@@ -30,7 +30,7 @@ RUN /tmp/build.sh \
     rm -f /etc/yum.repos.d/terra.repo && \
     rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
-    rm -f /etc/yum.repos.d/kylegospo-webapp-manager-fedora-37.repo && \
+    rm -f /etc/yum.repos.d/kylegospo-webapp-manager-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     /tmp/post-install.sh && \
