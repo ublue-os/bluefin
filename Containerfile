@@ -33,7 +33,6 @@ RUN /tmp/build.sh \
     rm -f /etc/yum.repos.d/kylegospo-webapp-manager-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
-    /tmp/post-install.sh && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && chmod -R 1777 /var/tmp 
