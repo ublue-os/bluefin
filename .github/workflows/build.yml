@@ -30,7 +30,7 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
-        major_version: [37, 38]
+        major_version: [37]
         include:
           - major_version: 37
             is_latest_version: true
