@@ -17,7 +17,6 @@ RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora
 RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/webapp-manager/repo/fedora-${FEDORA_MAJOR_VERSION}/kylegospo-webapp-manager-fedora-${FEDORA_MAJOR_VERSION}.repo -O /etc/yum.repos.d/kylegospo-webapp-manager-fedora-${FEDORA_MAJOR_VERSION}.repo
 
 RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter gnome-control-center gnome-control-center-filesystem
-RUN rpm-ostree override remove gnome-software-rpm-ostree firefox firefox-langpacks
 
 ADD packages.json /tmp/packages.json
 
