@@ -7,7 +7,7 @@ on:
       - '**.md'
       - '**.txt'
   schedule:
-    - cron: '20 20 * * *'  # 8:20pm everyday
+    - cron: '20 22 * * *'  # 10:20pm everyday
   push:
     branches:
       - main
@@ -15,7 +15,7 @@ on:
       - '**.md'
       - '**.txt'
 env:
-    IMAGE_BASE_NAME: main
+    IMAGE_BASE_NAME: bluefin
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 jobs:
@@ -29,20 +29,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_name: [silverblue, kinoite, vauxite, sericea, base, lxqt, mate]
+        image_flavor: [main, nvidia]
         major_version: [37, 38]
         include:
           - major_version: 37
             is_latest_version: true
             is_stable_version: true
           - major_version: 38
-            is_latest_version: true
+            is_latest_version: false
             is_stable_version: false
-        exclude:
-          # There is no Fedora 37 version of sericea
-          # When F38 is added, sericea will automatically be built too
-          - image_name: sericea
-            major_version: 37
     steps: 
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
@@ -50,12 +45,11 @@ jobs:
 
       - name: Matrix Variables
         run: |
-          if [[ "${{ matrix.image_name }}" == "lxqt" || "${{ matrix.image_name }}" == "mate" ]]; then
-              echo "SOURCE_IMAGE=base" >> $GITHUB_ENV
+          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
+              echo "IMAGE_NAME=bluefin" >> $GITHUB_ENV
           else
-              echo "SOURCE_IMAGE=${{ matrix.image_name }}" >> $GITHUB_ENV
+              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.image_name, env.IMAGE_BASE_NAME) }}" >> $GITHUB_ENV
           fi
-          echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.image_name, env.IMAGE_BASE_NAME) }}" >> $GITHUB_ENV
 
       - name: Generate tags
         id: generate-tags
@@ -109,7 +103,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.description=A base ${{ env.IMAGE_NAME }} image with batteries included
-            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/main/main/README.md
+            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
       # Build image using Buildah action
@@ -123,8 +117,8 @@ jobs:
           tags: |
             ${{ steps.generate-tags.outputs.alias_tags }}
           build-args: |
-            IMAGE_NAME=${{ matrix.image_name }}
-            SOURCE_IMAGE=${{ env.SOURCE_IMAGE }}
+            IMAGE_NAME=${{ env.IMAGE_NAME }}
+            SOURCE_IMAGE=main
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
