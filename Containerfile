@@ -19,6 +19,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/webapp-manager/repo/f
 RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter gnome-control-center gnome-control-center-filesystem
 
 ADD packages.json /tmp/packages.json
+ADD build.sh /tmp/build.sh
 
 RUN /tmp/build.sh \
     systemctl unmask dconf-update.service && \
