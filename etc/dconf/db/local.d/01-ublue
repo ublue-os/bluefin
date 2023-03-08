@@ -1,0 +1,44 @@
+[org/gnome/shell] 
+favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Rhythmbox3.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'yelp.desktop']
+enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@micxgx.gmail.com']
+
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/lagoon.jpg'
+picture-options='stretched'
+primary-color='000000'
+secondary-color='FFFFFF'
+
+[org/gnome/desktop/interface]
+enable-hot-corners="false"
+cursor-theme="Yaru"
+icon-theme="Yaru"
+gtk-theme="Yaru"
+font-antialiasing="rgba"
+font-name="Ubuntu 12"
+document-font-name="Ubuntu 12"
+monospace-font-name="Ubuntu Mono 18"
+
+[org/gnome/desktop/sound]
+allow-volume-above-100-percent="true"
+theme-name="Yaru"
+
+[org/gnome/desktop/wm/preferences]
+button-layout=":minimize,maximize,close"
+num-workspaces="4"
+title-bar-font="Ubuntu Bold 12"
+
+[org/gnome/shell/extensions/dash-to-dock]
+dock-fixed="true"
+dock-position="LEFT"
+extend-height="true"
+force-straight-corner="false"
+custom-theme-shring="true"
+disable-overview-on-startup="true"
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Control><Alt>t'
+command='gnome-terminal'
+name='gnome-terminal'
+
+[org/gnome/settings-daemon/plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
