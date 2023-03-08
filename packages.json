@@ -1,0 +1,41 @@
+{
+    "all": {
+        "include": {
+            "all": [
+                "blackbox-terminal", 
+                "gnome-shell-extension-appindicator",
+                "gnome-shell-extension-dash-to-dock",
+                "gnome-shell-extension-blur-my-shell", 
+                "gnome-shell-extension-gsconnect", 
+                "nautilus-gsconnect", 
+                "libgda",
+                "libgda-sqlite",
+                "libratbag-ratbagd",
+                "podman-docker", 
+                "tailscale",
+                "wireguard-tools",
+                "webapp-manager",
+                "yaru-theme"
+            ]         
+        },
+        "exclude": {
+            "all": []
+        }
+    },
+    "37": {
+        "include": {
+            "all": []
+        },
+        "exclude": {
+            "all": []
+        }
+    },
+    "38": {
+        "include": {
+            "all": []
+        },
+        "exclude": {
+            "all": []
+        }
+    }
+}
