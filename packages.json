@@ -15,7 +15,6 @@
                 "podman-compose",
                 "tailscale",
                 "wireguard-tools",
-                "webapp-manager",
                 "yaru-theme"
             ]         
         },
