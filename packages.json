@@ -2,7 +2,8 @@
     "all": {
         "include": {
             "all": [
-                "blackbox-terminal", 
+                "blackbox-terminal",
+                "bootc",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell", 
