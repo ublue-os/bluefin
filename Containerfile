@@ -14,7 +14,6 @@ COPY usr /usr
 
 RUN wget https://github.com/terrapkg/subatomic-repos/raw/main/terra.repo -O /etc/yum.repos.d/terra.repo
 RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-$(rpm -E %fedora)/kylegospo-gnome-vrr-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
-RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/webapp-manager/repo/fedora-${FEDORA_MAJOR_VERSION}/kylegospo-webapp-manager-fedora-${FEDORA_MAJOR_VERSION}.repo -O /etc/yum.repos.d/kylegospo-webapp-manager-fedora-${FEDORA_MAJOR_VERSION}.repo
 
 RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter gnome-control-center gnome-control-center-filesystem
 
@@ -30,7 +29,6 @@ RUN /tmp/build.sh \
     rm -f /etc/yum.repos.d/terra.repo && \
     rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
-    rm -f /etc/yum.repos.d/kylegospo-webapp-manager-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     rm -rf /tmp/* /var/* && \
