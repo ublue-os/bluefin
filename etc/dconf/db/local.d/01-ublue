@@ -32,6 +32,7 @@ dock-fixed="true"
 force-straight-corner="false"
 custom-theme-shring="true"
 disable-overview-on-startup="true"
+transparency-mode='DYNAMIC'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control><Alt>t'
