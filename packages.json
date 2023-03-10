@@ -21,8 +21,7 @@
         "exclude": {
             "all": [
                 "firefox",
-                "firefox-langpacks",
-                "gnome-software-rpm-ostree"
+                "firefox-langpacks"
             ]
         }
     },
