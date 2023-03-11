@@ -107,7 +107,7 @@ Everything you need is included.
 
 > How do I get my GNOME back to normal Fedora defaults?
 
-> We set the default dconf keys in `/etc/dconf/db/local`, removing those keys and updating the database will take you back to the fedora default: 
+We set the default dconf keys in `/etc/dconf/db/local`, removing those keys and updating the database will take you back to the fedora default: 
 
     sudo rm -f /etc/dconf/db/local
     sudo dconf update
