@@ -20,11 +20,11 @@ The endstate is a system as reliable as a Chromebook with near-zero maintainance
 
 1. Download and install [Fedora Silverblue](https://silverblue.fedoraproject.org/download)
 1. After you reboot you should [pin the working deployment](https://docs.fedoraproject.org/en-US/fedora-silverblue/faq/#_about_using_silverblue) so you can safely rollback. 
-1. [AMD/Intel users] Open a terminal and rebase the OS to this image:
+1. [AMD/Intel GPU users only] Open a terminal and rebase the OS to this image:
 
         sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:37
 
-1. [Nvidia users] Open a terminal and rebase the OS to this image:
+1. [Nvidia GPU users only] Open a terminal and rebase the OS to this image:
 
         sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:37
         
