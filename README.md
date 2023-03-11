@@ -73,7 +73,6 @@ System updates are image-based and automatic. Applications are logically seperat
     - udev rules for game controllers included out of the box
     - [Tailscale](https://tailscale.com/) for VPN
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
-    - [input-remapper](https://github.com/sezanzeb/input-remapper) for remapping input devices
 - Built on top of the the [uBlue main image](https://github.com/ublue-os/main) 
   - System designed for automatic staging of updates
     - If you've never used an image-based Linux before just use your computer normally
