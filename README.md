@@ -128,6 +128,8 @@ We set the default dconf keys in `/etc/dconf/db/local`, removing those keys and 
 
     sudo rm -f /etc/dconf/db/local
     sudo dconf update
+    
+If you prefer a vanilla GNOME installation check out [silverblue-main](https://github.com/ublue-os/main) or [silverblue-nvidia](https://github.com/ublue-os/nvidia) for a more upstream experience.
 
 Should I trust you?
 
