@@ -53,8 +53,8 @@ download-updates-notify="false"
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
 
 [com/raggesilver/BlackBox]
-command-as-login-shell="true"
-use-custom-command="true"
+command-as-login-shell=true
+use-custom-command=true
 custom-shell-command='distrobox enter ubuntu'
 theme-dark="Yaru"
 style-preference=1
