@@ -135,11 +135,10 @@ Should I trust you?
 
 > This is all hosted, built, and pushed on GitHub. As far as if I'm a trustable fellow, here's my [bio](https://www.ypsidanger.com/about/). If you've made it this far then hopefully you've come to the conclusion on how easy it would be to build all of this on your own trusted machinery. :smile:
 
-## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Recent activity [![Time period](https://images.repography.com/0/neovim/neovim/recent-activity/d751713988987e9331980363e24189ce_badge.svg)](https://repography.com)
-[![Timeline graph](https://images.repography.com/0/neovim/neovim/recent-activity/d751713988987e9331980363e24189ce_timeline.svg)](https://github.com/neovim/neovim/commits)
-[![Issue status graph](https://images.repography.com/0/neovim/neovim/recent-activity/d751713988987e9331980363e24189ce_issues.svg)](https://github.com/neovim/neovim/issues)
-[![Pull request status graph](https://images.repography.com/0/neovim/neovim/recent-activity/d751713988987e9331980363e24189ce_prs.svg)](https://github.com/neovim/neovim/pulls)
-[![Trending topics](https://images.repography.com/0/neovim/neovim/recent-activity/d751713988987e9331980363e24189ce_words.svg)](https://github.com/neovim/neovim/commits)
-[![Top contributors](https://images.repography.com/0/neovim/neovim/recent-activity/d751713988987e9331980363e24189ce_users.svg)](https://github.com/neovim/neovim/graphs/contributors)
-[![Activity map](https://images.repography.com/0/neovim/neovim/recent-activity/d751713988987e9331980363e24189ce_map.svg)](https://github.com/neovim/neovim/commits)
-
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Recent activity [![Time period](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_badge.svg)](https://repography.com)
+[![Timeline graph](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_timeline.svg)](https://github.com/ublue-os/bluefin/commits)
+[![Issue status graph](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_issues.svg)](https://github.com/ublue-os/bluefin/issues)
+[![Pull request status graph](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_prs.svg)](https://github.com/ublue-os/bluefin/pulls)
+[![Trending topics](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_words.svg)](https://github.com/ublue-os/bluefin/commits)
+[![Top contributors](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_users.svg)](https://github.com/ublue-os/bluefin/graphs/contributors)
+[![Activity map](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_map.svg)](https://github.com/ublue-os/bluefin/commits)
