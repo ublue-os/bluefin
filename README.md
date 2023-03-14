@@ -92,6 +92,18 @@ These are currently unimplemented ideas that we plan on adding:
   - GNOME Calculator, Calendar, Characters, Connections, Contacts, Evince, Firmware, Logs, Maps, NautilusPreviewer, TextEditor, Weather, baobab, clocks, eog, and font-viewer
 - All applications installed per user instead of system wide, similar to openSUSE MicroOS. Thanks for the inspiration Team Green!
 
+### Recommended Extensions
+
+The author recommends the following extensions if you'd like to round out your experience. Use the included "Extensions Manager" application to search for these extensions, everything you need to get them to run is already included:
+
+<img src="https://user-images.githubusercontent.com/1264109/224862317-569d018f-a7be-4895-82ff-e2c67652a0ab.png" width="400">
+
+(Note: Installing extensions via extensions.gnome.org won't work, the extensions must be installed via this application)
+
+- [Tailscale Status](https://extensions.gnome.org/extension/5112/tailscale-status/) for VPN
+- [Pano](https://extensions.gnome.org/extension/5278/pano/) for clipboard management
+- [Desktop Cube](https://extensions.gnome.org/extension/4648/desktop-cube/) if you really want to go retro
+
 ## Verification
 
 These images are signed with sisgstore's [cosign](https://docs.sigstore.dev/cosign/overview/). You can verify the signature by downloading the `cosign.pub` key from this repo and running the following command:
