@@ -14,6 +14,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
+  workflow_dispatch:
 env:
     IMAGE_BASE_NAME: bluefin
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -30,14 +31,14 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
-        major_version: [37]
+        major_version: [37, 38]
         include:
           - major_version: 37
             is_latest_version: true
             is_stable_version: true
- #        - major_version: 38
- #          is_latest_version: false
- #          is_stable_version: false
+          - major_version: 38
+            is_latest_version: false
+            is_stable_version: false
     steps: 
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
@@ -102,7 +103,7 @@ jobs:
             ${{ env.IMAGE_NAME }}
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
-            org.opencontainers.image.description=A base ${{ env.IMAGE_NAME }} image with batteries included
+            org.opencontainers.image.description=Fedora Silverblue for Ubuntu Expatriates
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
