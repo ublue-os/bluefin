@@ -4,19 +4,20 @@
             "all": [
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
-                "gnome-shell-extension-blur-my-shell", 
-                "gnome-shell-extension-gsconnect", 
-                "nautilus-gsconnect", 
+                "gnome-shell-extension-blur-my-shell",
+                "gnome-shell-extension-gsconnect",
+                "nautilus-gsconnect",
                 "libgda",
                 "libgda-sqlite",
                 "libratbag-ratbagd",
                 "podman-docker",
                 "podman-compose",
+                "python3-pip",
                 "tailscale",
                 "wireguard-tools",
                 "xprop",
                 "yaru-theme"
-            ]         
+            ]
         },
         "exclude": {
             "all": [
