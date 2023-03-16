@@ -53,7 +53,7 @@ screens:
           - Discord: com.discordapp.Discord
           - Games: org.gnome.Games
           - Heroic Games Launcher: com.heroicgameslauncher.hgl
-          - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud
+          - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud//22.08
           - Steam: com.valvesoftware.Steam
           - Gamescope for Steam: com.valvesoftware.Steam.Utility.gamescope
           - Proton Updater for Steam: net.davidotek.pupgui2
