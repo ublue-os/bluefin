@@ -9,7 +9,7 @@ screens:
   first-screen:
     source: yafti.screen.title
     values:
-      title: "Welcome to uBlue"
+      title: "Welcome to Bluefin"
       icon: "/path/to/icon"
       description: |
         Pick some applications to get started
@@ -22,15 +22,32 @@ screens:
       groups:
         Core:
           description: Core Applications
+          default: true
           packages:
           - Backup: org.gnome.DejaDup
           - Calculator: org.gnome.Calculator
-          - Extensions: com.mattjakeman.ExtensionManager
+          - Calendar: org.gnome.Calendar
+          - Characters: org.gnome.Characters
+          - Connections: org.gnome.Connections
+          - Contacts: org.gnome.Contacts
+          - Document Viewer: org.gnome.Evince
+          - Extensions Manager: com.mattjakeman.ExtensionManager
+          - Fedora Media Writer: org.fedoraproject.MediaWriter
           - Firefox Browser: org.mozilla.firefox
-          - Flatseal: com.github.tchx84.Flatseal
+          - Flatseal Permissions Manager: com.github.tchx84.Flatseal
+          - Logs: org.gnome.Logs
+          - Maps: org.gnome.Maps
+          - Nautilus Preview: org.gnome.NautilusPreviewer
+          - Text Editor: org.gnome.TextEditor
+          - Weather: org.gnome.Weather
+          - Disk Usage Analyzer: org.gnome.baobab
+          - Clocks: org.gnome.clocks
+          - Picture Viewer: org.gnome.eog
+          - Font Viewer: org.gnome.font-viewer
           - Font Downloader: com.gustavoperedo.FontDownloader
         Gaming:
-          description: "ROCK & STONE"
+          description: "Rock and Stone!"
+          default: false
           packages:
           - Bottles: com.usebottles.bottles
           - Discord: com.discordapp.Discord
@@ -42,8 +59,8 @@ screens:
           - Proton Updater for Steam: net.davidotek.pupgui2
         Office:
           description: Bow to Capitalism
+          default: false
           packages:
-          - Calendar: org.gnome.Calendar
           - LibreOffice: org.libreoffice.LibreOffice
           - Obsidian: md.obsidian.Obsidian
           - OnlyOffice: org.onlyoffice.desktopeditors
@@ -51,27 +68,19 @@ screens:
           - Standard Notes: org.standardnotes.standardnotes
           - Thunderbird Email: org.mozilla.Thunderbird
         Streaming:
-          description: Stream to the internet
+          description: Stream to the Internet
+          default: false
           packages:
           - OBS Studio: com.obsproject.Studio
           - VkCapture for OBS: com.obsproject.Studio.OBSVkCapture 
           - Gstreamer for OBS: com.obsproject.Studio.Plugin.Gstreamer
           - Gstreamer VAAPI for OBS: com.obsproject.Studio.Plugin.GStreamerVaapi
           - Boatswain for Streamdeck: com.feaneron.Boatswain
-        Developer:  
-          description: DEVELOPERS, DEVELOPERS, DEVELOPERS
-          packages:
-          - Visual Studio Code: com.visualstudio.code
-          - Rust SDK Extension: org.freedesktop.Sdk.Extension.rust-stable
-          - PHP SDK Extension: org.freedesktop.Sdk.Extension.php74
-          - OpenJDK SDK Extension: org.freedesktop.Sdk.Extension.openjdk17
-          - Node.JS SDK Extension: org.freedesktop.Sdk.Extension.node18
-          - Go SDK Extension: org.freedesktop.Sdk.Extension.golang
-          - .NET Core SDK Extension: org.freedesktop.Sdk.Extension.dotnet7
+          
   final-screen:
     source: yafti.screen.title
     values:
-      title: "All done"
+      title: "All done!"
       icon: "/path/to/icon"
       description: |
         Thanks for installing, join the community, next steps
