@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=uBlue First Boot Setup
+Comment=Performst first time installer actions
+Exec=/usr/bin/yafti /etc/yafti.yml
+Icon=org.gnome.Terminal
+Type=Application
+Categories=Utility;System;
+Name[en_US]=startup
