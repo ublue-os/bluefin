@@ -24,7 +24,8 @@ COPY --from=docker.io/bketelsen/apx:latest /usr/share/apx /usr/share/apx
 ADD packages.json /tmp/packages.json
 ADD build.sh /tmp/build.sh
 
-RUN /tmp/build.sh \
+RUN /tmp/build.sh && \
+    pip install --prefix=/usr yafti && \
     systemctl unmask dconf-update.service && \
     systemctl enable dconf-update.service && \
     systemctl enable rpm-ostree-countme.service && \
@@ -35,7 +36,8 @@ RUN /tmp/build.sh \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
-    mkdir -p /var/tmp && chmod -R 1777 /var/tmp 
+    mkdir -p /var/tmp && \
+    chmod -R 1777 /var/tmp
 
 # K8s tools
 
