@@ -11,6 +11,7 @@ echo "Creating service files"
 sleep 1
 echo "creating SSL cert file"
 
+sudo mkdir -p /etc/systemd/system/nix-daemon.service.d
 sudo tee /etc/systemd/system/nix-daemon.service.d/override.conf <<EOF
 [Service]
 Environment="NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
