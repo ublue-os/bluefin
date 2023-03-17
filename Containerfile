@@ -57,7 +57,7 @@ RUN semanage fcontext -a -t usr_t '/nix/store/[^/]+/share(/.*)?'
 RUN semanage fcontext -a -t var_run_t '/nix/var/nix/daemon-socket(/.*)?'
 RUN semanage fcontext -a -t usr_t '/nix/var/nix/profiles(/per-user/[^/]+)?/[^/]+'
 
-RUN mkdir /var/lib/nix
+RUN mkdir -p /var/lib/nix
 
 RUN semanage fcontext -a -t etc_t '/var/lib/nix/store/[^/]+/etc(/.*)?'
 RUN semanage fcontext -a -t lib_t '/var/lib/nix/store/[^/]+/lib(/.*)?'
