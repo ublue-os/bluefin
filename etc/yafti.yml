@@ -33,7 +33,6 @@ screens:
           - Document Viewer: org.gnome.Evince
           - Extensions Manager: com.mattjakeman.ExtensionManager
           - Fedora Media Writer: org.fedoraproject.MediaWriter
-          - Firefox Browser: org.mozilla.firefox
           - Flatseal Permissions Manager: com.github.tchx84.Flatseal
           - Logs: org.gnome.Logs
           - Maps: org.gnome.Maps
@@ -45,6 +44,15 @@ screens:
           - Picture Viewer: org.gnome.eog
           - Font Viewer: org.gnome.font-viewer
           - Font Downloader: com.gustavoperedo.FontDownloader
+        Browsers:
+          descriptions: Surf the Web
+          default: false
+          packages:
+          - Brave: com.brave.Browser
+          - Google Chrome: com.google.Chrome
+          - Microsoft Edge: com.microsoft.Edge
+          - Mozilla Firefox: org.mozilla.firefox
+          - Opera: com.opera.Opera
         Gaming:
           description: "Rock and Stone!"
           default: false
