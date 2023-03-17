@@ -74,10 +74,11 @@ System updates are image-based and automatic. Applications are logically seperat
     - This feature is experimental and not considered ready for production. It is for experienced users only, here be dragons
 - Quality of Life Improvements
     - systemd shutdown timers adjusted to 15 seconds
-    - udev rules for game controllers included out of the box
     - [Tailscale](https://tailscale.com/) for VPN
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
 - Built on top of the the [uBlue main image](https://github.com/ublue-os/main) 
+  - Extra udev rules for game controllers and [other devices](https://github.com/ublue-os/config) included out of the box
+  - All multimedia codecs included
   - System designed for automatic staging of updates
     - If you've never used an image-based Linux before just use your computer normally
     - Don't overthink it, just shut your computer off when you're not using it
