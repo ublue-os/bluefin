@@ -18,6 +18,9 @@ COPY --from=docker.io/bketelsen/apx:latest /usr/bin/apx /usr/bin/apx
 COPY --from=docker.io/bketelsen/apx:latest /etc/apx/config.json /etc/apx/config.json
 COPY --from=docker.io/bketelsen/apx:latest /usr/share/apx /usr/share/apx
 
+
+COPY --from=docker.io/bketelsen/fleek:latest /app/fleek /usr/bin/fleek
+
 #RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
 #RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter gnome-control-center gnome-control-center-filesystem
 
