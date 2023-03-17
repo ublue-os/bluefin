@@ -47,3 +47,48 @@ COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 RUN curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.17.0/kind-$(uname)-amd64"
 RUN chmod +x ./kind
 RUN mv ./kind /usr/bin/kind
+
+RUN semanage fcontext -a -t etc_t '/nix/store/[^/]+/etc(/.*)?'
+RUN semanage fcontext -a -t lib_t '/nix/store/[^/]+/lib(/.*)?'
+RUN semanage fcontext -a -t systemd_unit_file_t '/nix/store/[^/]+/lib/systemd/system(/.*)?'
+RUN semanage fcontext -a -t man_t '/nix/store/[^/]+/man(/.*)?'
+RUN semanage fcontext -a -t bin_t '/nix/store/[^/]+/s?bin(/.*)?'
+RUN semanage fcontext -a -t usr_t '/nix/store/[^/]+/share(/.*)?'
+RUN semanage fcontext -a -t var_run_t '/nix/var/nix/daemon-socket(/.*)?'
+RUN semanage fcontext -a -t usr_t '/nix/var/nix/profiles(/per-user/[^/]+)?/[^/]+'
+
+RUN mkdir /var/lib/nix
+
+RUN semanage fcontext -a -t etc_t '/var/lib/nix/store/[^/]+/etc(/.*)?'
+RUN semanage fcontext -a -t lib_t '/var/lib/nix/store/[^/]+/lib(/.*)?'
+RUN semanage fcontext -a -t systemd_unit_file_t '/var/lib/nix/store/[^/]+/lib/systemd/system(/.*)?'
+RUN semanage fcontext -a -t man_t '/var/lib/nix/store/[^/]+/man(/.*)?'
+RUN semanage fcontext -a -t bin_t '/var/lib/nix/store/[^/]+/s?bin(/.*)?'
+RUN semanage fcontext -a -t usr_t '/var/lib/nix/store/[^/]+/share(/.*)?'
+RUN semanage fcontext -a -t var_run_t '/var/lib/nix/var/nix/daemon-socket(/.*)?'
+RUN semanage fcontext -a -t usr_t '/var/lib/nix/var/nix/profiles(/per-user/[^/]+)?/[^/]+'
+
+# Ensure systemd picks up the newly created units
+RUN systemctl daemon-reload
+# Enable the nix mount on boot.
+RUN systemctl enable nix.mount
+# Mount the nix mount now.
+RUN systemctl start nix.mount
+# R = recurse, F = full context (not just target)
+RUN restorecon -RF /nix
+
+RUN setenforce Permissive
+
+RUN sh <(curl -L https://nixos.org/nix/install) --daemon
+
+# Remove the linked services
+sudo rm -f /etc/systemd/system/nix-daemon.{service,socket}
+# Manually copy the services.
+sudo cp /var/lib/nix/var/nix/profiles/default/lib/systemd/system/nix-daemon.{service,socket} /etc/systemd/system/# R = recurse, F = full context (not just target)
+RUN restorecon -RF /nix
+# Ensure systemd picks up the newly created units
+RUN systemctl daemon-reload
+# Start (and enable) the nix-daemon socket
+RUN systemctl enable --now nix-daemon.socket
+
+RUN setenforce Enforcing

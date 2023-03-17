@@ -1,0 +1,14 @@
+[Unit]
+Description=Nix Package Manager
+DefaultDependencies=no
+After=mkdir-rootfs@nix.service
+Wants=mkdir-rootfs@nix.service
+Before=sockets.target
+After=ostree-remount.service
+BindsTo=var.mount
+
+[Mount]
+What=/var/lib/nix
+Where=/nix
+Options=bind
+Type=none
