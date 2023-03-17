@@ -68,6 +68,10 @@ System updates are image-based and automatic. Applications are logically seperat
     - [kind](https://kind.sigs.k8s.io/) - Run a Kubernetes cluster on your machine. Do a `kind create cluster` on the host to get started!
     - [kubectl](https://kubernetes.io/docs/reference/kubectl/) - Administer Kubernetes Clusters
     - [Podman-Docker](https://github.com/containers/podman) - Automatically aliases the `docker` command to `podman`
+- Nix-powered Development Experience (Alpha) 
+    - Powered by [Zero-to-Nix](https://zero-to-nix.com/) - thanks Determinate Systems!
+    - Run `/usr/bin/ublue-nix-installer` to get started
+    - This feature is experimental and not considered ready for production. It is for experienced users only, here be dragons
 - Quality of Life Improvements
     - systemd shutdown timers adjusted to 15 seconds
     - udev rules for game controllers included out of the box
