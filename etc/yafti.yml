@@ -43,9 +43,9 @@ screens:
           - Clocks: org.gnome.clocks
           - Picture Viewer: org.gnome.eog
           - Font Viewer: org.gnome.font-viewer
-          - Font Downloader: com.gustavoperedo.FontDownloader
+          - Font Downloader: org.gustavoperedo.FontDownloader
         Browsers:
-          descriptions: Surf the Web
+          description: Surf the Web
           default: false
           packages:
           - Brave: com.brave.Browser
