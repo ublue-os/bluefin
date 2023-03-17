@@ -22,7 +22,10 @@ distrobox-opensuse:
 distrobox-ubuntu:
   echo 'Creating Ubuntu distrobox ...'
   distrobox create --image quay.io/toolbx-images/ubuntu-toolbox:22.04 -n ubuntu -Y
- 
+
+nix-me-up:
+  echo 'Setting phasers to kill. Installing nix.'
+  /usr/bin/nix-install
 update:
   rpm-ostree update
   flatpak update -y
