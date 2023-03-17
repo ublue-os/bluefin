@@ -26,8 +26,11 @@ distrobox-ubuntu:
 nix-me-up:
   echo 'Setting phasers to kill. Installing nix.'
   /usr/bin/nix-install
+  
 update:
   rpm-ostree update
   flatpak update -y
   distrobox upgrade -a
   
+yafti:
+  yafti /etc/yafti.yml
