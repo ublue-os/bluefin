@@ -45,7 +45,7 @@ screens:
           - Font Viewer: org.gnome.font-viewer
           - Font Downloader: com.gustavoperedo.FontDownloader
         Browsers:
-          descriptions: Surf the Web
+          description: Surf the Web
           default: false
           packages:
           - Brave: com.brave.Browser
