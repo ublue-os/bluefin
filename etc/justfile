@@ -25,8 +25,8 @@ distrobox-ubuntu:
 
 nix-me-up:
   echo 'Setting phasers to kill. Installing nix.'
-  /usr/bin/nix-install
-  
+  /usr/bin/ublue-nix-installer
+ 
 update:
   rpm-ostree update
   flatpak update -y
