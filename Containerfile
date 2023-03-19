@@ -51,3 +51,15 @@ COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 RUN curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.17.0/kind-$(uname)-amd64"
 RUN chmod +x ./kind
 RUN mv ./kind /usr/bin/kind
+
+# Install 1Password via Tarball
+RUN curl -sSO https://downloads.1password.com/linux/tar/stable/x86_64/1password-latest.tar.gz && \
+    tar -xf 1password-latest.tar.gz && \
+    rm 1password-latest.tar.gz && \
+    mkdir -p /usr/1Password && \
+    mv 1password-*/* /usr/1Password && \
+    sh /usr/libexec/1password-after-install.sh \
+    && \
+    rm -rf /var/* /tmp/* && \
+    ostree container commit
+   
