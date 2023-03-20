@@ -6,11 +6,11 @@ Fedora Silverblue for Ubuntu Expatriates
 [![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue.
-Currently you'll need to have Fedora Silverblue installed to rebase to this image (see below). We will provide ISOs as soon as the custom image feature lands in the Fedora installer.
+Note: Currently you'll need to have Fedora Silverblue installed to rebase to this image (see below). We will provide ISOs as soon as the custom image feature lands in the Fedora installer.
 
-This is an interpretation of "What if we could rebuild Ubuntu from the ground up built on cloud-native technology?"
-The goal is to provide an Ubuntu experience using the most amount of automation possible.
-The endstate is a system as reliable as a Chromebook with near-zero maintainance, but with the power of Ubuntu and Fedora fused together. 
+For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together.  
+
+For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars) 
 
 ![image](https://user-images.githubusercontent.com/1264109/224488462-ac4ed2ad-402d-4116-bd08-15f61acce5cf.png)
 
@@ -54,14 +54,13 @@ System updates are image-based and automatic. Applications are logically seperat
     - GSConnect - Integrate your mobile device with your desktop
     - GNOME Variable Refresh Rate patches included via the [GNOME VRR COPR](https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/)
     - Blur my Shell - for dat bling
-- GNOME Software with Flathub
+- GNOME Software with [Flathub](https://flathub.org)
     - Use a familiar software center UI to install graphical software
-- Built-in Ubuntu user space 
-    - Official Ubuntu LTS cloud image 
-      - `Ctrl`-`Alt`-`u` - will launch an Ubuntu image inside a terminal via [Distrobox](https://github.com/89luca89/distrobox), your home directory will be transparently mounted
-      - A [BlackBox terminal](https://www.omgubuntu.co.uk/2022/07/blackbox-gtk4-terminal-emulator-for-gnome) is used just for this configuration
-      - Use this container for your typical CLI needs or to install software that is not available via Flatpak or Fedora 
-      - Refer to the [Distrobox documentation](https://distrobox.privatedns.org/#distrobox) for more information on using and configuring custom images
+- For developers: Built-in Ubuntu user space 
+    - `Ctrl`-`Alt`-`u` - will launch an Ubuntu image inside a terminal via [Distrobox](https://github.com/89luca89/distrobox), your home directory will be transparently mounted
+    - A [BlackBox terminal](https://www.omgubuntu.co.uk/2022/07/blackbox-gtk4-terminal-emulator-for-gnome) is used just for this configuration
+    - Use this container for your typical CLI needs or to install software that is not available via Flatpak or Fedora 
+    - Refer to the [Distrobox documentation](https://distrobox.privatedns.org/#distrobox) for more information on using and configuring custom images
     - GNOME Terminal
       - `Ctrl`-`Alt`-`t` - will launch a host-level GNOME Terminal if you need to do host-level things in Fedora (you shouldn't need to do much).   
 - Cloud Native Tools
