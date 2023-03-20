@@ -1,4 +1,4 @@
-name: build-ublue
+name: Build and Push Image
 on:
   pull_request:
     branches:
@@ -14,8 +14,6 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
-  merge_group:
-    types: [checks_requested]
   workflow_dispatch:
 env:
     IMAGE_BASE_NAME: bluefin
