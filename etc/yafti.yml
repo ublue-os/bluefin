@@ -13,6 +13,18 @@ screens:
       icon: "/path/to/icon"
       description: |
         Pick some applications to get started
+  can-we-modify-your-flatpaks:
+    source: yafti.screen.consent
+    values:
+      title: Welcome traveler
+      condition:
+        run: flatpak remotes --system | grep fedora
+      description: |
+        This tool modifies your flatpaks and flatpak sources. If you do not want to do this exit the installer.
+        For new users just do it (tm)
+      actions:
+        - run: flatpak remote-delete fedora --force
+        - run: flatpak remove --system --noninteractive --all
   applications:
     source: yafti.screen.package
     values:
