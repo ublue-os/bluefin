@@ -5,7 +5,7 @@ screens:
   first-screen:
     source: yafti.screen.title
     values:
-      title: "Welcome to Bluefin"
+      title: "Welcome to Bluefin (Alpha)"
       icon: "/path/to/icon"
       description: |
         Pick some applications to get started
@@ -16,11 +16,11 @@ screens:
       condition:
         run: flatpak remotes --system | grep fedora
       description: |
-        This will modify your Flatpaks. If you do not want to do this exit the installer.
+        WARNING: This will modify your Flatpaks if you are rebasing! If you do not want to do this exit the installer.
       actions:
         - run: flatpak remote-delete fedora --force
         - run: flatpak remove --system --noninteractive --all
-        - run: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        - run: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
   applications:
     source: yafti.screen.package
     values:
