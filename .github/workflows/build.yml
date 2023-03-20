@@ -1,11 +1,5 @@
 name: Build and Push Image
 on:
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
   schedule:
     - cron: '20 22 * * *'  # 10:20pm everyday
   push:

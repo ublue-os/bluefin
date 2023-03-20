@@ -1,17 +1,15 @@
 name: Pull Requests
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+
 
 jobs:
-  push-ghcr:
-    name: Build and push image
+  lint:
+    name: Lint
     runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: read
-      id-token: read
 
     steps: 
       - name: Checkout repository
