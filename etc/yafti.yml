@@ -1,10 +1,6 @@
 title: Welcome to uBlue
-actions:
-  pre:
-  - run: /usr/bin/flatpak remote-delete flathub --force
-  - run: /usr/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-  - run: /usr/bin/flatpak remove --system --noninteractive --all
-  - run: /usr/bin/flatpak remote-delete fedora --force
+properties:
+  mode: "run-on-change"
 screens:
   first-screen:
     source: yafti.screen.title
@@ -16,12 +12,11 @@ screens:
   can-we-modify-your-flatpaks:
     source: yafti.screen.consent
     values:
-      title: Welcome traveler
+      title: Welcome, Traveler
       condition:
         run: flatpak remotes --system | grep fedora
       description: |
-        This tool modifies your flatpaks and flatpak sources. If you do not want to do this exit the installer.
-        For new users just do it (tm)
+        This will modify your Flatpaks. If you do not want to do this exit the installer.
       actions:
         - run: flatpak remote-delete fedora --force
         - run: flatpak remove --system --noninteractive --all
