@@ -58,6 +58,7 @@ RUN curl -sSO https://downloads.1password.com/linux/tar/stable/x86_64/1password-
     rm 1password-latest.tar.gz && \
     mkdir -p /usr/1Password && \
     mv 1password-*/* /usr/1Password && \
+    cp -r /usr/1Password/resources/icons/* /usr/share/icons && \
     sh /usr/libexec/1password-after-install.sh \
     && \
     rm -rf /var/* /tmp/* && \
