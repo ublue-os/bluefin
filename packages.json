@@ -22,7 +22,8 @@
         "exclude": {
             "all": [
                 "firefox",
-                "firefox-langpacks"
+                "firefox-langpacks",
+                "gnome-tour"
             ]
         }
     },
