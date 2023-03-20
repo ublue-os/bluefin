@@ -77,7 +77,6 @@ jobs:
 
           if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
              [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
-              BUILD_TAGS+=("${TIMESTAMP}")
               BUILD_TAGS+=("latest")
           fi
 
