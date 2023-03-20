@@ -14,6 +14,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
+  merge_group:    
   workflow_dispatch:
 env:
     IMAGE_BASE_NAME: bluefin
