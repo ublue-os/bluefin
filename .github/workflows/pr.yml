@@ -1,0 +1,27 @@
+name: Pull Requests
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  push-ghcr:
+    name: Build and push image
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: read
+      id-token: read
+
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Lint Code Base
+        uses: github/super-linter/slim@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
