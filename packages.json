@@ -16,7 +16,8 @@
                 "tailscale",
                 "wireguard-tools",
                 "xprop",
-                "yaru-theme"
+                "yaru-theme",
+		"zsh"
             ]
         },
         "exclude": {
