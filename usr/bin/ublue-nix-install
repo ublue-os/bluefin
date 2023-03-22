@@ -13,7 +13,7 @@ sudo semanage fcontext -a -t etc_t '/var/lib/nix/store/[^/]+/etc(/.*)?' ; sudo s
 echo "Creating service files"
 sleep 1
 echo "Creating SSL cert file"
-
+sudo mkdir -p /etc/systemd/system/nix-daemon.service.d/
 sudo tee /etc/systemd/system/nix-daemon.service.d/override.conf <<EOF
 [Service]
 Environment="NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
