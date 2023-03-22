@@ -47,6 +47,8 @@ The `latest` tag will automatically point to the latest build.
 
 System updates are image-based and automatic. Applications are logically seperated from the system by using Flatpaks, and the CLI experience is contained within OCI containers: 
 
+## For Users
+
 - Ubuntu-like GNOME layout
   - Includes the following GNOME Extensions
     - Dash to Dock - for a more Unity-like dock
@@ -56,7 +58,16 @@ System updates are image-based and automatic. Applications are logically seperat
     - Blur my Shell - for dat bling
 - GNOME Software with [Flathub](https://flathub.org)
     - Use a familiar software center UI to install graphical software
-- For developers: Built-in Ubuntu user space 
+- Built on top of the the [uBlue main image](https://github.com/ublue-os/main) 
+  - Extra udev rules for game controllers and [other devices](https://github.com/ublue-os/config) included out of the box
+  - All multimedia codecs included
+  - System designed for automatic staging of updates
+    - If you've never used an image-based Linux before just use your computer normally
+    - Don't overthink it, just shut your computer off when you're not using it
+
+## For Developers    
+    
+- Built-in Ubuntu user space 
     - `Ctrl`-`Alt`-`u` - will launch an Ubuntu image inside a terminal via [Distrobox](https://github.com/89luca89/distrobox), your home directory will be transparently mounted
     - A [BlackBox terminal](https://www.omgubuntu.co.uk/2022/07/blackbox-gtk4-terminal-emulator-for-gnome) is used just for this configuration
     - Use this container for your typical CLI needs or to install software that is not available via Flatpak or Fedora 
@@ -75,12 +86,7 @@ System updates are image-based and automatic. Applications are logically seperat
     - systemd shutdown timers adjusted to 15 seconds
     - [Tailscale](https://tailscale.com/) for VPN
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
-- Built on top of the the [uBlue main image](https://github.com/ublue-os/main) 
-  - Extra udev rules for game controllers and [other devices](https://github.com/ublue-os/config) included out of the box
-  - All multimedia codecs included
-  - System designed for automatic staging of updates
-    - If you've never used an image-based Linux before just use your computer normally
-    - Don't overthink it, just shut your computer off when you're not using it
+    - `zsh` available as an optional shell, use `sudo lcsh -i` and follow the prompts to configure it
 
 ### Future Features
 
