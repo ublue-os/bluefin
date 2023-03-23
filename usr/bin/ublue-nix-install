@@ -12,12 +12,6 @@ echo "Adding SELinux content to /var/lib/nix"
 sudo semanage fcontext -a -t etc_t '/var/lib/nix/store/[^/]+/etc(/.*)?' ; sudo semanage fcontext -a -t lib_t '/var/lib/nix/store/[^/]+/lib(/.*)?' ; sudo semanage fcontext -a -t systemd_unit_file_t '/var/lib/nix/store/[^/]+/lib/systemd/system(/.*)?' ; sudo semanage fcontext -a -t man_t '/var/lib/nix/store/[^/]+/man(/.*)?' ; sudo semanage fcontext -a -t bin_t '/var/lib/nix/store/[^/]+/s?bin(/.*)?' ; sudo semanage fcontext -a -t usr_t '/var/lib/nix/store/[^/]+/share(/.*)?' ; sudo semanage fcontext -a -t var_run_t '/var/lib/nix/var/nix/daemon-socket(/.*)?' ; sudo semanage fcontext -a -t usr_t '/var/lib/nix/var/nix/profiles(/per-user/[^/]+)?/[^/]+'
 echo "Creating service files"
 sleep 1
-echo "Creating SSL cert file"
-sudo mkdir -p /etc/systemd/system/nix-daemon.service.d/
-sudo tee /etc/systemd/system/nix-daemon.service.d/override.conf <<EOF
-[Service]
-Environment="NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
-EOF
 sleep 1
 echo "Creating rootfs mkdir service"
 
@@ -72,9 +66,9 @@ sleep 1
 
 echo "Preparing the nix install script"
 
-sleep 5
+sleep 2
 
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm 
+sh <(curl -L https://nixos.org/nix/install) --daemon
 
 echo "Nix installer has finished running"
 sleep 1
@@ -82,6 +76,12 @@ echo "Copying service files"
 
 sleep 1
 
+echo "Creating SSL cert file"
+sudo mkdir -p /etc/systemd/system/nix-daemon.service.d/
+sudo tee /etc/systemd/system/nix-daemon.service.d/override.conf <<EOF
+[Service]
+Environment="NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
+EOF
 sudo rm -f /etc/systemd/system/nix-daemon.{service,socket} ; sudo cp /nix/var/nix/profiles/default/lib/systemd/system/nix-daemon.{service,socket} /etc/systemd/system/ ; sudo restorecon -RF /nix ; sudo systemctl daemon-reload ; sudo systemctl enable --now nix-daemon.socket
 
 sleep 1
@@ -89,6 +89,9 @@ sleep 1
 echo "Setting SELinux back to Enforcing"
 
 sudo setenforce Enforcing
+
+echo "Modifying /etc/nix/nix.conf"
+sudo echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
 
 sleep 1
 
