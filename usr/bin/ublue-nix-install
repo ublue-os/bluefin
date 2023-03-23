@@ -91,7 +91,7 @@ echo "Setting SELinux back to Enforcing"
 sudo setenforce Enforcing
 
 echo "Modifying /etc/nix/nix.conf"
-sudo echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
 
 sleep 1
 
