@@ -65,7 +65,8 @@ System updates are image-based and automatic. Applications are logically seperat
     - If you've never used an image-based Linux before just use your computer normally
     - Don't overthink it, just shut your computer off when you're not using it
 
-## For Developers    
+<details>
+        <summary><h2>For Developers</h2></summary>
     
 - Built-in Ubuntu user space 
     - `Ctrl`-`Alt`-`u` - will launch an Ubuntu image inside a terminal via [Distrobox](https://github.com/89luca89/distrobox), your home directory will be transparently mounted
@@ -87,6 +88,7 @@ System updates are image-based and automatic. Applications are logically seperat
     - [Tailscale](https://tailscale.com/) for VPN
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
     - `zsh` available as an optional shell, use `sudo lcsh -i` and follow the prompts to configure it
+ </details>
 
 ### Future Features
 
