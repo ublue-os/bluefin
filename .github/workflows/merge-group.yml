@@ -1,11 +1,15 @@
 name: choo-choo
 on:
+  pull_request:
+    branches:
+      - main
   merge_group:
-    branches: [main]
+    branches: 
+      - main
   workflow_dispatch:
 env:
-    IMAGE_BASE_NAME: bluefin
-    IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_BASE_NAME: bluefin
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 jobs:
   push-ghcr:
