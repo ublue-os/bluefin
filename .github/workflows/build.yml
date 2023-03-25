@@ -90,8 +90,8 @@ jobs:
       - name: Get Current Fedora Version
         id: labels
         run: |
-          docker pull quay.io/fedora-ostree-desktops/${{ env.SOURCE_IMAGE }}:${{ matrix.major_version }}
-          ver=$(docker inspect quay.io/fedora-ostree-desktops/${{ env.SOURCE_IMAGE }}:${{ matrix.major_version }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')
+          docker pull ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }}
+          ver=$(docker inspect ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')
           echo "VERSION=$ver" >> $GITHUB_OUTPUT  
 
       # Build metadata
