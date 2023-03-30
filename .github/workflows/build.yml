@@ -89,10 +89,9 @@ jobs:
           
       - name: Get Current Fedora Version
         id: labels
-        run: |
-          docker pull ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }}
-          ver=$(docker inspect ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')
-          echo "VERSION=$ver" >> $GITHUB_OUTPUT  
+        run: |  
+        ver=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
+        echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       # Build metadata
       - name: Image Metadata
