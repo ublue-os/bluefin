@@ -30,11 +30,11 @@ jobs:
     name: Generate and Release ISOs
     runs-on: ubuntu-latest
     needs: release-please
+    if: needs.release-please.outputs.releases_created
     container: fedora:latest
     strategy:
       matrix:
         fedora-version: [ 38 ]
-        if: needs.release-please.outputs.releases_created
     steps:
       - uses: actions/checkout@v3
       - name: Generate ISO  
