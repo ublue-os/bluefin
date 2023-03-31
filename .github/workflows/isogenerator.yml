@@ -25,6 +25,12 @@ jobs:
           
       - uses: actions/upload-artifact@v3
         with:
-          name: example-${{ matrix.fedora-version }}
+          name: bluefin-${{ matrix.fedora-version }}
           path: ${{ steps.isogenerator.outputs.iso-path }}
+          
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: bluefin-${{ matrix.fedora-version }}
         
