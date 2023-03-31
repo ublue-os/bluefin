@@ -19,7 +19,6 @@ jobs:
         id: isogenerator
         with:
           image-name: bluefin-${{ matrix.fedora-version }}
-          installer-major-version: 38
           installer-repo: development
           installer-major-version: ${{ matrix.fedora-version }}
           kickstart-file-path: bluefin.ks
