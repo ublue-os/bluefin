@@ -1,0 +1,29 @@
+name: Generate ISO
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    strategy:
+      matrix:
+        fedora-version: [ 38 ]
+    steps:
+      - uses: actions/checkout@v3
+        
+      - uses: ublue-os/isogenerator@main
+        id: isogenerator
+        with:
+          image-name: bluefin-${{ matrix.fedora-version }}
+          installer-major-version: ${{ matrix.fedora-version }}
+          kickstart-file-path: ublue.ks
+          
+      - uses: actions/upload-artifact@v3
+        with:
+          name: example-${{ matrix.fedora-version }}
+          path: ${{ steps.isogenerator.outputs.iso-path }}
+        
