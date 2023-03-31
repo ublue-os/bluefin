@@ -2,12 +2,55 @@ on:
   push:
     branches:
       - main
-name: release-please
+
+permissions:
+  contents: write
+  checks: write
+  actions: read
+  packages: write
+  pull-requests: write
+      
+name: Release Please
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release-please.outputs.releases_created }}
+      tag: ${{ steps.release-please.outputs.tag_name }}
+      upload_url: ${{ steps.release-please.outputs.upload_url }}
     steps:
       - uses: google-github-actions/release-please-action@v3
+        id: release-please
         with:
           release-type: node
           package-name: release-please-action
+          draft: true
+
+  build-iso:
+    name: Generate and Release ISOs
+    runs-on: ubuntu-latest
+    needs: release-please
+    container: fedora:latest
+    strategy:
+      matrix:
+        fedora-version: [ 38 ]
+        if: needs.release-please.outputs.releases_created
+    steps:
+      - uses: actions/checkout@v3
+      - name: Generate ISO  
+        uses: ublue-os/isogenerator@main
+        id: isogenerator
+        with:
+          image-name: bluefin-${{ matrix.fedora-version }}
+          installer-repo: development
+          installer-major-version: ${{ matrix.fedora-version }}
+          kickstart-file-path: bluefin.ks
+          
+      - name: Upload ISO
+        uses: ublue-os/upload-assets@pass-in-tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          asset_paths: '["bluefin-${{ matrix.fedora-version }}"]'
+          tag: ${{ needs.release-please.outputs.tag }}
+        
