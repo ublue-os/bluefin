@@ -20,7 +20,7 @@ jobs:
         with:
           image-name: bluefin-${{ matrix.fedora-version }}
           installer-major-version: ${{ matrix.fedora-version }}
-          kickstart-file-path: ublue.ks
+          kickstart-file-path: bluefin.ks
           
       - uses: actions/upload-artifact@v3
         with:
