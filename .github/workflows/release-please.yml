@@ -51,6 +51,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          asset_paths: '["bluefin-${{ matrix.fedora-version }}"]'
+          asset_paths: '["${{ steps.isogenerator.outputs.iso-path }}"]'
           tag: ${{ needs.release-please.outputs.tag }}
         
