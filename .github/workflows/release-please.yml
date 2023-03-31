@@ -46,8 +46,11 @@ jobs:
           installer-major-version: ${{ matrix.fedora-version }}
           kickstart-file-path: bluefin.ks
           
-      - name: Upload ISO
-        uses: ublue-os/upload-assets@pass-in-tag
+  upload-iso:        
+    name: Upload ISO
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ublue-os/upload-assets@pass-in-tag
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
