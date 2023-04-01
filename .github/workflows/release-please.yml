@@ -52,6 +52,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          asset_paths: '["${{ steps.isogenerator.outputs.iso-path }}"]'
+          asset_paths: '["/__w/bluefin/bluefin/${{ steps.isogenerator.outputs.iso-path }}"]'
           tag: ${{ needs.release-please.outputs.tag }}
         
