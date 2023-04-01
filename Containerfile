@@ -16,8 +16,8 @@ COPY --from=docker.io/bketelsen/vanilla-os:v0.0.12 /usr/share/backgrounds/vanill
 COPY --from=docker.io/bketelsen/vanilla-os:v0.0.12 /usr/share/gnome-background-properties/vanilla.xml /usr/share/gnome-background-properties/vanilla.xml
 
 COPY --from=docker.io/bketelsen/fleek:latest /app/fleek /usr/bin/fleek
-COPY --from=docker.io/bketelsen/fleek:latest /man/en/man1/fleek.1.gz /usr/share/man/man1/fleek.1.gz
-COPY --from=docker.io/bketelsen/fleek:latest /man/pt/man1/fleek.1.gz /usr/share/man/pt/man1/fleek.1.gz
+COPY --from=docker.io/bketelsen/fleek:latest /en/man1/fleek.1.gz /usr/share/man/man1/fleek.1.gz
+COPY --from=docker.io/bketelsen/fleek:latest /pt/man1/fleek.1.gz /usr/share/man/pt/man1/fleek.1.gz
 COPY --from=docker.io/bketelsen/fleek:latest /completions/fleek.bash /etc/bash_completion.d/fleek
 COPY --from=docker.io/bketelsen/fleek:latest /completions/fleek.zsh /usr/local/share/zsh/site-functions/_fleek
 
