@@ -35,16 +35,17 @@ jobs:
     strategy:
       matrix:
         fedora-version: [ 38 ]
+        image_flavor: [bluefin, bluefin-nvidia]
     steps:
       - uses: actions/checkout@v3
       - name: Generate ISO  
         uses: ublue-os/isogenerator@main
         id: isogenerator
         with:
-          image-name: bluefin-${{ matrix.fedora-version }}
+          image-name: ${{ matrix.image_flavor }}-${{ matrix.fedora-version }}
           installer-repo: development
           installer-major-version: ${{ matrix.fedora-version }}
-          kickstart-file-path: bluefin.ks
+          kickstart-file-path: ${{ matrix.image_flavor }}.ks
           
       - name: Upload ISO
         uses: ublue-os/upload-assets@pass-in-tag
