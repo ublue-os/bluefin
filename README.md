@@ -97,12 +97,18 @@ System updates are image-based and automatic. Applications are logically seperat
     - `zsh` available as an optional shell, use `sudo lcsh -i` and follow the prompts to configure it
  </details>
 
-### Future Features
+### Roadmap and Future Features
+
+- Fedora 38 will be the initial release and will be considered ALPHA
+- Fedora 39 is the target for an initial GA release
 
 These are currently unimplemented ideas that we plan on adding:
 
+- Provide a `:gts` tag aliased to the Fedora -1 release for an approximation of Ubuntu's release cadence
 - Provide a `:lts` tag derived from CentOS Stream for a more enterprise-like cadence
 - [Firecracker](https://github.com/firecracker-microvm/firecracker) - help wanted with this!
+
+
 
 ### Applications
 
