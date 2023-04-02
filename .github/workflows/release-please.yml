@@ -47,11 +47,17 @@ jobs:
           installer-major-version: ${{ matrix.fedora-version }}
           kickstart-file-path: ${{ matrix.image_flavor }}.ks
           
+#      - name: Upload ISO
+#        uses: ublue-os/upload-assets@pass-in-tag
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#        with:
+#          asset_paths: '["./${{ steps.isogenerator.outputs.iso-path }}"]'
+#          tag: ${{ needs.release-please.outputs.tag }}
+
       - name: Upload ISO
-        uses: ublue-os/upload-assets@pass-in-tag
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        with:
-          asset_paths: '["./${{ steps.isogenerator.outputs.iso-path }}"]'
-          tag: ${{ needs.release-please.outputs.tag }}
+        run:
+          gh release upload ${{ needs.release-please.outputs.tag }} ./${{ steps.isogenerator.outputs.iso-path }}
         
