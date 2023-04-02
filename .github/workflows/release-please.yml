@@ -54,7 +54,11 @@ jobs:
 #        with:
 #          asset_paths: '["./${{ steps.isogenerator.outputs.iso-path }}"]'
 #          tag: ${{ needs.release-please.outputs.tag }}
-
+      - name: install github CLI
+        run: |
+          sudo dnf install 'dnf-command(config-manager)'
+          sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+          sudo dnf install gh
       - name: Upload ISO
         env:
           GITHUB_TOKEN: ${{ github.token }}
