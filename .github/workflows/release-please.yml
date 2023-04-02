@@ -58,7 +58,6 @@ jobs:
         run: | 
           ls -lah
           pwd
-      - uses: actions/checkout@v3
       - name: install github CLI
         run: |
           sudo dnf install 'dnf-command(config-manager)' -y
@@ -68,5 +67,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run:
-          gh release upload ${{ needs.release-please.outputs.tag }} ./${{ steps.isogenerator.outputs.iso-path }}
+          gh release upload ${{ needs.release-please.outputs.tag }} ./${{ steps.isogenerator.outputs.iso-path }} -R ublue-os/bluefin
         
