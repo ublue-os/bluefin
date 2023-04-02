@@ -24,7 +24,6 @@ jobs:
         with:
           release-type: node
           package-name: release-please-action
-          draft: true
 
   build-iso:
     name: Generate and Release ISOs
