@@ -9,7 +9,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue.
 
 For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together.  
 
-For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars) 
+For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). 
 
 ![image](https://user-images.githubusercontent.com/1264109/224488462-ac4ed2ad-402d-4116-bd08-15f61acce5cf.png)
 
@@ -87,9 +87,9 @@ System updates are image-based and automatic. Applications are logically seperat
     - [kubectl](https://kubernetes.io/docs/reference/kubectl/) - Administer Kubernetes Clusters
     - [Podman-Docker](https://github.com/containers/podman) - Automatically aliases the `docker` command to `podman`
 - Nix-powered Development Experience (Alpha) 
-    - Powered by [Zero-to-Nix](https://zero-to-nix.com/) - thanks Determinate Systems!
-    - Run `/usr/bin/ublue-nix-install` to get started
-    - This feature is experimental and not considered ready for production. It is for experienced users only, here be dragons
+    - [Introducing Fleek](https://github.com/ublue-os/fleek) - a user-friendly wrapper around Nix and Nix Home Manager
+    - Run `/usr/bin/ublue-nix-install` to get started, then `fleek help` to learn more
+    - This feature is experimental and not considered ready for production. It is for experienced users only, but is improving quickly
 - Quality of Life Improvements
     - systemd shutdown timers adjusted to 15 seconds
     - [Tailscale](https://tailscale.com/) for VPN
