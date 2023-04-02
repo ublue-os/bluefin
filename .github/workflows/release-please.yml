@@ -54,6 +54,7 @@ jobs:
 #        with:
 #          asset_paths: '["./${{ steps.isogenerator.outputs.iso-path }}"]'
 #          tag: ${{ needs.release-please.outputs.tag }}
+      - uses: actions/checkout@v3
       - name: install github CLI
         run: |
           sudo dnf install 'dnf-command(config-manager)' -y
