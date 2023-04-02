@@ -1,12 +1,11 @@
 # bluefin
 Fedora Silverblue for Ubuntu Expatriates
 
-(This isn't ready yet)
+## This image is not production ready yet
 
 [![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue.
-Note: Currently you'll need to have Fedora Silverblue installed to rebase to this image (see below). We will provide ISOs as soon as the custom image feature lands in the Fedora installer.
 
 For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together.  
 
@@ -18,7 +17,14 @@ For developers we endeavour to provide the best cloud-native developer experienc
 
 # Usage
 
-1. Download and install [Fedora Silverblue](https://silverblue.fedoraproject.org/download)
+1. Download and install [test ISOs from here](https://github.com/ublue-os/bluefin/releases):
+   - `bluefin-38.iso` is for systems with Intel and AMD GPUs
+   - `bluefin-nvidia-38.iso` is for systems with Nvidia GPUs
+   - [Follow the installation instructions](https://ublue.it/installation/)
+
+<details>
+<summary>For existing Silverblue/Kinoite users</summary>
+
 1. After you reboot you should [pin the working deployment](https://docs.fedoraproject.org/en-US/fedora-silverblue/faq/#_about_using_silverblue) so you can safely rollback. 
 1. [AMD/Intel GPU users only] Open a terminal and rebase the OS to this image:
 
@@ -33,6 +39,8 @@ For developers we endeavour to provide the best cloud-native developer experienc
 1. To revert back:
 
         sudo rpm-ostree rebase fedora:fedora/37/x86_64/silverblue
+        
+</details>
 
 Check the [Silverblue documentation](https://docs.fedoraproject.org/en-US/fedora-silverblue/) for instructions on how to use rpm-ostree. 
 We build date tags as well, so if you want to rebase to a particular day's release you can use the version number and date to boot off of that specific image:
