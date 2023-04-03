@@ -157,7 +157,7 @@ These images are signed with sigstore's [cosign](https://docs.sigstore.dev/cosig
 
 > What about codecs?
 
-Everything you need is included.
+Everything you need is included. You will need to [configure Firefox for hardware acceleration](https://ublue.it/codecs/)
 
 > How do I get my GNOME back to normal Fedora defaults?
 
