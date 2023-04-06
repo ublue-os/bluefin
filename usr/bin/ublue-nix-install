@@ -107,7 +107,7 @@ sudo tee /opt/nb/reset-nix <<EOF
 sudo echo "Resetting nix..."
 sudo rm -rf /nix/*
 sudo mkdir -p /nix
-sudo cp -R /opt/nb/nix/* /nix/
+sudo cp -R /opt/nixbackup/nix/* /nix/
 sudo restorecon -RF /nix
 sudo echo "Nix has been reset. Reboot for changes to apply."
 EOF
