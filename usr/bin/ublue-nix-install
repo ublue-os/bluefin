@@ -112,7 +112,7 @@ sudo restorecon -RF /nix
 sudo echo "Nix has been reset. Reboot for changes to apply."
 EOF
 
-sudo chmod a+x /opt/nb/reset-nix
+sudo chmod a+x /opt/nixbackup/reset-nix
 
 sudo echo "Finished installing nix backup"
 
