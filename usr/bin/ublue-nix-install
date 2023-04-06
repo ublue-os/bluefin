@@ -99,7 +99,7 @@ sleep 1
 
 echo "Installing nix backup"
 
-sudo mkdir /opt/nb
+sudo mkdir /opt/nixbackup
 sudo cp -R /nix /opt/nb
 
 sudo tee /opt/nb/reset-nix <<EOF
