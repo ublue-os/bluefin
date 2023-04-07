@@ -31,7 +31,7 @@ title-bar-font="Ubuntu Bold 12"
 [org/gnome/shell/extensions/dash-to-dock]
 dock-fixed=true
 force-straight-corner=false
-custom-theme-shring=true
+custom-theme-shrink=true
 disable-overview-on-startup=true
 transparency-mode='DYNAMIC'
 
