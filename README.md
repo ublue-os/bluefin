@@ -1,5 +1,6 @@
 # tblue
 Fedora Silverblue with tweaks
+
 [![Release](https://github.com/sisus198/tblue/actions/workflows/release-please.yml/badge.svg)](https://github.com/sisus198/tblue/actions/workflows/release-please.yml)
 
 ## This image is a fork of ublue-os/bluefin
