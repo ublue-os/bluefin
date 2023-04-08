@@ -4,7 +4,6 @@
             "all": [
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
-                "gnome-shell-extension-blur-my-shell",
                 "gnome-shell-extension-gsconnect",
                 "nautilus-gsconnect",
                 "libgda",
@@ -13,27 +12,34 @@
                 "podman-docker",
                 "podman-compose",
                 "python3-pip",
-                "tailscale",
-                "wireguard-tools",
                 "xprop",
-                "yaru-theme",
-		"zsh"
+		"gnome-console",
+		"gstreamer1-plugin-openh264",
+                "mozilla-openh264",
+                "openh264",
+		"lm_sensors",
+		"fastfetch",
+		"mesa-vdpau-drivers-freeworld",
+                "gstreamer1-plugin-libav",
+                "gstreamer1-plugins-bad-free-extras",
+                "gstreamer1-plugins-bad-freeworld",
+                " gstreamer1-plugins-ugly",
+                "gstreamer1-vaapi", 
+                "compat-ffmpeg4",
+                "libavcodec-freeworld",
             ]
         },
         "exclude": {
             "all": [
                 "firefox",
                 "firefox-langpacks",
-                "gnome-tour"
+                "gnome-tour",
+		"yelp",
+		"gnome-terminal",
+		"gnome-terminal-nautilius",
+		"gnome-system-monitor",
+		"toolbox",
             ]
-        }
-    },
-    "37": {
-        "include": {
-            "all": []
-        },
-        "exclude": {
-            "all": []
         }
     },
     "38": {

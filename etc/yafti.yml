@@ -1,11 +1,16 @@
-title: Welcome to uBlue
+title: Welcome to Tblue
 properties:
   mode: "run-on-change"
+actions:
+  pre:
+  - run: sudo sed -i 's/compress=zstd:1/x-systemd.device-timeout=0,ssd,noatime,space_cache,commit=120,compress=zstd,discard=async/' /etc/fstab
+  - run: sudo systemctl daemon-reload
+  - run: sudo systemctl enable fstrim.timer
 screens:
   first-screen:
     source: yafti.screen.title
     values:
-      title: "Welcome to Bluefin (Alpha)"
+      title: "Welcome to Tblue"
       icon: "/path/to/icon"
       description: |
         Pick some applications to get started
@@ -41,7 +46,7 @@ screens:
           - Document Viewer: org.gnome.Evince
           - Extensions Manager: com.mattjakeman.ExtensionManager
           - Fedora Media Writer: org.fedoraproject.MediaWriter
-          - Mozilla Firefox: org.mozilla.firefox
+          - LibreWolf: io.gitlab.librewolf-community
           - Flatseal Permissions Manager: com.github.tchx84.Flatseal
           - Logs: org.gnome.Logs
           - Maps: org.gnome.Maps
@@ -54,7 +59,7 @@ screens:
           - Font Viewer: org.gnome.font-viewer
           - Font Downloader: org.gustavoperedo.FontDownloader
         Web Browsers:
-          description: Additional browsers to complement Firefox
+          description: Additional browsers to complement LibreWolf
           default: false
           packages:
           - Brave: com.brave.Browser

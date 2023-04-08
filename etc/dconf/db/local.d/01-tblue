@@ -1,0 +1,36 @@
+[org/gnome/shell] 
+favorite-apps = ['io.gitlab.librewolf-community', 'org.gnome.Nautilus.desktop', 'org.gnome.Console.desktop', 'org.gnome.Software.desktop']
+enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@micxgx.gmail.com', 'gsconnect@andyholmes.github.io']
+
+[org/gnome/desktop/interface]
+enable-hot-corners=false
+clock-show-weekday=true
+font-antialiasing="rgba"
+
+[org/gnome/desktop/sound]
+allow-volume-above-100-percent=false
+
+[org/gnome/desktop/wm/preferences]
+button-layout=":minimize,maximize,close"
+num-workspaces='4'
+
+[org/gnome/shell/extensions/dash-to-dock]
+dock-fixed=true
+force-straight-corner=false
+custom-theme-shrink=true
+disable-overview-on-startup=true
+transparency-mode='DYNAMIC'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Control><Alt>t'
+command='kgx'
+name='gnome-console'
+
+[org/gnome/software]
+allow-updates=false
+download-updates=false
+download-updates-notify=false
+
+[org/gnome/settings-daemon/plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+home=['<Super>e']
