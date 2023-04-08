@@ -33,7 +33,7 @@ jobs:
     container: fedora:latest
     strategy:
       matrix:
-        fedora-version: [ 38 ]
+        fedora-version: [38]
         image_flavor: [tblue]
     steps:
       - uses: actions/checkout@v3
