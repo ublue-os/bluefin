@@ -32,7 +32,6 @@ RUN /tmp/build.sh && \
     wget https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts -O /etc/hosts && \
     echo kernel.kptr_restrict=1 > /etc/sysctl.d/51-kptr-restrict.conf && \
     echo 'blacklist sp5100_tco' > /etc/modprobe.d/disable-sp5100-watchdog.conf && \
-    modprobe tcp_bbr && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && \
