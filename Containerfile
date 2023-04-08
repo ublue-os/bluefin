@@ -30,9 +30,6 @@ RUN /tmp/build.sh && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     wget https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts -O /etc/hosts && \
-    grubby --args "zswap.enabled=1 mitigations=off nowatchdog processor.ignore_ppc=1 amdgpu.ppfeaturemask=0xffffffff ec_sys.write_support=1" --update-kernel=ALL && \
-    echo high > /sys/class/drm/card0/device/power_dpm_force_performance_level && \
-    echo high > /sys/class/drm/card1/device/power_dpm_force_performance_level && \
     echo kernel.kptr_restrict=1 > /etc/sysctl.d/51-kptr-restrict.conf && \
     echo 'blacklist sp5100_tco' > /etc/modprobe.d/disable-sp5100-watchdog.conf && \
     modprobe tcp_bbr && \
