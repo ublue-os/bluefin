@@ -23,13 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main]
-        major_version: [37, 38]
+        major_version: [38]
         include:
-          - major_version: 37
-            is_latest_version: true
-            is_stable_version: true
           - major_version: 38
-            is_latest_version: false
+            is_latest_version: true
             is_stable_version: false
     steps: 
       # Checkout push-to-registry action GitHub repository
