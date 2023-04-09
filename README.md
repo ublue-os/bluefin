@@ -17,7 +17,7 @@ For developers we endeavour to provide the best cloud-native developer experienc
 
 # Usage
 
-1. Download and install [test ISOs from here](https://github.com/ublue-os/bluefin/releases):
+1. Download and install [test ISOs from here](https://github.com/ublue-os/bluefin/releases/tag/v1.0.0):
    - `bluefin-38.iso` is for systems with Intel and AMD GPUs
    - `bluefin-nvidia-38.iso` is for systems with Nvidia GPUs
    - [Follow the installation instructions](https://ublue.it/installation/)
