@@ -33,8 +33,8 @@ jobs:
     container: fedora:latest
     strategy:
       matrix:
-        fedora-version: [38]
-        image_flavor: [tblue]
+        fedora-version: [ 38 ]
+        image_flavor: [ tblue ]
     steps:
       - uses: actions/checkout@v3
       - name: Generate ISO  
