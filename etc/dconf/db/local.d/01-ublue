@@ -28,6 +28,9 @@ button-layout=":minimize,maximize,close"
 num-workspaces='4'
 title-bar-font="Ubuntu Bold 12"
 
+[org/gnome/desktop/peripherals/touchpad]
+tap-to-click=true
+
 [org/gnome/shell/extensions/dash-to-dock]
 dock-fixed=true
 force-straight-corner=false
