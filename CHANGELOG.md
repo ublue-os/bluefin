@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/ublue-os/bluefin/compare/v1.0.0...v1.1.0) (2023-04-09)
+
+
+### Features
+
+* add blackbox to initial install wizard ([#157](https://github.com/ublue-os/bluefin/issues/157)) ([c0eb411](https://github.com/ublue-os/bluefin/commit/c0eb411003c1a7133a76c53a1cdec5662cf1dfdc))
+* enable "tap-to-click" for touchpad ([#158](https://github.com/ublue-os/bluefin/issues/158)) ([8c0d9ae](https://github.com/ublue-os/bluefin/commit/8c0d9ae96e0abc2b35bb8b89b80a7bc634acf0c5))
+
+
+### Bug Fixes
+
+* fix typo in dconf option. ([#153](https://github.com/ublue-os/bluefin/issues/153)) ([8899e93](https://github.com/ublue-os/bluefin/commit/8899e938590b6164666f29376ab38ecaf9e8f0a4))
+
 ## [1.0.0](https://github.com/ublue-os/bluefin/compare/v1.0.0...v1.0.0) (2023-04-02)
 
 
