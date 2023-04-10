@@ -95,6 +95,29 @@ echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.con
 
 sleep 1
 
+# nb stands for nix backup
+
+echo "Installing nix backup"
+
+sudo mkdir /opt/nixbackup
+sudo cp -R /nix /opt/nb
+
+sudo tee /opt/nb/reset-nix <<EOF
+#!/bin/bash
+sudo echo "Resetting nix..."
+sudo rm -rf /nix/*
+sudo mkdir -p /nix
+sudo cp -R /opt/nixbackup/nix/* /nix/
+sudo restorecon -RF /nix
+sudo echo "Nix has been reset. Reboot for changes to apply."
+EOF
+
+sudo chmod a+x /opt/nixbackup/reset-nix
+
+sudo echo "Finished installing nix backup"
+
+sleep 1
+
 echo "You MUST reboot in order for the installation to finish"
 echo "Reboot your system by typing:"
 echo "systemctl reboot"
