@@ -176,6 +176,8 @@ Should I trust you?
 [![Timeline graph](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_timeline.svg)](https://github.com/ublue-os/bluefin/commits)
 [![Issue status graph](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_issues.svg)](https://github.com/ublue-os/bluefin/issues)
 [![Pull request status graph](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_prs.svg)](https://github.com/ublue-os/bluefin/pulls)
-[![Trending topics](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_words.svg)](https://github.com/ublue-os/bluefin/commits)
-[![Top contributors](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_users.svg)](https://github.com/ublue-os/bluefin/graphs/contributors)
 [![Activity map](https://images.repography.com/35181738/ublue-os/bluefin/recent-activity/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_map.svg)](https://github.com/ublue-os/bluefin/commits)
+
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Top contributors
+[![Top contributors](https://images.repography.com/35181738/ublue-os/bluefin/top-contributors/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_table.svg)](https://github.com/ublue-os/bluefin/graphs/contributors)
+
