@@ -4,6 +4,7 @@ enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@mi
 
 [org/gnome/desktop/background]
 picture-uri='file:///usr/share/backgrounds/lagoon.jpg'
+picture-uri-dark='file:///usr/share/backgrounds/lagoon.jpg'
 picture-options='stretched'
 primary-color='000000'
 secondary-color='FFFFFF'
