@@ -162,7 +162,7 @@ Everything you need is included. You will need to [configure Firefox for hardwar
 
 We set the default dconf keys in `/etc/dconf/db/local`, removing those keys and updating the database will take you back to the fedora default: 
 
-    sudo rm -f /etc/dconf/db/local
+    sudo rm -f /etc/dconf/db/local.d/01-ublue
     sudo dconf update
     
 If you prefer a vanilla GNOME installation check out [silverblue-main](https://github.com/ublue-os/main) or [silverblue-nvidia](https://github.com/ublue-os/nvidia) for a more upstream experience.
