@@ -6,9 +6,9 @@ Fedora Silverblue for Ubuntu Expatriates
 [![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
-    - For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. 
-    - For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). 
-    - For gamers we strive to deliver a world-class Flathub gaming experience.
+- For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together.
+- For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars).
+- For gamers we strive to deliver a world-class Flathub gaming experience.
 
 ![image](https://user-images.githubusercontent.com/1264109/224488462-ac4ed2ad-402d-4116-bd08-15f61acce5cf.png)
 
@@ -162,7 +162,7 @@ Everything you need is included. You will need to [configure Firefox for hardwar
 
 We set the default dconf keys in `/etc/dconf/db/local`, removing those keys and updating the database will take you back to the fedora default: 
 
-    sudo rm -f /etc/dconf/db/local
+    sudo rm -f /etc/dconf/db/local.d/01-ublue
     sudo dconf update
     
 If you prefer a vanilla GNOME installation check out [silverblue-main](https://github.com/ublue-os/main) or [silverblue-nvidia](https://github.com/ublue-os/nvidia) for a more upstream experience.
