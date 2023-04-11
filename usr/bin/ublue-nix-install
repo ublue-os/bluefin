@@ -95,14 +95,12 @@ echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.con
 
 sleep 1
 
-# nb stands for nix backup
-
 echo "Installing nix backup"
 
 sudo mkdir /opt/nixbackup
-sudo cp -R /nix /opt/nb
+sudo cp -R /nix /opt/nixbackup
 
-sudo tee /opt/nb/reset-nix <<EOF
+sudo tee /opt/nixbackup/reset-nix <<EOF
 #!/bin/bash
 sudo echo "Resetting nix..."
 sudo rm -rf /nix/*
