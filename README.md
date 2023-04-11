@@ -5,11 +5,10 @@ Fedora Silverblue for Ubuntu Expatriates
 
 [![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
 
-A familiar(ish) Ubuntu desktop for Fedora Silverblue.
-
-For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together.  
-
-For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). 
+A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
+    - For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. 
+    - For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). 
+    - For gamers we strive to deliver a world-class Flathub gaming experience.
 
 ![image](https://user-images.githubusercontent.com/1264109/224488462-ac4ed2ad-402d-4116-bd08-15f61acce5cf.png)
 
@@ -28,17 +27,17 @@ For developers we endeavour to provide the best cloud-native developer experienc
 1. After you reboot you should [pin the working deployment](https://docs.fedoraproject.org/en-US/fedora-silverblue/faq/#_about_using_silverblue) so you can safely rollback. 
 1. [AMD/Intel GPU users only] Open a terminal and rebase the OS to this image:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:37
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:38
 
 1. [Nvidia GPU users only] Open a terminal and rebase the OS to this image:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:37
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:38
         
 1. Reboot the system and you're done!
 
 1. To revert back:
 
-        sudo rpm-ostree rebase fedora:fedora/37/x86_64/silverblue
+        sudo rpm-ostree rebase fedora:fedora/38/x86_64/silverblue
         
 </details>
 
