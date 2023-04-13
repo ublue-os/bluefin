@@ -40,3 +40,6 @@ update:
   
 yafti:
   yafti /etc/yafti.yml
+
+zsh:
+  sudo lchsh -i
