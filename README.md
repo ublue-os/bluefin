@@ -93,7 +93,7 @@ System updates are image-based and automatic. Applications are logically seperat
     - systemd shutdown timers adjusted to 15 seconds
     - [Tailscale](https://tailscale.com/) for VPN
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
-    - `zsh` available as an optional shell, use `sudo lcsh -i` and follow the prompts to configure it
+    - `zsh` available as an optional shell, use `just zsh` and follow the prompts to configure it
  </details>
 
 ### Roadmap and Future Features
