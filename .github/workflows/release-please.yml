@@ -49,10 +49,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run:
-          gh release upload Iso-Release ${{ steps.isogenerator.outputs.iso-path }} -R sisus198/tblue --clobber
+          gh release upload v1.0.0 ${{ steps.isogenerator.outputs.iso-path }} -R sisus198/tblue --clobber
       - name: Upload SHA256SUM
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run:
-          gh release upload Iso-Release ${{ steps.isogenerator.outputs.sha256sum-path }} -R sisus198/tblue --clobber
+          gh release upload v1.0.0 ${{ steps.isogenerator.outputs.sha256sum-path }} -R sisus198/tblue --clobber
         
