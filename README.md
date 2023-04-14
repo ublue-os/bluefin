@@ -1,7 +1,7 @@
 # bluefin
 Fedora Silverblue for Ubuntu Expatriates
 
-## This image is not production ready yet
+**This image is not production ready yet**
 
 [![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
 
@@ -21,8 +21,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
    - `bluefin-nvidia-38.iso` is for systems with Nvidia GPUs
    - [Follow the installation instructions](https://ublue.it/installation/)
 
-<details>
-<summary>For existing Silverblue/Kinoite users</summary>
+### For existing Silverblue/Kinoite users
 
 1. After you reboot you should [pin the working deployment](https://docs.fedoraproject.org/en-US/fedora-silverblue/faq/#_about_using_silverblue) so you can safely rollback. 
 1. [AMD/Intel GPU users only] Open a terminal and rebase the OS to this image:
@@ -39,8 +38,6 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
         sudo rpm-ostree rebase fedora:fedora/38/x86_64/silverblue
         
-</details>
-
 Check the [Silverblue documentation](https://docs.fedoraproject.org/en-US/fedora-silverblue/) for instructions on how to use rpm-ostree. 
 We build date tags as well, so if you want to rebase to a particular day's release you can use the version number and date to boot off of that specific image:
   
@@ -71,8 +68,8 @@ System updates are image-based and automatic. Applications are logically seperat
     - If you've never used an image-based Linux before just use your computer normally
     - Don't overthink it, just shut your computer off when you're not using it
 
-<details>
-        <summary><h2>For Developers</h2></summary>
+
+## For Developers
     
 - Built-in Ubuntu user space 
     - `Ctrl`-`Alt`-`u` - will launch an Ubuntu image inside a terminal via [Distrobox](https://github.com/89luca89/distrobox), your home directory will be transparently mounted
@@ -94,7 +91,6 @@ System updates are image-based and automatic. Applications are logically seperat
     - [Tailscale](https://tailscale.com/) for VPN
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
     - `zsh` available as an optional shell, use `just zsh` and follow the prompts to configure it
- </details>
 
 ### Roadmap and Future Features
 
@@ -106,8 +102,6 @@ These are currently unimplemented ideas that we plan on adding:
 - Provide a `:gts` tag aliased to the Fedora -1 release for an approximation of Ubuntu's release cadence
 - Provide a `:lts` tag derived from CentOS Stream for a more enterprise-like cadence
 - [Firecracker](https://github.com/firecracker-microvm/firecracker) - help wanted with this!
-
-
 
 ### Applications
 
@@ -179,4 +173,3 @@ Should I trust you?
 
 ## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Top contributors
 [![Top contributors](https://images.repography.com/35181738/ublue-os/bluefin/top-contributors/FQtB4TpTHzW4xXgqpImZRpCa_73e9torMuxJiEGHGyI/dQfbRYx1KQiBimZnq3kUtRc3TOPc1aWB9etI3c1KNLs_table.svg)](https://github.com/ublue-os/bluefin/graphs/contributors)
-
