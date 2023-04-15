@@ -53,6 +53,7 @@ name='blackbox'
 allow-updates=false
 download-updates=false
 download-updates-notify=false
+first-run=false
 
 [org/gnome/settings-daemon/plugins/media-keys]
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
