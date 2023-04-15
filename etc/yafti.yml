@@ -18,6 +18,8 @@ screens:
       description: |
         WARNING: This will modify your Flatpaks if you are rebasing! If you do not want to do this exit the installer.
       actions:
+        - run: /usr/lib/fedora-third-party/fedora-third-party-opt-out
+        - run: /usr/bin/fedora-third-party disable
         - run: flatpak remote-delete fedora --force
         - run: flatpak remove --system --noninteractive --all
         - run: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
