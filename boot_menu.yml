@@ -1,0 +1,7 @@
+ublue_variants:
+  - label: sisus198/tblue
+    ks: /kickstart/tblue.ks
+    flavors:
+      - label: bluefin
+      - label: bluefin-nvidia
+        ks: /kickstart/tblue-nvidia.ks
