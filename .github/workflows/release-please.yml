@@ -34,7 +34,7 @@ jobs:
     strategy:
       matrix:
         fedora-version: [ 38 ]
-        image_flavor: [tblue, tblue-nvidia]
+        image_flavor: [tblue]
     steps:
       - uses: actions/checkout@v3
       - name: Generate ISO  
@@ -46,6 +46,7 @@ jobs:
           installer-major-version: ${{ matrix.fedora-version }}
           kickstart-file-path: ${{ matrix.image_flavor }}.ks
           output-filename: ${{ matrix.image_flavor }}-${{ matrix.fedora-version }}.iso
+          boot-menu-path: ${{ github.workspace }}/boot_menu.yml
       - uses: actions/upload-artifact@v3
         with:
           name: Tblue
