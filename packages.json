@@ -19,16 +19,13 @@
                 "openh264",
 		"lm_sensors",
 		"fastfetch",
-		"mesa-vdpau-drivers-freeworld",
                 "gstreamer1-plugin-libav",
                 "gstreamer1-plugins-bad-free-extras",
                 "gstreamer1-plugins-bad-freeworld",
                 "gstreamer1-plugins-ugly",
                 "gstreamer1-vaapi", 
                 "compat-ffmpeg4",
-                "libavcodec-freeworld",
-		"mesa-filesystem",
-		"mesa-va-drivers-freeworld"
+                "libavcodec-freeworld"
             ]
         },
         "exclude": {
@@ -52,5 +49,25 @@
         "exclude": {
             "all": []
         }
-    }
+    },
+    "main": {
+         "include": {
+             "all": [
+                 "mesa-filesystem",
+                 "mesa-vdpau-drivers-freeworld",
+		 "mesa-va-drivers-freeworld"
+	     ]
+         },
+         "exclude": {
+             "all": []
+         }
+    },
+    "nvidia": {
+        "include": {
+            "all": []
+        },
+        "exclude": {
+            "all": []
+        }
+    }  
 }
