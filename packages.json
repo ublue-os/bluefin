@@ -27,7 +27,8 @@
                 "gstreamer1-vaapi", 
                 "compat-ffmpeg4",
                 "libavcodec-freeworld",
-		"mesa-filesystem"
+		"mesa-filesystem",
+		"mesa-va-drivers-freeworld"
             ]
         },
         "exclude": {
@@ -39,7 +40,8 @@
 		"gnome-terminal",
 		"gnome-terminal-nautilus",
 		"gnome-system-monitor",
-		"toolbox"
+		"toolbox",
+		"mesa-vdpau-drivers"
             ]
         }
     },
