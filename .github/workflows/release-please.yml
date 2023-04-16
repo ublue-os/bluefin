@@ -29,18 +29,23 @@ jobs:
     name: Generate and Release ISOs
     runs-on: ubuntu-latest
     container: 
-      image: fedora:38
+      image: fedora:latest
       options: --privileged
+    strategy:
+      matrix:
+        fedora-version: [ 38 ]
+        image_flavor: [tblue]
     steps:
       - uses: actions/checkout@v3
       - name: Generate ISO  
         uses: ublue-os/isogenerator@main
         id: isogenerator
         with:
-          image-name: tblue-38
+          image-name: ${{ matrix.image_flavor }}
           installer-repo: development
-          installer-major-version: 38
-          kickstart-file-path: tblue.ks
+          installer-major-version: ${{ matrix.fedora-version }}
+          kickstart-file-path: ${{ matrix.image_flavor }}.ks
+          output-filename: ${{ matrix.image_flavor }}-${{ matrix.fedora-version }}
       - name: install github CLI
         run: |
           sudo dnf install 'dnf-command(config-manager)' -y
@@ -56,4 +61,3 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run:
           gh release upload v1.0.0 ${{ steps.isogenerator.outputs.sha256sum-path }} -R sisus198/tblue --clobber
-        
