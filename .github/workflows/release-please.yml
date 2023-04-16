@@ -34,7 +34,7 @@ jobs:
     strategy:
       matrix:
         fedora-version: [ 38 ]
-        image_flavor: [tblue]
+        image_flavor: [tblue, tblue-nvidia]
     steps:
       - uses: actions/checkout@v3
       - name: Generate ISO  
