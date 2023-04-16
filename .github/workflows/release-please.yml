@@ -37,6 +37,9 @@ jobs:
         image_flavor: [tblue]
     steps:
       - uses: actions/upload-artifact@v3
+        with:
+          name: Tblue
+          path: builds/
       - name: Generate ISO  
         uses: ublue-os/isogenerator@main
         id: isogenerator
