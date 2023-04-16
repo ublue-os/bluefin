@@ -29,23 +29,19 @@ jobs:
     name: Generate and Release ISOs
     runs-on: ubuntu-latest
     container: 
-      image: fedora:latest
+      image: fedora:38
       options: --privileged
-    strategy:
-      matrix:
-        fedora-version: [ 38 ]
-        image_flavor: [tblue]
     steps:
       - uses: actions/checkout@v3
       - name: Generate ISO  
         uses: ublue-os/isogenerator@main
         id: isogenerator
         with:
-          image-name: ${{ matrix.image_flavor }}
+          image-name: tblue
           installer-repo: development
-          installer-major-version: ${{ matrix.fedora-version }}
-          kickstart-file-path: ${{ matrix.image_flavor }}.ks
-          output-filename: ${{ matrix.image_flavor }}-${{ matrix.fedora-version }}.iso
+          installer-major-version: 38
+          kickstart-file-path: /kickstart/tblue.ks
+          output-filename: tblue-38.iso
           boot-menu-path: ${{ github.workspace }}/boot_menu.yml
       - uses: actions/upload-artifact@v3
         with:
