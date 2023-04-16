@@ -45,19 +45,4 @@ jobs:
           installer-repo: development
           installer-major-version: ${{ matrix.fedora-version }}
           kickstart-file-path: ${{ matrix.image_flavor }}.ks
-          output-filename: ${{ matrix.image_flavor }}-${{ matrix.fedora-version }}
-      - name: install github CLI
-        run: |
-          sudo dnf install 'dnf-command(config-manager)' -y
-          sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
-          sudo dnf install gh -y
-      - name: Upload ISO
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run:
-          gh release upload v1.0.0 ${{ steps.isogenerator.outputs.iso-path }} -R sisus198/tblue --clobber
-      - name: Upload SHA256SUM
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run:
-          gh release upload v1.0.0 ${{ steps.isogenerator.outputs.sha256sum-path }} -R sisus198/tblue --clobber
+          output-filename: ${{ matrix.image_flavor }}-${{ matrix.fedora-version }}.iso
