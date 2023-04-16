@@ -48,7 +48,7 @@
              "all": [
                  "mesa-filesystem",
                  "mesa-vdpau-drivers-freeworld",
-		 "mesa-va-drivers-freeworld"
+		 "mesa-va-drivers-freeworld",
 		 "compat-ffmpeg4", 
 		 "gstreamer1-plugin-openh264",
 		 "gstreamer1-plugins-bad-freeworld",
