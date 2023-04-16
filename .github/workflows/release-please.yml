@@ -36,7 +36,7 @@ jobs:
         fedora-version: [ 38 ]
         image_flavor: [tblue]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/upload-artifact@v3
       - name: Generate ISO  
         uses: ublue-os/isogenerator@main
         id: isogenerator
