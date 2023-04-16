@@ -36,10 +36,7 @@ jobs:
         fedora-version: [ 38 ]
         image_flavor: [tblue]
     steps:
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Tblue
-          path: builds/
+      - uses: actions/checkout@v3
       - name: Generate ISO  
         uses: ublue-os/isogenerator@main
         id: isogenerator
@@ -49,3 +46,7 @@ jobs:
           installer-major-version: ${{ matrix.fedora-version }}
           kickstart-file-path: ${{ matrix.image_flavor }}.ks
           output-filename: ${{ matrix.image_flavor }}-${{ matrix.fedora-version }}.iso
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Tblue
+          path: ${{ steps.isogenerator.outputs.iso-path }}
