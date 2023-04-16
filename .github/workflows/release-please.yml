@@ -40,6 +40,7 @@ jobs:
           image-name: tblue-38
           installer-repo: development
           installer-major-version: 38
+          kickstart-file-path: tblue.ks
       - name: install github CLI
         run: |
           sudo dnf install 'dnf-command(config-manager)' -y
