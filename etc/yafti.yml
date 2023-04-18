@@ -6,7 +6,7 @@ actions:
   - run: sudo sed -i 's/compress=zstd:1/x-systemd.device-timeout=0,ssd,noatime,space_cache,commit=120,compress=zstd,discard=async/' /etc/fstab
   - run: sudo systemctl daemon-reload
   - run: sudo systemctl enable fstrim.timer
-  - run: sudo grubby --args "zswap.enabled=1 mitigations=off nowatchdog processor.ignore_ppc=1 amdgpu.ppfeaturemask=0xffffffff ec_sys.write_support=1" --update-kernel=ALL
+  - run: sudo grubby --args "zswap.enabled=1 elevator=none mitigations=off nowatchdog processor.ignore_ppc=1 amdgpu.ppfeaturemask=0xffffffff ec_sys.write_support=1" --update-kernel=ALL
 screens:
   first-screen:
     source: yafti.screen.title
