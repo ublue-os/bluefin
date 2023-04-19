@@ -10,7 +10,6 @@
                 "libgda",
                 "libgda-sqlite",
                 "libratbag-ratbagd",
-                "podman-docker",
                 "podman-compose",
                 "python3-pip",
                 "tailscale",
@@ -30,7 +29,9 @@
     },
     "37": {
         "include": {
-            "all": []
+            "all": [
+	        "podman-docker",
+	    ]
         },
         "exclude": {
             "all": []
@@ -42,7 +43,8 @@
         },
         "exclude": {
             "all": [
-	        "podman-docker"]
+	        "podman-docker"
+	    ]
         }
     }
 }
