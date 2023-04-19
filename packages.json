@@ -30,7 +30,7 @@
     "37": {
         "include": {
             "all": [
-	        "podman-docker",
+	        "podman-docker"
 	    ]
         },
         "exclude": {
