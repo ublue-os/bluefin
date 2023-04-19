@@ -41,7 +41,8 @@
             "all": []
         },
         "exclude": {
-            "all": []
+            "all": [
+	        "podman-docker"]
         }
     }
 }
