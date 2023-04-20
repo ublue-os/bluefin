@@ -1,7 +1,7 @@
 # bluefin
 Fedora Silverblue for Ubuntu Expatriates
 
-**This image is not production ready yet**
+**This image is considered Beta** 
 
 [![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
 
