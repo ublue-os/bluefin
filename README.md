@@ -6,9 +6,9 @@ Fedora Silverblue for Ubuntu Expatriates
 [![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
-- For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together.
-- For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars).
-- For gamers we strive to deliver a world-class Flathub gaming experience.
+- For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together
+- For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars)
+- For gamers we strive to deliver a world-class Flathub gaming experience
 
 ![image](https://user-images.githubusercontent.com/1264109/224488462-ac4ed2ad-402d-4116-bd08-15f61acce5cf.png)
 
@@ -95,7 +95,7 @@ System updates are image-based and automatic. Applications are logically seperat
 
 ### Roadmap and Future Features
 
-- Fedora 38 will be the initial release and will be considered ALPHA
+- Fedora 38 will be the initial release and will be considered Beta
 - Fedora 39 is the target for an initial GA release
 
 These are currently unimplemented ideas that we plan on adding:
@@ -113,7 +113,7 @@ These are currently unimplemented ideas that we plan on adding:
 
 ### Recommended Extensions
 
-The author recommends the following extensions if you'd like to round out your experience. Use the included "Extensions Manager" application to search for these extensions, everything you need to get them to run is already included:
+The authors recommend the following extensions if you'd like to round out your experience. Use the included "Extensions Manager" application to search for these extensions, everything you need to get them to run is already included:
 
 <img src="https://user-images.githubusercontent.com/1264109/224862317-569d018f-a7be-4895-82ff-e2c67652a0ab.png" width="400">
 
