@@ -32,6 +32,10 @@ gnome-extensions:
 nix-me-up:
   echo 'Setting phasers to kill. Installing nix.'
   /usr/bin/ublue-nix-install
+  
+touch:
+  pip install --upgrade gnome-extensions-cli
+  gext install improvedosk@nick-shmyrev.dev
 
 update:
   rpm-ostree update
