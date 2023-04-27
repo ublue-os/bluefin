@@ -3,8 +3,6 @@ on:
   schedule:
     - cron: '20 22 * * *'  # 10:20pm everyday
   push:
-    branches:
-      - main
     paths-ignore:
       - '**.md'
       - '**.txt'
