@@ -49,12 +49,6 @@ binding='<Control><Alt>u'
 command='flatpak run com.raggesilver.BlackBox'
 name='blackbox'
 
-[org/gnome/software]
-allow-updates=false
-download-updates=false
-download-updates-notify=false
-first-run=false
-
 [org/gnome/settings-daemon/plugins/media-keys]
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
 home=['<Super>e']
