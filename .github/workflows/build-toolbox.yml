@@ -42,7 +42,6 @@ jobs:
       - name: Build Image
         id: build_image
         uses: redhat-actions/buildah-build@v2
-        if: github.event_name != 'pull_request'
         with:
           containerfiles: |
             ./Containerfile.toolbox
