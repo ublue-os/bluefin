@@ -6,11 +6,13 @@ LABEL com.github.containers.toolbox="true" \
       summary="A cloud-native terminal experience" \
       maintainer="jorge.castro@gmail.com"
 
+COPY toolbox-packages /toolbox-packages
+
 RUN sed -Ei '/apt-get (update|upgrade)/s/^/#/' /usr/local/sbin/unminimize && \
     apt-get update && \
     yes | /usr/local/sbin/unminimize && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
-        $(cat extra-packages | xargs) && \
+        $(cat /toolbox-packages) && \
     rm -rd /var/lib/apt/lists/*
 
 RUN rm /toolbox-packages
