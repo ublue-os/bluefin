@@ -13,6 +13,7 @@
                 "podman-compose",
                 "python3-pip",
                 "tailscale",
+		"tmux",
                 "wireguard-tools",
                 "xprop",
                 "yaru-theme",
