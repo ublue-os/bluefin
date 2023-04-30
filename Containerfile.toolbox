@@ -12,7 +12,7 @@ RUN sed -Ei '/apt-get (update|upgrade)/s/^/#/' /usr/local/sbin/unminimize && \
     apt-get update && \
     yes | /usr/local/sbin/unminimize && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
-        $(cat toolbox-packages) && \
+        $(cat /toolbox-packages) && \
     rm -rd /var/lib/apt/lists/*
 
 RUN rm /toolbox-packages
