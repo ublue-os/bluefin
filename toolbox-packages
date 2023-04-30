@@ -3,7 +3,6 @@ dbus-x11
 direnv
 ffmpeg
 fzf
-just
 make
 ncdu
 neofetch
@@ -14,4 +13,3 @@ python-is-python3
 python3
 ripgrep
 speedtest-cli
-vimdiff
