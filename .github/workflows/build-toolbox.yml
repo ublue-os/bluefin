@@ -1,4 +1,4 @@
-name: build-toolbox
+name: Build and Push Toolbox Image
 on:
   schedule:
     - cron: '20 22 * * *'  # 10:20pm everyday
