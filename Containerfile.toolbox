@@ -6,20 +6,37 @@ LABEL com.github.containers.toolbox="true" \
       summary="A cloud-native terminal experience" \
       maintainer="jorge.castro@gmail.com"
 
+# Remove apt configuration optimized for containers
+# Remove docker-gzip-indexes to help with "command-not-found"
+RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes /etc/apt/apt.conf.d/docker-no-languages
+
+# Enable myhostname nss plugin for clean hostname resolution without patching
+# hosts (at least for sudo), add it right after 'files' entry. We expect that
+# this entry is not present yet. Do this early so that package postinst (which
+# adds it too late in the order) skips this step
+RUN sed -Ei 's/^(hosts:.*)(\<files\>)\s*(.*)/\1\2 myhostname \3/' /etc/nsswitch.conf
+
 COPY toolbox-packages /toolbox-packages
 
 RUN sed -Ei '/apt-get (update|upgrade)/s/^/#/' /usr/local/sbin/unminimize && \
     apt-get update && \
     yes | /usr/local/sbin/unminimize && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
-        $(cat /toolbox-packages) && \
+        ubuntu-minimal ubuntu-standard \
+        libnss-myhostname \
+        $(cat toolbox-packages | xargs) && \
     rm -rd /var/lib/apt/lists/*
 
 RUN rm /toolbox-packages
+
+# Fix empty bind-mount to clear selinuxfs (see #337)
+RUN mkdir /usr/share/empty
+
+# Add flatpak-spawn to /usr/bin
+RUN ln -s /usr/libexec/flatpak-xdg-utils/flatpak-spawn /usr/bin/
 
 RUN   ln -fs /bin/sh /usr/bin/sh && \
       ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
       ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
       ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree && \
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/transactional-update
+      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
