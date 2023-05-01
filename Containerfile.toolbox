@@ -6,16 +6,6 @@ LABEL com.github.containers.toolbox="true" \
       summary="A cloud-native terminal experience" \
       maintainer="jorge.castro@gmail.com"
 
-# Remove apt configuration optimized for containers
-# Remove docker-gzip-indexes to help with "command-not-found"
-RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes /etc/apt/apt.conf.d/docker-no-languages
-
-# Enable myhostname nss plugin for clean hostname resolution without patching
-# hosts (at least for sudo), add it right after 'files' entry. We expect that
-# this entry is not present yet. Do this early so that package postinst (which
-# adds it too late in the order) skips this step
-RUN sed -Ei 's/^(hosts:.*)(\<files\>)\s*(.*)/\1\2 myhostname \3/' /etc/nsswitch.conf
-
 COPY toolbox-packages /toolbox-packages
 
 RUN sed -Ei '/apt-get (update|upgrade)/s/^/#/' /usr/local/sbin/unminimize && \
@@ -28,12 +18,6 @@ RUN sed -Ei '/apt-get (update|upgrade)/s/^/#/' /usr/local/sbin/unminimize && \
     rm -rd /var/lib/apt/lists/*
 
 RUN rm /toolbox-packages
-
-# Fix empty bind-mount to clear selinuxfs (see #337)
-RUN mkdir /usr/share/empty
-
-# Add flatpak-spawn to /usr/bin
-RUN ln -s /usr/libexec/flatpak-xdg-utils/flatpak-spawn /usr/bin/
 
 RUN   ln -fs /bin/sh /usr/bin/sh && \
       ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
