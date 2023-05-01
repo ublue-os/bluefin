@@ -7,6 +7,10 @@ bios:
 changelogs:
   rpm-ostree db diff --changelogs
 
+distrobox-bluefin:
+  echo 'Creating Blufin Ubuntu distrobox ...'
+  distrobox create --image ghcr.io/ublue-os/ubuntu-toolbox:latest -n bluefin -Y
+
 distrobox-boxkit:
   echo 'Creating Boxkit distrobox ...'
   distrobox create --image ghcr.io/ublue-os/boxkit -n boxkit -Y
