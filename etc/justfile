@@ -26,6 +26,10 @@ distrobox-opensuse:
 distrobox-ubuntu:
   echo 'Creating Ubuntu distrobox ...'
   distrobox create --image quay.io/toolbx-images/ubuntu-toolbox:22.04 -n ubuntu -Y
+  
+distrobox-universal:
+  echo 'Creating Universal Development distrobox ...'
+  distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
 
 gnome-extensions:
   pip install --upgrade gnome-extensions-cli
