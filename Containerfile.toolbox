@@ -8,7 +8,7 @@ LABEL com.github.containers.toolbox="true" \
 
 COPY toolbox-packages /toolbox-packages
 
-RUN apt-get update &&  apt-get upgrade -y \
+RUN apt-get update &&  apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
         $(cat toolbox-packages | xargs) && \
     rm -rd /var/lib/apt/lists/*
