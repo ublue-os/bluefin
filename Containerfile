@@ -38,8 +38,8 @@ RUN /tmp/build.sh && \
     chmod -R 1777 /var/tmp
 
 # xdg-terminal exec
-wget "https://raw.githubusercontent.com/Vladimir-csp/xdg-terminal-exec/master/xdg-terminal-exec" -O "/usr/bin/xdg-terminal-exec"
-chmod +x "/usr/bin/xdg-terminal-exec"
+RUN wget "https://raw.githubusercontent.com/Vladimir-csp/xdg-terminal-exec/master/xdg-terminal-exec" -O "/usr/bin/xdg-terminal-exec"
+RUN chmod +x "/usr/bin/xdg-terminal-exec"
 
 
 # K8s tools
