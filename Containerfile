@@ -37,6 +37,11 @@ RUN /tmp/build.sh && \
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp
 
+# xdg-terminal exec
+wget "https://raw.githubusercontent.com/Vladimir-csp/xdg-terminal-exec/master/xdg-terminal-exec" -O "/usr/bin/xdg-terminal-exec"
+chmod +x "/usr/bin/xdg-terminal-exec"
+
+
 # K8s tools
 
 COPY --from=cgr.dev/chainguard/kubectl:latest /usr/bin/kubectl /usr/bin/kubectl
