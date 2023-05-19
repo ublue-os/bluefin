@@ -44,6 +44,7 @@ nix-me-up:
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
+  gext install gestureImprovements@gestures
 
 update:
   rpm-ostree update
