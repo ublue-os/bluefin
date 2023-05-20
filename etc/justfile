@@ -51,6 +51,10 @@ update:
   flatpak update -y
   distrobox upgrade -a
   
+update-distrobox-git:
+  echo 'Installing latest git snapshot of Distrobox'
+  curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --next --prefix ~/.local
+    
 yafti:
   yafti /etc/yafti.yml
 
