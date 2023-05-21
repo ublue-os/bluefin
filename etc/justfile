@@ -36,6 +36,7 @@ gnome-extensions:
   gext install tailscale-status@maxgallup.github.com
   gext install nightthemeswitcher@romainvigier.fr
   gext install pano@elhan.io
+  gext install weatheroclock@CleoMenezesJr.github.io
 
 nix-me-up:
   echo 'Setting phasers to kill. Installing nix.'
