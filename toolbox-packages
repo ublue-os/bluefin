@@ -3,6 +3,8 @@ dbus-x11
 direnv
 ffmpeg
 fzf
+libegl1-mesa
+libgl1-mesa-glx
 make
 ncdu
 neofetch
