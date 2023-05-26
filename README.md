@@ -7,7 +7,7 @@ Fedora Silverblue for Ubuntu Expatriates
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
 - For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together
-- For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars)
+- For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). These are included in dedicated `bluefin-dx` and `bluefin-dx-nvidia` images
 - For gamers we strive to deliver a world-class Flathub gaming experience
 
 ![image](https://user-images.githubusercontent.com/1264109/224488462-ac4ed2ad-402d-4116-bd08-15f61acce5cf.png)
@@ -27,11 +27,24 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 1. After you reboot you should [pin the working deployment](https://docs.fedoraproject.org/en-US/fedora-silverblue/faq/#_about_using_silverblue) so you can safely rollback. 
 1. [AMD/Intel GPU users only] Open a terminal and rebase the OS to this image:
 
+    Bluefin:
+
         sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:38
+
+    Bluefin DX:
+
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx:38
+
 
 1. [Nvidia GPU users only] Open a terminal and rebase the OS to this image:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:38
+    Bluefin:
+
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-nvidia:38
+        
+    Bluefin DX:
+
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-nvidia:38      
         
 1. Reboot the system and you're done!
 
@@ -94,6 +107,22 @@ System updates are image-based and automatic. Applications are logically seperat
     - [Tailscale](https://tailscale.com/) for VPN
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
     - `zsh` available as an optional shell, use `just zsh` and follow the prompts to configure it
+
+## bluefin-dx - The Bluefin Developer Experience
+
+Dedicated developer image with bundled tools. It endevaours to be the world's most powerful cloud native developer environment. :) It includes everything in the base image plus: 
+
+- VSCode and related tools
+- virt-manager and associated tooling
+- Cockpit and goodies for local and remote management 
+- podman extras (docker compat tools and convenience shortcuts too)
+- LXC/LXD
+- A collection of well curated monospace fonts 
+- hashicorp repo included and enabled
+  - Too many to list
+  - None of them installed by default, but you can just add them to the Containerfile as you need them
+- Kubernetes Tools
+  - helm, ko, flux, minio-client -- if it's an incubated project we intend to add it where appropriate
 
 ### Roadmap and Future Features
 
