@@ -9,7 +9,6 @@ on:
   merge_group:    
   workflow_dispatch:
 env:
-    IMAGE_BASE_NAME: bluefin
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 jobs:
@@ -24,6 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
+        base_name: [bluefin, bluefin-dx]
         major_version: [37, 38]
         include:
           - major_version: 37
@@ -40,9 +40,9 @@ jobs:
       - name: Matrix Variables
         run: |
           if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
-              echo "IMAGE_NAME=bluefin" >> $GITHUB_ENV
+              echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
           else
-              echo "IMAGE_NAME=${{ format('{0}-{1}', env.IMAGE_BASE_NAME, matrix.image_flavor) }}" >> $GITHUB_ENV
+              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
           fi
 
       - name: Generate tags
@@ -122,6 +122,8 @@ jobs:
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
+          extra-args: |
+            --target=${{ matrix.base_name }}
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
