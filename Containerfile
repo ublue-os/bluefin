@@ -4,7 +4,7 @@ ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-37}"
 
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS builder
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
@@ -45,3 +45,30 @@ COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 RUN curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.17.0/kind-$(uname)-amd64"
 RUN chmod +x ./kind
 RUN mv ./kind /usr/bin/kind
+
+FROM bluefin AS bluefin-dx
+
+ARG IMAGE_NAME="${IMAGE_NAME}"
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
+
+# If you need to copy specific files for this -dx edition create
+# a directory called "dx" in the project root, create an etc, in
+# there and drop your files in. Uncomment the line below to enable
+COPY dx/etc /etc
+
+RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
+
+RUN rpm-ostree install code
+RUN rpm-ostree install lxd lxc
+RUN rpm-ostree install iotop dbus-x11 podman-compose podman-docker podman-plugins podman-tui
+RUN rpm-ostree install cascadia-code-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts mozilla-fira-mono-fonts 
+RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt qemu qemu-user-static qemu-user-binfmt edk2-ovmf
+RUN rpm-ostree install cockpit-bridge cockpit-system cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
+
+COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
+COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
+COPY --from=cgr.dev/chainguard/ko:latest /usr/bin/ko /usr/bin/ko
+COPY --from=cgr.dev/chainguard/minio-client:latest /usr/bin/mc /usr/bin/mc
+
+RUN rm -rf /tmp/* /var/*
+RUN ostree container commit
