@@ -1,3 +1,7 @@
+!include /usr/share/ublue-os/just/main.just
+!include /usr/share/ublue-os/just/nvidia.just
+!include /usr/share/ublue-os/just/custom.just
+
 default:
     @just --list
     
