@@ -51,7 +51,10 @@ FROM bluefin AS bluefin-dx
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
-COPY etc /etc
+# If you need to copy specific files for this -dx edition create
+# a directory called "dx" in the project root, create an etc, in
+# there and drop your files in. Uncomment the line below to enable
+COPY dx/etc /etc
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
 

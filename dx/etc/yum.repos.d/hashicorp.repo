@@ -1,0 +1,13 @@
+[hashicorp]
+name=Hashicorp Stable - $basearch
+baseurl=https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/stable
+enabled=1
+gpgcheck=1
+gpgkey=https://rpm.releases.hashicorp.com/gpg
+
+[hashicorp-test]
+name=Hashicorp Test - $basearch
+baseurl=https://rpm.releases.hashicorp.com/fedora/$releasever/$basearch/test
+enabled=0
+gpgcheck=1
+gpgkey=https://rpm.releases.hashicorp.com/gpg
