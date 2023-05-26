@@ -62,7 +62,7 @@ RUN wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 RUN rpm-ostree install code
 RUN rpm-ostree install lxd lxc
 RUN rpm-ostree install iotop dbus-x11 podman-compose podman-docker podman-plugins podman-tui
-RUN rpm-ostree install cascadia-code-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts mozilla-fira-mono-fonts nerd-fonts
+RUN rpm-ostree install cascadiacode-nerd-fonts firacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibmplexmono-nerd-fonts jetbrainsmono-nerd-fonts mozilla-fira-mono-fonts sourcecodepro-nerd-fonts ubuntu-nerd-fonts ubuntumono-nerd-fonts 
 RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt qemu qemu-user-static qemu-user-binfmt edk2-ovmf
 RUN rpm-ostree install cockpit-bridge cockpit-system cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
 
