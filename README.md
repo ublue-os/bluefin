@@ -95,6 +95,22 @@ System updates are image-based and automatic. Applications are logically seperat
     - [Just](https://github.com/casey/just) task runner for post-install automation tasks
     - `zsh` available as an optional shell, use `just zsh` and follow the prompts to configure it
 
+## bluefin-dx - The Bluefin Developer Experience
+
+Dedicated developer image with bundled tools. It endevaours to be the world's most powerful cloud native developer environment. :)
+
+- VSCode and related tools
+- virt-manager and associated tooling
+- Cockpit and goodies for local and remote management 
+- podman extras (docker compat tools and convenience shortcuts too)
+- LXC/LXD
+- A collection of well curated monospace fonts 
+- hashicorp repo included and enabled
+  - Too many to list
+  - None of them installed by default, but you can just add them to the Containerfile as you need them
+- Kubernetes Tools
+  - helm, ko, flux, minio-client -- if it's an incubated project we intend to add it where appropriate
+
 ### Roadmap and Future Features
 
 - Fedora 38 will be the initial release and will be considered Beta
