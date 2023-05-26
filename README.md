@@ -110,7 +110,7 @@ System updates are image-based and automatic. Applications are logically seperat
 
 ## bluefin-dx - The Bluefin Developer Experience
 
-Dedicated developer image with bundled tools. It endevaours to be the world's most powerful cloud native developer environment. :)
+Dedicated developer image with bundled tools. It endevaours to be the world's most powerful cloud native developer environment. :) It includes everything in the base image plus: 
 
 - VSCode and related tools
 - virt-manager and associated tooling
