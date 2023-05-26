@@ -46,14 +46,15 @@ RUN curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.17.0/kind-$(uname)-amd64"
 RUN chmod +x ./kind
 RUN mv ./kind /usr/bin/kind
 
+## bluefin-dx developer edition image section
+# TODO: this should be in packages.json but yolo for now
+
 FROM bluefin AS bluefin-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
-# If you need to copy specific files for this -dx edition create
-# a directory called "dx" in the project root, create an etc, in
-# there and drop your files in. Uncomment the line below to enable
+# dx specific files come from the dx directory in this repo
 COPY dx/etc /etc
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
@@ -65,6 +66,7 @@ RUN rpm-ostree install iotop dbus-x11 podman-compose podman-docker podman-plugin
 RUN rpm-ostree install cascadiacode-nerd-fonts firacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibmplexmono-nerd-fonts jetbrainsmono-nerd-fonts mozilla-fira-mono-fonts sourcecodepro-nerd-fonts ubuntu-nerd-fonts ubuntumono-nerd-fonts 
 RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt qemu qemu-user-static qemu-user-binfmt edk2-ovmf
 RUN rpm-ostree install cockpit-bridge cockpit-system cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
+RUN rpm-ostree install p7zip p7zip-plugins powertop 
 
 COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
 COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
