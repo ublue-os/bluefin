@@ -45,6 +45,10 @@ gnome-extensions:
 nix-me-up:
   echo 'Setting phasers to kill. Installing nix.'
   /usr/bin/ublue-nix-install
+
+nix-devbox:
+  echo 'Installing devbox!'
+  curl -fsSL https://get.jetpack.io/devbox | bash
   
 touch:
   pip install --upgrade gnome-extensions-cli
