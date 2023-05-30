@@ -49,6 +49,7 @@ screens:
           - Logs: org.gnome.Logs
           - Maps: org.gnome.Maps
           - Nautilus Preview: org.gnome.NautilusPreviewer
+          - Syncthing: com.github.zocker_160.SyncThingy
           - Text Editor: org.gnome.TextEditor
           - Weather: org.gnome.Weather
           - Disk Usage Analyzer: org.gnome.baobab
