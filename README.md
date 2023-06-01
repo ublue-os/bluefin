@@ -40,7 +40,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
     Bluefin:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-nvidia:38
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:38
         
     Bluefin DX:
 
