@@ -44,6 +44,13 @@ force-straight-corner=false
 custom-theme-shrink=true
 disable-overview-on-startup=true
 transparency-mode='DYNAMIC'
+animation-time=0.15
+background-color='rgb(40,40,40)'
+background-opacity=0.8
+custom-background-color=true
+customize-alphas=true
+max-alpha=0.8
+min-alpha=0.5
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control><Alt>t'
