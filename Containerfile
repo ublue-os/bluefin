@@ -68,7 +68,11 @@ RUN rpm-ostree install iotop dbus-x11 podman-compose podman-docker podman-plugin
 RUN rpm-ostree install adobe-source-code-pro-fonts cascadiacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts jetbrains-mono-fonts-all mozilla-fira-mono-fonts powerline-fonts ubuntumono-nerd-fonts
 RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt qemu qemu-user-static qemu-user-binfmt edk2-ovmf
 RUN rpm-ostree install cockpit-bridge cockpit-system cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
-RUN rpm-ostree install cargo nodejs-npm p7zip p7zip-plugins powertop rust
+RUN rpm-ostree install p7zip p7zip-plugins powertop
+RUN rpm-ostree install rpm-ostree install diffstat doxygen patch patchutils subversion systemtap clang15-libs clang15-resource-filesystem dyninst ed elfutils-devel libserf llvm15-libs \
+perl-File-Find perl-Git perl-TermReadKey perl-lib perl-File-Copy perl-ExtUtils-Command perl-AutoSplit perl-Compare perl-FindBin perl-IPC-Cmd perl-Pod-Html perl-Benchmark \
+subversion-libs systemtap-client systemtap-devel systemtap-runtime tbb \ 
+utf8proc xapian-core-libs xz-devel elfutils-debuginfod-client-devel 
 
 COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
 COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
