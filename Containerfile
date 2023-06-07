@@ -70,7 +70,7 @@ RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvi
 RUN rpm-ostree install cockpit-bridge cockpit-system cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
 RUN rpm-ostree install p7zip p7zip-plugins powertop
 RUN rpm-ostree install diffstat doxygen patch patchutils subversion systemtap clang15-libs clang15-resource-filesystem dyninst ed elfutils-devel libserf llvm15-libs \
-perl-File-Find perl-Git perl-TermReadKey perl-lib perl-File-Copy perl-ExtUtils-Command perl-AutoSplit perl-Compare perl-FindBin perl-IPC-Cmd perl-Pod-Html perl-Benchmark \
+perl-File-Find perl-Git perl-TermReadKey perl-lib perl-File-Copy perl-ExtUtils-Command perl-AutoSplit perl-File-Compare perl-FindBin perl-IPC-Cmd perl-Pod-Html perl-Benchmark \
 subversion-libs systemtap-client systemtap-devel systemtap-runtime tbb \ 
 utf8proc xapian-core-libs xz-devel elfutils-debuginfod-client-devel 
 
