@@ -22,13 +22,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia]
+        image_flavor: [main]
         base_name: [bluefin, bluefin-dx]
-        major_version: [37, 38]
+        major_version: [38]
         include:
-          - major_version: 37
-            is_latest_version: false
-            is_stable_version: false
           - major_version: 38
             is_latest_version: true
             is_stable_version: true
