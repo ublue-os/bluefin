@@ -1,5 +1,5 @@
 # bluefin
-Fedora Silverblue for Ubuntu Expatriates
+Evolve.
 
 **This image is considered Beta** 
 
@@ -98,10 +98,12 @@ System updates are image-based and automatic. Applications are logically seperat
     - [kind](https://kind.sigs.k8s.io/) - Run a Kubernetes cluster on your machine. Do a `kind create cluster` on the host to get started!
     - [kubectl](https://kubernetes.io/docs/reference/kubectl/) - Administer Kubernetes Clusters
     - [Podman-Docker](https://github.com/containers/podman) - Automatically aliases the `docker` command to `podman`
-- Nix-powered Development Experience (Alpha) 
-    - [Introducing Fleek](https://github.com/ublue-os/fleek) - a user-friendly wrapper around Nix and Nix Home Manager
-    - Run `/usr/bin/ublue-nix-install` to get started, then `fleek help` to learn more
-    - This feature is experimental and not considered ready for production. It is for experienced users only, but is improving quickly
+- Nix-powered Development Experience powered by Devbox
+    - [Introducing Fleek](https://getfleek.dev)
+      - `just nix-devbox` to get started
+      - `just nix-devbox-global` to install a global profile
+      - Check out [Devbox](https://www.jetpack.io/devbox) for more information
+    - This feature is considered Beta but improving quickly
 - Quality of Life Improvements
     - systemd shutdown timers adjusted to 15 seconds
     - [Tailscale](https://tailscale.com/) for VPN
