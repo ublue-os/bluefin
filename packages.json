@@ -2,6 +2,8 @@
     "all": {
         "include": {
             "all": [
+		"ddccontrol", 
+		"ddccontrol-gtk",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell",
