@@ -92,7 +92,7 @@ FROM bluefin-dx as bluefin-framework
 
 RUN rpm-ostree install tlp tlp-rdw
 RUN rpm-ostree override remove power-profiles-daemon
-RUN systemctl start tlp
+RUN systemctl enable tlp
 
 RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
