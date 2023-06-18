@@ -88,7 +88,7 @@ RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
 
 # Image for Framework laptops
-FROM bluefin-dx as bluefin-framework
+FROM bluefin-dx as bluefin-dx-framework
 
 RUN rpm-ostree install tlp tlp-rdw
 RUN rpm-ostree override remove power-profiles-daemon
