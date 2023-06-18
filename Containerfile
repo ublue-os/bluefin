@@ -86,3 +86,13 @@ RUN rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
 
 RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
+
+# Image for Framework laptops
+FROM bluefin-dx as bluefin-framework
+
+RUN rpm-ostree install tlp tlp-rdw
+RUN rpm-ostree override remove power-profiles-daemon
+RUN systemctl start tlp
+
+RUN rm -rf /tmp/* /var/*
+RUN ostree container commit
