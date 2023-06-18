@@ -23,7 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
-        base_name: [bluefin, bluefin-dx, bluefin-framework]
+        base_name: [bluefin, bluefin-dx, bluefin-dx-framework]
+        exclude:
+          - base_name: bluefin-dx-framework
+            image_flavor: nvidia
         major_version: [37, 38]
         include:
           - major_version: 37
