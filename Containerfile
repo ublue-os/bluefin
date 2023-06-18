@@ -90,6 +90,8 @@ RUN ostree container commit
 # Image for Framework laptops
 FROM bluefin-dx as bluefin-framework
 
+COPY framework/usr /usr
+
 RUN rpm-ostree install tlp tlp-rdw
 RUN rpm-ostree override remove power-profiles-daemon
 RUN systemctl enable tlp
