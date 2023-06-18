@@ -2,6 +2,7 @@
     "all": {
         "include": {
             "all": [
+	        "cockpit-bridge",
 		"ddccontrol", 
 		"ddccontrol-gtk",
                 "gnome-shell-extension-appindicator",
