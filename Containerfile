@@ -89,7 +89,7 @@ RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
 
 # Image for Framework laptops
-FROM ${TARGET_BASE} as framework
+FROM bluefin AS bluefin-framework
 
 COPY framework/usr /usr
 
