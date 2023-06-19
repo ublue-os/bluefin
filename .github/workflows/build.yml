@@ -23,18 +23,20 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
-        base_name: [bluefin, bluefin-dx, framework]
+        base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
         major_version: [37, 38]
         exclude:
-          - base_name: framework
+          - base_name: bluefin-dx-framework
+            image_flavor: nvidia
+          - base_name: bluefin-framework
             image_flavor: nvidia
         include:
-          - base_name: framework
-            target_name: bluefin
-            image_name: bluefin-framework
-          - base_name: framework
-            target_name: bluefin-dx
-            image_name: bluefin-dx-framework
+          - base_name: bluefin-framework
+            target_base: bluefin
+            target_name: framework
+          - base_name: bluefin-dx-framework
+            target_base: bluefin-dx
+            target_name: framework
           - major_version: 37
             is_latest_version: false
             is_stable_version: false
@@ -49,9 +51,9 @@ jobs:
       - name: Matrix Variables
         run: |
           if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
-              echo "IMAGE_NAME=${{ matrix.image_name || matrix.base_name }}" >> $GITHUB_ENV
+              echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
           else
-              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.image_name || matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
           fi
 
       - name: Generate tags
@@ -129,11 +131,11 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
-            TARGET_NAME=${{ matrix.target_name }}
+            TARGET_BASE=${{ matrix.target_base }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
           extra-args: |
-            --target=${{ matrix.base_name }}
+            --target=${{ matrix.target_name || matrix.base_name }}
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12

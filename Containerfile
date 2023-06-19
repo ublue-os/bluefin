@@ -3,7 +3,7 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
 ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-37}"
-ARG TARGET_NAME="${TARGET_NAME:-bluefin}"
+ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
 
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 
@@ -89,7 +89,7 @@ RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
 
 # Image for Framework laptops
-FROM ${TARGET_NAME} as framework
+FROM ${TARGET_BASE} as framework
 
 COPY framework/usr /usr
 
