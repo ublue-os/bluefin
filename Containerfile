@@ -89,7 +89,7 @@ RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
 
 # Image for Framework laptops
-FROM ${TARGET_NAME} as ${TARGET_NAME}-framework
+FROM ${TARGET_NAME} as framework
 
 COPY framework/usr /usr
 
