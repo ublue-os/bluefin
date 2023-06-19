@@ -1,3 +1,7 @@
+benchmark:
+  echo 'Running a 1 minute benchmark ...'
+  stress-ng --matrix 0 -t 1m --times
+
 distrobox-bluefin:
   echo 'Creating Blufin Ubuntu distrobox ...'
   distrobox create --image ghcr.io/ublue-os/ubuntu-toolbox:latest -n bluefin -Y
