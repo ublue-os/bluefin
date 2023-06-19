@@ -23,12 +23,18 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
-        base_name: [bluefin, bluefin-dx, bluefin-dx-framework]
+        base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
+        major_version: [37, 38]
         exclude:
           - base_name: bluefin-dx-framework
             image_flavor: nvidia
-        major_version: [37, 38]
+          - base_name: bluefin-framework
+            image_flavor: nvidia
         include:
+          - base_name: bluefin-framework
+            target_name: bluefin
+          - base_name: bluefin-dx-framework
+            target_name: bluefin-dx
           - major_version: 37
             is_latest_version: false
             is_stable_version: false
@@ -123,6 +129,7 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
+            TARGET_NAME=${{ matrix.target_name }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
           extra-args: |
