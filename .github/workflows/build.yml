@@ -26,9 +26,7 @@ jobs:
         base_name: [bluefin, bluefin-dx, framework]
         major_version: [37, 38]
         exclude:
-          - base_name: bluefin-dx-framework
-            image_flavor: nvidia
-          - base_name: bluefin-framework
+          - base_name: framework
             image_flavor: nvidia
         include:
           - base_name: framework
