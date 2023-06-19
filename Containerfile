@@ -95,7 +95,7 @@ COPY framework/usr /usr
 
 RUN rpm-ostree install tlp tlp-rdw
 RUN rpm-ostree override remove power-profiles-daemon
-RUN rpm-ostree kargs --append=‘hid_sensor_hub.blacklist=1 modprobe.blacklist=hid_sensor_hub’
+RUN rpm-ostree kargs --append='hid_sensor_hub.blacklist=1 modprobe.blacklist=hid_sensor_hub'
 RUN systemctl enable tlp
 
 RUN rm -rf /tmp/* /var/*
