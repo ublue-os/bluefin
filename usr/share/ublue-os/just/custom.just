@@ -10,6 +10,9 @@ distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
 
+fish:
+  sudo lchsh -i
+
 gnome-extensions:
   pip install --upgrade gnome-extensions-cli
   gext install tailscale-status@maxgallup.github.com
