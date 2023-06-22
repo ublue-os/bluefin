@@ -77,6 +77,12 @@ COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
 COPY --from=cgr.dev/chainguard/ko:latest /usr/bin/ko /usr/bin/ko
 COPY --from=cgr.dev/chainguard/minio-client:latest /usr/bin/mc /usr/bin/mc
 
+# Install DevPod
+RUN wget https://github.com/loft-sh/devpod/releases/latest/download/DevPod_linux_x86_64.rpm -O /tmp/devpod.rpm && \
+  rpm-ostree install /tmp/devpod.rpm && \
+  wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
+  install -c -m 0755 /tmp/devpod /usr/bin
+
 RUN /tmp/workarounds.sh
 
 # Clean up repos, everything is on the image so we don't need them
