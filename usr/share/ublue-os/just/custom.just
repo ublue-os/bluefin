@@ -1,3 +1,7 @@
+benchmark:
+  echo 'Running a 1 minute benchmark ...'
+  stress-ng --matrix 0 -t 1m --times
+
 distrobox-bluefin:
   echo 'Creating Blufin Ubuntu distrobox ...'
   distrobox create --image ghcr.io/ublue-os/ubuntu-toolbox:latest -n bluefin -Y
@@ -5,6 +9,9 @@ distrobox-bluefin:
 distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
+
+fish:
+  sudo lchsh -i
 
 gnome-extensions:
   pip install --upgrade gnome-extensions-cli

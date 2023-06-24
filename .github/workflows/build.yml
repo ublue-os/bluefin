@@ -23,12 +23,20 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
-        base_name: [bluefin, bluefin-dx]
-        major_version: [37, 38]
+        base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
+        major_version: [38]
+        exclude:
+          - base_name: bluefin-dx-framework
+            image_flavor: nvidia
+          - base_name: bluefin-framework
+            image_flavor: nvidia
         include:
-          - major_version: 37
-            is_latest_version: false
-            is_stable_version: false
+          - base_name: bluefin-framework
+            target_base: bluefin
+            target_name: framework
+          - base_name: bluefin-dx-framework
+            target_base: bluefin-dx
+            target_name: framework
           - major_version: 38
             is_latest_version: true
             is_stable_version: true
@@ -106,6 +114,20 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
+      # Update FROM lines for variants that have their own matrix via SED
+      # This is due to limitations in buildah using interpreted values as registry
+      # images and not image targets in file:
+      #   `FROM ${TARGET_BASE} as framework`
+      # evalutates to `FROM bluefin as framework` but buildah then looks for quay.io/bluefin
+      # vs the existing containerfile target.
+      # TODO(GH-280): Find an alternative for this rather than using sed.
+      - name: Build Image
+        id: sed_workaround
+        if: matrix.target_base
+        shell: bash
+        run: |
+          sed -i 's/FROM bluefin AS bluefin-framework/FROM ${{ matrix.target_base }} AS ${{ matrix.base_name }}/' Containerfile
+
       # Build image using Buildah action
       - name: Build Image
         id: build_image
@@ -120,8 +142,12 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
+            TARGET_BASE=${{ matrix.target_base }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
+          # TODO(GH-280)
+          # extra-args: |
+          #   --target=${{ matrix.target_name || matrix.base_name }}
           extra-args: |
             --target=${{ matrix.base_name }}
 

@@ -2,8 +2,10 @@
     "all": {
         "include": {
             "all": [
+	        "cockpit-bridge",
 		"ddccontrol", 
 		"ddccontrol-gtk",
+		"fish",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell",
