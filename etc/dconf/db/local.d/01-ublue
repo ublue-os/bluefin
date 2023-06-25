@@ -57,11 +57,6 @@ binding='<Control><Alt>t'
 command='gnome-terminal'
 name='gnome-terminal'
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
-binding='<Control><Alt>u'
-command='flatpak run com.raggesilver.BlackBox'
-name='blackbox'
-
 [org/gnome/settings-daemon/plugins/media-keys]
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
 home=['<Super>e']
@@ -71,10 +66,13 @@ sort-directories-first=true
 
 [com/raggesilver/BlackBox]
 command-as-login-shell=true
-use-custom-command=true
-custom-shell-command='distrobox enter ubuntu'
 theme-dark="Yaru"
 style-preference=2
 font="Ubuntu Mono 16"
 window-width=975
 window-height=650
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Control><Alt>u'
+command='flatpak run com.raggesilver.BlackBox --command "distrobox enter ubuntu"'
+name='blackbox ubuntu'
