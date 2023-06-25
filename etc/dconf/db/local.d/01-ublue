@@ -66,6 +66,8 @@ sort-directories-first=true
 
 [com/raggesilver/BlackBox]
 command-as-login-shell=true
+use-custom-command=true
+custom-shell-command='distrobox enter ubuntu'
 theme-dark="Yaru"
 style-preference=2
 font="Ubuntu Mono 16"
