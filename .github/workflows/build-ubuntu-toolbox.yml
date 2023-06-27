@@ -1,11 +1,8 @@
-name: Build and Push Toolbox Image
+name: Build and Push Ubuntu Toolbox Image
 on:
   schedule:
     - cron: '20 22 * * *'  # 10:20pm everyday
   pull_request:
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
   merge_group:    
   workflow_dispatch:
 env:
@@ -44,7 +41,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           containerfiles: |
-            ./Containerfile.toolbox
+            ./toolboxes/Containerfile.ubuntu
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ env.IMAGE_TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
