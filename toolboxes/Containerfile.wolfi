@@ -6,7 +6,7 @@ LABEL com.github.containers.toolbox="true" \
       summary="A new cloud-native terminal experience powered by Wolfi" \
       maintainer="jorge.castro@gmail.com"
 
-COPY packages.wolfi /toolbox-packages
+COPY ./toolboxes/packages.wolfi /toolbox-packages
 
 RUN apk update && \
     apk upgrade && \

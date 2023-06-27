@@ -6,7 +6,7 @@ LABEL com.github.containers.toolbox="true" \
       summary="A cloud-native terminal experience powered by Ubuntu" \
       maintainer="jorge.castro@gmail.com"
 
-COPY packages.ubuntu /toolbox-packages
+COPY ./toolboxes/packages.ubuntu /toolbox-packages
 
 RUN apt-get update && \ 
     apt-get upgrade -y && \
