@@ -10,7 +10,8 @@ COPY ./toolboxes/packages.wolfi /toolbox-packages
 
 RUN apk update && \
     apk upgrade && \
-    grep -v '^#' /toolbox-packages | xargs apk add
+    apk add bash micro
+# grep -v '^#' /toolbox-packages | xargs apk add
     
 RUN rm /toolbox-packages
 
