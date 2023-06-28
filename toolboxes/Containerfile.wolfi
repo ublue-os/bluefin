@@ -10,7 +10,7 @@ COPY ./toolboxes/packages.wolfi /toolbox-packages
 
 RUN apk update && \
     apk upgrade && \
-    apk add bash micro
+    apk add bash curl git posix-libc-utils
 # grep -v '^#' /toolbox-packages | xargs apk add
     
 RUN rm /toolbox-packages
