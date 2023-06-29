@@ -4,5 +4,4 @@ curl
 git
 posix-libc-utils
 su-exec
-uutils
 vim
