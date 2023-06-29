@@ -14,3 +14,5 @@ RUN apk update && \
     
 RUN rm /toolbox-packages
 
+# Change root shell to BASH
+RUN sed -i -e '/^root/s/\/bin\/ash/\/bin\/bash/' /etc/passwd
