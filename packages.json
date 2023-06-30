@@ -2,9 +2,14 @@
     "all": {
         "include": {
             "all": [
+                "clevis",
+                "clevis-dracut",
+                "clevis-udisks2",
 	        "cockpit-bridge",
 		"ddccontrol", 
 		"ddccontrol-gtk",
+                "evolution",
+                "freeipa-client",
 		"fish",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
@@ -16,6 +21,7 @@
                 "libratbag-ratbagd",
 		"nautilus-gsconnect",    
                 "python3-pip",
+                "rclone",
 		"samba",
 		"samba-ldb-ldap-modules", 
 		"samba-dcerpc",
@@ -23,6 +29,8 @@
 		"samba-winbind-modules",
                 "tailscale",
 		"tmux",
+                "vim",
+                "vim-default-editor",
                 "wireguard-tools",
                 "xprop",
                 "yaru-theme",
@@ -31,8 +39,6 @@
         },
         "exclude": {
             "all": [
-                "firefox",
-                "firefox-langpacks",
                 "gnome-tour"
             ]
         }
