@@ -39,7 +39,8 @@
         },
         "exclude": {
             "all": [
-                "gnome-tour"
+                "gnome-tour",
+                "nano-default-editor"
             ]
         }
     },
