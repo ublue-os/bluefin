@@ -10,7 +10,7 @@ primary-color='000000'
 secondary-color='FFFFFF'
 
 [org/gnome/desktop/interface]
-enable-hot-corners=false
+enable-hot-corners=true
 clock-show-weekday=true
 cursor-theme="Yaru"
 icon-theme="Yaru"
@@ -25,7 +25,6 @@ allow-volume-above-100-percent=true
 theme-name="Yaru"
 
 [org/gnome/desktop/wm/preferences]
-button-layout=":minimize,maximize,close"
 num-workspaces='4'
 title-bar-font="Ubuntu Bold 12"
 
