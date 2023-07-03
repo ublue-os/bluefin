@@ -20,10 +20,6 @@ font-name="Ubuntu 12"
 document-font-name="Ubuntu 12"
 monospace-font-name="Ubuntu Mono 18"
 
-[org/gnome/desktop/sound]
-allow-volume-above-100-percent=true
-theme-name="Yaru"
-
 [org/gnome/desktop/wm/preferences]
 num-workspaces='4'
 title-bar-font="Ubuntu Bold 12"
