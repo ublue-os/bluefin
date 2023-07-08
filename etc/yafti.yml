@@ -81,6 +81,7 @@ screens:
           description: Bow to Capitalism
           default: false
           packages:
+          - Gnome Next Meeting Applet: com.chmouel.gnomeNextMeetingApplet
           - LibreOffice: org.libreoffice.LibreOffice
           - Obsidian: md.obsidian.Obsidian
           - OnlyOffice: org.onlyoffice.desktopeditors
