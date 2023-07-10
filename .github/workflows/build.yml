@@ -14,7 +14,7 @@ env:
 jobs:
   push-ghcr:
     name: Build and push image
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-big
     permissions:
       contents: read
       packages: write
