@@ -3,7 +3,7 @@ Evolve.
 
 **This image is considered Beta** 
 
-[![release-please](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/release-please.yml)
+[![release-please](https://github.com/bpbeatty/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/bpbeatty/bluefin/actions/workflows/release-please.yml)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
 - For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together
@@ -29,22 +29,22 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
     Bluefin:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:38
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/bpbeatty/bluefin:38
 
     Bluefin DX:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx:38
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/bpbeatty/bluefin-dx:38
 
 
 1. [Nvidia GPU users only] Open a terminal and rebase the OS to this image:
 
     Bluefin:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:38
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/bpbeatty/bluefin-nvidia:38
         
     Bluefin DX:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-nvidia:38      
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/bpbeatty/bluefin-dx-nvidia:38
         
 1. Reboot the system and you're done!
 
@@ -55,7 +55,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 Check the [Silverblue documentation](https://docs.fedoraproject.org/en-US/fedora-silverblue/) for instructions on how to use rpm-ostree. 
 We build date tags as well, so if you want to rebase to a particular day's release you can use the version number and date to boot off of that specific image:
   
-    sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:37-20230310 
+    sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/bpbeatty/bluefin:37-20230310
 
 The `latest` tag will automatically point to the latest build. 
 
@@ -160,13 +160,13 @@ The authors recommend the following extensions if you'd like to round out your e
 
 These images are signed with sigstore's [cosign](https://docs.sigstore.dev/cosign/overview/). You can verify the signature by downloading the `cosign.pub` key from this repo and running the following command:
 
-    cosign verify --key cosign.pub ghcr.io/ublue-os/bluefin
+    cosign verify --key cosign.pub ghcr.io/bpbeatty/bluefin
     
 ## Building Locally
 
 1. Clone this repository and cd into the working directory
 
-       git clone https://github.com/ublue-os/bluefin.git
+       git clone https://github.com/bpbeatty/bluefin.git
        cd bluefin
 
 1. Make modifications if desired
