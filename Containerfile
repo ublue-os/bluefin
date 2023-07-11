@@ -24,6 +24,7 @@ ADD packages.json /tmp/packages.json
 ADD build.sh /tmp/build.sh
 
 RUN /tmp/build.sh && \
+    setsebool -P -N use_nfs_home_dirs=1 unconfined_mozilla_plugin_transition=0 && \
     pip install --prefix=/usr yafti && \
     systemctl unmask dconf-update.service && \
     systemctl enable dconf-update.service && \
