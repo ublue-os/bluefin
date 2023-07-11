@@ -3,9 +3,6 @@ on:
   schedule:
     - cron: '00 10 * * *'  # 10:00am everyday
   pull_request:
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
   merge_group:    
   workflow_dispatch:
 env:
