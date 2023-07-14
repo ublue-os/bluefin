@@ -3,7 +3,9 @@ Evolve.
 
 **This image is considered Beta** 
 
-[![release-please](https://github.com/bpbeatty/bluefin/actions/workflows/release-please.yml/badge.svg)](https://github.com/bpbeatty/bluefin/actions/workflows/release-please.yml)
+[![Bluefin Build](https://github.com/bpbeatty/bluefin/actions/workflows/build.yml/badge.svg)](https://github.com/bpbeatty/bluefin/actions/workflows/build.yml)
+
+[![Ubuntu Toolbox Build](https://github.com/bpbeatty/bluefin/actions/workflows/build-ubuntu-toolbox.yml/badge.svg)](https://github.com/bpbeatty/bluefin/actions/workflows/build-ubuntu-toolbox.yml)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
 - For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together
