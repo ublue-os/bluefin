@@ -83,6 +83,8 @@ RUN wget https://github.com/loft-sh/devpod/releases/latest/download/DevPod_linux
   wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
   install -c -m 0755 /tmp/devpod /usr/bin
 
+RUN systemctl enable podman.socket
+
 RUN /tmp/workarounds.sh
 
 # Clean up repos, everything is on the image so we don't need them
