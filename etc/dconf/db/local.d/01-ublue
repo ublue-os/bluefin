@@ -59,7 +59,7 @@ name='gnome-terminal'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
-command='flatpak run com.raggesilver.BlackBox --command "distrobox enter ubuntu"'
+command='flatpak run com.raggesilver.BlackBox'
 name='blackbox ubuntu'
 
 [org/gnome/settings-daemon/plugins/media-keys]
