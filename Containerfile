@@ -105,6 +105,7 @@ COPY framework/usr /usr
 RUN rpm-ostree install tlp tlp-rdw stress-ng
 RUN rpm-ostree override remove power-profiles-daemon
 RUN systemctl enable tlp
+RUN systemctl enable fprintd.service
 
 RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
