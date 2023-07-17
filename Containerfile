@@ -100,6 +100,7 @@ RUN ostree container commit
 # Image for Framework laptops
 FROM bluefin AS bluefin-framework
 
+COPY framework/etc /etc
 COPY framework/usr /usr
 
 RUN rpm-ostree install tlp tlp-rdw stress-ng
