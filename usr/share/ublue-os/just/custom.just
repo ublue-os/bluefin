@@ -10,6 +10,10 @@ distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
 
+fix-fractional-scaling
+  echo 'Turning on fractional scaling, remember to log out and back in ...'
+  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+
 fish:
   sudo lchsh -i
 
@@ -19,7 +23,6 @@ gnome-extensions:
   gext install nightthemeswitcher@romainvigier.fr
   gext install pano@elhan.io
   gext install weatheroclock@CleoMenezesJr.github.io
-
 
 nix-devbox:
   echo 'Setting phasers to kill. Installing nix.'
@@ -35,7 +38,6 @@ nix-devbox-global:
   echo 'run "devbox global run install-zsh-hook" to configure zsh shell'
   echo 'run "devbox global run" to see other available configuration commands'
  
-  
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
