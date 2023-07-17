@@ -39,6 +39,7 @@ screens:
           - Calculator: org.gnome.Calculator
           - Calendar: org.gnome.Calendar
           - Characters: org.gnome.Characters
+          - Codecs: org.freedesktop.Platform.ffmpeg-full
           - Connections: org.gnome.Connections
           - Contacts: org.gnome.Contacts
           - Document Viewer: org.gnome.Evince
