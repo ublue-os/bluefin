@@ -69,6 +69,9 @@ home=['<Super>e']
 [org/gtk/gtk4/settings/file-chooser]
 sort-directories-first=true
 
+[org/gnome/mutter]
+experimental-features=['scale-monitor-framebuffer']
+
 [com/raggesilver/BlackBox]
 command-as-login-shell=true
 use-custom-command=true
