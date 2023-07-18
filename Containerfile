@@ -34,6 +34,9 @@ RUN /tmp/build.sh && \
     fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
+    rm -f /usr/share/applications/fish.desktop && \
+    rm -f /usr/share/applications/htop.desktop && \
+    rm -f /usr/share/applications/nvtop.desktop && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     rm -rf /tmp/* /var/* && \
@@ -46,7 +49,7 @@ RUN /tmp/build.sh && \
 COPY --from=cgr.dev/chainguard/kubectl:latest /usr/bin/kubectl /usr/bin/kubectl
 COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 
-RUN curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.17.0/kind-$(uname)-amd64"
+RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64"
 RUN chmod +x ./kind
 RUN mv ./kind /usr/bin/kind
 
@@ -85,6 +88,9 @@ RUN wget https://github.com/loft-sh/devpod/releases/latest/download/DevPod_linux
   wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
   install -c -m 0755 /tmp/devpod /usr/bin
 
+RUN systemctl enable podman.socket
+RUN systemctl disable pmie.service
+
 RUN /tmp/workarounds.sh
 
 # Clean up repos, everything is on the image so we don't need them
@@ -100,11 +106,13 @@ RUN ostree container commit
 # Image for Framework laptops
 FROM bluefin AS bluefin-framework
 
+COPY framework/etc /etc
 COPY framework/usr /usr
 
 RUN rpm-ostree install tlp tlp-rdw stress-ng
 RUN rpm-ostree override remove power-profiles-daemon
 RUN systemctl enable tlp
+RUN systemctl enable fprintd.service
 
 RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
