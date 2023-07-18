@@ -87,6 +87,7 @@ RUN wget https://github.com/loft-sh/devpod/releases/latest/download/DevPod_linux
   install -c -m 0755 /tmp/devpod /usr/bin
 
 RUN systemctl enable podman.socket
+RUN systemctl disable pmie.service
 
 RUN /tmp/workarounds.sh
 
