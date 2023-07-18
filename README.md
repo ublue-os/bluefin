@@ -1,5 +1,4 @@
 # bluefin
-Evolve.
 
 **This image is considered Beta** 
 
@@ -33,7 +32,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
         sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:38
 
-    Bluefin DX:
+    Bluefin Developer Experience:
 
         sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx:38
 
@@ -44,7 +43,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
         sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:38
         
-    Bluefin DX:
+    Bluefin Developer Experience:
 
         sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-nvidia:38      
         
@@ -74,59 +73,78 @@ System updates are image-based and automatic. Applications are logically seperat
     - Dash to Dock - for a more Unity-like dock
     - Appindicator - for tray-like icons in the top right corner
     - GSConnect - Integrate your mobile device with your desktop
-    - Blur my Shell - for dat bling
+    - Blur my Shell - for that bling
 - GNOME Software with [Flathub](https://flathub.org)
     - Use a familiar software center UI to install graphical software
-- Built on top of the the [uBlue main image](https://github.com/ublue-os/main) 
+- Built on top of the the [Universal Blue main image](https://github.com/ublue-os/main) 
   - Extra udev rules for game controllers and [other devices](https://github.com/ublue-os/config) included out of the box
   - All multimedia codecs included
   - System designed for automatic staging of updates
     - If you've never used an image-based Linux before just use your computer normally
     - Don't overthink it, just shut your computer off when you're not using it
 
-
 ## For Developers
     
+## bluefin-dx - The Bluefin Developer Experience
+
+Dedicated developer image with bundled tools. It endevaours to be the world's most powerful cloud native developer environment. :) It includes everything in the base image plus: 
+
+- [VSCode](https://code.visualstudio.com/) and related tools
+- [virt-manager](https://virt-manager.org/) and associated tooling
+- [Cockpit](https://cockpit-project.org/) for local and remote management 
+- Podman and Docker extras
+  - Automatically aliases the `docker` command to `podman`
+  - podman.socket on by default so existing tools expecting a docker socket work out of the box
+- LXC and LXD
+- A collection of well curated monospace fonts 
+- hashicorp repo included and enabled
+  - None of them installed by default, but you can just add them to the Containerfile as you need them
 - Built-in Ubuntu user space 
     - `Ctrl`-`Alt`-`u` - will launch an Ubuntu image inside a terminal via [Distrobox](https://github.com/89luca89/distrobox), your home directory will be transparently mounted
     - A [BlackBox terminal](https://www.omgubuntu.co.uk/2022/07/blackbox-gtk4-terminal-emulator-for-gnome) is used just for this configuration
     - Use this container for your typical CLI needs or to install software that is not available via Flatpak or Fedora
-    - Optional [ubuntu-toolbox image](https://github.com/ublue-os/bluefin/pkgs/container/ubuntu-toolbox) with Python, NPM, and other convenience development tools.  `just distrobox-bluefin` to get started. To configure `just` follow the [guide](https://ublue.it/guide/just/).
+    - Optional [ubuntu-toolbox image](https://github.com/ublue-os/bluefin/pkgs/container/ubuntu-toolbox) with Python, and other convenience development tools. `just distrobox-bluefin` to get started. To configure `just` follow the [guide](https://ublue.it/guide/just/).
     - Optional [universal image](https://mcr.microsoft.com/en-us/product/devcontainers/universal/about) with Python, Node.js, JavaScript, TypeScript, C++, Java, C#, F#, .NET Core, PHP, Go, Ruby, and and Conda. `just distrobox-universal` to get started
+    - `just assemble` shortcut to decleratively build distroboxes defined in `/etc/distrobox/distrobox.ini`
     - Refer to the [Distrobox documentation](https://distrobox.privatedns.org/#distrobox) for more information on using and configuring custom images
     - GNOME Terminal
       - `Ctrl`-`Alt`-`t` - will launch a host-level GNOME Terminal if you need to do host-level things in Fedora (you shouldn't need to do much).   
 - Cloud Native Tools
     - [kind](https://kind.sigs.k8s.io/) - Run a Kubernetes cluster on your machine. Do a `kind create cluster` on the host to get started!
     - [kubectl](https://kubernetes.io/docs/reference/kubectl/) - Administer Kubernetes Clusters
-    - [Podman-Docker](https://github.com/containers/podman) - Automatically aliases the `docker` command to `podman`
-- Nix-powered Development Experience powered by Devbox
+    - helm, ko, flux, minio-client -- if it's an incubated project we intend to add it where appropriate
+- [DevPod](https://devpod.sh/docs/what-is-devpod) - reproducible developer environments, powered by [devcontainers](https://containers.dev/) - Nix-powered Development Experience powered by Devbox
     - [Introducing Fleek](https://getfleek.dev)
       - `just nix-devbox` to get started
       - `just nix-devbox-global` to install a global profile
       - Check out [Devbox](https://www.jetpack.io/devbox) for more information
-    - This feature is considered Beta but improving quickly
 - Quality of Life Improvements
     - systemd shutdown timers adjusted to 15 seconds
     - [Tailscale](https://tailscale.com/) for VPN
-    - [Just](https://github.com/casey/just) task runner for post-install automation tasks
-    - `zsh` available as an optional shell, use `just zsh` and follow the prompts to configure it
+    - [Just](https://github.com/casey/just) task runner for post-install automation tasks. Check out [our documentation](https://universal-blue.org/guide/just/) for more information on using and customizing just.
+    - `fish` and `zsh` available as optional shells, use `just fish` or `just zsh` and follow the prompts to configure them
 
-## bluefin-dx - The Bluefin Developer Experience
+## Framework Images
 
-Dedicated developer image with bundled tools. It endevaours to be the world's most powerful cloud native developer environment. :) It includes everything in the base image plus: 
+Bluefin is available as an image for the Framework 13 laptop that comes preconfigured with tlp and the [recommended power settings](https://github.com/ublue-os/bluefin/blob/main/framework/etc/tlp.d/50-framework.conf) from the [Framework Knowledge Base](https://knowledgebase.frame.work/en_us/optimizing-fedora-battery-life-r1baXZh)
 
-- VSCode and related tools
-- virt-manager and associated tooling
-- Cockpit and goodies for local and remote management 
-- podman extras (docker compat tools and convenience shortcuts too)
-- LXC/LXD
-- A collection of well curated monospace fonts 
-- hashicorp repo included and enabled
-  - Too many to list
-  - None of them installed by default, but you can just add them to the Containerfile as you need them
-- Kubernetes Tools
-  - helm, ko, flux, minio-client -- if it's an incubated project we intend to add it where appropriate
+Note that the default image works fine on the Framework 13, this image provides tweaks and further improvements. Additionally if you have power profiles that you think would be useful for the community please send a pull request! 
+
+1. Rebase to the -framework image: 
+
+    Bluefin:
+
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-framework:38
+
+    Bluefin Developer Experience:
+
+        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-framework:38
+
+1. Then run this command to set the right kernel arguments for the brightness keys to work:
+  
+       just framework-13
+
+Then reboot and you're done!
 
 ### Roadmap and Future Features
 
