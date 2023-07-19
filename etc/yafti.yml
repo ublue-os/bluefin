@@ -39,6 +39,7 @@ screens:
           - Calculator: org.gnome.Calculator
           - Calendar: org.gnome.Calendar
           - Characters: org.gnome.Characters
+          - Codecs: org.freedesktop.Platform.ffmpeg-full
           - Connections: org.gnome.Connections
           - Contacts: org.gnome.Contacts
           - Document Viewer: org.gnome.Evince
@@ -81,6 +82,7 @@ screens:
           description: Bow to Capitalism
           default: false
           packages:
+          - Gnome Next Meeting Applet: com.chmouel.gnomeNextMeetingApplet
           - LibreOffice: org.libreoffice.LibreOffice
           - Obsidian: md.obsidian.Obsidian
           - OnlyOffice: org.onlyoffice.desktopeditors

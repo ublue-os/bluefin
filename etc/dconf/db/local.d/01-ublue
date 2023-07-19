@@ -60,7 +60,7 @@ name='gnome-terminal'
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
 command='flatpak run com.raggesilver.BlackBox'
-name='blackbox'
+name='blackbox ubuntu'
 
 [org/gnome/settings-daemon/plugins/media-keys]
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
@@ -68,6 +68,9 @@ home=['<Super>e']
 
 [org/gtk/gtk4/settings/file-chooser]
 sort-directories-first=true
+
+[org/gnome/mutter]
+experimental-features=['scale-monitor-framebuffer']
 
 [com/raggesilver/BlackBox]
 command-as-login-shell=true

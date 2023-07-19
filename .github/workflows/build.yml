@@ -3,9 +3,6 @@ on:
   schedule:
     - cron: '00 10 * * *'  # 10:00am everyday
   pull_request:
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
   merge_group:    
   workflow_dispatch:
 env:
@@ -185,7 +182,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Sign container
-      - uses: sigstore/cosign-installer@v3.0.5
+      - uses: sigstore/cosign-installer@v3.1.1
         if: github.event_name != 'pull_request'
 
       - name: Sign container image

@@ -2,13 +2,16 @@ benchmark:
   echo 'Running a 1 minute benchmark ...'
   stress-ng --matrix 0 -t 1m --times
 
-distrobox-bluefin:
-  echo 'Creating Blufin Ubuntu distrobox ...'
-  distrobox create --image ghcr.io/ublue-os/ubuntu-toolbox:latest -n bluefin -Y
+assemble:
+  echo 'Assembling and replacing distroboxes ...'
+  distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
 
 distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
+
+framework-13:
+  rpm-ostree kargs --append="module_blacklist=hid_sensor_hub" --append="nvme.noacpi=1"
 
 fish:
   sudo lchsh -i
