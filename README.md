@@ -30,22 +30,22 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
     Bluefin:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:38
+        sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin:38
 
     Bluefin Developer Experience:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx:38
+        sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-dx:38
 
 
 1. [Nvidia GPU users only] Open a terminal and rebase the OS to this image:
 
     Bluefin:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-nvidia:38
+        sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-nvidia:38
         
     Bluefin Developer Experience:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-nvidia:38      
+        sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-dx-nvidia:38      
         
 1. Reboot the system and you're done!
 
@@ -56,7 +56,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 Check the [Silverblue documentation](https://docs.fedoraproject.org/en-US/fedora-silverblue/) for instructions on how to use rpm-ostree. 
 We build date tags as well, so if you want to rebase to a particular day's release you can use the version number and date to boot off of that specific image:
   
-    sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin:37-20230310 
+    sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin:37-20230310 
 
 The `latest` tag will automatically point to the latest build. 
 
@@ -134,11 +134,11 @@ Note that the default image works fine on the Framework 13, this image provides 
 
     Bluefin:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-framework:38
+        sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-framework:38
 
     Bluefin Developer Experience:
 
-        sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/ublue-os/bluefin-dx-framework:38
+        sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-dx-framework:38
 
 1. Then run this command to set the right kernel arguments for the brightness keys to work:
   
@@ -198,7 +198,7 @@ These images are signed with sigstore's [cosign](https://docs.sigstore.dev/cosig
 1. [Podman push](https://docs.podman.io/en/latest/markdown/podman-push.1.html) to a registry of your choice.
 1. Rebase to your image to wherever you pushed it:
 
-       sudo rpm-ostree rebase ostree-unverified-registry:whatever/bluefin:latest
+       sudo rpm-ostree rebase ostree-image-signed:docker://whatever/bluefin:latest
    
 ## Frequently Asked Questions
 
