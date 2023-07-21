@@ -78,8 +78,7 @@ RUN chmod +x ./kind
 RUN mv ./kind /usr/bin/kind
 
 # Install DevPod
-RUN wget https://github.com/loft-sh/devpod/releases/latest/download/DevPod_linux_x86_64.rpm -O /tmp/devpod.rpm && \
-  rpm-ostree install /tmp/devpod.rpm && \
+RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releases/latest | jq -r '.assets[] | select(.name| test(".*x86_64.rpm$")).browser_download_url') && \
   wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
   install -c -m 0755 /tmp/devpod /usr/bin
 
