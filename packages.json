@@ -2,47 +2,52 @@
     "all": {
         "include": {
             "all": [
-	        "cockpit-bridge",
-		"ddccontrol", 
-		"ddccontrol-gtk",
-		"fish",
+                "cockpit-bridge",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell",
-                "gnome-shell-extension-gsconnect",
-                "input-remapper",
                 "libgda",
                 "libgda-sqlite",
                 "libratbag-ratbagd",
-		"nautilus-gsconnect",
-		"pulseaudio-utils",
+                "pulseaudio-utils",
                 "python3-pip",
-		"samba",
-		"samba-ldb-ldap-modules", 
-		"samba-dcerpc",
-		"samba-winbind-clients",
-		"samba-winbind-modules",
+                "samba",
+                "samba-ldb-ldap-modules",
+                "samba-dcerpc",
+                "samba-winbind-clients",
+                "samba-winbind-modules",
                 "tailscale",
-		"tmux",
-                "wireguard-tools",
-                "xprop",
-                "yaru-theme",
-		"zsh"
+                "tmux",
+                "zsh",
+                "code",
+                "golang",
+                "java-17-openjdk-devel",
+                "java-17-openjdk-src",
+                "podman-compose",
+                "podman-docker",
+                "podman-plugins",
+                "adobe-source-code-pro-fonts",
+                "cascadiacode-nerd-fonts",
+                "google-droid-sans-mono-fonts",
+                "google-go-mono-fonts",
+                "ibm-plex-mono-fonts",
+                "jetbrains-mono-fonts-all",
+                "mozilla-fira-mono-fonts",
+                "powerline-fonts",
+                "gh",
+                "evolution",
+                "evolution-ews"
             ]
         },
         "exclude": {
-            "all": [
-                "firefox",
-                "firefox-langpacks",
-                "gnome-tour"
-            ]
+            "all": []
         }
     },
     "37": {
         "include": {
             "all": [
-	        "podman-docker"
-	    ]
+                "podman-docker"
+            ]
         },
         "exclude": {
             "all": []
@@ -54,8 +59,8 @@
         },
         "exclude": {
             "all": [
-	        "podman-docker"
-	    ]
+                "podman-docker"
+            ]
         }
     }
 }

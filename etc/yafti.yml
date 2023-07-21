@@ -1,18 +1,18 @@
-title: Welcome to uBlue
+title: Welcome
 properties:
   mode: "run-on-change"
 screens:
   first-screen:
     source: yafti.screen.title
     values:
-      title: "Welcome to Bluefin (Alpha)"
+      title: "Welcome"
       icon: "/path/to/icon"
       description: |
         Pick some applications to get started
   can-we-modify-your-flatpaks:
     source: yafti.screen.consent
     values:
-      title: Welcome, Traveler
+      title: Welcome
       condition:
         run: flatpak remotes --system | grep fedora
       description: |
@@ -34,82 +34,26 @@ screens:
           description: Core Applications
           default: true
           packages:
-          - Backup: org.gnome.DejaDup
-          - Blackbox Terminal: com.raggesilver.BlackBox
-          - Calculator: org.gnome.Calculator
-          - Calendar: org.gnome.Calendar
-          - Characters: org.gnome.Characters
-          - Codecs: org.freedesktop.Platform.ffmpeg-full
-          - Connections: org.gnome.Connections
-          - Contacts: org.gnome.Contacts
+          - Backup: org.gnome.World.PikaBackup
           - Document Viewer: org.gnome.Evince
           - Extensions Manager: com.mattjakeman.ExtensionManager
-          - Fedora Media Writer: org.fedoraproject.MediaWriter
-          - Mozilla Firefox: org.mozilla.firefox
           - Flatseal Permissions Manager: com.github.tchx84.Flatseal
-          - Logs: org.gnome.Logs
           - Maps: org.gnome.Maps
           - Nautilus Preview: org.gnome.NautilusPreviewer
-          - Syncthing: com.github.zocker_160.SyncThingy
           - Text Editor: org.gnome.TextEditor
           - Weather: org.gnome.Weather
           - Disk Usage Analyzer: org.gnome.baobab
-          - Clocks: org.gnome.clocks
           - Picture Viewer: org.gnome.eog
           - Font Viewer: org.gnome.font-viewer
-          - Font Downloader: org.gustavoperedo.FontDownloader
-        Web Browsers:
-          description: Additional browsers to complement Firefox
-          default: false
-          packages:
-          - Brave: com.brave.Browser
-          - Google Chrome: com.google.Chrome
-          - Microsoft Edge: com.microsoft.Edge
-          - Opera: com.opera.Opera
-        Gaming:
-          description: "Rock and Stone!"
-          default: false
-          packages:
-          - Bottles: com.usebottles.bottles
           - Discord: com.discordapp.Discord
-          - Heroic Games Launcher: com.heroicgameslauncher.hgl
-          - Lutris: net.lutris.Lutris
-          - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud//22.08
-          - Steam: com.valvesoftware.Steam
-          - Gamescope for Steam: com.valvesoftware.Steam.Utility.gamescope
-          - Proton Updater for Steam: net.davidotek.pupgui2
-        Office:
-          description: Bow to Capitalism
-          default: false
-          packages:
-          - Gnome Next Meeting Applet: com.chmouel.gnomeNextMeetingApplet
-          - LibreOffice: org.libreoffice.LibreOffice
-          - Obsidian: md.obsidian.Obsidian
-          - OnlyOffice: org.onlyoffice.desktopeditors
-          - Slack: com.slack.Slack
-          - Standard Notes: org.standardnotes.standardnotes
-          - Thunderbird Email: org.mozilla.Thunderbird
-        Streaming:
-          description: Stream to the Internet
-          default: false
-          packages:
-          - OBS Studio: com.obsproject.Studio
-          - VkCapture for OBS: com.obsproject.Studio.OBSVkCapture 
-          - Gstreamer for OBS: com.obsproject.Studio.Plugin.Gstreamer
-          - Gstreamer VAAPI for OBS: com.obsproject.Studio.Plugin.GStreamerVaapi
-          - Boatswain for Streamdeck: com.feaneron.Boatswain
-          
+        Development:
+          - GitHub Notifications: com.mardojai.ForgeSparks
+          - Podman UI: com.github.marhkb.Pods
+          - Postman: com.getpostman.Postman
+          - Wine Bottles: com.usebottles.bottles
   final-screen:
     source: yafti.screen.title
     values:
       title: "All done!"
       icon: "/path/to/icon"
-      links:
-        - "Install More Applications": 
-            run: /usr/bin/gnome-software
-        - "Website":
-            run: /usr/bin/xdg-open https://ublue.it
-        - "Join the Discord Community":
-            run: /usr/bin/xdg-open https://discord.gg/XjG48C7VHx 
-      description: |
-        Thanks for trying Bluefin, we hope you enjoy it!
+

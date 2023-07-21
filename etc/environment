@@ -1,1 +1,2 @@
 MUTTER_DEBUG_FORCE_KMS_MODE=simple
+PATH="$PATH:$HOME/go/bin"
