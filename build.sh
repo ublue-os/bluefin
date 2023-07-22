@@ -12,9 +12,11 @@ EXCLUDED_PACKAGES=($(jq -r "[(.all.exclude | (.all, select(.\"$IMAGE_NAME\" != n
                              | sort | unique[]" /tmp/packages.json))
 
 
-rpm-ostree install \
-    /tmp/rpms/bpbeatty*.rpm \
-    fedora-repos-archive
+rpm-ostree override remove \
+    ublue-os-signing-*.noarch && \
+    rpm-ostree install \
+        /tmp/rpms/bpbeatty*.rpm \
+        fedora-repos-archive
 
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     EXCLUDED_PACKAGES=($(rpm -qa --queryformat='%{NAME} ' ${EXCLUDED_PACKAGES[@]}))
