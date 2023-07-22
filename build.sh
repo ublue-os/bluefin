@@ -13,7 +13,7 @@ EXCLUDED_PACKAGES=($(jq -r "[(.all.exclude | (.all, select(.\"$IMAGE_NAME\" != n
 
 
 rpm-ostree install \
-    /tmp/rpms/*.rpm \
+    /tmp/rpms/bpbeatty*.rpm \
     fedora-repos-archive
 
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
