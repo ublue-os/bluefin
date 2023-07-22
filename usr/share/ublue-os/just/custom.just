@@ -37,7 +37,10 @@ nix-devbox-global:
   echo 'run "devbox global run install-bash-hook" to configure bash shell'
   echo 'run "devbox global run install-zsh-hook" to configure zsh shell'
   echo 'run "devbox global run" to see other available configuration commands'
- 
+
+tea:
+  echo 'Installing the tea package manager'
+  sh <(curl https://tea.xyz)
   
 touch:
   pip install --upgrade gnome-extensions-cli

@@ -1,3 +1,4 @@
+bc
 btop
 dbus-x11
 direnv
@@ -5,11 +6,11 @@ ffmpeg
 fzf
 libegl1-mesa
 libgl1-mesa-glx
+libvte-common
 make
 ncdu
 neofetch
 neovim
-npm
 plocate
 progress
 python-is-python3
