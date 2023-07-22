@@ -140,11 +140,12 @@ Note that the default image works fine on the Framework 13, this image provides 
 
         sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/bluefin-dx-framework:38
 
+1. Reboot! 
 1. Then run this command to set the right kernel arguments for the brightness keys to work:
   
        just framework-13
 
-Then reboot and you're done!
+Then reboot one more time and you're done!
 
 ### Roadmap and Future Features
 
