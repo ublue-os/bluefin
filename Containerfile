@@ -13,7 +13,7 @@ ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 COPY etc /etc
 COPY usr /usr
 
-COPY --from=ghcr.io/bpbeatty/config:latest /rpms /tmp/rpms
+COPY --from=ghcr.io/bpbeatty/signing:latest /rpms /tmp/rpms
 COPY --from=docker.io/bketelsen/vanilla-os:v0.0.12 /usr/share/backgrounds/vanilla /usr/share/backgrounds/vanilla
 COPY --from=docker.io/bketelsen/vanilla-os:v0.0.12 /usr/share/gnome-background-properties/vanilla.xml /usr/share/gnome-background-properties/vanilla.xml
 COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign

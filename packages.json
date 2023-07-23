@@ -5,12 +5,12 @@
                 "clevis",
                 "clevis-dracut",
                 "clevis-udisks2",
-	        "cockpit-bridge",
-		"ddccontrol", 
-		"ddccontrol-gtk",
+                "cockpit-bridge",
+                "ddccontrol",
+                "ddccontrol-gtk",
                 "evolution",
                 "freeipa-client",
-		"fish",
+                "fish",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell",
@@ -19,37 +19,38 @@
                 "libgda",
                 "libgda-sqlite",
                 "libratbag-ratbagd",
-		"nautilus-gsconnect",
-		"pulseaudio-utils",
+                "nautilus-gsconnect",
+                "pulseaudio-utils",
                 "python3-pip",
                 "rclone",
-		"samba",
-		"samba-ldb-ldap-modules", 
-		"samba-dcerpc",
-		"samba-winbind-clients",
-		"samba-winbind-modules",
+                "samba",
+                "samba-ldb-ldap-modules",
+                "samba-dcerpc",
+                "samba-winbind-clients",
+                "samba-winbind-modules",
                 "tailscale",
-		"tmux",
+                "tmux",
                 "vim",
                 "vim-default-editor",
                 "wireguard-tools",
                 "xprop",
                 "yaru-theme",
-		"zsh"
+                "zsh"
             ]
         },
         "exclude": {
             "all": [
                 "gnome-tour",
-                "nano-default-editor"
+                "nano-default-editor",
+                "ublue-os-signing"
             ]
         }
     },
     "37": {
         "include": {
             "all": [
-	        "podman-docker"
-	    ]
+                "podman-docker"
+            ]
         },
         "exclude": {
             "all": []
@@ -61,8 +62,8 @@
         },
         "exclude": {
             "all": [
-	        "podman-docker"
-	    ]
+                "podman-docker"
+            ]
         }
     }
 }
