@@ -103,7 +103,7 @@ FROM bluefin AS bluefin-framework
 COPY framework/etc /etc
 COPY framework/usr /usr
 
-RUN rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2023-2846d5650e
+RUN rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2023-94ec7a8b52
 
 RUN rpm-ostree install tlp tlp-rdw stress-ng
 RUN rpm-ostree override remove power-profiles-daemon
