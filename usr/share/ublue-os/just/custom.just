@@ -11,7 +11,7 @@ distrobox-universal:
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
 
 framework-13:
-  rpm-ostree kargs --append="module_blacklist=hid_sensor_hub" --append="nvme.noacpi=1"
+  rpm-ostree kargs --append="module_blacklist=hid_sensor_hub" --append="nvme.noacpi=1" --append="tpm_tis.interrupts=0"
 
 fish:
   sudo lchsh -i
