@@ -18,6 +18,8 @@ cockpit:
   sudo podman container runlabel INSTALL quay.io/cockpit/ws
   sudo systemctl enable cockpit.service
 
+code-profile:
+  xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
 
 distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
