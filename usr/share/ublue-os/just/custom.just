@@ -10,6 +10,17 @@ brew:
   echo 'Installing homebrew ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+cockpit:
+  echo 'Enabling Cockpit'
+  echo 'PasswordAuthentication yes' | sudo tee /etc/ssh/sshd_config.d/02-enable-passwords.conf
+  sudo systemctl try-restart sshd
+  sudo podman container runlabel --name cockpit-ws RUN quay.io/cockpit/ws
+  sudo podman container runlabel INSTALL quay.io/cockpit/ws
+  sudo systemctl enable cockpit.service
+
+code-profile:
+  xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
+
 distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
