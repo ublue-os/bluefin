@@ -14,7 +14,7 @@ framework-13:
   rpm-ostree kargs --append="module_blacklist=hid_sensor_hub" --append="nvme.noacpi=1" --append="tpm_tis.interrupts=0"
 
 fish:
-  sudo lchsh -i
+  sudo lchsh $USER /usr/bin/fish
 
 gnome-extensions:
   pip install --upgrade gnome-extensions-cli
@@ -55,4 +55,4 @@ yafti:
   yafti /etc/yafti.yml
 
 zsh:
-  sudo lchsh -i
+  sudo lchsh $USER /usr/bin/zsh
