@@ -66,7 +66,8 @@ RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvi
 RUN rpm-ostree install cockpit-system cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
 RUN rpm-ostree install p7zip p7zip-plugins powertop
 
-RUN pip install --prefix=/usr docker-compose
+RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
+    install -c -m 0755 /tmp/docker-compose /usr/bin
 
 COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
