@@ -27,7 +27,7 @@ sort-directories-first=true
 [org/gnome/mutter]
 experimental-features=['scale-monitor-framebuffer']
 
-[org/gnome/shell/extensions/pano/]
+[org/gnome/shell/extensions/pano]
 global-shortcut=['<Super>v']
 history-length=200
 keep-search-entry=false
@@ -36,11 +36,11 @@ send-notification-on-copy=false
 shortcut=['<Super>v']
 show-indicator=false
 
-[org/gnome/shell/extensions/pano/text-item/]
+[org/gnome/shell/extensions/pano/text-item]
 body-bg-color='rgb(141,141,143)'
 header-bg-color='rgb(50,58,68)'
 
-[org/gnome/desktop/background/]
+[org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
 picture-uri='file:///usr/share/backgrounds/gnome/blobs-l.svg'

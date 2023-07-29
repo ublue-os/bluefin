@@ -2,7 +2,16 @@
     "all": {
         "include": {
             "all": [
+                "cockpit",
                 "cockpit-bridge",
+                "cockpit-system",
+                "cockpit-ostree",
+                "cockpit-networkmanager",
+                "cockpit-selinux",
+                "cockpit-storaged",
+                "cockpit-podman",
+                "cockpit-machines",
+                "cockpit-pcp",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell",
@@ -36,7 +45,9 @@
                 "powerline-fonts",
                 "gh",
                 "evolution",
-                "evolution-ews"
+                "evolution-ews",
+                "fzf",
+                "ripgrep"
             ]
         },
         "exclude": {
