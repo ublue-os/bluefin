@@ -22,6 +22,10 @@ cockpit:
 code-profile:
   xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
 
+distrobox-wolfi:
+  echo 'Creating WolfiOS distrobox ...'
+  distrobox create --image ghcr.io/ublue-os/wolfi-toolbox:latest -n wolfi 
+
 distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
