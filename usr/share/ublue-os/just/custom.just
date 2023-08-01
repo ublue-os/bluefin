@@ -7,8 +7,8 @@ assemble:
   distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
 
 brew:
-  echo 'Installing homebrew ..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo "Installing homebrew ..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
 
 cockpit:
   echo 'Enabling Cockpit'
