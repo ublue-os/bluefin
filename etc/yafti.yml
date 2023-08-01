@@ -76,7 +76,7 @@ screens:
           - Lutris: net.lutris.Lutris
           - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud//22.08
           - Steam: com.valvesoftware.Steam
-          - Gamescope for Steam: com.valvesoftware.Steam.Utility.gamescope
+          - Gamescope for Steam: org.freedesktop.Platform.VulkanLayer.gamescope
           - Proton Updater for Steam: net.davidotek.pupgui2
         Office:
           description: Bow to Capitalism
