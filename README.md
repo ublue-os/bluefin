@@ -17,7 +17,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
 # Usage
 
-1. Download and install [the ISO from here](https://ublue.it/installation/):
+1. Download and install [the ISO from here](https://github.com/ublue-os/main/releases/latest/):
    - Select "Install ublue-os/bluefin" from the menu 
      - Choose "Install bluefin:38" if you have an AMD or Intel GPU
      - Choose "Install bluefin-nvidia:38" if you have an Nvidia GPU
@@ -140,11 +140,12 @@ Note that the default image works fine on the Framework 13, this image provides 
 
         sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/bpbeatty/bluefin-dx-framework:38
 
+1. Reboot! 
 1. Then run this command to set the right kernel arguments for the brightness keys to work:
   
        just framework-13
 
-Then reboot and you're done!
+Then reboot one more time and you're done!
 
 ### Roadmap and Future Features
 
