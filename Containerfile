@@ -65,6 +65,7 @@ RUN rpm-ostree install adobe-source-code-pro-fonts cascadiacode-nerd-fonts googl
 RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt edk2-ovmf
 RUN rpm-ostree install cockpit-system cockpit-ostree cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
 RUN rpm-ostree install p7zip p7zip-plugins powertop
+RUN rpm-ostree install podmansh
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin
