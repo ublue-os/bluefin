@@ -34,18 +34,9 @@
             "all": [
                 "firefox",
                 "firefox-langpacks",
+	        "gnome-software-rpm-ostree", 
                 "gnome-tour"
             ]
-        }
-    },
-    "37": {
-        "include": {
-            "all": [
-	        "podman-docker"
-	    ]
-        },
-        "exclude": {
-            "all": []
         }
     },
     "38": {
