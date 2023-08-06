@@ -55,6 +55,8 @@ COPY dx/etc /etc
 COPY dx/usr /usr
 COPY workarounds.sh /tmp/workarounds.sh
 
+RUN /tmp/workarounds.sh
+
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
   wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 
@@ -105,8 +107,6 @@ RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releas
 
 RUN systemctl enable podman.socket
 RUN systemctl disable pmie.service
-
-RUN /tmp/workarounds.sh
 
 RUN rm -rf /tmp/* /var/* && \
   ostree container commit
