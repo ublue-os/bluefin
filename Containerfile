@@ -58,22 +58,6 @@ COPY workarounds.sh /tmp/workarounds.sh
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
   wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 
-RUN rpm-ostree install code \
-  && \
-  rpm-ostree install lxd lxc \
-  && \
-  rpm-ostree install iotop dbus-x11 podman-docker podman-plugins podman-tui \
-  && \
-  rpm-ostree install adobe-source-code-pro-fonts cascadiacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts jetbrains-mono-fonts-all mozilla-fira-mono-fonts powerline-fonts ubuntumono-nerd-fonts ubuntu-nerd-fonts \
-  && \
-  rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt edk2-ovmf \
-  && \
-  rpm-ostree install cockpit-system cockpit-ostree cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp \
-  && \
-  rpm-ostree install p7zip p7zip-plugins powertop \
-  && \
-  rpm-ostree install podmansh
-
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin
 
@@ -91,21 +75,37 @@ RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/dow
 # Install DevPod
 RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releases/latest | jq -r '.assets[] | select(.name| test(".*x86_64.rpm$")).browser_download_url') && \
   wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
-  install -c -m 0755 /tmp/devpod /usr/bin
+  install -c -m 0755 /tmp/devpod /usr/bin && \
+  rm -rf /tmp/devpod
 
 RUN systemctl enable podman.socket
 RUN systemctl disable pmie.service
 
 RUN /tmp/workarounds.sh
 
-# Clean up repos, everything is on the image so we don't need them
-RUN rm -f /etc/yum.repos.d/terra.repo && \
+RUN rpm-ostree install code \
+  && \
+  rpm-ostree install lxd lxc \
+  && \
+  rpm-ostree install iotop dbus-x11 podman-docker podman-plugins podman-tui \
+  && \
+  rpm-ostree install adobe-source-code-pro-fonts cascadiacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts jetbrains-mono-fonts-all mozilla-fira-mono-fonts powerline-fonts ubuntumono-nerd-fonts ubuntu-nerd-fonts \
+  && \
+  rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt edk2-ovmf \
+  && \
+  rpm-ostree install cockpit-system cockpit-ostree cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp \
+  && \
+  rpm-ostree install p7zip p7zip-plugins powertop \
+  && \
+  rpm-ostree install podmansh \
+  && \
+  rm -f /etc/yum.repos.d/terra.repo && \
   rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
   rm -f /etc/yum.repos.d/vscode.repo && \
   rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo && \
-  rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
-
-RUN rm -rf /tmp/* /var/* && \
+  rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo \
+  && \
+  rm -rf /tmp/* /var/* && \
   ostree container commit
 
 # Image for Framework laptops
