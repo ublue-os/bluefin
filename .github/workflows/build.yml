@@ -111,6 +111,11 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
+      - name: Show system information
+        if: always()
+        run: |
+          df -h 
+
       # Update FROM lines for variants that have their own matrix via SED
       # This is due to limitations in buildah using interpreted values as registry
       # images and not image targets in file:
@@ -198,4 +203,9 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           echo "${{ toJSON(steps.push.outputs) }}"
+
+      - name: Show system information
+        if: always()
+        run: |
+          df -h 
 
