@@ -101,6 +101,7 @@ RUN rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
 RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
 
+
 # Image for Framework laptops
 FROM bluefin AS bluefin-framework
 
