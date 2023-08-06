@@ -58,31 +58,6 @@ COPY workarounds.sh /tmp/workarounds.sh
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
   wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 
-RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
-    install -c -m 0755 /tmp/docker-compose /usr/bin
-
-COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
-COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
-COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
-COPY --from=cgr.dev/chainguard/ko:latest /usr/bin/ko /usr/bin/ko
-COPY --from=cgr.dev/chainguard/minio-client:latest /usr/bin/mc /usr/bin/mc
-COPY --from=cgr.dev/chainguard/kubectl:latest /usr/bin/kubectl /usr/bin/kubectl
-
-RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64" && \
-  chmod +x ./kind && \
-  mv ./kind /usr/bin/kind
-
-# Install DevPod
-RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releases/latest | jq -r '.assets[] | select(.name| test(".*x86_64.rpm$")).browser_download_url') && \
-  wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
-  install -c -m 0755 /tmp/devpod /usr/bin && \
-  rm -rf /tmp/devpod
-
-RUN systemctl enable podman.socket
-RUN systemctl disable pmie.service
-
-RUN /tmp/workarounds.sh
-
 RUN rpm-ostree install code \
   && \
   rpm-ostree install lxd lxc \
@@ -106,6 +81,34 @@ RUN rpm-ostree install code \
   rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo \
   && \
   rm -rf /tmp/* /var/* && \
+  ostree container commit
+
+RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
+    install -c -m 0755 /tmp/docker-compose /usr/bin
+
+COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
+COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
+COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
+COPY --from=cgr.dev/chainguard/ko:latest /usr/bin/ko /usr/bin/ko
+COPY --from=cgr.dev/chainguard/minio-client:latest /usr/bin/mc /usr/bin/mc
+COPY --from=cgr.dev/chainguard/kubectl:latest /usr/bin/kubectl /usr/bin/kubectl
+
+RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64" && \
+  chmod +x ./kind && \
+  mv ./kind /usr/bin/kind
+
+# Install DevPod
+RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releases/latest | jq -r '.assets[] | select(.name| test(".*x86_64.rpm$")).browser_download_url') && \
+  wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
+  install -c -m 0755 /tmp/devpod /usr/bin && \
+  rm -rf /tmp/* /var/*
+
+RUN systemctl enable podman.socket
+RUN systemctl disable pmie.service
+
+RUN /tmp/workarounds.sh
+
+RUN rm -rf /tmp/* /var/* && \
   ostree container commit
 
 # Image for Framework laptops
