@@ -11,7 +11,7 @@ env:
 jobs:
   push-ghcr:
     name: Build and push image
-    runs-on: buildjet-2vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
