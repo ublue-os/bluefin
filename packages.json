@@ -4,6 +4,7 @@
             "all": [
 	        "cockpit-bridge",
 		"ddccontrol", 
+		"ddccontrol-db", 
 		"ddccontrol-gtk",
 		"fish",
                 "gnome-shell-extension-appindicator",
