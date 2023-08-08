@@ -58,7 +58,7 @@ code-profile:
 
 distrobox-mlbox:
   echo 'Assembling and replacing pytorch-nvidia mlbox distrobox ...'
-  distrobox assemble create --replace  --file /dx/usr/share/ublue-os/distrobox/pytorch-nvidia.ini
+  distrobox assemble create --file /usr/share/ublue-os/distrobox/pytorch-nvidia.ini
 
 distrobox-wolfi:
   echo 'Creating WolfiOS distrobox ...'
