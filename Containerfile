@@ -88,6 +88,13 @@ RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releas
   wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
   install -c -m 0755 /tmp/devpod /usr/bin
 
+# Install kns/kctx and add completions for Bash
+RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr/bin/kubectx && \
+    wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
+    chmod +x /usr/bin/kubectx /usr/bin/kubens
+
+    
+
 RUN systemctl enable podman.socket
 RUN systemctl disable pmie.service
 
