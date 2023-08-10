@@ -1,8 +1,3 @@
-[org/gnome/desktop/interface]
-font-name="Ubuntu Nerd Font 12"
-document-font-name="Ubuntu Nerd Font 12"
-monospace-font-name="UbuntuMono Nerd Font 18"
-
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
 binding='<Control><Alt>f'
 command='flatpak run com.raggesilver.BlackBox --command "distrobox enter fedora"'

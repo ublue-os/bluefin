@@ -20,6 +20,7 @@ COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 
 RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
 RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter gnome-control-center gnome-control-center-filesystem xorg-x11-server-Xwayland
+RUN rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
 
 ADD packages.json /tmp/packages.json
 ADD build.sh /tmp/build.sh
@@ -40,6 +41,7 @@ RUN /tmp/build.sh && \
     rm -f /usr/share/applications/nvtop.desktop && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
+    sed -i '/^PRETTY_NAME/s/Silverblue/Bluefin/' /usr/lib/os-release && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && \
@@ -62,12 +64,13 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDOR
 RUN wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 
 RUN rpm-ostree install code
-RUN rpm-ostree install lxd lxc
+RUN rpm-ostree install lxd lxc lxd-agent
 RUN rpm-ostree install iotop dbus-x11 podman-docker podman-plugins podman-tui
 RUN rpm-ostree install adobe-source-code-pro-fonts cascadiacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts jetbrains-mono-fonts-all mozilla-fira-mono-fonts powerline-fonts ubuntumono-nerd-fonts ubuntu-nerd-fonts
-RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt edk2-ovmf
+RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt edk2-ovmf edk2-ovmf genisoimage qemu-img qemu-system-x86-core qemu-char-spice qemu-device-usb-redirect qemu-device-display-virtio-vga qemu-device-display-virtio-gpu
 RUN rpm-ostree install cockpit-system cockpit-ostree cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
 RUN rpm-ostree install p7zip p7zip-plugins powertop
+RUN rpm-ostree install podmansh
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin
@@ -87,6 +90,13 @@ RUN mv ./kind /usr/bin/kind
 RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releases/latest | jq -r '.assets[] | select(.name| test(".*x86_64.rpm$")).browser_download_url') && \
   wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
   install -c -m 0755 /tmp/devpod /usr/bin
+
+# Install kns/kctx and add completions for Bash
+RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr/bin/kubectx && \
+    wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
+    chmod +x /usr/bin/kubectx /usr/bin/kubens
+
+    
 
 RUN systemctl enable podman.socket
 RUN systemctl disable pmie.service

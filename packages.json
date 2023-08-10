@@ -11,6 +11,11 @@
                 "evolution",
                 "freeipa-client",
                 "fish",
+	              "cockpit-bridge",
+		            "ddccontrol",
+		            "ddccontrol-db",
+		            "ddccontrol-gtk",
+		            "fish",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell",
@@ -40,12 +45,14 @@
         },
         "exclude": {
             "all": [
+	              "gnome-software-rpm-ostree",
                 "gnome-tour",
                 "nano-default-editor",
                 "ublue-os-signing"
             ]
         }
     },
+<<<<<<< HEAD
     "37": {
         "include": {
             "all": [

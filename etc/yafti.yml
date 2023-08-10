@@ -39,7 +39,7 @@ screens:
           - Calculator: org.gnome.Calculator
           - Calendar: org.gnome.Calendar
           - Characters: org.gnome.Characters
-          - Codecs: org.freedesktop.Platform.ffmpeg-full
+          - Codecs: org.freedesktop.Platform.ffmpeg-full//22.08
           - Connections: org.gnome.Connections
           - Contacts: org.gnome.Contacts
           - Document Viewer: org.gnome.Evince
@@ -76,7 +76,7 @@ screens:
           - Lutris: net.lutris.Lutris
           - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud//22.08
           - Steam: com.valvesoftware.Steam
-          - Gamescope for Steam: com.valvesoftware.Steam.Utility.gamescope
+          - Gamescope for Steam: org.freedesktop.Platform.VulkanLayer.gamescope
           - Proton Updater for Steam: net.davidotek.pupgui2
         Office:
           description: Bow to Capitalism
