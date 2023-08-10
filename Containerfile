@@ -115,6 +115,7 @@ FROM bluefin AS bluefin-framework
 
 COPY framework/etc /etc
 COPY framework/usr /usr
+COPY framework/usr/share/backgrounds /usr/share/backgrounds
 
 RUN rpm-ostree install tlp tlp-rdw stress-ng
 RUN rpm-ostree override remove power-profiles-daemon
