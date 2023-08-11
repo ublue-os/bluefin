@@ -84,13 +84,14 @@ gnome-extensions:
 # Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
 jetbrains-toolbox:
   #!/usr/bin/env bash
+  BUILD_VERSION="2.0.1.16621"
   echo "Installing JetBrains Toolbox"
   pushd "$(mktemp -d)"
-  curl -sSfL -O https://download.jetbrains.com/toolbox/jetbrains-toolbox-2.0.1.16621.tar.gz
-  echo "732762c3cf81bf52309aa86344db7462cea0534cb17aa01ece1b542b9af0f838 jetbrains-toolbox-2.0.1.16621.tar.gz" | sha256sum -c
-  tar zxf jetbrains-toolbox-2.0.1.16621.tar.gz
+  curl -sSfL -O https://download.jetbrains.com/toolbox/jetbrains-toolbox-$BUILD_VERSION.tar.gz
+  curl -sSfL https://download.jetbrains.com/toolbox/jetbrains-toolbox-$BUILD_VERSION.tar.gz.sha256 | sha256sum -c
+  tar zxf jetbrains-toolbox-$BUILD_VERSION.tar.gz
   echo "Launching JetBrains Toolbox"
-  ./jetbrains-toolbox-2.0.1.16621/jetbrains-toolbox
+  ./jetbrains-toolbox-$BUILD_VERSION/jetbrains-toolbox
 
 nix-devbox:
   echo 'Setting phasers to kill. Installing nix.'
