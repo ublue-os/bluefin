@@ -84,6 +84,17 @@ gnome-extensions:
   gext install pano@elhan.io
   gext install weatheroclock@CleoMenezesJr.github.io
 
+# Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
+jetbrains-toolbox:
+  #!/usr/bin/env bash
+  BUILD_VERSION="2.0.1.16621"
+  echo "Installing JetBrains Toolbox"
+  pushd "$(mktemp -d)"
+  curl -sSfL -O https://download.jetbrains.com/toolbox/jetbrains-toolbox-$BUILD_VERSION.tar.gz
+  curl -sSfL https://download.jetbrains.com/toolbox/jetbrains-toolbox-$BUILD_VERSION.tar.gz.sha256 | sha256sum -c
+  tar zxf jetbrains-toolbox-$BUILD_VERSION.tar.gz
+  echo "Launching JetBrains Toolbox"
+  ./jetbrains-toolbox-$BUILD_VERSION/jetbrains-toolbox
 
 nix-devbox:
   echo 'Setting phasers to kill. Installing nix.'
