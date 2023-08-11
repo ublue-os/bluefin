@@ -28,6 +28,8 @@ brew-shell:
   #!/usr/bin/env bash
   set -euxo pipefail
   echo "Adding homebrew to shell configuration"
+  touch $HOME/.zprofile
+  touch $HOME/.bash_profile
   if grep -q "linuxbrew" $HOME/.zprofile
   then
     echo "Brew configuration already present in .zprofile"
