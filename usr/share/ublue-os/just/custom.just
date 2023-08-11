@@ -8,15 +8,16 @@ assemble:
 
 # Install aqua | https://aquaproj.github.io
 aqua:
-  @printf '\n=>Installing aqua ...\n\n'
+  #!/usr/bin/env bash
+  printf '\n=>Installing aqua ...\n\n'
   pushd "$(mktemp -d)"
   curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v2.1.1/aqua-installer
   echo "c2af02bdd15da6794f9c98db40332c804224930212f553a805425441f8331665  aqua-installer" | sha256sum -c
   chmod +x aqua-installer
   ./aqua-installer
-  @printf '\n=> Make sure the ${AQUA_ROOT_DIR}/bin environment variable is added to your PATH (.bashrc/.zshrc):\n'
-  @printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
-  @printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
+  printf '\n=> Make sure the ${AQUA_ROOT_DIR}/bin environment variable is added to your PATH (.bashrc/.zshrc):\n'
+  printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
+  printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
 
 # Install Homebrew for Linux
 brew:
