@@ -156,7 +156,7 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ matrix.image_flavor }}" == "nvidia" ]]; then
-              echo "BASE_TAG=-${{ matrix.nvidia_version }}" >> $GITHUB_ENV
+              echo "NVIDIA_VERSION=-${{ matrix.nvidia_version }}" >> $GITHUB_ENV
           else
               echo "NVIDIA_VERSION=" >> $GITHUB_ENV
           fi
