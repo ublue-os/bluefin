@@ -59,6 +59,32 @@ cockpit:
 code-profile:
   xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
 
+# Rebase to a non developer bluefin image
+devmode-off:
+  #!/usr/bin/env bash
+  CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
+  if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+  then
+      echo "Rebasing to a non developer image"
+      NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
+      rpm-ostree rebase $NEW_IMAGE
+  else
+      echo "You are currently not on a developer image"
+  fi
+
+# Rebase to a developer bluefin image
+devmode-on:
+  #!/usr/bin/env bash
+  CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
+  if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+  then
+      echo "You are already on a developer image"
+  else
+      echo "Rebasing to a developer image"
+      NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin/bluefin-dx/")
+      rpm-ostree rebase $NEW_IMAGE
+  fi
+
 distrobox-mlbox:
   echo 'Assembling pytorch-nvidia mlbox distrobox ...'
   distrobox assemble create --file /usr/share/ublue-os/distrobox/pytorch-nvidia.ini
