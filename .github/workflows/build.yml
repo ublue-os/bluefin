@@ -151,6 +151,16 @@ jobs:
         run: |
           sed -i 's/FROM bluefin AS bluefin-framework/FROM ${{ matrix.target_base }} AS ${{ matrix.base_name }}/' Containerfile
 
+      - name: Set base image tag to have nvidia version
+        id: base_tag
+        shell: bash
+        run: |
+          if [[ "${{ matrix.image_flavor }}" == "nvidia" ]]; then
+              echo "BASE_TAG=${{ matrix.major_version }}-${{ matrix.nvidia_version }}" >> $GITHUB_ENV
+          else
+              echo "base_tag=${{ matrix.major_version }}" >> $GITHUB_ENV
+          fi
+
       # Build image using Buildah action
       - name: Build Image
         id: build_image
@@ -164,7 +174,7 @@ jobs:
           build-args: |
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
-            FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
+            FEDORA_MAJOR_VERSION=${{ env.BASE_TAG }}
             TARGET_BASE=${{ matrix.target_base }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
