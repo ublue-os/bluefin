@@ -21,7 +21,7 @@ jobs:
       matrix:
         image_flavor: [main, nvidia]
         base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
-        major_version: [38]
+        major_version: [38, 37]
         nvidia_version: [535, 470]
         exclude:
           - base_name: bluefin-dx-framework
@@ -35,8 +35,10 @@ jobs:
         include:
           - base_name: bluefin-framework
             target_base: bluefin
+            image_flavor: main
             target_name: framework
           - base_name: bluefin-dx-framework
+            image_flavor: main
             target_base: bluefin-dx
             target_name: framework
           - major_version: 38
