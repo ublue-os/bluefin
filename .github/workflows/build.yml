@@ -87,7 +87,7 @@ jobs:
           echo ${{ matrix.image_flavor }}
           if [[ "${{ matrix.image_flavor }}" == "nvidia" ]]; then
             echo "test"
-            BUILD_TAGS=("${MAJOR_VERSION}-${NVIDIA_VERSION}" "${MAJOR_VERSION}-${NVIDIA-VERISON}-${TIMESTAMP}")
+            BUILD_TAGS=("${MAJOR_VERSION}-${NVIDIA_VERSION}" "${MAJOR_VERSION}-${NVIDIA-VERSION}-${TIMESTAMP}")
             if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
                [[ "${{ matrix.is_latest_nvidia_version }}" == "true" ]] && \
                [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
