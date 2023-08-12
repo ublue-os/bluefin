@@ -84,8 +84,9 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          
+          echo ${{ matrix.base_version }}
           if [[ "${{ matrix.base_version }}" == "nvidia" ]]; then
+            echo "test"
             BUILD_TAGS=("${MAJOR_VERSION}-${NVIDIA_VERSION}" "${MAJOR_VERSION}-${NVIDIA-VERISON}-${TIMESTAMP}")
             if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
                [[ "${{ matrix.is_latest_nvidia_version }}" == "true" ]] && \
