@@ -176,6 +176,7 @@ jobs:
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
             TARGET_BASE=${{ matrix.target_base }}
+            NVIDIA_VERSION=${{ env.NVIDIA_VERSION}}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
           # TODO(GH-280)
