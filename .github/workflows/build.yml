@@ -71,6 +71,7 @@ jobs:
           # Generate a timestamp for creating an image version history
           TIMESTAMP="$(date +%Y%m%d)"
           MAJOR_VERSION="${{ matrix.major_version }}"
+          NVIDIA_VERSION="${{ matrix.nvidia_version }}"
           COMMIT_TAGS=()
           BUILD_TAGS=()
           # Have tags for tracking builds during pull request
@@ -83,15 +84,16 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
+          
           if [[ "${{ matrix.base_version }}" == "nvidia" ]]; then
-
+            BUILD_TAGS=("${MAJOR_VERSION}-${NVIDIA_VERSION}" "${MAJOR_VERSION}-${NVIDIA-VERISON}-${TIMESTAMP}")
             if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
                [[ "${{ matrix.is_latest_nvidia_version }}" == "true" ]] && \
                [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
                 BUILD_TAGS+=("latest")
             fi
           else
+            BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
             if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
                [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
                 BUILD_TAGS+=("latest")
