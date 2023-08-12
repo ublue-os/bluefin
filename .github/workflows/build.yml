@@ -92,6 +92,7 @@ jobs:
                [[ "${{ matrix.is_latest_nvidia_version }}" == "true" ]] && \
                [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
                 BUILD_TAGS+=("latest")
+                BUILD_TAGS+=("${MAJOR_VERSION}")
             fi
           else
             BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
