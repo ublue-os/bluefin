@@ -22,11 +22,16 @@ jobs:
         image_flavor: [main, nvidia]
         base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
         major_version: [38]
+        nvidia_version: [535, 470]
         exclude:
           - base_name: bluefin-dx-framework
             image_flavor: nvidia
           - base_name: bluefin-framework
             image_flavor: nvidia
+          - image_flavor: main
+            nvidia_version: 535
+          - image_flavor: main
+            nvidia_version: 470
         include:
           - base_name: bluefin-framework
             target_base: bluefin
@@ -37,6 +42,11 @@ jobs:
           - major_version: 38
             is_latest_version: true
             is_stable_version: true
+          - image_flavor: nvidia
+            major_version: 38
+            nvidia_version: 535
+            is_latest_nvidia_version: true
+            
     steps: 
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
