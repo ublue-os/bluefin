@@ -156,9 +156,9 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ matrix.image_flavor }}" == "nvidia" ]]; then
-              echo "BASE_TAG=${{ matrix.major_version }}-${{ matrix.nvidia_version }}" >> $GITHUB_ENV
+              echo "BASE_TAG=-${{ matrix.nvidia_version }}" >> $GITHUB_ENV
           else
-              echo "base_tag=${{ matrix.major_version }}" >> $GITHUB_ENV
+              echo "NVIDIA_VERSION=" >> $GITHUB_ENV
           fi
 
       # Build image using Buildah action
@@ -174,7 +174,7 @@ jobs:
           build-args: |
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
-            FEDORA_MAJOR_VERSION=${{ env.BASE_TAG }}
+            FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
             TARGET_BASE=${{ matrix.target_base }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
