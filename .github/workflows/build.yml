@@ -80,10 +80,18 @@ jobs:
           fi
 
           BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
+          if [[ "${{ matrix.base_version }}" == "nvidia" ]]; then
 
-          if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
-             [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
-              BUILD_TAGS+=("latest")
+            if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_latest_nvidia_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+                BUILD_TAGS+=("latest")
+            fi
+          else
+            if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+                BUILD_TAGS+=("latest")
+            fi
           fi
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
