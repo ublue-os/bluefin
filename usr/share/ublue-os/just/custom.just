@@ -1,7 +1,9 @@
+# Run a one minute system benchmark
 benchmark:
   echo 'Running a 1 minute benchmark ...'
   stress-ng --matrix 0 -t 1m --times
 
+# Assemble distrobox containers
 assemble:
   echo 'Assembling and replacing distroboxes ...'
   distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
@@ -46,7 +48,7 @@ brew-shell:
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
   fi
 
-
+# Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:
   echo 'Enabling Cockpit'
   echo 'PasswordAuthentication yes' | sudo tee /etc/ssh/sshd_config.d/02-enable-passwords.conf
@@ -56,10 +58,11 @@ cockpit:
   sudo podman container runlabel INSTALL quay.io/cockpit/ws
   sudo systemctl enable cockpit.service
 
+# Import a devcontainers profile for VSCode
 code-profile:
   xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
 
-# Rebase to a non developer bluefin image
+# Rebase to a stock Bluefin image
 devmode-off:
   #!/usr/bin/env bash
   CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
@@ -72,7 +75,7 @@ devmode-off:
       echo "You are currently not on a developer image"
   fi
 
-# Rebase to a developer bluefin image
+# Rebase to the Bluefin Developer Experience image
 devmode-on:
   #!/usr/bin/env bash
   CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
@@ -85,24 +88,30 @@ devmode-on:
       rpm-ostree rebase $NEW_IMAGE
   fi
 
+# Assemble a Pytorch distrobox (Nvidia only)
 distrobox-mlbox:
   echo 'Assembling pytorch-nvidia mlbox distrobox ...'
   distrobox assemble create --file /usr/share/ublue-os/distrobox/pytorch-nvidia.ini
 
+# Create a Wolfi OS container | https://github.com/wolfi-dev
 distrobox-wolfi:
   echo 'Creating WolfiOS distrobox ...'
   distrobox create --image ghcr.io/ublue-os/wolfi-toolbox:latest -n wolfi
 
+# Create a universal developer container
 distrobox-universal:
   echo 'Creating Universal Development distrobox ...'
   distrobox create --image mcr.microsoft.com/devcontainers/universal:latest -n universal -Y
 
+# Add boot parameters needed for a Framework 13 laptop
 framework-13:
   rpm-ostree kargs --append="module_blacklist=hid_sensor_hub" --append="nvme.noacpi=1" --append="tpm_tis.interrupts=0"
 
+# Switch to the fish shell
 fish:
   sudo lchsh -s /usr/bin/fish $USER
 
+# Install recommended GNOME extensions
 gnome-extensions:
   pip install --upgrade gnome-extensions-cli
   gext install tailscale-status@maxgallup.github.com
@@ -122,6 +131,7 @@ jetbrains-toolbox:
   echo "Launching JetBrains Toolbox"
   ./jetbrains-toolbox-$BUILD_VERSION/jetbrains-toolbox
 
+# Install nix and Devbox
 nix-devbox:
   echo 'Setting phasers to kill. Installing nix.'
   curl -s https://raw.githubusercontent.com/dnkmmr69420/nix-installer-scripts/main/installer-scripts/silverblue-nix-installer.sh | bash
@@ -129,6 +139,7 @@ nix-devbox:
   curl -fsSL https://get.jetpack.io/devbox | bash
   echo 'You MUST reboot to continue'
 
+# Install nix and Devbox (Global Profile)
 nix-devbox-global:
   echo 'Installing devbox global profile.'
   devbox global pull https://devbox.getfleek.dev/high
@@ -136,21 +147,21 @@ nix-devbox-global:
   echo 'run "devbox global run install-zsh-hook" to configure zsh shell'
   echo 'run "devbox global run" to see other available configuration commands'
 
-tea:
-  echo 'Installing the tea package manager'
-  sh <(curl https://tea.xyz)
-
+# Install better touch-friendly GNOME extensions
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
   gext install gestureImprovements@gestures
 
+# Upgrade Distrobox to the latest git version
 update-distrobox-git:
   echo 'Installing latest git snapshot of Distrobox'
   curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --next --prefix ~/.local
 
+# Run the yafti setup tool
 yafti:
   yafti /etc/yafti.yml
 
+# Switch to the zsh shell
 zsh:
   sudo lchsh -s /usr/bin/zsh $USER
