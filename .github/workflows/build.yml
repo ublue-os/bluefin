@@ -35,12 +35,12 @@ jobs:
         include:
           - base_name: bluefin-framework
             target_base: bluefin
-            major_version: 38
-            image_flavor: main
+            # major_version: 38
+            # image_flavor: main
             target_name: framework
           - base_name: bluefin-dx-framework
-            image_flavor: main
-            major_version: 38
+            # image_flavor: main
+            # major_version: 38
             target_base: bluefin-dx
             target_name: framework
           - major_version: 38
