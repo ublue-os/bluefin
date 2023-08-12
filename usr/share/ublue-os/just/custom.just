@@ -8,15 +8,16 @@ assemble:
 
 # Install aqua | https://aquaproj.github.io
 aqua:
-  @printf '\n=>Installing aqua ...\n\n'
+  #!/usr/bin/env bash
+  printf '\n=>Installing aqua ...\n\n'
   pushd "$(mktemp -d)"
   curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v2.1.1/aqua-installer
   echo "c2af02bdd15da6794f9c98db40332c804224930212f553a805425441f8331665  aqua-installer" | sha256sum -c
   chmod +x aqua-installer
   ./aqua-installer
-  @printf '\n=> Make sure the ${AQUA_ROOT_DIR}/bin environment variable is added to your PATH (.bashrc/.zshrc):\n'
-  @printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
-  @printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
+  printf '\n=> Make sure the ${AQUA_ROOT_DIR}/bin environment variable is added to your PATH (.bashrc/.zshrc):\n'
+  printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
+  printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
 
 # Install Homebrew for Linux
 brew:
@@ -28,6 +29,8 @@ brew-shell:
   #!/usr/bin/env bash
   set -euxo pipefail
   echo "Adding homebrew to shell configuration"
+  touch $HOME/.zprofile
+  touch $HOME/.bash_profile
   if grep -q "linuxbrew" $HOME/.zprofile
   then
     echo "Brew configuration already present in .zprofile"
@@ -56,6 +59,32 @@ cockpit:
 code-profile:
   xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
 
+# Rebase to a non developer bluefin image
+devmode-off:
+  #!/usr/bin/env bash
+  CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
+  if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+  then
+      echo "Rebasing to a non developer image"
+      NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
+      rpm-ostree rebase $NEW_IMAGE
+  else
+      echo "You are currently not on a developer image"
+  fi
+
+# Rebase to a developer bluefin image
+devmode-on:
+  #!/usr/bin/env bash
+  CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
+  if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+  then
+      echo "You are already on a developer image"
+  else
+      echo "Rebasing to a developer image"
+      NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin/bluefin-dx/")
+      rpm-ostree rebase $NEW_IMAGE
+  fi
+
 distrobox-mlbox:
   echo 'Assembling pytorch-nvidia mlbox distrobox ...'
   distrobox assemble create --file /usr/share/ublue-os/distrobox/pytorch-nvidia.ini
@@ -72,7 +101,7 @@ framework-13:
   rpm-ostree kargs --append="module_blacklist=hid_sensor_hub" --append="nvme.noacpi=1" --append="tpm_tis.interrupts=0"
 
 fish:
-  sudo lchsh $USER /usr/bin/fish
+  sudo lchsh -s /usr/bin/fish $USER
 
 gnome-extensions:
   pip install --upgrade gnome-extensions-cli
@@ -81,6 +110,17 @@ gnome-extensions:
   gext install pano@elhan.io
   gext install weatheroclock@CleoMenezesJr.github.io
 
+# Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
+jetbrains-toolbox:
+  #!/usr/bin/env bash
+  BUILD_VERSION="2.0.1.16621"
+  echo "Installing JetBrains Toolbox"
+  pushd "$(mktemp -d)"
+  curl -sSfL -O https://download.jetbrains.com/toolbox/jetbrains-toolbox-$BUILD_VERSION.tar.gz
+  curl -sSfL https://download.jetbrains.com/toolbox/jetbrains-toolbox-$BUILD_VERSION.tar.gz.sha256 | sha256sum -c
+  tar zxf jetbrains-toolbox-$BUILD_VERSION.tar.gz
+  echo "Launching JetBrains Toolbox"
+  ./jetbrains-toolbox-$BUILD_VERSION/jetbrains-toolbox
 
 nix-devbox:
   echo 'Setting phasers to kill. Installing nix.'
@@ -113,4 +153,4 @@ yafti:
   yafti /etc/yafti.yml
 
 zsh:
-  sudo lchsh $USER /usr/bin/zsh
+  sudo lchsh -s /usr/bin/zsh $USER
