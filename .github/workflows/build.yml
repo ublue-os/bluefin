@@ -39,7 +39,7 @@ jobs:
             is_stable_version: true
     steps: 
       - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+        uses: kfir4444/free-disk-space@main
         with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
