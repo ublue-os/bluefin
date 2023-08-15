@@ -189,11 +189,6 @@ podmansh-switch IMAGE:
   systemctl --user daemon-reload
   systemctl --user start podmansh.service
   echo "Image now switched to {{IMAGE}}"
-
-tea:
-  echo 'Installing the tea package manager'
-  sh <(curl https://tea.xyz)
-  
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
