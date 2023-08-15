@@ -147,7 +147,7 @@ nix-devbox-global:
   echo 'run "devbox global run install-zsh-hook" to configure zsh shell'
   echo 'run "devbox global run" to see other available configuration commands'
 
-# Install better touch-friendly GNOME extensions
+# Enable podmansh as user shell (EXPERIMENTAL)
 podmansh:
   sudo mkdir -p /etc/containers/systemd/users/${UID}
   sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
@@ -160,6 +160,7 @@ podmansh:
   echo "By default, the shell will be Bash. To override it, create ~/.profile with your preferred shell"
   echo "Note: That shell must exist in the toolbox!"
 
+# Switch podmansh to another image (EXPERIMENTAL)
 podmansh-switch IMAGE:
   sudo sed -i "/Image\=.*$/c Image\={{IMAGE}}" /etc/containers/systemd/users/${UID}/podmansh.container
   podman pull {{IMAGE}}
@@ -167,6 +168,8 @@ podmansh-switch IMAGE:
   systemctl --user daemon-reload
   systemctl --user start podmansh.service
   echo "Image now switched to {{IMAGE}}"
+
+# Install better touch-friendly GNOME extensions
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
