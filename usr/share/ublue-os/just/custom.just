@@ -170,6 +170,30 @@ podmansh-switch IMAGE:
   echo "Image now switched to {{IMAGE}}"
 
 # Install better touch-friendly GNOME extensions
+podmansh:
+  sudo mkdir -p /etc/containers/systemd/users/${UID}
+  sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
+  sudo lchsh $USER /usr/bin/podmansh
+  podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
+  
+  systemctl --user daemon-reload
+  systemctl --user start podmansh.service
+  echo "Shell now switched to podmansh. Spawn a new terminal to get going!"
+  echo "By default, the shell will be Bash. To override it, create ~/.profile with your preferred shell"
+  echo "Note: That shell must exist in the toolbox!"
+
+podmansh-switch IMAGE:
+  sudo sed -i "/Image\=.*$/c Image\={{IMAGE}}" /etc/containers/systemd/users/${UID}/podmansh.container
+  podman pull {{IMAGE}}
+  podman rm -f podmansh
+  systemctl --user daemon-reload
+  systemctl --user start podmansh.service
+  echo "Image now switched to {{IMAGE}}"
+
+tea:
+  echo 'Installing the tea package manager'
+  sh <(curl https://tea.xyz)
+  
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
