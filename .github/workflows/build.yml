@@ -11,7 +11,7 @@ env:
 jobs:
   push-ghcr:
     name: Build and push image
-    runs-on: buildjet-2vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -22,21 +22,35 @@ jobs:
         image_flavor: [main, nvidia]
         base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
         major_version: [38]
+        nvidia_version: [535, 470]
         exclude:
           - base_name: bluefin-dx-framework
             image_flavor: nvidia
           - base_name: bluefin-framework
             image_flavor: nvidia
+          - image_flavor: main
+            nvidia_version: 535
+          - image_flavor: main
+            nvidia_version: 470
         include:
           - base_name: bluefin-framework
             target_base: bluefin
+            major_version: 38
+            image_flavor: main
             target_name: framework
           - base_name: bluefin-dx-framework
+            image_flavor: main
+            major_version: 38
             target_base: bluefin-dx
             target_name: framework
           - major_version: 38
             is_latest_version: true
             is_stable_version: true
+          - major_version: 38
+            image_flavor: nvidia
+            nvidia_version: 535
+            is_latest_nvidia_version: true
+            
     steps: 
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
@@ -57,6 +71,7 @@ jobs:
           # Generate a timestamp for creating an image version history
           TIMESTAMP="$(date +%Y%m%d)"
           MAJOR_VERSION="${{ matrix.major_version }}"
+          NVIDIA_VERSION="${{ matrix.nvidia_version }}"
           COMMIT_TAGS=()
           BUILD_TAGS=()
           # Have tags for tracking builds during pull request
@@ -69,11 +84,22 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
-
-          if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
-             [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
-              BUILD_TAGS+=("latest")
+          echo ${{ matrix.image_flavor }}
+          if [[ "${{ matrix.image_flavor }}" == "nvidia" ]]; then
+            echo "test"
+            BUILD_TAGS=("${MAJOR_VERSION}-${NVIDIA_VERSION}" "${MAJOR_VERSION}-${NVIDIA_VERSION}-${TIMESTAMP}")
+            if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_latest_nvidia_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+                BUILD_TAGS+=("latest")
+                BUILD_TAGS+=("${MAJOR_VERSION}")
+            fi
+          else
+            BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
+            if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+                BUILD_TAGS+=("latest")
+            fi
           fi
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -125,6 +151,16 @@ jobs:
         run: |
           sed -i 's/FROM bluefin AS bluefin-framework/FROM ${{ matrix.target_base }} AS ${{ matrix.base_name }}/' Containerfile
 
+      - name: Set base image tag to have nvidia version
+        id: base_tag
+        shell: bash
+        run: |
+          if [[ "${{ matrix.image_flavor }}" == "nvidia" ]]; then
+              echo "NVIDIA_VERSION=-${{ matrix.nvidia_version }}" >> $GITHUB_ENV
+          else
+              echo "NVIDIA_VERSION=" >> $GITHUB_ENV
+          fi
+
       # Build image using Buildah action
       - name: Build Image
         id: build_image
@@ -140,6 +176,7 @@ jobs:
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
             TARGET_BASE=${{ matrix.target_base }}
+            NVIDIA_VERSION=${{ env.NVIDIA_VERSION}}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
           # TODO(GH-280)
@@ -173,29 +210,29 @@ jobs:
           extra-args: |
             --disable-content-trust
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        if: github.event_name != 'pull_request'
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Login to GitHub Container Registry
+      #   uses: docker/login-action@v2
+      #   if: github.event_name != 'pull_request'
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Sign container
-      - uses: sigstore/cosign-installer@v3.1.1
-        if: github.event_name != 'pull_request'
+      # # Sign container
+      # - uses: sigstore/cosign-installer@v3.1.1
+      #   if: github.event_name != 'pull_request'
 
-      - name: Sign container image
-        if: github.event_name != 'pull_request'
-        run: |
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
-        env:
-          TAGS: ${{ steps.push.outputs.digest }}
-          COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+      # - name: Sign container image
+      #   if: github.event_name != 'pull_request'
+      #   run: |
+      #     cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
+      #   env:
+      #     TAGS: ${{ steps.push.outputs.digest }}
+      #     COSIGN_EXPERIMENTAL: false
+      #     COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      - name: Echo outputs
-        if: github.event_name != 'pull_request'
-        run: |
-          echo "${{ toJSON(steps.push.outputs) }}"
+      # - name: Echo outputs
+      #   if: github.event_name != 'pull_request'
+      #   run: |
+      #     echo "${{ toJSON(steps.push.outputs) }}"
 
