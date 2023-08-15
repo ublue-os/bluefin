@@ -61,7 +61,7 @@ RUN wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 
 RUN rpm-ostree install code
 RUN rpm-ostree install lxd lxc lxd-agent
-RUN rpm-ostree install iotop dbus-x11 podman-docker podman-plugins podman-tui
+RUN rpm-ostree install iotop dbus-x11 podman-plugins podman-tui
 RUN rpm-ostree install adobe-source-code-pro-fonts cascadiacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts jetbrains-mono-fonts-all mozilla-fira-mono-fonts powerline-fonts ubuntumono-nerd-fonts ubuntu-nerd-fonts
 RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt edk2-ovmf edk2-ovmf genisoimage qemu-img qemu-system-x86-core qemu-char-spice qemu-device-usb-redirect qemu-device-display-virtio-vga qemu-device-display-virtio-gpu
 RUN rpm-ostree install cockpit-system cockpit-ostree cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
