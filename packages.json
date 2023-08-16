@@ -15,6 +15,7 @@
                 "libgda",
                 "libgda-sqlite",
                 "libratbag-ratbagd",
+		"mesa-libGLU", 
 		"nautilus-gsconnect",
 		"pulseaudio-utils",
                 "python3-pip",
