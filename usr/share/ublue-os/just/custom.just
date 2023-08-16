@@ -109,7 +109,7 @@ framework-13:
 
 # Switch to the fish shell
 fish:
-  sudo lchsh -s /usr/bin/fish $USER
+  sudo lchsh $USER /usr/bin/fish 
 
 # Install recommended GNOME extensions
 gnome-extensions:
@@ -134,7 +134,7 @@ jetbrains-toolbox:
 # Install nix and Devbox
 nix-devbox:
   echo 'Setting phasers to kill. Installing nix.'
-  curl -s https://raw.githubusercontent.com/dnkmmr69420/nix-installer-scripts/main/installer-scripts/silverblue-nix-installer.sh | bash
+  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
   echo 'Installing devbox!'
   curl -fsSL https://get.jetpack.io/devbox | bash
   echo 'You MUST reboot to continue'
@@ -186,4 +186,4 @@ yafti:
 
 # Switch to the zsh shell
 zsh:
-  sudo lchsh -s /usr/bin/zsh $USER
+  sudo lchsh $USER /usr/bin/zsh 
