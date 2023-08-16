@@ -122,7 +122,7 @@ gnome-extensions:
 # Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
 jetbrains-toolbox:
   #!/usr/bin/env bash
-  BUILD_VERSION="2.0.1.16621"
+  BUILD_VERSION="2.0.2.16660"
   echo "Installing JetBrains Toolbox"
   pushd "$(mktemp -d)"
   curl -sSfL -O https://download.jetbrains.com/toolbox/jetbrains-toolbox-$BUILD_VERSION.tar.gz
