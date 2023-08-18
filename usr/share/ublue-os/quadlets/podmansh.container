@@ -18,9 +18,15 @@ Volume=/:/run/host:rslave
 Volume=/dev:/dev:rslave
 Volume=/sys:/sys:rslave
 Volume=/tmp:/tmp:rslave
+Volume=/etc/passwd:/etc/passwd:rslave
+Volume=/etc/passwd-:/etc/passwd-:rslave
+Volume=/etc/group:/etc/group:rslave
+Volume=/etc/group-:/etc/group-:rslave
+Volume=/tmp:/tmp:rslave
 Volume=/sys/fs/selinux
+Volume=/etc/selinux:/etc/selinux:rslave
 Volume=/var/log/journal
-Volume=/run/user/1000:/run/user/1000:rslave
+Volume=/run/user/%U:/run/user/%U:rslave
 Volume=/etc/hosts:/etc/hosts:ro
 Volume=/etc/resolv.conf:/etc/resolv.conf:ro
 
@@ -29,7 +35,7 @@ Environment=ENV=%h/.profile
 PodmanArgs=--env-host
 PodmanArgs=--privileged
 PodmanArgs=--mount=type=devpts,destination=/dev/pts
-PodmanArgs=--userns=keep-id
+PodmanArgs=--userns=host
 PodmanArgs=--ulimit=host
 PodmanArgs=--security-opt=label=disable
 PodmanArgs=--cgroupns=private

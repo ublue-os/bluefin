@@ -155,6 +155,7 @@ podmansh:
   podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
   
   systemctl --user daemon-reload
+  systemctl --user stop podmansh.service
   systemctl --user start podmansh.service
   echo "Shell now switched to podmansh. Spawn a new terminal to get going!"
   echo "By default, the shell will be Bash. To override it, create ~/.profile with your preferred shell"
@@ -169,7 +170,6 @@ podmansh-switch IMAGE:
   systemctl --user start podmansh.service
   echo "Image now switched to {{IMAGE}}"
 
-# Install better touch-friendly GNOME extensions
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
