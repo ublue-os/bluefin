@@ -143,8 +143,8 @@ nix-devbox:
 nix-devbox-global:
   echo 'Installing devbox global profile.'
   devbox global pull https://devbox.getfleek.dev/high
-  echo 'run "devbox global run install-bash-hook" to configure bash shell'
-  echo 'run "devbox global run install-zsh-hook" to configure zsh shell'
+  echo 'run "devbox global run install-hook-bash" to configure bash shell'
+  echo 'run "devbox global run install-hook-zsh" to configure zsh shell'
   echo 'run "devbox global run" to see other available configuration commands'
 
 # Enable podmansh as user shell (EXPERIMENTAL)
