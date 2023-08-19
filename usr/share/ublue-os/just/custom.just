@@ -170,6 +170,7 @@ podmansh-switch IMAGE:
   systemctl --user start podmansh.service
   echo "Image now switched to {{IMAGE}}"
 
+# Install a better on-screen-keyboard and gesture improvements
 touch:
   pip install --upgrade gnome-extensions-cli
   gext install improvedosk@nick-shmyrev.dev
