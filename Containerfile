@@ -95,6 +95,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
 
 RUN systemctl enable podman.socket
 RUN systemctl disable pmie.service
+RUN systemctl disable pmlogger.service
 
 RUN /tmp/workarounds.sh
 
