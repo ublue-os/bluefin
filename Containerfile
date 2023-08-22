@@ -10,8 +10,9 @@ FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
-COPY etc /etc
 COPY usr /usr
+COPY usr/etc/systemd /etc/systemd
+COPY usr/etc/yum.repos.d /etc/yum.repos.d
 
 COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 
@@ -51,8 +52,8 @@ ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
 # dx specific files come from the dx directory in this repo
-COPY dx/etc /etc
 COPY dx/usr /usr
+COPY dx/usr/etc/yum.repos.d /etc/yum.repos.d
 COPY workarounds.sh /tmp/workarounds.sh
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
@@ -112,8 +113,8 @@ RUN ostree container commit
 # Image for Framework laptops
 FROM bluefin AS bluefin-framework
 
-COPY framework/etc /etc
 COPY framework/usr /usr
+COPY framework/usr/etc/systemd /etc/systemd
 
 RUN rpm-ostree install tlp tlp-rdw stress-ng
 RUN rpm-ostree override remove power-profiles-daemon
