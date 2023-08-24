@@ -1,0 +1,14 @@
+FROM registry.fedoraproject.org/fedora-toolbox:38
+# From https://github.com/containers/toolbox/tree/main/images/fedora/f38
+
+LABEL com.github.containers.toolbox="true" \
+      usage="This image is meant to be used with the toolbox or distrobox command" \
+      summary="A cloud-native terminal experience powered by Fedora" 
+
+COPY ./toolboxes/packages.fedora /toolbox-packages
+
+RUN dnf -y upgrade && \
+    dnf -y install $(<toolbox-packages) && \
+    dnf clean all
+
+RUN rm /toolbox-packages
