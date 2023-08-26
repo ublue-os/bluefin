@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Little helper script to launch other than default (ubuntu) distroboxes without manually
+# having to assemble them.
+
+container_name=$1
+if [ "${container_name}" == "" ]; then
+    echo "Please specify the container name you want to enter."
+    echo "For example: ${0} fedora"
+    exit 1
+fi
+
+# Inspect if the container is already present
+inspect_cmd="podman inspect --type container "${container_name}" --format {{.State.Status}} > /dev/null"
+eval "${inspect_cmd}"
+container_exists=$?
+
+if [ "$container_exists" -eq 0 ]; then
+    # No need to assemble, enjoy your stay
+    exec distrobox enter "${container_name}"
+else
+    # We don't have the container so we assemble it first. With distrobox version 1.5.0.2 
+    # or below we need to assemble all the entries that occur in the `distrobox.ini` manifest. 
+    # In future versions of distrobox we will be able to specify `--name $container_name` to
+    # only assemble the box we want to enter.
+    distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
+
+    # All done, good to go
+    exec distrobox enter "${container_name}"
+fi
