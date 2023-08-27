@@ -10,7 +10,6 @@ FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
-COPY etc /etc
 COPY usr /usr
 
 COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
@@ -51,7 +50,6 @@ ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
 # dx specific files come from the dx directory in this repo
-COPY dx/etc /etc
 COPY dx/usr /usr
 COPY workarounds.sh /tmp/workarounds.sh
 
@@ -112,7 +110,6 @@ RUN ostree container commit
 # Image for Framework laptops
 FROM bluefin AS bluefin-framework
 
-COPY framework/etc /etc
 COPY framework/usr /usr
 
 RUN rpm-ostree install tlp tlp-rdw stress-ng
