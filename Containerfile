@@ -24,8 +24,6 @@ ADD build.sh /tmp/build.sh
 
 RUN /tmp/build.sh && \
     pip install --prefix=/usr yafti && \
-    systemctl unmask dconf-update.service && \
-    systemctl enable dconf-update.service && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     fc-cache -f /usr/share/fonts/ubuntu && \
