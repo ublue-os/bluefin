@@ -11,6 +11,7 @@ ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
 COPY usr /usr
+COPY etc/yum.repos.d/ /etc/yum.repos.d/
 
 COPY --from=cgr.dev/chainguard/cosign:latest /usr/bin/cosign /usr/bin/cosign
 
@@ -51,6 +52,7 @@ ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 
 # dx specific files come from the dx directory in this repo
 COPY dx/usr /usr
+COPY dx/etc/yum.repos.d/ /etc/yum.repos.d/
 COPY workarounds.sh /tmp/workarounds.sh
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
