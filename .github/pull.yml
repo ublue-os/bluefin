@@ -1,6 +1,10 @@
 version: "1"
 rules:
-  - base: main
+  - base: bluefin-main
     upstream: ublue-os:main
-    mergeMethod: merge
+    mergeMethod: hardreset
     mergeUnstable: false
+  - base: main
+    upstream: bluefin-main
+label: ":arrow_heading_down: pull"  # Optional
+conflictLabel: "merge-conflict"     # Optional, on merge conflict assign a custom label, Default: merge-conflict
