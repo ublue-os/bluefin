@@ -14,6 +14,9 @@ RUN apt-get update && \
         $(cat toolbox-packages | xargs) && \
     rm -rd /var/lib/apt/lists/*
 
+RUN  apt-get install -y openssh-server && \
+    sed -i "s/#Port 22/Port 2222/" /etc/ssh/sshd_config
+
 RUN  apt-get install -y wget gpg && \
     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg && \
     install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg && \
