@@ -14,7 +14,8 @@ RUN apt-get update && \
         $(cat toolbox-packages | xargs) && \
     rm -rd /var/lib/apt/lists/*
 
-RUN  apt-get install -y systemd software-properties-common libpam-systemd openssh-server && \
+RUN  apt-get update && \
+    apt-get install -y systemd software-properties-common libpam-systemd openssh-server && \
     sed -i "s/#Port 22/Port 2222/" /etc/ssh/sshd_config
 
 RUN  apt-get install -y wget gpg && \
@@ -24,7 +25,8 @@ RUN  apt-get install -y wget gpg && \
     rm -f packages.microsoft.gpg && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y code
+    DEBIAN_FRONTEND=noninteractive apt-get install -y code && \
+    rm -rd /var/lib/apt/lists/*
 
 
 
