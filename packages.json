@@ -23,6 +23,7 @@
 		"samba-dcerpc",
 		"samba-winbind-clients",
 		"samba-winbind-modules",
+		"solaar",
                 "tailscale",
 		"tmux",
                 "wireguard-tools",
