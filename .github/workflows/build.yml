@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main]
+        image_flavor: [main, nvidia]
         base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
         major_version: [38]
         exclude:
