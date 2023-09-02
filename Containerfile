@@ -7,7 +7,6 @@ ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
 
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 
-ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin"
 
@@ -51,7 +50,6 @@ RUN /tmp/build.sh && \
 
 FROM bluefin AS bluefin-dx
 
-ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin-dx"
 
@@ -112,6 +110,7 @@ RUN ostree container commit
 # Image for Framework laptops
 FROM bluefin AS bluefin-framework
 
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin-framework"
 
 COPY framework/usr /usr
