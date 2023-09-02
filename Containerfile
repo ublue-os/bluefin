@@ -5,6 +5,7 @@ ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-37}"
 ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
 
+## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
@@ -12,6 +13,8 @@ ARG PACKAGE_LIST="bluefin"
 
 COPY usr /usr
 COPY etc/yum.repos.d/ /etc/yum.repos.d/
+COPY packages.json /tmp/packages.json
+COPY build.sh /tmp/build.sh
 
 # gnome-vrr
 RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
@@ -22,9 +25,6 @@ RUN rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
 RUN wget https://copr.fedorainfracloud.org/coprs/rhcontainerbot/bootc/repo/fedora-"${FEDORA_MAJOR_VERSION}"/bootc-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/bootc.repo
 RUN rpm-ostree install bootc
 RUN rm -f /etc/yum.repos.d/bootc-"${FEDORA_MAJOR_VERSION}".repo
-
-ADD packages.json /tmp/packages.json
-ADD build.sh /tmp/build.sh
 
 RUN /tmp/build.sh && \
     pip install --prefix=/usr yafti && \
@@ -46,8 +46,6 @@ RUN /tmp/build.sh && \
     chmod -R 1777 /var/tmp
 
 ## bluefin-dx developer edition image section
-# TODO: this should be in packages.json but yolo for now
-
 FROM bluefin AS bluefin-dx
 
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
@@ -63,7 +61,7 @@ COPY build.sh /tmp/build.sh
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
 RUN wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 
-# install packages from packages.json
+# Handle packages via packages.json
 RUN /tmp/build.sh
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
@@ -117,7 +115,7 @@ COPY framework/usr /usr
 COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
 
-# install packages from packages.json
+# Handle packages via packages.json
 RUN /tmp/build.sh
 
 RUN systemctl enable tlp
