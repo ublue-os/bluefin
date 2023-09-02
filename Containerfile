@@ -53,23 +53,20 @@ FROM bluefin AS bluefin-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
+ARG PACKAGE_LIST="bluefin-dx"
 
 # dx specific files come from the dx directory in this repo
 COPY dx/usr /usr
 COPY dx/etc/yum.repos.d/ /etc/yum.repos.d/
 COPY workarounds.sh /tmp/workarounds.sh
+COPY packages.json /tmp/packages.json
+COPY build.sh /tmp/build.sh
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
 RUN wget https://terra.fyralabs.com/terra.repo -O /etc/yum.repos.d/terra.repo
 
-RUN rpm-ostree install code
-RUN rpm-ostree install lxd lxc lxd-agent
-RUN rpm-ostree install iotop dbus-x11 podman-plugins podman-tui
-RUN rpm-ostree install adobe-source-code-pro-fonts cascadiacode-nerd-fonts google-droid-sans-mono-fonts google-go-mono-fonts ibm-plex-mono-fonts jetbrains-mono-fonts-all mozilla-fira-mono-fonts powerline-fonts ubuntumono-nerd-fonts ubuntu-nerd-fonts
-RUN rpm-ostree install qemu qemu-user-static qemu-user-binfmt virt-manager libvirt edk2-ovmf edk2-ovmf genisoimage qemu-img qemu-system-x86-core qemu-char-spice qemu-device-usb-redirect qemu-device-display-virtio-vga qemu-device-display-virtio-gpu
-RUN rpm-ostree install cockpit-system cockpit-ostree cockpit-networkmanager cockpit-selinux cockpit-storaged cockpit-podman cockpit-machines cockpit-pcp
-RUN rpm-ostree install p7zip p7zip-plugins powertop
-RUN rpm-ostree install podmansh
+# install packages from packages.json
+RUN /tmp/build.sh
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin

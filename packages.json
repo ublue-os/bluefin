@@ -2,11 +2,11 @@
     "all": {
         "include": {
             "bluefin": [
-	        "cockpit-bridge",
-		"ddccontrol", 
-		"ddccontrol-db", 
-		"ddccontrol-gtk",
-		"fish",
+                "cockpit-bridge",
+                "ddccontrol",
+                "ddccontrol-db",
+                "ddccontrol-gtk",
+                "fish",
                 "gnome-shell-extension-appindicator",
                 "gnome-shell-extension-dash-to-dock",
                 "gnome-shell-extension-blur-my-shell",
@@ -15,40 +15,89 @@
                 "libgda",
                 "libgda-sqlite",
                 "libratbag-ratbagd",
-		"nautilus-gsconnect",
-		"pulseaudio-utils",
+                "nautilus-gsconnect",
+                "pulseaudio-utils",
                 "python3-pip",
-		"samba",
-		"samba-ldb-ldap-modules", 
-		"samba-dcerpc",
-		"samba-winbind-clients",
-		"samba-winbind-modules",
-		"solaar",
+                "samba",
+                "samba-ldb-ldap-modules",
+                "samba-dcerpc",
+                "samba-winbind-clients",
+                "samba-winbind-modules",
+                "solaar",
                 "tailscale",
-		"tmux",
+                "tmux",
                 "wireguard-tools",
                 "xprop",
                 "yaru-theme",
-		"zsh"
+                "zsh"
+            ],
+            "bluefin-dx": [
+                "code",
+                "lxd",
+                "lxc",
+                "lxd-agent",
+                "iotop",
+                "dbus-x11",
+                "podman-plugins",
+                "podman-tui",
+                "adobe-source-code-pro-fonts",
+                "cascadiacode-nerd-fonts",
+                "google-droid-sans-mono-fonts",
+                "google-go-mono-fonts",
+                "ibm-plex-mono-fonts",
+                "jetbrains-mono-fonts-all",
+                "mozilla-fira-mono-fonts",
+                "powerline-fonts",
+                "ubuntumono-nerd-fonts",
+                "ubuntu-nerd-fonts",
+                "qemu",
+                "qemu-user-static",
+                "qemu-user-binfmt",
+                "virt-manager",
+                "libvirt",
+                "edk2-ovmf",
+                "edk2-ovmf",
+                "genisoimage",
+                "qemu-img",
+                "qemu-system-x86-core",
+                "qemu-char-spice",
+                "qemu-device-usb-redirect",
+                "qemu-device-display-virtio-vga",
+                "qemu-device-display-virtio-gpu",
+                "cockpit-system",
+                "cockpit-ostree",
+                "cockpit-networkmanager",
+                "cockpit-selinux",
+                "cockpit-storaged",
+                "cockpit-podman",
+                "cockpit-machines",
+                "cockpit-pcp",
+                "p7zip",
+                "p7zip-plugins",
+                "powertop",
+                "podmansh"
             ]
         },
         "exclude": {
             "bluefin": [
                 "firefox",
                 "firefox-langpacks",
-	        "gnome-software-rpm-ostree", 
+                "gnome-software-rpm-ostree",
                 "gnome-tour"
-            ]
+            ],
+            "bluefin-dx": []
         }
     },
     "38": {
         "include": {
-            "bluefin": []
+            "bluefin": [],
+            "bluefin-dx": []
         },
         "exclude": {
             "bluefin": [
-	        "podman-docker"
-	    ]
+                "podman-docker"
+            ],
+            "bluefin-dx": []
         }
     }
 }
