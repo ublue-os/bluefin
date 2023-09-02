@@ -9,6 +9,7 @@ FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
+ARG PACKAGE_LIST="bluefin"
 
 COPY usr /usr
 COPY etc/yum.repos.d/ /etc/yum.repos.d/

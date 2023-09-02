@@ -1,7 +1,7 @@
 {
     "all": {
         "include": {
-            "all": [
+            "bluefin": [
 	        "cockpit-bridge",
 		"ddccontrol", 
 		"ddccontrol-db", 
@@ -33,7 +33,7 @@
             ]
         },
         "exclude": {
-            "all": [
+            "bluefin": [
                 "firefox",
                 "firefox-langpacks",
 	        "gnome-software-rpm-ostree", 
@@ -43,10 +43,10 @@
     },
     "38": {
         "include": {
-            "all": []
+            "bluefin": []
         },
         "exclude": {
-            "all": [
+            "bluefin": [
 	        "podman-docker"
 	    ]
         }
