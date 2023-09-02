@@ -1,54 +1,113 @@
 {
-    "all": {
-        "include": {
-            "all": [
-	        "cockpit-bridge",
-		"ddccontrol", 
-		"ddccontrol-db", 
-		"ddccontrol-gtk",
-		"fish",
-                "gnome-shell-extension-appindicator",
-                "gnome-shell-extension-dash-to-dock",
-                "gnome-shell-extension-blur-my-shell",
-                "gnome-shell-extension-gsconnect",
-                "input-remapper",
-                "libgda",
-                "libgda-sqlite",
-                "libratbag-ratbagd",
-		"nautilus-gsconnect",
-		"pulseaudio-utils",
-                "python3-pip",
-		"samba",
-		"samba-ldb-ldap-modules", 
-		"samba-dcerpc",
-		"samba-winbind-clients",
-		"samba-winbind-modules",
-		"solaar",
-                "tailscale",
-		"tmux",
-                "wireguard-tools",
-                "xprop",
-                "yaru-theme",
-		"zsh"
-            ]
-        },
-        "exclude": {
-            "all": [
-                "firefox",
-                "firefox-langpacks",
-	        "gnome-software-rpm-ostree", 
-                "gnome-tour"
-            ]
-        }
-    },
-    "38": {
-        "include": {
-            "all": []
-        },
-        "exclude": {
-            "all": [
-	        "podman-docker"
-	    ]
-        }
-    }
+	"all": {
+		"include": {
+			"bluefin": [
+				"cockpit-bridge",
+				"ddccontrol-db",
+				"ddccontrol-gtk",
+				"ddccontrol",
+				"fish",
+				"gnome-shell-extension-appindicator",
+				"gnome-shell-extension-blur-my-shell",
+				"gnome-shell-extension-dash-to-dock",
+				"gnome-shell-extension-gsconnect",
+				"input-remapper",
+				"libgda-sqlite",
+				"libgda",
+				"libratbag-ratbagd",
+				"nautilus-gsconnect",
+				"pulseaudio-utils",
+				"python3-pip",
+				"samba-dcerpc",
+				"samba-ldb-ldap-modules",
+				"samba-winbind-clients",
+				"samba-winbind-modules",
+				"samba",
+				"solaar",
+				"tailscale",
+				"tmux",
+				"wireguard-tools",
+				"xprop",
+				"yaru-theme",
+				"zsh"
+			],
+			"bluefin-dx": [
+				"adobe-source-code-pro-fonts",
+				"cascadiacode-nerd-fonts",
+				"cockpit-machines",
+				"cockpit-networkmanager",
+				"cockpit-ostree",
+				"cockpit-pcp",
+				"cockpit-podman",
+				"cockpit-selinux",
+				"cockpit-storaged",
+				"cockpit-system",
+				"code",
+				"dbus-x11",
+				"edk2-ovmf",
+				"edk2-ovmf",
+				"genisoimage",
+				"google-droid-sans-mono-fonts",
+				"google-go-mono-fonts",
+				"ibm-plex-mono-fonts",
+				"iotop",
+				"jetbrains-mono-fonts-all",
+				"libvirt",
+				"lxc",
+				"lxd-agent",
+				"lxd",
+				"mozilla-fira-mono-fonts",
+				"p7zip-plugins",
+				"p7zip",
+				"podman-plugins",
+				"podman-tui",
+				"podmansh",
+				"powerline-fonts",
+				"powertop",
+				"qemu-char-spice",
+				"qemu-device-display-virtio-gpu",
+				"qemu-device-display-virtio-vga",
+				"qemu-device-usb-redirect",
+				"qemu-img",
+				"qemu-system-x86-core",
+				"qemu-user-binfmt",
+				"qemu-user-static",
+				"qemu",
+				"ubuntu-nerd-fonts",
+				"ubuntumono-nerd-fonts",
+				"virt-manager"
+			],
+			"bluefin-framework": [
+				"stress-ng",
+				"tlp-rdw",
+				"tlp"
+			]
+		},
+		"exclude": {
+			"bluefin": [
+				"firefox-langpacks",
+				"firefox",
+				"gnome-software-rpm-ostree",
+				"gnome-tour"
+			],
+			"bluefin-dx": [],
+			"bluefin-framework": [
+				"power-profiles-daemon"
+			]
+		}
+	},
+	"38": {
+		"include": {
+			"bluefin": [],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		},
+		"exclude": {
+			"bluefin": [
+				"podman-docker"
+			],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		}
+	}
 }
