@@ -76,6 +76,11 @@
                 "p7zip-plugins",
                 "powertop",
                 "podmansh"
+            ],
+            "bluefin-framework": [
+                "tlp",
+                "tlp-rdw",
+                "stress-ng"
             ]
         },
         "exclude": {
@@ -85,19 +90,24 @@
                 "gnome-software-rpm-ostree",
                 "gnome-tour"
             ],
-            "bluefin-dx": []
+            "bluefin-dx": [],
+            "bluefin-framework": [
+                "power-profiles-daemon"
+            ]
         }
     },
     "38": {
         "include": {
             "bluefin": [],
-            "bluefin-dx": []
+            "bluefin-dx": [],
+            "bluefin-framework": []
         },
         "exclude": {
             "bluefin": [
                 "podman-docker"
             ],
-            "bluefin-dx": []
+            "bluefin-dx": [],
+            "bluefin-framework": []
         }
     }
 }

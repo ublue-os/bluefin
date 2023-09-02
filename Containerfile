@@ -112,10 +112,15 @@ RUN ostree container commit
 # Image for Framework laptops
 FROM bluefin AS bluefin-framework
 
-COPY framework/usr /usr
+ARG PACKAGE_LIST="bluefin-framework"
 
-RUN rpm-ostree install tlp tlp-rdw stress-ng
-RUN rpm-ostree override remove power-profiles-daemon
+COPY framework/usr /usr
+COPY packages.json /tmp/packages.json
+COPY build.sh /tmp/build.sh
+
+# install packages from packages.json
+RUN /tmp/build.sh
+
 RUN systemctl enable tlp
 RUN systemctl enable fprintd.service
 
