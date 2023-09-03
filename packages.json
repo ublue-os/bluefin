@@ -2,6 +2,7 @@
 	"all": {
 		"include": {
 			"bluefin": [
+				"bash-color-prompt",
 				"cockpit-bridge",
 				"ddccontrol-db",
 				"ddccontrol-gtk",
