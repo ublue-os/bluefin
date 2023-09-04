@@ -50,6 +50,7 @@ screens:
           - Logs: org.gnome.Logs
           - Maps: org.gnome.Maps
           - Nautilus Preview: org.gnome.NautilusPreviewer
+          - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Syncthing: com.github.zocker_160.SyncThingy
           - Text Editor: org.gnome.TextEditor
           - Weather: org.gnome.Weather
