@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Questions
-    url: https://github.com/orgs/ublue-os/discussions/
+  - name: Questions and Feedback
+    url: https://github.com/orgs/ublue-os/discussions/categories/bluefin
     about: Ask a question, share tips, and help others
