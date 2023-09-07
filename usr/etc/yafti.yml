@@ -101,7 +101,7 @@ screens:
         Utilities:
           description: Useful Utilities
           default: true
-          packagess:
+          packages:
           - Font Downloader: org.gustavoperedo.FontDownloader
           - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Backup: org.gnome.DejaDup
