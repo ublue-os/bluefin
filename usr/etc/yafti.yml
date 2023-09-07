@@ -122,6 +122,8 @@ screens:
             run: /usr/bin/gnome-software
         - "Website":
             run: /usr/bin/xdg-open https://ublue.it
+        - "Discussions and Announcements":
+            run: /usr/bin/xdg-open https://github.com/orgs/ublue-os/discussions/categories/bluefin
         - "Join the Discord Community":
             run: /usr/bin/xdg-open https://discord.gg/XjG48C7VHx 
       description: |
