@@ -34,8 +34,6 @@ screens:
           description: Core Applications
           default: true
           packages:
-          - Backup: org.gnome.DejaDup
-          - Blackbox Terminal: com.raggesilver.BlackBox
           - Calculator: org.gnome.Calculator
           - Calendar: org.gnome.Calendar
           - Characters: org.gnome.Characters
@@ -50,16 +48,14 @@ screens:
           - Logs: org.gnome.Logs
           - Maps: org.gnome.Maps
           - Nautilus Preview: org.gnome.NautilusPreviewer
-          - PinApp Menu Editor: io.github.fabrialberio.pinapp
-          - Syncthing: com.github.zocker_160.SyncThingy
           - Text Editor: org.gnome.TextEditor
           - Weather: org.gnome.Weather
           - Disk Usage Analyzer: org.gnome.baobab
           - Clocks: org.gnome.clocks
           - Picture Viewer: org.gnome.eog
           - Font Viewer: org.gnome.font-viewer
-          - Font Downloader: org.gustavoperedo.FontDownloader
-        Web Browsers:
+          - Blackbox Terminal: com.raggesilver.BlackBox
+        Other Web Browsers:
           description: Additional browsers to complement Firefox
           default: false
           packages:
@@ -72,13 +68,12 @@ screens:
           default: false
           packages:
           - Bottles: com.usebottles.bottles
-          - Discord: com.discordapp.Discord
           - Heroic Games Launcher: com.heroicgameslauncher.hgl
           - Lutris: net.lutris.Lutris
           - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud//22.08
           - Steam: com.valvesoftware.Steam
           - Gamescope for Steam: org.freedesktop.Platform.VulkanLayer.gamescope
-          - Proton Updater for Steam: net.davidotek.pupgui2
+          - Proton Updater (GTK) for Steam: com.vysp3r.ProtonPlus
         Office:
           description: Bow to Capitalism
           default: false
@@ -87,7 +82,6 @@ screens:
           - LibreOffice: org.libreoffice.LibreOffice
           - Obsidian: md.obsidian.Obsidian
           - OnlyOffice: org.onlyoffice.desktopeditors
-          - Slack: com.slack.Slack
           - Standard Notes: org.standardnotes.standardnotes
           - Thunderbird Email: org.mozilla.Thunderbird
         Streaming:
@@ -99,6 +93,19 @@ screens:
           - Gstreamer for OBS: com.obsproject.Studio.Plugin.Gstreamer
           - Gstreamer VAAPI for OBS: com.obsproject.Studio.Plugin.GStreamerVaapi
           - Boatswain for Streamdeck: com.feaneron.Boatswain
+        Communication:
+          description: Tools to communicate and collaborate
+          packages:
+          - Discord: com.discordapp.Discord
+          - Slack: com.slack.Slack
+        Utilities:
+          description: Useful Utilities
+          default: true
+          packagess:
+          - Font Downloader: org.gustavoperedo.FontDownloader
+          - PinApp Menu Editor: io.github.fabrialberio.pinapp
+          - Backup: org.gnome.DejaDup
+          - Syncthing: com.github.zocker_160.SyncThingy
         Admin Tools:
           description: Helper Utilities for Administration
           default: false
