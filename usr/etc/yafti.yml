@@ -31,9 +31,10 @@ screens:
       package_manager: yafti.plugin.flatpak
       groups:
         Core:
-          description: Core Applications
+          description: Core Applications (* Some packages are expected)
           default: true
           packages:
+          - Blackbox Terminal *: com.raggesilver.BlackBox
           - Calculator: org.gnome.Calculator
           - Calendar: org.gnome.Calendar
           - Characters: org.gnome.Characters
@@ -54,7 +55,6 @@ screens:
           - Clocks: org.gnome.clocks
           - Picture Viewer: org.gnome.eog
           - Font Viewer: org.gnome.font-viewer
-          - Blackbox Terminal: com.raggesilver.BlackBox
         Other Web Browsers:
           description: Additional browsers to complement Firefox
           default: false
@@ -101,7 +101,7 @@ screens:
         Utilities:
           description: Useful Utilities
           default: true
-          packagess:
+          packages:
           - Font Downloader: org.gustavoperedo.FontDownloader
           - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Backup: org.gnome.DejaDup
