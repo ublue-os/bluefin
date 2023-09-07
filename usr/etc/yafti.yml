@@ -54,6 +54,7 @@ screens:
           - Clocks: org.gnome.clocks
           - Picture Viewer: org.gnome.eog
           - Font Viewer: org.gnome.font-viewer
+          - Blackbox Terminal: com.raggesilver.BlackBox
         Other Web Browsers:
           description: Additional browsers to complement Firefox
           default: false
@@ -72,7 +73,6 @@ screens:
           - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud//22.08
           - Steam: com.valvesoftware.Steam
           - Gamescope for Steam: org.freedesktop.Platform.VulkanLayer.gamescope
-          - Proton Updater (QT) for Steam: net.davidotek.pupgui2
           - Proton Updater (GTK) for Steam: com.vysp3r.ProtonPlus
         Office:
           description: Bow to Capitalism
@@ -105,7 +105,6 @@ screens:
           - Font Downloader: org.gustavoperedo.FontDownloader
           - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Backup: org.gnome.DejaDup
-          - Blackbox Terminal: com.raggesilver.BlackBox
           - Syncthing: com.github.zocker_160.SyncThingy
         Admin Tools:
           description: Helper Utilities for Administration
