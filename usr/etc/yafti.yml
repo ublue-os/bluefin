@@ -99,6 +99,11 @@ screens:
           - Gstreamer for OBS: com.obsproject.Studio.Plugin.Gstreamer
           - Gstreamer VAAPI for OBS: com.obsproject.Studio.Plugin.GStreamerVaapi
           - Boatswain for Streamdeck: com.feaneron.Boatswain
+        Admin Tools:
+          description: Helper Utilities for Administration
+          default: false
+          packages:
+          - Cockpit Client: org.cockpit_project.CockpitClient
           
   final-screen:
     source: yafti.screen.title
