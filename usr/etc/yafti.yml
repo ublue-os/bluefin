@@ -23,17 +23,18 @@ screens:
         - run: flatpak remote-delete fedora --force
         - run: flatpak remove --system --noninteractive --all
         - run: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
-  applications:
+  install-required-packages:
     source: yafti.screen.package
     values:
-      title: Application Installation
-      show_terminal: true
+      title: Install required packages
       package_manager: yafti.plugin.flatpak
+      show-terminal: true
       groups:
         Core:
           description: Core Applications
           default: true
           packages:
+          - Blackbox Terminal: com.raggesilver.BlackBox
           - Calculator: org.gnome.Calculator
           - Calendar: org.gnome.Calendar
           - Characters: org.gnome.Characters
@@ -54,15 +55,24 @@ screens:
           - Clocks: org.gnome.clocks
           - Picture Viewer: org.gnome.eog
           - Font Viewer: org.gnome.font-viewer
-          - Blackbox Terminal: com.raggesilver.BlackBox
-        Other Web Browsers:
-          description: Additional browsers to complement Firefox
+  applications:
+    source: yafti.screen.package
+    values:
+      title: Application Installation
+      show_terminal: true
+      package_manager: yafti.plugin.flatpak
+      groups:
+        Admin Tools:
+          description: Helper Utilities for Administration
           default: false
           packages:
-          - Brave: com.brave.Browser
-          - Google Chrome: com.google.Chrome
-          - Microsoft Edge: com.microsoft.Edge
-          - Opera: com.opera.Opera
+          - Cockpit Client: org.cockpit_project.CockpitClient
+        Communication:
+          default: false
+          description: Tools to communicate and collaborate
+          packages:
+          - Discord: com.discordapp.Discord
+          - Slack: com.slack.Slack
         Gaming:
           description: "Rock and Stone!"
           default: false
@@ -84,6 +94,14 @@ screens:
           - OnlyOffice: org.onlyoffice.desktopeditors
           - Standard Notes: org.standardnotes.standardnotes
           - Thunderbird Email: org.mozilla.Thunderbird
+        Other Web Browsers:
+          description: Additional browsers to complement Firefox
+          default: false
+          packages:
+          - Brave: com.brave.Browser
+          - Google Chrome: com.google.Chrome
+          - Microsoft Edge: com.microsoft.Edge
+          - Opera: com.opera.Opera
         Streaming:
           description: Stream to the Internet
           default: false
@@ -93,11 +111,6 @@ screens:
           - Gstreamer for OBS: com.obsproject.Studio.Plugin.Gstreamer
           - Gstreamer VAAPI for OBS: com.obsproject.Studio.Plugin.GStreamerVaapi
           - Boatswain for Streamdeck: com.feaneron.Boatswain
-        Communication:
-          description: Tools to communicate and collaborate
-          packages:
-          - Discord: com.discordapp.Discord
-          - Slack: com.slack.Slack
         Utilities:
           description: Useful Utilities
           default: true
@@ -106,12 +119,6 @@ screens:
           - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Backup: org.gnome.DejaDup
           - Syncthing: com.github.zocker_160.SyncThingy
-        Admin Tools:
-          description: Helper Utilities for Administration
-          default: false
-          packages:
-          - Cockpit Client: org.cockpit_project.CockpitClient
-          
   final-screen:
     source: yafti.screen.title
     values:
