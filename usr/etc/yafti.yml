@@ -26,7 +26,7 @@ screens:
   install-required-packages:
     source: yafti.screen.package
     values:
-      title: Installing required packages
+      title: Install required packages
       package_manager: yafti.plugin.flatpak
       show-terminal: true
       groups:
