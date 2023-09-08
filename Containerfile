@@ -95,7 +95,7 @@ RUN systemctl disable pmlogger.service
 
 RUN /tmp/workarounds.sh
 
-# Clean up repos, everything is on the image so we don't need them
+# Clean up repos, everything is on the image so we don't need them. Also link cjk fonts to hardcoded steam paths.
 RUN rm -f /etc/yum.repos.d/terra.repo
 RUN rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
 RUN rm -f /etc/yum.repos.d/vscode.repo
