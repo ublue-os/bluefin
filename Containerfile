@@ -33,6 +33,7 @@ RUN /tmp/build.sh && \
     systemctl enable dconf-update.service && \
     fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
+    ln -s "/usr/share/fonts/google-noto-sans-cjk-fonts" "/usr/share/fonts/noto-cjk" && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
     rm -f /usr/share/applications/fish.desktop && \
     rm -f /usr/share/applications/htop.desktop && \
@@ -72,7 +73,6 @@ COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
 COPY --from=cgr.dev/chainguard/ko:latest /usr/bin/ko /usr/bin/ko
 COPY --from=cgr.dev/chainguard/minio-client:latest /usr/bin/mc /usr/bin/mc
 COPY --from=cgr.dev/chainguard/kubectl:latest /usr/bin/kubectl /usr/bin/kubectl
-RUN ln -s "/usr/share/fonts/google-noto-sans-cjk-fonts" "/usr/share/fonts/noto-cjk"
 
 RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64"
 RUN chmod +x ./kind
@@ -96,7 +96,7 @@ RUN systemctl disable pmlogger.service
 
 RUN /tmp/workarounds.sh
 
-# Clean up repos, everything is on the image so we don't need them. Also link cjk fonts to hardcoded steam paths.
+# Clean up repos, everything is on the image so we don't need them.
 RUN rm -f /etc/yum.repos.d/terra.repo
 RUN rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
 RUN rm -f /etc/yum.repos.d/vscode.repo
