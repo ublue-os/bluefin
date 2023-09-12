@@ -16,7 +16,10 @@ COPY etc/yum.repos.d/ /etc/yum.repos.d/
 COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
 
-RUN ln -sr /usr/bin/rpm-ostree /usr/bin/bootc
+## bootc
+RUN wget https://copr.fedorainfracloud.org/coprs/rhcontainerbot/bootc/repo/fedora-"${FEDORA_MAJOR_VERSION}"/bootc-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/bootc.repo
+RUN rpm-ostree install bootc
+RUN rm -f /etc/yum.repos.d/bootc-"${FEDORA_MAJOR_VERSION}".repo
 
 RUN /tmp/build.sh && \
     pip install --prefix=/usr yafti && \
