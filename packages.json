@@ -81,8 +81,7 @@
 				"virt-manager"
 			],
 			"bluefin-framework": [
-				"stress-ng",
-				"tlp-rdw",
+\				"tlp-rdw",
 				"tlp"
 			]
 		},
