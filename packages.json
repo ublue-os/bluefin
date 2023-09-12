@@ -25,6 +25,7 @@
 				"samba-winbind-modules",
 				"samba",
 				"solaar",
+				"stress-ng",
 				"tailscale",
 				"tmux",
 				"wireguard-tools",
