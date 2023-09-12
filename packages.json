@@ -25,6 +25,7 @@
 				"samba-winbind-modules",
 				"samba",
 				"solaar",
+				"stress-ng",
 				"tailscale",
 				"tmux",
 				"wireguard-tools",
@@ -80,9 +81,8 @@
 				"virt-manager"
 			],
 			"bluefin-framework": [
-				"stress-ng",
-				"tlp-rdw",
-				"tlp"
+				"tlp",
+				"tlp-rdw"
 			]
 		},
 		"exclude": {
