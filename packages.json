@@ -81,8 +81,8 @@
 				"virt-manager"
 			],
 			"bluefin-framework": [
-\				"tlp-rdw",
-				"tlp"
+				"tlp",
+				"tlp-rdw"
 			]
 		},
 		"exclude": {
