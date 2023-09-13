@@ -100,6 +100,7 @@ RUN /tmp/workarounds.sh
 RUN rm -f /etc/yum.repos.d/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
 RUN rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
 RUN rm -f /etc/yum.repos.d/vscode.repo
+RUN rm -f /etc/yum.repos.d/docker-ce.repo
 RUN rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo
 RUN rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
 
