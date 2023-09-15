@@ -31,8 +31,7 @@
 				"wireguard-tools",
 				"xprop",
 				"yaru-theme",
-				"zsh",
-				"google-noto-sans-cjk-fonts"
+				"zsh"
 			],
 			"bluefin-dx": [
 				"adobe-source-code-pro-fonts",
@@ -95,8 +94,7 @@
 				"firefox-langpacks",
 				"firefox",
 				"gnome-software-rpm-ostree",
-				"gnome-tour",
-				"google-noto-sans-cjk-vf-fonts"
+				"gnome-tour"
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": [
