@@ -184,12 +184,12 @@ touch:
 
 # A preview of what the update system would look like in the future
 update-ng:
-  echo 'Assembling and replacing distroboxes ...'
-  distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
-  echo 'Upgrading flatpaks...'
-  flatpak update -y
   echo 'Upgrading system...'
   sudo bootc upgrade
+  echo 'Upgrading flatpaks...'
+  flatpak update -y
+  echo 'Assembling and replacing distroboxes ...'
+  distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
 
 # Upgrade Distrobox to the latest git version
 distrobox-git:
