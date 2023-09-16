@@ -182,8 +182,17 @@ touch:
   gext install improvedosk@nick-shmyrev.dev
   gext install gestureImprovements@gestures
 
+# A preview of what the update system would look like in the future
+update-ng:
+  echo 'Upgrading system...'
+  sudo bootc upgrade
+  echo 'Upgrading flatpaks...'
+  flatpak update -y
+  echo 'Assembling and replacing distroboxes ...'
+  distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
+
 # Upgrade Distrobox to the latest git version
-update-distrobox-git:
+distrobox-git:
   echo 'Installing latest git snapshot of Distrobox'
   curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --next --prefix ~/.local
 
