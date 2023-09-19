@@ -10,8 +10,13 @@ env:
 
 jobs:
   push-ghcr:
+<<<<<<< HEAD
     name: Make
     runs-on: ubuntu-22.04
+=======
+    name: Build and push image
+    runs-on: [self-hosted]
+>>>>>>> 7aa6745 (Update build.yml)
     permissions:
       contents: read
       packages: write
