@@ -115,5 +115,19 @@
 			"bluefin-dx": [],
 			"bluefin-framework": []
 		}
+	},
+	"39": {
+		"include": {
+			"bluefin": [],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		},
+		"exclude": {
+			"bluefin": [
+				"podman-docker"
+			],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		}
 	}
 }
