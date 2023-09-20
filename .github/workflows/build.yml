@@ -21,7 +21,7 @@ jobs:
       matrix:
         image_flavor: [main, nvidia]
         base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
-        major_version: [38]
+        major_version: [38, 39]
         exclude:
           - base_name: bluefin-dx-framework
             image_flavor: nvidia
@@ -37,6 +37,9 @@ jobs:
           - major_version: 38
             is_latest_version: true
             is_stable_version: true
+          - major_version: 39
+            is_latest_version: true
+            is_stable_version: false
     steps: 
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
