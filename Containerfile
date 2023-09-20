@@ -90,7 +90,11 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
-    
+# Install Starship Shell Prompt
+RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" && \
+  tar -xzf /tmp/starship.tar.gz -C /tmp && \
+  install -c -m 0755 /tmp/starship /usr/bin && \
+  echo 'eval "$(starship init bash)"' >> /usr/etc/bashrc
 
 RUN systemctl enable podman.socket
 RUN systemctl disable pmie.service
