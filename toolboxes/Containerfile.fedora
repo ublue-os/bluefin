@@ -1,5 +1,5 @@
-FROM registry.fedoraproject.org/fedora-toolbox:38
-# From https://github.com/containers/toolbox/tree/main/images/fedora/f38
+FROM ghcr.io/ublue-os/fedora-distrobox:latest
+# From https://github.com/ublue-os/fedora-distrobox
 
 LABEL com.github.containers.toolbox="true" \
       usage="This image is meant to be used with the toolbox or distrobox command" \
