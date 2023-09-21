@@ -28,6 +28,12 @@ RUN wget https://copr.fedorainfracloud.org/coprs/rhcontainerbot/bootc/repo/fedor
 RUN rpm-ostree install bootc
 RUN rm -f /etc/yum.repos.d/bootc-"${FEDORA_MAJOR_VERSION}".repo
 
+# Starship Shell Prompt
+RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" && \
+  tar -xzf /tmp/starship.tar.gz -C /tmp && \
+  install -c -m 0755 /tmp/starship /usr/bin && \
+  echo 'eval "$(starship init bash)"' >> /etc/bashrc
+
 RUN /tmp/build.sh && \
     pip install --prefix=/usr yafti && \
     systemctl enable rpm-ostree-countme.service && \
@@ -91,8 +97,6 @@ RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releas
 RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr/bin/kubectx && \
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
     chmod +x /usr/bin/kubectx /usr/bin/kubens
-
-    
 
 RUN systemctl enable podman.socket
 RUN systemctl disable pmie.service
