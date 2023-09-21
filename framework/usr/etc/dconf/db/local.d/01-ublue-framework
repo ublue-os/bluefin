@@ -1,9 +1,0 @@
-[org/gnome/desktop/interface]
-text-scaling-factor=1.25
-
-[org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/framework_box.png'
-picture-uri-dark='file:///usr/share/backgrounds/framework_box.png'
-picture-options='zoom'
-primary-color='E6C39AFF'
-secondary-color='020201FF'

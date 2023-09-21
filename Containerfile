@@ -108,22 +108,3 @@ RUN rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
 
 RUN rm -rf /tmp/* /var/*
 RUN ostree container commit
-
-# Image for Framework laptops
-FROM bluefin AS bluefin-framework
-
-ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin-framework"
-
-COPY framework/usr /usr
-COPY packages.json /tmp/packages.json
-COPY build.sh /tmp/build.sh
-
-# Handle packages via packages.json
-RUN /tmp/build.sh
-
-RUN systemctl enable tlp
-RUN systemctl enable fprintd.service
-
-RUN rm -rf /tmp/* /var/*
-RUN ostree container commit
