@@ -84,10 +84,6 @@
 				"ubuntumono-nerd-fonts",
 				"virt-manager",
 				"wl-clipboard"
-			],
-			"bluefin-framework": [
-				"tlp",
-				"tlp-rdw"
 			]
 		},
 		"exclude": {
@@ -97,13 +93,23 @@
 				"gnome-software-rpm-ostree",
 				"gnome-tour"
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": [
-				"power-profiles-daemon"
-			]
+			"bluefin-dx": []
 		}
 	},
 	"38": {
+		"include": {
+			"bluefin": [],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		},
+		"exclude": {
+			"bluefin": [
+				"podman-docker"
+			],
+			"bluefin-dx": []
+		}
+	},
+	"39": {
 		"include": {
 			"bluefin": [],
 			"bluefin-dx": [],

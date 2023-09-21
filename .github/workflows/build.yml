@@ -1,7 +1,7 @@
 name: Build and Push Image
 on:
   schedule:
-    - cron: '00 10 * * *'  # 10:00am everyday
+    - cron: '00 08 * * *'  # 8:00am everyday
   merge_group:
   pull_request:
   workflow_dispatch:
@@ -20,24 +20,16 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia]
-        base_name: [bluefin, bluefin-dx, bluefin-framework, bluefin-dx-framework]
-        major_version: [38]
-        exclude:
-          - base_name: bluefin-dx-framework
-            image_flavor: nvidia
-          - base_name: bluefin-framework
-            image_flavor: nvidia
+        base_name: [bluefin, bluefin-dx]
+        major_version: [38, 39]
         include:
-          - base_name: bluefin-framework
-            target_base: bluefin
-            target_name: framework
-          - base_name: bluefin-dx-framework
-            target_base: bluefin-dx
-            target_name: framework
           - major_version: 38
             is_latest_version: true
             is_stable_version: true
-    steps: 
+          - major_version: 39
+            is_latest_version: true
+            is_stable_version: false
+    steps:
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
         uses: actions/checkout@v4
@@ -90,10 +82,10 @@ jobs:
               echo "${TAG}"
           done
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
-          
+
       - name: Get Current Fedora Version
         id: labels
-        run: |  
+        run: |
           ver=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
           echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
@@ -110,20 +102,6 @@ jobs:
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology 
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
-
-      # Update FROM lines for variants that have their own matrix via SED
-      # This is due to limitations in buildah using interpreted values as registry
-      # images and not image targets in file:
-      #   `FROM ${TARGET_BASE} as framework`
-      # evalutates to `FROM bluefin as framework` but buildah then looks for quay.io/bluefin
-      # vs the existing containerfile target.
-      # TODO(GH-280): Find an alternative for this rather than using sed.
-      - name: Build Image
-        id: sed_workaround
-        if: matrix.target_base
-        shell: bash
-        run: |
-          sed -i 's/FROM bluefin AS bluefin-framework/FROM ${{ matrix.target_base }} AS ${{ matrix.base_name }}/' Containerfile
 
       # Build image using Buildah action
       - name: Build Image
@@ -197,4 +175,3 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           echo "${{ toJSON(steps.push.outputs) }}"
-
