@@ -111,7 +111,9 @@
 	},
 	"39": {
 		"include": {
-			"bluefin": [],
+			"bluefin": [
+				"input-leap"	
+			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
 		},
