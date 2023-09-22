@@ -1,3 +1,5 @@
+# vim: set ft=make :
+
 # Run a one minute system benchmark
 benchmark:
   echo 'Running a 1 minute benchmark ...'
