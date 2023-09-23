@@ -8,9 +8,51 @@ LABEL com.github.containers.toolbox="true" \
 
 COPY ./toolboxes/packages.wolfi /toolbox-packages
 
+# Update image & add dependencies
 RUN apk update && \
-    apk upgrade && \
-    grep -v '^#' /toolbox-packages | xargs apk add
+    apk upgrade
+
+# Add Distrobox specific packages
+# Remove procps due to conflict with coreutils
+RUN apk del procps && \
+    apk add sudo-rs \
+        coreutils \
+        bash \
+        bzip2 \
+        curl \
+        diffutils \
+        findmnt \
+        findutils \
+        git \
+        gpg \
+        iproute2 \
+        iputils \
+        keyutils \
+        libcap \
+        ncurses \
+        ncurses-terminfo \
+        net-tools \
+        openssh-client \
+        posix-libc-utils \
+        rsync \
+        tcpdump \
+        tree \
+        umount \
+        util-linux \
+        util-linux-misc \
+        wget \
+        xz \
+        zip
+
+# Set up dependencies
+RUN git clone https://github.com/89luca89/distrobox.git --single-branch /tmp/distrobox && \
+    cp /tmp/distrobox/distrobox-host-exec /usr/bin/distrobox-host-exec && \
+    wget https://github.com/1player/host-spawn/releases/download/$(cat /tmp/distrobox/distrobox-host-exec | grep host_spawn_version= | cut -d "\"" -f 2)/host-spawn-$(uname -m) -O /usr/bin/host-spawn && \
+    chmod +x /usr/bin/host-spawn && \
+    rm -drf /tmp/distrobox && \
+
+# Add optional packages
+RUN grep -v '^#' /toolbox-packages | xargs apk add
     
 RUN rm /toolbox-packages
 
