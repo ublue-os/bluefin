@@ -175,3 +175,12 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           echo "${{ toJSON(steps.push.outputs) }}"
+
+  check:
+    name: Check all builds successful
+    runs-on: ubuntu-latest
+    needs: [push-ghcr]
+    steps:
+      - name: Exit
+        shell: bash
+        run: exit 0
