@@ -1,3 +1,5 @@
+# vim: set ft=make :
+
 # Run a one minute system benchmark
 benchmark:
   echo 'Running a 1 minute benchmark ...'
@@ -198,7 +200,7 @@ distrobox-git:
 
 # Run the yafti setup tool
 yafti:
-  yafti /etc/yafti.yml
+  yafti /etc/yafti.yml --force
 
 # Switch to the zsh shell
 zsh:
