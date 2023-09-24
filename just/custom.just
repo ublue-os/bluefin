@@ -174,8 +174,8 @@ podmansh-switch IMAGE:
   systemctl --user start podmansh.service
   echo "Image now switched to {{IMAGE}}"
 
-# Run Pytorch
-pytorch: 
+# Run Tensorflow
+tensorflow: 
   echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
   podman pull tensorflow/tensorflow:latest
   podman run -it -p 8888:8888 tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
