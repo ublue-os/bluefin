@@ -29,11 +29,6 @@ RUN if grep -qv "39" <<< "${FEDORA_MAJOR_VERSION}"; then \
     rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo \
     ; fi
 
-## bootc
-RUN wget https://copr.fedorainfracloud.org/coprs/rhcontainerbot/bootc/repo/fedora-"${FEDORA_MAJOR_VERSION}"/bootc-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/bootc.repo
-RUN rpm-ostree install bootc
-RUN rm -f /etc/yum.repos.d/bootc-"${FEDORA_MAJOR_VERSION}".repo
-
 # Starship Shell Prompt
 RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" && \
   tar -xzf /tmp/starship.tar.gz -C /tmp && \
