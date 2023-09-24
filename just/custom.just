@@ -174,6 +174,11 @@ podmansh-switch IMAGE:
   systemctl --user start podmansh.service
   echo "Image now switched to {{IMAGE}}"
 
+# Run Pytorch
+pytorch: 
+  echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
+  podman run -it -p 8888:8888 tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
+
 # Install a better on-screen-keyboard and gesture improvements
 touch:
   pip install --upgrade gnome-extensions-cli
