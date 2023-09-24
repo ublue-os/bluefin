@@ -16,7 +16,7 @@ ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin"
 
 COPY usr /usr
-COPY just/custom.just /tmp/just/custom.just
+COPY just /tmp/just
 COPY etc/yum.repos.d/ /etc/yum.repos.d/
 COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
@@ -43,7 +43,7 @@ RUN /tmp/build.sh && \
     systemctl enable dconf-update.service && \
     fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
-    cat /tmp/just/custom.just >> /usr/share/ublue-os/just/60-custom.just && \
+    find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
     rm -f /usr/share/applications/fish.desktop && \
     rm -f /usr/share/applications/htop.desktop && \
