@@ -177,6 +177,7 @@ podmansh-switch IMAGE:
 # Run Pytorch
 pytorch: 
   echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
+  podman pull tensorflow/tensorflow:latest
   podman run -it -p 8888:8888 tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
 # Install a better on-screen-keyboard and gesture improvements
