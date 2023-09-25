@@ -90,7 +90,7 @@
 			"bluefin": [
 				"firefox-langpacks",
 				"firefox",
-				"gnome-extension-app",
+				"gnome-extensions-app",
 				"gnome-software-rpm-ostree",
 				"gnome-tour"
 			],
