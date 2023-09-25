@@ -179,9 +179,9 @@ pytorch:
   echo 'Follow the prompts and check the tutorial: https://docs.anaconda.com/free/anaconda/jupyter-notebooks/'
   podman pull docker.io/continuumio/miniconda3
   podman run -i -t -p 8888:8888 docker.io/continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir \
-/opt/notebooks && /opt/conda/bin/jupyter notebook \
---notebook-dir=/opt/notebooks --ip='*' --port=8888 \
---no-browser --allow-root"
+  /opt/notebooks && /opt/conda/bin/jupyter notebook \
+  --notebook-dir=/opt/notebooks --ip='*' --port=8888 \
+  --no-browser --allow-root"
 
 # Run Tensorflow
 tensorflow: 
