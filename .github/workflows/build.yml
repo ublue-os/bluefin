@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nokmods, nvidia]
+        image_flavor: [main, nvidia, asus, framework, surface]
         base_name: [bluefin, bluefin-dx]
         major_version: [38, 39]
         include:
@@ -29,6 +29,9 @@ jobs:
           - major_version: 39
             is_latest_version: true
             is_stable_version: false
+        exclude:
+          - image_flavor: surface
+            major_version: 39
     steps:
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
