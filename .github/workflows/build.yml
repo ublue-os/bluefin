@@ -32,6 +32,8 @@ jobs:
         exclude:
           - image_flavor: surface
             major_version: 39
+          - image_flavor: surface-nvidia
+            major_version: 39
     steps:
       - name: Maximize build space
         uses: AdityaGarg8/remove-unwanted-software@v1
