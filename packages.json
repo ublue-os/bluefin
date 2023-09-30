@@ -16,6 +16,8 @@
 				"libgda-sqlite",
 				"libgda",
 				"libratbag-ratbagd",
+				"libxcrypt-compat",
+				"mesa-libGLU",
 				"nautilus-gsconnect",
 				"pulseaudio-utils",
 				"python3-pip",
