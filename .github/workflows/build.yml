@@ -36,7 +36,7 @@ jobs:
             major_version: 39
     steps:
       - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v4
+        uses: ublue-os/remove-unwanted-software@v5
 
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
