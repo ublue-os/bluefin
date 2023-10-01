@@ -1,0 +1,12 @@
+[Unit]
+Description=Configure system for current hardware
+After=rpm-ostreed.service
+Before=systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/ublue-hardware-setup
+
+[Install]
+WantedBy=multi-user.target

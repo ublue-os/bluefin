@@ -1,0 +1,10 @@
+[Unit]
+Description=Configure system for current user
+Requires=xdg-desktop-autostart.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ublue-user-setup
+
+[Install]
+WantedBy=default.target
