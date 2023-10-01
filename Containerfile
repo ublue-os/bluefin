@@ -46,7 +46,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
-    systemctl enable ublue-update.timer && \
+    systemctl disable ublue-update.timer && \
     fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just && \
