@@ -99,12 +99,6 @@ if [[ -f $HWS_VER_FILE && $HWS_VER = $HWS_VER_RAN ]]; then
   fi
 fi
 
-# Remove system flatpaks
-if flatpak remotes --system | grep -q fedora; then
-    flatpak remote-delete fedora --force
-    flatpak remove --system --noninteractive --all
-fi
-
 echo $HWS_VER > $HWS_VER_FILE
 echo $IMAGE_NAME > $KNOWN_IMAGE_NAME_FILE
 echo $IMAGE_FLAVOR > $KNOWN_IMAGE_FLAVOR_FILE
