@@ -16,6 +16,11 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
   /usr/lib/fedora-third-party/fedora-third-party-opt-out
   /usr/bin/fedora-third-party disable
   flatpak remote-delete fedora --force
+
+  FEDORA_FLATPAKS=$(flatpak list --columns=application,origin | grep -w 'fedora' | awk '{print $1}')
+  for flatpak in $FEDORA_FLATPAKS; do
+    flatpak remove --system --noninteractive $flatpak
+  done
 fi
 
 notify-send "Flatpak installer" "Currently installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
