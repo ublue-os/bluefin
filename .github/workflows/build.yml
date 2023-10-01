@@ -122,6 +122,7 @@ jobs:
           tags: |
             ${{ steps.generate-tags.outputs.alias_tags }}
           build-args: |
+            IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
             TARGET_BASE=${{ matrix.target_base }}
