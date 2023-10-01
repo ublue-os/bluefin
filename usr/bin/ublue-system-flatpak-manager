@@ -18,8 +18,6 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
   flatpak remote-delete fedora --force
 fi
 
-notify-send "Flatpak installer" "Currently installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
-
 # Lists of flatpaks
 FLATPAK_LIST=$(flatpak list --columns=application)
 INSTALL_LIST=$(cat /etc/flatpak/system/install)
@@ -33,8 +31,6 @@ if [[ -n $INSTALL_LIST ]]; then
     fi
   done
 fi
-
-notify-send "Flatpak installer" "Finished installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
 
 # Remove flatpaks in list
 if [[ -n $REMOVE_LIST ]]; then
