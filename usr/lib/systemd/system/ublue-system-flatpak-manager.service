@@ -6,7 +6,7 @@ After=network-online.target ublue-hardware-setup.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/ublue-flatpak-manager
+ExecStart=/usr/bin/ublue-system-flatpak-manager
 Restart=on-failure
 
 [Install]
