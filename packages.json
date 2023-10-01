@@ -30,6 +30,7 @@
 				"stress-ng",
 				"tailscale",
 				"tmux",
+				"ublue-update",
 				"wireguard-tools",
 				"xprop",
 				"yaru-theme",
@@ -94,7 +95,8 @@
 				"firefox",
 				"gnome-extensions-app",
 				"gnome-software-rpm-ostree",
-				"gnome-tour"
+				"gnome-tour",
+				"ublue-os-update-services"
 			],
 			"bluefin-dx": []
 		}
