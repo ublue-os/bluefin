@@ -11,13 +11,6 @@ if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
   exit 0
 fi
 
-# Opt out of and remove Fedora's flatpak repo
-if grep -qz 'fedora' <<< $(flatpak remotes); then
-  /usr/lib/fedora-third-party/fedora-third-party-opt-out
-  /usr/bin/fedora-third-party disable
-  flatpak remote-delete fedora --force
-fi
-
 notify-send "Flatpak installer" "Currently installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
 
 # Remove fedora flatpak repo
@@ -47,6 +40,18 @@ if [[ -n $REMOVE_LIST ]]; then
     if grep -qz $flatpak <<< $FLATPAK_LIST; then
       flatpak remove --system --noninteractive $flatpak
     fi
+  done
+fi
+
+# Opt out of and remove Fedora's flatpak repo
+if grep -qz 'fedora' <<< $(flatpak remotes); then
+  /usr/lib/fedora-third-party/fedora-third-party-opt-out
+  /usr/bin/fedora-third-party disable
+  flatpak remote-delete fedora --force
+
+  FEDORA_FLATPAKS=$(flatpak list --columns=application,origin | grep -w 'fedora' | awk '{print $1}')
+  for flatpak in $FEDORA_FLATPAKS; do
+    flatpak remove --system --noninteractive $flatpak
   done
 fi
 
