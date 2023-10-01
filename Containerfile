@@ -120,7 +120,7 @@ RUN mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     systemctl enable podman.socket && \
     systemctl enable ublue-hardware-setup.service && \
-    systemctl enable ublue-flatpak-manager.service && \
+    systemctl disable ublue-flatpak-manager.service && \
     systemctl --global enable ublue-user-setup.service && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
