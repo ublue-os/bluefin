@@ -1,6 +1,6 @@
 title: Welcome to uBlue
 properties:
-  mode: "run-on-change"
+  mode: "run-once"
 screens:
   first-screen:
     source: yafti.screen.title
@@ -9,38 +9,6 @@ screens:
       icon: "/path/to/icon"
       description: |
         Pick some applications to get started
-  install-required-packages:
-    source: yafti.screen.package
-    values:
-      title: Install required packages
-      package_manager: yafti.plugin.flatpak
-      show-terminal: true
-      groups:
-        Core:
-          description: Core Applications
-          default: true
-          packages:
-          - Blackbox Terminal: com.raggesilver.BlackBox
-          - Calculator: org.gnome.Calculator
-          - Calendar: org.gnome.Calendar
-          - Characters: org.gnome.Characters
-          - Codecs: org.freedesktop.Platform.ffmpeg-full//22.08
-          - Connections: org.gnome.Connections
-          - Contacts: org.gnome.Contacts
-          - Document Viewer: org.gnome.Evince
-          - Extensions Manager: com.mattjakeman.ExtensionManager
-          - Fedora Media Writer: org.fedoraproject.MediaWriter
-          - Mozilla Firefox: org.mozilla.firefox
-          - Flatseal Permissions Manager: com.github.tchx84.Flatseal
-          - Logs: org.gnome.Logs
-          - Maps: org.gnome.Maps
-          - Nautilus Preview: org.gnome.NautilusPreviewer
-          - Text Editor: org.gnome.TextEditor
-          - Weather: org.gnome.Weather
-          - Disk Usage Analyzer: org.gnome.baobab
-          - Clocks: org.gnome.clocks
-          - Picture Viewer: org.gnome.eog
-          - Font Viewer: org.gnome.font-viewer
   applications:
     source: yafti.screen.package
     values:
