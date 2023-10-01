@@ -73,20 +73,21 @@ ARG PACKAGE_LIST="bluefin-dx"
 # dx specific files come from the dx directory in this repo
 COPY dx/usr /usr
 COPY dx/etc/yum.repos.d/ /etc/yum.repos.d/
-COPY workarounds.sh /tmp/workarounds.sh
-COPY packages.json /tmp/packages.json
-COPY build.sh /tmp/build.sh
-COPY image-info.sh /tmp/image-info.sh
+COPY workarounds.sh \
+     packages.json \
+     build.sh \
+     image-info.sh \
+    /tmp
 
 # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
 RUN sysctl -p
 
-RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
-RUN wget https://copr.fedorainfracloud.org/coprs/bobslept/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
+RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    wget https://copr.fedorainfracloud.org/coprs/bobslept/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
 
 # Handle packages via packages.json
-RUN /tmp/build.sh
-RUN /tmp/image-info.sh
+RUN /tmp/build.sh && \
+    /tmp/image-info.sh
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin
@@ -97,33 +98,38 @@ COPY --from=cgr.dev/chainguard/ko:latest /usr/bin/ko /usr/bin/ko
 COPY --from=cgr.dev/chainguard/minio-client:latest /usr/bin/mc /usr/bin/mc
 COPY --from=cgr.dev/chainguard/kubectl:latest /usr/bin/kubectl /usr/bin/kubectl
 
-RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64"
-RUN chmod +x ./kind
-RUN mv ./kind /usr/bin/kind
+RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64" && \
+    chmod +x ./kind && \
+    mv ./kind /usr/bin/kind
 
 # Install DevPod
 RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releases/latest | jq -r '.assets[] | select(.name| test(".*x86_64.rpm$")).browser_download_url') && \
-  wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
-  install -c -m 0755 /tmp/devpod /usr/bin
+    wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
+    install -c -m 0755 /tmp/devpod /usr/bin
 
 # Install kns/kctx and add completions for Bash
 RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr/bin/kubectx && \
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
-RUN systemctl enable podman.socket
-RUN systemctl disable pmie.service
-RUN systemctl disable pmlogger.service
+# Install FlatHub OOTB, set up services
+RUN mkdir -p /usr/etc/flatpak/remotes.d && \
+    wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
+    systemctl enable podman.socket && \
+    systemctl enable ublue-hardware-setup.service && \
+    systemctl enable ublue-flatpak-manager.service && \
+    systemctl --global enable ublue-user-setup.service && \
+    systemctl disable pmie.service && \
+    systemctl disable pmlogger.service
 
 RUN /tmp/workarounds.sh
 
 # Clean up repos, everything is on the image so we don't need them
-RUN rm -f /etc/yum.repos.d/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
-RUN rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
-RUN rm -f /etc/yum.repos.d/vscode.repo
-RUN rm -f /etc/yum.repos.d/docker-ce.repo
-RUN rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo
-RUN rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
-
-RUN rm -rf /tmp/* /var/*
-RUN ostree container commit
+RUN rm -f /etc/yum.repos.d/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    rm -f /etc/yum.repos.d/vscode.repo && \
+    rm -f /etc/yum.repos.d/docker-ce.repo && \
+    rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo && \
+    rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo && \
+    rm -rf /tmp/* /var/* && \
+    ostree container commit
