@@ -62,8 +62,13 @@ binding='<Control><Alt>u'
 command='flatpak run com.raggesilver.BlackBox --command "distrobox enter ubuntu"'
 name='blackbox ubuntu'
 
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Control><Shift>Escape'
+command="flatpak run io.missioncenter.MissionCenter"
+name='mission-center'
+
 [org/gnome/settings-daemon/plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', 'org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2']
 home=['<Super>e']
 
 [org/gnome/settings-daemon/plugins/power]
