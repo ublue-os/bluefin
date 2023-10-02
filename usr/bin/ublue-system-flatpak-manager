@@ -55,5 +55,8 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
   done
 fi
 
+# Disable the system variant of the flathub repo
+flatpak remote-modify flathub --disable --system
+
 mkdir -p /etc/ublue
 echo $VER > $VER_FILE
