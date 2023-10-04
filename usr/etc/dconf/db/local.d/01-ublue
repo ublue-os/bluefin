@@ -74,6 +74,9 @@ home=['<Super>e']
 [org/gnome/settings-daemon/plugins/power]
 power-button-action='interactive'
 
+[org/gtk/settings/file-chooser]
+sort-directories-first=true
+
 [org/gtk/gtk4/settings/file-chooser]
 sort-directories-first=true
 
