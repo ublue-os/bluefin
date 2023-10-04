@@ -89,3 +89,8 @@ style-preference=2
 font="Ubuntu Mono 16"
 window-width=975
 window-height=650
+
+[org/gnome/software]
+allow-updates=false
+download-updates=false
+download-updates-notify=false
