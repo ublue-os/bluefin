@@ -21,6 +21,8 @@ COPY etc/yum.repos.d/ /etc/yum.repos.d/
 COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
 COPY image-info.sh /tmp/image-info.sh
+# Copy ublue-update.toml to tmp first, to avoid being overwritten.
+COPY usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 
 # GNOME VRR
 RUN if grep -qv "39" <<< "${FEDORA_MAJOR_VERSION}"; then \
@@ -45,6 +47,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     pip install --prefix=/usr yafti && \
     mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
+    cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
