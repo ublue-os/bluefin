@@ -99,7 +99,7 @@ COPY workarounds.sh \
 RUN sysctl -p
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
-    wget https://copr.fedorainfracloud.org/coprs/bobslept/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
+    wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
 
 # Handle packages via packages.json
 RUN /tmp/build.sh && \
@@ -136,7 +136,7 @@ RUN systemctl enable podman.socket && \
 RUN /tmp/workarounds.sh
 
 # Clean up repos, everything is on the image so we don't need them
-RUN rm -f /etc/yum.repos.d/bobslept-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+RUN rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/vscode.repo && \
     rm -f /etc/yum.repos.d/docker-ce.repo && \
