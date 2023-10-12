@@ -11,8 +11,6 @@ if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
   exit 0
 fi
 
-notify-send "Flatpak installer" "Currently installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
-
 # Remove fedora flatpak repo
 if grep -qz 'fedora' <<< $(flatpak remotes); then
   flatpak remote-delete --user fedora --force
@@ -27,12 +25,13 @@ REMOVE_LIST=$(cat /etc/flatpak/system/remove)
 if [[ -n $INSTALL_LIST ]]; then
   for flatpak in $INSTALL_LIST; do
     if grep -qvz $flatpak <<< $FLATPAK_LIST; then
-      flatpak install --system --noninteractive flathub $flatpak
+      if ! flatpak install --system --noninteractive flathub $flatpak; then
+        # exit on error
+        exit 1
+      fi
     fi
   done
 fi
-
-notify-send "Flatpak installer" "Finished installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
 
 # Remove flatpaks in list
 if [[ -n $REMOVE_LIST ]]; then
@@ -51,12 +50,17 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
 
   FEDORA_FLATPAKS=$(flatpak list --columns=application,origin | grep -w 'fedora' | awk '{print $1}')
   for flatpak in $FEDORA_FLATPAKS; do
-    flatpak remove --system --noninteractive $flatpak
+    if ! flatpak remove --system --noninteractive $flatpak; then
+      # exit on error
+      exit 1
+    fi
   done
 fi
 
 # Disable the system variant of the flathub repo
 flatpak remote-modify flathub --disable --system
+
+notify-send "Flatpak installer" "Finished installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
 
 mkdir -p /etc/ublue
 echo $VER > $VER_FILE
