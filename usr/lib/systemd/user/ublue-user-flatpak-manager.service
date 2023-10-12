@@ -8,6 +8,8 @@ After=network-online.target
 Type=oneshot
 ExecStart=/usr/bin/ublue-user-flatpak-manager
 Restart=on-failure
+RestartSec=30
+StartLimitInterval=0
 
 [Install]
 WantedBy=default.target
