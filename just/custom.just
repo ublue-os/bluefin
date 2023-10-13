@@ -175,7 +175,7 @@ podmansh:
   #!/usr/bin/env bash
   sudo mkdir -p /etc/containers/systemd/users/${UID}
   sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
-  just --unstable --justfile {{justfile()}} chsh /usr/bin/podmansh
+  ujust chsh /usr/bin/podmansh
   podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
 
   systemctl --user daemon-reload
@@ -235,7 +235,7 @@ yafti:
 
 # Switch to the zsh shell
 zsh:
-  just /usr/bin/zsh
+  ujust /usr/bin/zsh
 
 docker:
   sudo systemctl enable --now docker
