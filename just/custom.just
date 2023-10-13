@@ -1,6 +1,7 @@
 # vim: set ft=make :
 
 uid := `id -u`
+shell := `getent passwd {{uid}} | cut -d: -f7`
 
 # Run a one minute system benchmark
 benchmark:
@@ -57,16 +58,18 @@ brew-shell:
   fi
 
 # Change the user's shell
-chsh shell:
+chsh new_shell:
   #!/usr/bin/env bash
   set -euo pipefail
-  CURRENT_SHELL="$(cat /etc/passwd | grep ":{{uid}}:" | cut '-d:' '-f7')"
-  if [ "{{shell}}" = "${CURRENT_SHELL}" ] ; then
-    printf "Your shell is already set to %s.\n" "${CURRENT_SHELL}"
+  if [ "{{shell}}" = "{{new_shell}}" ] ; then
+    printf "Your shell is already set to %s.\n" "{{new_shell}}"
   else
-    sudo usermod $USER --shell "{{shell}}"
-    CURRENT_SHELL="$(cat /etc/passwd | grep ":{{uid}}:" | cut '-d:' '-f7')"
-    printf "%s's shell is now %s.\n" "$USER" "${CURRENT_SHELL}"
+    if [ -x "{{new_shell}}" ] ; then
+      sudo usermod $USER --shell "{{new_shell}}"
+      printf "%s's shell is now %s.\n" "$USER" "{{new_shell}}"
+    else
+      echo "{{new_shell}} does not exist or is not executable!"
+    fi
   fi
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
