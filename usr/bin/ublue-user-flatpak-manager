@@ -21,23 +21,15 @@ REMOVE_LIST=$(cat /etc/flatpak/user/remove)
 
 # Install flatpaks in list
 if [[ -n $INSTALL_LIST ]]; then
-  for flatpak in $INSTALL_LIST; do
-    if grep -qvz $flatpak <<< $FLATPAK_LIST; then
-      if ! flatpak install --user --noninteractive flathub $flatpak; then
-        # exit on error
-        exit 1
-      fi
-    fi
-  done
+  if ! flatpak install --user --noninteractive flathub ${INSTALL_LIST[@]}; then
+    # exit on error
+    exit 1
+  fi
 fi
 
 # Remove flatpaks in list
 if [[ -n $REMOVE_LIST ]]; then
-  for flatpak in $REMOVE_LIST; do
-    if grep -qz $flatpak <<< $FLATPAK_LIST; then
-      flatpak remove --user --noninteractive $flatpak
-    fi
-  done
+  flatpak remove --user --noninteractive ${REMOVE_LIST[@]}
 fi
 
 notify-send "Flatpak installer" "Finished installing user flatpaks" --app-name="Flatpak installer" -u NORMAL
