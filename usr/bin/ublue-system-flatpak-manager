@@ -50,10 +50,7 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
 
   FEDORA_FLATPAKS=$(flatpak list --columns=application,origin | grep -w 'fedora' | awk '{print $1}')
   for flatpak in $FEDORA_FLATPAKS; do
-    if ! flatpak remove --system --noninteractive $flatpak; then
-      # exit on error
-      exit 1
-    fi
+    flatpak remove --system --noninteractive $flatpak
   done
 fi
 

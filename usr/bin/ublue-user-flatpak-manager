@@ -35,10 +35,7 @@ fi
 if [[ -n $REMOVE_LIST ]]; then
   for flatpak in $REMOVE_LIST; do
     if grep -qz $flatpak <<< $FLATPAK_LIST; then
-      if ! flatpak remove --user --noninteractive $flatpak; then
-        # exit on error
-        exit 1
-      fi
+      flatpak remove --user --noninteractive $flatpak
     fi
   done
 fi
