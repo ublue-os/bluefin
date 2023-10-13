@@ -57,21 +57,6 @@ brew-shell:
     echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
   fi
 
-# Change the user's shell
-chsh new_shell:
-  #!/usr/bin/env bash
-  set -euo pipefail
-  if [ "{{shell}}" = "{{new_shell}}" ] ; then
-    printf "Your shell is already set to %s.\n" "{{new_shell}}"
-  else
-    if [ -x "{{new_shell}}" ] ; then
-      sudo usermod $USER --shell "{{new_shell}}"
-      printf "%s's shell is now %s.\n" "$USER" "{{new_shell}}"
-    else
-      echo "{{new_shell}} does not exist or is not executable!"
-    fi
-  fi
-
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:
   echo 'Enabling Cockpit'
