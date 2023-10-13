@@ -55,7 +55,7 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
   done
 
   # Remove flatpak runtimes from origin fedora
-  FEDORA_FLATPAKS=$(flatpak list --runtime --columns=application,origin | grep -w 'fedora' | awk '{print $1}')
+  FEDORA_FLATPAKS=$(flatpak list --runtime --columns=application,arch,branch,origin | grep -w 'fedora' | awk '{print $1"/"$2"/"$3}')
   for flatpak in $FEDORA_FLATPAKS; do
     flatpak remove --system --noninteractive $flatpak
   done
