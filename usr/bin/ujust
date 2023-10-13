@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/bin/just --unstable --justfile /usr/share/ublue-os/justfile
+/usr/bin/just --unstable --justfile /usr/share/ublue-os/justfile "${@}"

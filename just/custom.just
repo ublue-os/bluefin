@@ -235,7 +235,7 @@ yafti:
 
 # Switch to the zsh shell
 zsh:
-  ujust /usr/bin/zsh
+  ujust chsh /usr/bin/zsh
 
 docker:
   sudo systemctl enable --now docker
