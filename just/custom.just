@@ -126,7 +126,7 @@ distrobox-universal:
 
 # Switch to the fish shell
 fish:
-  just --unstable --justfile {{justfile()}} chsh /usr/bin/fish
+ ujust chsh /usr/bin/fish
 
 # Install recommended GNOME extensions
 gnome-extensions:
