@@ -26,9 +26,11 @@ jobs:
           - major_version: 38
             is_latest_version: true
             is_stable_version: true
+            is_gts_version: true
           - major_version: 39
             is_latest_version: true
             is_stable_version: false
+            is_gts_version: false
         exclude:
           - image_flavor: surface
             major_version: 39
@@ -81,6 +83,8 @@ jobs:
           if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
              [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
               BUILD_TAGS+=("latest")
+          elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+              BUILD_TAGS+=("gts")
           fi
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
