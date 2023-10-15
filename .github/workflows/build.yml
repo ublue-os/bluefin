@@ -31,11 +31,6 @@ jobs:
             is_latest_version: true
             is_stable_version: false
             is_gts_version: false
-        exclude:
-          - image_flavor: surface
-            major_version: 39
-          - image_flavor: surface-nvidia
-            major_version: 39
     steps:
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@v6
