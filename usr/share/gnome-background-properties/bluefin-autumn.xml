@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+<wallpapers>
+  <wallpaper deleted="false">
+    <name>Bluefin - Autumn</name>
+    <filename>/usr/share/backgrounds/bluefin/WallPaper_AutumnDay_Post.webp</filename>
+    <filename-dark>/usr/share/backgrounds/bluefin/WallPaper_AutumnNight_Post.webp</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#2A1413</pcolor>
+    <scolor>#000000</scolor>
+  </wallpaper>
+</wallpapers>
