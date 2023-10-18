@@ -151,7 +151,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
 # Install Charm VHS & dependencies
-RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/vhs/releases/latest | jq -r '.assets[] | select(.name| test(".*Linux_x86_64.rpm$")).browser_download_url') && \
+RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/vhs/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') && \
     wget https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.x86_64 -O /tmp/ttyd && \
     install -c -m 0755 /tmp/ttyd /usr/bin
 
