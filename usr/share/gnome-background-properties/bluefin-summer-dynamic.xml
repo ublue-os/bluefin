@@ -3,10 +3,12 @@
 <wallpapers>
   <wallpaper deleted="false">
     <name>Bluefin - Summer Dynamic</name>
-    <filename>/usr/share/backgrounds/bluefin/bluefin-summer-timed.xml</filename>
+    <filename>/usr/share/backgrounds/bluefin/bluefin-summer-dynamic.xml</filename>
     <options>zoom</options>
     <shade_type>solid</shade_type>
     <pcolor>#F99F53</pcolor>
     <scolor>#000000</scolor>
   </wallpaper>
 </wallpapers>
+
+
