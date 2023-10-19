@@ -153,7 +153,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
 # Install Charm VHS & dependencies
 RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/vhs/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') && \
     wget https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.x86_64 -O /tmp/ttyd && \
-    install -c -m 0755 /tmp/ttyd /usr/bin
+    install -c -m 0755 /tmp/ttyd /usr/bin/ttyd
 
 # Set up services
 RUN systemctl enable podman.socket && \
