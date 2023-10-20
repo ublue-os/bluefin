@@ -144,6 +144,11 @@ nix-devbox:
   curl -fsSL https://get.jetpack.io/devbox | bash
   echo 'You MUST reboot to continue'
 
+# Remove nix
+nix-remove:
+  echo 'Setting phasers to stun. Removing nix.'
+  /nix/nix-installer uninstall
+
 # Install nix and Devbox (Global Profile)
 nix-devbox-global:
   echo 'Installing devbox global profile.'
