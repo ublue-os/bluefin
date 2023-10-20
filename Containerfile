@@ -155,6 +155,9 @@ RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/vhs/rel
     wget https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.x86_64 -O /tmp/ttyd && \
     install -c -m 0755 /tmp/ttyd /usr/bin/ttyd
 
+# Install Charm gum 
+RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/gum/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') 
+
 # Set up services
 RUN systemctl enable podman.socket && \
     systemctl disable pmie.service && \
