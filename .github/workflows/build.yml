@@ -130,6 +130,7 @@ jobs:
           build-args: |
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
+            IMAGE_VENDOR=${{ github.repository_owner }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
