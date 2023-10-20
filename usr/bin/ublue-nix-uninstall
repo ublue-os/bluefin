@@ -1,0 +1,9 @@
+#!/bin/bash
+
+/nix/nix-installer uninstall
+
+echo "Removing profile changes..."
+
+sleep 1
+
+sudo rm -f /etc/profile.d/nix-app-icons.sh
