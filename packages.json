@@ -15,7 +15,6 @@
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
 				"mesa-libGLU",
-				"nautilus-gsconnect",
 				"pulseaudio-utils",
 				"python3-pip",
 				"samba-dcerpc",
@@ -30,7 +29,6 @@
 				"ublue-update",
 				"wireguard-tools",
 				"xprop",
-				"yaru-theme",
 				"wl-clipboard",
 				"zsh"
 			],
