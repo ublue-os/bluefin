@@ -38,14 +38,14 @@ brew-shell:
   if grep -q "linuxbrew" $HOME/.zprofile
   then
     echo "Brew configuration already present in .zprofile"
-  else 
+  else
     echo "Adding Brew configuration to .zprofile"
     echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zprofile
   fi
   if grep -q "linuxbrew" $HOME/.bash_profile
   then
     echo "Brew configuration already present in .bash_profile"
-  else 
+  else
     echo "Adding Brew configuration to .bash_profile"
     echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
   fi
@@ -107,16 +107,8 @@ distrobox-universal:
 
 # Switch to the fish shell
 fish:
-  sudo usermod $USER --shell /usr/bin/fish 
+  sudo usermod $USER --shell /usr/bin/fish
   printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
-
-# Install recommended GNOME extensions
-gnome-extensions:
-  pip install --upgrade gnome-extensions-cli
-  gext install tailscale-status@maxgallup.github.com
-  gext install nightthemeswitcher@romainvigier.fr
-  gext install pano@elhan.io
-  gext install weatheroclock@CleoMenezesJr.github.io
 
 # Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
 jetbrains-toolbox:
@@ -164,7 +156,7 @@ podmansh:
   sudo usermod $USER --shell /usr/bin/podmansh
   printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
   podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
-  
+
   systemctl --user daemon-reload
   systemctl --user stop podmansh.service
   systemctl --user start podmansh.service
@@ -191,16 +183,10 @@ pytorch:
   --no-browser --allow-root"
 
 # Run Tensorflow
-tensorflow: 
+tensorflow:
   echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
   podman pull docker.io/tensorflow/tensorflow:latest
   podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
-
-# Install a better on-screen-keyboard and gesture improvements
-touch:
-  pip install --upgrade gnome-extensions-cli
-  gext install improvedosk@nick-shmyrev.dev
-  gext install gestureImprovements@gestures
 
 # A preview of what the update system would look like in the future
 update-ng:
@@ -222,7 +208,7 @@ yafti:
 
 # Switch to the zsh shell
 zsh:
-  sudo usermod $USER --shell /usr/bin/zsh 
+  sudo usermod $USER --shell /usr/bin/zsh
   printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
 
 docker:
