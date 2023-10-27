@@ -65,6 +65,7 @@ screens:
           - Font Downloader: org.gustavoperedo.FontDownloader
           - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Backup: org.gnome.DejaDup
+          - LocalSend: org.localsend.localsend_app
           - Syncthing: com.github.zocker_160.SyncThingy
           - Cockpit Client: org.cockpit_project.CockpitClient
   final-screen:
