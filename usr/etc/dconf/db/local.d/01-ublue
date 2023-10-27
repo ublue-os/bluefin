@@ -5,7 +5,7 @@ enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@mi
 [org/gnome/desktop/background]
 picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-autumn-dynamic.xml'
 picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-autumn-dynamic.xml'
-picture-options='stretched'
+picture-options='zoom'
 primary-color='000000'
 secondary-color='FFFFFF'
 
