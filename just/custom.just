@@ -202,10 +202,6 @@ distrobox-git:
   echo 'Installing latest git snapshot of Distrobox'
   curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --next --prefix ~/.local
 
-# Run the yafti setup tool
-yafti:
-  yafti /etc/yafti.yml --force
-
 # Switch to the zsh shell
 zsh:
   sudo usermod $USER --shell /usr/bin/zsh
