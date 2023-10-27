@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/ublue-os/bluefin/compare/v1.2.0...v1.3.0) (2023-10-27)
+
+
+### Features
+
+* add localsend to recommended utilities ([#618](https://github.com/ublue-os/bluefin/issues/618)) ([588139e](https://github.com/ublue-os/bluefin/commit/588139e7fec63e75107ac9e785fc7c11c52616fe))
+
 ## [1.2.0](https://github.com/ublue-os/bluefin/compare/v1.0.0...v1.2.0) (2023-10-23)
 
 
