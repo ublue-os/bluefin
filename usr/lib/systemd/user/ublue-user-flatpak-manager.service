@@ -1,0 +1,15 @@
+[Unit]
+Description=Manage user flatpaks
+Documentation=https://github.com/ublue-os/endlish-oesque/issues/10
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ublue-user-flatpak-manager
+Restart=on-failure
+RestartSec=30
+StartLimitInterval=0
+
+[Install]
+WantedBy=default.target

@@ -40,14 +40,14 @@ brew-shell:
     echo "Brew configuration already present in .zprofile"
   else 
     echo "Adding Brew configuration to .zprofile"
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zprofile
+    echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zprofile
   fi
   if grep -q "linuxbrew" $HOME/.bash_profile
   then
     echo "Brew configuration already present in .bash_profile"
   else 
     echo "Adding Brew configuration to .bash_profile"
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
+    echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
   fi
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
@@ -59,6 +59,7 @@ cockpit:
   sudo podman container runlabel --name cockpit-ws RUN quay.io/cockpit/ws
   sudo podman container runlabel INSTALL quay.io/cockpit/ws
   sudo systemctl enable cockpit.service
+  echo 'Open Cockpit -> http://localhost:9090'
 
 # Import a devcontainers profile for VSCode
 code-profile:
@@ -107,7 +108,8 @@ distrobox-universal:
 
 # Switch to the fish shell
 fish:
-  sudo lchsh $USER /usr/bin/fish 
+  sudo usermod $USER --shell /usr/bin/fish 
+  printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
 
 # Install recommended GNOME extensions
 gnome-extensions:
@@ -143,6 +145,11 @@ nix-devbox:
   curl -fsSL https://get.jetpack.io/devbox | bash
   echo 'You MUST reboot to continue'
 
+# Remove nix
+nix-remove:
+  echo 'Setting phasers to stun. Removing nix.'
+  /nix/nix-installer uninstall
+
 # Install nix and Devbox (Global Profile)
 nix-devbox-global:
   echo 'Installing devbox global profile.'
@@ -155,7 +162,8 @@ nix-devbox-global:
 podmansh:
   sudo mkdir -p /etc/containers/systemd/users/${UID}
   sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
-  sudo lchsh $USER /usr/bin/podmansh
+  sudo usermod $USER --shell /usr/bin/podmansh
+  printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
   podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
   
   systemctl --user daemon-reload
@@ -215,7 +223,8 @@ yafti:
 
 # Switch to the zsh shell
 zsh:
-  sudo lchsh $USER /usr/bin/zsh 
+  sudo usermod $USER --shell /usr/bin/zsh 
+  printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
 
 docker:
   sudo systemctl enable --now docker

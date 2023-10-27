@@ -1,60 +1,14 @@
-title: Welcome to uBlue
+title: Welcome to Bluefin
 properties:
-  mode: "run-on-change"
+  mode: "run-once"
 screens:
   first-screen:
     source: yafti.screen.title
     values:
-      title: "Welcome to Bluefin (Alpha)"
+      title: "Welcome to Bluefin (Beta)"
       icon: "/path/to/icon"
       description: |
-        Pick some applications to get started
-  can-we-modify-your-flatpaks:
-    source: yafti.screen.consent
-    values:
-      title: Welcome, Traveler
-      condition:
-        run: flatpak remotes --system | grep fedora
-      description: |
-        WARNING: This will modify your Flatpaks if you are rebasing! If you do not want to do this exit the installer.
-      actions:
-        - run: /usr/lib/fedora-third-party/fedora-third-party-opt-out
-        - run: /usr/bin/fedora-third-party disable
-        - run: flatpak remote-delete fedora --force
-        - run: flatpak remove --system --noninteractive --all
-        - run: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
-  install-required-packages:
-    source: yafti.screen.package
-    values:
-      title: Install required packages
-      package_manager: yafti.plugin.flatpak
-      show-terminal: true
-      groups:
-        Core:
-          description: Core Applications
-          default: true
-          packages:
-          - Blackbox Terminal: com.raggesilver.BlackBox
-          - Calculator: org.gnome.Calculator
-          - Calendar: org.gnome.Calendar
-          - Characters: org.gnome.Characters
-          - Codecs: org.freedesktop.Platform.ffmpeg-full//22.08
-          - Connections: org.gnome.Connections
-          - Contacts: org.gnome.Contacts
-          - Document Viewer: org.gnome.Evince
-          - Extensions Manager: com.mattjakeman.ExtensionManager
-          - Fedora Media Writer: org.fedoraproject.MediaWriter
-          - Mozilla Firefox: org.mozilla.firefox
-          - Flatseal Permissions Manager: com.github.tchx84.Flatseal
-          - Logs: org.gnome.Logs
-          - Maps: org.gnome.Maps
-          - Nautilus Preview: org.gnome.NautilusPreviewer
-          - Text Editor: org.gnome.TextEditor
-          - Weather: org.gnome.Weather
-          - Disk Usage Analyzer: org.gnome.baobab
-          - Clocks: org.gnome.clocks
-          - Picture Viewer: org.gnome.eog
-          - Font Viewer: org.gnome.font-viewer
+        Applications are also installing in the background, the system will notify you when it is finished.
   applications:
     source: yafti.screen.package
     values:
@@ -62,11 +16,6 @@ screens:
       show_terminal: true
       package_manager: yafti.plugin.flatpak
       groups:
-        Admin Tools:
-          description: Helper Utilities for Administration
-          default: false
-          packages:
-          - Cockpit Client: org.cockpit_project.CockpitClient
         Communication:
           default: false
           description: Tools to communicate and collaborate
@@ -82,16 +31,14 @@ screens:
           - Lutris: net.lutris.Lutris
           - MangoHUD: org.freedesktop.Platform.VulkanLayer.MangoHud//22.08
           - Steam: com.valvesoftware.Steam
-          - Gamescope for Steam: org.freedesktop.Platform.VulkanLayer.gamescope
-          - Proton Updater (GTK) for Steam: com.vysp3r.ProtonPlus
+          - Proton Plus for Steam: com.vysp3r.ProtonPlus
         Office:
           description: Bow to Capitalism
           default: false
           packages:
-          - Gnome Next Meeting Applet: com.chmouel.gnomeNextMeetingApplet
+          - OnlyOffice: org.onlyoffice.desktopeditors
           - LibreOffice: org.libreoffice.LibreOffice
           - Obsidian: md.obsidian.Obsidian
-          - OnlyOffice: org.onlyoffice.desktopeditors
           - Standard Notes: org.standardnotes.standardnotes
           - Thunderbird Email: org.mozilla.Thunderbird
         Other Web Browsers:
@@ -118,7 +65,9 @@ screens:
           - Font Downloader: org.gustavoperedo.FontDownloader
           - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Backup: org.gnome.DejaDup
+          - LocalSend: org.localsend.localsend_app
           - Syncthing: com.github.zocker_160.SyncThingy
+          - Cockpit Client: org.cockpit_project.CockpitClient
   final-screen:
     source: yafti.screen.title
     values:
@@ -127,8 +76,8 @@ screens:
       links:
         - "Install More Applications": 
             run: /usr/bin/gnome-software
-        - "Website":
-            run: /usr/bin/xdg-open https://ublue.it
+        - "Documentation":
+            run: /usr/bin/xdg-open https://universal-blue.org/images/bluefin/
         - "Discussions and Announcements":
             run: /usr/bin/xdg-open https://github.com/orgs/ublue-os/discussions/categories/bluefin
         - "Join the Discord Community":

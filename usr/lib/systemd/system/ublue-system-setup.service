@@ -1,0 +1,12 @@
+[Unit]
+Description=Configure system
+After=rpm-ostreed.service
+Before=systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/ublue-system-setup
+
+[Install]
+WantedBy=multi-user.target

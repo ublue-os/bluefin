@@ -2,9 +2,7 @@
 
 **This image is considered Beta** 
 
-[![Bluefin Build](https://github.com/ublue-os/bluefin/actions/workflows/build.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build.yml)
-
-[![Ubuntu Toolbox Build](https://github.com/ublue-os/bluefin/actions/workflows/build-ubuntu-toolbox.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-ubuntu-toolbox.yml)
+## [Download the test ISO](https://github.com/ublue-os/bluefin/releases/tag/v1.2.0)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
 - For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together
@@ -21,4 +19,4 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 2. [Discussions and Announcements](https://github.com/orgs/ublue-os/discussions/categories/bluefin) - strongly recommended!
 3. [Developer Experience Edition](https://universal-blue.org/images/bluefin/developer-experience/)
 4. [Administrator's Guide](https://universal-blue.org/images/bluefin/admin/)
-5. [Framework Images](https://universal-blue.org/images/bluefin/framework/)
+5. [Framework Images](https://universal-blue.org/images/framework/)

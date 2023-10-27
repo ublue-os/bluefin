@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Script Version
+VER=1
+VER_FILE="$HOME/.ublue_flatpak_manager_version"
+VER_RAN=$(cat $VER_FILE)
+
+# Run script if updated
+if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
+  echo "Flatpak manager v$VER has already ran. Exiting..."
+  exit 0
+fi
+
+# Setup Flathub
+flatpak remote-add --if-not-exists --user flathub /etc/flatpak/remotes.d/flathub.flatpakrepo
+
+# Lists of flatpaks
+FLATPAK_LIST=$(flatpak list --columns=application)
+INSTALL_LIST=$(cat /etc/flatpak/user/install)
+REMOVE_LIST=$(cat /etc/flatpak/user/remove)
+
+# Install flatpaks in list
+if [[ -n $INSTALL_LIST ]]; then
+  if ! flatpak install --user --noninteractive flathub ${INSTALL_LIST[@]}; then
+    # exit on error
+    exit 1
+  fi
+fi
+
+# Remove flatpaks in list
+if [[ -n $REMOVE_LIST ]]; then
+  flatpak remove --user --noninteractive ${REMOVE_LIST[@]}
+fi
+
+notify-send "Flatpak installer" "Finished installing user flatpaks" --app-name="Flatpak installer" -u NORMAL
+
+echo $VER > $VER_FILE
