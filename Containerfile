@@ -10,7 +10,7 @@ ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
-ARG IMAGE_VENDOR="ublue-os"
+ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
@@ -72,11 +72,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
-    if [ ${FEDORA_MAJOR_VERSION} -gt 38 ]; then \
-        systemctl enable ublue-update.timer \
-    ; else \
-        systemctl disable ublue-update.timer \
-    ; fi && \
+    systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
     systemctl enable ublue-system-flatpak-manager.service && \
     systemctl --global enable ublue-user-flatpak-manager.service && \
@@ -102,7 +98,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
 FROM bluefin AS bluefin-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
-ARG IMAGE_VENDOR="ublue-os"
+ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
@@ -149,6 +145,14 @@ RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releas
 RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr/bin/kubectx && \
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
     chmod +x /usr/bin/kubectx /usr/bin/kubens
+
+# Install Charm VHS & dependencies
+RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/vhs/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') && \
+    wget https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.x86_64 -O /tmp/ttyd && \
+    install -c -m 0755 /tmp/ttyd /usr/bin/ttyd
+
+# Install Charm gum 
+RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/gum/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') 
 
 # Set up services
 RUN systemctl enable podman.socket && \
