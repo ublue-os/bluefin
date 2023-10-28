@@ -7,7 +7,7 @@ IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 
 case $FEDORA_MAJOR_VERSION in
   38)
-    IMAGE_TAG="latest"
+    IMAGE_TAG="gts"
     ;;
   *)
     IMAGE_TAG="$FEDORA_MAJOR_VERSION"
