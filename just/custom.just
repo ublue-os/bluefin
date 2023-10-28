@@ -82,6 +82,16 @@ devmode-off:
 devmode-on:
   #!/usr/bin/env bash
   CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
+
+  if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE
+  then
+      echo ""
+      echo "Before we can switch to the Bluefin Developer Experience"
+      echo "the current system needs an update. Please run 'just update'"
+      echo "and reboot your system when the update is finished."
+      exit
+  fi
+
   if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
   then
       echo "You are already on a developer image"
