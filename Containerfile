@@ -137,8 +137,8 @@ RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/dow
     mv ./kind /usr/bin/kind
 
 # Install DevPod
-RUN rpm-ostree install $(curl https://api.github.com/repos/loft-sh/devpod/releases/latest | jq -r '.assets[] | select(.name| test(".*x86_64.rpm$")).browser_download_url') && \
-    wget https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64 -O /tmp/devpod && \
+RUN rpm-ostree install https://github.com/loft-sh/devpod/releases/download/v0.3.7/DevPod_linux_x86_64.rpm && \
+    wget https://github.com/loft-sh/devpod/releases/download/v0.3.7/devpod-linux-amd64 -O /tmp/devpod && \
     install -c -m 0755 /tmp/devpod /usr/bin
 
 # Install kns/kctx and add completions for Bash
