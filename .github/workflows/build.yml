@@ -78,7 +78,9 @@ jobs:
           if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
              [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
               BUILD_TAGS+=("latest")
-          elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+          fi
+
+          if [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
               BUILD_TAGS+=("gts")
           fi
 
