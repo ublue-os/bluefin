@@ -55,6 +55,14 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
     mkdir -p /etc/akmods-rpms/ && \
     mv /tmp/akmods-rpms/kmods/*steamdeck*.rpm /etc/akmods-rpms/steamdeck.rpm
 
+# Keyd
+RUN wget https://copr.fedorainfracloud.org/coprs/dspom/keyd/repo/fedora-"${FEDORA_MAJOR_VERSION}"/dspom-keyd-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/dspom-keyd-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+ rpm-ostree install keyd && \
+ mkdir -p /etc/keyd && \
+ echo "[ids]/n*/n[main]\ncapslock = overload(control, esc)/nesc = capslock" > /etc/keyd/default.conf && \
+ systemctl enable keyd.service && \
+ rm -f /etc/yum.repos.d/dspom-keyd-fedora-"${FEDORA_MAJOR_VERSION}".repo
+
 # Starship Shell Prompt
 RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" && \
   tar -xzf /tmp/starship.tar.gz -C /tmp && \
