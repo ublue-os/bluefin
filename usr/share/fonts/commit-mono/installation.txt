@@ -1,0 +1,11 @@
+A short guide for how to install and enable your shiny new version of Commit Mono.
+This is taken from section 08 Install from https://commitmono.com/
+
+#1 (Download the fonts)
+#2 Unzip the fonts. You'll see 4 font files. These 4 fonts make up a 'Style Group':
+   * CommitMono-Regular: Base version with settings and weight of your choice.
+   * CommitMono-Italic: An italic version, same weight as regular.
+   * CommitMono-Bold: A bold version, weight 700.
+   * CommitMono-BoldItalic: A bold version, weight 700, that is also italic.
+#3 Install all 4 fonts on your system:
+   * Windows: Right click the font in the folder and click "Install
