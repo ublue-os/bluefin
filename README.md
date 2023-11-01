@@ -3,6 +3,8 @@
 **This image is considered Beta** 
 
 ## [Download the test ISO](https://github.com/ublue-os/bluefin/releases/)
+## [projectbluefin.io](https://projectbluefin.io)
+## [Announcement Blog Post](https://www.ypsidanger.com/announcing-project-bluefin/)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
 - For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together
