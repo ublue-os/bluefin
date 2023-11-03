@@ -236,6 +236,7 @@ zsh:
   sudo usermod $USER --shell /usr/bin/zsh 
   printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
 
+# Enable docker on the system
 docker:
   sudo systemctl enable --now docker
   sudo usermod -aG docker $USER
