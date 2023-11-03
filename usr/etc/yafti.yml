@@ -22,6 +22,11 @@ screens:
           packages:
           - Discord: com.discordapp.Discord
           - Slack: com.slack.Slack
+        Development Tools:
+          description: Start your cloud-native journey here!
+          default: false
+          packages:
+          - Podman Desktop: io.podman_desktop.PodmanDesktop
         Gaming:
           description: "Rock and Stone!"
           default: false
