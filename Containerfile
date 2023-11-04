@@ -51,7 +51,7 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
     # Don't install evdi on asus because of conflicts
     if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then \
         rpm-ostree install \
-            /tmp/akmods-rpms/kmods/*evdi*.rpm && \
+            /tmp/akmods-rpms/kmods/*evdi*.rpm \
     ; fi && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
