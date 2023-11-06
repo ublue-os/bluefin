@@ -23,6 +23,11 @@ aqua:
   printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
   printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
 
+# Install the BLuefin CLI experience, powered by Homebrew and Fleek
+bluefin-cli:
+  echo "Installing Homebrew and Fleek ..."
+  curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- high
+
 # Install Homebrew for Linux
 brew:
   echo "Installing homebrew ..."
