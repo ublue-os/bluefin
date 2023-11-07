@@ -1,10 +1,10 @@
 ublue_variants:
-  - label: ublue-os/lutho
+  - label: ethanjli/lutho
     ks: /kickstart/ublue-os.ks
     flavors:
       - label: lutho
         info: Lutho
-  - label: ublue-os/lutho-nvidia
+  - label: ethanjli/lutho-nvidia
     ks: /kickstart/ublue-os-nvidia.ks
     subvariants:
       - label: latest driver

@@ -1,7 +1,7 @@
 {
 	"all": {
 		"include": {
-			"bluefin": [
+			"lutho": [
 				"bash-color-prompt",
 				"cockpit-bridge",
 				"ddccontrol-db",
@@ -32,7 +32,7 @@
 				"wl-clipboard", 
 				"zsh"
 			],
-			"bluefin-dx": [
+			"lutho-dx": [
 				"adobe-source-code-pro-fonts",
 				"bison",
 				"byacc",
@@ -112,41 +112,41 @@
 			]
 		},
 		"exclude": {
-			"bluefin": [
+			"lutho": [
 				"firefox-langpacks",
 				"firefox",
 				"ublue-os-update-services"
 			],
-			"bluefin-dx": []
+			"lutho-dx": []
 		}
 	},
 	"38": {
 		"include": {
-			"bluefin": [],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho": [],
+			"lutho-dx": [],
+			"lutho-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"lutho": [
 				"podman-docker"
 			],
-			"bluefin-dx": []
+			"lutho-dx": []
 		}
 	},
 	"39": {
 		"include": {
-			"bluefin": [
+			"lutho": [
 				"input-leap"	
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho-dx": [],
+			"lutho-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"lutho": [
 				"podman-docker"
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho-dx": [],
+			"lutho-framework": []
 		}
 	}
 }
