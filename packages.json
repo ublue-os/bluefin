@@ -9,18 +9,12 @@
 				"ddccontrol",
 				"evtest",
 				"fish",
-				"gnome-shell-extension-appindicator",
-				"gnome-shell-extension-blur-my-shell",
-				"gnome-shell-extension-dash-to-dock",
-				"gnome-shell-extension-gsconnect",
-				"gnome-shell-extension-tailscale-status",
 				"input-remapper",
 				"libgda-sqlite",
 				"libgda",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
 				"mesa-libGLU",
-				"nautilus-gsconnect",
 				"pulseaudio-utils",
 				"python3-pip",
 				"samba-dcerpc",
@@ -35,7 +29,6 @@
 				"ublue-update",
 				"wireguard-tools",
 				"xprop",
-				"yaru-theme",
 				"wl-clipboard", 
 				"zsh"
 			],
@@ -122,9 +115,6 @@
 			"bluefin": [
 				"firefox-langpacks",
 				"firefox",
-				"gnome-extensions-app",
-				"gnome-software-rpm-ostree",
-				"gnome-tour",
 				"ublue-os-update-services"
 			],
 			"bluefin-dx": []
