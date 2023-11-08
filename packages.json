@@ -4,14 +4,9 @@
 			"lutho": [
 				"bash-color-prompt",
 				"cockpit-bridge",
-				"ddccontrol-db",
-				"ddccontrol-gtk",
-				"ddccontrol",
 				"evtest",
 				"fish",
 				"input-remapper",
-				"libgda-sqlite",
-				"libgda",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
 				"mesa-libGLU",
@@ -22,7 +17,6 @@
 				"samba-winbind-clients",
 				"samba-winbind-modules",
 				"samba",
-				"solaar",
 				"stress-ng",
 				"tailscale",
 				"tmux",
@@ -106,8 +100,6 @@
 				"subversion",
 				"swig",
 				"systemtap",
-				"ubuntu-nerd-fonts",
-				"ubuntumono-nerd-fonts",
 				"virt-manager"
 			]
 		},
