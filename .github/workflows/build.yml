@@ -32,12 +32,12 @@ jobs:
         major_version: [38, 39]
         include:
           - major_version: 38
-            is_latest_version: true
+            is_latest_version: false
             is_stable_version: true
             is_gts_version: true
           - major_version: 39
             is_latest_version: true
-            is_stable_version: false
+            is_stable_version: true
             is_gts_version: false
     steps:
       - name: Maximize build space
@@ -86,9 +86,7 @@ jobs:
           if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
              [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
               BUILD_TAGS+=("latest")
-          fi
-
-          if [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+          elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
               BUILD_TAGS+=("gts")
           fi
 
