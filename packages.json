@@ -22,9 +22,11 @@
 				"tmux",
 				"ublue-update",
 				"wireguard-tools",
+				"xdg-desktop-portal",
 				"xdg-desktop-portal-gnome",
 				"xdg-desktop-portal-gtk",
 				"xdg-desktop-portal-kde",
+				"xdg-desktop-portal-wlr",
 				"xprop",
 				"wl-clipboard", 
 				"zsh"
