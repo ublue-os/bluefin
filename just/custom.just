@@ -23,6 +23,10 @@ aqua:
   printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
   printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
 
+# Set shell (back) to bash
+bash:
+  ujust chsh /bin/bash
+
 # Install Homebrew for Linux
 brew:
   echo "Installing homebrew ..."
@@ -38,14 +42,14 @@ brew-shell:
   if grep -q "linuxbrew" $HOME/.zprofile
   then
     echo "Brew configuration already present in .zprofile"
-  else 
+  else
     echo "Adding Brew configuration to .zprofile"
     echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zprofile
   fi
   if grep -q "linuxbrew" $HOME/.bash_profile
   then
     echo "Brew configuration already present in .bash_profile"
-  else 
+  else
     echo "Adding Brew configuration to .bash_profile"
     echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
   fi
@@ -118,8 +122,7 @@ distrobox-universal:
 
 # Switch to the fish shell
 fish:
-  sudo usermod $USER --shell /usr/bin/fish 
-  printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+ ujust chsh /usr/bin/fish
 
 # Install recommended GNOME extensions
 gnome-extensions:
@@ -170,12 +173,12 @@ nix-devbox-global:
 
 # Enable podmansh as user shell (EXPERIMENTAL)
 podmansh:
+  #!/usr/bin/env bash
   sudo mkdir -p /etc/containers/systemd/users/${UID}
   sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
-  sudo usermod $USER --shell /usr/bin/podmansh
-  printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+  ujust chsh /usr/bin/podmansh
   podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
-  
+
   systemctl --user daemon-reload
   systemctl --user stop podmansh.service
   systemctl --user start podmansh.service
@@ -202,7 +205,7 @@ pytorch:
   --no-browser --allow-root"
 
 # Run Tensorflow
-tensorflow: 
+tensorflow:
   echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
   podman pull docker.io/tensorflow/tensorflow:latest
   podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
@@ -233,8 +236,7 @@ yafti:
 
 # Switch to the zsh shell
 zsh:
-  sudo usermod $USER --shell /usr/bin/zsh 
-  printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+  ujust chsh /usr/bin/zsh
 
 # Enable docker on the system
 docker:
