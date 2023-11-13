@@ -174,14 +174,32 @@ podmansh:
   sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
   sudo usermod $USER --shell /usr/bin/podmansh
   printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+  systemctl --user start podman.socket
+  loginctl enable-linger $(whoami)
+
   podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
   
   systemctl --user daemon-reload
   systemctl --user stop podmansh.service
   systemctl --user start podmansh.service
-  echo "Shell now switched to podmansh. Spawn a new terminal to get going!"
-  echo "By default, the shell will be Bash. To override it, create ~/.profile with your preferred shell"
-  echo "Note: That shell must exist in the toolbox!"
+  
+  @echo "Shell now switched to podmansh. Spawn a new terminal to get going!"
+  @echo "By default, the shell will be Bash. To override it, create ~/.profile with your preferred shell"
+  @echo "Note: That shell must exist in the toolbox!"
+  @echo "To ensure a smooth experience within VSCode, please add the following to your settings.json:"
+  @echo "---"
+  @echo "\"terminal.integrated.profiles.linux\": {"
+  @echo "  \"podmansh zsh\": {"
+  @echo "     \"path\": \"podmansh\","
+  @echo "     \"args\": [\"-c\", \"cd \${workspaceFolder}; exec zsh\"]"
+  @echo "  }"
+  @echo "}"
+  @echo "---"
+  @echo "Please make sure you have the following environment variable set WITHIN the container:"
+  @echo "---"
+  @echo "export DOCKER_HOST=unix:///var/run/podman/podman.sock"
+  @echo "---"
+  @echo "Happy Podmansh'ing!"
 
 # Switch podmansh to another image (EXPERIMENTAL)
 podmansh-switch IMAGE:
