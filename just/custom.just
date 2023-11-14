@@ -227,11 +227,6 @@ distrobox-git:
   echo 'Installing latest git snapshot of Distrobox'
   curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --next --prefix ~/.local
 
-# Initialize Waydroid
-waydroid-init:
-  echo 'Initializing aydroid...'
-  sudo waydroid init -c https://ota.waydro.id/system -v https://ota.waydro.id/vendor -s GAPPS
-
 # Run the yafti setup tool
 yafti:
   yafti /etc/yafti.yml --force
