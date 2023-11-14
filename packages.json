@@ -25,6 +25,7 @@
 				"xdg-desktop-portal",
 				"xdg-desktop-portal-kde",
 				"xprop",
+				"waydroid",
 				"wl-clipboard", 
 				"zsh"
 			],
