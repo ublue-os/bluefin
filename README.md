@@ -27,4 +27,4 @@ I will try to do other customizations (e.g. KDE Plasma configurations, homefiles
 
 ## Associated repositories
 
-- [ethanjli/planktoscope-toolbox](https://github.com/ethanjli/planktoscope-toolbox): a Distrobox container image to help me 
+- [github.com/ethanjli/planktoscope-toolbox](https://github.com/ethanjli/planktoscope-toolbox): a Distrobox container image I use for working on the various repositories in [github.com/PlanktoScope](https://github.com/PlanktoScope)
