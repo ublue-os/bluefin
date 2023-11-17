@@ -129,6 +129,29 @@ gnome-extensions:
   gext install pano@elhan.io
   gext install weatheroclock@CleoMenezesJr.github.io
 
+# Enable or Disable Gnome-VRR
+gnome-vrr:
+  #!/usr/bin/env bash
+  if gsettings get org.gnome.mutter experimental-features | grep -q "variable-refresh-rate"
+  then
+    CURRENT_STATE="Enabled"
+  else
+    CURRENT_STATE="Disabled"
+  fi
+  echo "Gnome-VRR is currently ${CURRENT_STATE}"
+  echo "Enable or Disable Gnome-VRR"
+  OPTION=$(gum choose Enable Disable)
+  if [ "$OPTION" = "Enable" ]
+  then
+    echo "Enabling Gnome-VRR"
+    gsettings set org.gnome.mutter experimental-features "['variable-refresh-rate','scale-monitor-framebuffer']"
+  elif [ "$OPTION" = "Disable" ]
+  then
+    echo "Disabling Gnome-VRR"
+    gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+  fi
+  echo "To apply the changes make sure you logout and restart your session"
+
 # Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
 jetbrains-toolbox:
   #!/usr/bin/env bash
