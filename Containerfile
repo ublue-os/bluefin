@@ -81,6 +81,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     fc-cache -f /usr/share/fonts/inter && \
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
+    rm -f /etc/yum.repos.d/charm.repo && \
     rm -f /etc/yum.repos.d/_copr_ublue-os-bling.repo && \
     rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /usr/share/applications/fish.desktop && \
@@ -145,12 +146,6 @@ RUN rpm-ostree install https://github.com/loft-sh/devpod/releases/download/v0.3.
 RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr/bin/kubectx && \
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
     chmod +x /usr/bin/kubectx /usr/bin/kubens
-
-# Install Charm gum 
-RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/gum/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') 
-
-# Install Charm glow
-RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/glow/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') 
 
 # Set up services
 RUN systemctl enable podman.socket && \
