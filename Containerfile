@@ -146,12 +146,6 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
-# Install Charm gum 
-RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/gum/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') 
-
-# Install Charm glow
-RUN rpm-ostree install $(curl https://api.github.com/repos/charmbracelet/glow/releases/latest | jq -r '.assets[] | select(.name| test(".*.x86_64.rpm$")).browser_download_url') 
-
 # Set up services
 RUN systemctl enable podman.socket && \
     systemctl disable pmie.service && \
