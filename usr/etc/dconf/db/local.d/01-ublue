@@ -22,7 +22,7 @@ monospace-font-name="Ubuntu Mono 18"
 
 [org/gnome/desktop/sound]
 allow-volume-above-100-percent=true
-theme-name="Yaru"
+theme-name="freedesktop"
 
 [org/gnome/desktop/wm/preferences]
 button-layout=":minimize,maximize,close"
