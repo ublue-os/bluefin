@@ -28,6 +28,11 @@ brew:
   echo "Installing homebrew ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+# Remove Homebrew
+brew-remove:
+  echo "Removing homebrew ..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
+
 # Add Homebrew to shell rc files
 brew-shell:
   #!/usr/bin/env bash
