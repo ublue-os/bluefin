@@ -81,7 +81,7 @@ sort-directories-first=true
 sort-directories-first=true
 
 [org/gnome/mutter]
-experimental-features=['variable-refresh-rate','scale-monitor-framebuffer']
+experimental-features=['scale-monitor-framebuffer']
 
 [com/raggesilver/BlackBox]
 command-as-login-shell=true
