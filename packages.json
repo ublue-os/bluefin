@@ -4,9 +4,6 @@
 			"bluefin": [
 				"bash-color-prompt",
 				"cockpit-bridge",
-				"ddccontrol-db",
-				"ddccontrol-gtk",
-				"ddccontrol",
 				"evtest",
 				"fish",
 				"glow",
