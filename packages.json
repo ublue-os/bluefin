@@ -6,6 +6,8 @@
 				"cockpit-bridge",
 				"evtest",
 				"fish",
+				"glow",
+				"gum",
 				"input-remapper",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
