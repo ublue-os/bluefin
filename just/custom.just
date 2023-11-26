@@ -34,10 +34,6 @@ cockpit:
     sudo systemctl enable cockpit.service
     echo 'Open Cockpit -> http://localhost:9090'
 
-# Import a devcontainers profile for VSCode
-code-profile:
-    xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
-
 # Toggle between Bluefin and the Developer Experience
 devmode:
     #!/usr/bin/env bash
@@ -64,7 +60,7 @@ devmode:
     OPTION=$(gum choose Enable Disable)
     if [ "$OPTION" = "Enable" ]
     then
-        if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+        if [ "$CURRENT_STATE" = "enabled" ]
         then
             echo "You are already on a developer image"
         else
@@ -74,7 +70,7 @@ devmode:
         fi
     elif [ "$OPTION" = "Disable" ]
     then
-        if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+        if [ "$CURRENT_STATE" = "enabled" ]
         then
             echo "Rebasing to a non developer image"
             NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
