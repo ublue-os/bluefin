@@ -82,9 +82,9 @@ screens:
         - "Install More Applications": 
             run: /usr/bin/gnome-software
         - "Documentation":
-            run: /usr/bin/xdg-open https://universal-blue.org/images/bluefin/
+            run: /usr/bin/xdg-open https://universal-blue.discourse.group/t/introduction-to-bluefin/41
         - "Discussions and Announcements":
-            run: /usr/bin/xdg-open https://github.com/orgs/ublue-os/discussions/categories/bluefin
+            run: /usr/bin/xdg-open https://universal-blue.discourse.group/c/bluefin/6
         - "Join the Discord Community":
             run: /usr/bin/xdg-open https://discord.gg/XjG48C7VHx 
       description: |

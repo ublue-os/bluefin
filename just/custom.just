@@ -23,38 +23,6 @@ aqua:
     printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
     printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
 
-# Install Homebrew for Linux
-brew:
-    echo "Installing homebrew ..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Remove Homebrew
-brew-remove:
-    echo "Removing homebrew ..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
-
-# Add Homebrew to shell rc files
-brew-shell:
-    #!/usr/bin/env bash
-    set -euxo pipefail
-    echo "Adding homebrew to shell configuration"
-    touch $HOME/.zprofile
-    touch $HOME/.bash_profile
-    if grep -q "linuxbrew" $HOME/.zprofile
-    then
-      echo "Brew configuration already present in .zprofile"
-    else 
-      echo "Adding Brew configuration to .zprofile"
-      echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.zprofile
-    fi
-    if grep -q "linuxbrew" $HOME/.bash_profile
-    then
-      echo "Brew configuration already present in .bash_profile"
-    else 
-      echo "Adding Brew configuration to .bash_profile"
-      echo 'eval "$(/var/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.bash_profile
-    fi
-
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:
     echo 'Enabling Cockpit'
@@ -66,25 +34,8 @@ cockpit:
     sudo systemctl enable cockpit.service
     echo 'Open Cockpit -> http://localhost:9090'
 
-# Import a devcontainers profile for VSCode
-code-profile:
-    xdg-open https://vscode.dev/profile/github/c761b7738e9a7b02286d6d94cb2d1ecd
-
-# Rebase to a stock Bluefin image
-devmode-off:
-    #!/usr/bin/env bash
-    CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-    if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
-    then
-        echo "Rebasing to a non developer image"
-        NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
-        rpm-ostree rebase $NEW_IMAGE
-    else
-        echo "You are currently not on a developer image"
-    fi
-
-# Rebase to the Bluefin Developer Experience image
-devmode-on:
+# Toggle between Bluefin and the Developer Experience
+devmode:
     #!/usr/bin/env bash
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
 
@@ -99,11 +50,34 @@ devmode-on:
 
     if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
     then
-        echo "You are already on a developer image"
+        CURRENT_STATE="enabled"
     else
-        echo "Rebasing to a developer image"
-        NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin/bluefin-dx/")
-        rpm-ostree rebase $NEW_IMAGE
+        CURRENT_STATE="disabled"
+    fi
+
+    echo "Developer mode is currently ${CURRENT_STATE}"
+    echo "Enable or Disable developer mode"
+    OPTION=$(gum choose Enable Disable)
+    if [ "$OPTION" = "Enable" ]
+    then
+        if [ "$CURRENT_STATE" = "enabled" ]
+        then
+            echo "You are already on a developer image"
+        else
+            echo "Rebasing to a developer image"
+            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin/bluefin-dx/")
+            rpm-ostree rebase $NEW_IMAGE
+        fi
+    elif [ "$OPTION" = "Disable" ]
+    then
+        if [ "$CURRENT_STATE" = "enabled" ]
+        then
+            echo "Rebasing to a non developer image"
+            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
+            rpm-ostree rebase $NEW_IMAGE
+        else
+            echo "You are currently not on a developer image"
+        fi
     fi
 
 # Assemble a Pytorch distrobox (Nvidia only)
