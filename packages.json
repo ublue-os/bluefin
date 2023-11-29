@@ -116,7 +116,8 @@
 				"systemtap",
 				"ubuntu-nerd-fonts",
 				"ubuntumono-nerd-fonts",
-				"virt-manager"
+				"virt-manager",
+				"virt-viewer"
 			]
 		},
 		"exclude": {
