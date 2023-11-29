@@ -94,6 +94,7 @@
 				"patchutils",
 				"p7zip-plugins",
 				"p7zip",
+				"podman-compose",
 				"podman-plugins",
 				"podman-tui",
 				"podmansh",
