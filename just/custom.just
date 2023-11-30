@@ -149,6 +149,17 @@ jetbrains-toolbox:
     echo "Launching JetBrains Toolbox"
     ./jetbrains-toolbox-"${BUILD_VERSION}"/jetbrains-toolbox
 
+# Install garden.io, the Cloud Native DevOps automation platform | https://garden.io
+  #!/usr/bin/env bash
+  command -v garden &> /dev/null || (
+    ASSET_URL=$(curl -s https://api.github.com/repos/garden-io/garden/releases/latest | \
+      jq -r '.assets[] | select(.browser_download_url | test("linux-amd64.tar.gz$")) | .browser_download_url')
+    curl -sSL $ASSET_URL | tar xz && \
+    GARDEN_DIR=${HOME}/.garden
+    TARGET_PATH=${GARDEN_DIR}/bin
+    mkdir -p "${GARDEN_DIR}"
+    mv linux-amd64/* "${TARGET_PATH}"
+
 # Install nix and Devbox
 nix-devbox:
     echo 'Setting phasers to kill. Installing nix.'
