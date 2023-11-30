@@ -19,11 +19,8 @@ if [ "$container_exists" -eq 0 ]; then
     # No need to assemble, enjoy your stay
     exec distrobox enter "${container_name}"
 else
-    # We don't have the container so we assemble it first. With distrobox version 1.5.0.2 
-    # or below we need to assemble all the entries that occur in the `distrobox.ini` manifest. 
-    # In future versions of distrobox we will be able to specify `--name $container_name` to
-    # only assemble the box we want to enter.
-    distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
+    # We don't have the container so we assemble it first.
+    distrobox assemble create --name "${container_name}" --replace --file /etc/distrobox/distrobox.ini
 
     # All done, good to go
     exec distrobox enter "${container_name}"
