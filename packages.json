@@ -1,26 +1,18 @@
 {
 	"all": {
 		"include": {
-			"bluefin": [
+			"lutho": [
 				"bash-color-prompt",
 				"cockpit-bridge",
 				"evtest",
 				"fish",
 				"glow",
 				"gum",
-				"gnome-shell-extension-appindicator",
-				"gnome-shell-extension-blur-my-shell",
-				"gnome-shell-extension-dash-to-dock",
-				"gnome-shell-extension-gsconnect",
-				"gnome-shell-extension-tailscale-status",
 				"hplip",
 				"input-remapper",
-				"libgda-sqlite",
-				"libgda",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
 				"mesa-libGLU",
-				"nautilus-gsconnect",
 				"pulseaudio-utils",
 				"python3-pip",
 				"samba-dcerpc",
@@ -28,18 +20,18 @@
 				"samba-winbind-clients",
 				"samba-winbind-modules",
 				"samba",
-				"solaar",
 				"stress-ng",
 				"tailscale",
 				"tmux",
 				"ublue-update",
 				"wireguard-tools",
+				"xdg-desktop-portal",
+				"xdg-desktop-portal-kde",
 				"xprop",
-				"yaru-theme",
 				"wl-clipboard", 
 				"zsh"
 			],
-			"bluefin-dx": [
+			"lutho-dx": [
 				"adobe-source-code-pro-fonts",
 				"bison",
 				"byacc",
@@ -94,7 +86,6 @@
 				"patchutils",
 				"p7zip-plugins",
 				"p7zip",
-				"podman-compose",
 				"podman-plugins",
 				"podman-tui",
 				"podmansh",
@@ -115,51 +106,46 @@
 				"subversion",
 				"swig",
 				"systemtap",
-				"ubuntu-nerd-fonts",
-				"ubuntumono-nerd-fonts",
 				"virt-manager",
 				"virt-viewer"
 			]
 		},
 		"exclude": {
-			"bluefin": [
+			"lutho": [
 				"firefox-langpacks",
 				"firefox",
-				"gnome-extensions-app",
-				"gnome-software-rpm-ostree",
-				"gnome-tour",
 				"ublue-os-update-services"
 			],
-			"bluefin-dx": []
+			"lutho-dx": []
 		}
 	},
 	"38": {
 		"include": {
-			"bluefin": [],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho": [],
+			"lutho-dx": [],
+			"lutho-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"lutho": [
 				"podman-docker"
 			],
-			"bluefin-dx": []
+			"lutho-dx": []
 		}
 	},
 	"39": {
 		"include": {
-			"bluefin": [
+			"lutho": [
 				"input-leap"	
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho-dx": [],
+			"lutho-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"lutho": [
 				"podman-docker"
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho-dx": [],
+			"lutho-framework": []
 		}
 	}
 }

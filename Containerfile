@@ -1,13 +1,13 @@
-ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-silverblue}"
+ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR:-main}"
 ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-39}"
-ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
+ARG TARGET_BASE="${TARGET_BASE:-lutho}"
 
-## bluefin image section
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
+## lutho image section
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS lutho
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
@@ -15,16 +15,7 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin"
-
-# GNOME VRR
-RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
-    if [ ${FEDORA_MAJOR_VERSION} -lt 39 ]; then \
-        rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem xorg-x11-server-Xwayland \
-    ; else \
-        rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem \
-    ; fi && \
-    rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
+ARG PACKAGE_LIST="lutho"
 
 COPY usr /usr
 COPY just /tmp/just
@@ -90,21 +81,21 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     rm -fr /usr/share/applications/gnome-system-monitor.desktop && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
-    sed -i '/^PRETTY_NAME/s/Silverblue/Bluefin/' /usr/lib/os-release && \
+    sed -i '/^PRETTY_NAME/s/Kinoite/Lutho/' /usr/lib/os-release && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp
 
-## bluefin-dx developer edition image section
-FROM bluefin AS bluefin-dx
+## lutho-dx developer edition image section
+FROM lutho AS lutho-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin-dx"
+ARG PACKAGE_LIST="lutho-dx"
 
 # dx specific files come from the dx directory in this repo
 COPY dx/usr /usr
