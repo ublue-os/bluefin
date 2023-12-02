@@ -23,6 +23,16 @@ aqua:
     printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
     printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
 
+[private]
+bluefin-cli:
+    #!/usr/bin/env bash
+    if [ ! -f "${HOME}/.brew_pkgs" ]; then
+       echo dysk > "${HOME}/.brew_pkgs"
+    fi;
+    distrobox-create --nvidia --image ghcr.io/ublue-os/bluefin-cli:latest -n bluefin-cli -Y -a "--env BREW_PKGS=.brew_pkgs"
+    echo "Entering bluefin-cli"
+    distrobox enter bluefin-cli
+
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:
     echo 'Enabling Cockpit'
