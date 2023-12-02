@@ -1,4 +1,4 @@
-name: Build and Push Wolfi Toolbox Image
+name: Build and Push Bluefin Toolbox Image
 on:
   schedule:
     - cron: '20 22 * * *'  # 10:20pm everyday
