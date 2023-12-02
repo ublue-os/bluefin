@@ -7,7 +7,7 @@ LABEL com.github.containers.toolbox="true" \
       maintainer="jorge.castro@gmail.com"
 
 COPY ./toolboxes/packages.bluefin-cli /toolbox-packages
-COPY ./toolboxes/brew_script.bluefin-cli /etc/profiles.d/brew_pkgs.sh
+COPY ./toolboxes/brew_script.bluefin-cli /etc/profile.d/brew_pkgs.sh
 
 USER root
 
