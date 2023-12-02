@@ -8,11 +8,15 @@ LABEL com.github.containers.toolbox="true" \
 
 COPY ./toolboxes/packages.bluefin-cli /toolbox-packages
 
+USER root
+
 RUN apt-get update && \ 
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
         $(cat toolbox-packages | xargs) && \
     rm -rd /var/lib/apt/lists/*
+
+USER linuxbrew
 
 RUN rm /toolbox-packages
 
