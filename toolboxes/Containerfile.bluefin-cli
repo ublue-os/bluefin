@@ -1,5 +1,5 @@
 FROM ghcr.io/homebrew/brew
-# From https://github.com/toolbx-images/images/tree/main/ubuntu/22.04
+# From https://github.com/Homebrew/brew/pkgs/container/brew
 
 LABEL com.github.containers.toolbox="true" \
       usage="This image is meant to be used with the toolbox or distrobox command" \
@@ -7,13 +7,14 @@ LABEL com.github.containers.toolbox="true" \
       maintainer="jorge.castro@gmail.com"
 
 COPY ./toolboxes/packages.bluefin-cli /toolbox-packages
+COPY ./toolboxes/brew_script.bluefin-cli /etc/profiles.d/brew_pkgs.sh
 
 USER root
 
 RUN apt-get update && \ 
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
-        $(cat toolbox-packages | xargs) && \
+        $(cat /toolbox-packages | xargs) && \
     rm -rd /var/lib/apt/lists/*
 
 RUN rm /toolbox-packages
