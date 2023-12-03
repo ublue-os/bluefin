@@ -31,7 +31,7 @@ bluefin-cli:
     fi;
     distrobox-create --nvidia --image ghcr.io/ublue-os/bluefin-cli:latest -n bluefin -Y -a "--env BREW_PKGS=.brew_pkgs"
     echo "Entering bluefin-cli"
-    distrobox enter bluefin-cli
+    distrobox enter bluefin
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:
