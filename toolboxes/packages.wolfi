@@ -1,2 +1,8 @@
+bash
+ruby-3.3
 git
-nano
+curl
+posix-libc-utils
+build-base
+procps
+sudo-rs
