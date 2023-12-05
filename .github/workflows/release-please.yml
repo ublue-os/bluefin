@@ -22,5 +22,5 @@ jobs:
       - uses: google-github-actions/release-please-action@v4
         id: release-please
         with:
-          release-type: node
+          release-type: simple
           package-name: release-please-action
