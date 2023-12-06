@@ -1,29 +1,21 @@
-FROM ghcr.io/homebrew/brew
-# From https://github.com/Homebrew/brew/pkgs/container/brew
+FROM ghcr.io/ublue-os/wolfi-toolbox
 
 LABEL com.github.containers.toolbox="true" \
       usage="This image is meant to be used with the toolbox or distrobox command" \
-      summary="The Bluefin Command Line experience" \
+      summary="A new cloud-native terminal experience powered by Wolfi and Homebrew" \
       maintainer="jorge.castro@gmail.com"
 
 COPY ./toolboxes/packages.bluefin-cli /toolbox-packages
-COPY ./toolboxes/brew_script.bluefin-cli /etc/profile.d/brew_pkgs.sh
 
-USER root
+# Update image
+RUN apk update && \
+    apk upgrade
 
-RUN apt-get update && \ 
-    apt-get upgrade -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install \
-        $(cat /toolbox-packages | xargs) && \
-    rm -rd /var/lib/apt/lists/*
+# Add optional packages
+RUN grep -v '^#' /toolbox-packages | xargs apk add
 
 RUN rm /toolbox-packages
 
-RUN   ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/docker && \
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/flatpak && \ 
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
-      ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
+# Change root shell to BASH
 
-RUN echo "ALL            ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-USER linuxbrew
+RUN sed -i -e '/^root/s/\/bin\/ash/\/bin\/bash/' /etc/passwd
