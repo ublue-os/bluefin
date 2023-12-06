@@ -1,8 +1,4 @@
 bash
-ruby-3.3
 git
-curl
-posix-libc-utils
-build-base
 procps
 sudo-rs
