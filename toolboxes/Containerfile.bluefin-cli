@@ -1,11 +1,11 @@
-FROM cgr.dev/chainguard/wolfi-base
+FROM ghcr.io/ublue-os/wolfi
 
 LABEL com.github.containers.toolbox="true" \
       usage="This image is meant to be used with the toolbox or distrobox command" \
       summary="A new cloud-native terminal experience powered by Wolfi and Homebrew" \
       maintainer="jorge.castro@gmail.com"
 
-COPY ./toolboxes/packages.wolfi /toolbox-packages
+COPY ./toolboxes/packages.bluefin-cli /toolbox-packages
 
 # Update image
 RUN apk update && \
