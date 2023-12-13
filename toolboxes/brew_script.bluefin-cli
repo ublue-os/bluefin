@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+if [ ! -f /home/linuxbrew/.firstrun ] && [ -n "${BREW_PKGS}" ]; then
+  touch /home/linuxbrew/.firstrun
+  # `brew update-reset` is currently needed
+  # because somekind of issue with brew
+  brew update-reset
+  xargs brew install < "${HOME}"/"${BREW_PKGS}"
+fi
