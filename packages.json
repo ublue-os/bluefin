@@ -21,6 +21,7 @@
 				"libimobiledevice",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
+				"make",
 				"mesa-libGLU",
 				"nautilus-gsconnect",
 				"pulseaudio-utils",
