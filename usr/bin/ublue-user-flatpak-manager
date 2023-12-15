@@ -16,20 +16,26 @@ flatpak remote-add --if-not-exists --user flathub /etc/flatpak/remotes.d/flathub
 
 # Lists of flatpaks
 FLATPAK_LIST=$(flatpak list --columns=application)
-INSTALL_LIST=$(cat /etc/flatpak/user/install)
-REMOVE_LIST=$(cat /etc/flatpak/user/remove)
+INSTALL_LIST_FILE="/etc/flatpak/user/install"
+REMOVE_LIST_FILE="/etc/flatpak/user/remove"
 
 # Install flatpaks in list
-if [[ -n $INSTALL_LIST ]]; then
-  if ! flatpak install --user --noninteractive flathub ${INSTALL_LIST[@]}; then
-    # exit on error
-    exit 1
+if [[ -f $INSTALL_LIST_FILE ]]; then
+  INSTALL_LIST=$(echo $FLATPAK_LIST | grep -vf - $INSTALL_LIST_FILE)
+  if [[ -n $INSTALL_LIST ]]; then
+    if ! flatpak install --user --noninteractive flathub ${INSTALL_LIST[@]}; then
+      # exit on error
+      exit 1
+    fi
   fi
 fi
 
 # Remove flatpaks in list
-if [[ -n $REMOVE_LIST ]]; then
-  flatpak remove --user --noninteractive ${REMOVE_LIST[@]}
+if [[ -f $REMOVE_LIST_FILE ]]; then
+  REMOVE_LIST=$(echo $FLATPAK_LIST | grep -f - $REMOVE_LIST_FILE)
+  if [[ -n $REMOVE_LIST ]]; then
+    flatpak remove --user --noninteractive ${REMOVE_LIST[@]}
+  fi
 fi
 
 notify-send "Flatpak installer" "Finished installing user flatpaks" --app-name="Flatpak installer" -u NORMAL
