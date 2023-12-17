@@ -54,7 +54,7 @@ min-alpha=0.5
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
-command='prompt -- distrobox enter ubuntu'
+command='xdg-terminal-exec "distrobox enter ubuntu"'
 name='Ubuntu Prompt'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
