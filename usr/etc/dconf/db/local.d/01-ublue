@@ -52,15 +52,10 @@ customize-alphas=true
 max-alpha=0.8
 min-alpha=0.5
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
-binding='<Control><Alt>t'
-command='gnome-terminal'
-name='gnome-terminal'
-
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
-command='flatpak run com.raggesilver.BlackBox --command "distrobox enter ubuntu"'
-name='blackbox ubuntu'
+command='xdg-terminal-exec "distrobox enter ubuntu"'
+name='Ubuntu Prompt'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
 binding='<Control><Shift>Escape'
@@ -98,7 +93,14 @@ allow-updates=false
 download-updates=false
 download-updates-notify=false
 
+[com/github/stunkymonkey/nautilus-open-any-terminal]
+terminal='prompt'
+keybindings=['<Ctrl><Alt>t']
+new-tab=false
+flatpak='off'
+
 [org/gnome/shell/extensions/Logo-menu]
 menu-button-icon-image=1
+menu-button-terminal='xdg-terminal-exec'
 menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
 menu-button-extensions-app='com.mattjakeman.ExtensionManager.desktop'
