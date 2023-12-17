@@ -3,7 +3,7 @@ favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
 binding='<Control><Alt>f'
-command='xdg-terminal-exec "bluefinbox-enter fedora"'
+command='xdg-terminal-exec -- bluefinbox-enter fedora'
 name='Fedora Prompt'
 
 [org/gnome/settings-daemon/plugins/media-keys]
