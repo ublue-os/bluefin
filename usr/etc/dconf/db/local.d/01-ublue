@@ -101,6 +101,6 @@ flatpak='off'
 
 [org/gnome/shell/extensions/Logo-menu]
 menu-button-icon-image=1
-menu-button-terminal='prompt --new-window'
+menu-button-terminal='xdg-terminal-open'
 menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
 menu-button-extensions-app='com.mattjakeman.ExtensionManager.desktop'
