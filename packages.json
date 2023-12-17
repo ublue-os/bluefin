@@ -14,7 +14,6 @@
 				"gnome-shell-extension-gsconnect",
 				"gnome-shell-extension-tailscale-status",
 				"gnome-shell-extension-logo-menu",
-				"nautilus-open-any-terminal",
 				"hplip",
 				"ifuse",
 				"input-remapper",
@@ -108,7 +107,6 @@
 				"gnome-extensions-app",
 				"gnome-software-rpm-ostree",
 				"gnome-tour",
-				"gnome-terminal-nautilus",
 				"ublue-os-update-services"
 			],
 			"bluefin-dx": []
@@ -130,14 +128,16 @@
 	"39": {
 		"include": {
 			"bluefin": [
-				"input-leap"	
+				"input-leap",
+     "nautilus-open-any-terminal"
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
 		},
 		"exclude": {
 			"bluefin": [
-				"podman-docker"
+				"podman-docker",
+     "gnome-terminal-nautilus"
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
