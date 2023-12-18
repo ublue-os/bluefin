@@ -18,27 +18,20 @@ fi
 
 # Lists of flatpaks
 FLATPAK_LIST=$(flatpak list --columns=application)
-INSTALL_LIST_FILE="/etc/flatpak/system/install"
-REMOVE_LIST_FILE="/etc/flatpak/system/remove"
-
+INSTALL_LIST=$(cat /etc/flatpak/system/install)
+REMOVE_LIST=$(cat /etc/flatpak/system/remove)
 
 # Install flatpaks in list
-if [[ -f $INSTALL_LIST_FILE ]]; then
-  INSTALL_LIST=$(echo $FLATPAK_LIST | grep -vf - $INSTALL_LIST_FILE)
-  if [[ -n $INSTALL_LIST ]]; then
-    if ! flatpak install --system --noninteractive flathub ${INSTALL_LIST[@]}; then
-      # exit on error
-      exit 1
-    fi
+if [[ -n $INSTALL_LIST ]]; then
+  if ! flatpak install --system --noninteractive flathub ${INSTALL_LIST[@]}; then
+    # exit on error
+    exit 1
   fi
 fi
 
 # Remove flatpaks in list once
-if [[ ! -f $VER_FILE && -f $REMOVE_LIST_FILE ]]; then
-  REMOVE_LIST=$(echo $FLATPAK_LIST | grep -f - $REMOVE_LIST_FILE)
-  if [[ -n $REMOVE_LIST ]]; then
-    flatpak remove --system --noninteractive ${REMOVE_LIST[@]}
-  fi
+if [[ ! -f $VER_FILE && -n $REMOVE_LIST ]]; then
+  flatpak remove --system --noninteractive ${REMOVE_LIST[@]}
 fi
 
 # Opt out of and remove Fedora's flatpak repo
