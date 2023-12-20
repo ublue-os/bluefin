@@ -3,7 +3,7 @@ favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop
 enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@micxgx.gmail.com', 'blur-my-shell@aunetx', 'gsconnect@andyholmes.github.io', 'logomenu@aryan_k']
 
 [org/gnome/desktop/app-folders]
-folder-children=['Games', 'Utilities', 'Distrobox', 'Wine', 'YaST', 'Pardus']
+folder-children=['Utilities', 'Distrobox', 'Wine', 'YaST', 'Pardus']
 
 [org/gnome/desktop/app-folders/folders/Distrobox]
 categories=['Distrobox']
