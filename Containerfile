@@ -135,7 +135,6 @@ RUN /tmp/build.sh && \
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin && \
-    usermod -aG docker $USER
 
 COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
 COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
