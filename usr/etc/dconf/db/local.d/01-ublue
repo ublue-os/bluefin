@@ -104,3 +104,7 @@ menu-button-icon-image=1
 menu-button-terminal='xdg-terminal-exec'
 menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
 menu-button-extensions-app='com.mattjakeman.ExtensionManager.desktop'
+
+[org/gnome/Prompt]
+restore-session=false
+restore-window-size=false
