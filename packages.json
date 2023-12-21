@@ -12,7 +12,6 @@
 				"gnome-shell-extension-blur-my-shell",
 				"gnome-shell-extension-dash-to-dock",
 				"gnome-shell-extension-gsconnect",
-				"gnome-shell-extension-tailscale-gnome-qs",
 				"gnome-shell-extension-logo-menu",
 				"hplip",
 				"ifuse",
@@ -116,7 +115,9 @@
 	},
 	"38": {
 		"include": {
-			"bluefin": [],
+			"bluefin": [
+				"gnome-shell-extension-tailscale-status"
+			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
 		},
@@ -130,8 +131,9 @@
 	"39": {
 		"include": {
 			"bluefin": [
+				"gnome-shell-extension-tailscale-gnome-qs",
 				"input-leap",
-     "nautilus-open-any-terminal"
+                                "nautilus-open-any-terminal"
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
@@ -139,7 +141,7 @@
 		"exclude": {
 			"bluefin": [
 				"podman-docker",
-     "gnome-terminal-nautilus"
+				"gnome-terminal-nautilus"
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
