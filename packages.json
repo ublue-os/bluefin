@@ -106,7 +106,12 @@
 				"gnome-tour",
 				"ublue-os-update-services"
 			],
-			"bluefin-dx": []
+			"bluefin-dx": [
+				"gnome-extensions-app",
+				"gnome-software-rpm-ostree",
+				"gnome-tour",
+				"ublue-os-update-services"
+			]
 		}
 	},
 	"38": {
