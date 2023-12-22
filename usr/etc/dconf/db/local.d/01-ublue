@@ -66,6 +66,11 @@ customize-alphas=true
 max-alpha=0.8
 min-alpha=0.5
 
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Control><Alt>t'
+command='xdg-terminal-exec'
+name='Prompt'
+
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
 command='xdg-terminal-exec -- distrobox enter ubuntu'
@@ -109,7 +114,7 @@ download-updates-notify=false
 
 [com/github/stunkymonkey/nautilus-open-any-terminal]
 terminal='prompt'
-keybindings=['<Ctrl><Alt>t']
+keybindings=''
 new-tab=false
 flatpak='off'
 
