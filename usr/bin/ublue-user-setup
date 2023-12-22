@@ -17,10 +17,11 @@ IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 # Enable NTP
 timedatectl set-ntp true
 
-# Setup VSCode
-# Pre-install preferred VSCode Extensions
-code --install-extension ms-vscode-remote.remote-containers
-cp -r /usr/share/ublue-os/configs/vscode/settings.json $HOME/.config/Code/User/settings.json
+if [[ $IMAGE_NAME = "bluefin-dx" ]]; then
+
+  source /usr/bin/bluefin-dx-user-setup
+
+fi
 
 
 # Prevent future executions
