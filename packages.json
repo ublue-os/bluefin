@@ -2,6 +2,7 @@
 	"all": {
 		"include": {
 			"lutho": [
+				"acpica-tools",
 				"bash-color-prompt",
 				"cockpit-bridge",
 				"evtest",
