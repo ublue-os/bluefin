@@ -50,8 +50,8 @@ jobs:
           containers: silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }}
 
       - name: Verify Chainguard images
+        if: matrix.base_name != 'bluefin'
         uses: EyeCantCU/cosign-action/verify@v0.2.1
-        if: ${{ matrix.base_name }} == "bluefin-dx"
         with:
           containers: flux, helm, ko, minio, kubectl
           cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
