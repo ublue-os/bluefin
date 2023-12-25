@@ -52,6 +52,9 @@ switch-windows-backward = ['<Shift><Alt>Tab']
 [org/gnome/desktop/peripherals/touchpad]
 tap-to-click=true
 
+[org/gnome/desktop/peripherals/keyboard]
+numlock-state=true
+
 [org/gnome/shell/extensions/dash-to-dock]
 dock-fixed=true
 force-straight-corner=false
