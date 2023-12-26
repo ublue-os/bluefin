@@ -1,11 +1,11 @@
-title: Welcome to Bluefin
+title: Welcome to Aurora
 properties:
   mode: "run-once"
 screens:
   first-screen:
     source: yafti.screen.title
     values:
-      title: "Welcome to Bluefin (Beta)"
+      title: "Welcome to Aurora, the Bluefin-KDE (Alpha)"
       icon: "/path/to/icon"
       description: |
         Applications are also installing in the background, the system will notify you when it is finished.
