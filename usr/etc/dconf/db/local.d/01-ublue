@@ -23,9 +23,6 @@ picture-options='zoom'
 primary-color='000000'
 secondary-color='FFFFFF'
 
-[org/gnome/desktop/input-sources]
-xkb-options=['caps:ctrl_modifier']
-
 [org/gnome/desktop/interface]
 enable-hot-corners=false
 clock-show-weekday=true
