@@ -1,7 +1,7 @@
 {
 	"all": {
 		"include": {
-			"bluefin": [
+			"aurora": [
 				"bash-color-prompt",
 				"cockpit-bridge",
 				"evtest",
@@ -41,7 +41,7 @@
 				"wl-clipboard", 
 				"zsh"
 			],
-			"bluefin-dx": [
+			"aurora-dx": [
 				"adobe-source-code-pro-fonts",
 				"cascadia-code-fonts",
 				"cockpit-machines",
@@ -99,30 +99,30 @@
 			]
 		},
 		"exclude": {
-			"bluefin": [
+			"aurora": [
 				"ublue-os-update-services"
 			],
-			"bluefin-dx": [
+			"aurora-dx": [
 				"ublue-os-update-services"
 			]
 		}
 	},
 	"38": {
 		"include": {
-			"bluefin": [
+			"aurora": [
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"aurora-dx": [],
+			"aurora-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"aurora": [
 			],
-			"bluefin-dx": []
+			"aurora-dx": []
 		}
 	},
 	"39": {
 		"include": {
-			"bluefin": [
+			"aurora": [
 				"input-leap",
 				"tuned",
 				"tuned-ppd",
@@ -130,14 +130,14 @@
 				"tuned-utils-systemtap",
 				"tuned-profiles-atomic"
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"aurora-dx": [],
+			"aurora-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"aurora": [
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"aurora-dx": [],
+			"aurora-framework": []
 		}
 	}
 }

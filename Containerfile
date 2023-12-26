@@ -4,10 +4,10 @@ ARG AKMODS_FLAVOR="${AKMODS_FLAVOR:-main}"
 ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-39}"
-ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
+ARG TARGET_BASE="${TARGET_BASE:-aurora}"
 
-## bluefin image section
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
+## aurora image section
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS aurora
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
@@ -15,7 +15,7 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin"
+ARG PACKAGE_LIST="aurora"
 
 # GNOME VRR & Ptyxis
 RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
@@ -113,21 +113,21 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     rm -f /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
-    sed -i '/^PRETTY_NAME/s/Silverblue/Bluefin/' /usr/lib/os-release && \
+    sed -i '/^PRETTY_NAME/s/Silverblue/aurora/' /usr/lib/os-release && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp
 
-## bluefin-dx developer edition image section
-FROM bluefin AS bluefin-dx
+## aurora-dx developer edition image section
+FROM aurora AS aurora-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin-dx"
+ARG PACKAGE_LIST="aurora-dx"
 
 # dx specific files come from the dx directory in this repo
 COPY dx/usr /usr
