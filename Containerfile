@@ -56,13 +56,11 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
-    systemctl enable dconf-update.service && \
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
     systemctl enable ublue-system-flatpak-manager.service && \
     systemctl --global enable ublue-user-flatpak-manager.service && \
     systemctl --global enable ublue-user-setup.service && \
-    fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
@@ -110,6 +108,9 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDOR
 # Handle packages via packages.json
 RUN /tmp/build.sh && \
     /tmp/image-info.sh
+
+## power-profiles-daemon with amd p-state support, remove when this is upstream
+RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging power-profiles-daemon
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin
