@@ -3,6 +3,14 @@
 # All the pieces needed to enable incus on Bluefin-dx
 # This script is meant to be run on a bluefin-dx host
 
+# if current user is root, warn and exit
+
+if [ "$EUID" -eq 0 ]
+then
+    echo "This script should not be run as root"
+    exit
+fi
+
 CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
 
 if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE
