@@ -131,7 +131,7 @@ else
         sudo incus admin init --minimal
         echo ""
         echo "Adding the incus bridge to the trusted firewall zone"
-        sudo firewall-cmd --zone=trusted --change-interface=br0 --permanent
+        sudo firewall-cmd --zone=trusted --change-interface=incusbr0 --permanent
         sudo firewall-cmd --reload
     else
         sudo incus admin init
