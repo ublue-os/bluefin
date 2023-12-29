@@ -49,11 +49,12 @@ fi
 sudo usermod -aG incus-admin $USER
 
 # check for, then add necessary entries to /etc/subuid and /etc/subgid
-
+echo ""
+echo "Checking for necessary entries in /etc/subuid and /etc/subgid"
 if grep -q "root:1000000:1000000000" /etc/subuid
 then
     echo ""
-    echo "You have the appropriate UID range in /etc/subuid"
+    echo "  * subuid root range"
 else
     echo "root:1000000:1000000000" | sudo tee -a /etc/subuid
 fi
@@ -61,7 +62,7 @@ fi
 if grep -q "root:1000000:1000000000" /etc/subgid
 then
     echo ""
-    echo "You have the appropriate GID range in /etc/subgid"
+    echo "  * subgid root range"
 else
     echo "root:1000000:1000000000" | sudo tee -a /etc/subgid
 fi
@@ -69,7 +70,7 @@ fi
 if grep -q "root:1000:1" /etc/subgid
 then
     echo ""
-    echo "You have the appropriate root GID in /etc/subgid"
+    echo "  * subgid root->user"
 else
     echo "root:1000:1" | sudo tee -a /etc/subgid
 fi
@@ -77,7 +78,7 @@ fi
 if grep -q "root:1000:1" /etc/subuid
 then
     echo ""
-    echo "You have the appropriate root UID in /etc/subuid"
+    echo "  * subuid root->user"
 else
     echo "root:1000:1" | sudo tee -a /etc/subuid
 fi
@@ -90,7 +91,7 @@ if [ "$SELINUX_STATUS" = "Enforcing" ]
 then
     echo ""
     echo "SELinux must be set to Permissive or Disabled to enable Incus"
-    echo "Choose your new SELinux state"
+    echo "Choose your new SELinux state:"
     OPTION=$(gum choose Permissive Disabled Cancel)
     if [ "$OPTION" = "Cancel" ]
     then
@@ -105,6 +106,8 @@ fi
 
 # create necessary directories for lxcfs and incus
 
+echo ""
+echo "Creating necessary directories for lxcfs and incus"
 sudo mkdir -p /var/lib/lxcfs
 sudo mkdir -p /var/lib/incus
 sudo mkdir -p /var/log/incus
@@ -119,7 +122,7 @@ sudo systemctl enable --now incus
 
 # run incus admin init
 echo ""
-echo "Choose your Incus installation type"
+echo "Choose your Incus installation type:"
 IOPTION=$(gum choose Minimal Custom Cancel)
 if [ "$IOPTION" = "Cancel" ]
 then
@@ -141,3 +144,5 @@ else
         echo "  sudo firewall-cmd --reload"
     fi
 fi
+echo ""
+echo "Incus has been installed. You can now run 'incus' to manage your containers."
