@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+# All the pieces needed to enable incus on Bluefin-dx
+# This script is meant to be run on a bluefin-dx host
+
+# if current user is root, warn and exit
+
+if [ "$EUID" -eq 0 ]
+then
+    echo "This script should not be run as root"
+    exit
+fi
+
+# add user to incus-admin group
+
+sudo usermod -aG incus-admin $USER
+
+# check for, then add necessary entries to /etc/subuid and /etc/subgid
+echo ""
+echo "Checking for necessary entries in /etc/subuid and /etc/subgid"
+if grep -q "root:1000000:1000000000" /etc/subuid
+then
+    echo ""
+    echo "  * subuid root range"
+else
+    echo "root:1000000:1000000000" | sudo tee -a /etc/subuid
+fi
+
+if grep -q "root:1000000:1000000000" /etc/subgid
+then
+    echo ""
+    echo "  * subgid root range"
+else
+    echo "root:1000000:1000000000" | sudo tee -a /etc/subgid
+fi
+
+if grep -q "root:1000:1" /etc/subgid
+then
+    echo ""
+    echo "  * subgid root->user"
+else
+    echo "root:1000:1" | sudo tee -a /etc/subgid
+fi
+
+if grep -q "root:1000:1" /etc/subuid
+then
+    echo ""
+    echo "  * subuid root->user"
+else
+    echo "root:1000:1" | sudo tee -a /etc/subuid
+fi
+
+# check to see if SELinux is set to permissive or disabled
+
+echo ""
+echo "Checking SELinux status"
+SELINUX_STATUS=$(getenforce)
+
+if [ "$SELINUX_STATUS" = "Enforcing" ]
+then
+    echo ""
+    echo "SELinux must be set to Permissive or Disabled to enable Incus"
+    echo "Choose your new SELinux state:"
+    OPTION=$(gum choose Permissive Disabled Cancel)
+    if [ "$OPTION" = "Cancel" ]
+    then
+        echo "You have chosen to cancel the Incus installation process"
+        exit
+    else
+        sudo setenforce $OPTION
+        echo "You must reboot before continuing. You can run this script again."
+        exit
+    fi
+fi
+
+# create necessary directories for lxcfs and incus
+
+echo ""
+echo "Creating necessary directories for lxcfs and incus"
+sudo mkdir -p /var/lib/lxcfs
+sudo mkdir -p /var/lib/incus
+sudo mkdir -p /var/log/incus
+
+# enable incus services
+
+echo ""
+echo "Enabling incus services"
+sudo systemctl enable --now lxcfs
+sudo systemctl enable --now incus
+
+
+# run incus admin init
+echo ""
+echo "Initializing Incus"
+echo ""
+echo "Choose your Incus installation type:"
+IOPTION=$(gum choose Minimal Custom Cancel)
+if [ "$IOPTION" = "Cancel" ]
+then
+    echo "You have chosen to cancel the Incus installation process"
+    exit
+else
+    if [ "$IOPTION" = "Minimal" ]
+    then
+        sudo incus admin init --minimal
+        echo ""
+        echo "Adding the incus bridge to the trusted firewall zone"
+        sudo firewall-cmd --zone=trusted --change-interface=incusbr0 --permanent
+        sudo firewall-cmd --reload
+    else
+        sudo incus admin init
+        echo ""
+        echo "Add the incus bridge to the trusted firewall zone"
+        echo "  sudo firewall-cmd --zone=trusted --change-interface=your-bridge --permanent"
+        echo "  sudo firewall-cmd --reload"
+    fi
+fi
+echo ""
+echo "Incus has been installed. You can now run 'incus' to manage your containers."
