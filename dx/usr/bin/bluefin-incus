@@ -32,9 +32,11 @@ fi
 # if we aren't on the dx image, we need to rebase
 # to the dx image
 
+echo ""
+echo "Checking for necessary Bluefin image"
 if [ "$CURRENT_STATE" = "dx" ]
 then
-    echo "You are already on a developer image"
+    echo "  * Already on a developer image"
 else
     echo ""
     echo "Before we can enable Incus on this system"
@@ -85,6 +87,8 @@ fi
 
 # check to see if SELinux is set to permissive or disabled
 
+echo ""
+echo "Checking SELinux status"
 SELINUX_STATUS=$(getenforce)
 
 if [ "$SELINUX_STATUS" = "Enforcing" ]
