@@ -185,8 +185,18 @@ garden:
 
 # Install and configure Incus
 incus:
-    echo 'Installing and configuring Incus.'
-    /usr/bin/bluefin-incus
+    #!/usr/bin/env bash
+    CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
+
+    if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+    then
+        echo 'Installing and configuring Incus.'
+        /usr/bin/bluefin-incus
+    else
+        echo "Developer mode is currently ${CURRENT_STATE}."
+        echo "Run `just devmode` to turn on Developer mode."
+        exit
+    fi
 
 # Install nix and Devbox
 nix-devbox:
