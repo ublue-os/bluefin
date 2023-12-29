@@ -1,5 +1,5 @@
 bash
-#brew
+brew
 git
 procps
 sudo-rs
