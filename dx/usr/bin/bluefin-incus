@@ -11,41 +11,6 @@ then
     exit
 fi
 
-CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-
-if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE
-then
-    echo ""
-    echo "Before we can enable Incus on this system"
-    echo "the current system needs an update. Please run 'just update'"
-    echo "and reboot your system when the update is finished."
-    exit
-fi
-
-if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
-then
-    CURRENT_STATE="dx"
-else
-    CURRENT_STATE="not-dx"
-fi
-
-# if we aren't on the dx image, we need to rebase
-# to the dx image
-
-echo ""
-echo "Checking for necessary Bluefin image"
-if [ "$CURRENT_STATE" = "dx" ]
-then
-    echo "  * Already on a developer image"
-else
-    echo ""
-    echo "Before we can enable Incus on this system"
-    echo "the current system needs to be on a developer (dx)"
-    echo "image. Please run 'just devmode' to rebase to a developer image"
-    echo "and reboot your system when the rebase is finished."
-    exit
-fi
-
 # add user to incus-admin group
 
 sudo usermod -aG incus-admin $USER
