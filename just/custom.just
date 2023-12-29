@@ -187,7 +187,7 @@ garden:
 incus:
     echo 'Installing and configuring Incus.'
     /usr/bin/bluefin-incus
-    
+
 # Install nix and Devbox
 nix-devbox:
     echo 'Setting phasers to kill. Installing nix.'
