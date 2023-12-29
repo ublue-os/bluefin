@@ -126,6 +126,8 @@ sudo systemctl enable --now incus
 
 # run incus admin init
 echo ""
+echo "Initializing Incus"
+echo ""
 echo "Choose your Incus installation type:"
 IOPTION=$(gum choose Minimal Custom Cancel)
 if [ "$IOPTION" = "Cancel" ]
