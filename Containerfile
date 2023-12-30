@@ -85,10 +85,6 @@ RUN wget https://github.com/OpenTabletDriver/OpenTabletDriver/releases/latest/do
     rm -rf /tmp/*
     # note: the user needs to manually enable the systemctl service according to https://opentabletdriver.net/Wiki/FAQ/Linux#autostart
 
-# Temporarily work around justfile incompatibility until https://github.com/ublue-os/config/pull/179/files
-# gets merged
-RUN sed -i 's~^!include \(.*\)~import "\1"~g' /usr/share/ublue-os/justfile
-
 ## lutho-dx developer edition image section
 FROM lutho AS lutho-dx
 
