@@ -29,6 +29,7 @@
 				"zsh"
 			],
 			"lutho-dx": [
+				"arm-image-installer",
 				"cockpit-machines",
 				"cockpit-networkmanager",
 				"cockpit-ostree",

@@ -21,10 +21,11 @@ rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ethanjli/lutho-dx:39
 
 ## Scope
 
-For now I will try to stay generally close to the Bluefin upstream, but I'll also experiment with new features and try to resolve things which might be annoyances specifically to me (e.g. I don't need or want Solaar, which is included in Bluefin).
+This fork tracks the upstream Bluefin project and generally tries to keep merges simple, but it does remove a lot of things in Bluefin which I personally don't need.
 
-I will try to do other customizations (e.g. KDE Plasma configurations, homefiles, declarative configurations in userland, custom distrobox images) in other repositories as much as possible. The goal is to eventually get all configurations managed on GitHub and all data synchronized with online storage (and/or with other devices via SyncThing) in a way that makes it relatively easy for me to wipe my computer and restore everything.
+I try to do as much as possible in my [dotfiles repo](https://github.com/ethanjli/dotfiles); this includes all KDE Plasma customizations and theming (which includes fonts!). This project is only run and tested with those dotfiles.
 
 ## Associated repositories
 
+- [github.com/ethanjli/dotfiles](https://github.com/ethanjli/dotfiles): configurations and CLI apps used with this image.
 - [github.com/ethanjli/planktoscope-toolbox](https://github.com/ethanjli/planktoscope-toolbox): a Distrobox container image I use for working on the various repositories in [github.com/PlanktoScope](https://github.com/PlanktoScope)
