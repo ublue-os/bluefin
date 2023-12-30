@@ -78,8 +78,6 @@
 		},
 		"exclude": {
 			"lutho": [
-				"firefox-langpacks",
-				"firefox",
 				"ublue-os-update-services"
 			],
 			"lutho-dx": []
