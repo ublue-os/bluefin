@@ -34,7 +34,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # only build main for now to have faster feedback cycles
         image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
         base_name: [aurora, aurora-dx]
         major_version: [38, 39]
@@ -50,6 +49,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+  
+      - name: Verify base image
+        uses: EyeCantCU/cosign-action/verify@v0.2.1
+        with:
+          containers: kinoite-${{ matrix.image_flavor }}:${{ matrix.major_version }}
+
+      - name: Verify Chainguard images
+        if: matrix.base_name != 'aurora'
+        uses: EyeCantCU/cosign-action/verify@v0.2.1
+        with:
+          containers: flux, helm, ko, minio, kubectl
+          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+          oidc-issuer: https://token.actions.githubusercontent.com
+          registry: cgr.dev/chainguard
+    
+      - name: Maximize build space
+        uses: ublue-os/remove-unwanted-software@v6
 
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@v0.2.2
