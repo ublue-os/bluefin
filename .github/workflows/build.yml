@@ -53,7 +53,7 @@ jobs:
         if: matrix.base_name != 'bluefin'
         uses: EyeCantCU/cosign-action/verify@v0.2.1
         with:
-          containers: flux, helm, ko, minio, kubectl
+          containers: dive, flux, helm, ko, minio, kubectl
           cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
           oidc-issuer: https://token.actions.githubusercontent.com
           registry: cgr.dev/chainguard
