@@ -156,7 +156,8 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
 # Set up services
-RUN systemctl enable docker.service && \
+RUN systemctl enable --global bluefin-dx-user-vscode.service && \
+    systemctl enable docker.service && \
     systemctl enable podman.socket && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
