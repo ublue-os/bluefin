@@ -1,0 +1,11 @@
+[Unit]
+Description=Workaround swtpm not having the correct label
+ConditionFileIsExecutable=/usr/bin/swtpm
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/swtpm-workaround
+
+[Install]
+WantedBy=multi-user.target

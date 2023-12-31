@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Copy swtpm to someplace mutable
+cp /usr/bin/swtpm /tmp/swtpm
+
+# Bind mount it over so it is in the correct location
+mount --bind /tmp/swtpm /usr/bin/swtpm
+
+# Fix SELinux labels
+semanage fcontext -a -t swtpm_exec_t "/usr/bin/swtpm"
+restorecon /usr/bin/swtpm
