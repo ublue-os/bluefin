@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Including this check here as well as a failsafe
-if [[ -f $USER_SETUP_VER_FILE && $USER_SETUP_VER = $USER_SETUP_VER_RAN ]]; then
+if [[ -f $USER_SETUP_VER_FILE && "$USER_SETUP_VER" = "$USER_SETUP_VER_RAN" ]]; then
   echo "User setup has already run. Exiting..."
   exit 0
 fi
@@ -9,4 +9,4 @@ fi
 # Setup VSCode
 # Pre-install preferred VSCode Extensions
 code --install-extension ms-vscode-remote.remote-containers
-cp -r /usr/share/ublue-os/configs/vscode/settings.json $HOME/.config/Code/User/settings.json
+code --install-extension ms-azuretools.vscode-docker
