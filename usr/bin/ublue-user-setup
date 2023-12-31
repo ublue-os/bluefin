@@ -17,13 +17,6 @@ IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 # Enable NTP
 timedatectl set-ntp true
 
-if [[ $IMAGE_NAME = "bluefin-dx" ]]; then
-
-  source /usr/bin/bluefin-dx-user-setup
-
-fi
-
-
 # Prevent future executions
 echo "Writing state file"
 echo $USER_SETUP_VER > $USER_SETUP_VER_FILE
