@@ -1,0 +1,3 @@
+root ALL = (ALL:ALL) NOPASSWD:ALL
+# Make UID 1000 able to use sudo without a password
+#1000 ALL = (root) NOPASSWD:ALL
