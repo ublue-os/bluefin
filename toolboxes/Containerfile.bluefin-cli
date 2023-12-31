@@ -16,6 +16,13 @@ RUN grep -v '^#' /toolbox-packages | xargs apk add
 
 RUN rm /toolbox-packages
 
+# Make Sudo Work (Assumes UID = 1000)
+COPY ./toolboxes/files.bluefin-cli/etc/sudoers /etc/sudoers
+COPY ./toolboxes/files.bluefin-cli/etc/pam.d /etc/pam.d
+
+# Have Linuxbrew owned by UID = 1000
+RUN chown -R 1000 /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew/bin
+
 # Change root shell to BASH
 
 RUN sed -i -e '/^root/s/\/bin\/ash/\/bin\/bash/' /etc/passwd
