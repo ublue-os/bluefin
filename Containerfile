@@ -159,6 +159,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
 RUN systemctl enable docker.service && \
     systemctl enable podman.socket && \
     systemctl enable swtpm-workaround.service && \
+    systemctl enable --global bluefin-dx-user-vscode.service && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
 

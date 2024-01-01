@@ -24,6 +24,7 @@
 				"make",
 				"mesa-libGLU",
 				"nautilus-gsconnect",
+				"playerctl",
 				"pulseaudio-utils",
 				"python3-pip",
 				"samba-dcerpc",
