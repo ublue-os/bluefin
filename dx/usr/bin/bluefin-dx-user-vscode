@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# SCRIPT VERSION
+USER_SETUP_VER=1
+USER_SETUP_VER_FILE="$HOME/.bluefin-vscode-configured"
+USER_SETUP_VER_RAN=$(cat "$USER_SETUP_VER_FILE")
+
+# Run script if updated
+if [[ -f $USER_SETUP_VER_FILE && "$USER_SETUP_VER" = "$USER_SETUP_VER_RAN" ]]; then
+  echo "User setup has already run. Exiting..."
+  exit 0
+fi
+
+# Setup VSCode
+# Pre-install preferred VSCode Extensions
+code --install-extension ms-vscode-remote.remote-containers
+code --install-extension ms-azuretools.vscode-docker
+
+# Prevent future executions
+echo "Writing state file"
+echo "$USER_SETUP_VER" > "$USER_SETUP_VER_FILE"
