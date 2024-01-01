@@ -82,7 +82,6 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
     systemctl enable ublue-system-flatpak-manager.service && \
-    systemctl enable bluefin-dx-user-vscode.service && \
     systemctl --global enable ublue-user-flatpak-manager.service && \
     systemctl --global enable ublue-user-setup.service && \
     fc-cache -f /usr/share/fonts/ubuntu && \
@@ -159,6 +158,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
 # Set up services
 RUN systemctl enable docker.service && \
     systemctl enable podman.socket && \
+    systemctl enable --global bluefin-dx-user-vscode.service && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
 
