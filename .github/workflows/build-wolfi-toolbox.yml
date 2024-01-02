@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: '20 22 * * *'  # 10:20pm everyday
   pull_request:
-  merge_group:    
+  merge_group:
   workflow_dispatch:
 env:
     IMAGE_NAME: wolfi-toolbox
@@ -24,11 +24,19 @@ jobs:
       id-token: write
     strategy:
       fail-fast: false
-    steps: 
+    steps:
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
         uses: actions/checkout@v4
-        
+
+      - name: Verify base container
+        uses: EyeCantCU/cosign-action/verify@v0.2.1
+        with:
+          containers: wolfi-base
+          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+          oidc-issuer: https://token.actions.githubusercontent.com
+          registry: cgr.dev/chainguard
+
       # Build metadata
       - name: Image Metadata
         uses: docker/metadata-action@v5
