@@ -1,16 +1,16 @@
 ublue_variants:
-  - label: ublue-os/bluefin
+  - label: ethanjli/lutho
     ks: /kickstart/ublue-os.ks
     flavors:
-      - label: bluefin
-        info: Bluefin
-  - label: ublue-os/bluefin-nvidia
+      - label: lutho
+        info: Lutho
+  - label: ethanjli/lutho-nvidia
     ks: /kickstart/ublue-os-nvidia.ks
     subvariants:
       - label: latest driver
       - label: 470xx driver
         suffix: -470
     flavors:
-      - label: bluefin-nvidia
-        info: Bluefin
+      - label: lutho-nvidia
+        info: Lutho
         

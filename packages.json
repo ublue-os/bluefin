@@ -1,29 +1,18 @@
 {
 	"all": {
 		"include": {
-			"bluefin": [
+			"lutho": [
+				"acpica-tools",
 				"bash-color-prompt",
 				"cockpit-bridge",
 				"evtest",
-				"fish",
 				"glow",
 				"gum",
-				"gnome-shell-extension-appindicator",
-				"gnome-shell-extension-blur-my-shell",
-				"gnome-shell-extension-dash-to-dock",
-				"gnome-shell-extension-gsconnect",
-				"gnome-shell-extension-logo-menu",
-				"hplip",
-				"ifuse",
 				"input-remapper",
-				"libgda-sqlite",
-				"libgda",
-				"libimobiledevice",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
 				"make",
 				"mesa-libGLU",
-				"nautilus-gsconnect",
 				"playerctl",
 				"pulseaudio-utils",
 				"python3-pip",
@@ -32,21 +21,16 @@
 				"samba-winbind-clients",
 				"samba-winbind-modules",
 				"samba",
-				"solaar",
 				"stress-ng",
 				"tailscale",
-				"tmux",
 				"ublue-update",
-				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
-				"yaru-theme",
 				"wl-clipboard", 
 				"zsh"
 			],
-			"bluefin-dx": [
-				"adobe-source-code-pro-fonts",
-				"cascadiacode-nerd-fonts",
+			"lutho-dx": [
+				"arm-image-installer",
 				"cockpit-machines",
 				"cockpit-networkmanager",
 				"cockpit-ostree",
@@ -58,7 +42,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-                                "devpod",
+				"devpod",
 				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
@@ -66,22 +50,16 @@
 				"docker-compose-plugin",
 				"edk2-ovmf",
 				"genisoimage",
-				"google-droid-sans-mono-fonts",
-				"google-go-mono-fonts",
-				"ibm-plex-mono-fonts",
 				"incus",
 				"incus-agent",
 				"iotop",
-				"jetbrains-mono-fonts-all",
 				"kcli",
 				"libvirt",
 				"lxc",
 				"lxd-agent",
 				"lxd",
-				"mozilla-fira-mono-fonts",
 				"p7zip-plugins",
 				"p7zip",
-				"podman-compose",
 				"podman-plugins",
 				"podman-tui",
 				"podmansh",
@@ -96,56 +74,44 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
-				"ubuntu-nerd-fonts",
-				"ubuntumono-nerd-fonts",
 				"virt-manager",
 				"virt-viewer"
 			]
 		},
 		"exclude": {
-			"bluefin": [
-				"firefox-langpacks",
-				"firefox",
-				"gnome-extensions-app",
-				"gnome-software-rpm-ostree",
-				"gnome-tour",
+			"lutho": [
 				"ublue-os-update-services"
 			],
-			"bluefin-dx": []
+			"lutho-dx": []
 		}
 	},
 	"38": {
 		"include": {
-			"bluefin": [
-				"gnome-shell-extension-tailscale-status"
-			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho": [],
+			"lutho-dx": [],
+			"lutho-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"lutho": [
 				"podman-docker"
 			],
-			"bluefin-dx": []
+			"lutho-dx": []
 		}
 	},
 	"39": {
 		"include": {
-			"bluefin": [
-				"gnome-shell-extension-tailscale-gnome-qs",
-				"input-leap",
-                                "nautilus-open-any-terminal"
+			"lutho": [
+				"input-leap"	
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho-dx": [],
+			"lutho-framework": []
 		},
 		"exclude": {
-			"bluefin": [
-				"podman-docker",
-				"gnome-terminal-nautilus"
+			"lutho": [
+				"podman-docker"
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"lutho-dx": [],
+			"lutho-framework": []
 		}
 	}
 }

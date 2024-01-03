@@ -1,13 +1,13 @@
-ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-silverblue}"
+ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-kinoite}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR:-main}"
 ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-39}"
-ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
+ARG TARGET_BASE="${TARGET_BASE:-lutho}"
 
-## bluefin image section
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
+## lutho image section
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS lutho
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
@@ -15,23 +15,7 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin"
-
-# GNOME VRR & Prompt
-RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
-        wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
-        rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem && \
-        rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
-        wget https://copr.fedorainfracloud.org/coprs/kylegospo/prompt/repo/fedora-$(rpm -E %fedora)/kylegospo-prompt-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:kylegospo:prompt \
-            vte291 \
-            vte-profile && \
-        rpm-ostree install \
-            prompt && \
-        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo \
-    ; fi
+ARG PACKAGE_LIST="lutho"
 
 COPY usr /usr
 COPY just /tmp/just
@@ -62,12 +46,6 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
     ; fi && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
-# Starship Shell Prompt
-RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" && \
-  tar -xzf /tmp/starship.tar.gz -C /tmp && \
-  install -c -m 0755 /tmp/starship /usr/bin && \
-  echo 'eval "$(starship init bash)"' >> /etc/bashrc
-
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rpm -E %fedora)/ublue-os-bling-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_ublue-os-bling.repo && \
     wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     /tmp/build.sh && \
@@ -78,13 +56,11 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
-    systemctl enable dconf-update.service && \
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
     systemctl enable ublue-system-flatpak-manager.service && \
     systemctl --global enable ublue-user-flatpak-manager.service && \
     systemctl --global enable ublue-user-setup.service && \
-    fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
@@ -97,21 +73,27 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     rm -fr /usr/share/applications/gnome-system-monitor.desktop && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
-    sed -i '/^PRETTY_NAME/s/Silverblue/Bluefin/' /usr/lib/os-release && \
+    sed -i '/^PRETTY_NAME/s/Kinoite/Lutho/' /usr/lib/os-release && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp
 
-## bluefin-dx developer edition image section
-FROM bluefin AS bluefin-dx
+# install userspace tablet driver
+RUN wget https://github.com/OpenTabletDriver/OpenTabletDriver/releases/latest/download/OpenTabletDriver.rpm -O /tmp/opentabletdriver.rpm && \
+    rpm-ostree install /tmp/opentabletdriver.rpm && \
+    rm -rf /tmp/*
+    # note: the user needs to manually enable the systemctl service according to https://opentabletdriver.net/Wiki/FAQ/Linux#autostart
+
+## lutho-dx developer edition image section
+FROM lutho AS lutho-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin-dx"
+ARG PACKAGE_LIST="lutho-dx"
 
 # dx specific files come from the dx directory in this repo
 COPY dx/usr /usr
