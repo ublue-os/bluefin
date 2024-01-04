@@ -67,23 +67,6 @@ jobs:
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@v6
 
-      - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@v0.2.2
-        with:
-          containers: silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }}
-
-      - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin'
-        uses: EyeCantCU/cosign-action/verify@v0.2.2
-        with:
-          containers: dive, flux, helm, ko, minio, kubectl
-          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
-          oidc-issuer: https://token.actions.githubusercontent.com
-          registry: cgr.dev/chainguard
-
-      - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v6
-
       - name: Check just syntax
         uses: ublue-os/just-action@v1
 
