@@ -13,6 +13,7 @@
 				"libxcrypt-compat",
 				"make",
 				"mesa-libGLU",
+				"playerctl",
 				"pulseaudio-utils",
 				"python3-pip",
 				"samba-dcerpc",

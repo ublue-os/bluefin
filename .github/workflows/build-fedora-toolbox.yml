@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: '20 22 * * *'  # 10:20pm everyday
   pull_request:
-  merge_group:    
+  merge_group:
   workflow_dispatch:
 env:
     IMAGE_NAME: fedora-toolbox
@@ -24,11 +24,16 @@ jobs:
       id-token: write
     strategy:
       fail-fast: false
-    steps: 
+    steps:
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
         uses: actions/checkout@v4
-        
+
+      - name: Verify Fedora distrobox
+        uses: EyeCantCU/cosign-action/verify@v0.2.1
+        with:
+          containers: fedora-distrobox:latest
+
       # Build metadata
       - name: Image Metadata
         uses: docker/metadata-action@v5
@@ -50,7 +55,7 @@ jobs:
           tags: ${{ env.IMAGE_TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
-          
+
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
       - name: Lowercase Registry
@@ -73,9 +78,6 @@ jobs:
           registry: ${{ steps.registry_case.outputs.lowercase }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
-          extra-args: |
-            --disable-content-trust
-            
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         if: github.event_name != 'pull_request'
@@ -83,7 +85,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-            
+
       # Sign container
       - uses: sigstore/cosign-installer@v3.3.0
         if: github.event_name != 'pull_request'

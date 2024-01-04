@@ -305,8 +305,10 @@ zsh:
     sudo usermod $USER --shell /usr/bin/zsh 
     printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
 
-# Enable docker on the system
-docker:
-    sudo systemctl enable --now docker
+# Configure docker,incus-admin,lxd,libvirt container manager permissions
+dx-group:
     sudo usermod -aG docker $USER
-    newgrp docker
+    sudo usermod -aG incus-admin $USER
+    sudo usermod -aG lxd $USER
+    sudo usermod -aG libvirt $USER
+    @echo "Logout to use docker, incus-admin, lxd, libvirt"
