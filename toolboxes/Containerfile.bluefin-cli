@@ -7,6 +7,10 @@ LABEL com.github.containers.toolbox="true" \
 
 COPY ./toolboxes/packages.bluefin-cli /toolbox-packages
 
+# Install brew_script
+COPY ./toolboxes/files.bluefin-cli/brew_script.bluefin-cli /tmp/brew_script
+RUN install -Dm755 /tmp/brew_script /usr/bin/brew_script
+
 # Update image
 RUN apk update && \
     apk upgrade
@@ -36,7 +40,7 @@ COPY ./toolboxes/files.bluefin-cli/etc/sudoers /etc/sudoers
 COPY ./toolboxes/files.bluefin-cli/etc/pam.d /etc/pam.d
 
 # Have Linuxbrew owned by UID = 1000
-RUN chown -R 1000 /home/linuxbrew/.linuxbrew /home/linuxbrew/.linuxbrew/bin
+RUN chown -R 1000 /home/linuxbrew
 
 # Change root shell to BASH
 
