@@ -1,10 +1,6 @@
-#!/usr/bin/env bash 
-
-if [ ! -f /home/linuxbrew/.firstrun ]; then
+if test "$(id -u)" -gt "0" && test ! -f /home/linuxbrew/.firstrun && test -d /home/linuxbrew/.linuxbrew/Cellar; then
   touch /home/linuxbrew/.firstrun
-  
-  # Package Relink
-  if [ -n "$(ls -A /home/linuxbrew/.linuxbrew/Cellar)" ]; then
+  if test -n "$(ls -A /home/linuxbrew/.linuxbrew/Cellar)"; then
     echo "Relinking Homebrew Cellar"
     /home/linuxbrew/.linuxbrew/bin/brew list -1 | while read line
     do
