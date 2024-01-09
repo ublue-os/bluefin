@@ -17,6 +17,7 @@ org.gnome.clocks
 org.gnome.font-viewer
 com.mattjakeman.ExtensionManager
 com.github.tchx84.Flatseal
+io.github.flattool.Warehouse
 org.fedoraproject.MediaWriter
 io.missioncenter.MissionCenter
 io.github.celluloid_player.Celluloid

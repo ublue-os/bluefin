@@ -6,6 +6,8 @@
 				"bash-color-prompt",
 				"cockpit-bridge",
 				"evtest",
+				"fish",
+				"firewall-config",
 				"glow",
 				"gum",
 				"input-remapper",
