@@ -6,10 +6,7 @@ LABEL com.github.containers.toolbox="true" \
       maintainer="jorge.castro@gmail.com"
 
 COPY ./toolboxes/packages.bluefin-cli /toolbox-packages
-
-# Install brew_script
-COPY ./toolboxes/files.bluefin-cli/brew_script.bluefin-cli /tmp/brew_script
-RUN install -Dm755 /tmp/brew_script /usr/bin/brew_script
+COPY ./toolboxes/files.bluefin-cli/etc /etc
 
 # Update image
 RUN apk update && \
@@ -19,6 +16,12 @@ RUN apk update && \
 RUN grep -v '^#' /toolbox-packages | xargs apk add
 
 RUN rm /toolbox-packages
+
+# Have Linuxbrew owned by UID = 1000
+RUN chown -R 1000 /home/linuxbrew
+
+# Give UID = 1000 sudo
+RUN echo "#1000 ALL = (root) NOPASSWD:ALL" >> /etc/sudoers
 
 # Get Distrobox-host-exec and host-spawn
 RUN git clone https://github.com/89luca89/distrobox.git --single-branch /tmp/distrobox && \
@@ -35,13 +38,5 @@ RUN mkdir -p /usr/local/bin  && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/podman && \
     ln -fs /usr/bin/distrobox-host-exec /usr/local/bin/rpm-ostree
 
-# Make Sudo Work (Assumes UID = 1000)
-COPY ./toolboxes/files.bluefin-cli/etc/sudoers /etc/sudoers
-COPY ./toolboxes/files.bluefin-cli/etc/pam.d /etc/pam.d
-
-# Have Linuxbrew owned by UID = 1000
-RUN chown -R 1000 /home/linuxbrew
-
 # Change root shell to BASH
-
 RUN sed -i -e '/^root/s/\/bin\/ash/\/bin\/bash/' /etc/passwd

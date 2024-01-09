@@ -30,8 +30,6 @@ bluefin-cli:
        mkdir -p "${XDG_DATA_HOME:-$HOME/.local/share}/bluefin-cli/Cellar" 
     fi; 
     distrobox-create --nvidia --image ghcr.io/ublue-os/bluefin-cli:latest -n bluefin --volume "${XDG_DATA_HOME:-$HOME/.local/share}/bluefin-cli/Cellar":/home/linuxbrew/.linuxbrew/Cellar:z
-    echo "Setting up bluefin-cli" 
-    distrobox enter -n bluefin -T -e brew_script
     echo "Entering bluefin-cli" 
     distrobox enter -n bluefin
 
