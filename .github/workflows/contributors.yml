@@ -1,22 +1,27 @@
 name: Update Contributors
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *' # Every day at midnight
-  push:
-    branches: 
-      - main
+    - cron: '3 2 1 * *'
+  pull_request: # TODO: Remove PR trigger
 
 jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
+      issues: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: akhilmhdh/contributors-readme-action@v2.3.6
+      - name: Run contributor action
+        uses: github/contributors@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+
+      - name: Create issue
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: Monthly contributor report
+          token: ${{ secrets.GITHUB_TOKEN }}
+          content-filepath: ./contributors.md
