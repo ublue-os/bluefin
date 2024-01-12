@@ -6,7 +6,6 @@ on:
   push:
     branches: 
       - main
-  pull_request: # TODO: Remove PR trigger before merge
 
 jobs:
   update:
