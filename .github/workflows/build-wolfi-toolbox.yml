@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify base container
-        uses: EyeCantCU/cosign-action/verify@v0.2.1
+        uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
           containers: wolfi-base
           cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
