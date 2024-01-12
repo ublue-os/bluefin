@@ -40,8 +40,7 @@ jobs:
             is_stable_version: true
             is_gts_version: false
     steps:
-      # Checkout push-to-registry action GitHub repository
-      - name: Checkout Push to Registry action
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Verify base image
