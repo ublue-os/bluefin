@@ -21,7 +21,7 @@ jobs:
     name: Make
     runs-on: ubuntu-22.04
     permissions:
-      contents: write
+      contents: read
       packages: write
       id-token: write
     strategy:
@@ -213,11 +213,7 @@ jobs:
       - name: Echo outputs
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ toJSON(steps.push.outputs) }}"
-
-      - uses: akhilmhdh/contributors-readme-action@v2.3.6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          echo "${{ toJSON(steps.push.outputs) }}"  
 
   check:
     name: Check all builds successful
