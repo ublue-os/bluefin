@@ -10,7 +10,7 @@ gpg
 iproute2
 iputils
 keyutils
-libcap
+libcap=2.68-r0
 mount
 ncurses
 ncurses-terminfo
