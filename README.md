@@ -23,7 +23,10 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 4. [Administrator's Guide](https://universal-blue.discourse.group/t/bluefin-administrators-guide/40)
 5. [Framework Images](https://universal-blue.org/images/framework/)
 
-# Contributors
+## Repobeats
 
-<!-- readme: collaborators,contributors -start -->
-<!-- readme: collaborators,contributors -end -->
+![Alt](https://repobeats.axiom.co/api/embed/7d4d3d6239bfb43fa6df8054b940d116727c833f.svg "Repobeats analytics image")
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date)](https://star-history.com/#ublue-os/bluefin&Date)
