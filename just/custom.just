@@ -287,7 +287,7 @@ update-ng:
     echo 'Upgrading flatpaks...'
     flatpak update -y
     echo 'Assembling and replacing distroboxes ...'
-    distrobox assemble create --replace --file /usr/etc/distrobox/distrobox.ini
+    distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
 
 # Upgrade Distrobox to the latest git version
 distrobox-git:
