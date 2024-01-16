@@ -87,19 +87,19 @@ devmode:
 
 # Assemble a Pytorch distrobox (Nvidia only)
 distrobox-mlbox:
-    source /usr/lib/ujust/libjust.sh
+    source /usr/lib/ujust/ujust.sh
     echo 'Assembling pytorch-nvidia mlbox distrobox ...'
     AssembleList create "/usr/share/ublue-os/distrobox/pytorch-nvidia.ini" "mlbox"
 
 # Create a Wolfi OS container | https://github.com/wolfi-dev
 distrobox-wolfi:
-    source /usr/lib/ujust/libjust.sh
+    source /usr/lib/ujust/ujust.sh
     echo 'Creating WolfiOS distrobox ...'
     Distrobox "ghcr.io/ublue-os/wolfi-toolbox:latest" "wolfi"
 
 # Create a universal developer container
 distrobox-universal:
-    source /usr/lib/ujust/libjust.sh
+    source /usr/lib/ujust/ujust.sh
     echo 'Creating Universal Development distrobox ...'
     Distrobox "mcr.microsoft.com/devcontainers/universal:latest" "universal"
 
