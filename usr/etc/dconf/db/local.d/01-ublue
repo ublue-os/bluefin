@@ -114,5 +114,11 @@ menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
 menu-button-extensions-app='com.mattjakeman.ExtensionManager.desktop'
 
 [org/gnome/Prompt]
+interface-style=system
 restore-session=false
 restore-window-size=false
+profile-uuids=['2871e8027773ae74d6c87a5f659bbc74']
+default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
+
+[org/gnome/Prompt/Profiles/2871e8027773ae74d6c87a5f659bbc74]
+palette='Catpuccin Mocha'
