@@ -27,14 +27,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
-        base_name: [bluefin, bluefin-dx]
-        major_version: [38, 39]
+        image_flavor: [main]
+        base_name: [bluefin-dx]
+        major_version: [39]
         include:
-          - major_version: 38
-            is_latest_version: false
-            is_stable_version: true
-            is_gts_version: true
           - major_version: 39
             is_latest_version: true
             is_stable_version: true
@@ -70,13 +66,8 @@ jobs:
           else
               echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
           fi
-          if [[ "${{ matrix.image_flavor }}" =~ "asus" ]]; then
-              echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
-          elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
-              echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
-          else
-              echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
-          fi
+
+          echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
 
       - name: Generate tags
         id: generate-tags
