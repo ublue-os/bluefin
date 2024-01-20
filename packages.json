@@ -59,7 +59,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-                                "devpod",
+        "devpod",
 				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
@@ -136,9 +136,13 @@
 			"bluefin": [
 				"gnome-shell-extension-tailscale-gnome-qs",
 				"input-leap",
-                                "nautilus-open-any-terminal"
+        "nautilus-open-any-terminal"
 			],
-			"bluefin-dx": [],
+			"bluefin-dx": [
+				"gnome-shell-extension-tailscale-gnome-qs",
+				"input-leap",
+        "nautilus-open-any-terminal"
+			],
 			"bluefin-framework": []
 		},
 		"exclude": {
