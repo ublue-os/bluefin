@@ -101,7 +101,8 @@
 				"ubuntumono-nerd-fonts",
 				"virt-manager",
 				"virt-viewer",
-				"conda"
+				"conda",
+				"hidapi",
 			]
 		},
 		"exclude": {
