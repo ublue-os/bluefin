@@ -1,0 +1,8 @@
+[conda]
+name=Conda
+baseurl=https://repo.anaconda.com/pkgs/misc/rpmrepo/conda
+enabled=1
+type=rpm
+repo_gpgcheck=0
+gpgcheck=0
+gpgkey=https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc

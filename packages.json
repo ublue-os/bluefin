@@ -100,7 +100,8 @@
 				"ubuntu-nerd-fonts",
 				"ubuntumono-nerd-fonts",
 				"virt-manager",
-				"virt-viewer"
+				"virt-viewer",
+				"conda"
 			]
 		},
 		"exclude": {
