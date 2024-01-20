@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/essn/ublue-workstation/compare/v1.4.0...v1.5.0) (2024-01-20)
+
+
+### Features
+
+* use topgrade for manual upgrades ([#822](https://github.com/essn/ublue-workstation/issues/822)) ([8639734](https://github.com/essn/ublue-workstation/commit/86397348596cba72ccbe46ef642e7b46e9d258f4))
+
+
+### Bug Fixes
+
+* Replace upstream file instead of adding new one for ujust update ([a7ba176](https://github.com/essn/ublue-workstation/commit/a7ba17627afd9b257741e81e7afed312ace9e1e0))
+
 ## [1.4.0](https://github.com/essn/ublue-workstation/compare/v1.3.0...v1.4.0) (2024-01-20)
 
 
