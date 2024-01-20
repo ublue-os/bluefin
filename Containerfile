@@ -92,6 +92,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-$(rp
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just && \
     rm -f /etc/yum.repos.d/tailscale.repo && \
     rm -f /etc/yum.repos.d/charm.repo && \
+    rm -f /etc/yum.repos.d/conda.repo && \
     rm -f /etc/yum.repos.d/_copr_ublue-os-bling.repo && \
     rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     echo "Hidden=true" >> /usr/share/applications/fish.desktop && \
