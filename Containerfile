@@ -31,8 +31,13 @@ ARG DOAS_MANDIR=/usr/local/share/man
 ARG DOAS_SYSCONFDIR=/usr/local/share/etc
 
 COPY --from=0 "${DOAS_PREFIX}/bin/doas" /usr/bin/doas
-COPY --from=0 "${DOAS_MANDIR}" /usr/share/man
-COPY --from=0 "${DOAS_SYSCONFDIR}" /usr/etc
+COPY --from=0 "${DOAS_PREFIX}/bin/doasedit" /usr/bin/doasedit
+COPY --from=0 "${DOAS_PREFIX}/bin/vidoas" /usr/bin/vidoas
+RUN chmod +x /usr/bin/doas && \
+    chmod +x /usr/bin/doasedit && \
+    chmod +x /usr/bin/vidoas
+# COPY --from=0 "${DOAS_MANDIR}" /usr/share/man
+# COPY --from=0 "${DOAS_SYSCONFDIR}" /usr/etc
 
 # GNOME VRR & Prompt
 RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
