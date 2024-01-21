@@ -1,10 +1,12 @@
-# Bluefin, Essn spin.
+[![Build and Push Image](https://github.com/essn/ublue-workstation/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/essn/ublue-workstation/actions/workflows/build.yml)[![Release Please](https://github.com/essn/ublue-workstation/actions/workflows/release-please.yml/badge.svg)](https://github.com/essn/ublue-workstation/actions/workflows/release-please.yml)
+
+# Bluefin, Essn spin
 Currently under heavy modification 🛠️, but feel free to try it out or use it for your own interpretation!
 
 More to come!
 
-### All credit to
-[projectbluefin.io](https://projectbluefin.io)
+### All credit to uBlue
+&#x1F49C; **Universal Blue** [projectbluefin.io](https://projectbluefin.io) &#x1F49C;
 
 ## Overview - by the amazing uBlue contributors
 
@@ -25,4 +27,3 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 3. [Developer Experience Edition](https://universal-blue.discourse.group/t/bluefin-dx-the-bluefin-developer-experience/39)
 4. [Administrator's Guide](https://universal-blue.discourse.group/t/bluefin-administrators-guide/40)
 5. ~[Framework Images](https://universal-blue.org/images/framework/)~
-
