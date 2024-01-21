@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.6.0](https://github.com/essn/ublue-workstation/compare/v1.5.0...v1.6.0) (2024-01-21)
+
+
+### Features
+
+* Add pods to default install ([#825](https://github.com/essn/ublue-workstation/issues/825)) ([7f76f9d](https://github.com/essn/ublue-workstation/commit/7f76f9d9d4b1c6989db7def8e64232cab1570355))
+* match bazzite's logomenu ([#826](https://github.com/essn/ublue-workstation/issues/826)) ([219f74e](https://github.com/essn/ublue-workstation/commit/219f74ea28e953605c76d9323efa18559a08ba06))
+
+
+### Bug Fixes
+
+* make topgrade --yes by default ([#824](https://github.com/essn/ublue-workstation/issues/824)) ([58e4244](https://github.com/essn/ublue-workstation/commit/58e42441b6f785bd2a99e50c0b18fd97a5dddfcd))
+
 ## [1.5.0](https://github.com/essn/ublue-workstation/compare/v1.4.0...v1.5.0) (2024-01-20)
 
 
