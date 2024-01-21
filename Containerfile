@@ -17,6 +17,23 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin"
 
+# Doas
+FROM bitnami/centos-base-buildpack:7-r9 AS doas
+RUN yum -y install gcc gcc-c++ make flex bison pam-devel byacc git
+RUN curl -Lo /tmp/doas.tar.gz "https://github.com/slicer69/doas/archive/refs/tags/6.3p9.tar.gz" && \
+  tar -xzf /tmp/doas.tar.gz -C /tmp/ && \
+  mv /tmp/doas-* /tmp/doas && \
+  cd /tmp/doas && \
+  make install
+
+ARG DOAS_PREFIX=/usr/local
+ARG DOAS_MANDIR=/usr/local/share/man
+ARG DOAS_SYSCONFDIR=/usr/local/share/etc
+
+COPY --from=0 "${DOAS_PREFIX}/bin/doas" /usr/bin/doas
+COPY --from=0 "${DOAS_MANDIR}" /usr/share/man
+COPY --from=0 "${DOAS_SYSCONFDIR}" /usr/etc
+
 # GNOME VRR & Prompt
 RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
         wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
