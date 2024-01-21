@@ -26,17 +26,17 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin"
 
-ARG DOAS_PREFIX=/usr/local
-ARG DOAS_MANDIR=/usr/local/share/man
-ARG DOAS_SYSCONFDIR=/usr/local/share/etc
+# ARG DOAS_PREFIX=/usr/local
+# ARG DOAS_MANDIR=/usr/local/share/man
+# ARG DOAS_SYSCONFDIR=/usr/local/share/etc
 
-COPY --from=doas "${DOAS_PREFIX}/bin/doas" /usr/bin/doas
-COPY --from=doas "${DOAS_PREFIX}/bin/doasedit" /usr/bin/doasedit
-COPY --from=doas "${DOAS_PREFIX}/bin/vidoas" /usr/bin/vidoas
+# COPY --from=doas "${DOAS_PREFIX}/bin/doas" /usr/bin/doas
+# COPY --from=doas "${DOAS_PREFIX}/bin/doasedit" /usr/bin/doasedit
+# COPY --from=doas "${DOAS_PREFIX}/bin/vidoas" /usr/bin/vidoas
 
-RUN chmod +x /usr/bin/doas && \
-    chmod +x /usr/bin/doasedit && \
-    chmod +x /usr/bin/vidoas
+# RUN chmod +x /usr/bin/doas && \
+#     chmod +x /usr/bin/doasedit && \
+#     chmod +x /usr/bin/vidoas
 
 # COPY --from=0 "${DOAS_MANDIR}" /usr/share/man
 # COPY --from=0 "${DOAS_SYSCONFDIR}" /usr/etc
@@ -183,10 +183,10 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
 # Mise
-RUN curl -Lo /tmp/mise-install.sh https://mise.jdx.dev/install.sh && \
-	chmod +x /tmp/mise-install.sh && \
-	. /tmp/mise-install.sh && \
-    echo "eval \"\$(/usr/local/bin/mise activate bash)\"" >> /etc/bashrc
+# RUN curl -Lo /tmp/mise-install.sh https://mise.jdx.dev/install.sh && \
+# 	chmod +x /tmp/mise-install.sh && \
+# 	. /tmp/mise-install.sh && \
+#    echo "eval \"\$(/usr/local/bin/mise activate bash)\"" >> /etc/bashrc
 
 # Set up services
 RUN systemctl enable docker.socket && \
