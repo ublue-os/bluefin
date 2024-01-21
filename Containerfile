@@ -175,6 +175,12 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
+# Mise
+RUN curl -Lo /tmp/mise-install.sh https://mise.jdx.dev/install.sh && \
+	chmod +x /tmp/mise-install.sh && \
+	. /tmp/mise-install.sh && \
+    echo "eval \"\$(/usr/local/bin/mise activate bash)\"" >> /etc/bashrc
+
 # Set up services
 RUN systemctl enable docker.socket && \
     systemctl enable podman.socket && \
