@@ -24,5 +24,5 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 2. [Discussions and Announcements](https://universal-blue.discourse.group/c/bluefin/6) - strongly recommended!
 3. [Developer Experience Edition](https://universal-blue.discourse.group/t/bluefin-dx-the-bluefin-developer-experience/39)
 4. [Administrator's Guide](https://universal-blue.discourse.group/t/bluefin-administrators-guide/40)
-5. ~[Framework Images](https://universal-blue.org/images/framework/~
+5. ~[Framework Images](https://universal-blue.org/images/framework/)~
 
