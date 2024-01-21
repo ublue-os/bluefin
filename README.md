@@ -3,7 +3,7 @@ Currently under heavy modification 🛠️, but feel free to try it out or use i
 
 More to come!
 
-## All credit to
+### All credit to
 [projectbluefin.io](https://projectbluefin.io)
 
 ## Overview - by the amazing uBlue contributors
@@ -18,7 +18,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 ### uBlue Wisdom
 > "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
 
-# Documentation
+## Documentation
 
 1. [Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41)
 2. [Discussions and Announcements](https://universal-blue.discourse.group/c/bluefin/6) - strongly recommended!
