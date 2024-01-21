@@ -37,10 +37,11 @@ COPY --from=doas "${DOAS_PREFIX}/bin/vidoas" /usr/bin/vidoas
 RUN chmod +x /usr/bin/doas && \
     chmod +x /usr/bin/doasedit && \
     chmod +x /usr/bin/vidoas
-COPY --from=0 "${DOAS_MANDIR}" /usr/share/man
-COPY --from=0 "${DOAS_SYSCONFDIR}" /usr/etc
 
-GNOME VRR & Prompt
+# COPY --from=0 "${DOAS_MANDIR}" /usr/share/man
+# COPY --from=0 "${DOAS_SYSCONFDIR}" /usr/etc
+
+# GNOME VRR & Prompt
 RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
         wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
         rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem && \
