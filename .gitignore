@@ -8,4 +8,4 @@ cosign.key
 .envrc
 
 # Local builds testing
-Containerfile.local
+Containerfile.*
