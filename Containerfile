@@ -6,15 +6,6 @@ ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-39}"
 ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
 
-# Doas
-FROM bitnami/centos-base-buildpack:7-r9 AS doas
-RUN yum -y install gcc gcc-c++ make flex bison pam-devel byacc git
-RUN curl -Lo /tmp/doas.tar.gz "https://github.com/slicer69/doas/archive/refs/tags/6.3p9.tar.gz" && \
-  tar -xzf /tmp/doas.tar.gz -C /tmp/ && \
-  mv /tmp/doas-* /tmp/doas && \
-  cd /tmp/doas && \
-  make install
-
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
 
@@ -25,21 +16,6 @@ ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin"
-
-# ARG DOAS_PREFIX=/usr/local
-# ARG DOAS_MANDIR=/usr/local/share/man
-# ARG DOAS_SYSCONFDIR=/usr/local/share/etc
-
-# COPY --from=doas "${DOAS_PREFIX}/bin/doas" /usr/bin/doas
-# COPY --from=doas "${DOAS_PREFIX}/bin/doasedit" /usr/bin/doasedit
-# COPY --from=doas "${DOAS_PREFIX}/bin/vidoas" /usr/bin/vidoas
-
-# RUN chmod +x /usr/bin/doas && \
-#     chmod +x /usr/bin/doasedit && \
-#     chmod +x /usr/bin/vidoas
-
-# COPY --from=0 "${DOAS_MANDIR}" /usr/share/man
-# COPY --from=0 "${DOAS_SYSCONFDIR}" /usr/etc
 
 # GNOME VRR & Prompt
 RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
