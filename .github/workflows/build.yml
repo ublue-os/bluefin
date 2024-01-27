@@ -6,6 +6,13 @@ on:
   pull_request:
     branches:
       - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
+      - testing
     paths-ignore:
       - '**.md'
   workflow_dispatch:
@@ -99,8 +106,16 @@ jobs:
 
           BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
 
-          if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
-             [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+          if [[ ${{ github.ref_name }} == "testing" ]]; then
+             BUILD_TAGS=("${MAJOR_VERSION}-testing" "${MAJOR_VERSION}-testing-${TIMESTAMP}")
+             if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+                [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+                 BUILD_TAGS+=("testing")
+             elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+                 BUILD_TAGS+=("gts-testing")
+             fi
+          elif [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
               BUILD_TAGS+=("latest")
           elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
               BUILD_TAGS+=("gts")

@@ -37,7 +37,6 @@
 				"stress-ng",
 				"tailscale",
 				"tmux",
-				"ublue-update",
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
@@ -47,7 +46,6 @@
 			],
 			"bluefin-dx": [
 				"adobe-source-code-pro-fonts",
-				"cascadiacode-nerd-fonts",
 				"cockpit-machines",
 				"cockpit-networkmanager",
 				"cockpit-ostree",
@@ -59,7 +57,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-                                "devpod",
+                "devpod",
 				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
@@ -80,6 +78,7 @@
 				"lxd-agent",
 				"lxd",
 				"mozilla-fira-mono-fonts",
+				"nerd-fonts",
 				"p7zip-plugins",
 				"p7zip",
 				"podman-compose",
@@ -97,8 +96,6 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
-				"ubuntu-nerd-fonts",
-				"ubuntumono-nerd-fonts",
 				"virt-manager",
 				"virt-viewer"
 			]
