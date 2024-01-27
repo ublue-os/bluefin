@@ -6,6 +6,13 @@ on:
   pull_request:
     branches:
       - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
+      - testing
     paths-ignore:
       - '**.md'
   workflow_dispatch:
