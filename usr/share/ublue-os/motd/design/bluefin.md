@@ -1,5 +1,5 @@
-# Welcome to Bluefin (Beta)
-Image: `%IMAGE_NAME%:%IMAGE_TAG%`
+# Welcome to Bluefin (󰂡eta) 
+: `%IMAGE_NAME%:%IMAGE_TAG%`
 
 | Command | Description |
 | ------- | ----------- |
@@ -7,9 +7,9 @@ Image: `%IMAGE_NAME%:%IMAGE_TAG%`
 | `ujust toggle-user-motd` | Toggle this banner on/off | 
 | `ujust bluefin-cli` | Configure the terminal (Alpha) |
 
-Please report issues at: https://github.com/ublue-os/bluefin
+Report issues at: 󰊤 https://issues.projectbluefin.io
 
 *Tip: %TIP%*
 
-- [Documentation](http://docs.projectbluefin.io/)
-- [Discuss](https://community.projectbluefin.io/)
+- 󰈙 [Documentation](http://docs.projectbluefin.io/)
+- 󰊌 [Discuss](https://community.projectbluefin.io/)
