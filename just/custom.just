@@ -140,7 +140,7 @@ distrobox-mlbox:
     #!/usr/bin/bash
     source /usr/lib/ujust/ujust.sh
     echo 'Assembling pytorch-nvidia mlbox distrobox ...'
-    AssembleList create "/usr/share/ublue-os/distrobox/pytorch-nvidia.ini" "mlbox"
+    AssembleList "/usr/share/ublue-os/distrobox/pytorch-nvidia.ini" create "mlbox"
 
 # Create a Wolfi OS container | https://github.com/wolfi-dev
 distrobox-wolfi:
