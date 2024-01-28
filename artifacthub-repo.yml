@@ -1,7 +1,8 @@
-repositoryID: d93848a7-1ba3-446f-a556-8cba07a42167
+# FIXME(ethanjli): I don't know the repository ID! According to https://artifacthub.io/docs/topics/repositories/, it can be omitted for now.
+#repositoryID: d93848a7-1ba3-446f-a556-8cba07a42167
 owners: # (optional, used to claim repository ownership)
-  - name: Jorge Castro
-    email: jorge.castro@gmail.com
+  - name: Ethan Li
+    email: lietk12@gmail.com
 #ignore: # (optional, packages that should not be indexed by Artifact Hub)
 #  - name: package1
 #  - name: package2 # Exact match
