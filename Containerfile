@@ -35,7 +35,6 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
 
 COPY usr /usr
 COPY just /tmp/just
-COPY motd /tmp/motd
 COPY etc/yum.repos.d/ /etc/yum.repos.d/
 COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
@@ -74,7 +73,6 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     pip install --prefix=/usr yafti && \
     pip install --prefix=/usr topgrade && \
     rpm-ostree install ublue-update && \
-    glow -s /tmp/motd/dracula.json /tmp/motd/bluefin.md > /usr/share/ublue-os/user-motd && \
     mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
