@@ -78,10 +78,11 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
-    mkdir -p /usr/etc/containers/systemd/user && \
-    wget -q https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-cli.container -P /usr/etc/containers/systemd/user && \
-    printf "\n\n[Install]\nWantedBy=bluefin-cli.target" >> /usr/etc/containers/systemd/user/bluefin-cli.container  && \
-    sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/user/bluefin-cli.container && \
+    mkdir -p /usr/etc/containers/systemd/users && \
+    wget -q https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-cli.container -P /usr/etc/containers/systemd/users && \
+    printf "\n\n[Install]\nWantedBy=bluefin-cli.target" >> /usr/etc/containers/systemd/users/bluefin-cli.container  && \
+    sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
+    sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
