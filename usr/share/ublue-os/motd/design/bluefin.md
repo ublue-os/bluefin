@@ -1,5 +1,5 @@
-# Welcome to Bluefin
-*Your image: `%IMAGE_NAME%:%IMAGE_TAG%`*
+# Welcome to Bluefin (Beta)
+Image: `%IMAGE_NAME%:%IMAGE_TAG%`
 
 | Command | Description |
 | ------- | ----------- |
