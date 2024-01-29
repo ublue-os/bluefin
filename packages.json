@@ -25,6 +25,7 @@
 				"make",
 				"mesa-libGLU",
 				"nautilus-gsconnect",
+				"nerd-fonts",
 				"playerctl",
 				"pulseaudio-utils",
 				"python3-pip",
@@ -37,7 +38,6 @@
 				"stress-ng",
 				"tailscale",
 				"tmux",
-				"ublue-update",
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
@@ -47,7 +47,7 @@
 			],
 			"bluefin-dx": [
 				"adobe-source-code-pro-fonts",
-				"cascadiacode-nerd-fonts",
+				"cascadia-code-fonts",
 				"cockpit-machines",
 				"cockpit-networkmanager",
 				"cockpit-ostree",
@@ -59,7 +59,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-                                "devpod",
+                "devpod",
 				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
@@ -97,8 +97,7 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
-				"ubuntu-nerd-fonts",
-				"ubuntumono-nerd-fonts",
+				"ubuntu-family-fonts",
 				"virt-manager",
 				"virt-viewer"
 			]
