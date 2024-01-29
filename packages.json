@@ -137,7 +137,7 @@
 				"tuned-ppd",
 				"tuned-utils",
 				"tuned-utils-systemtap",
-				"tuned-profiles-atomic",
+				"tuned-profiles-atomic"
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
