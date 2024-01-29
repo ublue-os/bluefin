@@ -5,19 +5,6 @@ benchmark:
     echo 'Running a 1 minute benchmark ...'
     stress-ng --matrix 0 -t 1m --times
 
-# Install aqua | https://aquaproj.github.io
-aqua:
-    #!/usr/bin/env bash
-    printf '\n=>Installing aqua ...\n\n'
-    pushd "$(mktemp -d)"
-    curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v2.1.1/aqua-installer
-    echo "c2af02bdd15da6794f9c98db40332c804224930212f553a805425441f8331665  aqua-installer" | sha256sum -c
-    chmod +x aqua-installer
-    ./aqua-installer
-    printf '\n=> Make sure the ${AQUA_ROOT_DIR}/bin environment variable is added to your PATH (.bashrc/.zshrc):\n'
-    printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
-    printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
-
 # Configure bluefin-cli Terminal Experience
 bluefin-cli:
     #!/usr/bin/bash
@@ -164,7 +151,6 @@ fish:
 # Install recommended GNOME extensions
 gnome-extensions:
     pip install --upgrade gnome-extensions-cli
-    gext install tailscale-status@maxgallup.github.com
     gext install nightthemeswitcher@romainvigier.fr
     gext install pano@elhan.io
     gext install weatheroclock@CleoMenezesJr.github.io
@@ -270,48 +256,6 @@ nix-devbox-global:
     echo 'run "devbox global run install-hook-zsh" to configure zsh shell'
     echo 'run "devbox global run" to see other available configuration commands'
 
-# Enable podmansh as user shell (EXPERIMENTAL)
-podmansh:
-    sudo mkdir -p /etc/containers/systemd/users/${UID}
-    sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
-    sudo usermod $USER --shell /usr/bin/podmansh
-    printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
-    systemctl --user start podman.socket
-    loginctl enable-linger $(whoami)
-
-    podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
-
-    systemctl --user daemon-reload
-    systemctl --user stop podmansh.service
-    systemctl --user start podmansh.service
-
-    @echo "Shell now switched to podmansh. Spawn a new terminal to get going!"
-    @echo "By default, the shell will be Bash. To override it, create ~/.profile with your preferred shell"
-    @echo "Note: That shell must exist in the toolbox!"
-    @echo "To ensure a smooth experience within VSCode, please add the following to your settings.json:"
-    @echo "---"
-    @echo "\"terminal.integrated.profiles.linux\": {"
-    @echo "  \"podmansh zsh\": {"
-    @echo "     \"path\": \"podmansh\","
-    @echo "     \"args\": [\"-c\", \"cd \${workspaceFolder}; exec zsh\"]"
-    @echo "  }"
-    @echo "}"
-    @echo "---"
-    @echo "Please make sure you have the following environment variable set WITHIN the container:"
-    @echo "---"
-    @echo "export DOCKER_HOST=unix:///var/run/podman/podman.sock"
-    @echo "---"
-    @echo "Happy Podmansh'ing!"
-
-# Switch podmansh to another image (EXPERIMENTAL)
-podmansh-switch IMAGE:
-    sudo sed -i "/Image\=.*$/c Image\={{ IMAGE }}" /etc/containers/systemd/users/${UID}/podmansh.container
-    podman pull {{ IMAGE }}
-    podman rm -f podmansh
-    systemctl --user daemon-reload
-    systemctl --user start podmansh.service
-    echo "Image now switched to {{ IMAGE }}"
-
 # Run pytorch
 pytorch:
     echo 'Follow the prompts and check the tutorial: https://docs.anaconda.com/free/anaconda/jupyter-notebooks/'
@@ -332,15 +276,6 @@ touch:
     pip install --upgrade gnome-extensions-cli
     gext install improvedosk@nick-shmyrev.dev
     gext install gestureImprovements@gestures
-
-# A preview of what the update system would look like in the future
-update-ng:
-    echo 'Upgrading system...'
-    sudo bootc upgrade
-    echo 'Upgrading flatpaks...'
-    flatpak update -y
-    echo 'Assembling and replacing distroboxes ...'
-    distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
 
 # Upgrade Distrobox to the latest git version
 distrobox-git:
