@@ -74,8 +74,8 @@ EOF
 cat > "/usr/share/ublue-os/bluefin-cli/${i}.sh" <<EOF
 #!/bin/sh 
  
-if test ! -f \"/run/user/\${UID}/container-entry\" && test -n \"\$PS1\" && test \$(podman ps --all --filter name=$i | grep -q \" $i\$\"); then  
-    touch \"/run/user/\${UID}/container-entry\"  
+if test ! -f "/run/user/\${UID}/container-entry" && test -n "\$PS1" && test \$(podman ps --all --filter name=$i | grep -q " $i\$"); then  
+    touch "/run/user/\${UID}/container-entry"  
     exec /usr/bin/distrobox-enter $i 
 fi
 EOF
