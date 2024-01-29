@@ -47,6 +47,7 @@
 			],
 			"bluefin-dx": [
 				"adobe-source-code-pro-fonts",
+				"cascadia-code-fonts",
 				"cockpit-machines",
 				"cockpit-networkmanager",
 				"cockpit-ostree",
@@ -96,6 +97,7 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
+				"ubuntu-family-fonts",
 				"virt-manager",
 				"virt-viewer"
 			]
