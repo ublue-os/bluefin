@@ -38,11 +38,6 @@
 				"stress-ng",
 				"tailscale",
 				"tmux",
-				"tuned",
-				"tuned-ppd",
-				"tuned-utils",
-				"tuned-utils-systemtap",
-				"tuned-profiles-atomic",
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
@@ -137,7 +132,12 @@
 			"bluefin": [
 				"gnome-shell-extension-tailscale-gnome-qs",
 				"input-leap",
-                                "nautilus-open-any-terminal"
+                "nautilus-open-any-terminal",
+				"tuned",
+				"tuned-ppd",
+				"tuned-utils",
+				"tuned-utils-systemtap",
+				"tuned-profiles-atomic",
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": []

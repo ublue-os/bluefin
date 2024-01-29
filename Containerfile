@@ -30,7 +30,14 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
             vte-profile && \
         rpm-ostree install \
             prompt && \
-        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo \
+        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
+        rpm-ostree override remove \
+            power-profiles-daemon \
+            || true && \
+        rpm-ostree override remove \
+            tlp \
+            tlp-rdw \
+            || true \
     ; fi
 
 COPY usr /usr
@@ -61,15 +68,6 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     wget https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/che-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo
 
-# Remove PPD & TLP
-RUN rpm-ostree override remove \
-        power-profiles-daemon \
-        || true && \
-    rpm-ostree override remove \
-        tlp \
-        tlp-rdw \
-        || true
-
 # Starship Shell Prompt
 RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" && \
   tar -xzf /tmp/starship.tar.gz -C /tmp && \
@@ -90,7 +88,9 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     printf "\n\n[Install]\nWantedBy=bluefin-cli.target" >> /usr/etc/containers/systemd/users/bluefin-cli.container  && \
     sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
     sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
-    systemctl enable tuned.service && \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
+        systemctl enable tuned.service \
+    ; fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
