@@ -7,7 +7,7 @@
 | `ujust toggle-user-motd` | Toggle this banner on/off | 
 | `ujust bluefin-cli` | Configure the terminal (Alpha) |
 
-*Tip: %TIP%*
+Tip: %TIP%
 
 - 󰊤 [Issues](https://issues.projectbluefin.io)
 - 󰈙 [Documentation:](http://docs.projectbluefin.io/)
