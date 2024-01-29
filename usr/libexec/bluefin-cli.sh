@@ -83,23 +83,23 @@ function Is_enabled_and_stop(){
     for i in ${targets[@]}
     do
         Enabled=0
-        Enabled=$(systemctl --user is-enabled $i.target)
-        if test "$Enabled" = "enabled" && $i != "$1"; then
-            printf "$i is enabled${n}.\n"
+        Enabled=$(systemctl --user is-enabled "$i".target)
+        if test "$Enabled" = "enabled" && test "$i" != "$1"; then
+            printf "$i is enabled.\n"
             printf "Would you like to disable and stop container?\n"
             Disable=$(Confirm) 
             if test "$Disable" -eq 0; then
-                systemctl --user --now disable $i.target
-                if test systemctl --user --quiet is-active $i.service; then
-                    systemctl --user stop $i.service
+                systemctl --user --now disable "$i".target
+                if test systemctl --user --quiet is-active "$i".service; then
+                    systemctl --user stop "$i".service
                 fi
             else
                 printf "Not disabling and stopping existing container $i..."
             fi
-            unset $Disable
-        elif test "$Enabled" = "enabled" && $i = "$1"; then
+            unset "$Disable" 
+        elif test "$Enabled" = "enabled" && test "$i" = "$1"; then
             printf "$i is already enabled${n}...\n"
-            Make_symlinks $TERMINAL_CHOICE $1
+            Make_symlinks "$TERMINAL_CHOICE" "$1" 
             Exiting
         fi
         unset $Enabled
@@ -115,20 +115,20 @@ function Already_exists_and_rm(){
     for i in ${targets[@]}
     do
         Exists=0
-        Exists=$(podman ps --all --filter name=$i | grep -q " $i\$" && echo "1" || echo "0")
-        if test "$Exists" -eq 1 && test $i = "$1"; then
-            printf "$1 ${red}${bold}exists${norma}, would you like to ${red}${bold}delete it?${norma}\n"
+        Exists=$(podman ps --all --filter name="$i" | grep -q " $i\$" && echo "1" || echo "0")
+        if test "$Exists" -eq 1 && test "$i" = "$1"; then
+            printf "$1 ${red}${bold}exists${normal}, would you like to ${red}${bold}delete it?${normal}\n"
             Delete=$(Confirm)
             if test "$Delete" -eq 0; then
                 printf "Removing $1...\n"
-                podman rm --force $1
+                podman rm --force "$1"
             else
-                printf "Not removing $1...\n"
+                printf "Not removing $1..."
                 Exiting
             fi
             unset $Delete 
         fi
-        unset $Delete
+        unset $Exists
     done
 }
 
@@ -145,7 +145,7 @@ function Build_container(){
         systemctl --user enable "$3".target
         systemctl --user restart "$3".service
     elif test "$2" = "Distrobox"; then
-        printf "${blue}Building container using a Distrobox${norma}\n\n"
+        printf "${blue}Building container using a Distrobox${normal}\n\n"
         distrobox-create --nvidia --no-entry --image "ghcr.io/ublue-os/${3}" --name "$3" 
     else
         printf "${red}Unkown Choice${normal}..."
