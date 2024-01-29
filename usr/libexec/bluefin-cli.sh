@@ -17,8 +17,8 @@ targets=(
 # Exit Function
 ###
 function Exiting(){
-    printf "Exiting...\n"
-    printf "Rerun CLI setup using ujust bluefin-cli...\n"
+    printf "${red}Exiting...${normal}\n"
+    printf "Rerun CLI setup using ${blue}ujust bluefin-cli${normal}...\n"
     exit 0
 }
 
@@ -60,7 +60,7 @@ function Choose_container(){
             CONTAINER_CHOICE="${CONTAINER_CHOICE%%${MATCH}*}dx-${MATCH}${CONTAINER_CHOICE##*${MATCH}}"
         fi
     fi
-    unset $DX_VERSION
+    unset "$DX_VERSION"
 }
 
 ###
@@ -102,7 +102,7 @@ function Is_enabled_and_stop(){
             Make_symlinks "$TERMINAL_CHOICE" "$1" 
             Exiting
         fi
-        unset $Enabled
+        unset "$Enabled"
     done
 }
 
@@ -126,9 +126,9 @@ function Already_exists_and_rm(){
                 printf "Not removing $1..."
                 Exiting
             fi
-            unset $Delete 
+            unset "$Delete"
         fi
-        unset $Exists
+        unset "$Exists"
     done
 }
 
@@ -146,7 +146,7 @@ function Build_container(){
         systemctl --user restart "$3".service
     elif test "$2" = "Distrobox"; then
         printf "${blue}Building container using a Distrobox${normal}\n\n"
-        distrobox-create --nvidia --no-entry --image "ghcr.io/ublue-os/${3}" --name "$3" 
+        distrobox-create --nvidia --no-entry -Y --image "ghcr.io/ublue-os/${3}" --name "$3"
     else
         printf "${red}Unkown Choice${normal}..."
         Exiting
@@ -174,13 +174,13 @@ function Make_symlinks(){
 function main(){
     printf "Set Up bluefin-cli\n"
     Terminal_choice
-    Make_container $TERMINAL_CHOICE
+    Make_container "$TERMINAL_CHOICE" 
     Container_manager
     Choose_container
-    Is_enabled_and_stop $CONTAINER_CHOICE
-    Already_exists_and_rm $CONTAINER_CHOICE
-    Build_container $MAKE_CONTAINER $CONTAINER_MANAGER $CONTAINER_CHOICE
-    Make_symlinks $TERMINAL_CHOICE $CONTAINER_CHOICE
+    Is_enabled_and_stop "$CONTAINER_CHOICE"
+    Already_exists_and_rm "$CONTAINER_CHOICE" 
+    Build_container "$MAKE_CONTAINER" "$CONTAINER_MANAGER" "$CONTAINER_CHOICE"
+    Make_symlinks "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
     printf "Finished Bluefin-CLI setup, rerun with ${blue}ujust bluefin-cli${normal} to reconfigure\n"
 }
 
