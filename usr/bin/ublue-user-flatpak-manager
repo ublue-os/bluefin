@@ -23,8 +23,12 @@ if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
   exit 0
 fi
 
-# Setup Flathub
+# Enable Flathub
+if grep -qz 'fedora' <<< $(flatpak remotes); then
+  flatpak remote-delete --user fedora --force
+fi
 flatpak remote-add --if-not-exists --user flathub /etc/flatpak/remotes.d/flathub.flatpakrepo
+flatpak remote-modify --user --enable flathub
 
 # Lists of flatpaks
 FLATPAK_LIST=$(flatpak list --columns=application)
