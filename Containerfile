@@ -177,6 +177,9 @@ RUN systemctl enable docker.socket && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
 
+# Compile gschema to include Bluefin setting overrides
+RUN glib-compile-schemas /usr/share/glib-2.0/schemas
+
 RUN /tmp/workarounds.sh
 
 # Clean up repos, everything is on the image so we don't need them

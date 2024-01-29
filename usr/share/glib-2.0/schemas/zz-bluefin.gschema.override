@@ -1,15 +1,18 @@
-[org/gnome/shell] 
+[org.gnome.desktop.peripherals.touchpad:GNOME-Greeter]
+tap-to-click=true
+
+[org.gnome.shell] 
 favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Rhythmbox3.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'code.desktop', 'ubuntu.desktop', 'yelp.desktop']
 enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@micxgx.gmail.com', 'blur-my-shell@aunetx', 'gsconnect@andyholmes.github.io', 'logomenu@aryan_k', 'tailscale@joaophi.github.com']
 
-[org/gnome/desktop/background]
+[org.gnome.desktop.background]
 picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-winter-dynamic.xml'
 picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-winter-dynamic.xml'
 picture-options='zoom'
 primary-color='000000'
 secondary-color='FFFFFF'
 
-[org/gnome/desktop/interface]
+[org.gnome.desktop.interface]
 enable-hot-corners=false
 clock-show-weekday=true
 cursor-theme="Yaru"
@@ -20,28 +23,28 @@ font-name="Ubuntu 12"
 document-font-name="Ubuntu 12"
 monospace-font-name="Ubuntu Mono 18"
 
-[org/gnome/desktop/sound]
+[org.gnome.desktop.sound]
 allow-volume-above-100-percent=true
 theme-name="freedesktop"
 
-[org/gnome/desktop/wm/preferences]
+[org.gnome.desktop.wm.preferences]
 button-layout=":minimize,maximize,close"
 num-workspaces='4'
-title-bar-font="Ubuntu Bold 12"
+titlebar-font="Ubuntu Bold 12"
 
-[org/gnome/desktop/wm/keybindings]
+[org.gnome.desktop.wm.keybindings]
 switch-applications = ['<Super>Tab']
 switch-applications-backward = ['<Shift><Super>Tab']
 switch-windows = ['<Alt>Tab']
 switch-windows-backward = ['<Shift><Alt>Tab']
 
-[org/gnome/desktop/peripherals/touchpad]
+[org.gnome.desktop.peripherals.touchpad]
 tap-to-click=true
 
-[org/gnome/desktop/peripherals/keyboard]
+[org.gnome.desktop.peripherals.keyboard]
 numlock-state=true
 
-[org/gnome/shell/extensions/dash-to-dock]
+[org.gnome.shell.extensions.dash-to-dock]
 dock-fixed=true
 force-straight-corner=false
 custom-theme-shrink=true
@@ -55,38 +58,38 @@ customize-alphas=true
 max-alpha=0.8
 min-alpha=0.5
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0]
 binding='<Control><Alt>t'
 command='xdg-terminal-exec'
 name='Prompt'
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom1]
 binding='<Control><Alt>u'
 command='xdg-terminal-exec -- distrobox enter ubuntu'
 name='Ubuntu Prompt'
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2]
 binding='<Control><Shift>Escape'
 command="flatpak run io.missioncenter.MissionCenter"
 name='mission-center'
 
-[org/gnome/settings-daemon/plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
+[org.gnome.settings-daemon.plugins.media-keys]
+custom-keybindings=['.org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0.', '.org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom1.', '.org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2.']
 home=['<Super>e']
 
-[org/gnome/settings-daemon/plugins/power]
+[org.gnome.settings-daemon.plugins.power]
 power-button-action='interactive'
 
-[org/gtk/settings/file-chooser]
+[org.gtk.Settings.FileChooser]
 sort-directories-first=true
 
-[org/gtk/gtk4/settings/file-chooser]
+[org.gtk.gtk4.Settings.FileChooser]
 sort-directories-first=true
 
-[org/gnome/mutter]
+[org.gnome.mutter]
 experimental-features=['scale-monitor-framebuffer']
 
-[com/raggesilver/BlackBox]
+[com.raggesilver.BlackBox]
 command-as-login-shell=true
 use-custom-command=false
 custom-shell-command='distrobox enter ubuntu'
@@ -96,18 +99,18 @@ font="Ubuntu Mono 16"
 window-width=975
 window-height=650
 
-[org/gnome/software]
+[org.gnome.software]
 allow-updates=false
 download-updates=false
 download-updates-notify=false
 
-[com/github/stunkymonkey/nautilus-open-any-terminal]
+[com.github.stunkymonkey.nautilus-open-any-terminal]
 terminal='prompt'
 keybindings=''
 new-tab=false
 flatpak='off'
 
-[org/gnome/shell/extensions/Logo-menu]
+[org.gnome.shell.extensions.Logo-menu]
 menu-button-icon-image=1
 menu-button-terminal='xdg-terminal-exec'
 menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
@@ -120,12 +123,12 @@ show-gamemode=false
 hide-forcequit=true
 show-pods=true
 
-[org/gnome/Prompt]
+[org.gnome.Prompt]
 interface-style='system'
 restore-session=false
 restore-window-size=false
 profile-uuids=['2871e8027773ae74d6c87a5f659bbc74']
 default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
 
-[org/gnome/Prompt/Profiles/2871e8027773ae74d6c87a5f659bbc74]
+[org.gnome.Prompt.Profiles.2871e8027773ae74d6c87a5f659bbc74]
 palette='Catpuccin Mocha'
