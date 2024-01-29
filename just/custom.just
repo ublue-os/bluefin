@@ -21,7 +21,7 @@ aqua:
 # Configure bluefin-cli Terminal Experience
 bluefin-cli:
     /usr/libexec/bluefin-cli.sh
-    
+
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:
     echo 'Enabling Cockpit'
