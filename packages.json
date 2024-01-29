@@ -132,7 +132,7 @@
 			"bluefin": [
 				"gnome-shell-extension-tailscale-gnome-qs",
 				"input-leap",
-                "nautilus-open-any-terminal",
+				"nautilus-open-any-terminal",
 				"tuned",
 				"tuned-ppd",
 				"tuned-utils",
