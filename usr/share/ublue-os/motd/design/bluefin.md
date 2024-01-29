@@ -11,5 +11,5 @@ Report issues at: 󰊤 https://issues.projectbluefin.io
 
 *Tip: %TIP%*
 
-- 󰈙 [Documentation](http://docs.projectbluefin.io/)
-- 󰊌 [Discuss](https://community.projectbluefin.io/)
+- 󰈙 [Documentation:](http://docs.projectbluefin.io/)
+- 󰊌 [Discuss:](https://community.projectbluefin.io/)
