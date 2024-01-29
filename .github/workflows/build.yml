@@ -6,6 +6,13 @@ on:
   pull_request:
     branches:
       - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
+      - testing
     paths-ignore:
       - '**.md'
   workflow_dispatch:
@@ -42,18 +49,17 @@ jobs:
             is_stable_version: true
             is_gts_version: false
     steps:
-      # Checkout push-to-registry action GitHub repository
-      - name: Checkout Push to Registry action
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@v0.2.1
+        uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
           containers: silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin'
-        uses: EyeCantCU/cosign-action/verify@v0.2.1
+        uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
           containers: dive, flux, helm, ko, minio, kubectl
           cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
@@ -102,8 +108,16 @@ jobs:
 
           BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
 
-          if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
-             [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+          if [[ ${{ github.ref_name }} == "testing" ]]; then
+             BUILD_TAGS=("${MAJOR_VERSION}-testing" "${MAJOR_VERSION}-testing-${TIMESTAMP}")
+             if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+                [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+                 BUILD_TAGS+=("testing")
+             elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+                 BUILD_TAGS+=("gts-testing")
+             fi
+          elif [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
+               [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
               BUILD_TAGS+=("latest")
           elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
               BUILD_TAGS+=("gts")
@@ -216,7 +230,7 @@ jobs:
       - name: Echo outputs
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ toJSON(steps.push.outputs) }}"
+          echo "${{ toJSON(steps.push.outputs) }}"  
 
   check:
     name: Check all builds successful

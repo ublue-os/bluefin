@@ -1,0 +1,7 @@
+[Unit]
+Description=Restart bluefin-cli.service to rebuild container
+
+[Service]
+Type=oneshot
+ExecStart=-/usr/bin/podman pull ghcr.io/ublue-os/bluefin-cli:latest
+ExecStart=-/usr/bin/systemctl --user restart bluefin-cli.service
