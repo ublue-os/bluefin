@@ -30,7 +30,14 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
             vte-profile && \
         rpm-ostree install \
             prompt && \
-        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo \
+        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
+        rpm-ostree override remove \
+            power-profiles-daemon \
+            || true && \
+        rpm-ostree override remove \
+            tlp \
+            tlp-rdw \
+            || true \
     ; fi
 
 COPY usr /usr
@@ -78,6 +85,9 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
+        systemctl enable tuned.service \
+    ; fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
@@ -135,9 +145,6 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDOR
 # Handle packages via packages.json
 RUN /tmp/build.sh && \
     /tmp/image-info.sh
-
-## power-profiles-daemon with amd p-state support, remove when this is upstream
-RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging power-profiles-daemon
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin

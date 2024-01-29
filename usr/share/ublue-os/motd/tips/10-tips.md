@@ -1,4 +1,5 @@
 The Project Bluefin team will use this banner to share important information and occasional tips
+Follow us on 󰫑 [@UniversalBlue@fosstodon.org](https://fosstodon.org/@UniversalBlue)
 Bluefin is your gateway to Kubernetes 󱃾 `kind create cluster` to [get started](https://kind.sigs.k8s.io/)
 Bluefin is your gateway to Cloud Native - find your flock at [l.cncf.io](landscape.cncf.io)
 Support the app store! Donate to  [Flatpak](https://opencollective.com/flatpak)
