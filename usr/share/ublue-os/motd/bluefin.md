@@ -1,7 +1,7 @@
 # 󱍢 Welcome to Bluefin (󰂡eta) 
 : `%IMAGE_NAME%:%IMAGE_TAG%`
 
-| Command | Description |
+|  Command | Description |
 | ------- | ----------- |
 | `ujust`  | List all available commands |
 | `ujust toggle-user-motd` | Toggle this banner on/off | 
