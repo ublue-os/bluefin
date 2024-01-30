@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script Version
-VER=2
+VER=3
 VER_FILE="/etc/ublue/flatpak_manager_version"
 VER_RAN=$(cat $VER_FILE)
 
@@ -19,6 +19,7 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
 fi
 
 # Ensure Flathub is enabled
+flatpak remote-add --if-not-exists --system flathub /usr/etc/flatpak/remotes.d/flathub.flatpakrepo
 flatpak remote-modify --system --enable flathub
 
 # Lists of flatpaks
