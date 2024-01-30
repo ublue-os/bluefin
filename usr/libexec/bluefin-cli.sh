@@ -62,6 +62,11 @@ function Make_container(){
         echo "Would you still like to setup default container?"
         MAKE_CONTAINER=$(Confirm) 
     fi
+    if test "$MAKE_CONTAINER" -eq 1; then
+        printf "Not making a container...\n"
+        Make_symlinks "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
+        Exiting
+    fi
 }
 
 ###
