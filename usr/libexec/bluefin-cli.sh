@@ -125,7 +125,7 @@ function Is_enabled_and_stop(){
             Disable=$(Confirm) 
             if test "$Disable" -eq 0; then
                 systemctl --user --now disable "$i".target
-                if test systemctl --user --quiet is-active "$i".service; then
+                if test "systemctl --user --quiet is-active $i.service"; then
                     systemctl --user stop "$i".service
                 fi
             else
