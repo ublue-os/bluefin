@@ -23,6 +23,10 @@ function Exiting(){
     echo "Rerun CLI setup using ${blue}ujust bluefin-cli${normal}..."
     exit 0
 }
+function Good_Exit(){
+    echo ""
+    echo "Finished Bluefin-CLI setup, rerun with ${blue}ujust bluefin-cli${normal} to reconfigure"
+}
 
 ###
 # Exit if string is empty
@@ -63,9 +67,9 @@ function Make_container(){
         MAKE_CONTAINER=$(Confirm) 
     fi
     if test "$MAKE_CONTAINER" -eq 1; then
-        printf "Not making a container...\n"
-        Make_symlinks "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
-        Exiting
+        printf "Not making a container. Existing containers will not be deleted...\n"
+        Make_bashrc_d_file "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
+        Good_Exit
     fi
 }
 
@@ -87,6 +91,7 @@ function Choose_container(){
         fi
     fi
     unset "$DX_VERSION"
+    unset "$MATCH"
     String_check "$CONTAINER_CHOICE"
 }
 
@@ -109,6 +114,7 @@ function Container_manager(){
 # Takes chosen container as an argument.
 ###
 function Is_enabled_and_stop(){
+    MATCH=0
     for i in "${targets[@]}"
     do
         Enabled=0
@@ -127,15 +133,15 @@ function Is_enabled_and_stop(){
             fi
             unset "$Disable" 
         elif test "$Enabled" = "enabled" && test "$i" = "$1"; then
-            echo "$i is already enabled..."
-            Make_symlinks "$TERMINAL_CHOICE" "$1" 
-            Exiting
-        else
-            printf "We shouldn't of gotten here..."
-            Exiting
+            echo "$1 is already enabled..."
+            MATCH=1
         fi
         unset "$Enabled"
     done
+    if test "$MATCH" -eq 1; then
+        Make_bashrc_d_file "$TERMINAL_CHOICE" "$1" 
+        Good_Exit
+    fi
 }
 
 ###
@@ -155,8 +161,18 @@ function Already_exists_and_rm(){
                 echo "Removing $1..."
                 podman rm --force "$1"
             else
-                printf "Not removing %s..." "$i"
+                printf "Not removing %s and cannot continue since %s already exists..." "$1" "$1"
                 Exiting
+            fi
+            unset "$Delete"
+        elif test "$Exists" -eq 1 && test "$i" != "$1"; then
+            echo "$i exists, would you like to ${red}delete it?${normal}"
+            Delete=$(Confirm)
+            if test "$Delete" -eq 0; then
+                echo "Removing $i..."
+                podman rm --force "$i"
+            else
+                echo "Not removing $i..."
             fi
             unset "$Delete"
         fi
@@ -191,15 +207,15 @@ function Build_container(){
 # If ~/.bashrc.d exists and Chose Container for terminal. Make a symlink from /usr/share/ublue-os for first time shell.
 # If Host was chosen. Remove existing symlink.
 ###
-function Make_symlinks(){
+function Make_bashrc_d_file(){
     if test -d "${HOME}/.bashrc.d" && test "$1" = "Host"; then
-            echo "Not making symlinks and ${red}removing existing symlink if it exists${normal}."
-            test -L "${HOME}/.bashrc.d/zz-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
+            echo "${red}Removing existing ~/.bashrc.d/00-container.sh if it exists${normal}."
+            test -f "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
     elif test -d "${HOME}/.bashrc.d"; then
         echo "Setting first terminal be Container for bash using ~/.bashrc.d"
         echo "Enter into container using prompt's menu after first entry"
         echo "${blue}This requires your bash shell to source files in ~/.bashrc.d/${normal}"
-        ln -sf "/usr/share/ublue-os/bluefin-cli/${2}.sh" "${HOME}/.bashrc.d/00-container.sh"
+        cp "/usr/share/ublue-os/bluefin-cli/${2}.sh" "${HOME}/.bashrc.d/00-container.sh"
     else
         echo "${red}Not implemented for non-Bash shells${normal} at this time..."
     fi
@@ -215,9 +231,8 @@ function main(){
     Is_enabled_and_stop "$CONTAINER_CHOICE"
     Already_exists_and_rm "$CONTAINER_CHOICE" 
     Build_container "$MAKE_CONTAINER" "$CONTAINER_MANAGER" "$CONTAINER_CHOICE"
-    Make_symlinks "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
-    echo ""
-    echo "Finished Bluefin-CLI setup, rerun with ${blue}ujust bluefin-cli${normal} to reconfigure"
+    Make_bashrc_d_file "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
+    Good_Exit
 }
 
 main
