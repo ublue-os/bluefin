@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
 source /usr/lib/ujust/ujust.sh
 
 ###
@@ -16,11 +17,30 @@ targets=(
 ###
 # Exit Function
 ###
+# shellcheck disable=SC2154
 function Exiting(){
     echo "${red}Exiting...${normal}"
     echo "Rerun CLI setup using ${blue}ujust bluefin-cli${normal}..."
     exit 0
 }
+
+###
+# Exit if string is empty
+###
+function String_check(){
+    if test -z "$1"; then
+        Exiting
+    fi
+}
+
+###
+# Trap function
+###
+function ctrl_c(){
+    printf "\nSignal SIGINT caught\n"
+    Exiting
+}
+
 
 ###
 # Choose if you want to use the Host or Container for first terminal
@@ -30,6 +50,7 @@ function Terminal_choice(){
     if test "$TERMINAL_CHOICE" = "Host"; then
         echo "You have chosen to use Host Terminal."
     fi
+    String_check "$TERMINAL_CHOICE"
 }
 
 ###
@@ -57,10 +78,11 @@ function Choose_container(){
         DX_VERSION=$(Confirm)
         if test "$DX_VERSION" -eq 0; then
             MATCH=$(echo "$CONTAINER_CHOICE" | cut -d "-" -f 2)
-            CONTAINER_CHOICE="${CONTAINER_CHOICE%%${MATCH}*}dx-${MATCH}${CONTAINER_CHOICE##*${MATCH}}"
+            CONTAINER_CHOICE="${CONTAINER_CHOICE%%"${MATCH}"*}dx-${MATCH}${CONTAINER_CHOICE##*"${MATCH}"}"
         fi
     fi
     unset "$DX_VERSION"
+    String_check "$CONTAINER_CHOICE"
 }
 
 ###
@@ -73,6 +95,7 @@ function Container_manager(){
     echo "They will always be on the latest image you have pulled."
     echo "However, ${red}manually installed packages using apk, apt, or dnf will not persist${normal}."
     CONTAINER_MANAGER=$(Choose Quadlet Distrobox)
+    String_check "$CONTAINER_MANAGER"
 }
 
 ###
@@ -87,7 +110,7 @@ function Is_enabled_and_stop(){
         Enabled=$(systemctl --user is-enabled "$i".target)
         if test "$Enabled" = "enabled" && test "$i" != "$1"; then
             echo "$i is enabled."
-            printf "Would you like to disable and stop container?\n"
+            echo "Would you like to disable and stop container?"
             Disable=$(Confirm) 
             if test "$Disable" -eq 0; then
                 systemctl --user --now disable "$i".target
@@ -101,6 +124,9 @@ function Is_enabled_and_stop(){
         elif test "$Enabled" = "enabled" && test "$i" = "$1"; then
             echo "$i is already enabled..."
             Make_symlinks "$TERMINAL_CHOICE" "$1" 
+            Exiting
+        else
+            printf "We shouldn't of gotten here..."
             Exiting
         fi
         unset "$Enabled"
@@ -118,14 +144,14 @@ function Already_exists_and_rm(){
         Exists=0
         Exists=$(podman ps --all --filter name="$i" | grep -q " $i\$" && echo "1" || echo "0")
         if test "$Exists" -eq 1 && test "$i" = "$1"; then
-            echo "$1 ${red}${bold}exists${normal}, would you like to ${red}${bold}delete it?${normal}"
+            echo "$1 ${red}exists${normal}, would you like to ${red}delete it?${normal}"
             Delete=$(Confirm)
             if test "$Delete" -eq 0; then
                 echo "Removing $1..."
                 podman rm --force "$1"
             else
                 printf "Not removing %s..." "$i"
-                ExitinG
+                Exiting
             fi
             unset "$Delete"
         fi
@@ -175,6 +201,7 @@ function Make_symlinks(){
 }
 
 function main(){
+    trap ctrl_c SIGINT
     printf "Set Up bluefin-cli\n"
     Terminal_choice
     Make_container "$TERMINAL_CHOICE" 

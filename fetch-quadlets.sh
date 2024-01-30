@@ -52,7 +52,7 @@ QUADLET_TARGETS=(
     "wolfi-toolbox"
     "wolfi-dx-toolbox"
 )
-for i in ${QUADLET_TARGETS[@]}
+for i in "${QUADLET_TARGETS[@]}"
 do
 cat > "/usr/lib/systemd/user/${i}.target" <<EOF
 [Unit]
