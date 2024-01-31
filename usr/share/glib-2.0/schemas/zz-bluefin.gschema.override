@@ -33,10 +33,10 @@ num-workspaces='4'
 titlebar-font="Ubuntu Bold 12"
 
 [org.gnome.desktop.wm.keybindings]
-switch-applications = ['<Super>Tab']
-switch-applications-backward = ['<Shift><Super>Tab']
-switch-windows = ['<Alt>Tab']
-switch-windows-backward = ['<Shift><Alt>Tab']
+switch-applications=['<Super>Tab']
+switch-applications-backward=['<Shift><Super>Tab']
+switch-windows=['<Alt>Tab']
+switch-windows-backward=['<Shift><Alt>Tab']
 
 [org.gnome.desktop.peripherals.touchpad]
 tap-to-click=true
@@ -57,25 +57,6 @@ custom-background-color=true
 customize-alphas=true
 max-alpha=0.8
 min-alpha=0.5
-
-[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0]
-binding='<Control><Alt>t'
-command='xdg-terminal-exec'
-name='Prompt'
-
-[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom1]
-binding='<Control><Alt>u'
-command='xdg-terminal-exec -- distrobox enter ubuntu'
-name='Ubuntu Prompt'
-
-[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2]
-binding='<Control><Shift>Escape'
-command="flatpak run io.missioncenter.MissionCenter"
-name='mission-center'
-
-[org.gnome.settings-daemon.plugins.media-keys]
-custom-keybindings=['.org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0.', '.org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom1.', '.org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2.']
-home=['<Super>e']
 
 [org.gnome.settings-daemon.plugins.power]
 power-button-action='interactive'
@@ -132,3 +113,12 @@ default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
 
 [org.gnome.Prompt.Profiles.2871e8027773ae74d6c87a5f659bbc74]
 palette='catppuccin-dynamic'
+
+### Below settings are supported with gschema override, but their corresponding dconfs are not. So edit dconfs if you need to modify this section further.
+
+[org.gnome.desktop.app-folders]
+folder-children=['Games', 'GamingUtilities', 'Utilities', 'Distrobox', 'Wine', 'YaST', 'Pardus']
+
+[org.gnome.settings-daemon.plugins.media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
+home=['<Super>e']
