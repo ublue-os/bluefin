@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script Version
-VER=2
+VER=3
 VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/flatpak_manager_version"
 VER_RAN=$(cat $VER_FILE)
 
@@ -23,8 +23,12 @@ if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
   exit 0
 fi
 
-# Setup Flathub
-flatpak remote-add --if-not-exists --user flathub /etc/flatpak/remotes.d/flathub.flatpakrepo
+# Enable Flathub
+if grep -qz 'fedora' <<< $(flatpak remotes); then
+  flatpak remote-delete --user fedora --force
+fi
+flatpak remote-add --if-not-exists --user flathub /usr/etc/flatpak/remotes.d/flathub.flatpakrepo
+flatpak remote-modify --user --enable --prio=2 flathub
 
 # Lists of flatpaks
 FLATPAK_LIST=$(flatpak list --columns=application)
