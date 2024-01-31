@@ -29,7 +29,7 @@ theme-name="freedesktop"
 
 [org.gnome.desktop.wm.preferences]
 button-layout=":minimize,maximize,close"
-num-workspaces='4'
+num-workspaces=4
 titlebar-font="Ubuntu Bold 12"
 
 [org.gnome.desktop.wm.keybindings]
