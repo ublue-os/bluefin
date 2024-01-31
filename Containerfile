@@ -46,6 +46,7 @@ COPY etc/yum.repos.d/ /etc/yum.repos.d/
 COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
 COPY image-info.sh /tmp/image-info.sh
+COPY fetch-quadlets.sh /tmp/fetch-quadlets.sh
 # Copy ublue-update.toml to tmp first, to avoid being overwritten.
 COPY usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 
@@ -77,17 +78,13 @@ RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     /tmp/build.sh && \
     /tmp/image-info.sh && \
+    /tmp/fetch-quadlets.sh && \
     pip install --prefix=/usr yafti && \
     pip install --prefix=/usr topgrade && \
     rpm-ostree install ublue-update && \
     mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
-    mkdir -p /usr/etc/containers/systemd/users && \
-    wget -q https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-cli.container -P /usr/etc/containers/systemd/users && \
-    printf "\n\n[Install]\nWantedBy=bluefin-cli.target" >> /usr/etc/containers/systemd/users/bluefin-cli.container  && \
-    sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
-    sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
         systemctl enable tuned.service \
     ; fi && \
