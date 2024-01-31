@@ -24,6 +24,7 @@ function Exiting(){
 function Good_Exit(){
     echo ""
     echo "Finished Bluefin-CLI setup, rerun with ${blue}ujust bluefin-cli${normal} to reconfigure"
+    exit 0
 }
 
 ###
@@ -104,8 +105,8 @@ function Is_enabled_and_stop(){
         Enabled=0
         Enabled=$(systemctl --user is-enabled "$i".target)
         if test "$Enabled" = "enabled" && test "$i" != "$1"; then
-            echo "$i is enabled."
-            echo "Would you like to disable and stop container?"
+            echo "${red}$i${normal} is ${red}enabled${normal}."
+            echo "Would you like to ${red}disable and stop container${red}?"
             Disable=$(Confirm) 
             if test "$Disable" -eq 0; then
                 systemctl --user --now disable "$i".target
@@ -117,7 +118,7 @@ function Is_enabled_and_stop(){
             fi
             unset "$Disable" 
         elif test "$Enabled" = "enabled" && test "$i" = "$1"; then
-            echo "$1 is already enabled..."
+            echo "${blue}$1 is already enabled${normal}..."
             MATCH=1
         fi
         unset "$Enabled"
@@ -201,6 +202,7 @@ function Make_bashrc_d_file(){
         echo "Setting first terminal be Container for bash using ~/.bashrc.d"
         echo "Enter into container using prompt's menu after first entry"
         echo "${blue}This requires your bash shell to source files in ~/.bashrc.d/${normal}"
+        test -e "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
         cp "/usr/share/ublue-os/bluefin-cli/${2}.sh" "${HOME}/.bashrc.d/00-container.sh"
     else
         echo "${red}Not implemented for non-Bash shells${normal} at this time..."
