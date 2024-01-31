@@ -4,8 +4,8 @@ Bluefin is your gateway to Kubernetes 󱃾 `kind create cluster` to [get started
 Bluefin is your gateway to Cloud Native - find your flock at [landscape.cncf.io](https://l.cncf.io)
 Support the app store! Donate to  [Flatpak](https://opencollective.com/flatpak)
 Bluefin is proudly built using 󰣛 Fedora technology with a bit of  Ubuntu flavor
-Check out Justin Garrison's 󰗃[Introduction to Bluefin](https://www.youtube.com/watch?v=Nz-yyDwTfRM)
-Check out the Bluefin 󰗃[announcement video](https://www.youtube.com/watch?v=YFXufAVdrw4)
+Check out Justin Garrison's 󰗃 [Introduction to Bluefin](https://www.youtube.com/watch?v=Nz-yyDwTfRM)
+Check out the Bluefin 󰗃 [announcement video](https://www.youtube.com/watch?v=YFXufAVdrw4)
 Need more indepth technical information? Check out the [Bluefin Administrator's Guide](https://universal-blue.discourse.group/docs?topic=40)
 Support [Bluefin's Paleoartists](https://universal-blue.discourse.group/docs?topic=299)
 Like servers? Check out [ucore](https://github.com/ublue-os/ucore)
