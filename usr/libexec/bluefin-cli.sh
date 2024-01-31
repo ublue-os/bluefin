@@ -7,11 +7,9 @@ source /usr/lib/ujust/ujust.sh
 ###
 targets=(
     "bluefin-cli"
-    "bluefin-dx-cli"
     "fedora-toolbox"
     "ubuntu-toolbox"
     "wolfi-toolbox"
-    "wolfi-dx-toolbox"
 )
 
 ###
@@ -45,7 +43,6 @@ function ctrl_c(){
     Exiting
 }
 
-
 ###
 # Choose if you want to use the Host or Container for first terminal
 ###
@@ -75,23 +72,10 @@ function Make_container(){
 
 ###
 # Choose which container they want to use
-# For bluefin-cli and wolfi, ask if they want dx
 ###
 function Choose_container(){
-    DX_VERSION=1
     echo "Which Container Toolbox would you like to use?"
     CONTAINER_CHOICE=$(Choose "${targets[@]}")
-    if test "$CONTAINER_CHOICE" = "bluefin-cli" || test "$CONTAINER_CHOICE" = "wolfi-toolbox"; then
-        printf "Would you like to use developer toolkit version?\n"
-        printf "It has packages for building Apks and other SDKs.\n"
-        DX_VERSION=$(Confirm)
-        if test "$DX_VERSION" -eq 0; then
-            MATCH=$(echo "$CONTAINER_CHOICE" | cut -d "-" -f 2)
-            CONTAINER_CHOICE="${CONTAINER_CHOICE%%"${MATCH}"*}dx-${MATCH}${CONTAINER_CHOICE##*"${MATCH}"}"
-        fi
-    fi
-    unset "$DX_VERSION"
-    unset "$MATCH"
     String_check "$CONTAINER_CHOICE"
 }
 
@@ -142,6 +126,7 @@ function Is_enabled_and_stop(){
         Make_bashrc_d_file "$TERMINAL_CHOICE" "$1" 
         Good_Exit
     fi
+    unset $MATCH
 }
 
 ###
@@ -161,8 +146,9 @@ function Already_exists_and_rm(){
                 echo "Removing $1..."
                 podman rm --force "$1"
             else
-                printf "Not removing %s and cannot continue since %s already exists..." "$1" "$1"
-                Exiting
+                echo "Reuisng existing $1 container."
+                Make_bashrc_d_file "$TERMINAL_CHOICE" "$1"
+                Good_Exit
             fi
             unset "$Delete"
         elif test "$Exists" -eq 1 && test "$i" != "$1"; then
