@@ -174,8 +174,14 @@ RUN systemctl enable docker.socket && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
 
-# Compile gschema to include Bluefin setting overrides
-RUN glib-compile-schemas /usr/share/glib-2.0/schemas
+# Test bluefin gschema for errors. If there are no errors, proceed with compiling bluefin gschema, which includes setting overrides.
+RUN mkdir -p /tmp/bluefin-schema-test && \
+    find /usr/share/glib-2.0/schemas/ -type f ! -name "*.gschema.override" -exec cp {} /tmp/bluefin-schema-test/ \; && \
+    cp /usr/share/glib-2.0/schemas/zz-bluefin.gschema.override /tmp/bluefin-schema-test/ && \
+    echo "Running error test for bluefin gschema override. Abort if failed." && \ 
+    glib-compile-schemas --strict /tmp/bluefin-schema-test && \
+    echo "Compiling gschema to include bluefin setting overrides" && \
+    glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
 
 RUN /tmp/workarounds.sh
 
