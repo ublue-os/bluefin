@@ -178,7 +178,7 @@ RUN systemctl enable docker.socket && \
 RUN mkdir -p /tmp/bluefin-schema-test && \
     find /usr/share/glib-2.0/schemas/ -type f ! -name "*.gschema.override" -exec cp {} /tmp/bluefin-schema-test/ \; && \
     cp /usr/share/glib-2.0/schemas/zz-bluefin.gschema.override /tmp/bluefin-schema-test/ && \
-    echo "Running error test for bluefin gschema override. Abort if failed." && \ 
+    echo "Running error test for bluefin gschema override. Aborting if failed." && \ 
     glib-compile-schemas --strict /tmp/bluefin-schema-test && \
     echo "Compiling gschema to include bluefin setting overrides" && \
     glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
