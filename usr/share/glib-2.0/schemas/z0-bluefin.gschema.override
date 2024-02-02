@@ -1,5 +1,9 @@
+#-------------- LOCKSCREEN MODIFICATIONS --------------#
+
 [org.gnome.desktop.peripherals.touchpad:GNOME-Greeter]
 tap-to-click=true
+
+#-------------- DESKTOP MODIFICATIONS --------------#
 
 [org.gnome.shell] 
 favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Rhythmbox3.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'code.desktop', 'ubuntu.desktop', 'yelp.desktop']
@@ -114,7 +118,9 @@ default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
 [org.gnome.Prompt.Profiles.2871e8027773ae74d6c87a5f659bbc74]
 palette='catppuccin-dynamic'
 
-### Below settings are supported with gschema override, but their corresponding dconfs are not. So edit dconfs if you need to modify this section further.
+#-------------- RELOCATABLE SCHEMAS IN THIS SECTION ARE LOCATED IN DCONF --------------#
+
+# Settings bellow are supported with gschema override, but their corresponding dconfs are not. Edit dconfs if you need to modify this section further.
 
 [org.gnome.desktop.app-folders]
 folder-children=['Games', 'GamingUtilities', 'Utilities', 'Distrobox', 'Wine', 'YaST', 'Pardus']
