@@ -65,24 +65,14 @@ min-alpha=0.5
 [org.gnome.settings-daemon.plugins.power]
 power-button-action='interactive'
 
-[org.gtk.Settings.FileChooser]
+[org.gtk.gtk4.Settings.FileChooser]
 sort-directories-first=true
 
-[org.gtk.gtk4.Settings.FileChooser]
+[org.gtk.Settings.FileChooser]
 sort-directories-first=true
 
 [org.gnome.mutter]
 experimental-features=['scale-monitor-framebuffer']
-
-[com.raggesilver.BlackBox]
-command-as-login-shell=true
-use-custom-command=false
-custom-shell-command='distrobox enter ubuntu'
-theme-dark="Yaru"
-style-preference=2
-font="Ubuntu Mono 16"
-window-width=975
-window-height=650
 
 [org.gnome.software]
 allow-updates=false
@@ -108,23 +98,22 @@ show-gamemode=false
 hide-forcequit=true
 show-pods=true
 
+#-------------- RELOCATABLE SCHEMAS IN THIS SECTION ARE LOCATED IN DCONF --------------#
+# Settings bellow are supported with gschema override, but their corresponding relocatable schemas are not. Edit dconfs if you need to modify relocatable schemas.
+
+# Folder names & .desktop shortcut content is recognized as a relocatable schema
+[org.gnome.desktop.app-folders]
+folder-children=['Games', 'GamingUtilities', 'Utilities', 'Distrobox', 'Wine', 'YaST', 'Pardus']
+
+# Modifying shortcut actions for custom0, custom1 & custom2 are recognized as relocatable schemas
+[org.gnome.settings-daemon.plugins.media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
+home=['<Super>e']
+
+# Prompt palette is recognized as a relocatable schema
 [org.gnome.Prompt]
 interface-style='system'
 restore-session=false
 restore-window-size=false
 profile-uuids=['2871e8027773ae74d6c87a5f659bbc74']
 default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
-
-[org.gnome.Prompt.Profiles.2871e8027773ae74d6c87a5f659bbc74]
-palette='catppuccin-dynamic'
-
-#-------------- RELOCATABLE SCHEMAS IN THIS SECTION ARE LOCATED IN DCONF --------------#
-
-# Settings bellow are supported with gschema override, but their corresponding dconfs are not. Edit dconfs if you need to modify this section further.
-
-[org.gnome.desktop.app-folders]
-folder-children=['Games', 'GamingUtilities', 'Utilities', 'Distrobox', 'Wine', 'YaST', 'Pardus']
-
-[org.gnome.settings-daemon.plugins.media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
-home=['<Super>e']
