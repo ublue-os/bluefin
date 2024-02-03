@@ -66,27 +66,6 @@ devmode:
         fi
     fi
 
-# Assemble a Pytorch distrobox (Nvidia only)
-distrobox-mlbox:
-    #!/usr/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    echo 'Assembling pytorch-nvidia mlbox distrobox ...'
-    AssembleList "/usr/share/ublue-os/distrobox/pytorch-nvidia.ini" create "mlbox"
-
-# Create a Wolfi OS container | https://github.com/wolfi-dev
-distrobox-wolfi:
-    #!/usr/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    echo 'Creating WolfiOS distrobox ...'
-    Distrobox "ghcr.io/ublue-os/wolfi-toolbox:latest" "wolfi"
-
-# Create a universal developer container
-distrobox-universal:
-    #!/usr/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    echo 'Creating Universal Development distrobox ...'
-    Distrobox "mcr.microsoft.com/devcontainers/universal:latest" "universal"
-
 # Switch to the fish shell
 fish:
     sudo usermod $USER --shell /usr/bin/fish 
