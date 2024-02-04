@@ -13,7 +13,7 @@ sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /usr/etc/containers/
 
 # bluefin-dx-cli
 wget --output-document="/usr/etc/containers/systemd/users/bluefin-dx-cli.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-dx-cli.container 
-printf "\n\n[Install]\nWantedBy=bluefin-dx-cli.target" >> /usr/etc/containers/systemd/users/bluefin-cli.container
+printf "\n\n[Install]\nWantedBy=bluefin-dx-cli.target" >> /usr/etc/containers/systemd/users/bluefin-dx-cli.container
 sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/bluefin-dx-cli.container
 sed -i 's/ContainerName=bluefin/ContainerName=bluefin-dx-cli/' /usr/etc/containers/systemd/users/bluefin-dx-cli.container
 
