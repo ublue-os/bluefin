@@ -19,9 +19,10 @@ ARG PACKAGE_LIST="aurora"
 
 # GNOME VRR & Ptyxis
 RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
-        wget https://copr.fedorainfracloud.org/coprs/kylegospo/prompt/repo/fedora-$(rpm -E %fedora)/kylegospo-prompt-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
+      wget https://copr.fedorainfracloud.org/coprs/kylegospo/prompt/repo/fedora-$(rpm -E %fedora)/kylegospo-prompt-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
         rpm-ostree override replace \
         --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:kylegospo:prompt \
             vte291 \
             vte-profile \
             libadwaita && \
@@ -37,7 +38,6 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
             || true \
     ; fi
 
-        --from repo=copr:copr.fedorainfracloud.org:kylegospo:prompt \
 COPY usr /usr
 COPY just /tmp/just
 COPY etc/yum.repos.d/ /etc/yum.repos.d/
