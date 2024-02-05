@@ -5,9 +5,14 @@ benchmark:
     echo 'Running a 1 minute benchmark ...'
     stress-ng --matrix 0 -t 1m --times
 
-# Configure bluefin-cli Terminal Experience
+# Configure Bluefin-CLI Terminal Experience
 bluefin-cli:
-    /usr/libexec/bluefin-cli.sh
+    @/usr/libexec/enable-bluefin-cli.sh
+
+# Configure Terminal Experience
+[private]
+configure-terminal:
+    @/usr/libexec/configure-terminal.sh
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:

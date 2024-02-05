@@ -7,9 +7,11 @@ source /usr/lib/ujust/ujust.sh
 ###
 targets=(
     "bluefin-cli"
+    "bluefin-dx-cli"
     "fedora-toolbox"
     "ubuntu-toolbox"
     "wolfi-toolbox"
+    "wolfi-dx-toolbox"
 )
 
 ###
@@ -39,6 +41,7 @@ function String_check(){
 ###
 # Trap function
 ###
+# shellcheck disable=SC2317
 function ctrl_c(){
     printf "\nSignal SIGINT caught\n"
     Exiting
@@ -66,7 +69,6 @@ function Make_container(){
     fi
     if test "$MAKE_CONTAINER" -eq 1; then
         printf "Not making a container. Existing containers will not be deleted...\n"
-        Make_bashrc_d_file "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
         Good_Exit
     fi
 }
@@ -124,7 +126,6 @@ function Is_enabled_and_stop(){
         unset "$Enabled"
     done
     if test "$MATCH" -eq 1; then
-        Make_bashrc_d_file "$TERMINAL_CHOICE" "$1" 
         Good_Exit
     fi
     unset $MATCH
@@ -148,7 +149,6 @@ function Already_exists_and_rm(){
                 podman rm --force "$1"
             else
                 echo "Reuisng existing $1 container."
-                Make_bashrc_d_file "$TERMINAL_CHOICE" "$1"
                 Good_Exit
             fi
             unset "$Delete"
@@ -194,20 +194,20 @@ function Build_container(){
 # If ~/.bashrc.d exists and Chose Container for terminal. Make a symlink from /usr/share/ublue-os for first time shell.
 # If Host was chosen. Remove existing symlink.
 ###
-function Make_bashrc_d_file(){
-    if test -d "${HOME}/.bashrc.d" && test "$1" = "Host"; then
-            echo "${red}Removing existing ~/.bashrc.d/00-container.sh if it exists${normal}."
-            test -f "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
-    elif test -d "${HOME}/.bashrc.d"; then
-        echo "Setting first terminal be Container for bash using ~/.bashrc.d"
-        echo "Enter into container using prompt's menu after first entry"
-        echo "${blue}This requires your bash shell to source files in ~/.bashrc.d/${normal}"
-        test -e "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
-        cp "/usr/share/ublue-os/bluefin-cli/${2}.sh" "${HOME}/.bashrc.d/00-container.sh"
-    else
-        echo "${red}Not implemented for non-Bash shells${normal} at this time..."
-    fi
-}
+# function Make_bashrc_d_file(){
+#     if test -d "${HOME}/.bashrc.d" && test "$1" = "Host"; then
+#             echo "${red}Removing existing ~/.bashrc.d/00-container.sh if it exists${normal}."
+#             test -f "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
+#     elif test -d "${HOME}/.bashrc.d"; then
+#         echo "Setting first terminal be Container for bash using ~/.bashrc.d"
+#         echo "Enter into container using prompt's menu after first entry"
+#         echo "${blue}This requires your bash shell to source files in ~/.bashrc.d/${normal}"
+#         test -e "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
+#         cp "/usr/share/ublue-os/bluefin-cli/${2}.sh" "${HOME}/.bashrc.d/00-container.sh"
+#     else
+#         echo "${red}Not implemented for non-Bash shells${normal} at this time..."
+#     fi
+# }
 
 function main(){
     trap ctrl_c SIGINT
@@ -219,7 +219,6 @@ function main(){
     Is_enabled_and_stop "$CONTAINER_CHOICE"
     Already_exists_and_rm "$CONTAINER_CHOICE" 
     Build_container "$MAKE_CONTAINER" "$CONTAINER_MANAGER" "$CONTAINER_CHOICE"
-    Make_bashrc_d_file "$TERMINAL_CHOICE" "$CONTAINER_CHOICE"
     Good_Exit
 }
 
