@@ -90,6 +90,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
+        echo "enabling tuned service for f39 builds" \ 
         systemctl enable tuned.service \
     ; fi && \
     systemctl enable rpm-ostree-countme.service && \
