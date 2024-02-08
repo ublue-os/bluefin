@@ -4,7 +4,7 @@ ublue_variants:
     flavors:
       - label: aurora
         info: Aurora
-  - label: ublue-os/aurora-nvidia
+  - label: nihaiden/aurora-nvidia
     ks: /kickstart/ublue-os-nvidia.ks
     subvariants:
       - label: latest driver
