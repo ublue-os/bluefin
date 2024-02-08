@@ -1,0 +1,47 @@
+on:
+  push:
+    paths:
+      - 'boot_menu.yml'
+      - '.github/workflows/release-iso.yml'
+  workflow_dispatch:
+
+name: release-iso
+jobs:
+  release-iso:
+    name: Generate and Release ISOs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container: 
+      image: fedora:39
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate ISO  
+        uses: ublue-os/isogenerator@v2.3.1
+        id: isogenerator
+        with:
+          image-name: ${{ github.event.repository.name }}
+          installer-repo: releases
+          installer-major-version: 39
+          boot-menu-path: boot_menu.yml
+      - name: install github CLI
+        run: |
+          sudo dnf install 'dnf-command(config-manager)' -y
+          sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+          sudo dnf install gh -y
+      - name: Upload ISO
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          if gh release list -R ${{ github.repository_owner }}/${{ github.event.repository.name }} | grep "auto-iso"; then
+            gh release view auto-iso -R ${{ github.repository_owner }}/${{ github.event.repository.name }} --json assets -q .assets[].name | xargs --no-run-if-empty -L 1 gh release delete-asset auto-iso -R ${{ github.repository_owner }}/${{ github.event.repository.name }}
+            gh release upload auto-iso ${{ steps.isogenerator.outputs.iso-path }} -R ${{ github.repository_owner }}/${{ github.event.repository.name }} --clobber
+          else
+            gh release create auto-iso ${{ steps.isogenerator.outputs.iso-path }} -t ISO -n "This is an automatically generated ISO release." -R ${{ github.repository_owner }}/${{ github.event.repository.name }}
+          fi
+      - name: Upload SHA256SUM
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run:
+          gh release upload auto-iso ${{ steps.isogenerator.outputs.sha256sum-path }} -R ${{ github.repository_owner }}/${{ github.event.repository.name }} --clobber
