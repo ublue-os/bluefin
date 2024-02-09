@@ -17,6 +17,7 @@
 				"hplip",
 				"ifuse",
 				"input-remapper",
+				"libfprint",
 				"libgda-sqlite",
 				"libgda",
 				"libimobiledevice",
