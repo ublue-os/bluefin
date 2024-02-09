@@ -1,0 +1,17 @@
+#!/bin/bash
+set -x
+
+# This little workaround is used to ensure
+# we use our $USER inside the containers, without
+# resorting to creating devcontainer.json or similar stuff
+arr=("$@")
+id="$( echo "$@" | rev | cut -d' ' -f2 | rev)"
+# if exec && distrobox -> use distrobox-enter --
+if  [ "$(flatpak-spawn --host podman inspect --type container --format '{{.Config.Labels.manager}}' "${id}")" == "distrobox" ]; then
+    for i in "${!arr[@]}"; do
+        if [[ ${arr[$i]} == *"root:root"* ]]; then
+            arr[$i]="$(echo "${arr[$i]}" | sed "s|root:root|$USER:$USER|g")"
+        fi
+    done
+fi
+flatpak-spawn --host podman "${arr[@]}"
