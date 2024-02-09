@@ -1,0 +1,34 @@
+#!/bin/bash
+set -x
+
+PODMAN_COMMAND="$(command -v podman 2> /dev/null)"
+
+# if we're in a flatpak, use podman-remote
+# else we fallback to host-spawn
+if [ -n "$FLATPAK_ID" ]; then
+	if command -v podman-remote > /dev/null 2>&1; then
+		PODMAN_COMMAND="podman-remote"
+	else
+		PODMAN_COMMAND="flatpak-spawn --host podman"
+	fi
+fi
+
+# This little workaround is used to ensure
+# we use our $USER inside the containers, without
+# resorting to creating devcontainer.json or similar stuff
+arr=("$@")
+if echo "$@" | grep -q 'exec'; then
+	id="$(echo "$@" | grep -Eo ' [a-zA-Z0-9]{64} ' | tr -d ' ')"
+	# if exec && distrobox -> use distrobox-enter --
+	if [ "$($PODMAN_COMMAND inspect --type container --format '{{ index .Config.Labels "manager" }}' "${id}")" == "distrobox" ] ||
+		[ "$($PODMAN_COMMAND inspect --type container --format '{{ index .Config.Labels "com.github.containers.toolbox" }}' "${id}")" == "true" ]; then
+
+		for i in "${!arr[@]}"; do
+			if [[ ${arr[$i]} == *"root:root"* ]]; then
+				arr[$i]="$(echo "${arr[$i]}" | sed "s|root:root|$USER:$USER|g")"
+			fi
+		done
+	fi
+fi
+
+$PODMAN_COMMAND "${arr[@]}"
