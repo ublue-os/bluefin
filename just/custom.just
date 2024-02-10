@@ -185,7 +185,7 @@ nix-devbox-global:
     echo 'run "devbox global run" to see other available configuration commands'
 
 # Prompt terminal transparency
-prompt-transparency opacity="0.85":
+prompt-transparency opacity="0.95":
     #!/usr/bin/env bash
     set -euxo pipefail
     if [[ -n "$(echo "{{ opacity }}" | grep -v '^[.0-9]*$')" ]]; then
