@@ -33,10 +33,10 @@ function default_login(){
     toggle=$(Choose Default Not-Default Cancel)
     if test "$toggle" = "Default"; then
         echo "Setting Bluefin-CLI to default Prompt Profile"
-        /usr/libexec/prompt-create-profile bluefin-cli default
+        /usr/libexec/prompt-create-profile.sh bluefin-cli default
     elif test "$toggle" = "Not-Default"; then
         echo "Setting Host back to default Prompt Profile"
-        /usr/libexec/prompt-create-profile Host default
+        /usr/libexec/prompt-create-profile.sh Host default
     else
         dconf write /or
         echo "Not Changing"
@@ -65,7 +65,7 @@ function logic(){
             fi
         fi
         echo "Setting Host back to default Prompt Profile"
-        /usr/libexec/prompt-create-profile Host default
+        /usr/libexec/prompt-create-profile.sh Host default
     else
         echo "Not Changing"
     fi
