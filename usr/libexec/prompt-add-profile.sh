@@ -2,7 +2,7 @@
 
 # Read the current value of the array
 CURRENT_VALUE=$(dconf read /org/gnome/Prompt/profile-uuids)
-guid=$1
+guid="$1"
 
 # remove the leading and trailing brackets
 CURRENT_VALUE=${CURRENT_VALUE:1:-1}
@@ -12,6 +12,9 @@ CURRENT_VALUE=${CURRENT_VALUE// /}
 
 # split the string into an array
 IFS=',' read -r -a array <<<"$CURRENT_VALUE"
+
+# Exit if the guid already is in the array
+[[ $CURRENT_VALUE =~ $guid ]] && exit 0
 
 # add the new value
 array+=("'$guid'")
