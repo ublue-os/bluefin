@@ -26,6 +26,7 @@ fi
 # Setup VSCode
 # Pre-install preferred VSCode Extensions
 code --install-extension ms-vscode-remote.remote-containers
+code --install-extension ms-vscode-remote.remote-ssh
 code --install-extension ms-azuretools.vscode-docker
 
 # Prevent future executions
