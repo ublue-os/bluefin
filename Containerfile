@@ -75,6 +75,10 @@ RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases
   install -c -m 0755 /tmp/starship /usr/bin && \
   echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
+# Copy atuin from bluefin-cli
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
+
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     /tmp/build.sh && \
     /tmp/image-info.sh && \
