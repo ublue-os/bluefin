@@ -107,7 +107,12 @@
 	"39": {
 		"include": {
 			"lutho": [
-				"input-leap"
+				"input-leap",
+				"tuned",
+				"tuned-ppd",
+				"tuned-utils",
+				"tuned-utils-systemtap",
+				"tuned-utils-atomic"
 			],
 			"lutho-dx": [],
 			"lutho-framework": []

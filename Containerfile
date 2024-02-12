@@ -16,6 +16,18 @@ ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="lutho"
+
+# tuned
+RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
+        rpm-ostree override remove \
+            power-profiles-daemon \
+            || true && \
+        rpm-ostree override remove \
+            tlp \
+            tlp-rdw \
+            || true \
+    ; fi
+
 COPY usr /usr
 COPY just /tmp/just
 COPY etc/yum.repos.d/ /etc/yum.repos.d/
