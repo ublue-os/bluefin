@@ -27,7 +27,8 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
         --experimental \
         --from repo=copr:copr.fedorainfracloud.org:kylegospo:prompt \
             vte291 \
-            vte-profile && \
+            vte-profile \
+            libadwaita && \
         rpm-ostree install \
             prompt && \
         rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
