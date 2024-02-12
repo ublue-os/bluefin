@@ -1,0 +1,14 @@
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Control><Alt>t'
+command='xdg-terminal-exec'
+name='Prompt'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Control><Alt>u'
+command='xdg-terminal-exec -- distrobox enter ubuntu'
+name='Ubuntu Prompt'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Control><Shift>Escape'
+command="flatpak run io.missioncenter.MissionCenter"
+name='mission-center'
