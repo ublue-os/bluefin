@@ -79,6 +79,7 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
+				"ubuntu-family-fonts",
 				"virt-manager",
 				"virt-viewer"
 			]
@@ -106,7 +107,12 @@
 	"39": {
 		"include": {
 			"lutho": [
-				"input-leap"	
+				"input-leap",
+				"tuned",
+				"tuned-ppd",
+				"tuned-utils",
+				"tuned-utils-systemtap",
+				"tuned-profiles-atomic"
 			],
 			"lutho-dx": [],
 			"lutho-framework": []

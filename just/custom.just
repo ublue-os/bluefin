@@ -5,78 +5,14 @@ benchmark:
     echo 'Running a 1 minute benchmark ...'
     stress-ng --matrix 0 -t 1m --times
 
-# Install aqua | https://aquaproj.github.io
-aqua:
-    #!/usr/bin/env bash
-    printf '\n=>Installing aqua ...\n\n'
-    pushd "$(mktemp -d)"
-    curl -sSfL -O https://raw.githubusercontent.com/aquaproj/aqua-installer/v2.1.1/aqua-installer
-    echo "c2af02bdd15da6794f9c98db40332c804224930212f553a805425441f8331665  aqua-installer" | sha256sum -c
-    chmod +x aqua-installer
-    ./aqua-installer
-    printf '\n=> Make sure the ${AQUA_ROOT_DIR}/bin environment variable is added to your PATH (.bashrc/.zshrc):\n'
-    printf '\n    export PATH="${AQUA_ROOT_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/aquaproj-aqua}/bin:$PATH"\n'
-    printf '\n=> see https://aquaproj.github.io/docs/tutorial for more info\n'
-
-# Configure bluefin-cli Terminal Experience
+# Configure Bluefin-CLI Terminal Experience
 bluefin-cli:
-    #!/usr/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    printf "Set Up bluefin-cli\n"
-    printf "Would you like to use Host Terminal or Container as default Terminal?\n"
-    TERMINAL_CHOICE=$(Choose Host Container)
-    if test "$TERMINAL_CHOICE" = "Container"; then
-        printf "You have chosen Container.\nWould you like to use quadlets to manage your container?\n"
-        MANAGEMENT_CHOICE=$(Choose Quadlet Distrobox)
-    else
-        printf "You have chosen to use Host Terminal. Would you like to setup Bluefin-cli container?\n"
-        MANAGEMENT_CHOICE=$(Choose Quadlet Distrobox No)
-    fi
-    if /usr/bin/systemctl is-enabled --quiet bluefin-cli.target; then
-        printf "Bluefin quadlet is already enabled, would you like to disable it?\n"
-        DISABLE=$(Choose Yes No)
-        if test "$DISABLE" = "No"; then
-            printf "Not Disabling existing container quadlet.\n"
-            printf "Finished Bluefin-CLI setup, rerun with ujust bluefin-cli to reconfigure\n"
-            printf "Exiting...\n"
-            exit 0
-        elif test "$DISABLE" = "Yes"; then
-            printf "Disabling Bluefin-CLI\n"
-            /usr/bin/systemctl --user disable --now bluefin-cli.target
-            /usr/bin/systemctl --user stop bluefin-cli.service
-        fi
-    fi
-    if /usr/bin/env DBX_CONTAINER_MANAGER="podman" /usr/bin/distrobox-list | grep -qE "^| bluefin-cli .*"; then
-        printf "You already have a container named bluefin-cli. Would you like to destroy it?\n"
-        REBUILD=$(Choose Yes No)
-        if test "$REBUILD" = "No"; then
-            printf "Not replacing existing container.\n"
-            printf "Finished Bluefin-CLI setup, rerun with ujust bluefin-cli to reconfigure\n"
-            printf "Exiting...\n"
-            exit 0
-        elif test "$REBUILD" = "Yes"; then
-            printf "Destroying existing bluefin-cli container\n"
-            /usr/bin/env DBX_CONTAINER_MANAGER="podman" /usr/bin/distrobox-rm -f bluefin-cli
-        fi
-    fi
-    if test "$MANAGEMENT_CHOICE" = "Quadlet"; then
-        /usr/bin/systemctl --user enable --now bluefin-cli.target 
-        /usr/bin/systemctl --user start bluefin-cli.service
-    elif test "$MANAGEMENT_CHOICE" = "Distrobox"; then
-        /usr/bin/env DBX_CONTAINER_MANAGER="podman" /usr/bin/distrobox-create --nvidia Y --image ghcr.io/ublue-os/bluefin-cli:latest -n bluefin-cli --no-entry --pull
-        /usr/bin/env DBX_CONTAINER_MANAGER="podman" /usr/bin/distrobox-enter bluefin-cli -- bash -l -c "exit" 
-    else
-        printf "You have chosen none.\n"
-        printf "Finished Bluefin-CLI setup, rerun with ujust bluefin-cli to reconfigure\n"
-        printf "Exiting...\n"
-        exit 0
-    fi
-    if test "$TERMINAL_CHOICE" = "Container"; then
-        printf "Setting first terminal be Container for bash using ~/.bashrc.d\n"
-        printf "Enter into container using prompt's menu after first entry\n"
-        ln -sf /usr/share/ublue-os/bluefin-cli/bluefin-cli.sh ~/.bashrc.d/zz-container.sh
-    fi 
-    printf "Finished Bluefin-CLI setup, rerun with ujust bluefin-cli to reconfigure\n"
+    @/usr/libexec/enable-bluefin-cli.sh
+
+# Configure Terminal Experience
+[private]
+configure-terminal:
+    @/usr/libexec/configure-terminal.sh
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 cockpit:
@@ -135,27 +71,6 @@ devmode:
         fi
     fi
 
-# Assemble a Pytorch distrobox (Nvidia only)
-distrobox-mlbox:
-    #!/usr/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    echo 'Assembling pytorch-nvidia mlbox distrobox ...'
-    AssembleList "/usr/share/ublue-os/distrobox/pytorch-nvidia.ini" create "mlbox"
-
-# Create a Wolfi OS container | https://github.com/wolfi-dev
-distrobox-wolfi:
-    #!/usr/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    echo 'Creating WolfiOS distrobox ...'
-    Distrobox "ghcr.io/ublue-os/wolfi-toolbox:latest" "wolfi"
-
-# Create a universal developer container
-distrobox-universal:
-    #!/usr/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    echo 'Creating Universal Development distrobox ...'
-    Distrobox "mcr.microsoft.com/devcontainers/universal:latest" "universal"
-
 # Switch to the fish shell
 fish:
     sudo usermod $USER --shell /usr/bin/fish 
@@ -164,7 +79,6 @@ fish:
 # Install recommended GNOME extensions
 gnome-extensions:
     pip install --upgrade gnome-extensions-cli
-    gext install tailscale-status@maxgallup.github.com
     gext install nightthemeswitcher@romainvigier.fr
     gext install pano@elhan.io
     gext install weatheroclock@CleoMenezesJr.github.io
@@ -270,47 +184,22 @@ nix-devbox-global:
     echo 'run "devbox global run install-hook-zsh" to configure zsh shell'
     echo 'run "devbox global run" to see other available configuration commands'
 
-# Enable podmansh as user shell (EXPERIMENTAL)
-podmansh:
-    sudo mkdir -p /etc/containers/systemd/users/${UID}
-    sudo cp /usr/share/ublue-os/quadlets/podmansh.container /etc/containers/systemd/users/${UID}/podmansh.container
-    sudo usermod $USER --shell /usr/bin/podmansh
-    printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
-    systemctl --user start podman.socket
-    loginctl enable-linger $(whoami)
-
-    podman pull ghcr.io/ublue-os/ubuntu-toolbox:latest
-
-    systemctl --user daemon-reload
-    systemctl --user stop podmansh.service
-    systemctl --user start podmansh.service
-
-    @echo "Shell now switched to podmansh. Spawn a new terminal to get going!"
-    @echo "By default, the shell will be Bash. To override it, create ~/.profile with your preferred shell"
-    @echo "Note: That shell must exist in the toolbox!"
-    @echo "To ensure a smooth experience within VSCode, please add the following to your settings.json:"
-    @echo "---"
-    @echo "\"terminal.integrated.profiles.linux\": {"
-    @echo "  \"podmansh zsh\": {"
-    @echo "     \"path\": \"podmansh\","
-    @echo "     \"args\": [\"-c\", \"cd \${workspaceFolder}; exec zsh\"]"
-    @echo "  }"
-    @echo "}"
-    @echo "---"
-    @echo "Please make sure you have the following environment variable set WITHIN the container:"
-    @echo "---"
-    @echo "export DOCKER_HOST=unix:///var/run/podman/podman.sock"
-    @echo "---"
-    @echo "Happy Podmansh'ing!"
-
-# Switch podmansh to another image (EXPERIMENTAL)
-podmansh-switch IMAGE:
-    sudo sed -i "/Image\=.*$/c Image\={{ IMAGE }}" /etc/containers/systemd/users/${UID}/podmansh.container
-    podman pull {{ IMAGE }}
-    podman rm -f podmansh
-    systemctl --user daemon-reload
-    systemctl --user start podmansh.service
-    echo "Image now switched to {{ IMAGE }}"
+# Prompt terminal transparency
+prompt-transparency opacity="0.95":
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    if [[ -n "$(echo "{{ opacity }}" | grep -v '^[.0-9]*$')" ]]; then
+      printf "Value must be numeric: %s.\n" "{{ opacity }}"
+    elif [[ $(echo "0<{{ opacity }} && 1>{{ opacity }}" | bc -q) -eq 1 ]]; then
+      raw="$(gsettings get org.gnome.Prompt profile-uuids)"
+      uuids="$(sed -En 's|[^0-9a-z]*||g; s|([0-9a-z]{32})|\1\n|gp' <<<${raw})"
+      for i in ${uuids}; do
+        location="org.gnome.Prompt.Profile:/org/gnome/Prompt/Profiles/${i}/"
+        gsettings set "${location}" opacity "{{ opacity }}"; done
+      printf "Prompt opacity is now %s.\n" "{{ opacity }}"
+    else
+      printf "Value must be between 0 and 1: %s.\n" "{{ opacity }}"
+    fi
 
 # Run pytorch
 pytorch:
@@ -333,15 +222,6 @@ touch:
     gext install improvedosk@nick-shmyrev.dev
     gext install gestureImprovements@gestures
 
-# A preview of what the update system would look like in the future
-update-ng:
-    echo 'Upgrading system...'
-    sudo bootc upgrade
-    echo 'Upgrading flatpaks...'
-    flatpak update -y
-    echo 'Assembling and replacing distroboxes ...'
-    distrobox assemble create --replace --file /etc/distrobox/distrobox.ini
-
 # Upgrade Distrobox to the latest git version
 distrobox-git:
     echo 'Installing latest git snapshot of Distrobox'
@@ -363,3 +243,18 @@ dx-group:
     sudo usermod -aG lxd $USER
     sudo usermod -aG libvirt $USER
     @echo "Logout to use docker, incus-admin, lxd, libvirt"
+
+# Add atuin
+atuin:
+    #!/usr/bin/bash 
+    shell=$(basename $SHELL) 
+    if test $shell = "fish"; then 
+        echo "Adding atuin to your config.fish"
+        printf '\nif status is-interactive\n\tif type -q atuin\n\t\tatuin init fish | source\n\tend\nend\n' >> ${XDG_CONFIG_HOME:-$HOME/.config}/fish/config.fish
+    elif test $shell = "zsh"; then 
+        echo "Adding atuin to your .zshrc"
+        printf '\n[[ "$(command -v atuin)" ]] && eval "$(atuin init zsh)"\n' >> ${ZDOTDIR:-$HOME}/.zshrc 
+    elif test $shell = "bash"; then 
+        echo "Adding bash-prexec and atuin to your .bashrc" 
+        printf '\n[[ -f /usr/share/bash-prexec ]] && source /usr/share/bash-prexec\n[[ "$(command -v atuin)" ]] && eval "$(atuin init bash)"\n' >> ~/.bashrc
+    fi

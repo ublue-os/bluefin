@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # SCRIPT VERSION
-USER_SETUP_VER=2
+USER_SETUP_VER=3
 USER_SETUP_VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/user-setup"
 USER_SETUP_VER_RAN=$(cat $USER_SETUP_VER_FILE)
 
@@ -30,6 +30,14 @@ IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 
 # Enable NTP
 timedatectl set-ntp true
+
+# Ensure custom prompt theme is present
+PROMPT_THEME_DIR="/usr/etc/skel/.local/share/org.gnome.Prompt/palettes"
+PROMPT_DIR="$HOME/.local/share/org.gnome.Prompt/palettes"
+mkdir -p "$PROMPT_DIR"
+if [[ ! -f "$PROMPT_DIR/catppuccin-dynamic.palette" ]]; then
+  cp "$PROMPT_THEME_DIR/catppuccin-dynamic.palette" "$PROMPT_DIR/catppuccin-dynamic.palette"
+fi
 
 # Prevent future executions
 echo "Writing state file"

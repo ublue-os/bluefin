@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script Version
-VER=1
+VER=3
 VER_FILE="/etc/ublue/flatpak_manager_version"
 VER_RAN=$(cat $VER_FILE)
 
@@ -11,10 +11,16 @@ if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
   exit 0
 fi
 
-# Remove fedora flatpak repo
+# Opt out of and remove Fedora's flatpak repo
 if grep -qz 'fedora' <<< $(flatpak remotes); then
-  flatpak remote-delete --user fedora --force
+  /usr/lib/fedora-third-party/fedora-third-party-opt-out
+  /usr/bin/fedora-third-party disable
+  flatpak remote-delete fedora --force
 fi
+
+# Ensure Flathub is enabled
+flatpak remote-add --if-not-exists --system flathub /usr/etc/flatpak/remotes.d/flathub.flatpakrepo
+flatpak remote-modify --system --enable flathub
 
 # Lists of flatpaks
 FLATPAK_LIST=$(flatpak list --columns=application)
@@ -33,26 +39,6 @@ fi
 if [[ ! -f $VER_FILE && -n $REMOVE_LIST ]]; then
   flatpak remove --system --noninteractive ${REMOVE_LIST[@]}
 fi
-
-# Opt out of and remove Fedora's flatpak repo
-if grep -qz 'fedora' <<< $(flatpak remotes); then
-  /usr/lib/fedora-third-party/fedora-third-party-opt-out
-  /usr/bin/fedora-third-party disable
-  flatpak remote-delete fedora --force
-
-  # Remove flatpak apps from origin fedora
-  FEDORA_FLATPAKS=$(flatpak list --app --columns=application,origin | grep -w 'fedora' | awk '{print $1}')
-  flatpak remove --system --noninteractive ${FEDORA_FLATPAKS[@]}
-
-  # Remove flatpak runtimes from origin fedora
-  FEDORA_FLATPAKS=$(flatpak list --runtime --columns=application,arch,branch,origin | grep -w 'fedora' | awk '{print $1"/"$2"/"$3}')
-  flatpak remove --system --noninteractive ${FEDORA_FLATPAKS[@]}
-fi
-
-# Disable the system variant of the flathub repo
-flatpak remote-modify flathub --disable --system
-
-notify-send "Flatpak installer" "Finished installing system flatpaks" --app-name="Flatpak installer" -u NORMAL
 
 mkdir -p /etc/ublue
 echo $VER > $VER_FILE

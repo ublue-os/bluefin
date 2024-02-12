@@ -17,12 +17,24 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="lutho"
 
+# tuned
+RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
+        rpm-ostree override remove \
+            power-profiles-daemon \
+            || true && \
+        rpm-ostree override remove \
+            tlp \
+            tlp-rdw \
+            || true \
+    ; fi
+
 COPY usr /usr
 COPY just /tmp/just
 COPY etc/yum.repos.d/ /etc/yum.repos.d/
 COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
 COPY image-info.sh /tmp/image-info.sh
+COPY fetch-quadlets.sh /tmp/fetch-quadlets.sh
 # Copy ublue-update.toml to tmp first, to avoid being overwritten.
 COPY usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 
@@ -45,20 +57,23 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     wget https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/che-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo
 
+# Copy atuin from bluefin-cli
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
+
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     /tmp/build.sh && \
     /tmp/image-info.sh && \
+    /tmp/fetch-quadlets.sh && \
     pip install --prefix=/usr yafti && \
     pip install --prefix=/usr topgrade && \
     rpm-ostree install ublue-update && \
     mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
-    mkdir -p /usr/etc/containers/systemd/users && \
-    wget -q https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-cli.container -P /usr/etc/containers/systemd/users && \
-    printf "\n\n[Install]\nWantedBy=bluefin-cli.target" >> /usr/etc/containers/systemd/users/bluefin-cli.container  && \
-    sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
-    sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /usr/etc/containers/systemd/users/bluefin-cli.container && \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
+        systemctl enable tuned.service \
+    ; fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable ublue-update.timer && \
@@ -114,14 +129,12 @@ RUN sysctl -p
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
-    wget https://copr.fedorainfracloud.org/coprs/karmab/kcli/repo/fedora-"${FEDORA_MAJOR_VERSION}"/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo
+    wget https://copr.fedorainfracloud.org/coprs/karmab/kcli/repo/fedora-"${FEDORA_MAJOR_VERSION}"/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    wget https://copr.fedorainfracloud.org/coprs/atim/ubuntu-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/atim-ubuntu-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/atim-ubuntu-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
 
 # Handle packages via packages.json
 RUN /tmp/build.sh && \
     /tmp/image-info.sh
-
-## power-profiles-daemon with amd p-state support, remove when this is upstream
-RUN rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging power-profiles-daemon
 
 RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
     install -c -m 0755 /tmp/docker-compose /usr/bin
@@ -157,6 +170,7 @@ RUN /tmp/workarounds.sh
 RUN rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    rm -f /etc/yum.repos.d/atim-ubuntu-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/vscode.repo && \
     rm -f /etc/yum.repos.d/docker-ce.repo && \
     rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo && \

@@ -140,8 +140,14 @@ jobs:
 
       - name: Get Current Fedora Version
         id: labels
+        shell: bash
         run: |
+          set -eo pipefail
           ver=$(skopeo inspect docker://ghcr.io/ublue-os/kinoite-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
+          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
+            echo "inspected image version must not be empty or null"
+            exit 1
+          fi
           echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       # Build metadata
@@ -215,7 +221,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Sign container
-      - uses: sigstore/cosign-installer@v3.3.0
+      - uses: sigstore/cosign-installer@v3.4.0
         if: github.event_name != 'pull_request'
 
       - name: Sign container image
