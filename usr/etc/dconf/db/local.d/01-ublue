@@ -57,12 +57,12 @@ min-alpha=0.5
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control><Alt>t'
-command='xdg-terminal-exec'
-name='Prompt'
+command='prompt --tab-with-profile=2871e8027773ae74d6c87a5f659bbc74'
+name='Host Prompt'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
-command='xdg-terminal-exec -- distrobox enter ubuntu'
+command='prompt --tab-with-profile=4741cb2eb3614750b79edc5c4b8c08b3'
 name='Ubuntu Prompt'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
@@ -70,8 +70,18 @@ binding='<Control><Shift>Escape'
 command="flatpak run io.missioncenter.MissionCenter"
 name='mission-center'
 
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
+binding='<Control><Alt>Enter'
+command="prompt --tab-with-profile=a21a910811504857bea4c96b3d937b93"
+name='Bluefin Prompt'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]
+binding='<Control><Alt>f'
+command="prompt --tab-with-profile=d6fe45489ed74fada5d95d715449ce7e"
+name='Fedora Prompt'
+
 [org/gnome/settings-daemon/plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/']
 home=['<Super>e']
 
 [org/gnome/settings-daemon/plugins/power]
@@ -85,16 +95,6 @@ sort-directories-first=true
 
 [org/gnome/mutter]
 experimental-features=['scale-monitor-framebuffer']
-
-[com/raggesilver/BlackBox]
-command-as-login-shell=true
-use-custom-command=false
-custom-shell-command='distrobox enter ubuntu'
-theme-dark="Yaru"
-style-preference=2
-font="Ubuntu Mono 16"
-window-width=975
-window-height=650
 
 [org/gnome/software]
 allow-updates=false
