@@ -112,7 +112,7 @@
 				"tuned-ppd",
 				"tuned-utils",
 				"tuned-utils-systemtap",
-				"tuned-utils-atomic"
+				"tuned-profiles-atomic"
 			],
 			"lutho-dx": [],
 			"lutho-framework": []
