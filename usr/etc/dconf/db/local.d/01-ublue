@@ -71,7 +71,7 @@ command="flatpak run io.missioncenter.MissionCenter"
 name='mission-center'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
-binding='<Control><Alt>Enter'
+binding='<Control><Alt>Return'
 command="prompt --tab-with-profile=a21a910811504857bea4c96b3d937b93"
 name='Bluefin Prompt'
 
