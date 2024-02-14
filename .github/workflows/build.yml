@@ -1,40 +1,45 @@
 name: Build and Push Image
 on:
   schedule:
-    - cron: '40 16 * * *'  # 16:40 UTC everyday
+    - cron: "40 16 * * *" # 16:40 UTC everyday
   merge_group:
   pull_request:
     branches:
       - main
       - testing
     paths-ignore:
-      - '**.md'
+      - "**.md"
   push:
     branches:
       - main
       - testing
     paths-ignore:
-      - '**.md'
+      - "**.md"
   workflow_dispatch:
 env:
-    IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME:
+  AKMODS_FLAVOR:
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-  push-ghcr:
+  build_and_push:
     name: Make
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
       id-token: write
+
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
+        image_flavor:
+          [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
         base_name: [bluefin, bluefin-dx]
         major_version: [38, 39]
         include:
@@ -46,6 +51,9 @@ jobs:
             is_latest_version: true
             is_stable_version: true
             is_gts_version: false
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -158,7 +166,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
-            org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology 
+            org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
@@ -177,7 +185,6 @@ jobs:
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
-            TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
@@ -234,18 +241,50 @@ jobs:
       - name: Echo outputs
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ toJSON(steps.push.outputs) }}"  
+          echo "${{ toJSON(steps.push.outputs) }}"
+
+  sign:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      id-token: write
+      packages: write
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: sigstore/cosign-installer@v3
+
+      - name: Sign the images
+        run: cosign sign -y ${TAGS}
+        env:
+          TAGS: ${{needs.build_and_push.outputs.tags}}
+
+      - name: Verify the pushed tags
+        run: |
+          cosign verify \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            --certificate-identity-regexp "${{ github.server_url }}/${{ github.repository }}" \
+            ${TAGS}
+        env:
+          TAGS: ${{needs.build_and_push.outputs.tags}}
 
   check:
     name: Check all builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    needs: [push-ghcr]
+    needs: [build_and_push, sign]
     steps:
       - name: Exit on failure
-        if: ${{ needs.push-ghcr.result == 'failure' }}
+        if: ${{ needs.build_and_push.result == 'failure' }} || ${{ needs.sign.result == 'failure' }}
         shell: bash
         run: exit 1
+
       - name: Exit
         shell: bash
         run: exit 0
