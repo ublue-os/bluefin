@@ -225,66 +225,41 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Sign container
+      # Sign container via github OIDC
       - uses: sigstore/cosign-installer@v3.4.0
         if: github.event_name != 'pull_request'
 
-      - name: Sign container image
-        if: github.event_name != 'pull_request'
-        run: |
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
-        env:
-          TAGS: ${{ steps.push.outputs.digest }}
-          COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
-
-      - name: Echo outputs
-        if: github.event_name != 'pull_request'
-        run: |
-          echo "${{ toJSON(steps.push.outputs) }}"
-
-  sign:
-    needs: build_and_push
-    runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    permissions:
-      id-token: write
-      packages: write
-    steps:
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: sigstore/cosign-installer@v3
-
       - name: Sign the images
+        if: github.event_name != 'pull_request'
         run: cosign sign -y ${TAGS}
         env:
-          TAGS: ${{needs.build_and_push.outputs.tags}}
+          TAGS: ${{steps.meta.outputs.tags}}
 
       - name: Verify the pushed tags
+        if: github.event_name != 'pull_request'
         run: |
           cosign verify \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
             --certificate-identity-regexp "${{ github.server_url }}/${{ github.repository }}" \
             ${TAGS}
         env:
-          TAGS: ${{needs.build_and_push.outputs.tags}}
+          TAGS: ${{steps.meta.outputs.tags}}
+
+      - name: Echo outputs
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "${{ toJSON(steps.push.outputs) }}"
 
   check:
     name: Check all builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    needs: [build_and_push, sign]
+    needs: [build_and_push]
     steps:
       - name: Exit on failure
-        if: ${{ needs.build_and_push.result == 'failure' }} || ${{ needs.sign.result == 'failure' }}
+        if: ${{ needs.build_and_push.result == 'failure' }}
         shell: bash
         run: exit 1
-
       - name: Exit
         shell: bash
         run: exit 0
