@@ -20,7 +20,7 @@ function get_status(){
     else
         bluefin_cli[1]="${red}Inactive${n}"
     fi
-    get_default=$(dconf read /org/gnome/Prompt/Profiles/default-profile-uuid)
+    get_default=$(dconf read /org/gnome/Prompt/default-profile-uuid)
     if test "$get_default" = "'a21a910811504857bea4c96b3d937b93'"; then
         bluefin_cli[2]="${green}Default${n}"
     else
