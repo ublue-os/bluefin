@@ -26,6 +26,7 @@ screens:
           description: Start your cloud-native journey here!
           default: false
           packages:
+          - GNOME Boxes: org.gnome.Boxes
           - Podman Desktop: io.podman_desktop.PodmanDesktop
         Gaming:
           description: "Rock and Stone!"
