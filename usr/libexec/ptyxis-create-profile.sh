@@ -1,16 +1,16 @@
 #!/usr/bin/bash
 
-# create a Prompt profile using dconf given the guid of the instance
+# create a Ptyxis profile using dconf given the guid of the instance
 # $1 = name
 
-# dconf read /org/gnome/Prompt/Profiles/d092b3519698570a3252762c658f7629/
-# /org/gnome/Prompt/Profiles/d092b3519698570a3252762c658f7629/custom-command
+# dconf read /org/gnome/Ptyxis/Profiles/d092b3519698570a3252762c658f7629/
+# /org/gnome/Ptyxis/Profiles/d092b3519698570a3252762c658f7629/custom-command
 #   'blincus shell myubuntu'
-# /org/gnome/Prompt/Profiles/d092b3519698570a3252762c658f7629/label
+# /org/gnome/Ptyxis/Profiles/d092b3519698570a3252762c658f7629/label
 #   'myubuntu'
-# /org/gnome/Prompt/Profiles/d092b3519698570a3252762c658f7629/login-shell
+# /org/gnome/Ptyxis/Profiles/d092b3519698570a3252762c658f7629/login-shell
 #   true
-# /org/gnome/Prompt/Profiles/d092b3519698570a3252762c658f7629/use-custom-command
+# /org/gnome/Ptyxis/Profiles/d092b3519698570a3252762c658f7629/use-custom-command
 #   true
 
 # if dconf doesn't exist, just return
@@ -41,7 +41,7 @@ if test -z "$guid"; then
 	guid=$(gen_uuid)
 fi
 
-default_guid=$(dconf read /org/gnome/Prompt/default-profile-uuid)
+default_guid=$(dconf read /org/gnome/Ptyxis/default-profile-uuid)
 default_guid=${default_guid:1:-1}
 
 # If default profile is trying to be made, just exit
@@ -57,11 +57,11 @@ fi
 
 # Write the default value if specified
 if test "$make_default" -eq 1; then
-    dconf write /org/gnome/Prompt/default-profile-uuid "'${guid}'"
+    dconf write /org/gnome/Ptyxis/default-profile-uuid "'${guid}'"
 fi
 
-profile="/org/gnome/Prompt/Profiles/${guid}/"
-opacity=$(dconf read /org/gnome/Prompt/Profiles/"${default_guid}"/opacity)
+profile="/org/gnome/Ptyxis/Profiles/${guid}/"
+opacity=$(dconf read /org/gnome/Ptyxis/Profiles/"${default_guid}"/opacity)
 
 if test "$name" = "Host"; then
 	dconf write "${profile}label" "'${name}'"
@@ -86,4 +86,4 @@ elif test "$name" = "ubuntu-toolbox"; then
 	dconf write "${profile}palette" "'Clone Of Ubuntu'"
 fi
 
-/usr/libexec/prompt-add-profile.sh "$guid"
+/usr/libexec/ptyxis-add-profile.sh "$guid"

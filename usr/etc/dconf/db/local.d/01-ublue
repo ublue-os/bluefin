@@ -57,13 +57,13 @@ min-alpha=0.5
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control><Alt>t'
-command='prompt --tab-with-profile=2871e8027773ae74d6c87a5f659bbc74'
-name='Host Prompt'
+command='ptyxis --tab-with-profile=2871e8027773ae74d6c87a5f659bbc74'
+name='Host Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
-command='prompt --tab-with-profile=4741cb2eb3614750b79edc5c4b8c08b3'
-name='Ubuntu Prompt'
+command='ptyxis --tab-with-profile=4741cb2eb3614750b79edc5c4b8c08b3'
+name='Ubuntu Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
 binding='<Control><Shift>Escape'
@@ -72,13 +72,13 @@ name='mission-center'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
 binding='<Control><Alt>Return'
-command="prompt --tab-with-profile=a21a910811504857bea4c96b3d937b93"
-name='Bluefin Prompt'
+command="ptyxis --tab-with-profile=a21a910811504857bea4c96b3d937b93"
+name='Bluefin Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]
 binding='<Control><Alt>f'
-command="prompt --tab-with-profile=d6fe45489ed74fada5d95d715449ce7e"
-name='Fedora Prompt'
+command="ptyxis --tab-with-profile=d6fe45489ed74fada5d95d715449ce7e"
+name='Fedora Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys]
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/']
@@ -102,7 +102,7 @@ download-updates=false
 download-updates-notify=false
 
 [com/github/stunkymonkey/nautilus-open-any-terminal]
-terminal='prompt'
+terminal='ptyxis'
 keybindings=''
 new-tab=false
 flatpak='off'
@@ -120,12 +120,12 @@ show-gamemode=false
 hide-forcequit=true
 show-pods=true
 
-[org/gnome/Prompt]
+[org/gnome/Ptyxis]
 interface-style='system'
 restore-session=false
 restore-window-size=false
 profile-uuids=['2871e8027773ae74d6c87a5f659bbc74']
 default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
 
-[org/gnome/Prompt/Profiles/2871e8027773ae74d6c87a5f659bbc74]
+[org/gnome/Ptyxis/Profiles/2871e8027773ae74d6c87a5f659bbc74]
 palette='catppuccin-dynamic'

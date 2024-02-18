@@ -20,7 +20,7 @@ function get_status(){
     else
         bluefin_cli[1]="${red}Inactive${n}"
     fi
-    get_default=$(dconf read /org/gnome/Prompt/default-profile-uuid)
+    get_default=$(dconf read /org/gnome/Ptyxis/default-profile-uuid)
     if test "$get_default" = "'a21a910811504857bea4c96b3d937b93'"; then
         bluefin_cli[2]="${green}Default${n}"
     else
@@ -32,11 +32,11 @@ function get_status(){
 function default_login(){
     toggle=$(Choose Default Not-Default Cancel)
     if test "$toggle" = "Default"; then
-        echo "Setting Bluefin-CLI to default Prompt Profile"
-        /usr/libexec/prompt-create-profile.sh bluefin-cli default
+        echo "Setting Bluefin-CLI to default Ptyxis Profile"
+        /usr/libexec/ptyxis-create-profile.sh bluefin-cli default
     elif test "$toggle" = "Not-Default"; then
-        echo "Setting Host back to default Prompt Profile"
-        /usr/libexec/prompt-create-profile.sh Host default
+        echo "Setting Host back to default Ptyxis Profile"
+        /usr/libexec/ptyxis-create-profile.sh Host default
     else
         dconf write /or
         echo "Not Changing"
@@ -64,8 +64,8 @@ function logic(){
                 systemctl --user reset-failed bluefin-cli.service > /dev/null 2>&1 || true
             fi
         fi
-        echo "Setting Host back to default Prompt Profile"
-        /usr/libexec/prompt-create-profile.sh Host default
+        echo "Setting Host back to default Ptyxis Profile"
+        /usr/libexec/ptyxis-create-profile.sh Host default
     else
         echo "Not Changing"
     fi

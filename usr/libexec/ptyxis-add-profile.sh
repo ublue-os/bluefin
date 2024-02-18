@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # Read the current value of the array
-CURRENT_VALUE=$(dconf read /org/gnome/Prompt/profile-uuids)
+CURRENT_VALUE=$(dconf read /org/gnome/Ptyxis/profile-uuids)
 guid="$1"
 
 # remove the leading and trailing brackets
@@ -29,4 +29,4 @@ UPDATED_VALUE=${UPDATED_VALUE%?}
 UPDATED_VALUE="[$UPDATED_VALUE]"
 
 # Write the updated array back to dconf
-dconf write /org/gnome/Prompt/profile-uuids "$UPDATED_VALUE"
+dconf write /org/gnome/Ptyxis/profile-uuids "$UPDATED_VALUE"

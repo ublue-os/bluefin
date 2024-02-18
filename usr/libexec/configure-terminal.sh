@@ -200,7 +200,7 @@ function Build_container(){
 #             test -f "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
 #     elif test -d "${HOME}/.bashrc.d"; then
 #         echo "Setting first terminal be Container for bash using ~/.bashrc.d"
-#         echo "Enter into container using prompt's menu after first entry"
+#         echo "Enter into container using ptyxis's menu after first entry"
 #         echo "${blue}This requires your bash shell to source files in ~/.bashrc.d/${normal}"
 #         test -e "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
 #         cp "/usr/share/ublue-os/bluefin-cli/${2}.sh" "${HOME}/.bashrc.d/00-container.sh"
