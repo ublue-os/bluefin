@@ -8,7 +8,7 @@
 
 ### Bluefin
 
-A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these twp use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. For gamers we strive to deliver a world-class Flathub gaming experience
+A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these two use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. For gamers we strive to deliver a world-class Flathub gaming experience.
 - [**bluefin-gts.iso**](https://download.projectbluefin.io/bluefin-gts.iso) - Recommended for new users (3.7GB, based on Fedora 38)
 - [**bluefin-latest.iso**](https://download.projectbluefin.io/bluefin-latest.iso) - Recommended for experienced users who are comfortable troubleshooting and contributing feedback to the project. (3.6GB, based on Fedora 39)
 
