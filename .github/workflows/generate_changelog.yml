@@ -9,15 +9,11 @@ permissions:
   actions: read
   packages: write
   pull-requests: write
-      
-name: Release Please
+
+name: Generate Changelog
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    outputs:
-      releases_created: ${{ steps.release-please.outputs.releases_created }}
-      tag: ${{ steps.release-please.outputs.tag_name }}
-      upload_url: ${{ steps.release-please.outputs.upload_url }}
     steps:
       - uses: google-github-actions/release-please-action@v4
         id: release-please
