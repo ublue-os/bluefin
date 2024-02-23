@@ -6,13 +6,16 @@
 ## [Announcement Blog Post](https://www.ypsidanger.com/announcing-project-bluefin/)
 ## Downloads
 
-- [bluefin-gts](https://download.projectbluefin.io/bluefin-gts.iso) - Recommended for new users (3.7GB, based on Fedora 38)
-- [bluefin-latest](https://download.projectbluefin.io/bluefin-latest.iso) - Recommended for experienced users who are comfortable troubleshooting and contributing feedback to the project. (3.6GB, based on Fedora 39)
+### Bluefin
 
-A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these three use cases:
-- For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together
-- For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). These are included in dedicated `bluefin-dx` and `bluefin-dx-nvidia` images
-- For gamers we strive to deliver a world-class Flathub gaming experience
+A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these twp use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. For gamers we strive to deliver a world-class Flathub gaming experience
+- [**bluefin-gts.iso**](https://download.projectbluefin.io/bluefin-gts.iso) - Recommended for new users (3.7GB, based on Fedora 38)
+- [**bluefin-latest.iso**](https://download.projectbluefin.io/bluefin-latest.iso) - Recommended for experienced users who are comfortable troubleshooting and contributing feedback to the project. (3.6GB, based on Fedora 39)
+
+### Bluefin Developer Experience Images
+For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). Check the [Bluefin-DX documentation](https://universal-blue.discourse.group/docs?topic=39) for more information.
+- [**bluefin-dx-gts**](https://download.projectbluefin.io/bluefin-dx-gts.iso) - Recommended for developers (3.7GB, based on Fedora 38)
+- [**bluefin-dx-latest**](https://download.projectbluefin.io/bluefin-dx-latest.iso) - Recommended for developers who are comfortable troubleshooting and contributing feedback to the project. (3.6GB, based on Fedora 39)
 
 ![image](https://github.com/ublue-os/bluefin/assets/1264109/c0b3fa8a-f513-4bb1-b314-e134d1802e18)
 
