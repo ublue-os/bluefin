@@ -1,4 +1,4 @@
-name: Build Bazzite ISOs
+name: Build Bluefin ISOs
 on:
   workflow_dispatch:
 env:
