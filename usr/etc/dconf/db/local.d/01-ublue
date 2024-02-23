@@ -57,12 +57,12 @@ min-alpha=0.5
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control><Alt>t'
-command='ptyxis --tab-with-profile=2871e8027773ae74d6c87a5f659bbc74'
+command='ptyxis --tab-with-profile=2871e8027773ae74d6c87a5f659bbc74 --new-window'
 name='Host Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>u'
-command='ptyxis --tab-with-profile=4741cb2eb3614750b79edc5c4b8c08b3'
+command='ptyxis --tab-with-profile=4741cb2eb3614750b79edc5c4b8c08b3 --new-window'
 name='Ubuntu Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
@@ -72,12 +72,12 @@ name='mission-center'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
 binding='<Control><Alt>Return'
-command="ptyxis --tab-with-profile=a21a910811504857bea4c96b3d937b93"
+command="ptyxis --tab-with-profile=a21a910811504857bea4c96b3d937b93 --new-window"
 name='Bluefin Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]
 binding='<Control><Alt>f'
-command="ptyxis --tab-with-profile=d6fe45489ed74fada5d95d715449ce7e"
+command="ptyxis --tab-with-profile=d6fe45489ed74fada5d95d715449ce7e --new-window"
 name='Fedora Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys]
