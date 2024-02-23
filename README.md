@@ -14,8 +14,8 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
 ### Bluefin Developer Experience Images
 For developers we endeavour to provide the best cloud-native developer experience by enabling easy consumption of the [industry's leading tools](https://landscape.cncf.io/card-mode?sort=stars). Check the [Bluefin-DX documentation](https://universal-blue.discourse.group/docs?topic=39) for more information.
-- [**bluefin-dx-gts**](https://download.projectbluefin.io/bluefin-dx-gts.iso) - Recommended for developers (3.7GB, based on Fedora 38)
-- [**bluefin-dx-latest**](https://download.projectbluefin.io/bluefin-dx-latest.iso) - Recommended for developers who are comfortable troubleshooting and contributing feedback to the project. (3.6GB, based on Fedora 39)
+- [**bluefin-dx-gts**](https://download.projectbluefin.io/bluefin-dx-gts.iso) - Recommended for developers (4.7GB, based on Fedora 38)
+- [**bluefin-dx-latest**](https://download.projectbluefin.io/bluefin-dx-latest.iso) - Recommended for developers who are comfortable troubleshooting and contributing feedback to the project. (4.6GB, based on Fedora 39)
 
 ![image](https://github.com/ublue-os/bluefin/assets/1264109/c0b3fa8a-f513-4bb1-b314-e134d1802e18)
 
