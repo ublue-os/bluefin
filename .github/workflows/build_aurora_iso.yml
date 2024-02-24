@@ -50,4 +50,4 @@ jobs:
           export RCLONE_CONFIG_R2_REGION=auto
           export RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
           dnf install -y rclone
-          rclone copy ./end_iso R2:bluefin
+          rclone copy ./end_iso R2:aurora-dl
