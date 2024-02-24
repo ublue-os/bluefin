@@ -15,7 +15,6 @@ permissions:
   packages: write
   pull-requests: write
 
-name: Build Release Artifacts
 jobs:
   build-iso:
     runs-on: ubuntu-22.04
