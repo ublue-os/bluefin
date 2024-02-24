@@ -1,4 +1,4 @@
-name: Build Bluefin ISOs
+name: Build Aurora ISOs
 on:
   workflow_dispatch:
 env:
