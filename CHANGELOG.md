@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.1](https://github.com/ublue-os/bluefin/compare/v1.4.0...v1.4.1) (2024-02-24)
+
+
+### Bug Fixes
+
+* action name ([#928](https://github.com/ublue-os/bluefin/issues/928)) ([62d2340](https://github.com/ublue-os/bluefin/commit/62d23400d6836afbcbbf9c77d15137dee5145e72))
+* minor typos ([#931](https://github.com/ublue-os/bluefin/issues/931)) ([73d93bd](https://github.com/ublue-os/bluefin/commit/73d93bd99b29c2635df9d34971623c04eae0d293))
+* remove nix shortcuts ([#925](https://github.com/ublue-os/bluefin/issues/925)) ([582fb1c](https://github.com/ublue-os/bluefin/commit/582fb1cff3934e046a6701d6bea579ecbbf50ed6))
+* use new window for the ptyxis shortcuts ([#922](https://github.com/ublue-os/bluefin/issues/922)) ([d8f827d](https://github.com/ublue-os/bluefin/commit/d8f827ddd2a92ac73bb90ae16d2bfd26b904fb51))
+
 ## [1.4.0](https://github.com/ublue-os/bluefin/compare/v1.3.0...v1.4.0) (2024-02-22)
 
 
