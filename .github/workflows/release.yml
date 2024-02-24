@@ -62,8 +62,6 @@ jobs:
           export RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
           dnf install -y rclone
           rclone copy ./end_iso R2:bluefin
-name: Generate Changelog
-jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
