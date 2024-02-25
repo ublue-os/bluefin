@@ -61,7 +61,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-                "devpod",
+                                "devpod",
 				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
