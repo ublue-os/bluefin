@@ -1,5 +1,6 @@
 # 󱍢 Welcome to Aurora (Alpha) 
-󱋩 `%IMAGE_NAME%:%IMAGE_TAG%`
+✈️ `%IMAGE_NAME%:%IMAGE_TAG%`
+Let's get stargazing.
 
 |  Command | Description |
 | ------- | ----------- |
