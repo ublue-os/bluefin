@@ -8,7 +8,7 @@
 ## [projectbluefin.io](https://projectbluefin.io)
 - [Announcement Blog Post](https://www.ypsidanger.com/announcing-project-bluefin/)
 
-A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these two use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. For gamers we strive to deliver a world-class Flathub gaming experience. [Introduction Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41)
+A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these two use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. For gamers we strive to deliver a world-class Flathub gaming experience. Check [Introduction to Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41) for a feature walkthrough. 
 
 #### Download: [**bluefin-gts.iso**](https://download.projectbluefin.io/bluefin-gts.iso) [(checksum)](https://download.projectbluefin.io/bluefin-gts-CHECKSUM)  
 Recommended for new users using AMD and Intel GPUs (3.7GB, based on Fedora 38)
