@@ -100,11 +100,6 @@ if [[ -f $HWS_VER_FILE && $HWS_VER = $HWS_VER_RAN ]]; then
   fi
 fi
 
-# Install brew
-if [[ ! -x /var/home/linuxbrew/.linuxbrew/bin/brew ]]; then
-  NONINTERACTIVE=1 /usr/libexec/brew-install
-fi
-
 echo $HWS_VER > $HWS_VER_FILE
 echo $IMAGE_NAME > $KNOWN_IMAGE_NAME_FILE
 echo $IMAGE_FLAVOR > $KNOWN_IMAGE_FLAVOR_FILE

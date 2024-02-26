@@ -36,6 +36,11 @@ if [[ ! -f "$PTYXIS_DIR/catppuccin-dynamic.palette" ]]; then
   cp "$PTYXIS_THEME_DIR/catppuccin-dynamic.palette" "$PTYXIS_DIR/catppuccin-dynamic.palette"
 fi
 
+# Install brew
+if [[ ! -x /var/home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  NONINTERACTIVE=1 /usr/libexec/brew-install
+fi
+
 # Handle privileged tasks
 pkexec /usr/libexec/ublue-privileged-user-setup
 
