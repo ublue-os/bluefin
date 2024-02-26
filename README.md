@@ -3,7 +3,7 @@ Don't like Gnome but want the all the goodies the awesome Bluefin Image provides
 
 ![This is the Aurora Banner.](./banner.jpg)
 
-# **This image is considered Alpha!** 
+# **This image is considered Beta!** 
 
 We're going to the stars! Aurora is getting it's first ever logo.
 
