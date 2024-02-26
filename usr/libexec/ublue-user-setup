@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # SCRIPT VERSION
-USER_SETUP_VER=4
+USER_SETUP_VER=5
 USER_SETUP_VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/user-setup"
 USER_SETUP_VER_RAN=$(cat $USER_SETUP_VER_FILE)
 
@@ -28,9 +28,6 @@ fi
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 
-# Enable NTP
-timedatectl set-ntp true
-
 # Ensure custom ptyxis theme is present
 PTYXIS_THEME_DIR="/usr/etc/skel/.local/share/org.gnome.Ptyxis/palettes"
 PTYXIS_DIR="$HOME/.local/share/org.gnome.Ptyxis/palettes"
@@ -38,6 +35,9 @@ mkdir -p "$PTYXIS_DIR"
 if [[ ! -f "$PTYXIS_DIR/catppuccin-dynamic.palette" ]]; then
   cp "$PTYXIS_THEME_DIR/catppuccin-dynamic.palette" "$PTYXIS_DIR/catppuccin-dynamic.palette"
 fi
+
+# Handle privileged tasks
+pkexec /usr/libexec/ublue-privileged-user-setup
 
 # Prevent future executions
 echo "Writing state file"

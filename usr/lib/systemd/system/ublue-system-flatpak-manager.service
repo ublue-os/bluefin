@@ -6,7 +6,7 @@ After=network-online.target ublue-system-setup.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/ublue-system-flatpak-manager
+ExecStart=/usr/libexec/ublue-system-flatpak-manager
 Restart=on-failure
 RestartSec=30
 StartLimitInterval=0

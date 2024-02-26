@@ -3,7 +3,7 @@ Description=Configure system for current user
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/ublue-user-setup
+ExecStart=/usr/libexec/ublue-user-setup
 
 [Install]
 WantedBy=default.target
