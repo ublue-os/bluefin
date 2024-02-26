@@ -5,8 +5,3 @@ timedatectl set-ntp true
 
 # Allow Tailscale Control
 tailscale set --operator="$(getent passwd $PKEXEC_UID | cut -d: -f1)"
-
-# Install brew
-if [[ ! -x /var/home/linuxbrew/.linuxbrew/bin/brew ]]; then
-	NONINTERACTIVE=1 /usr/libexec/brew-install
-fi
