@@ -4,7 +4,7 @@
  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
 <policyconfig>
 
-  <vendor>Bazzite</vendor>
+  <vendor>Universal Blue</vendor>
   <vendor_url>https://github.com/ublue-os/</vendor_url>
 
   <action id="org.ublue.policykit.privileged.user.setup">
