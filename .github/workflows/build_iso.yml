@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: Build ISOs
         #if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
-        uses: ublue-os/isogenerator@1.0.5
+        uses: ublue-os/isogenerator@1.0.7
         with:
           ARCH: x86_64
           IMAGE_NAME: ${{ matrix.image_name }}
