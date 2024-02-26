@@ -5,7 +5,7 @@ IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 IMAGE_FLAVOR=$(jq -r '."image-flavor"' < $IMAGE_INFO)
 
 # SCRIPT VERSION
-HWS_VER=1
+HWS_VER=2
 HWS_VER_FILE="/etc/ublue/hws_version"
 HWS_VER_RAN=$(cat $HWS_VER_FILE)
 

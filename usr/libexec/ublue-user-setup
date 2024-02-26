@@ -28,9 +28,6 @@ fi
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 
-# Enable NTP
-timedatectl set-ntp true
-
 # Ensure custom ptyxis theme is present
 PTYXIS_THEME_DIR="/usr/etc/skel/.local/share/org.gnome.Ptyxis/palettes"
 PTYXIS_DIR="$HOME/.local/share/org.gnome.Ptyxis/palettes"
@@ -38,6 +35,14 @@ mkdir -p "$PTYXIS_DIR"
 if [[ ! -f "$PTYXIS_DIR/catppuccin-dynamic.palette" ]]; then
   cp "$PTYXIS_THEME_DIR/catppuccin-dynamic.palette" "$PTYXIS_DIR/catppuccin-dynamic.palette"
 fi
+
+# Install brew
+if [[ ! -x /var/home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  NONINTERACTIVE=1 /usr/libexec/brew-install
+fi
+
+# Handle privileged tasks
+pkexec /usr/libexec/ublue-privileged-user-setup
 
 # Prevent future executions
 echo "Writing state file"
