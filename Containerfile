@@ -100,9 +100,8 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     systemctl enable dconf-update.service && \
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
-    systemctl enable ublue-system-networked-tasks.service && \
-    systemctl enable brew-install-workaround.service && \
-    systemctl --global enable ublue-user-networked-tasks.service && \
+    systemctl enable ublue-system-flatpak-manager.service && \
+    systemctl --global enable ublue-user-flatpak-manager.service && \
     systemctl --global enable ublue-user-setup.service && \
     fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
