@@ -51,7 +51,7 @@ fi
 notify-send "Flatpak installer" "Finished installing user flatpaks" --app-name="Flatpak installer" -u NORMAL
 
 # Install brew
-if [[ ! -x /var/home/linuxbrew/.linuxbrew/bin/brew ]]; then
+if [[ ! -f "/var/home/linuxbrew/.linuxbrew/bin" || ! -x "/var/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
   NONINTERACTIVE=1 /usr/libexec/brew-install
 fi
 
