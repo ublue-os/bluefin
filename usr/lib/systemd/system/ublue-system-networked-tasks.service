@@ -1,12 +1,12 @@
 [Unit]
-Description=Manage system flatpaks
+Description=Manage tasks that require network access (Flatpaks)
 Documentation=https://github.com/ublue-os/endlish-oesque/issues/10
 Wants=network-online.target
 After=network-online.target ublue-system-setup.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/libexec/ublue-system-flatpak-manager
+ExecStart=/usr/libexec/ublue-system-networked-tasks
 Restart=on-failure
 RestartSec=30
 StartLimitInterval=0

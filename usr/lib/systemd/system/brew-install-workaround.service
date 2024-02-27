@@ -1,0 +1,20 @@
+[Unit]
+Description=Workaround brew-install not having the correct caps
+ConditionFileIsExecutable=/usr/libexec/brew-install
+After=local-fs.target
+
+[Service]
+Type=oneshot
+# Copy if it doesn't exist
+ExecStartPre=/usr/bin/bash -c "[ -x /usr/local/libexec/.brew-install ] || /usr/bin/cp /usr/libexec/brew-install /usr/local/libexec/.brew-install"
+# This is faster than using .mount unit. Also allows for the previous line/cleanup
+ExecStartPre=/usr/bin/mount --bind /usr/local/libexec/.brew-install /usr/libexec/brew-install
+# Fix caps
+ExecStart=/usr/sbin/setcap 'cap_sys_admin+p' /usr/libexec/brew-install
+# Clean-up after ourselves
+ExecStop=/usr/bin/umount /usr/libexec/brew-install
+ExecStop=/usr/bin/rm /usr/local/libexec/.brew-install
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
