@@ -19,7 +19,7 @@ brew:
 # Install "fleek" set of packages for brew | none, low, default, high
 brew-fleek level="high":
     #!/usr/bin/env/bash
-    curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- "{{ opacity }}"
+    curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- "{{ level }}"
 
 
 
