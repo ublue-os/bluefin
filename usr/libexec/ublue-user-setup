@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 # SCRIPT VERSION
 USER_SETUP_VER=5
