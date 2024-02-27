@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Script Version
-VER=4
+VER=5
 VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/networked_tasks_version"
 VER_RAN=$(cat $VER_FILE)
 
@@ -52,7 +52,7 @@ notify-send "Flatpak installer" "Finished installing user flatpaks" --app-name="
 
 # Install brew
 if [[ ! -f "/var/home/linuxbrew/.linuxbrew/bin" || ! -x "/var/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
-  NONINTERACTIVE=1 /usr/libexec/brew-install
+  /usr/bin/bash -c 'env NONINTERACTIVE=1 /usr/libexec/brew-install'
 fi
 
 notify-send "Brew installer" "Finished installing brew package manager" --app-name="Brew installer" -u NORMAL
