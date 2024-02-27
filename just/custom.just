@@ -9,6 +9,20 @@ benchmark:
 bluefin-cli:
     @/usr/libexec/enable-bluefin-cli.sh
 
+# Install Homebrew | https://brew.sh
+brew:
+    #!/usr/bin/env bash
+    if [[ ! -f "/var/home/linuxbrew/.linuxbrew/bin" || ! -x "/var/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+        /usr/bin/bash -c 'env NONINTERACTIVE=1 /usr/libexec/brew-install'
+    fi
+
+# Install "fleek" set of packages for brew | none, low, default, high
+brew-fleek level="high":
+    #!/usr/bin/env/bash
+    curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- "{{ opacity }}"
+
+
+
 # Configure Terminal Experience
 [private]
 configure-terminal:
