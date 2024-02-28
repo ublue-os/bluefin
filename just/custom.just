@@ -12,8 +12,20 @@ bluefin-cli:
 # Install Homebrew | https://brew.sh
 brew:
     #!/usr/bin/env bash
+    source /usr/lib/ujust/ujust.sh
     if [[ ! -f "/var/home/linuxbrew/.linuxbrew/bin" || ! -x "/var/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+        echo "${b}Brew Installation${n}"
+        echo "Please ${b}IGNORE${n} everything the installer tells you to do"
+        echo "We have already done it for you! You just need to close and re-open the terminal after installation"
+        echo "Do you understand?"
+        echo "Please type in \"Yes I understand\" and press enter"
+        read ACCEPT
+        if [ "$ACCEPT" == "Yes I understand" ]; then
+           if [[ ! -f "/var/home/linuxbrew/.linuxbrew/bin" || ! -x "/var/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
         /usr/bin/bash -c '/usr/libexec/brew-install'
+        else
+          echo "Capitalization matters when you type \"Yes I understand\""
+        fi
     fi
 
 # Install "fleek" set of packages for brew | none, low, default, high
