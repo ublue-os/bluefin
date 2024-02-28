@@ -1,41 +1,47 @@
 name: Build and Push Image
+
 on:
   schedule:
-    - cron: '40 16 * * *'  # 16:40 UTC everyday
+    - cron: "40 16 * * *" # 16:40 UTC everyday
   merge_group:
   pull_request:
     branches:
       - main
       - testing
     paths-ignore:
-      - '**.md'
+      - "**.md"
   push:
     branches:
       - main
       - testing
     paths-ignore:
-      - '**.md'
+      - "**.md"
   workflow_dispatch:
+
 env:
-    IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME:
+  AKMODS_FLAVOR:
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-  push-ghcr:
+  build_and_push:
     name: Make
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
       id-token: write
+
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
         base_name: [bluefin, bluefin-dx]
+        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
         major_version: [38, 39]
         include:
           - major_version: 38
@@ -158,7 +164,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
-            org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology 
+            org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
@@ -177,7 +183,6 @@ jobs:
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
             FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
-            TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
@@ -218,32 +223,39 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Sign container
+      # Sign container via github OIDC
       - uses: sigstore/cosign-installer@v3.4.0
         if: github.event_name != 'pull_request'
 
-      - name: Sign container image
+      - name: Sign the images
+        if: github.event_name != 'pull_request'
+        run: cosign sign -y ${TAGS}
+        env:
+          TAGS: ${{steps.meta.outputs.tags}}
+
+      - name: Verify the pushed tags
         if: github.event_name != 'pull_request'
         run: |
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
+          cosign verify \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            --certificate-identity-regexp "${{ github.server_url }}/${{ github.repository }}" \
+            ${TAGS}
         env:
-          TAGS: ${{ steps.push.outputs.digest }}
-          COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          TAGS: ${{steps.meta.outputs.tags}}
 
       - name: Echo outputs
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ toJSON(steps.push.outputs) }}"  
+          echo "${{ toJSON(steps.push.outputs) }}"
 
   check:
     name: Check all builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    needs: [push-ghcr]
+    needs: [build_and_push]
     steps:
       - name: Exit on failure
-        if: ${{ needs.push-ghcr.result == 'failure' }}
+        if: ${{ needs.build_and_push.result == 'failure' }}
         shell: bash
         run: exit 1
       - name: Exit

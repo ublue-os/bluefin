@@ -13,4 +13,3 @@ ublue_variants:
     flavors:
       - label: bluefin-nvidia
         info: Bluefin
-        
