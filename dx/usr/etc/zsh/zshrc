@@ -192,14 +192,14 @@ colors
 #####################
 
 # Brew
-if [[ -o interactive ]]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if [[ -o interactive ]] && [[ -d /home/linuxbrew/.linuxbrew ]]; then
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # Starship
-if command -v starship > /dev/null
+if type "starship" > /dev/null; then
   eval "$(starship init zsh)"
-end
+fi
 
 #####################
 # User configuration
