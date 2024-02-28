@@ -13,7 +13,7 @@ bluefin-cli:
 brew:
     #!/usr/bin/env bash
     if [[ ! -f "/var/home/linuxbrew/.linuxbrew/bin" || ! -x "/var/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
-        /usr/bin/bash -c 'env NONINTERACTIVE=1 /usr/libexec/brew-install'
+        /usr/bin/bash -c '/usr/libexec/brew-install'
     fi
 
 # Install "fleek" set of packages for brew | none, low, default, high
