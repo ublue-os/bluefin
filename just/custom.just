@@ -18,7 +18,7 @@ brew:
         echo "Please ${b}IGNORE${n} everything the installer tells you to do"
         echo "We have already done it for you! You just need to close and re-open the terminal after installation"
         echo "Do you understand?"
-        echo "Please type in \"Yes I understand\" and press enter"
+        echo "Please type in \"YES I UNDERSTAND\" and press enter"
         read ACCEPT
         if [ "$ACCEPT" == "YES I UNDERSTAND" ]; then
           /usr/bin/bash -c '/usr/libexec/brew-install'
