@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 # Script Version
 VER=3
-VER_FILE="/etc/ublue/networked_tasks_version"
+VER_FILE="/etc/ublue/flatpak_manager_version"
 VER_RAN=$(cat $VER_FILE)
 
 # Run script if updated
 if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
-  echo "Networked tasks v$VER has already ran. Exiting..."
+  echo "Flatpak manager v$VER has already ran. Exiting..."
   exit 0
 fi
 

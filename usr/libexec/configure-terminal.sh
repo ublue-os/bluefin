@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 # shellcheck source=/dev/null
 source /usr/lib/ujust/ujust.sh
 
