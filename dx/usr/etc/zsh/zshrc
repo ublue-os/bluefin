@@ -187,9 +187,19 @@ zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<-
 autoload -U colors
 colors
 
+#####################
+# Sourcing
+#####################
+
+# Brew
 if [[ -o interactive ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
+
+# Starship
+if command -v starship > /dev/null
+  eval "$(starship init zsh)"
+end
 
 #####################
 # User configuration
