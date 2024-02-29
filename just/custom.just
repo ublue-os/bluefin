@@ -26,6 +26,12 @@ brew:
           echo "Capitalization matters when you type \"YES I UNDERSTAND\""
         fi
     fi
+    # if /etc/profile.d/brew.sh already exists, replace it with /usr/etc/profile.d/brew.sh
+    if [ -f /etc/profile.d/brew.sh ]; then
+        if [ -f /usr/etc/profile.d/brew.sh ]; then
+            sudo cp /usr/etc/profile.d/brew.sh /etc/profile.d/brew.sh
+        fi
+    fi
 
 # Install "fleek" set of packages for brew | none, low, default, high
 brew-fleek level="high":
