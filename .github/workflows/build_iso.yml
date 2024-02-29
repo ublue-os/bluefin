@@ -1,6 +1,7 @@
 name: Build Bluefin ISOs
 on:
   workflow_dispatch:
+  pull_request:
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -46,8 +47,6 @@ jobs:
           IMAGE_TAG: ${{ matrix.image_tag }}
           SECURE_BOOT_KEY_URL: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           ENROLLMENT_PASSWORD: 'ublue-os'
-          ACTION_REPO: ublue-os/isogenerator
-          ACTION_REF: 1.0.9
 
       - name: Upload ISOs and SHA Checksum Files to R2
         shell: bash
@@ -61,4 +60,6 @@ jobs:
           SOURCE_DIR: ${{ steps.build.outputs.output-dir }}
         run: |
           dnf install -y rclone
-          rclone copy $SOURCE_DIR R2:bluefin
+          ls -la $SOURCE_DIR
+
+          echo "rclone copy $SOURCE_DIR R2:bluefin"
