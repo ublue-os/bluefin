@@ -2,6 +2,10 @@ name: Build Bluefin ISOs
 on:
   workflow_dispatch:
   pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build_iso.yml'
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -51,7 +55,19 @@ jobs:
           SECURE_BOOT_KEY_URL: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           ENROLLMENT_PASSWORD: 'ublue-os'
 
-      - name: Upload ISOs and SHA Checksum Files to R2
+      - name: Upload ISOs and Checksum (Pull Request)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
+          path: ${{ steps.build.outputs.output-directory }}
+          if-no-files-found: error
+          retention-days: 0
+          compression-level: 0
+          overwrite: true
+
+      - name: Upload ISOs and Checksum to R2
+        if: github.event_name == 'workflow_dispatch'
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
@@ -60,7 +76,7 @@ jobs:
           RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           RCLONE_CONFIG_R2_REGION: auto
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          SOURCE_DIR: ${{ steps.build.outputs.output-dir }}
+          SOURCE_DIR: ${{ steps.build.outputs.output-directory }}
         run: |
           dnf install -y rclone
           ls -la $SOURCE_DIR
