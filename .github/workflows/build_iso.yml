@@ -25,14 +25,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_name: [bluefin, bluefin-asus, bluefin-nvidia, bluefin-surface, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface]
-        major_version: [38, 39]
-        image_tag: [latest, gts]
-        exclude:
-          - major_version: 38
-            image_tag: latest
-          - major_version: 39
-            image_tag: gts
+        # image_name: [bluefin, bluefin-asus, bluefin-nvidia, bluefin-surface, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface]
+        # major_version: [38, 39]
+        # image_tag: [latest, gts]
+        image_name: [bluefin]
+        major_version: [39]
+        image_tag: [latest]
+        # exclude:
+        #   - major_version: 38
+        #     image_tag: latest
+        #   - major_version: 39
+        #     image_tag: gts
     steps:
       - name: Build ISOs
         #if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
