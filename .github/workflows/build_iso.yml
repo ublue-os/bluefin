@@ -29,20 +29,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # image_name: [bluefin, bluefin-asus, bluefin-nvidia, bluefin-surface, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface]
-        # major_version: [38, 39]
-        # image_tag: [latest, gts]
-        image_name: [bluefin]
-        major_version: [39]
-        image_tag: [latest]
-        # exclude:
-        #   - major_version: 38
-        #     image_tag: latest
-        #   - major_version: 39
-        #     image_tag: gts
+        image_name: [bluefin, bluefin-asus, bluefin-nvidia, bluefin-surface, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface]
+        major_version: [38, 39]
+        image_tag: [latest, gts]
+        exclude:
+          - major_version: 38
+            image_tag: latest
+          - major_version: 39
+            image_tag: gts
     steps:
       - name: Build ISOs
-        #if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
         uses: ublue-os/isogenerator@1.0.9
         id: build
         with:
@@ -55,7 +51,7 @@ jobs:
           SECURE_BOOT_KEY_URL: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           ENROLLMENT_PASSWORD: 'ublue-os'
 
-      - name: Upload ISOs and Checksum (Pull Request)
+      - name: Upload ISOs and Checksum to Job Artifacts
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
@@ -79,6 +75,4 @@ jobs:
           SOURCE_DIR: ${{ steps.build.outputs.output-directory }}
         run: |
           dnf install -y rclone
-          ls -la $SOURCE_DIR
-
-          echo "rclone copy $SOURCE_DIR R2:bluefin"
+          rclone copy $SOURCE_DIR R2:bluefin
