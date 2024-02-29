@@ -72,7 +72,7 @@ name='mission-center'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
 binding='<Control><Alt>Return'
-command="ptyxis --tab-with-profile=a21a910811504857bea4c96b3d937b93 --new-window"
+command="ptyxis --new-window"
 name='Bluefin Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]
