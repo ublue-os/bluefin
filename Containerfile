@@ -53,7 +53,7 @@ RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then \
         --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
             egl-wayland \
             || true && \
-        rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo
+        rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
     ; fi
 
 COPY usr /usr
