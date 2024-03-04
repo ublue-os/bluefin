@@ -164,7 +164,7 @@ incus:
         /usr/bin/bluefin-incus
     else
         echo "Developer mode is currently ${b}${red}Disabled${n}."
-        echo "Run `just devmode` to turn on Developer mode."
+        echo "Run \"just devmode\" to turn on Developer mode."
         exit
     fi
 
