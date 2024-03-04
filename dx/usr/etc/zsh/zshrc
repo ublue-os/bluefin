@@ -31,6 +31,15 @@ fi
 unset _comp_path
 
 #
+# Completions
+#
+
+# load brew autocomplete
+if [ -d "/home/linuxbrew/.linuxbrew/share/zsh/site-functions" ]; then
+    fpath+=(/home/linuxbrew/.linuxbrew/share/zsh/site-functions)
+fi
+
+#
 # Options
 #
 
@@ -46,6 +55,8 @@ setopt AUTO_PARAM_SLASH   # If completed parameter is a directory, add a trailin
 setopt EXTENDED_GLOB      # Needed for file modification glob modifiers with compinit.
 unsetopt MENU_COMPLETE    # Do not autoselect the first completion entry.
 unsetopt FLOW_CONTROL     # Disable start/stop characters in shell editor.
+setopt interactivecomments  # Allow inline comments
+setopt AUTO_CD              # Auto changes to a directory without typing cd.
 
 #
 # Variables
@@ -61,13 +72,6 @@ LS_COLORS=${LS_COLORS:-'di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40
 #
 # Styles
 #
-
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-zstyle ':omz:update' mode reminder # just remind me to update when it's time
-
-# change how often to auto-update (in days).
-zstyle ':omz:update' frequency 30
 
 # Defaults.
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
@@ -193,7 +197,7 @@ colors
 
 # Brew
 if [[ -o interactive ]] && [[ -d /home/linuxbrew/.linuxbrew ]]; then
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # Starship
