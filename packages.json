@@ -31,6 +31,7 @@
 				"pulseaudio-utils",
 				"python3-pip",
 				"rclone",
+				"restic",
 				"samba-dcerpc",
 				"samba-ldb-ldap-modules",
 				"samba-winbind-clients",
