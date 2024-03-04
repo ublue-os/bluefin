@@ -3,6 +3,7 @@
 		"include": {
 			"bluefin": [
 				"bash-color-prompt",
+				"bcache-tools",
 				"cockpit-bridge",
 				"evtest",
 				"fish",
