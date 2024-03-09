@@ -170,12 +170,6 @@ tensorflow:
     podman pull docker.io/tensorflow/tensorflow:latest
     podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
-# Install a better on-screen-keyboard and gesture improvements
-touch:
-    pip install --upgrade gnome-extensions-cli
-    gext install improvedosk@nick-shmyrev.dev
-    gext install gestureImprovements@gestures
-
 # Run the yafti setup tool
 yafti:
     yafti /etc/yafti.yml --force

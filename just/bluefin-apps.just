@@ -109,3 +109,11 @@ install-jetbrains-toolbox:
     tar zxf jetbrains-toolbox-"${BUILD_VERSION}".tar.gz
     echo "Launching JetBrains Toolbox"
     ./jetbrains-toolbox-"${BUILD_VERSION}"/jetbrains-toolbox
+
+alias touch := install-touch
+
+# Install a better on-screen-keyboard and gesture improvements
+install-touch:
+    pip install --upgrade gnome-extensions-cli
+    gext install improvedosk@nick-shmyrev.dev
+    gext install gestureImprovements@gestures
