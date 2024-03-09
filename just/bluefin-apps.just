@@ -1,4 +1,7 @@
 # vim: set ft=make :
+########################
+### bluefin-apps.just
+########################
 ## Standardized verbs
 # configure- = configure something that is pre-installed on the image
 # install-   = install something, no uninstall or configuration provided
