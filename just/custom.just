@@ -65,7 +65,6 @@ cockpit:
 devmode:
     #!/usr/bin/env bash
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-
     if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE
     then
         echo ""
@@ -74,14 +73,12 @@ devmode:
         echo "and reboot your system when the update is finished."
         exit
     fi
-
     if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
     then
         CURRENT_STATE="enabled"
     else
         CURRENT_STATE="disabled"
     fi
-
     echo "Developer mode is currently ${CURRENT_STATE}"
     echo "Enable or Disable developer mode"
     OPTION=$(gum choose Enable Disable)
