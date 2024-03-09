@@ -100,10 +100,34 @@ devmode:
         fi
     fi
 
-# Switch to the fish shell
-fish:
-    sudo usermod $USER --shell /usr/bin/fish 
-    printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+alias shell := configure-shell
+
+# Switch to a different shell
+configure-shell ACTION="":
+    #!/bin/bash
+    source /usr/lib/ujust/ujust.sh
+    CURRENT_SHELL="$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+    OPTION={{ ACTION }}
+    if [ "$OPTION" == "help" ]; then
+      echo "Usage: ujust shell <option>"
+      echo "  <option>: Specify the quick option to skip the prompt"
+      echo "  Use 'fish' to select fish"
+      echo "  Use 'zsh' to select zsh"
+      echo "  Use 'bash' to select bash"
+      exit 0
+    elif [ "$OPTION" == "" ]; then
+      echo "${bold}Shell configuration${normal}"
+      echo "${USER}'s shell is currently ${CURRENT_SHELL}"
+      OPTION=$(Choose "fish" "zsh" "bash")
+    fi
+    if [[ "$OPTION" =~ zsh|fish ]]; then
+      sudo usermod $USER --shell /usr/bin/$OPTION 
+      printf "${USER}'s shell is now %s.\n" "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+    elif [ "$OPTION" == "bash" ]; then
+      sudo usermod $USER --shell /bin/$OPTION 
+      printf "${USER}'s shell is now %s.\n" "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
+    fi
+
 
 # Install recommended GNOME extensions
 gnome-extensions:
@@ -209,11 +233,6 @@ touch:
 # Run the yafti setup tool
 yafti:
     yafti /etc/yafti.yml --force
-
-# Switch to the zsh shell
-zsh:
-    sudo usermod $USER --shell /usr/bin/zsh 
-    printf "${USER}'s shell is now %s." "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
 
 # Configure docker,incus-admin,lxd,libvirt container manager permissions
 dx-group:
