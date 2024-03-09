@@ -117,3 +117,20 @@ install-touch:
     pip install --upgrade gnome-extensions-cli
     gext install improvedosk@nick-shmyrev.dev
     gext install gestureImprovements@gestures
+
+alias atuin := install-atuin
+
+# Add atuin
+install-atuin:
+    #!/usr/bin/bash 
+    shell=$(basename $SHELL) 
+    if test $shell = "fish"; then 
+        echo "Adding atuin to your config.fish"
+        printf '\nif status is-interactive\n\tif type -q atuin\n\t\tatuin init fish | source\n\tend\nend\n' >> ${XDG_CONFIG_HOME:-$HOME/.config}/fish/config.fish
+    elif test $shell = "zsh"; then 
+        echo "Adding atuin to your .zshrc"
+        printf '\n[[ "$(command -v atuin)" ]] && eval "$(atuin init zsh)"\n' >> ${ZDOTDIR:-$HOME}/.zshrc 
+    elif test $shell = "bash"; then 
+        echo "Adding bash-prexec and atuin to your .bashrc" 
+        printf '\n[[ -f /usr/share/bash-prexec ]] && source /usr/share/bash-prexec\n[[ "$(command -v atuin)" ]] && eval "$(atuin init bash)"\n' >> ~/.bashrc
+    fi
