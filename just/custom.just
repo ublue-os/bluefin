@@ -92,7 +92,6 @@ configure-shell ACTION="":
       printf "${USER}'s shell is now %s.\n" "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
     fi
 
-
 # Install recommended GNOME extensions
 gnome-extensions:
     pip install --upgrade gnome-extensions-cli
@@ -122,21 +121,6 @@ gnome-vrr:
       gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
     fi
     echo "To apply the changes make sure you logout and restart your session"
-
-# Install and configure Incus
-incus:
-    #!/usr/bin/env bash
-    source /usr/lib/ujust/ujust.sh
-    CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-    if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
-    then
-        echo 'Installing and configuring Incus.'
-        /usr/bin/bluefin-incus
-    else
-        echo "Developer mode is currently ${b}${red}Disabled${n}."
-        echo "Run \"just devmode\" to turn on Developer mode."
-        exit
-    fi
 
 # Ptyxis terminal transparency
 ptyxis-transparency opacity="0.95":
