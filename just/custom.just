@@ -155,25 +155,6 @@ ptyxis-transparency opacity="0.95":
       printf "Value must be between 0 and 1: %s.\n" "{{ opacity }}"
     fi
 
-# Run pytorch
-pytorch:
-    echo 'Follow the prompts and check the tutorial: https://docs.anaconda.com/free/anaconda/jupyter-notebooks/'
-    podman pull docker.io/continuumio/miniconda3
-    podman run -i -t -p 8888:8888 docker.io/continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir \
-    /opt/notebooks && /opt/conda/bin/jupyter notebook \
-    --notebook-dir=/opt/notebooks --ip='*' --port=8888 \
-    --no-browser --allow-root"
-
-# Run Tensorflow
-tensorflow:
-    echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
-    podman pull docker.io/tensorflow/tensorflow:latest
-    podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
-
-# Run the yafti setup tool
-yafti:
-    yafti /etc/yafti.yml --force
-
 # Configure docker,incus-admin,lxd,libvirt container manager permissions
 dx-group:
     sudo usermod -aG docker $USER
