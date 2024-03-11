@@ -33,6 +33,9 @@ jobs:
           - major_version: 39
             image_tag: gts
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.3.1
+
       - name: Build ISOs
         uses: jasonn3/build-container-installer@main
         id: build
