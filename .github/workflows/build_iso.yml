@@ -33,6 +33,7 @@ jobs:
           - major_version: 39
             image_tag: gts
     steps:
+      # Build ISO using Matrix
       - name: Build ISOs
         uses: jasonn3/build-container-installer@main
         id: build
