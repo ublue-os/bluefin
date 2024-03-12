@@ -87,11 +87,10 @@ configure-shell ACTION="":
       echo "${USER}'s shell is currently ${CURRENT_SHELL}"
       OPTION=$(Choose "fish" "zsh" "bash")
     fi
-    if [[ "$OPTION" =~ zsh|fish ]]; then
+    if [ -z "$OPTION" ]; then
+      exit 0
+    else
       sudo usermod $USER --shell /usr/bin/$OPTION 
-      printf "${USER}'s shell is now %s.\n" "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
-    elif [ "$OPTION" == "bash" ]; then
-      sudo usermod $USER --shell /bin/$OPTION 
       printf "${USER}'s shell is now %s.\n" "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
     fi
 
