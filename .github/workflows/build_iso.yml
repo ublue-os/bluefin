@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - testing
     paths:
       - '.github/workflows/build_iso.yml'
 
@@ -16,47 +17,45 @@ concurrency:
 
 jobs:
   build-iso:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       id-token: write
-    container:
-      image: fedora:${{ matrix.major_version }}
-      options: "--privileged"
-      volumes:
-        - "/:/host"
     strategy:
       fail-fast: false
       matrix:
         image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
-        major_version: [38, 39]
-        image_tag: [latest, gts]
-        exclude:
-          - major_version: 38
-            image_tag: latest
-          - major_version: 39
-            image_tag: gts
+        major_version: [39]
+        image_tag: [latest]
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.3.1
+
       - name: Build ISOs
-        uses: ublue-os/isogenerator@1.0.9
+        uses: jasonn3/build-container-installer@main
         id: build
         with:
-          ARCH: x86_64
-          IMAGE_NAME: ${{ matrix.image_name }}
-          IMAGE_REPO: ghcr.io/ublue-os
-          VARIANT: 'Silverblue'
-          VERSION: ${{ matrix.major_version }}
-          IMAGE_TAG: ${{ matrix.image_tag }}
-          SECURE_BOOT_KEY_URL: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
-          ENROLLMENT_PASSWORD: 'ublue-os'
+          arch: x86_64
+          image_name: ${{ matrix.image_name }}
+          image_repo: ghcr.io/ublue-os
+          variant: 'Silverblue'
+          version: ${{ matrix.major_version }}
+          image_tag: ${{ matrix.image_tag }}
+          secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
+          enrollment_password: 'ublue-os'
+          iso_name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
+          enable_cache_dnf: "false"
+          enable_cache_skopeo: "false"
 
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
-          path: ${{ steps.build.outputs.output-directory }}
+          name: ${{ steps.build.outputs.iso_name }}
+          path: |
+            ${{ steps.build.outputs.iso_path }}
+            ${{ steps.build.outputs.iso_path }}-CHECKSUM
           if-no-files-found: error
           retention-days: 0
           compression-level: 0
@@ -72,7 +71,9 @@ jobs:
           RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           RCLONE_CONFIG_R2_REGION: auto
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          SOURCE_DIR: ${{ steps.build.outputs.output-directory }}
+          SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
+          SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
         run: |
           dnf install -y rclone
-          rclone copy $SOURCE_DIR R2:bluefin
+          rclone copy $SOURCE_ISO R2:bluefin
+          rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
