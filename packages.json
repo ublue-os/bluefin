@@ -11,6 +11,7 @@
 				"glow",
 				"gum",
 				"input-remapper",
+				"kio-fuse",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
 				"make",
