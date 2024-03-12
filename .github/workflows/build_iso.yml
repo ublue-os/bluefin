@@ -25,13 +25,8 @@ jobs:
       fail-fast: false
       matrix:
         image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
-        major_version: [38, 39]
-        image_tag: [latest, gts]
-        exclude:
-          - major_version: 38
-            image_tag: latest
-          - major_version: 39
-            image_tag: gts
+        major_version: [39]
+        image_tag: [latest]
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
