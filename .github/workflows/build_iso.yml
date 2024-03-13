@@ -29,7 +29,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
+        #image_name: [lutho, lutho-nvidia, lutho-asus, lutho-asus-nvidia, lutho-surface, lutho-surface-nvidia, lutho-dx, lutho-dx-nvidia, lutho-dx-asus, lutho-dx-surface, lutho-dx-asus-nvidia, lutho-dx-surface-nvidia]
+        image_name: [lutho, lutho-dx]
         major_version: [38, 39]
         image_tag: [latest, gts]
         exclude:
