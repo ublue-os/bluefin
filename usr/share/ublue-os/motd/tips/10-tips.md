@@ -10,3 +10,4 @@ Need more indepth technical information?~Check out the [Bluefin Administrator's 
 Support [Bluefin's Paleoartists](https://universal-blue.discourse.group/docs?topic=299)
 Like servers? Check out [ucore](https://github.com/ublue-os/ucore)
 Update break something? You can roll back and pin the previous release or build date:~[View our guide](https://universal-blue.discourse.group/docs?topic=513)
+Use `brew search` and `brew install` to install packages. Bluefin will take care of the updates automatically

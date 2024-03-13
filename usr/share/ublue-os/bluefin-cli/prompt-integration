@@ -1,6 +1,0 @@
-
-
-[Service]
-ExecStartPre=-/usr/libexec/prompt-remove-profile.sh %N
-ExecStartPost=-/usr/libexec/prompt-create-profile.sh %N
-ExecStop=-/usr/libexec/prompt-remove-profile.sh %N

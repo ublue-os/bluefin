@@ -1,0 +1,79 @@
+name: Build ISOs
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build_iso.yml'
+
+env:
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    container:
+      image: fedora:${{ matrix.major_version }}
+      options: "--privileged"
+      volumes:
+        - "/:/host"
+    strategy:
+      fail-fast: false
+      matrix:
+        #image_name: [lutho, lutho-nvidia, lutho-asus, lutho-asus-nvidia, lutho-surface, lutho-surface-nvidia, lutho-dx, lutho-dx-nvidia, lutho-dx-asus, lutho-dx-surface, lutho-dx-asus-nvidia, lutho-dx-surface-nvidia]
+        image_name: [lutho, lutho-dx]
+        major_version: [38, 39]
+        image_tag: [latest, gts]
+        exclude:
+          - major_version: 38
+            image_tag: latest
+          - major_version: 39
+            image_tag: gts
+    steps:
+      - name: Build ISOs
+        uses: ublue-os/isogenerator@1.0.9
+        id: build
+        with:
+          ARCH: x86_64
+          IMAGE_NAME: ${{ matrix.image_name }}
+          IMAGE_REPO: ghcr.io/ethanjli
+          VARIANT: 'Kinoite'
+          VERSION: ${{ matrix.major_version }}
+          IMAGE_TAG: ${{ matrix.image_tag }}
+          SECURE_BOOT_KEY_URL: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
+          ENROLLMENT_PASSWORD: 'ublue-os'
+
+      - name: Upload ISOs and Checksum to Job Artifacts
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
+          path: ${{ steps.build.outputs.output-directory }}
+          if-no-files-found: error
+          retention-days: 0
+          compression-level: 0
+          overwrite: true
+
+      - name: Upload ISOs and Checksum to R2
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          SOURCE_DIR: ${{ steps.build.outputs.output-directory }}
+        run: |
+          dnf install -y rclone
+          rclone copy $SOURCE_DIR R2:bluefin

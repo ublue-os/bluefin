@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 # Script Version
-VER=3
+VER=5
 VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/flatpak_manager_version"
 VER_RAN=$(cat $VER_FILE)
 
@@ -11,7 +11,7 @@ mkdir -p "$(dirname "$VER_FILE")" || exit 1
 # Exit if v1 file is present.
 VER_1_FILE="$HOME/.ublue_flatpak_manager_version"
 if [[ -f $VER_1_FILE  ]]; then
-  echo "Flatpak manager v1 has already ran. Exiting..."
+  echo "Networked tasks v$VER has already ran. Exiting..."
   rm $VER_1_FILE
   echo $VER > $VER_FILE
   exit 0

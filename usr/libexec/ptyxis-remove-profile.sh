@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# ensure that the prompt profiles for deleted instances are removed
+# ensure that the ptyxis profiles for deleted instances are removed
 
 # if dconf doesn't exist, just return
 if ! command -v dconf >/dev/null; then
@@ -7,15 +7,15 @@ if ! command -v dconf >/dev/null; then
 fi
 
 # Cleanup any stale profiles
-for i in $(dconf list /org/gnome/Prompt/Profiles/); do
+for i in $(dconf list /org/gnome/Ptyxis/Profiles/); do
     i=${i:0:-1}
-    [[ $(dconf read /org/gnome/Prompt/profile-uuids) =~ $i ]] || dconf reset -f "/org/gnome/Prompt/Profiles/${i}/"
+    [[ $(dconf read /org/gnome/Ptyxis/profile-uuids) =~ $i ]] || dconf reset -f "/org/gnome/Ptyxis/Profiles/${i}/"
 done
 
 name="$1"
 
 # Read the current value of the array
-CURRENT_VALUE=$(dconf read /org/gnome/Prompt/profile-uuids)
+CURRENT_VALUE=$(dconf read /org/gnome/Ptyxis/profile-uuids)
 
 # remove the leading and trailing brackets
 CURRENT_VALUE=${CURRENT_VALUE:1:-1}
@@ -27,7 +27,7 @@ CURRENT_VALUE=${CURRENT_VALUE// /}
 IFS=',' read -r -a array <<<"$CURRENT_VALUE"
 
 # Get Default
-DEFAULT_VALUE=$(dconf read /org/gnome/Prompt/default-profile-uuid)
+DEFAULT_VALUE=$(dconf read /org/gnome/Ptyxis/default-profile-uuid)
 
 # loop through the array and remove any that don't exist
 for i in "${!array[@]}"; do
@@ -37,7 +37,7 @@ for i in "${!array[@]}"; do
     guid=${guid//\'/}
 
     #echo "Checking profile for $(red $guid)"
-    profile="/org/gnome/Prompt/Profiles/${guid}/"
+    profile="/org/gnome/Ptyxis/Profiles/${guid}/"
 
     ublue_os=$(dconf read "${profile}ublue-os")
     label=$(dconf read "${profile}label")
@@ -59,7 +59,7 @@ for i in "${!array[@]}"; do
             UPDATED_VALUE="[$UPDATED_VALUE]"
 
             # Write the updated array back to dconf
-            dconf write /org/gnome/Prompt/profile-uuids "$UPDATED_VALUE"
+            dconf write /org/gnome/Ptyxis/profile-uuids "$UPDATED_VALUE"
         fi
     fi
 done

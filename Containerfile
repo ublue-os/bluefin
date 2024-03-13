@@ -28,6 +28,21 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
             || true \
     ; fi
 
+# Install Explicit Sync Patches on Nvidia builds
+RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then \
+        wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
+        rpm-ostree override replace \
+        --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+            xorg-x11-server-Xwayland && \
+        rpm-ostree override replace \
+        --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+            egl-wayland \
+            || true && \
+        rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
+    ; fi
+
 COPY usr /usr
 COPY just /tmp/just
 COPY etc/yum.repos.d/ /etc/yum.repos.d/
@@ -57,11 +72,18 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     wget https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/che-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo
 
-# Copy atuin from bluefin-cli
+# Copy Bluefin CLI packages
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/eza /usr/bin/eza
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/fd /usr/bin/fd
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/fzf /usr/bin/fzf
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/rg /usr/bin/rg
+COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/zoxide /usr/bin/zoxide
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    wget https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -O /usr/libexec/brew-install && \
+    chmod +x /usr/libexec/brew-install && \
     /tmp/build.sh && \
     /tmp/image-info.sh && \
     /tmp/fetch-quadlets.sh && \
@@ -91,6 +113,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     echo "Hidden=true" >> /usr/share/applications/nvtop.desktop && \
     echo "Hidden=true" >> /usr/share/applications/gnome-system-monitor.desktop && \
     rm -f /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo && \
+    sed -i 's/#DefaultLimitNOFILE=/DefaultLimitNOFILE=4096:524288/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     sed -i '/^PRETTY_NAME/s/Kinoite/Lutho/' /usr/lib/os-release && \
@@ -175,5 +198,6 @@ RUN rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".rep
     rm -f /etc/yum.repos.d/docker-ce.repo && \
     rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo && \
     rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo && \
+    fc-cache --system-only --really-force --verbose && \
     rm -rf /tmp/* /var/* && \
     ostree container commit
