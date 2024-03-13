@@ -1,4 +1,4 @@
-name: Build Bluefin ISOs
+name: Build ISOs
 on:
   workflow_dispatch:
   pull_request:
