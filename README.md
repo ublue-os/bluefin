@@ -1,48 +1,31 @@
-# bluefin
-**This image is considered Beta** 
+# lutho-os
 
-![image](https://github.com/ublue-os/bluefin/assets/1264109/c0b3fa8a-f513-4bb1-b314-e134d1802e18)
+**This image is considered pre-alpha** 
 
-> "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
+This image is a fork of [Bluefin](https://github.com/ublue-os/bluefin), but based on Fedora Kinoite instead of Fedora Silverblue, and customized for my ([@ethanjli](https://github.com/ethanjli)'s) own personal requirements.
 
-## [projectbluefin.io](https://projectbluefin.io)
-- [Announcement Blog Post](https://www.ypsidanger.com/announcing-project-bluefin/)
+*Lutho* is the name of my Framework 13 AMD laptop which this *lutho-os* image is being maintained for. The name comes from a character in Ken Liu's silkpunk novel series *The Dandelion Dynasty*:
 
-A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these two use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. For gamers we strive to deliver a world-class Flathub gaming experience. Check [Introduction to Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41) for a feature walkthrough. 
+> Lutho: patron of Haan; god of fishermen, divination, mathematics, and knowledge; his pawi is the sea turtle.
 
-#### Download: [**bluefin-gts.iso**](https://download.projectbluefin.io/bluefin-gts.iso) [(checksum)](https://download.projectbluefin.io/bluefin-gts-CHECKSUM)  
-Recommended for new users using AMD and Intel GPUs (3.7GB, based on Fedora 38)
+## Usage
 
-#### Download: [**bluefin-nvidia-gts.iso**](https://download.projectbluefin.io/bluefin-nvidia-gts.iso) [(checksum)](https://download.projectbluefin.io/bluefin-nvidia-gts-CHECKSUM)  
-Recommended for new users using Nvidia GPUs (4.5GB, based on Fedora 38)
-- If you are an experienced user who is comfortable troubleshooting and contributing feedback use: [**bluefin-latest.iso**](https://download.projectbluefin.io/bluefin-latest.iso) [(checksum)](https://download.projectbluefin.io/bluefin-latest-CHECKSUM) and [**bluefin-nvidia-latest.iso**](https://download.projectbluefin.io/bluefin-nvidia-latest.iso) [(checksum)](https://download.projectbluefin.io/bluefin-nvidia-latest-CHECKSUM)
+I do not recommend using this image unless you are me (@ethanjli) - I occasionally experiment with changes in pull requests where I build and push the changes to the images for testing on my laptop before I merge the pull requests into the main branch, which means that some images will occasionally be broken. However, please feel free to study [the changes I've made from Bluefin](https://github.com/ethanjli/lutho-os/compare/bluefin-main...ethanjli:lutho-os:main) as a reference for how you might make your own Kinoite-based fork of Bluefin.
 
-### Bluefin Developer Experience Images
+I use the `ghcr.io/ethanjli/lutho-dx:39` image, e.g. with the following `rpm-ostree` commands:
 
-[Bluefin Developer Experience Edition](https://universal-blue.discourse.group/t/bluefin-dx-the-bluefin-developer-experience/39) (`bluefin-dx`) is a dedicated developer image with bundled tools. Unlike traditional Linux systems, the operating system and developer environment are explicitly and purposely separated.
+```
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/ethanjli/lutho-dx:39
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ethanjli/lutho-dx:39
+```
 
-#### Download: [**bluefin-dx-gts.iso**](https://download.projectbluefin.io/bluefin-dx-gts.iso) [(checksum)](https://download.projectbluefin.io/bluefin-dx-gts-CHECKSUM) 
-Recommended for developers with AMD and Intel based GPUs (3.7GB, based on Fedora 38)  
-#### Download: [**bluefin-dx-nvidia-gts.iso**](https://download.projectbluefin.io/bluefin-dx-nvidia-gts.iso) [(checksum)](https://download.projectbluefin.io/bluefin-dx-nvidia-gts-CHECKSUM)  
-Recommended for developers with Nvidia GPUs (5.4GB, based on Fedora 38)  
-- If you are an experienced user who is comfortable troubleshooting and contributing feedback use: [**bluefin-dx-latest.iso**](https://download.projectbluefin.io/bluefin-dx-latest.iso) [(checksum)](https://download.projectbluefin.io/bluefin-dx-latest-CHECKSUM) / [**bluefin-dx-nvidia-latest.iso**](https://download.projectbluefin.io/bluefin-dx-nvidia-latest.iso) [(checksum)](https://download.projectbluefin.io/bluefin-dx-nvidia-latest-CHECKSUM)  
+## Scope
 
-# Documentation
+This fork tracks the upstream Bluefin project and generally tries to keep merges simple, but it does remove a lot of things in Bluefin which I personally don't need.
 
-1. [Discussions and Announcements](https://universal-blue.discourse.group/c/bluefin/6) - strongly recommended!
-2. [Administrator's Guide](https://universal-blue.discourse.group/t/bluefin-administrators-guide/40)
+I try to do as much as possible in my [dotfiles repo](https://github.com/ethanjli/dotfiles); this includes all KDE Plasma customizations and theming (which includes fonts!). This project is only run and tested with those dotfiles.
 
-## Repobeats
+## Associated repositories
 
-![Alt](https://repobeats.axiom.co/api/embed/40b85b252bf6ea25eb90539d1adcea013ccae69a.svg "Repobeats analytics image")
-
-## Star History
-
-<a href="https://star-history.com/#ublue-os/bluefin&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date" />
-  </picture>
-</a>
-
+- [github.com/ethanjli/dotfiles](https://github.com/ethanjli/dotfiles): configurations and CLI apps used with this image.
+- [github.com/ethanjli/planktoscope-toolbox](https://github.com/ethanjli/planktoscope-toolbox): a Distrobox container image I use for working on the various repositories in [github.com/PlanktoScope](https://github.com/PlanktoScope)
