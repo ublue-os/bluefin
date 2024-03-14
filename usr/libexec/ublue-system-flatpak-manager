@@ -1,10 +1,4 @@
 #!/usr/bin/bash
 
-# Opt out of and remove Fedora's flatpak repo
-if grep -qz 'fedora' <<<$(flatpak remotes); then
-	/usr/lib/fedora-third-party/fedora-third-party-opt-out
-	/usr/bin/fedora-third-party disable
-	flatpak remote-delete fedora --force
-fi
-
+# Use until yafti rework is done
 flatpak --system update -y

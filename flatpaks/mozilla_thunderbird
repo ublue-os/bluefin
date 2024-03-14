@@ -1,0 +1,8 @@
+runtime/org.freedesktop.Platform.GL.default/x86_64/23.08
+runtime/org.freedesktop.Platform.GL.default/x86_64/23.08-extra
+runtime/org.freedesktop.Platform/x86_64/23.08
+runtime/org.freedesktop.Platform.Locale/x86_64/23.08
+runtime/org.freedesktop.Platform.openh264/x86_64/2.2.0
+
+runtime/org.mozilla.firefox.Locale/x86_64/stable
+app/org.mozilla.firefox/x86_64/stable

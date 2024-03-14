@@ -47,7 +47,7 @@ jobs:
           iso_name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
-          flatpak_remote_refs: "runtime/org.kde.Platform/x86_64/6.5 runtime/org.freedesktop.Platform/x86_64/23.08 runtime/org.gnome.Platform/x86_64/45 runtime/org.gnome.Platform/x86_64/44 app/org.gnome.Calculator/x86_64/stable app/org.gnome.Calendar/x86_64/stable app/org.gnome.Characters/x86_64/stable app/org.gnome.Connections/x86_64/stable app/org.gnome.Contacts/x86_64/stable app/org.gnome.Evince/x86_64/stable app/org.gnome.Loupe/x86_64/stable app/org.gnome.Logs/x86_64/stable app/org.gnome.Maps/x86_64/stable app/org.gnome.NautilusPreviewer/x86_64/stable app/org.gnome.TextEditor/x86_64/stable app/org.gnome.Weather/x86_64/stable app/org.gnome.baobab/x86_64/stable app/org.gnome.clocks/x86_64/stable app/org.gnome.font-viewer/x86_64/stable app/com.mattjakeman.ExtensionManager/x86_64/stable app/com.github.tchx84.Flatseal/x86_64/stable app/io.github.dvlv.boxbuddyrs/x86_64/stable app/io.github.flattool.Warehouse/x86_64/stable app/org.fedoraproject.MediaWriter/x86_64/stable app/io.missioncenter.MissionCenter/x86_64/stable app/io.github.celluloid_player.Celluloid/x86_64/stable app/org.mozilla.firefox/x86_64/stable"
+          flatpak_remote_refs_dir: /github/workspace/flatpaks
 
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.event_name == 'pull_request'
