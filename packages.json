@@ -87,6 +87,7 @@
 				"qemu-user-static",
 				"qemu",
 				"ubuntu-family-fonts",
+				"udica",
 				"virt-manager",
 				"virt-viewer"
 			]
