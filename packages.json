@@ -4,6 +4,7 @@
 			"bluefin": [
 				"bash-color-prompt",
 				"bcache-tools",
+				"bootc",
 				"cockpit-bridge",
 				"evtest",
 				"epson-inkjet-printer-escpr",
