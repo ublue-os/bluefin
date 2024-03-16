@@ -53,6 +53,7 @@
 			],
 			"bluefin-dx": [
 				"adobe-source-code-pro-fonts",
+				"btrfs-assistant",
 				"cascadia-code-fonts",
 				"cockpit-machines",
 				"cockpit-networkmanager",
@@ -94,6 +95,7 @@
 				"podmansh",
 				"powerline-fonts",
 				"powertop",
+				"snapper",
 				"qemu-char-spice",
 				"qemu-device-display-virtio-gpu",
 				"qemu-device-display-virtio-vga",
