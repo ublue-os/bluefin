@@ -32,6 +32,9 @@ jobs:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
 
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Build ISOs
         uses: jasonn3/build-container-installer@main
         id: build
@@ -75,6 +78,7 @@ jobs:
           SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
           SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
         run: |
-          dnf install -y rclone
+          apt-get update
+          apt-get install -y rclone
           rclone copy $SOURCE_ISO R2:bluefin
           rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
