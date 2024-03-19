@@ -48,6 +48,9 @@ jobs:
             is_latest_version: true
             is_stable_version: true
             is_gts_version: false
+        exclude:
+          - major_version: 38
+            image_flavor: [asus, asus-nvidia]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -263,8 +266,8 @@ jobs:
       fail-fast: false
       matrix:
         image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
-        major_version: [39]
-        image_tag: [latest, 39-testing]
+        major_version: [38, 39]
+        image_tag: [latest, 38-testing, 39-testing]
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
