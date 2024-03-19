@@ -38,10 +38,12 @@ jobs:
 
   build-container:
     runs-on: ubuntu-22.04
+    needs: [check-just-files]
     permissions:
       contents: read
       packages: write
       id-token: write
+    continue-on-error: false
     strategy:
       fail-fast: false
       matrix:
