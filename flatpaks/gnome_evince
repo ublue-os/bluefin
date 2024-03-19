@@ -2,7 +2,6 @@ runtime/org.gnome.Platform/x86_64/45
 runtime/org.gnome.Platform.Locale/x86_64/45
 runtime/org.freedesktop.Platform.GL.default/x86_64/23.08
 runtime/org.freedesktop.Platform.GL.default/x86_64/23.08-extra
-runtime/org.freedesktop.Platform.openh264/x86_64/2.2.0
 
 runtime/org.gnome.Evince.Locale/x86_64/stable
 app/org.gnome.Evince/x86_64/stable

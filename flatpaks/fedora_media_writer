@@ -1,6 +1,5 @@
 runtime/org.freedesktop.Platform.GL.default/x86_64/23.08
 runtime/org.freedesktop.Platform.GL.default/x86_64/23.08-extra 
-runtime/org.freedesktop.Platform.openh264/x86_64/2.2.0
 runtime/org.kde.PlatformTheme.QGnomePlatform/x86_64/6.5
 runtime/org.kde.WaylandDecoration.QAdwaitaDecorations/x86_64/6.5 
 runtime/org.kde.WaylandDecoration.QGnomePlatform-decoration/x86_64/6.5
