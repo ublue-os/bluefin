@@ -256,6 +256,5 @@ jobs:
     name: build iso
     #needs: [check-container-build]
     if: endsWith("${{ github.event.pull_request.title }}", "[ISO]" )
-    #if: github.event_name == 'pull_request' || github.ref_name == 'testing'
     uses: ./.github/workflows/build_iso.yml
     secrets: inherit
