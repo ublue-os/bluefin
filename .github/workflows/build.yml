@@ -234,7 +234,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
       - name: Echo outputs
-        if: github.event_name != 'pull_request'
+        #if: github.event_name != 'pull_request'
         run: |
           echo "${{ toJSON(steps.push.outputs) }}"
 
@@ -251,3 +251,10 @@ jobs:
       - name: Exit
         shell: bash
         run: exit 0
+
+  build_iso:
+    name: build iso
+    needs: [check]
+    if: github.event_name == 'pull_request' || github.ref_name == 'testing'
+    uses: ./.github/workflows/build_iso.yml
+    secrets: inherit
