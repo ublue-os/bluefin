@@ -51,7 +51,6 @@ jobs:
         image_variant: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
         version: [38, 39]
         support: [latest, gts]
-        target: ${{ matrix.image_name }}
         exclude:
           - version: 38
             image_variant: asus
@@ -79,6 +78,7 @@ jobs:
           version: ${{ matrix.version }}
           support: ${{ matrix.support }}
           signing_key: ${{ secrets.SIGNING_SECRET }}
+          target: ${{ matrix.image_name }}
           extra_build_args: |
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
 
