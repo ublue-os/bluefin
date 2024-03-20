@@ -56,8 +56,10 @@ jobs:
             image_variant: asus
           - version: 38
             image_variant: asus-nvidia
-          - support: gts
-            version: 39
+          - version: 38
+            support: latest
+          - version: 39
+            support: gts
     steps:
       - name: Determine AKMODS_FLAVOR
         run: |
