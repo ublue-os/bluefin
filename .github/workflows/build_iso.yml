@@ -60,7 +60,7 @@ jobs:
           image_repo: ghcr.io/ublue-os
           variant: 'Silverblue'
           version: ${{ matrix.major_version }}
-          image_tag: ${{ github.event.number && format('pr-{0}-{1}', github.event.number, matrix.major_version) || ${{ steps.generate-tag.outputs.tag }} }}
+          image_tag: ${{ github.event.number && format('pr-{0}-{1}', github.event.number, matrix.major_version) || ${{ steps.generate-tag.outputs.tag }}
           secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           enrollment_password: 'ublue-os'
           iso_name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
