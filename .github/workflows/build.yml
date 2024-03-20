@@ -237,7 +237,7 @@ jobs:
     name: Check all builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    needs: [push-ghcr]
+    needs: [build-container]
     steps:
       - name: Exit on failure
         if: ${{ needs.push-ghcr.result == 'failure' }}
