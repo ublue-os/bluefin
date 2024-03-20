@@ -27,7 +27,8 @@ concurrency:
 jobs:
   build-container:
     name: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    continue-on-error: false
     strategy:
       fail-fast: false
       matrix:
@@ -238,7 +239,7 @@ jobs:
         run: |
           echo "${{ toJSON(steps.push.outputs) }}"
 
-  check-container-build:
+  check:
     name: Check all builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
@@ -254,6 +255,7 @@ jobs:
 
   build_iso:
     name: build iso
+    needs: [check]
     if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
     uses: ./.github/workflows/build_iso.yml
     secrets: inherit
