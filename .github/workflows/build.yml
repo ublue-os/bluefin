@@ -9,7 +9,6 @@ on:
       - testing
     paths-ignore:
       - '**.md'
-      - '.github/workflows/build_iso.yml'
   push:
     branches:
       - main
