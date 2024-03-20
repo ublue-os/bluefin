@@ -59,6 +59,15 @@ jobs:
           - support: gts
             version: 39
     steps:
+      - name: Determine AKMODS_FLAVOR
+        run: |
+          if [[ "${{ matrix.image_variant }}" =~ ^asus* ]]; then
+              echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
+          elif [[ "${{ matrix.image_variant }}" =~ ^surface* ]]; then
+              echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
+          else
+              echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
+          fi
       - name: Build Container
         uses: ublue-os/build-action@main
         with:
@@ -67,6 +76,8 @@ jobs:
           version: ${{ matrix.version }}
           support: ${{ matrix.support }}
           signing_key: ${{ secrets.SIGNING_SECRET }}
+          extra_build_args: |
+            AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
 
   build-iso:
     runs-on: ubuntu-latest
