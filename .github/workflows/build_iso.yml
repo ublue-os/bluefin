@@ -17,8 +17,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
+        image_name:
+          - bluefin
+          - bluefin-nvidia
+          - bluefin-asus
+          - bluefin-asus-nvidia
+          - bluefin-surface
+          - bluefin-surface-nvidia
+          - bluefin-dx
+          - bluefin-dx-nvidia
+          - bluefin-dx-asus
+          - bluefin-dx-surface
+          - bluefin-dx-asus-nvidia
+          - bluefin-dx-surface-nvidia
         major_version: [38, 39]
+        exclude:
+          - major_version: 38
+            image_name: bluefin-asus
+          - major_version: 38
+            image_name: bluefin-asus-nvidia
+          - major_version: 38
+            image_name: bluefin-dx-asus
+          - major_version: 38
+            image_name: bluefin-dx-asus-nvidia
         include:
           - major_version: 38
             is_gts_version: true
