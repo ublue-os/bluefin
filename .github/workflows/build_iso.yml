@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   build-iso:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -107,8 +107,7 @@ jobs:
           overwrite: true
 
       - name: Upload ISOs and Checksum to R2
-        #if: startsWith(github.ref, 'refs/tags/v')
-        if: github.event_name != 'pull_request'
+        if: github.event_name == 'workflow_dispatch'
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
