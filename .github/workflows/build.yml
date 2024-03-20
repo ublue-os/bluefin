@@ -255,6 +255,6 @@ jobs:
   build_iso:
     name: build iso
     #needs: [check]
-    #if: github.event_name == 'pull_request' || github.ref_name == 'testing'
+    if: github.event_name == 'pull_request' || github.ref_name == 'testing'
     uses: ./.github/workflows/build_iso.yml
     secrets: inherit
