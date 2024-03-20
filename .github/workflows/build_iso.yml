@@ -1,0 +1,100 @@
+name: Build Bluefin ISOs
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
+        major_version: [38, 39]
+        include:
+          - major_version: 38
+            is_gts_version: true
+          - major_version: 39
+            is_gts_version: false
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.3.1
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set Image Tag
+        id: generate-tag
+        shell: bash
+        run: |
+          TAG="latest"
+
+          if [[ ${{ matrix.is_gts_version }} == "true" ]]; then
+            TAG="gts"
+          fi
+
+          if [[ "${{ github.ref_name }}" == "testing" ]]; then
+            if [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+              TAG="gts-testing"
+            else
+              TAG="testing"
+            fi
+          fi
+
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Build ISOs
+        uses: jasonn3/build-container-installer@main
+        id: build
+        with:
+          arch: x86_64
+          image_name: ${{ matrix.image_name }}
+          image_repo: ghcr.io/ublue-os
+          variant: 'Silverblue'
+          version: ${{ matrix.major_version }}
+          image_tag: ${{ github.event.number && format('pr-{0}-{1}', github.event.number, matrix.major_version) || ${{ steps.generate-tag.outputs.tag }} }}
+          secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
+          enrollment_password: 'ublue-os'
+          iso_name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
+          enable_cache_dnf: "false"
+          enable_cache_skopeo: "false"
+          flatpak_remote_refs_dir: /github/workspace/flatpaks
+
+      - name: Upload ISOs and Checksum to Job Artifacts
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.iso_name }}
+          path: |
+            ${{ steps.build.outputs.iso_path }}
+            ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          if-no-files-found: error
+          retention-days: 0
+          compression-level: 0
+          overwrite: true
+
+      - name: Upload ISOs and Checksum to R2
+        #if: startsWith(github.ref, 'refs/tags/v')
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
+          SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
+        run: |
+          apt-get update
+          apt-get install -y rclone
+          rclone copy $SOURCE_ISO R2:bluefin
+          rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
