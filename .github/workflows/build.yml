@@ -255,6 +255,6 @@ jobs:
   build_iso:
     name: build iso
     #needs: [check-container-build]
-    if: ${{ endsWith(github.event.pull_request.title, "[ISO]") }}
+    if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
     uses: ./.github/workflows/build_iso.yml
     secrets: inherit
