@@ -95,7 +95,6 @@ jobs:
       matrix:
         image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
         major_version: [39]
-        image_tag: ${{ github.event.issue.number && format('pr-{0}', github.event.issue.number) || 'latest' }}
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
@@ -112,7 +111,7 @@ jobs:
           image_repo: ghcr.io/ublue-os
           variant: 'Silverblue'
           version: ${{ matrix.major_version }}
-          image_tag: ${{ matrix.image_tag }}
+          image_tag: ${{ github.event.issue.number && format('pr-{0}', github.event.issue.number) || 'latest' }}
           secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           enrollment_password: 'ublue-os'
           iso_name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
