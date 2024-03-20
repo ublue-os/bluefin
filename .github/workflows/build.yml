@@ -252,18 +252,9 @@ jobs:
   #        shell: bash
   #        run: exit 0
 
-  debug:
-    name: debug github pr title
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo outputs
-        shell: bash
-        run: |
-          echo "${{ github.event.pull_request.title }}"
-
   build_iso:
     name: build iso
     #needs: [check-container-build]
-    if: endsWith("${{ github.event.pull_request.title }}", "[ISO]" )
+    if: ${{ endsWith(github.event.pull_request.title, "[ISO]") }}
     uses: ./.github/workflows/build_iso.yml
     secrets: inherit
