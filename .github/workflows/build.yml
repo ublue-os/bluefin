@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   build-container:
-    name: Build Container and Push to GHCR
+    name: build
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
