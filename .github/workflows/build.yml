@@ -34,6 +34,11 @@ jobs:
         image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
         base_name: [bluefin, bluefin-dx]
         major_version: [38, 39]
+        exclude:
+          - major_version: 38
+            image_flavor: asus
+          - major_version: 38
+            image_flavor: asus-nvidia
         include:
           - major_version: 38
             is_latest_version: false
