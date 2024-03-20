@@ -245,7 +245,7 @@ jobs:
     needs: [build-container]
     steps:
       - name: Exit on failure
-        if: ${{ needs.push-ghcr.result == 'failure' }}
+        if: ${{ needs.build_container.result == 'failure' }}
         shell: bash
         run: exit 1
       - name: Exit
@@ -255,6 +255,6 @@ jobs:
   build_iso:
     name: build iso
     needs: [check]
-    if: github.event_name == 'pull_request' || github.ref_name == 'testing'
+    #if: github.event_name == 'pull_request' || github.ref_name == 'testing'
     uses: ./.github/workflows/build_iso.yml
     secrets: inherit
