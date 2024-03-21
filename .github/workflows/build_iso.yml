@@ -88,7 +88,7 @@ jobs:
           image_tag: ${{ steps.generate-tag.outputs.tag }}
           secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           enrollment_password: 'ublue-os'
-          iso_name: ${{ matrix.image_name }}-${{ matrix.image_tag }}-${{ matrix.major_version}}
+          iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
           flatpak_remote_refs_dir: /github/workspace/flatpaks
