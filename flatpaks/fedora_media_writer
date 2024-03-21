@@ -1,9 +1,0 @@
-runtime/org.freedesktop.Platform.GL.default/x86_64/23.08
-runtime/org.freedesktop.Platform.GL.default/x86_64/23.08-extra 
-runtime/org.kde.PlatformTheme.QGnomePlatform/x86_64/6.5
-runtime/org.kde.WaylandDecoration.QAdwaitaDecorations/x86_64/6.5 
-runtime/org.kde.WaylandDecoration.QGnomePlatform-decoration/x86_64/6.5
-runtime/org.kde.Platform/x86_64/6.5
-runtime/org.kde.Platform.Locale/x86_64/6.5
-
-app/org.fedoraproject.MediaWriter/x86_64/stable

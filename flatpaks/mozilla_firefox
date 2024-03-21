@@ -1,7 +1,2 @@
-runtime/org.freedesktop.Platform.GL.default/x86_64/23.08
-runtime/org.freedesktop.Platform.GL.default/x86_64/23.08-extra
 runtime/org.freedesktop.Platform/x86_64/23.08
-runtime/org.freedesktop.Platform.Locale/x86_64/23.08
-
-runtime/org.mozilla.Thunderbird.Locale/x86_64/stable
-app/org.mozilla.Thunderbird/x86_64/stable
+app/org.mozilla.firefox/x86_64/stable

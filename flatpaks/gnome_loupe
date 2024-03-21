@@ -1,8 +1,0 @@
-runtime/org.gnome.Platform/x86_64/45
-runtime/org.gnome.Platform.Locale/x86_64/45
-runtime/org.freedesktop.Platform.GL.default/x86_64/23.08
-runtime/org.freedesktop.Platform.GL.default/x86_64/23.08-extra
-
-runtime/org.gnome.Loupe.HEIC/x86_64/stable
-runtime/org.gnome.Loupe.Locale/x86_64/stable
-app/org.gnome.Loupe/x86_64/stable
