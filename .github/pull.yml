@@ -1,6 +1,6 @@
 version: "1"
 rules:
   - base: main
-    upstream: ublue-os:main
+    upstream: tuna:main
     mergeMethod: merge
     mergeUnstable: false
