@@ -1,5 +1,7 @@
-# bluefin
+# tuna
 **This image is considered Beta** 
+
+An image for my personnal use based on UBlue with reduced usless packages and some added one.
 
 ![image](https://github.com/ublue-os/bluefin/assets/1264109/c0b3fa8a-f513-4bb1-b314-e134d1802e18)
 
