@@ -1,10 +1,10 @@
 ublue_variants:
-  - label: ublue-os/bluefin
+  - label: jumpyvi/tuna
     ks: /kickstart/ublue-os.ks
     flavors:
       - label: bluefin
         info: Bluefin
-  - label: ublue-os/bluefin-nvidia
+  - label: jumpyvi/tuna-nvidia
     ks: /kickstart/ublue-os-nvidia.ks
     subvariants:
       - label: latest driver
