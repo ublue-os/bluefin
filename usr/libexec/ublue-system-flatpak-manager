@@ -29,7 +29,7 @@ REMOVE_LIST=$(cat /etc/flatpak/system/remove)
 
 # Install flatpaks in list
 if [[ -n $INSTALL_LIST ]]; then
-  if ! flatpak install --system --noninteractive flathub ${INSTALL_LIST[@]}; then
+  if ! flatpak install --user --noninteractive flathub ${INSTALL_LIST[@]}; then
     # exit on error
     exit 1
   fi
@@ -37,7 +37,7 @@ fi
 
 # Remove flatpaks in list once
 if [[ ! -f $VER_FILE && -n $REMOVE_LIST ]]; then
-  flatpak remove --system --noninteractive ${REMOVE_LIST[@]}
+  flatpak remove --user --noninteractive ${REMOVE_LIST[@]}
 fi
 
 mkdir -p /etc/ublue
