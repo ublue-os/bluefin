@@ -52,6 +52,7 @@ COPY image-info.sh /tmp/image-info.sh
 COPY fetch-quadlets.sh /tmp/fetch-quadlets.sh
 # Copy ublue-update.toml to tmp first, to avoid being overwritten.
 COPY usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
+COPY pkgman-install.sh /tmp/pkgman-install.sh
 
 # Add ublue kmods, add needed negativo17 repo and then immediately disable due to incompatibility with RPMFusion
 COPY --from=ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION} /rpms /tmp/akmods-rpms

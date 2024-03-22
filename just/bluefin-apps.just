@@ -41,15 +41,7 @@ alias brew-fleek := install-brew-fleek
 # Install "fleek" set of packages for brew | none, low, default, high
 install-brew-fleek level="high":
     #!/usr/bin/env bash
-    echo "Nix is going to be installed from the determinate nix installer"
     curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- {{ level }}
-
-# Install "fleek" set of packages for brew | none, low, default, high
-install-nix:
-    #!/usr/bin/env bash
-    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-    nix-channel --add https://nixos.org/channels/nixos-23.11 nix-stable
-
 
 alias cockpit := setup-cockpit
 
