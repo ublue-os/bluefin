@@ -18,27 +18,5 @@ if grep -qz 'fedora' <<< $(flatpak remotes); then
   flatpak remote-delete fedora --force
 fi
 
-# Ensure Flathub is enabled
-flatpak remote-add --if-not-exists --user flathub /usr/etc/flatpak/remotes.d/flathub.flatpakrepo
-flatpak remote-modify --user --enable flathub
-
-# Lists of flatpaks
-FLATPAK_LIST=$(flatpak list --columns=application)
-INSTALL_LIST=$(cat /etc/flatpak/system/install)
-REMOVE_LIST=$(cat /etc/flatpak/system/remove)
-
-# Install flatpaks in list
-if [[ -n $INSTALL_LIST ]]; then
-  if ! flatpak install --user --noninteractive flathub ${INSTALL_LIST[@]}; then
-    # exit on error
-    exit 1
-  fi
-fi
-
-# Remove flatpaks in list once
-if [[ ! -f $VER_FILE && -n $REMOVE_LIST ]]; then
-  flatpak remove --user --noninteractive ${REMOVE_LIST[@]}
-fi
-
 mkdir -p /etc/ublue
 echo $VER > $VER_FILE
