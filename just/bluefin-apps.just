@@ -41,7 +41,9 @@ alias brew-fleek := install-brew-fleek
 # Install "fleek" set of packages for brew | none, low, default, high
 install-brew-fleek level="high":
     #!/usr/bin/env bash
+    echo "Nix is going to be installed from the determinate nix installer"
     curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- {{ level }}
+
 
 alias cockpit := setup-cockpit
 
