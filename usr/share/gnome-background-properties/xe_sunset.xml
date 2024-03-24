@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+<wallpapers>
+    <wallpaper>
+        <name>Sunset</name>
+        <filename>/usr/share/backgrounds/xe_sunset.jpeg</filename>
+        <options>zoom</options>
+        <shade_type>solid</shade_type>
+        <pcolor>#000000</pcolor>
+        <scolor>#ffffff</scolor>
+    </wallpaper>
+</wallpapers>
