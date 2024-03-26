@@ -89,7 +89,7 @@ RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases
   install -c -m 0755 /tmp/starship /usr/bin && \
   echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
-# Copy Finite CLI packages
+# Copy Bluefin CLI packages
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/eza /usr/bin/eza
@@ -196,7 +196,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
 # Set up services
 RUN systemctl enable podman.socket && \
     systemctl enable swtpm-workaround.service && \
-    systemctl enable finite-dx-groups.service && \
+    systemctl enable bluefin-dx-groups.service && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
 

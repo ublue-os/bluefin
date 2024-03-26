@@ -57,7 +57,6 @@
 				"cockpit-system",
 				"codium",
 				"dbus-x11",
-				"devpod",
 				"distrobuilder",
 				"edk2-ovmf",
 				"genisoimage",
@@ -130,10 +129,10 @@
 		"include": {
 			"finite": [
 				"input-leap",
-				"nautilus-open-any-terminal",
 				"tuned",
 				"tuned-ppd",
 				"tuned-utils",
+				"tuned-utils-systemtap",
 				"tuned-profiles-atomic"
 			],
 			"finite-dx": [],

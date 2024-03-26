@@ -83,9 +83,9 @@ screens:
         - "Install More Applications": 
             run: /usr/bin/plasma-discover
         - "Documentation":
-            run: /usr/bin/xdg-open https://universal-blue.discourse.group/t/introduction-to-finite/41
+            run: /usr/bin/xdg-open https://universal-blue.discourse.group/t/introduction-to-bluefin/41
         - "Discussions and Announcements":
-            run: /usr/bin/xdg-open https://universal-blue.discourse.group/c/finite/6
+            run: /usr/bin/xdg-open https://universal-blue.discourse.group/c/bluefin/6
         - "Join the Discord Community":
             run: /usr/bin/xdg-open https://discord.gg/XjG48C7VHx 
       description: |

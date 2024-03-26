@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# All the pieces needed to enable incus on Finite-dx
-# This script is meant to be run on a finite-dx host
+# All the pieces needed to enable incus on Bluefin-dx
+# This script is meant to be run on a bluefin-dx host
 
 # if current user is root, warn and exit
 

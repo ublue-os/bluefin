@@ -7,7 +7,7 @@ source /usr/lib/ujust/ujust.sh
 ###
 targets=(
     "bluefin-cli"
-    "finite-dx-cli"
+    "bluefin-dx-cli"
     "fedora-toolbox"
     "ubuntu-toolbox"
     "wolfi-toolbox"
@@ -25,7 +25,7 @@ function Exiting(){
 }
 function Good_Exit(){
     echo ""
-    echo "Finished Finite-CLI setup, rerun with ${blue}ujust bluefin-cli${normal} to reconfigure"
+    echo "Finished Bluefin-CLI setup, rerun with ${blue}ujust bluefin-cli${normal} to reconfigure"
     exit 0
 }
 

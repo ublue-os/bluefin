@@ -1,6 +1,6 @@
 # vim: set ft=make :
 ########################
-### finite-apps.just
+### bluefin-apps.just
 ########################
 ## Standardized verbs
 # configure- = configure something that is pre-installed on the image
@@ -114,7 +114,7 @@ install-incus:
     if grep -q "finite-dx" <<< $CURRENT_IMAGE
     then
         echo 'Installing and configuring Incus.'
-        /usr/bin/finite-incus
+        /usr/bin/bluefin-incus
     else
         echo "Developer mode is currently ${b}${red}Disabled${n}."
         echo "Run \"just devmode\" to turn on Developer mode."

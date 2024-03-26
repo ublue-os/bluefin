@@ -1,6 +1,6 @@
 # vim: set ft=make :
 ########################
-### finite-tools.just
+### bluefin-tools.just
 ########################
 ## Standardized verbs
 # configure- = configure something that is pre-installed on the image

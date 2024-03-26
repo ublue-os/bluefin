@@ -10,14 +10,14 @@ wget --output-document="/usr/etc/containers/systemd/users/bluefin-cli.container"
 cat /usr/share/ublue-os/bluefin-cli/ptyxis-integration >> /usr/etc/containers/systemd/users/bluefin-cli.container
 printf "\n\n[Install]\nWantedBy=bluefin-cli.target" >> /usr/etc/containers/systemd/users/bluefin-cli.container
 sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/bluefin-cli.container
-sed -i 's/ContainerName=finite/ContainerName=bluefin-cli/' /usr/etc/containers/systemd/users/bluefin-cli.container
+sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /usr/etc/containers/systemd/users/bluefin-cli.container
 
-# finite-dx-cli
-wget --output-document="/usr/etc/containers/systemd/users/finite-dx-cli.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/finite-dx-cli.container 
-cat /usr/share/ublue-os/bluefin-cli/ptyxis-integration >> /usr/etc/containers/systemd/users/finite-dx-cli.container
-printf "\n\n[Install]\nWantedBy=finite-dx-cli.target" >> /usr/etc/containers/systemd/users/finite-dx-cli.container
-sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/finite-dx-cli.container
-sed -i 's/ContainerName=finite/ContainerName=finite-dx-cli/' /usr/etc/containers/systemd/users/finite-dx-cli.container
+# bluefin-dx-cli
+wget --output-document="/usr/etc/containers/systemd/users/bluefin-dx-cli.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-dx-cli.container 
+cat /usr/share/ublue-os/bluefin-cli/ptyxis-integration >> /usr/etc/containers/systemd/users/bluefin-dx-cli.container
+printf "\n\n[Install]\nWantedBy=bluefin-dx-cli.target" >> /usr/etc/containers/systemd/users/bluefin-dx-cli.container
+sed -i '/AutoUpdate.*/ s/^#*/#/' /usr/etc/containers/systemd/users/bluefin-dx-cli.container
+sed -i 's/ContainerName=bluefin/ContainerName=bluefin-dx-cli/' /usr/etc/containers/systemd/users/bluefin-dx-cli.container
 
 # fedora-toolbox
 wget --output-document="/usr/etc/containers/systemd/users/fedora-toolbox.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/fedora-toolbox/fedora-distrobox-quadlet.container 

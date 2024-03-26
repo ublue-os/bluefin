@@ -78,7 +78,7 @@ fi
 
 if test -n "$palette"; then
 	dconf write "${profile}palette" "'${palette}'"
-elif test "$name" = "bluefin-cli" || test "$name" = "finite-dx-cli"; then
+elif test "$name" = "bluefin-cli" || test "$name" = "bluefin-dx-cli"; then
 	dconf write "${profile}palette" "'catppuccin-dynamic'"
 elif test "$name" = "fedora-toolbox"; then
 	dconf write "${profile}palette" "'Elio'"

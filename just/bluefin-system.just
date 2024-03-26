@@ -1,6 +1,6 @@
 # vim: set ft=make :
 ########################
-### finite-system.just
+### bluefin-system.just
 ########################
 ## Standardized verbs
 # configure- = configure something that is pre-installed on the image
@@ -15,7 +15,7 @@ benchmark:
     echo 'Running a 1 minute benchmark ...'
     stress-ng --matrix 0 -t 1m --times
 
-# Configure Finite-CLI Terminal Experience
+# Configure Bluefin-CLI Terminal Experience
 bluefin-cli:
     @/usr/libexec/enable-bluefin-cli.sh
 
@@ -24,19 +24,19 @@ bluefin-cli:
 configure-terminal:
     @/usr/libexec/configure-terminal.sh
 
-# Toggle between Finite and the Developer Experience
+# Toggle between Bluefin and the Developer Experience
 devmode:
     #!/usr/bin/env bash
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
     if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE
     then
         echo ""
-        echo "Before we can switch to the Finite Developer Experience"
+        echo "Before we can switch to the Bluefin Developer Experience"
         echo "the current system needs an update. Please run 'just update'"
         echo "and reboot your system when the update is finished."
         exit
     fi
-    if grep -q "finite-dx" <<< $CURRENT_IMAGE
+    if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
     then
         CURRENT_STATE="enabled"
     else
