@@ -9,14 +9,12 @@ on:
       - testing
     paths-ignore:
       - '**.md'
-      - '.github/workflows/build_iso.yml'
   push:
     branches:
       - main
       - testing
     paths-ignore:
       - '**.md'
-      - '.github/workflows/build_iso.yml'
   workflow_dispatch:
 env:
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -26,19 +24,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  push-ghcr:
-    name: Make
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
+  build-container:
+    name: build
+    runs-on: ubuntu-latest
+    continue-on-error: false
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
+        image_flavor: [main, nvidia, asus, asus-nvidia, surface, surface-nvidia]
         base_name: [bluefin, bluefin-dx]
         major_version: [38, 39]
+        exclude:
+          - major_version: 38
+            image_flavor: asus
+          - major_version: 38
+            image_flavor: asus-nvidia
         include:
           - major_version: 38
             is_latest_version: false
@@ -236,18 +236,27 @@ jobs:
       - name: Echo outputs
         if: github.event_name != 'pull_request'
         run: |
-          echo "${{ toJSON(steps.push.outputs) }}"  
+          echo "${{ toJSON(steps.push.outputs) }}"
 
   check:
     name: Check all builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    needs: [push-ghcr]
+    needs: [build-container]
     steps:
       - name: Exit on failure
-        if: ${{ needs.push-ghcr.result == 'failure' }}
+        if: ${{ needs.build_container.result == 'failure' }}
         shell: bash
         run: exit 1
       - name: Exit
         shell: bash
         run: exit 0
+
+  build_iso:
+    name: build iso
+    needs: [check]
+    if: github.ref_name == 'testing'
+    # Eventually would be nice for building images in PRs
+    #if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
+    uses: ./.github/workflows/build_iso.yml
+    secrets: inherit

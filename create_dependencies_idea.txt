@@ -1,0 +1,17 @@
+# 0. Create Container
+podman run --rm -it --entrypoint /bin/bash ghcr.io/ublue-os/bluefin:latest
+
+# 1. Setup Flatpak temp directory
+export FLATPAK_USER_DIR=$(mktemp -d)
+export FLATPAK_TRIGGERSDIR=$(mktemp -d)
+flatpak config --user --set languages "*"
+flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# 2. Install list of flatpaks
+flatpak install --user -y $LIST_OF_FLATPAKS
+
+# 3. List Flatpaks and PARSE Columns Application ID, Arch, and Branch as $APPLICATION_ID/$ARCH/$BRANCH
+flatpak list --columns=application,arch,branch
+
+# 4. Feed parsed list to flatpak info command and grab spit out ref to a file
+flatpak info $APPLICATION_ID/$ARCH/$BRANCH
