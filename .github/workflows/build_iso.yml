@@ -99,6 +99,7 @@ jobs:
           EOF
           docker run --rm --privileged --entrypoint bash -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak -e FLATPAK_TRIGGERSDIR=/flatpak/triggers --volume ${{ github.workspace }}/${FLATPAK_DIR}:/flatpak_dir ${image} /flatpak_dir/script.sh
           FLATPAK_PARSED=$(cat ${{ github.workspace }}/${FLATPAK_DIR}/flatpaks_with_deps | tr '\n' ' ')
+          cat ${FLATPAK_PARSED}
           echo "flatpak_list=${FLATPAK_PARSED}" >> $GITHUB_OUTPUT
           docker rmi ${image}
 
@@ -118,6 +119,7 @@ jobs:
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
           flatpak_remote_refs: ${{ steps.flatpak_dependencies.outputs.flatpak_list }}
+          enable_flatpak_dependencies: "false"
 
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.event_name == 'pull_request'
