@@ -1,7 +1,7 @@
 [misc]
 no_self_update = true
-disable = ["containers", "git", "helm", "self_update", "toolbx"]
-ignore_failures = ["brew_cask", "brew_formula", "distrobox", "firmware", "flatpak", "home_manager", "nix", "node", "pip3"]
+disable = ["self_update", "toolbx", "containers", "helm"]
+ignore_failures = ["distrobox", "flatpak", "brew_cask", "brew_formula", "nix", "node", "pip3", "home_manager", "firmware"]
 assume_yes = true
 no_retry = false
 
