@@ -95,10 +95,11 @@ jobs:
           flatpak config --system --set languages "*"
           flatpak remote-add --system flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install --system -y ${DIR_REFS}
-          ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v '*org.freedesktop.Platform.openh264*' | sed 's/^deploy\///g' | tr '\n' ' ' > /flatpak_dir/flatpaks_with_deps
+          mkdir /flatpak_dir/flatpaks_list
+          ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v '*org.freedesktop.Platform.openh264*' | sed 's/^deploy\///g' | tr '\n' ' ' > /flatpak_dir/flatpaks_list/flatpaks_with_deps
           EOF
           docker run --rm --privileged --entrypoint bash -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak -e FLATPAK_TRIGGERSDIR=/flatpak/triggers --volume ${{ github.workspace }}/${FLATPAK_DIR}:/flatpak_dir ${image} /flatpak_dir/script.sh
-          FLATPAK_PARSED=$(cat ${{ github.workspace }}/${FLATPAK_DIR}/flatpaks_with_deps)
+          FLATPAK_PARSED=$(cat ${{ github.workspace }}/${FLATPAK_DIR}/flatpaks_list)
           echo "flatpak_list=${FLATPAK_PARSED}" >> $GITHUB_OUTPUT
           docker rmi ${image}
 
@@ -117,7 +118,7 @@ jobs:
           iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
-          flatpak_remote_refs: "${{ steps.flatpak_dependencies.outputs.flatpak_list }}"
+          flatpak_remote_refs_dir: "${{ steps.flatpak_dependencies.outputs.flatpak_list }}"
           enable_flatpak_dependencies: "false"
 
       - name: Upload ISOs and Checksum to Job Artifacts
