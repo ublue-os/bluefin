@@ -1,7 +1,9 @@
 # Finite
 **This image is considered Beta** 
 
-A fork of Bluefin aimed at the KDE Plasma Desktop with more open tools.
+A fork of Bluefin aimed at the KDE Plasma Desktop with less, but also more open tools.
+
+**If you just want a KDE Spin of Bluefin, I would reccomend [Aurora](https://github.com/NiHaiden/aurora) instead.**
 
 > "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
 
