@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# Choose to enable or disable finite-cli
+# Choose to enable or disable bluefin-cli
 
 # shellcheck disable=1091
 # shellcheck disable=2206
@@ -10,12 +10,12 @@ source /usr/lib/ujust/ujust.sh
 finite_cli=(${red}Disabled${n} ${red}Inactive${n} ${red}Not Default${n})
 
 function get_status(){
-    if systemctl --quiet --user is-enabled finite-cli.target; then
+    if systemctl --quiet --user is-enabled bluefin-cli.target; then
         finite_cli[0]="${green}Enabled${n}"
     else
         finite_cli[0]="${red}Disabled${n}"
     fi
-    if systemctl --quiet --user is-active finite-cli.service; then
+    if systemctl --quiet --user is-active bluefin-cli.service; then
         finite_cli[1]="${green}Active${n}"
     else
         finite_cli[1]="${red}Inactive${n}"
@@ -33,7 +33,7 @@ function default_login(){
     toggle=$(Choose Default Not-Default Cancel)
     if test "$toggle" = "Default"; then
         echo "Setting Finite-CLI to default Ptyxis Profile"
-        /usr/libexec/ptyxis-create-profile.sh finite-cli default
+        /usr/libexec/ptyxis-create-profile.sh bluefin-cli default
     elif test "$toggle" = "Not-Default"; then
         echo "Setting Host back to default Ptyxis Profile"
         /usr/libexec/ptyxis-create-profile.sh Host default
@@ -46,22 +46,22 @@ function default_login(){
 function logic(){
     if test "$toggle" = "Enable"; then
         echo "${b}${green}Enabling${n} Finite-CLI"
-        systemctl --user enable --now finite-cli.target > /dev/null 2>&1 
-        if ! systemctl --quiet --user is-active finite-cli.service; then
-            systemctl --user reset-failed finite-cli.service > /dev/null 2>&1 || true
+        systemctl --user enable --now bluefin-cli.target > /dev/null 2>&1 
+        if ! systemctl --quiet --user is-active bluefin-cli.service; then
+            systemctl --user reset-failed bluefin-cli.service > /dev/null 2>&1 || true
             echo "${b}${green}Starting${n} Finite-CLI"
-            systemctl --user start finite-cli.service
+            systemctl --user start bluefin-cli.service
         fi
         default_login
     elif test "$toggle" = "Disable"; then
         echo "${b}${red}Disabling${n} Finite-CLI"
-        systemctl --user disable --now finite-cli.target > /dev/null 2>&1
-        if systemctl --quiet --user is-active finite-cli.service; then
+        systemctl --user disable --now bluefin-cli.target > /dev/null 2>&1
+        if systemctl --quiet --user is-active bluefin-cli.service; then
             echo "Do you want to ${b}${red}Stop${n} the Container?"
             stop=$(Confirm)
             if test "$stop" -eq 0; then
-                systemctl --user stop finite-cli.service > /dev/null 2>&1
-                systemctl --user reset-failed finite-cli.service > /dev/null 2>&1 || true
+                systemctl --user stop bluefin-cli.service > /dev/null 2>&1
+                systemctl --user reset-failed bluefin-cli.service > /dev/null 2>&1 || true
             fi
         fi
         echo "Setting Host back to default Ptyxis Profile"

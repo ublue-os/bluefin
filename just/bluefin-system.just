@@ -16,8 +16,8 @@ benchmark:
     stress-ng --matrix 0 -t 1m --times
 
 # Configure Finite-CLI Terminal Experience
-finite-cli:
-    @/usr/libexec/enable-finite-cli.sh
+bluefin-cli:
+    @/usr/libexec/enable-bluefin-cli.sh
 
 # Configure Terminal Experience
 [private]

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 declare -Ar known_container=(
-    ["finite-cli"]="a21a910811504857bea4c96b3d937b93"
+    ["bluefin-cli"]="a21a910811504857bea4c96b3d937b93"
     ["finite-dx-cli"]="276d25e6065b497b96dd57e4f95ff50a"
     ["fedora-toolbox"]="d6fe45489ed74fada5d95d715449ce7e"
     ["ubuntu-toolbox"]="4741cb2eb3614750b79edc5c4b8c08b3"
@@ -9,7 +9,7 @@ declare -Ar known_container=(
     ["Host"]="2871e8027773ae74d6c87a5f659bbc74"
 )
 declare -Ar known_guid=(
-    ["a21a910811504857bea4c96b3d937b93"]="finite-cli"
+    ["a21a910811504857bea4c96b3d937b93"]="bluefin-cli"
     ["276d25e6065b497b96dd57e4f95ff50a"]="finite-dx-cli"
     ["d6fe45489ed74fada5d95d715449ce7e"]="fedora-toolbox"
     ["4741cb2eb3614750b79edc5c4b8c08b3"]="ubuntu-toolbox"
