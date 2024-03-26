@@ -23,7 +23,6 @@
 				"libxcrypt-compat",
 				"make",
 				"mesa-libGLU",
-				"nautilus-gsconnect",
 				"nerd-fonts",
 				"playerctl",
 				"pulseaudio-utils",
@@ -41,7 +40,6 @@
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
-				"yaru-theme",
 				"wl-clipboard", 
 				"zsh"
 			],
@@ -102,9 +100,15 @@
 			"bluefin": [
 				"firefox-langpacks",
 				"firefox",
-				"ublue-os-update-services"
+				"ublue-os-update-services",
+				"plasma-welcome"
 			],
-			"bluefin-dx": []
+			"bluefin-dx": [
+				"firefox-langpacks",
+				"firefox",
+				"ublue-os-update-services",
+				"plasma-welcome"
+			]
 		}
 	},
 	"38": {
