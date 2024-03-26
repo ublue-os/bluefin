@@ -76,6 +76,32 @@ jobs:
 
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
+      - name: Determine Flatpak dependencies
+        id: flatpak_dependencies
+        shell: bash
+        run: |
+          set -ex
+          image="ghcr.io/ublue-os/${{ matrix.image_name }}:${{ steps.generate-tag.outputs.tag }}"
+          # Make temp space
+          FLATPAK_DIR=$(basename $(mktemp -d -p ${{ github.workspace }} flatpak.XXX))
+          # Get list of refs from directory
+          DIR_REFS=$(cat /github/workspace/flatpaks/* | tr '\n' ' ' )
+          # Generate install script
+          cat << EOF > ${{ github.workspace }}/${FLATPAK_DIR}/script.sh
+          cat /flatpak_dir/script.sh
+          mkdir -p /flatpak/flatpak /flatpak/triggers
+          mkdir /var/tmp || true
+          chmod -R 1777 /var/tmp
+          flatpak config --system --set languages "*"
+          flatpak remote-add --system flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --system -y ${DIR_REFS}
+          ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v '*org.freedesktop.Platform.openh264*' | sed 's/^deploy\///g' > /flatpak_dir/flatpaks_with_deps
+          EOF
+          docker run --rm --privileged --entrypoint bash -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak -e FLATPAK_TRIGGERSDIR=/flatpak/triggers --volume ${{ github.workspace }}/${FLATPAK_DIR}:/flatpak_dir ${image} /flatpak_dir/script.sh
+          FLATPAK_PARSED=$(cat ${{ github.workspace }}/${FLATPAK_DIR}/flatpaks_with_deps | tr '\n' ' ')
+          echo "flatpak_list=${FLATPAK_PARSED}" >> $GITHUB_OUTPUT
+          docker rmi ${image}
+
       - name: Build ISOs
         uses: jasonn3/build-container-installer@main
         id: build
@@ -91,7 +117,7 @@ jobs:
           iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
-          flatpak_remote_refs_dir: /github/workspace/flatpaks
+          flatpak_remote_refs: ${{ steps.flatpak_dependencies.outputs.flatpak_list }}
 
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.event_name == 'pull_request'
