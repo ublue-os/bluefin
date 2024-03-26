@@ -83,24 +83,23 @@ jobs:
           set -ex
           image="ghcr.io/ublue-os/${{ matrix.image_name }}:${{ steps.generate-tag.outputs.tag }}"
           # Make temp space
-          FLATPAK_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
-          FLATPAK_LIST_OUTPUT=$(mkdir ${{ github.workspace }}/flatpaks/parsed)
+          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
           # Get list of refs from directory
-          DIR_REFS=$(cat ${{ github.workspace }}/flatpaks/* | tr '\n' ' ' )
+          FLATPAK_REFS_DIR=${{ github.workspace }}/flatpaks
+          FLATPAK_REFS_DIR_LIST=$(cat ${FLATPAK_REFS_DIR}/* | tr '\n' ' ' )
           # Generate install script
-          cat << EOF > ${{ github.workspace }}/${FLATPAK_DIR}/script.sh
-          cat /flatpak_dir/script.sh
+          cat << EOF > ${TEMP_FLATPAK_INSTALL_DIR}/script.sh
+          cat /temp_flatpak_install_dir/script.sh
           mkdir -p /flatpak/flatpak /flatpak/triggers
           mkdir /var/tmp || true
           chmod -R 1777 /var/tmp
           flatpak config --system --set languages "*"
           flatpak remote-add --system flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --system -y ${DIR_REFS}
+          flatpak install --system -y ${FLATPAK_REFS_DIR_LIST}
           ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v '*org.freedesktop.Platform.openh264*' | sed 's/^deploy\///g' > /output/flatpaks_with_deps
           EOF
-          docker run --rm --privileged --entrypoint bash -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak -e FLATPAK_TRIGGERSDIR=/flatpak/triggers --volume ${FLATPAK_LIST_OUTPUT}:/output --volume ${FLATPAK_DIR}:/flatpak_dir ${image} /flatpak_dir/script.sh
-          find ${FLATPAK_LIST_OUTPUT}
-          echo "flatpak_list=${FLATPAK_LIST_OUTPUT}" >> $GITHUB_OUTPUT
+          docker run --rm --privileged --entrypoint bash -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak -e FLATPAK_TRIGGERSDIR=/flatpak/triggers --volume ${FLATPAK_REFS_DIR}:/output --volume ${TEMP_FLATPAK_INSTALL_DIR}:/temp_flatpak_install_dir ${image} /temp_flatpak_install_dir/script.sh
+          find ${FLATPAK_REFS_DIR}
           docker rmi ${image}
 
       - name: Build ISOs
@@ -118,7 +117,7 @@ jobs:
           iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
-          flatpak_remote_refs_dir: "${{ steps.flatpak_dependencies.outputs.flatpak_list }}"
+          flatpak_remote_refs_dir: ${{ github.workspace }}/flatpaks
           enable_flatpak_dependencies: "false"
 
       - name: Upload ISOs and Checksum to Job Artifacts
