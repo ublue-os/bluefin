@@ -76,7 +76,7 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
             /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
             /tmp/akmods-rpms/kmods/*wl*.rpm \
     ; fi && \
-    if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then \
+    if grep -qv "asus" < "${AKMODS_FLAVOR}"; then \
         rpm-ostree install \
             /tmp/akmods-rpms/kmods/*evdi*.rpm \
     ; fi && \
@@ -111,6 +111,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
+        echo "enabling tuned service for f39 builds" \ 
         systemctl enable tuned.service \
     ; fi && \
     systemctl enable rpm-ostree-countme.service && \
@@ -127,12 +128,19 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     echo "Hidden=true" >> /usr/share/applications/fish.desktop && \
     echo "Hidden=true" >> /usr/share/applications/htop.desktop && \
     echo "Hidden=true" >> /usr/share/applications/nvtop.desktop && \
-    echo "Hidden=true" >> /usr/share/applications/gnome-system-monitor.desktop && \
     rm -f /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo && \
     sed -i 's/#DefaultLimitNOFILE=/DefaultLimitNOFILE=4096:524288/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
-    sed -i '/^PRETTY_NAME/s/Kinoite/Bluefin/' /usr/lib/os-release && \
+    sed -i '/^PRETTY_NAME/s/Kinoite/bluefin/' /usr/lib/os-release && \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \ 
+        sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:org.gnome.Ptyxis.desktop,applications:org.kde.discover.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml  && \
+        sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.gnome.Ptyxis.desktop,org.kde.discover.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml  && \
+        sed -i 's@Exec=ptyxis@Exec=kde-ptyxis@g' /usr/share/applications/org.gnome.Ptyxis.desktop && \
+        sed -i 's@Keywords=@Keywords=konsole;@g' /usr/share/applications/org.gnome.Ptyxis.desktop &&  \
+        cp /usr/share/applications/org.gnome.Ptyxis.desktop /usr/share/kglobalaccel/org.gnome.Ptyxis.desktop \
+    ; fi && \
+    rm -f /usr/share/kglobalaccel/org.kde.konsole.desktop && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && \
@@ -168,9 +176,6 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDOR
 RUN /tmp/build.sh && \
     /tmp/image-info.sh
 
-RUN wget https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -O /tmp/docker-compose && \
-    install -c -m 0755 /tmp/docker-compose /usr/bin
-
 COPY --from=cgr.dev/chainguard/dive:latest /usr/bin/dive /usr/bin/dive
 COPY --from=cgr.dev/chainguard/flux:latest /usr/bin/flux /usr/bin/flux
 COPY --from=cgr.dev/chainguard/helm:latest /usr/bin/helm /usr/bin/helm
@@ -182,6 +187,8 @@ RUN curl -Lo ./kind "https://github.com/kubernetes-sigs/kind/releases/latest/dow
     chmod +x ./kind && \
     mv ./kind /usr/bin/kind
 
+
+
 # Install kns/kctx and add completions for Bash
 RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr/bin/kubectx && \
     wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens -O /usr/bin/kubens && \
@@ -192,17 +199,15 @@ RUN systemctl enable docker.socket && \
     systemctl enable podman.socket && \
     systemctl enable swtpm-workaround.service && \
     systemctl enable bluefin-dx-groups.service && \
-    systemctl enable --global bluefin-dx-user-vscode.service && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
 
 RUN /tmp/workarounds.sh
 
-# Clean up repos, everything is on the image so we don't need them
 RUN rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
-    rm -f /etc/yum.repos.d/vscode.repo && \
+    rm -f /etc/yum.repos.d/vscodium.repo && \
     rm -f /etc/yum.repos.d/docker-ce.repo && \
     rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo && \
     rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo && \

@@ -21,18 +21,6 @@ if echo "$@" | grep -q 'exec'; then
 	# if exec && distrobox -> use distrobox-enter --
 	if [ "$($PODMAN_COMMAND inspect --type container --format '{{ index .Config.Labels "manager" }}' "${id}")" = "distrobox" ]; then
 
-		# Ensure that our distrobox containers will use different vscode-servers by symlinking to different paths
-		if [ -n "${id}" ]; then
-			$PODMAN_COMMAND exec -u "$USER" "${id}" /bin/sh -c '
-			if [ ! -L "${HOME}/.vscode-server" ]; then
-				[ -e "${HOME}/.vscode-server" ] && mv "${HOME}/.vscode-server" /var/tmp
-				[ -d /var/tmp/.vscode-server ] && mkdir /var/tmp/.vscode-server
-				ln -sf /var/tmp/.vscode-server "$HOME"
-			elif [ ! -e "${HOME}/.vscode-server" ]; then
-				mkdir /var/tmp/.vscode-server
-			fi'
-		fi
-
 		# Remove everything from $@ and leave only the execution part, we start
 		# capturing after we meet our ID
 		dbox_args="-e A=B"
@@ -40,8 +28,6 @@ if echo "$@" | grep -q 'exec'; then
 		for i; do
 			if [ $capture = "true" ]; then
 				set -- "$@" "$i"
-			elif echo "$i" | grep -q "VSCODE"; then
-				dbox_args="$dbox_args -e $i"
 			elif echo "$i" | grep -q "\-w"; then
 				dbox_args="$dbox_args -w $2"
 			fi
