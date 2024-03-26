@@ -117,7 +117,7 @@ jobs:
           iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
-          flatpak_remote_refs_dir: ${{ github.workspace }}/flatpaks
+          flatpak_remote_refs_dir: flatpaks
           enable_flatpak_dependencies: "false"
 
       - name: Upload ISOs and Checksum to Job Artifacts
