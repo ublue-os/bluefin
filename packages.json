@@ -59,7 +59,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-                                "devpod",
+                "devpod",
 				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
@@ -97,7 +97,6 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
-				"ubuntu-family-fonts",
 				"udica",
 				"virt-manager",
 				"virt-viewer"
