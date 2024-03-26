@@ -165,8 +165,7 @@ jobs:
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology 
-            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
-            io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
+            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/APoorDev/bluefin/README.md
 
       # Build image using Buildah action
       - name: Build Image

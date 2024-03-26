@@ -19,6 +19,7 @@
 				"libgda-sqlite",
 				"libgda",
 				"libimobiledevice",
+				"libadwaita",
 				"libratbag-ratbagd",
 				"libxcrypt-compat",
 				"make",
@@ -57,7 +58,7 @@
 				"codium",
 				"containerd.io",
 				"dbus-x11",
-                "devpod",
+				"devpod",
 				"distrobuilder",
 				"edk2-ovmf",
 				"genisoimage",
@@ -98,12 +99,14 @@
 		},
 		"exclude": {
 			"bluefin": [
+				"gnome-session",
 				"firefox-langpacks",
 				"firefox",
 				"ublue-os-update-services",
 				"plasma-welcome"
 			],
 			"bluefin-dx": [
+				"gnome-session",
 				"firefox-langpacks",
 				"firefox",
 				"ublue-os-update-services",
