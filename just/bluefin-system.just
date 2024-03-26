@@ -94,57 +94,6 @@ configure-shell ACTION="":
       printf "${USER}'s shell is now %s.\n" "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
     fi
 
-alias gnome-extensions := get-gnome-extensions
-
-# Install recommended GNOME extensions
-get-gnome-extensions:
-    pip install --upgrade gnome-extensions-cli
-    gext install nightthemeswitcher@romainvigier.fr
-    gext install pano@elhan.io
-    gext install weatheroclock@CleoMenezesJr.github.io
-
-alias gnome-vrr := toggle-gnome-vrr
-
-# Enable or Disable Gnome-VRR
-toggle-gnome-vrr:
-    #!/usr/bin/env bash
-    if gsettings get org.gnome.mutter experimental-features | grep -q "variable-refresh-rate"
-    then
-      CURRENT_STATE="Enabled"
-    else
-      CURRENT_STATE="Disabled"
-    fi
-    echo "Gnome-VRR is currently ${CURRENT_STATE}"
-    echo "Enable or Disable Gnome-VRR"
-    OPTION=$(gum choose Enable Disable)
-    if [ "$OPTION" = "Enable" ]
-    then
-      echo "Enabling Gnome-VRR"
-      gsettings set org.gnome.mutter experimental-features "['variable-refresh-rate','scale-monitor-framebuffer']"
-    elif [ "$OPTION" = "Disable" ]
-    then
-      echo "Disabling Gnome-VRR"
-      gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
-    fi
-    echo "To apply the changes make sure you logout and restart your session"
-
-# Ptyxis terminal transparency
-ptyxis-transparency opacity="0.95":
-    #!/usr/bin/env bash
-    set -euxo pipefail
-    if [[ -n "$(echo "{{ opacity }}" | grep -v '^[.0-9]*$')" ]]; then
-      printf "Value must be numeric: %s.\n" "{{ opacity }}"
-    elif [[ $(echo "0<{{ opacity }} && 1>{{ opacity }}" | bc -q) -eq 1 ]]; then
-      raw="$(gsettings get org.gnome.Ptyxis profile-uuids)"
-      uuids="$(sed -En 's|[^0-9a-z]*||g; s|([0-9a-z]{32})|\1\n|gp' <<<${raw})"
-      for i in ${uuids}; do
-        location="org.gnome.Ptyxis.Profile:/org/gnome/Ptyxis/Profiles/${i}/"
-        gsettings set "${location}" opacity "{{ opacity }}"; done
-      printf "Ptyxis opacity is now %s.\n" "{{ opacity }}"
-    else
-      printf "Value must be between 0 and 1: %s.\n" "{{ opacity }}"
-    fi
-
 # Configure docker,incus-admin,lxd,libvirt container manager permissions
 dx-group:
     sudo usermod -aG docker $USER

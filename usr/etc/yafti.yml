@@ -81,7 +81,7 @@ screens:
       icon: "/path/to/icon"
       links:
         - "Install More Applications": 
-            run: /usr/bin/gnome-software
+            run: /usr/bin/plasma-discover
         - "Documentation":
             run: /usr/bin/xdg-open https://universal-blue.discourse.group/t/introduction-to-bluefin/41
         - "Discussions and Announcements":
