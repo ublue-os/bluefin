@@ -70,9 +70,10 @@ jobs:
             fi
           fi
 
-          if [[ github.event.number ]]; then
-            TAG="pr-${{ github.event.number }}-${{ matrix.major_version }}"
-          fi
+          # Would like to implement in the future. This will allow us to support image tags from a PR.
+          #if [[ github.event.number ]]; then
+          #  TAG="pr-${{ github.event.number }}-${{ matrix.major_version }}"
+          #fi
 
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
@@ -121,7 +122,8 @@ jobs:
           enable_flatpak_dependencies: "false"
 
       - name: Upload ISOs and Checksum to Job Artifacts
-        if: github.event_name == 'pull_request'
+        if: github.ref_name == 'testing'
+        #if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.build.outputs.iso_name }}
