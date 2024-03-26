@@ -195,8 +195,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
     chmod +x /usr/bin/kubectx /usr/bin/kubens
 
 # Set up services
-RUN systemctl enable docker.socket && \
-    systemctl enable podman.socket && \
+RUN systemctl enable podman.socket && \
     systemctl enable swtpm-workaround.service && \
     systemctl enable bluefin-dx-groups.service && \
     systemctl disable pmie.service && \
@@ -208,7 +207,6 @@ RUN rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".rep
     rm -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     rm -f /etc/yum.repos.d/vscodium.repo && \
-    rm -f /etc/yum.repos.d/docker-ce.repo && \
     rm -f /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo && \
     rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo && \
     fc-cache --system-only --really-force --verbose && \
