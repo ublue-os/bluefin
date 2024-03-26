@@ -1,6 +1,6 @@
 # vim: set ft=make :
 ########################
-### bluefin-system.just
+### finite-system.just
 ########################
 ## Standardized verbs
 # configure- = configure something that is pre-installed on the image
@@ -15,28 +15,28 @@ benchmark:
     echo 'Running a 1 minute benchmark ...'
     stress-ng --matrix 0 -t 1m --times
 
-# Configure Bluefin-CLI Terminal Experience
-bluefin-cli:
-    @/usr/libexec/enable-bluefin-cli.sh
+# Configure Finite-CLI Terminal Experience
+finite-cli:
+    @/usr/libexec/enable-finite-cli.sh
 
 # Configure Terminal Experience
 [private]
 configure-terminal:
     @/usr/libexec/configure-terminal.sh
 
-# Toggle between Bluefin and the Developer Experience
+# Toggle between Finite and the Developer Experience
 devmode:
     #!/usr/bin/env bash
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
     if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE
     then
         echo ""
-        echo "Before we can switch to the Bluefin Developer Experience"
+        echo "Before we can switch to the Finite Developer Experience"
         echo "the current system needs an update. Please run 'just update'"
         echo "and reboot your system when the update is finished."
         exit
     fi
-    if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+    if grep -q "finite-dx" <<< $CURRENT_IMAGE
     then
         CURRENT_STATE="enabled"
     else
@@ -52,7 +52,7 @@ devmode:
             echo "You are already on a developer image"
         else
             echo "Rebasing to a developer image"
-            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin/bluefin-dx/")
+            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/finite/finite-dx/")
             rpm-ostree rebase $NEW_IMAGE
         fi
     elif [ "$OPTION" = "Disable" ]
@@ -60,7 +60,7 @@ devmode:
         if [ "$CURRENT_STATE" = "enabled" ]
         then
             echo "Rebasing to a non developer image"
-            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
+            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/finite-dx/finite/")
             rpm-ostree rebase $NEW_IMAGE
         else
             echo "You are currently not on a developer image"

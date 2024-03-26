@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report an issue about using Bluefin
+description: Report an issue about using Finite
 body:
   - type: markdown
     attributes:

@@ -1,16 +1,16 @@
 ublue_variants:
-  - label: apoordev/bluefin
+  - label: apoordev/finite
     ks: /kickstart/apoordev.ks
     flavors:
-      - label: bluefin
-        info: Bluefin
-  - label: apoordev/bluefin-nvidia
+      - label: finite
+        info: Finite
+  - label: apoordev/finite-nvidia
     ks: /kickstart/apoordev-nvidia.ks
     subvariants:
       - label: latest driver
       - label: 470xx driver
         suffix: -470
     flavors:
-      - label: bluefin-nvidia
-        info: Bluefin
+      - label: finite-nvidia
+        info: Finite
         

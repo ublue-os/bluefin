@@ -1,11 +1,11 @@
-title: Welcome to Bluefin
+title: Welcome to Finite
 properties:
   mode: "run-once"
 screens:
   first-screen:
     source: yafti.screen.title
     values:
-      title: "Welcome to Bluefin (Beta)"
+      title: "Welcome to Finite (Beta)"
       icon: "/path/to/icon"
       description: |
         Applications are also installing in the background, the system will notify you when it is finished.
@@ -83,10 +83,10 @@ screens:
         - "Install More Applications": 
             run: /usr/bin/plasma-discover
         - "Documentation":
-            run: /usr/bin/xdg-open https://universal-blue.discourse.group/t/introduction-to-bluefin/41
+            run: /usr/bin/xdg-open https://universal-blue.discourse.group/t/introduction-to-finite/41
         - "Discussions and Announcements":
-            run: /usr/bin/xdg-open https://universal-blue.discourse.group/c/bluefin/6
+            run: /usr/bin/xdg-open https://universal-blue.discourse.group/c/finite/6
         - "Join the Discord Community":
             run: /usr/bin/xdg-open https://discord.gg/XjG48C7VHx 
       description: |
-        Thanks for trying Bluefin, we hope you enjoy it!
+        Thanks for trying Finite, we hope you enjoy it!

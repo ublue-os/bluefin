@@ -1,7 +1,7 @@
 # Finite
 **This image is considered Beta** 
 
-A fork of Bluefin aimed at the KDE Plasma Desktop with more open tools.
+A fork of Finite aimed at the KDE Plasma Desktop with more open tools.
 
 > "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
 
@@ -9,7 +9,7 @@ A familiar(ish) Ubuntu desktop for Fedora Kinoite. It strives to cover these two
 
 ## About & Features
 
-Finite is a fork of Bluefin that makes a few changes to the packages offered. The name comes from the projects Finite is based on. **Fin**(Bluefin)**ite**(Kinoite).
+Finite is a fork of Finite that makes a few changes to the packages offered. The name comes from the projects Finite is based on. **Fin**(Finite)**ite**(Kinoite).
 
 - Replace Gnome Desktop with the KDE Plasma Desktop.
 - Replaced VSCode with VSCodium on dx image.

@@ -1,4 +1,4 @@
-name: Build Bluefin ISOs
+name: Build Finite ISOs
 on:
   workflow_dispatch:
   pull_request:
@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_name: [bluefin, bluefin-nvidia, bluefin-asus, bluefin-asus-nvidia, bluefin-surface, bluefin-surface-nvidia, bluefin-dx, bluefin-dx-nvidia, bluefin-dx-asus, bluefin-dx-surface, bluefin-dx-asus-nvidia, bluefin-dx-surface-nvidia]
+        image_name: [finite, finite-nvidia, finite-asus, finite-asus-nvidia, finite-surface, finite-surface-nvidia, finite-dx, finite-dx-nvidia, finite-dx-asus, finite-dx-surface, finite-dx-asus-nvidia, finite-dx-surface-nvidia]
         major_version: [38, 39]
         image_tag: [latest, gts]
         exclude:
@@ -75,4 +75,4 @@ jobs:
           SOURCE_DIR: ${{ steps.build.outputs.output-directory }}
         run: |
           dnf install -y rclone
-          rclone copy $SOURCE_DIR R2:bluefin
+          rclone copy $SOURCE_DIR R2:finite

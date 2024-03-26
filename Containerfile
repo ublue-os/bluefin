@@ -4,10 +4,10 @@ ARG AKMODS_FLAVOR="${AKMODS_FLAVOR:-main}"
 ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-39}"
-ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
+ARG TARGET_BASE="${TARGET_BASE:-finite}"
 
-## bluefin image section
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
+## finite image section
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS finite
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
@@ -15,7 +15,7 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin"
+ARG PACKAGE_LIST="finite"
 
 # Ptyxi
 RUN echo "${FEDORA_MAJOR_VERSION}"
@@ -89,14 +89,14 @@ RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases
   install -c -m 0755 /tmp/starship /usr/bin && \
   echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
-# Copy Bluefin CLI packages
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/eza /usr/bin/eza
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/fd /usr/bin/fd
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/fzf /usr/bin/fzf
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/rg /usr/bin/rg
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/zoxide /usr/bin/zoxide
+# Copy Finite CLI packages
+COPY --from=ghcr.io/ublue-os/finite-cli /usr/bin/atuin /usr/bin/atuin
+COPY --from=ghcr.io/ublue-os/finite-cli /usr/share/bash-prexec /usr/share/bash-prexec
+COPY --from=ghcr.io/ublue-os/finite-cli /usr/bin/eza /usr/bin/eza
+COPY --from=ghcr.io/ublue-os/finite-cli /usr/bin/fd /usr/bin/fd
+COPY --from=ghcr.io/ublue-os/finite-cli /usr/bin/fzf /usr/bin/fzf
+COPY --from=ghcr.io/ublue-os/finite-cli /usr/bin/rg /usr/bin/rg
+COPY --from=ghcr.io/ublue-os/finite-cli /usr/bin/zoxide /usr/bin/zoxide
 
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
     wget https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -O /usr/libexec/brew-install && \
@@ -132,7 +132,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     sed -i 's/#DefaultLimitNOFILE=/DefaultLimitNOFILE=4096:524288/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
-    sed -i '/^PRETTY_NAME/s/Kinoite/bluefin/' /usr/lib/os-release && \
+    sed -i '/^PRETTY_NAME/s/Kinoite/finite/' /usr/lib/os-release && \
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \ 
         sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:org.gnome.Ptyxis.desktop,applications:org.kde.discover.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml  && \
         sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.gnome.Ptyxis.desktop,org.kde.discover.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml  && \
@@ -145,15 +145,15 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp
 
-## bluefin-dx developer edition image section
-FROM bluefin AS bluefin-dx
+## finite-dx developer edition image section
+FROM finite AS finite-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="bluefin-dx"
+ARG PACKAGE_LIST="finite-dx"
 
 # dx specific files come from the dx directory in this repo
 COPY dx/usr /usr
@@ -196,7 +196,7 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx -O /usr
 # Set up services
 RUN systemctl enable podman.socket && \
     systemctl enable swtpm-workaround.service && \
-    systemctl enable bluefin-dx-groups.service && \
+    systemctl enable finite-dx-groups.service && \
     systemctl disable pmie.service && \
     systemctl disable pmlogger.service
 

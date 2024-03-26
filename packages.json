@@ -1,7 +1,7 @@
 {
 	"all": {
 		"include": {
-			"bluefin": [
+			"finite": [
 				"bash-color-prompt",
 				"bcache-tools",
 				"cockpit-bridge",
@@ -44,7 +44,7 @@
 				"wl-clipboard", 
 				"zsh"
 			],
-			"bluefin-dx": [
+			"finite-dx": [
 				"adobe-source-code-pro-fonts",
 				"cascadia-code-fonts",
 				"cockpit-machines",
@@ -97,14 +97,14 @@
 			]
 		},
 		"exclude": {
-			"bluefin": [
+			"finite": [
 				"gnome-session",
 				"firefox-langpacks",
 				"firefox",
 				"ublue-os-update-services",
 				"plasma-welcome"
 			],
-			"bluefin-dx": [
+			"finite-dx": [
 				"gnome-session",
 				"firefox-langpacks",
 				"firefox",
@@ -115,20 +115,20 @@
 	},
 	"38": {
 		"include": {
-			"bluefin": [],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"finite": [],
+			"finite-dx": [],
+			"finite-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"finite": [
 				"podman-docker"
 			],
-			"bluefin-dx": []
+			"finite-dx": []
 		}
 	},
 	"39": {
 		"include": {
-			"bluefin": [
+			"finite": [
 				"input-leap",
 				"nautilus-open-any-terminal",
 				"tuned",
@@ -136,15 +136,15 @@
 				"tuned-utils",
 				"tuned-profiles-atomic"
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"finite-dx": [],
+			"finite-framework": []
 		},
 		"exclude": {
-			"bluefin": [
+			"finite": [
 				"podman-docker"
 			],
-			"bluefin-dx": [],
-			"bluefin-framework": []
+			"finite-dx": [],
+			"finite-framework": []
 		}
 	}
 }

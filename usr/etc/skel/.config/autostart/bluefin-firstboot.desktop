@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Bluefin First Boot Setup
+Name=Finite First Boot Setup
 Comment=Sets up Ublue Desktop Correctly On FirstBoot
 Exec=/usr/bin/yafti /etc/yafti.yml
 Icon=org.gnome.Terminal

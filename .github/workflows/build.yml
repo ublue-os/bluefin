@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
-        base_name: [bluefin, bluefin-dx]
+        base_name: [finite, finite-dx]
         major_version: [38, 39, 40]
         include:
           - major_version: 38
@@ -62,7 +62,7 @@ jobs:
           containers: kinoite-${{ matrix.image_flavor }}:${{ matrix.major_version }}
 
       - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin'
+        if: matrix.base_name != 'finite'
         uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
           containers: dive, flux, helm, ko, minio, kubectl
@@ -165,7 +165,7 @@ jobs:
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology 
-            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/APoorDev/bluefin/README.md
+            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/APoorDev/finite/README.md
 
       # Build image using Buildah action
       - name: Build Image

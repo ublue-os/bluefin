@@ -1,4 +1,4 @@
-# 󱍢 Welcome to Bluefin (󰂡eta) 
+# 󱍢 Welcome to Finite (󰂡eta) 
 󱋩 `%IMAGE_NAME%:%IMAGE_TAG%`
 
 |  Command | Description |
@@ -9,6 +9,6 @@
 
 %TIP%
 
-- 󰊤 [Issues](https://issues.projectbluefin.io)
-- 󰈙 [Documentation](http://docs.projectbluefin.io/)
-- 󰊌 [Discuss](https://community.projectbluefin.io/)
+- 󰊤 [Issues](https://issues.projectfinite.io)
+- 󰈙 [Documentation](http://docs.projectfinite.io/)
+- 󰊌 [Discuss](https://community.projectfinite.io/)

@@ -19,7 +19,7 @@ if ! command -v dconf >/dev/null; then
 fi
 
 # shellcheck disable=SC1091
-. /usr/share/ublue-os/bluefin-cli/known-containers
+. /usr/share/ublue-os/finite-cli/known-containers
 
 # shellcheck disable=SC2001
 gen_uuid() {
@@ -78,7 +78,7 @@ fi
 
 if test -n "$palette"; then
 	dconf write "${profile}palette" "'${palette}'"
-elif test "$name" = "bluefin-cli" || test "$name" = "bluefin-dx-cli"; then
+elif test "$name" = "finite-cli" || test "$name" = "finite-dx-cli"; then
 	dconf write "${profile}palette" "'catppuccin-dynamic'"
 elif test "$name" = "fedora-toolbox"; then
 	dconf write "${profile}palette" "'Elio'"
