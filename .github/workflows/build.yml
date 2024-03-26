@@ -55,7 +55,7 @@ jobs:
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
-          containers: Kinoite-${{ matrix.image_flavor }}:${{ matrix.major_version }}
+          containers: kinoite-${{ matrix.image_flavor }}:${{ matrix.major_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin'
@@ -143,7 +143,7 @@ jobs:
         shell: bash
         run: |
           set -eo pipefail
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/Kinoite-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
+          ver=$(skopeo inspect docker://ghcr.io/ublue-os/kinoite-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
           if [ -z "$ver" ] || [ "null" = "$ver" ]; then
             echo "inspected image version must not be empty or null"
             exit 1
