@@ -85,7 +85,7 @@ jobs:
           # Make temp space
           FLATPAK_DIR=$(basename $(mktemp -d -p ${{ github.workspace }} flatpak.XXX))
           # Get list of refs from directory
-          DIR_REFS=$(cat /github/workspace/flatpaks/* | tr '\n' ' ' )
+          DIR_REFS=$(cat ${{ github.workspace }}/flatpaks/* | tr '\n' ' ' )
           # Generate install script
           cat << EOF > ${{ github.workspace }}/${FLATPAK_DIR}/script.sh
           cat /flatpak_dir/script.sh
