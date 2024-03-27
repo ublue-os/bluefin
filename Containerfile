@@ -41,18 +41,18 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
 
 # Install Explicit Sync Patches on Nvidia builds
 RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then \
-        wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
-            xorg-x11-server-Xwayland && \
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
-            egl-wayland \
-            || true && \
-        rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
-    ; fi
+  wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
+  rpm-ostree override replace \
+  --experimental \
+  --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+  xorg-x11-server-Xwayland && \
+  rpm-ostree override replace \
+  --experimental \
+  --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+  egl-wayland \
+  || true && \
+  rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
+  ; fi
 
 COPY usr /usr
 COPY just /tmp/just
@@ -76,7 +76,7 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
             /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
             /tmp/akmods-rpms/kmods/*wl*.rpm \
     ; fi && \
-    if grep -qv "asus" < "${AKMODS_FLAVOR}"; then \
+    if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then \
         rpm-ostree install \
             /tmp/akmods-rpms/kmods/*evdi*.rpm \
     ; fi && \
@@ -116,10 +116,10 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     ; fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable dconf-update.service && \
+    systemctl enable ublue-system-flatpak-manager.service && \
+    systemctl --global enable ublue-system-flatpak-manager.service && \
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
-    systemctl enable ublue-system-flatpak-manager.service && \
-    systemctl --global enable ublue-user-flatpak-manager.service && \
     systemctl --global enable ublue-user-setup.service && \
     fc-cache -f /usr/share/fonts/inter && \
     find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just && \
