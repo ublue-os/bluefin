@@ -78,6 +78,7 @@
 				"podman-compose",
 				"podman-plugins",
 				"podman-tui",
+				"podman-docker",
 				"podmansh",
 				"powerline-fonts",
 				"powertop",

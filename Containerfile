@@ -68,7 +68,7 @@ COPY usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 COPY --from=ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION} /rpms /tmp/akmods-rpms
 RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
     wget https://negativo17.org/repos/fedora-multimedia.repo -O /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
-    if [[ "${FEDORA_MAJOR_VERSION}" == "39" ]]; then \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
         rpm-ostree install \
             /tmp/akmods-rpms/kmods/*xpadneo*.rpm \
             /tmp/akmods-rpms/kmods/*xone*.rpm \
