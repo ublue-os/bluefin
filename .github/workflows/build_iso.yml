@@ -49,7 +49,7 @@ jobs:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
 
-      - name: Checkout repo
+      - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Set Image Tag
@@ -77,7 +77,7 @@ jobs:
 
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
-      - name: Determine Flatpak dependencies
+      - name: Determine Flatpak Dependencies
         id: flatpak_dependencies
         shell: bash
         run: |
@@ -99,12 +99,17 @@ jobs:
           flatpak install --system -y ${FLATPAK_REFS_DIR_LIST}
           ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v 'org\.freedesktop\.Platform\.openh264' | sed 's/^deploy\///g' > /output/flatpaks_with_deps
           EOF
-          docker run --rm --privileged --entrypoint bash -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak -e FLATPAK_TRIGGERSDIR=/flatpak/triggers --volume ${FLATPAK_REFS_DIR}:/output --volume ${TEMP_FLATPAK_INSTALL_DIR}:/temp_flatpak_install_dir ${image} /temp_flatpak_install_dir/script.sh
-          find ${FLATPAK_REFS_DIR}
+          docker run --rm --privileged \
+            --entrypoint bash \
+            -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak \
+            -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
+            --volume ${FLATPAK_REFS_DIR}:/output \
+            --volume ${TEMP_FLATPAK_INSTALL_DIR}:/temp_flatpak_install_dir \
+            ${image} /temp_flatpak_install_dir/script.sh
           docker rmi ${image}
 
       - name: Build ISOs
-        uses: jasonn3/build-container-installer@main
+        uses: jasonn3/build-container-installer@v1.1.1
         id: build
         with:
           arch: x86_64
