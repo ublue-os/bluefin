@@ -17,3 +17,8 @@ Finite is a fork of Bluefin that makes a few changes to the packages offered. Th
 - Replaced VSCode with VSCodium on dx image.
 - Removed docker from dx image.
 - Full hardware accelerated codec support for H264 decoding.
+
+Rebase from an existing upstream Fedora Atomic to this image:
+```bash
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/apoordev/finite:stable
+```
