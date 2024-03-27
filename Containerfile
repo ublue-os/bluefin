@@ -118,7 +118,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
-    systemctl enable ublue-flatpak-manager.service && \
+    systemctl --global enable ublue-flatpak-manager.service && \
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
     systemctl --global enable ublue-user-setup.service && \
