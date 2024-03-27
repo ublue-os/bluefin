@@ -49,7 +49,7 @@ jobs:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
 
-      - name: Checkout repo
+      - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Set Image Tag
@@ -77,7 +77,7 @@ jobs:
 
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
-      - name: Determine Flatpak dependencies
+      - name: Determine Flatpak Dependencies
         id: flatpak_dependencies
         shell: bash
         run: |
@@ -104,7 +104,7 @@ jobs:
           docker rmi ${image}
 
       - name: Build ISOs
-        uses: jasonn3/build-container-installer@v1.1.0
+        uses: jasonn3/build-container-installer@1.1.0
         id: build
         with:
           arch: x86_64
