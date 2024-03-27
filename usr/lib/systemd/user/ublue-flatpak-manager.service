@@ -2,7 +2,7 @@
 Description=Manage flatpaks
 Documentation=https://github.com/ublue-os/endlish-oesque/issues/10
 Wants=network-online.target
-After=network-online.target ublue-system-setup.service
+After=network-online.target
 
 [Service]
 Type=oneshot
