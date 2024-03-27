@@ -1,4 +1,8 @@
 #!/usr/bin/bash
 
+# For backwards compatibility (enable flathub for --user)
+flatpak remote-add --if-not-exists --user flathub /usr/etc/flatpak/remotes.d/flathub.flatpakrepo
+flatpak remote-modify --user --enable --prio=2 flathub
+
 # Use until yafti rework is done
 flatpak --system update -y
