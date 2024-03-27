@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
+        image_flavor: [main, nvidia, asus, asus-nvidia ]
         base_name: [finite, finite-dx]
         major_version: [38, 39]
         exclude:
@@ -51,6 +51,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: debug ref_name
+        shell: bash
+        run: |
+          echo ${{ github.ref_name }}
 
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@v0.2.2
