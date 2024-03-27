@@ -114,6 +114,10 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
         echo "enabling tuned service for f39 builds" \ 
         systemctl enable tuned.service \
     ; fi && \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "40" ]]; then \
+        echo "Touching systemd user.conf for Fedora 40." \
+        touch /etc/systemd/user.conf \
+    ; fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable dconf-update.service && \
     systemctl enable ublue-update.timer && \
