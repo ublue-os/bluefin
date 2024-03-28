@@ -190,25 +190,6 @@ function Build_container(){
     fi
 }
 
-###
-# If ~/.bashrc.d exists and Chose Container for terminal. Make a symlink from /usr/share/ublue-os for first time shell.
-# If Host was chosen. Remove existing symlink.
-###
-# function Make_bashrc_d_file(){
-#     if test -d "${HOME}/.bashrc.d" && test "$1" = "Host"; then
-#             echo "${red}Removing existing ~/.bashrc.d/00-container.sh if it exists${normal}."
-#             test -f "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
-#     elif test -d "${HOME}/.bashrc.d"; then
-#         echo "Setting first terminal be Container for bash using ~/.bashrc.d"
-#         echo "Enter into container using ptyxis's menu after first entry"
-#         echo "${blue}This requires your bash shell to source files in ~/.bashrc.d/${normal}"
-#         test -e "${HOME}/.bashrc.d/00-container.sh" && rm "${HOME}/.bashrc.d/00-container.sh"
-#         cp "/usr/share/ublue-os/bluefin-cli/${2}.sh" "${HOME}/.bashrc.d/00-container.sh"
-#     else
-#         echo "${red}Not implemented for non-Bash shells${normal} at this time..."
-#     fi
-# }
-
 function main(){
     trap ctrl_c SIGINT
     printf "Set Up bluefin-cli\n"

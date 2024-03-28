@@ -20,23 +20,18 @@ function get_status(){
     else
         bluefin_cli[1]="${red}Inactive${n}"
     fi
-    get_default=$(dconf read /org/gnome/Ptyxis/default-profile-uuid)
-    if test "$get_default" = "'a21a910811504857bea4c96b3d937b93'"; then
-        bluefin_cli[2]="${green}Default${n}"
-    else
         bluefin_cli[2]="${red}Not-Default${n}"
-    fi
     echo "Bluefin-cli is currently ${b}${bluefin_cli[0]}${n} (run status), ${b}${bluefin_cli[1]}${n} (on boot status), and ${b}${bluefin_cli[2]}${n} (terminal profile)."
 }
 
 function default_login(){
     toggle=$(Choose Default Not-Default Cancel)
     if test "$toggle" = "Default"; then
-        echo "Setting Bluefin-CLI to default Ptyxis Profile"
-        /usr/libexec/ptyxis-create-profile.sh bluefin-cli default
+        echo "Setting Bluefin-CLI to default Konsole Profile"
+        echo "This currently does nothing..."
     elif test "$toggle" = "Not-Default"; then
-        echo "Setting Host back to default Ptyxis Profile"
-        /usr/libexec/ptyxis-create-profile.sh Host default
+        echo "Setting Host back to default Konsole Profile"
+        echo "This currently does nothing..."
     else
         dconf write /or
         echo "Not Changing"
@@ -64,8 +59,8 @@ function logic(){
                 systemctl --user reset-failed bluefin-cli.service > /dev/null 2>&1 || true
             fi
         fi
-        echo "Setting Host back to default Ptyxis Profile"
-        /usr/libexec/ptyxis-create-profile.sh Host default
+        echo "Setting Host back to default Konsole Profile"
+        echo "This currently does nothing..."
     else
         echo "Not Changing"
     fi

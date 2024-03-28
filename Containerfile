@@ -27,8 +27,6 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
             vte291 \
             vte-profile \
             libadwaita && \
-        rpm-ostree install \
-            ptyxis && \
         rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
         rpm-ostree override remove \
             power-profiles-daemon \
@@ -133,11 +131,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     sed -i '/^PRETTY_NAME/s/Kinoite/finite/' /usr/lib/os-release && \
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \ 
-        sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:org.gnome.Ptyxis.desktop,applications:org.kde.discover.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml  && \
-        sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.gnome.Ptyxis.desktop,org.kde.discover.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml  && \
-        sed -i 's@Exec=ptyxis@Exec=kde-ptyxis@g' /usr/share/applications/org.gnome.Ptyxis.desktop && \
-        sed -i 's@Keywords=@Keywords=konsole;@g' /usr/share/applications/org.gnome.Ptyxis.desktop &&  \
-        cp /usr/share/applications/org.gnome.Ptyxis.desktop /usr/share/kglobalaccel/org.gnome.Ptyxis.desktop \
+        sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.kde.konsole.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml  && \
     ; fi && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
