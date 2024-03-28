@@ -93,7 +93,6 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     /tmp/build.sh && \
     /tmp/image-info.sh && \
     /tmp/fetch-quadlets.sh && \
-    pip install --prefix=/usr yafti && \
     pip install --prefix=/usr topgrade && \
     rpm-ostree install ublue-update && \
     mkdir -p /usr/etc/flatpak/remotes.d && \
