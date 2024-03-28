@@ -51,6 +51,18 @@ RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then \
   || true && \
   rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
   ; fi
+  wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
+  rpm-ostree override replace \
+  --experimental \
+  --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+  xorg-x11-server-Xwayland && \
+  rpm-ostree override replace \
+  --experimental \
+  --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+  egl-wayland \
+  || true && \
+  rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
+  ; fi
 
 COPY usr /usr
 COPY just /tmp/just
@@ -100,6 +112,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     ; fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable dconf-update.service && \
+    systemctl --global enable ublue-flatpak-manager.service && \
     systemctl --global enable ublue-flatpak-manager.service && \
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \

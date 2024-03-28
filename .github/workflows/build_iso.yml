@@ -2,13 +2,16 @@ name: Build Finite ISOs
 on:
   workflow_dispatch:
   workflow_call:
+  workflow_call:
 
 concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-iso
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-iso
   cancel-in-progress: true
 
 jobs:
   build-iso:
+    runs-on: ubuntu-latest
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -40,6 +43,7 @@ jobs:
           - major_version: 38
             is_gts_version: true
           - major_version: 39
+            is_gts_version: false
             is_gts_version: false
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -106,6 +110,7 @@ jobs:
 
       - name: Build ISOs
         uses: jasonn3/build-container-installer@v1.1.1
+        uses: jasonn3/build-container-installer@v1.1.1
         id: build
         with:
           arch: x86_64
@@ -125,8 +130,14 @@ jobs:
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.ref_name == 'testing'
         #if: github.event_name == 'pull_request'
+        if: github.ref_name == 'testing'
+        #if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
+          name: ${{ steps.build.outputs.iso_name }}
+          path: |
+            ${{ steps.build.outputs.iso_path }}
+            ${{ steps.build.outputs.iso_path }}-CHECKSUM
           name: ${{ steps.build.outputs.iso_name }}
           path: |
             ${{ steps.build.outputs.iso_path }}
