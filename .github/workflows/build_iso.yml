@@ -146,7 +146,8 @@ jobs:
       
       - name: Upload ISOs and Checksum to R2
         if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main'
-        run: |    
+        run: |
+          rclone --version && \    
           rclone copy $SOURCE_ISO R2:bluefin && \
           rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
         env:
