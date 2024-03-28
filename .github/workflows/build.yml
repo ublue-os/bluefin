@@ -49,6 +49,16 @@ jobs:
             is_latest_version: true
             is_stable_version: true
             is_gts_version: false
+        exclude:
+          - major_version: 38
+            image_flavor: asus
+          - major_version: 38
+            image_flavor: asus-nvidia
+          - major_version: 38
+            image_flavor: surface
+          - major_version: 38
+            image_flavor: surface-nvidia
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
