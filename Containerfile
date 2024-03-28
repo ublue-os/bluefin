@@ -111,7 +111,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
         echo "enabling tuned service for f39 builds" \ 
         systemctl enable tuned.service \
-    ; fi && \
+    fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable dconf-update.service && \
     systemctl --global enable ublue-flatpak-manager.service && \
