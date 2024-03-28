@@ -153,7 +153,7 @@ jobs:
           SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
           SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
         run: |
-          apt-get update
-          apt-get install -y rclone
+          sudo apt-get update
+          sudo apt-get install -y rclone
           rclone copy $SOURCE_ISO R2:bluefin
           rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
