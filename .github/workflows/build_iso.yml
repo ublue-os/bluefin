@@ -150,12 +150,12 @@ jobs:
           RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           RCLONE_CONFIG_R2_REGION: auto
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
-          SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          SOURCE_ISO_NAME: ${{ steps.build.outputs.iso_name }}
+          SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_name }}-CHECKSUM
+          SOURCE_ISO_PATH: ${{ steps.build.outputs.iso_path }}
+          SOURCE_ISO_CHECKSUM_PATH: ${{ steps.build.outputs.iso_path }}-CHECKSUM
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
-          sudo chmod 777 $SOURCE_ISO
-          sudo chmod 777 $SOURCE_ISO_CHECKSUM
-          rclone copy $SOURCE_ISO R2:bluefin && \
-          rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
+          rclone copyto --progress $SOURCE_ISO_PATH R2:bluefin/$SOURCE_ISO_NAME && \
+          rclone copyto --progress $SOURCE_ISO_CHECKSUM_PATH R2:bluefin/$SOURCE_ISO_CHECKSUM
