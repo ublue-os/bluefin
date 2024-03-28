@@ -111,7 +111,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
         echo "enabling tuned service for f39 builds" \ 
         systemctl enable tuned.service \
-    fi && \
+    ; fi && \
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable dconf-update.service && \
     systemctl --global enable ublue-flatpak-manager.service && \
@@ -131,7 +131,8 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     sed -i '/^PRETTY_NAME/s/Kinoite/finite/' /usr/lib/os-release && \
     if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \ 
-        sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.kde.konsole.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml  && \
+        sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:org.kde.konsole.desktop,applications:org.kde.discover.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml  && \
+        sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.kde.konsole.desktop,org.kde.discover.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml \
     ; fi && \
     rm -rf /tmp/* /var/* && \
     ostree container commit && \
