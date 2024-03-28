@@ -38,7 +38,7 @@ jobs:
       matrix:
         image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
         base_name: [bluefin, bluefin-dx]
-        major_version: [38, 39, 40]
+        major_version: [38, 39]
         include:
           - major_version: 38
             is_latest_version: false
@@ -47,10 +47,6 @@ jobs:
           - major_version: 39
             is_latest_version: true
             is_stable_version: true
-            is_gts_version: false
-          - major_version: 40
-            is_latest_version: false
-            is_stable_version: false
             is_gts_version: false
         exclude:
           - major_version: 38
