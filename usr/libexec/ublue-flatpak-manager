@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+
+# Script Version
+VER=1
+VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/flatpak_manager_version"
+VER_RAN=$(cat $VER_FILE)
+
+mkdir -p "$(dirname "$VER_FILE")" || exit 1
+
+# Run script if updated
+if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
+	echo "Flatpak manager v$VER has already ran. Exiting..."
+	exit 0
+fi
+
+# Use until yafti rework is done
+flatpak --system update -y
+
+notify-send "Flatpak Manager Service" "Finished Updating System Flatpaks" --app-name="Flatpak Manager Service" -u NORMAL
+
+echo $VER >$VER_FILE

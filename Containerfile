@@ -19,42 +19,42 @@ ARG PACKAGE_LIST="bluefin"
 
 # GNOME VRR & Ptyxis
 RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
-        wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
-        rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem && \
-        rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
-        wget https://copr.fedorainfracloud.org/coprs/kylegospo/prompt/repo/fedora-$(rpm -E %fedora)/kylegospo-prompt-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:kylegospo:prompt \
-            vte291 \
-            vte-profile \
-            libadwaita && \
-        rpm-ostree install \
-            ptyxis && \
-        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
-        rpm-ostree override remove \
-            power-profiles-daemon \
-            || true && \
-        rpm-ostree override remove \
-            tlp \
-            tlp-rdw \
-            || true \
-    ; fi
+  wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
+  rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem && \
+  rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
+  wget https://copr.fedorainfracloud.org/coprs/kylegospo/prompt/repo/fedora-$(rpm -E %fedora)/kylegospo-prompt-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
+  rpm-ostree override replace \
+  --experimental \
+  --from repo=copr:copr.fedorainfracloud.org:kylegospo:prompt \
+  vte291 \
+  vte-profile \
+  libadwaita && \
+  rpm-ostree install \
+  ptyxis && \
+  rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
+  rpm-ostree override remove \
+  power-profiles-daemon \
+  || true && \
+  rpm-ostree override remove \
+  tlp \
+  tlp-rdw \
+  || true \
+  ; fi
 
 # Install Explicit Sync Patches on Nvidia builds
 RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then \
-        wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
-            xorg-x11-server-Xwayland && \
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
-            egl-wayland \
-            || true && \
-        rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
-    ; fi
+  wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
+  rpm-ostree override replace \
+  --experimental \
+  --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+  xorg-x11-server-Xwayland && \
+  rpm-ostree override replace \
+  --experimental \
+  --from repo=copr:copr.fedorainfracloud.org:gloriouseggroll:nvidia-explicit-sync \
+  egl-wayland \
+  || true && \
+  rm /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo \
+  ; fi
 
 COPY usr /usr
 COPY just /tmp/just
@@ -104,10 +104,9 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     systemctl enable rpm-ostree-countme.service && \
     systemctl enable tailscaled.service && \
     systemctl enable dconf-update.service && \
+    systemctl --global enable ublue-flatpak-manager.service && \
     systemctl enable ublue-update.timer && \
     systemctl enable ublue-system-setup.service && \
-    systemctl enable ublue-system-flatpak-manager.service && \
-    systemctl --global enable ublue-user-flatpak-manager.service && \
     systemctl --global enable ublue-user-setup.service && \
     fc-cache -f /usr/share/fonts/ubuntu && \
     fc-cache -f /usr/share/fonts/inter && \
