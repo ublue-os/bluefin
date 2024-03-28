@@ -22,3 +22,7 @@ Rebase from an existing upstream Fedora Atomic to this image:
 ```bash
 rpm-ostree rebase ostree-unverified-registry:ghcr.io/apoordev/finite:stable
 ```
+or for devices with Nvidia GPUs:
+```bash
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/apoordev/finite:nvidia
+```
