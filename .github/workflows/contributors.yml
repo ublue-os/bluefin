@@ -1,22 +1,42 @@
 name: Update Contributors
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *' # Every day at midnight
-  push:
-    branches: 
-      - main
+    - cron: '3 2 1 * *'
+  pull_request: # TODO: Remove PR trigger
 
 jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
+      issues: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Get dates for last month
+        shell: bash
+        run: |
+          # Calculate the first day of the previous month
+          start_date=$(date -d "last month" +%Y-%m-01)
+  
+          # Calculate the last day of the previous month
+          end_date=$(date -d "$start_date +1 month -1 day" +%Y-%m-%d)
+  
+          #Set an environment variable with the date range
+          echo "START_DATE=$start_date" >> "$GITHUB_ENV"
+          echo "END_DATE=$end_date" >> "$GITHUB_ENV"
 
-      - uses: akhilmhdh/contributors-readme-action@v2.3.6
+      - name: Run contributor action
+        uses: github/contributors@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          START_DATE: ${{ env.START_DATE }}
+          END_DATE: ${{ env.END_DATE }}
+          REPOSITORY: ${{ github.repository }}
+
+      - name: Create issue
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: Monthly contributor report
+          token: ${{ secrets.GITHUB_TOKEN }}
+          content-filepath: ./contributors.md
