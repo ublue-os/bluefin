@@ -140,9 +140,15 @@ jobs:
           compression-level: 0
           overwrite: true
 
+      - name: Install Latest Version of RClone
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main'
+        uses: AnimMouse/setup-rclone@v1
+      
       - name: Upload ISOs and Checksum to R2
         if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main'
-        shell: bash
+        run: |    
+          rclone copy $SOURCE_ISO R2:bluefin && \
+          rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
         env:
           RCLONE_CONFIG_R2_TYPE: s3
           RCLONE_CONFIG_R2_PROVIDER: Cloudflare
@@ -152,10 +158,3 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
           SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y rclone
-          sudo chmod 777 $SOURCE_ISO
-          sudo chmod 777 $SOURCE_ISO_CHECKSUM
-          rclone copy $SOURCE_ISO R2:bluefin && \
-          rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
