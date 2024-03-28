@@ -76,10 +76,10 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
             /tmp/akmods-rpms/kmods/*xone*.rpm \
             /tmp/akmods-rpms/kmods/*openrazer*.rpm \
             /tmp/akmods-rpms/kmods/*wl*.rpm; \
-        if grep -qv "surface" <<< "${AKMODS_FLAVOR}"; then \
-            rpm-ostree install \
-                /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
-        ; fi && \
+    ; fi && \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]] && grep -qv "surface" <<< "${AKMODS_FLAVOR}"; then \
+        rpm-ostree install \
+            /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
     ; fi && \
     if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then \
         rpm-ostree install \
