@@ -155,5 +155,5 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
-          rclone copy $SOURCE_ISO R2:bluefin
+          rclone copy $SOURCE_ISO R2:bluefin && \
           rclone copy $SOURCE_ISO_CHECKSUM R2:bluefin
