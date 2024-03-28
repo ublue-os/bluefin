@@ -1,4 +1,5 @@
 # Finite
+[![build-finite](https://github.com/APoorDev/finite/actions/workflows/build.yml/badge.svg)](https://github.com/APoorDev/finite/actions/workflows/build.yml) [![build-finite-isos](https://github.com/APoorDev/finite/actions/workflows/build_iso.yml/badge.svg)](https://github.com/APoorDev/finite/actions/workflows/build_iso.yml)
 **This image is considered Beta** 
 
 A fork of Bluefin aimed at the KDE Plasma Desktop with less, but also more open tools.
