@@ -136,20 +136,20 @@ jobs:
           compression-level: 0
           overwrite: true
 
-      - name: Upload ISOs and Checksum to R2
-        if: github.event_name == 'workflow_dispatch'
-        shell: bash
-        env:
-          RCLONE_CONFIG_R2_TYPE: s3
-          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
-          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          RCLONE_CONFIG_R2_REGION: auto
-          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
-          SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
-        run: |
-          apt-get update
-          apt-get install -y rclone
-          rclone copy $SOURCE_ISO R2:finite
-          rclone copy $SOURCE_ISO_CHECKSUM R2:finite
+#      - name: Upload ISOs and Checksum to R2
+#        if: github.event_name == 'workflow_dispatch'
+#        shell: bash
+#        env:
+#          RCLONE_CONFIG_R2_TYPE: s3
+#          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+#          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+#          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+#          RCLONE_CONFIG_R2_REGION: auto
+#          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+#          SOURCE_ISO: ${{ steps.build.outputs.iso_path }}
+#          SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_path }}-CHECKSUM
+#        run: |
+#          apt-get update
+#          apt-get install -y rclone
+#          rclone copy $SOURCE_ISO R2:finite
+#          rclone copy $SOURCE_ISO_CHECKSUM R2:finite
