@@ -22,14 +22,10 @@ jobs:
           - finite-nvidia
           - finite-asus
           - finite-asus-nvidia
-          - finite-surface
-          - finite-surface-nvidia
           - finite-dx
           - finite-dx-nvidia
           - finite-dx-asus
-          - finite-dx-surface
           - finite-dx-asus-nvidia
-          - finite-dx-surface-nvidia
         major_version: [38, 39]
         exclude:
           - major_version: 38
