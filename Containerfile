@@ -17,6 +17,18 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="finite"
 
+# Remove power-profiles and tlp
+RUN echo "${FEDORA_MAJOR_VERSION}"
+RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
+        rpm-ostree override remove \
+            power-profiles-daemon \
+            || true && \
+        rpm-ostree override remove \
+            tlp \
+            tlp-rdw \
+            || true \
+    ; fi
+
 # Install Explicit Sync Patches on Nvidia builds
 RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then \
   wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
