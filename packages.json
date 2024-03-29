@@ -65,7 +65,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-                                "devpod",
+				"devpod",
 				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
@@ -155,7 +155,10 @@
 		"exclude": {
 			"bluefin": [
 				"podman-docker",
-				"gnome-terminal-nautilus"
+				"gnome-terminal-nautilus",
+				"power-profiles-daemon",
+				"tlp",
+				"tlp-rdw"
 			],
 			"bluefin-dx": [],
 			"bluefin-framework": []
