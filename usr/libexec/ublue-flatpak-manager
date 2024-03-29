@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # Script Version
-VER=1
+VER=2
 VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/flatpak_manager_version"
 VER_RAN=$(cat $VER_FILE)
 
@@ -11,6 +11,14 @@ mkdir -p "$(dirname "$VER_FILE")" || exit 1
 if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
 	echo "Flatpak manager v$VER has already ran. Exiting..."
 	exit 0
+fi
+
+# Install User Flatpak Repo if user has flatpaks installed from that repo
+USER_FLATPAKS=$(flatpak list --user)
+
+if [[ -n "$USER_FLATPAKS" ]]; then
+    flatpak remote-add --if-not-exists --user flathub /usr/etc/flatpak/remotes.d/flathub.flatpakrepo
+	flatpak remote-modify --user --enable --prio=2 flathub
 fi
 
 # Use until yafti rework is done
