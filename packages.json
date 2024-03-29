@@ -103,6 +103,8 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
+				"rocm-hip",
+				"rocm-opencl",
 				"ubuntu-family-fonts",
 				"udica",
 				"virt-manager",
