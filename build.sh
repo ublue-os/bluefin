@@ -46,7 +46,7 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     EXCLUDED_PACKAGES=($(rpm -qa --queryformat='%{NAME} ' ${EXCLUDED_PACKAGES[@]}))
 fi
 
-# remove any exluded packages which are still present on image
+# remove any excluded packages which are still present on image
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     rpm-ostree override remove \
         ${EXCLUDED_PACKAGES[@]}

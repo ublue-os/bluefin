@@ -31,14 +31,7 @@ RUN if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
             libadwaita && \
         rpm-ostree install \
             ptyxis && \
-        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo && \
-        rpm-ostree override remove \
-            power-profiles-daemon \
-            || true && \
-        rpm-ostree override remove \
-            tlp \
-            tlp-rdw \
-            || true \
+        rm -f /etc/yum.repos.d/_copr_kylegospo-prompt.repo \
     ; fi
 
 # Install Explicit Sync Patches on Nvidia builds
