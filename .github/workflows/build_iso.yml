@@ -109,7 +109,7 @@ jobs:
         with:
           arch: x86_64
           image_name: ${{ matrix.image_name }}
-          image_repo: ghcr.io/ublue-os
+          image_repo: ghcr.io/apoordev
           variant: 'Kinoite'
           version: ${{ matrix.major_version }}
           image_tag: ${{ steps.generate-tag.outputs.tag }}
