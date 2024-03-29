@@ -157,5 +157,5 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
-          rclone copyto --progress $SOURCE_ISO_PATH R2:bluefin/$SOURCE_ISO_NAME && \
-          rclone copyto --progress $SOURCE_ISO_CHECKSUM_PATH R2:bluefin/$SOURCE_ISO_CHECKSUM
+          rclone copyto --s3-no-check-bucket --progress $SOURCE_ISO_PATH R2:bluefin/$SOURCE_ISO_NAME && \
+          rclone copyto --s3-no-check-bucket --progress $SOURCE_ISO_CHECKSUM_PATH R2:bluefin/$SOURCE_ISO_CHECKSUM
