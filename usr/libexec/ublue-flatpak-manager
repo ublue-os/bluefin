@@ -16,6 +16,6 @@ fi
 # Use until yafti rework is done
 flatpak --system update -y
 
-notify-send "Flatpak Manager Service" "Finished Updating System Flatpaks" --app-name="Flatpak Manager Service" -u NORMAL
+notify-send "Welcome to Bluefin" "Your computer is ready!" --app-name="Flatpak Manager Service" -u NORMAL
 
 echo $VER >$VER_FILE
