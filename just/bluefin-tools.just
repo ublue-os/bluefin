@@ -24,7 +24,3 @@ tensorflow:
     echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
     podman pull docker.io/tensorflow/tensorflow:latest
     podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
-
-# Run the yafti setup tool
-yafti:
-    yafti /etc/yafti.yml --force
