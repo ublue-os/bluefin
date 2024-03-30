@@ -1,5 +1,64 @@
 # Changelog
 
+## [2.1.0](https://github.com/ublue-os/bluefin/compare/v2.0.0...v2.1.0) (2024-03-30)
+
+
+### Features
+
+* add bcache-tools ([#1008](https://github.com/ublue-os/bluefin/issues/1008)) ([fde9e52](https://github.com/ublue-os/bluefin/commit/fde9e5253f04b3125e55a36d084b875d551ee5fc))
+* add bluefin CLI packages from wolfi ([#1001](https://github.com/ublue-os/bluefin/issues/1001)) ([2c17790](https://github.com/ublue-os/bluefin/commit/2c17790443ed7a5f85300a65c33b2db6661f7886))
+* add epson printer drivers ([#1013](https://github.com/ublue-os/bluefin/issues/1013)) ([deccb8c](https://github.com/ublue-os/bluefin/commit/deccb8ca8c000528962149f1ff4ca9c5f318c013))
+* Add Explicit sync patches for XWayland on Nvidia builds ([#993](https://github.com/ublue-os/bluefin/issues/993)) ([025b662](https://github.com/ublue-os/bluefin/commit/025b6627f5f57b98abd38338671ab5d7d57c3e97))
+* Add Fedora 40 builds to Bluefin ([#1041](https://github.com/ublue-os/bluefin/issues/1041)) ([59dd5cb](https://github.com/ublue-os/bluefin/commit/59dd5cbcc8d67fc760ae5e0d04f044c76da67330))
+* add meslo nerd font ([#967](https://github.com/ublue-os/bluefin/issues/967)) ([ce88078](https://github.com/ublue-os/bluefin/commit/ce880781fd5d223403de4e18f99f98f3253bbfe2))
+* add more zsh configs ([#966](https://github.com/ublue-os/bluefin/issues/966)) ([5535205](https://github.com/ublue-os/bluefin/commit/5535205718792bb79b3e3ce0ffe2a28845da909e))
+* add ROCm support to -dx ([#1058](https://github.com/ublue-os/bluefin/issues/1058)) ([dfdc9f7](https://github.com/ublue-os/bluefin/commit/dfdc9f7c33865c94cf343c5c39a74d4e64e9422d))
+* add udica ([#1029](https://github.com/ublue-os/bluefin/issues/1029)) ([97e8199](https://github.com/ublue-os/bluefin/commit/97e81995db8078bd67a0db82d8e4f7fa362b7dd3))
+* add zsh config file ([#963](https://github.com/ublue-os/bluefin/issues/963)) ([1ae2f30](https://github.com/ublue-os/bluefin/commit/1ae2f3094cfaf5a581a89a440a2cb77507a9dcda))
+* **art:** add some wallpapers ([#1032](https://github.com/ublue-os/bluefin/issues/1032)) ([59aa407](https://github.com/ublue-os/bluefin/commit/59aa407db89adff28a1738c510183589cf14cf74))
+* change to spring wallpaper ([#987](https://github.com/ublue-os/bluefin/issues/987)) ([5ab4e1c](https://github.com/ublue-os/bluefin/commit/5ab4e1c176caa172355defa4fa910313b9758b4e))
+* create FUNDING.yml ([#1052](https://github.com/ublue-os/bluefin/issues/1052)) ([9278b06](https://github.com/ublue-os/bluefin/commit/9278b066306508fdd217cabdee22d0d3f2d144c1))
+* initial devcontainer ([#1027](https://github.com/ublue-os/bluefin/issues/1027)) ([bc696c8](https://github.com/ublue-os/bluefin/commit/bc696c8d00ee0aa739e1cb8d950922c80f2292ab))
+* **just:** cleanup and standardization of just recipes ([#1003](https://github.com/ublue-os/bluefin/issues/1003)) ([4b9441a](https://github.com/ublue-os/bluefin/commit/4b9441a962696cabfb807edebe180425b75d3ff5))
+* Update isogenerator to latest version ([#968](https://github.com/ublue-os/bluefin/issues/968)) ([8242907](https://github.com/ublue-os/bluefin/commit/8242907c30e0e6b0f3c6263be192c077c91ea417))
+
+
+### Bug Fixes
+
+* add gitattributes for proper linguist detection ([#1023](https://github.com/ublue-os/bluefin/issues/1023)) ([b09f95d](https://github.com/ublue-os/bluefin/commit/b09f95d28a5e8473b2b2240df600eaed35d69bef))
+* Add more missing ISOs ([5dc6543](https://github.com/ublue-os/bluefin/commit/5dc6543de32e52b5c84c3439f95c7c55b663b81c))
+* change ctrl-alt-enter to host term ([#970](https://github.com/ublue-os/bluefin/issues/970)) ([6b669aa](https://github.com/ublue-os/bluefin/commit/6b669aa430cae0450af872253759fbb4ceb07760))
+* change this into a welcome message ([#1063](https://github.com/ublue-os/bluefin/issues/1063)) ([3d4debc](https://github.com/ublue-os/bluefin/commit/3d4debc818ccddadb2d0bebd547eb3460c9f9010))
+* check for directory, not command ([#980](https://github.com/ublue-os/bluefin/issues/980)) ([c64eb03](https://github.com/ublue-os/bluefin/commit/c64eb03626f522e525d0206a588e351c573bc7b5))
+* check for directory, not command ([#991](https://github.com/ublue-os/bluefin/issues/991)) ([56d68e9](https://github.com/ublue-os/bluefin/commit/56d68e92dc13d0dce4547c80c330c80fe075b59a))
+* **ci:** fixing issues with mokutil password ([#969](https://github.com/ublue-os/bluefin/issues/969)) ([0c89938](https://github.com/ublue-os/bluefin/commit/0c899382fd8c62007459c88f297634a912979a2f))
+* correct ulimit nofile issue with brew ([#988](https://github.com/ublue-os/bluefin/issues/988)) ([3911e57](https://github.com/ublue-os/bluefin/commit/3911e57908f204b5930e0ee99f5411b1a554ec1a))
+* Correcting small typo from title-bar-font to titlebar-font. ([#1000](https://github.com/ublue-os/bluefin/issues/1000)) ([ca1d662](https://github.com/ublue-os/bluefin/commit/ca1d662c6558e01355dc04da87e8b01ccc19e9c0))
+* Delete sysctl maximum file limits workaround ([#979](https://github.com/ublue-os/bluefin/issues/979)) ([f237cef](https://github.com/ublue-os/bluefin/commit/f237cefd309202d958705dd9d5ae42f6076a16b4))
+* disable topgrade git extension ([#1044](https://github.com/ublue-os/bluefin/issues/1044)) ([59f6ac9](https://github.com/ublue-os/bluefin/commit/59f6ac9c8273a1b31d4a10765289a45c6404c6be))
+* force clean font cache ([#1016](https://github.com/ublue-os/bluefin/issues/1016)) ([19e6bf3](https://github.com/ublue-os/bluefin/commit/19e6bf3e3ab5f001c76243337d10524133ba7439))
+* Increase Nofile limit to fix installation of some brew application ([#985](https://github.com/ublue-os/bluefin/issues/985)) ([fbed7bd](https://github.com/ublue-os/bluefin/commit/fbed7bd07a8786611881423f400dcf17373ea1b3))
+* increase soft and hard file limits ([#978](https://github.com/ublue-os/bluefin/issues/978)) ([8eb9f3f](https://github.com/ublue-os/bluefin/commit/8eb9f3f6bbed75377b10976933841647be65ba59))
+* **just:** remove yafti ([#1075](https://github.com/ublue-os/bluefin/issues/1075)) ([de262c1](https://github.com/ublue-os/bluefin/commit/de262c15b35ff40cec15ba792d33b9fb245e9eee))
+* Make this check if brew is installed before trying to run it. ([#975](https://github.com/ublue-os/bluefin/issues/975)) ([c0a2cfb](https://github.com/ublue-os/bluefin/commit/c0a2cfb06abee26b1769a67ca5d3978e010c5d0d))
+* Only run brew for interactive fish shells ([#959](https://github.com/ublue-os/bluefin/issues/959)) ([9375d8e](https://github.com/ublue-os/bluefin/commit/9375d8e90b723fb71e7eea71be50be9317a3649d))
+* remove brew install, it's in config now ([#1042](https://github.com/ublue-os/bluefin/issues/1042)) ([9af6d49](https://github.com/ublue-os/bluefin/commit/9af6d4956497d58958a93c34b91c6a5e0eeeebbf))
+* remove gnome touch extensions ([#1045](https://github.com/ublue-os/bluefin/issues/1045)) ([260a64a](https://github.com/ublue-os/bluefin/commit/260a64abb4c6d7cd3c275f03d04cde6fdc516c04))
+* remove old yafti ([#1051](https://github.com/ublue-os/bluefin/issues/1051)) ([e7edb3c](https://github.com/ublue-os/bluefin/commit/e7edb3c8f5356cc5c9e4b71f79286661aaa50da2))
+* remove quotes around level ([#981](https://github.com/ublue-os/bluefin/issues/981)) ([968b17f](https://github.com/ublue-os/bluefin/commit/968b17faceb9ff39a04634c7b723aa0e9283991e))
+* replace profile brew.sh on just brew command ([#984](https://github.com/ublue-os/bluefin/issues/984)) ([874a5d2](https://github.com/ublue-os/bluefin/commit/874a5d299fee6a36bd38a1bb1eb56cfab4d5235f))
+* source docker-compose from one place ([#1066](https://github.com/ublue-os/bluefin/issues/1066)) ([df3fdb7](https://github.com/ublue-os/bluefin/commit/df3fdb70785a944e9e8d2e1b6141c1451c581912))
+* **topgrade:** ignore helm, ignore npm errors ([#997](https://github.com/ublue-os/bluefin/issues/997)) ([324e69a](https://github.com/ublue-os/bluefin/commit/324e69a111c42421cc2010f104bfa5ba3762b1db))
+* **topgrade:** npm should be node ([#1010](https://github.com/ublue-os/bluefin/issues/1010)) ([23ea820](https://github.com/ublue-os/bluefin/commit/23ea820ae02093ffe432a604f9c172e5074dbeb1))
+* turn off audible bell in the terminal ([#992](https://github.com/ublue-os/bluefin/issues/992)) ([6177f02](https://github.com/ublue-os/bluefin/commit/6177f0275ab464b7783e36dfe5b9a305b0e321c6))
+* Use Ptyxis from the ublue-os/staging copr repo ([#1073](https://github.com/ublue-os/bluefin/issues/1073)) ([e25e120](https://github.com/ublue-os/bluefin/commit/e25e1206eddfa2ef79d9e76c0dfff9d48c639bd6))
+
+
+### Reverts
+
+* "feat: Add Fedora 40 builds to Bluefin" ([#1053](https://github.com/ublue-os/bluefin/issues/1053)) ([98c33c4](https://github.com/ublue-os/bluefin/commit/98c33c4899a749220b62aa88b26999ce1f615494))
+* "fix: disable topgrade git extension" ([#1046](https://github.com/ublue-os/bluefin/issues/1046)) ([29ef97b](https://github.com/ublue-os/bluefin/commit/29ef97baec8e233fda9c48330cc87a48a070e7c6))
+
 ## [2.0.0](https://github.com/ublue-os/bluefin/compare/v1.2.0...v2.0.0) (2024-02-28)
 
 
