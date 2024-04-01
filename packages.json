@@ -163,5 +163,32 @@
 			"bluefin-dx": [],
 			"bluefin-framework": []
 		}
+	},
+	"40": {
+		"include": {
+			"bluefin": [
+				"gnome-shell-extension-tailscale-gnome-qs",
+				"input-leap",
+				"nautilus-open-any-terminal",
+				"tuned",
+				"tuned-ppd",
+				"tuned-utils",
+				"tuned-profiles-atomic"
+			],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		},
+		"exclude": {
+			"bluefin": [
+				"podman-docker",
+				"gnome-terminal-nautilus",
+				"power-profiles-daemon",
+				"tlp",
+				"tlp-rdw"
+			],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		}
 	}
+
 }
