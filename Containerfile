@@ -85,7 +85,7 @@ RUN wget https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -O /
     mkdir -p /usr/etc/flatpak/remotes.d && \
     wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remotes.d && \
     cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml && \
-    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
+    if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" || "${FEDORA_MAJOR_VERSION}" -eq "40" ]]; then \
         systemctl enable tuned.service \
     ; fi && \
     systemctl enable rpm-ostree-countme.service && \
