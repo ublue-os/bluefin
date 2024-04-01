@@ -19,7 +19,7 @@ ARG PACKAGE_LIST="bluefin"
 
 # GNOME VRR & Ptyxis
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
-    if [ ${FEDORA_MAJOR_VERSION} -ge "39" ]; then \
+    if [ ${FEDORA_MAJOR_VERSION} -eq "39" ]; then \
         wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
         rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem && \
         rm -f /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
