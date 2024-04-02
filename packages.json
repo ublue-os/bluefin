@@ -66,7 +66,6 @@
 				"containerd.io",
 				"dbus-x11",
 				"devpod",
-				"distrobuilder",
 				"docker-ce",
 				"docker-ce-cli",
 				"docker-buildx-plugin",
@@ -89,7 +88,6 @@
 				"p7zip-plugins",
 				"p7zip",
 				"podman-compose",
-				"podman-plugins",
 				"podman-tui",
 				"podmansh",
 				"powerline-fonts",
@@ -128,7 +126,10 @@
 			"bluefin": [
 				"gnome-shell-extension-tailscale-status"
 			],
-			"bluefin-dx": [],
+			"bluefin-dx": [
+				"distrobuilder",
+				"podman-plugins"
+			],
 			"bluefin-framework": []
 		},
 		"exclude": {
@@ -139,6 +140,35 @@
 		}
 	},
 	"39": {
+		"include": {
+			"bluefin": [
+				"gnome-shell-extension-tailscale-gnome-qs",
+				"input-leap",
+				"nautilus-open-any-terminal",
+				"tuned",
+				"tuned-ppd",
+				"tuned-utils",
+				"tuned-profiles-atomic"
+			],
+			"bluefin-dx": [
+				"distrobuilder",
+				"podman-plugins"
+			],
+			"bluefin-framework": []
+		},
+		"exclude": {
+			"bluefin": [
+				"podman-docker",
+				"gnome-terminal-nautilus",
+				"power-profiles-daemon",
+				"tlp",
+				"tlp-rdw"
+			],
+			"bluefin-dx": [],
+			"bluefin-framework": []
+		}
+	},
+	"40": {
 		"include": {
 			"bluefin": [
 				"gnome-shell-extension-tailscale-gnome-qs",
@@ -164,4 +194,5 @@
 			"bluefin-framework": []
 		}
 	}
+
 }
