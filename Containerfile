@@ -75,6 +75,9 @@ RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
 
+COPY /usr/etc/systemd/user.conf /etc/systemd/user.conf
+
+
 RUN wget https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -O /usr/libexec/brew-install && \
     chmod +x /usr/libexec/brew-install && \
     /tmp/build.sh && \
@@ -106,7 +109,6 @@ RUN wget https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -O /
     echo "Hidden=true" >> /usr/share/applications/nvtop.desktop && \
     echo "Hidden=true" >> /usr/share/applications/gnome-system-monitor.desktop && \
     rm -f /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo && \
-    cp /usr/etc/systemd/user.conf /etc/systemd/user.conf && \
     sed -i 's/#DefaultLimitNOFILE=/DefaultLimitNOFILE=4096:524288/' /etc/systemd/user.conf && \
 
     sed -i '/^PRETTY_NAME/s/Silverblue/Bluefin/' /usr/lib/os-release && \
