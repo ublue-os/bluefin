@@ -40,10 +40,8 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
         rpm-ostree override replace \
         --experimental \
         --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-            gtk4 \
             vte291 \
             vte-profile \
-            libadwaita && \
         rpm-ostree install \
             ptyxis \
     ; fi
