@@ -41,7 +41,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
         --experimental \
         --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
             vte291 \
-            vte-profile \
+            vte-profile && \
         rpm-ostree install \
             ptyxis \
     ; fi
