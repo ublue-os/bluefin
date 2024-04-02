@@ -35,7 +35,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
     ; fi
 
 # Install Explicit Sync Patches on Nvidia builds
-RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then \
+RUN if [[ "${IMAGE_FLAVOR}" =~ "nvidia" && "${IMAGE_FLAVOR}" =~ "39" ]]; then \
         wget https://copr.fedorainfracloud.org/coprs/gloriouseggroll/nvidia-explicit-sync/repo/fedora-$(rpm -E %fedora)/gloriouseggroll-nvidia-explicit-sync-fedora-$(rpm -E %fedora).repo?arch=x86_64 -O /etc/yum.repos.d/_copr_gloriouseggroll-nvidia-explicit-sync.repo && \
         rpm-ostree override replace \
         --experimental \
