@@ -17,8 +17,10 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG PACKAGE_LIST="bluefin"
 
-# GNOME VRR & Ptyxis
+
+# Add Staging repo
 RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo && \
+    # 39 gets VRR and Ptyxis
     if [ ${FEDORA_MAJOR_VERSION} -eq "39" ]; then \
         wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
         rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem && \
@@ -30,6 +32,16 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
             vte291 \
             vte-profile \
             libadwaita && \
+        rpm-ostree install \
+            ptyxis \
+    ; fi && \
+    # 40 gets only Ptyxis
+    if [ ${FEDORA_MAJOR_VERSION} -eq "40" ]; then \
+        rpm-ostree override replace \
+        --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+            vte291 \
+            vte-profile && \
         rpm-ostree install \
             ptyxis \
     ; fi
