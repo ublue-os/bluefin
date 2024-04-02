@@ -34,7 +34,7 @@ RUN wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$
             libadwaita && \
         rpm-ostree install \
             ptyxis \
-    ; fi \
+    ; fi && \
     # 40 gets only Ptyxis
     if [ ${FEDORA_MAJOR_VERSION} -eq "40" ]; then \
         rpm-ostree override replace \
