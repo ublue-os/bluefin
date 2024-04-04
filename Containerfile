@@ -85,7 +85,7 @@ RUN curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases
 
 # Magnificent app which corrects your previous console command.
 # https://github.com/nvbn/thefuck
-RUN echo 'eval $(thefuck --alias)"' >> /etc/bashrc
+RUN echo 'eval $(thefuck --alias)' >> /etc/bashrc
 
 # Copy Bluefin CLI packages
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
