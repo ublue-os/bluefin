@@ -120,7 +120,7 @@ jobs:
           image_tag: ${{ steps.generate-tag.outputs.tag }}
           secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           enrollment_password: 'ublue-os'
-          iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}
+          iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}.iso
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
           flatpak_remote_refs_dir: /github/workspace/flatpaks
@@ -133,8 +133,8 @@ jobs:
         with:
           name: ${{ steps.build.outputs.iso_name }}
           path: |
-            ${{ steps.build.outputs.iso_path }}
-            ${{ steps.build.outputs.iso_path }}-CHECKSUM
+            ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}
+            ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
           if-no-files-found: error
           retention-days: 0
           compression-level: 0
@@ -152,8 +152,8 @@ jobs:
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_ISO_NAME: ${{ steps.build.outputs.iso_name }}
           SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_name }}-CHECKSUM
-          SOURCE_ISO_PATH: ${{ steps.build.outputs.iso_path }}
-          SOURCE_ISO_CHECKSUM_PATH: ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          SOURCE_ISO_PATH: ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}
+          SOURCE_ISO_CHECKSUM_PATH: ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
