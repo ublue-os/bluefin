@@ -28,6 +28,8 @@ screens:
           packages:
           - GNOME Boxes: org.gnome.Boxes
           - Podman Desktop: io.podman_desktop.PodmanDesktop
+          - Headlamp: io.kinvolk.Headlamp
+          - Cockpit Client: org.cockpit_project.CockpitClient
         Gaming:
           description: "Rock and Stone!"
           default: false
@@ -39,14 +41,14 @@ screens:
           - Steam: com.valvesoftware.Steam
           - Proton Plus for Steam: com.vysp3r.ProtonPlus
         Office:
-          description: Bow to Capitalism
+          description: Work apps, Bow to Capitalism
           default: false
           packages:
           - OnlyOffice: org.onlyoffice.desktopeditors
           - LibreOffice: org.libreoffice.LibreOffice
+          - LogSeq: com.logseq.Logseq
           - Obsidian: md.obsidian.Obsidian
-          - Standard Notes: org.standardnotes.standardnotes
-          - Thunderbird Email: org.mozilla.Thunderbird
+          - Standard Notes: org.standardnotes.standardnotes       
         Other Web Browsers:
           description: Additional browsers to complement Firefox
           default: false
@@ -73,7 +75,6 @@ screens:
           - Backup: org.gnome.DejaDup
           - LocalSend: org.localsend.localsend_app
           - Syncthing: com.github.zocker_160.SyncThingy
-          - Cockpit Client: org.cockpit_project.CockpitClient
   final-screen:
     source: yafti.screen.title
     values:
