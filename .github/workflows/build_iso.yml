@@ -79,35 +79,31 @@ jobs:
 
       - name: Determine Flatpak Dependencies
         id: flatpak_dependencies
+        uses: jasonn3/build-container-installer@deps
+        with:
+          arch: x86_64
+          image_name: ${{ matrix.image_name }}
+          image_repo: ghcr.io/ublue-os
+          variant: 'Silverblue'
+          version: ${{ matrix.major_version }}
+          image_tag: ${{ steps.generate-tag.outputs.tag }}
+          secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
+          enrollment_password: 'ublue-os'
+          make_target: flatpaks/full_list
+          enable_cache_dnf: "false"
+          enable_cache_skopeo: "false"
+          flatpak_remote_refs_dir: flatpaks
+
+      - name: Filter Flatpak list
+        id: filtered_flatpak_dependencies
         shell: bash
         run: |
-          set -ex
-          image="ghcr.io/ublue-os/${{ matrix.image_name }}:${{ steps.generate-tag.outputs.tag }}"
-          # Make temp space
-          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
-          # Get list of refs from directory
-          FLATPAK_REFS_DIR=${{ github.workspace }}/flatpaks
-          FLATPAK_REFS_DIR_LIST=$(cat ${FLATPAK_REFS_DIR}/* | tr '\n' ' ' )
-          # Generate install script
-          cat << EOF > ${TEMP_FLATPAK_INSTALL_DIR}/script.sh
-          cat /temp_flatpak_install_dir/script.sh
-          mkdir -p /flatpak/flatpak /flatpak/triggers
-          mkdir /var/tmp || true
-          chmod -R 1777 /var/tmp
-          flatpak config --system --set languages "*"
-          flatpak remote-add --system flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --system -y ${FLATPAK_REFS_DIR_LIST}
-          ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v 'org\.freedesktop\.Platform\.openh264' | sed 's/^deploy\///g' > /output/flatpaks_with_deps
-          EOF
-          docker run --rm --privileged \
-            --entrypoint bash \
-            -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak \
-            -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
-            --volume ${FLATPAK_REFS_DIR}:/output \
-            --volume ${TEMP_FLATPAK_INSTALL_DIR}:/temp_flatpak_install_dir \
-            ${image} /temp_flatpak_install_dir/script.sh
-          docker rmi ${image}
-
+          newlist=$(echo ${{ steps.flatpak_dependencies.outputs.flatpak_refs }} | \
+            tr ' ' '\n' | \
+            grep -v 'org\.freedesktop\.Platform\.openh264' | \
+            tr '\n' ' ')
+          echo "filtered_flatpak_refs=${newlist}" >> $GITHUB_OUTPUT
+          
       - name: Build ISOs
         uses: jasonn3/build-container-installer@main
         id: build
@@ -123,7 +119,7 @@ jobs:
           iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}.iso
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
-          flatpak_remote_refs_dir: /github/workspace/flatpaks
+          flatpak_remote_refs: ${{ steps.filtered_flatpak_dependencies.outputs.filtered_flatpak_refs }}
           enable_flatpak_dependencies: "false"
 
       - name: Upload ISOs and Checksum to Job Artifacts
