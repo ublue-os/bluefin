@@ -22,11 +22,10 @@ screens:
           packages:
           - Discord: com.discordapp.Discord
           - Slack: com.slack.Slack
-        Development Tools:
+        Cloud Native Development Tools:
           description: Start your cloud-native journey here!
           default: false
           packages:
-          - GNOME Boxes: org.gnome.Boxes
           - Podman Desktop: io.podman_desktop.PodmanDesktop
           - Headlamp: io.kinvolk.Headlamp
           - Cockpit Client: org.cockpit_project.CockpitClient
@@ -49,6 +48,7 @@ screens:
           - LogSeq: com.logseq.Logseq
           - Obsidian: md.obsidian.Obsidian
           - Standard Notes: org.standardnotes.standardnotes       
+          - Todoist: com.todoist.Todoist
         Other Web Browsers:
           description: Additional browsers to complement Firefox
           default: false
@@ -57,6 +57,7 @@ screens:
           - Google Chrome: com.google.Chrome
           - Microsoft Edge: com.microsoft.Edge
           - Opera: com.opera.Opera
+          - Vivaldi: com.vivaldi.Vivaldi
         Streaming:
           description: Stream to the Internet
           default: false
@@ -73,7 +74,8 @@ screens:
           - Font Downloader: org.gustavoperedo.FontDownloader
           - PinApp Menu Editor: io.github.fabrialberio.pinapp
           - Backup: org.gnome.DejaDup
-          - LocalSend: org.localsend.localsend_app
+          - LocalSend (Easily send files across your network): org.localsend.localsend_app
+          - Peek (Simple Screen Recorder): com.uploadedlobster.peek
           - Syncthing: com.github.zocker_160.SyncThingy
   final-screen:
     source: yafti.screen.title
