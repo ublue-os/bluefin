@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+set -oue pipefail
+
 if [ "$BASE_IMAGE_NAME" = "silverblue" ]; then
     sed -i '/^PRETTY_NAME/s/Bluefin/Bluefin-dx/' /usr/lib/os-release
 elif [ "$BASE_IMAGE_NAME" = "kinoite" ]; then
