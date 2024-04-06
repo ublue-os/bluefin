@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -oue pipefail
+
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 wget https://negativo17.org/repos/fedora-multimedia.repo -O /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then
