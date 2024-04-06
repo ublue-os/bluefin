@@ -6,7 +6,7 @@ set -ouex pipefail
 INCLUDED_PACKAGES=($(jq -r "[(.all.include.all[]), \
                     (.\"$FEDORA_MAJOR_VERSION\".include.all[]), \
                     (.all.include.$BASE_IMAGE_NAME[]), \
-                    (.\"$FEDORA_MAJOR_VERSION\".include.$BASE_IMAGE_NAME[]) \
+                    (.\"$FEDORA_MAJOR_VERSION\".include.$BASE_IMAGE_NAME[])] \
                     | sort | unique[]" /tmp/packages.json))
 
 # build list of all packages requested for exclusion
