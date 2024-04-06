@@ -166,7 +166,7 @@ jobs:
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
           ## flatpak_remote_refs: ${{ steps.filtered_flatpak_dependencies.outputs.filtered_flatpak_refs }}
-          flatpak_remote_refs_dir: /github/workspace/${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
+          flatpak_remote_refs_dir: ${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
           enable_flatpak_dependencies: "false"
 
       - name: Move ISOs to Upload Directory
