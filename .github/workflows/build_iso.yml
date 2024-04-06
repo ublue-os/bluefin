@@ -161,8 +161,7 @@ jobs:
           image_tag: ${{ steps.generate-tag.outputs.tag }}
           secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           enrollment_password: 'ublue-os'
-          ## iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}.iso
-          iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}
+          iso_name: ${{ matrix.image_name }}-${{ steps.generate-tag.outputs.tag }}.iso
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
           ## flatpak_remote_refs: ${{ steps.filtered_flatpak_dependencies.outputs.filtered_flatpak_refs }}
@@ -175,8 +174,8 @@ jobs:
         run: |
           ISO_UPLOAD_DIR=${{ github.workspace }}/upload
           mkdir ${ISO_UPLOAD_DIR}
-          mv ${{ steps.build.outputs.iso_path }} ${ISO_UPLOAD_DIR}
-          mv ${{ steps.build.outputs.iso_path }}-CHECKSUM ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }} ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM ${ISO_UPLOAD_DIR}
           echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
 
       - name: Upload ISOs and Checksum to Job Artifacts
