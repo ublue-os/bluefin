@@ -3,17 +3,17 @@
 set -ouex pipefail
 
 # build list of all packages requested for inclusion
-INCLUDED_PACKAGES=($(jq -r "[(.all.include.all[]), \
-                    (.\"$FEDORA_MAJOR_VERSION\".include.all[]), \
-                    (.all.include.$BASE_IMAGE_NAME[]), \
-                    (.\"$FEDORA_MAJOR_VERSION\".include.$BASE_IMAGE_NAME[])] \
+INCLUDED_PACKAGES=($(jq -r "[(.all.include | (select(.all != null).all)[]), \
+                    (.all.include | (select(.\"$BASE_IMAGE_NAME\" != null).\"$BASE_IMAGE_NAME\")[]), \
+                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".include | (select(.all != null).all)[]), \
+                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".include | (select(.\"$BASE_IMAGE_NAME\" != null).\"$BASE_IMAGE_NAME\")[])] \
                     | sort | unique[]" /tmp/packages.json))
 
 # build list of all packages requested for exclusion
-EXCLUDED_PACKAGES=($(jq -r "[(.all.exclude.all[]), \
-                    (.\"$FEDORA_MAJOR_VERSION\".exclude.all[]), \
-                    (.all.exclude.$BASE_IMAGE_NAME[]), \
-                    (.\"$FEDORA_MAJOR_VERSION\".exclude.$BASE_IMAGE_NAME[])] \
+EXCLUDED_PACKAGES=($(jq -r "[(.all.exclude | (select(.all != null).all)[]), \
+                    (.all.exclude | (select(.\"$BASE_IMAGE_NAME\" != null).\"$BASE_IMAGE_NAME\")[]), \
+                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".exclude | (select(.all != null).all)[]), \
+                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".exclude | (select(.\"$BASE_IMAGE_NAME\" != null).\"$BASE_IMAGE_NAME\")[])] \
                     | sort | unique[]" /tmp/packages.json))
 
 # ensure exclusion list only contains packages already present on image
