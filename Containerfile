@@ -31,7 +31,7 @@ COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-
 COPY --from=ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION} /rpms /tmp/akmods-rpms
 
 # Build, cleanup, commit.
-RUN bash -c ". /tmp/build/build.sh"  && \
+RUN . /tmp/build/build.sh  && \
     rm -rf /tmp/* /var/* && \
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp && \
@@ -52,7 +52,7 @@ COPY system_files/dx /
 COPY packages.json /tmp/packages.json
 
 # Handle packages via packages.json
-RUN bash -c ". /tmp/build/build-dx.sh" && \
+RUN . /tmp/build/build-dx.sh && \
     fc-cache --system-only --really-force --verbose && \
     rm -rf /tmp/* /var/* && \
     mkdir -p /var/tmp && \
