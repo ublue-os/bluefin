@@ -7,7 +7,7 @@ ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-39}"
 ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
 
 ## bluefin image section
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS bluefin
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
@@ -31,14 +31,14 @@ COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-
 COPY --from=ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION} /rpms /tmp/akmods-rpms
 
 # Build, cleanup, commit.
-RUN bash -c ". /tmp/build/build.sh"  && \
+RUN bash -c ". /tmp/build/build-base.sh"  && \
     rm -rf /tmp/* /var/* && \
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp && \
     ostree container commit
 
 ## bluefin-dx developer edition image section
-FROM bluefin AS bluefin-dx
+FROM base AS dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
