@@ -56,6 +56,8 @@ jobs:
             image_flavor: surface
           - major_version: 38
             image_flavor: surface-nvidia
+          - major_version: 40
+            image_flavor: framework
 
     steps:
       - name: Checkout
@@ -87,6 +89,16 @@ jobs:
               echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
           else
               echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+          fi
+          if [[ "${{ matrix.base_name }}" =~ "bluefin" ]]; then
+              echo "BASE_IMAGE_NAME"="silverblue" >> $GITHUB_ENV
+          elif [[ "${{ matrix.base_name }}" =~ "aurora" ]]; then
+              echo "BASE_IMAGE_NAME"="kinoite" >> $GITHUB_ENV
+          fi
+          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
+              echo "TARGET_NAME"="dx" >> $GITHUB_ENV
+          else
+              echo "TARGET_NAME"="base" >> $GITHUB_ENV
           fi
           if [[ "${{ matrix.image_flavor }}" =~ "asus" ]]; then
               echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
@@ -184,6 +196,7 @@ jobs:
           tags: |
             ${{ steps.generate-tags.outputs.alias_tags }}
           build-args: |
+            BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
@@ -196,7 +209,7 @@ jobs:
           # extra-args: |
           #   --target=${{ matrix.target_name || matrix.base_name }}
           extra-args: |
-            --target=${{ matrix.base_name }}
+            --target=${{ env.TARGET_NAME }}
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
