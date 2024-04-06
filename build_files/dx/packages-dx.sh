@@ -10,8 +10,8 @@ INCLUDED_PACKAGES=($(jq -r "[(.all.include.all[]), \
                     | sort | unique[]" /tmp/packages.json))
 
 # build list of all packages requested for exclusion
-EXCLUDED_PACKAGES=($(jq -r "[(.all.include.all[]), \
-                    (.\"$FEDORA_MAJOR_VERSION\".include.all[]), \
+EXCLUDED_PACKAGES=($(jq -r "[(.all.exclude.all[]), \
+                    (.\"$FEDORA_MAJOR_VERSION\".exclude.all[]), \
                     (.all.exclude.dx[]), \
                     (.\"$FEDORA_MAJOR_VERSION\".exclude.dx[])] \
                     | sort | unique[]" /tmp/packages.json))
