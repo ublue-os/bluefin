@@ -13,5 +13,6 @@ rpm-ostree install ublue-update
 . /tmp/build/font-install.sh
 . /tmp/build/install-tmp.sh
 . /tmp/build/systemd.sh
+. /tmp/build/aurora-changes.sh
 . /tmp/build/branding.sh
 . /tmp/build/cleanup.sh

@@ -55,6 +55,7 @@
 				"yaru-theme"
 			],
 			"kinoite": [
+				"fastfetch",
 				"libadwaita-qt5"
 			],
 			"dx": [
