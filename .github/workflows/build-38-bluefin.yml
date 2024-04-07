@@ -1,0 +1,27 @@
+name: bluefin 38
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  schedule:
+    - cron: '42 16 * * *'  # 16:42 UTC everyday
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      brand_name: bluefin
+      fedora_version: 38
