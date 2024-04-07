@@ -25,8 +25,7 @@ tensorflow:
     podman pull docker.io/tensorflow/tensorflow:latest
     podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
-# Setup a local Ollama instance in a container.
-# Detect hardware, offer a choice if needed.
+# Setup a local Ollama instance in a container. Detect hardware, offer a choice if needed.
 ollama:
     #!/usr/bin/env bash
     echo 'Follow the prompts and check the tutorial: '
