@@ -98,7 +98,7 @@ jobs:
           containers: ${{ env.BASE_IMAGE_NAME}}-${{ matrix.image_flavor }}:${{ matrix.major_version }}
 
       - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin'
+        if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
         uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
           containers: dive, flux, helm, ko, minio, kubectl
