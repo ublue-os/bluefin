@@ -6,6 +6,10 @@ on:
         description: 'The Fedora release version: 38, 39, 40, etc'
         required: true
         type: string
+      brand_name:
+        description: "'aurora' or 'bluefin'"
+        required: true
+        type: string
 env:
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
@@ -21,8 +25,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
-        base_name: [bluefin, bluefin-dx, aurora, aurora-dx]
+        image_flavor:
+          - main
+          - nvidia
+          - asus
+          - asus-nvidia
+          - framework
+          - surface
+          - surface-nvidia
+        base_name:
+          - ${{ inputs.brand_name }}
+          - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
         include:

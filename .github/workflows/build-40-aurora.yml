@@ -1,4 +1,4 @@
-name: bluefin 40
+name: aurora 40
 on:
   merge_group:
   pull_request:
@@ -23,4 +23,5 @@ jobs:
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     with:
+      brand_name: aurora
       fedora_version: 40

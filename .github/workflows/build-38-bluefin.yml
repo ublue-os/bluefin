@@ -1,4 +1,4 @@
-name: bluefin 39
+name: bluefin 38
 on:
   merge_group:
   pull_request:
@@ -14,7 +14,7 @@ on:
     paths-ignore:
       - '**.md'
   schedule:
-    - cron: '40 16 * * *'  # 16:40 UTC everyday
+    - cron: '50 16 * * *'  # 16:50 UTC everyday
   workflow_dispatch:
 
 jobs:
@@ -23,4 +23,5 @@ jobs:
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     with:
-      fedora_version: 39
+      brand_name: bluefin
+      fedora_version: 38
