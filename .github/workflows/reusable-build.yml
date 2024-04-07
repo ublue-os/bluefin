@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-container:
+  build_container:
     name: image
     runs-on: ubuntu-latest
     continue-on-error: false
@@ -268,10 +268,10 @@ jobs:
           echo "${{ toJSON(steps.push.outputs) }}"
 
   check:
-    name: Check all builds successful
+    name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    needs: [build-container]
+    needs: [build_container]
     steps:
       - name: Exit on failure
         if: ${{ needs.build_container.result == 'failure' }}
