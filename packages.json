@@ -54,6 +54,9 @@
 				"nautilus-gsconnect",
 				"yaru-theme"
 			],
+			"kinoite": [
+				"libadwaita-qt5"
+			],
 			"dx": [
 				"adobe-source-code-pro-fonts",
 				"cascadia-code-fonts",
@@ -122,6 +125,9 @@
 				"gnome-extensions-app",
 				"gnome-software-rpm-ostree",
 				"gnome-tour"
+			],
+			"kinoite": [
+				"plasma-welcome"
 			],
 			"dx": []
 		}
