@@ -32,8 +32,8 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
-        base_name: [bluefin, bluefin-dx]
-        major_version: [38, 39]
+        base_name: [bluefin, bluefin-dx, aurora, aurora-dx]
+        major_version: [38, 39, 40]
         include:
           - major_version: 38
             is_latest_version: false
@@ -43,7 +43,15 @@ jobs:
             is_latest_version: true
             is_stable_version: true
             is_gts_version: false
+          - major_version: 40
+            is_latest_version: false
+            is_stable_version: false
+            is_gts_version: false
         exclude:
+          - major_version: 38
+            base_name: aurora
+          - major_version: 38
+            base_name: aurora-dx
           - major_version: 38
             image_flavor: asus
           - major_version: 38
@@ -52,18 +60,45 @@ jobs:
             image_flavor: surface
           - major_version: 38
             image_flavor: surface-nvidia
+          - major_version: 40
+            image_flavor: framework
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Matrix Variables
+        run: |
+          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
+              echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
+          else
+              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+          fi
+          if [[ "${{ matrix.base_name }}" =~ "bluefin" ]]; then
+              echo "BASE_IMAGE_NAME"="silverblue" >> $GITHUB_ENV
+          elif [[ "${{ matrix.base_name }}" =~ "aurora" ]]; then
+              echo "BASE_IMAGE_NAME"="kinoite" >> $GITHUB_ENV
+          fi
+          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
+              echo "TARGET_NAME"="dx" >> $GITHUB_ENV
+          else
+              echo "TARGET_NAME"="base" >> $GITHUB_ENV
+          fi
+          if [[ "${{ matrix.image_flavor }}" =~ "asus" ]]; then
+              echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
+          elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
+              echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
+          else
+              echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
+          fi
+
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
-          containers: silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }}
+          containers: ${{ env.BASE_IMAGE_NAME}}-${{ matrix.image_flavor }}:${{ matrix.major_version }}
 
       - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin'
+        if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
         uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
           containers: dive, flux, helm, ko, minio, kubectl
@@ -76,21 +111,6 @@ jobs:
 
       - name: Check just syntax
         uses: ublue-os/just-action@v1
-
-      - name: Matrix Variables
-        run: |
-          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
-              echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
-          else
-              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
-          fi
-          if [[ "${{ matrix.image_flavor }}" =~ "asus" ]]; then
-              echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
-          elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
-              echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
-          else
-              echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
-          fi
 
       - name: Generate tags
         id: generate-tags
@@ -180,6 +200,7 @@ jobs:
           tags: |
             ${{ steps.generate-tags.outputs.alias_tags }}
           build-args: |
+            BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
@@ -192,7 +213,7 @@ jobs:
           # extra-args: |
           #   --target=${{ matrix.target_name || matrix.base_name }}
           extra-args: |
-            --target=${{ matrix.base_name }}
+            --target=${{ env.TARGET_NAME }}
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12

@@ -25,10 +25,6 @@ tensorflow:
     podman pull docker.io/tensorflow/tensorflow:latest
     podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
-# Run the yafti setup tool
-yafti:
-    yafti /etc/yafti.yml --force
-
 # Setup a local Ollama instance in a container.
 # Detect hardware, offer a choice if needed.
 ollama:

@@ -13,7 +13,7 @@
 # Run a one minute system benchmark
 benchmark:
     echo 'Running a 1 minute benchmark ...'
-    stress-ng --matrix 0 -t 1m --times
+    cd /tmp && stress-ng --matrix 0 -t 1m --times
 
 # Configure Bluefin-CLI Terminal Experience
 bluefin-cli:
