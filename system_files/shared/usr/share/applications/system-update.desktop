@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=System Update
+Comment=Update Bluefin, Flatpaks, Distrobox containers, and more
+Icon=/usr/share/ublue-os/bluefin/update.svg
+Categories=ConsoleOnly;System;
+Terminal=true
+Exec=/usr/bin/ujust update
