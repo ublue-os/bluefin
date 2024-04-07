@@ -1,4 +1,4 @@
-name: ublue main 40
+name: bluefin 40
 on:
   merge_group:
   pull_request:
