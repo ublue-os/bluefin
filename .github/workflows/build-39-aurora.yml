@@ -7,12 +7,14 @@ on:
       - testing
     paths-ignore:
       - '**.md'
+      - 'system_files/bluefin/**'
   push:
     branches:
       - main
       - testing
     paths-ignore:
       - '**.md'
+      - 'system_files/bluefin/**'
   schedule:
     - cron: '41 16 * * *'  # 16:41 UTC everyday
   workflow_dispatch:
