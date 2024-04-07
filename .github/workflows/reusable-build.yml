@@ -38,24 +38,7 @@ jobs:
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
-        include:
-          - fedora_version: 38
-            is_latest_version: false
-            is_stable_version: true
-            is_gts_version: true
-          - fedora_version: 39
-            is_latest_version: true
-            is_stable_version: true
-            is_gts_version: false
-          - fedora_version: 40
-            is_latest_version: false
-            is_stable_version: false
-            is_gts_version: false
         exclude:
-          - fedora_version: 38
-            base_name: aurora
-          - fedora_version: 38
-            base_name: aurora-dx
           - fedora_version: 38
             image_flavor: asus
           - fedora_version: 38
@@ -123,8 +106,24 @@ jobs:
           # Generate a timestamp for creating an image version history
           TIMESTAMP="$(date +%Y%m%d)"
           FEDORA_VERSION="${{ matrix.fedora_version }}"
+
+          if [[ "${{ matrix.fedora_version }}" -eq "38" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=true
+          elif [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
+            IS_LATEST_VERSION=true
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=false
+          elif [[ "${{ matrix.fedora_version }}" -eq "40" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=false
+            IS_GTS_VERSION=false
+          fi
+
           COMMIT_TAGS=()
           BUILD_TAGS=()
+
           # Have tags for tracking builds during pull request
           SHA_SHORT="${GITHUB_SHA::7}"
           COMMIT_TAGS+=("pr-${{ github.event.number }}-${FEDORA_VERSION}")
