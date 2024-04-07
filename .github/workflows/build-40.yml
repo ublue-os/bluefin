@@ -1,0 +1,26 @@
+name: ublue main 40
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  schedule:
+    - cron: '45 16 * * *'  # 16:45 UTC everyday
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      fedora_version: 40
