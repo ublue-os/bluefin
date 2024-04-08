@@ -44,7 +44,7 @@ jobs:
           else
               echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
           fi
-          echo "BASE_IMAGE_NAME"="lutho" >> $GITHUB_ENV
+          echo "BASE_IMAGE_NAME"="aurora" >> $GITHUB_ENV
           if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
               echo "TARGET_NAME"="dx" >> $GITHUB_ENV
           else
