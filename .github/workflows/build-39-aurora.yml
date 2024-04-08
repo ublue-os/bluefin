@@ -1,0 +1,29 @@
+name: aurora 39
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+      - 'system_files/silverblue/**'
+  push:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+      - 'system_files/silverblue/**'
+  schedule:
+    - cron: '41 16 * * *'  # 16:41 UTC everyday
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      brand_name: aurora
+      fedora_version: 39

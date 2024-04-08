@@ -1,87 +1,58 @@
 name: Build and Push Image
 on:
-  schedule:
-    - cron: '40 16 * * *'  # 16:40 UTC everyday
-  merge_group:
-  pull_request:
-    branches:
-      - main
-      - testing
-    paths-ignore:
-      - '**.md'
-  push:
-    branches:
-      - main
-      - testing
-    paths-ignore:
-      - '**.md'
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      fedora_version:
+        description: 'The Fedora release version: 38, 39, 40, etc'
+        required: true
+        type: string
+      brand_name:
+        description: "'aurora' or 'bluefin'"
+        required: true
+        type: string
 env:
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.fedora_version }}
   cancel-in-progress: true
 
 jobs:
-  build-container:
-    name: build
+  build_container:
+    name: image
     runs-on: ubuntu-latest
     continue-on-error: false
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia, asus, asus-nvidia, framework, surface, surface-nvidia]
-        base_name: [bluefin, bluefin-dx]
-        major_version: [38, 39, 40]
-        include:
-          - major_version: 38
-            is_latest_version: false
-            is_stable_version: true
-            is_gts_version: true
-          - major_version: 39
-            is_latest_version: true
-            is_stable_version: true
-            is_gts_version: false
-          - major_version: 40
-            is_latest_version: false
-            is_stable_version: false
-            is_gts_version: false
+        image_flavor:
+          - main
+          - nvidia
+          - asus
+          - asus-nvidia
+          - framework
+          - surface
+          - surface-nvidia
+        base_name:
+          - ${{ inputs.brand_name }}
+          - ${{ inputs.brand_name }}-dx
+        fedora_version:
+          - ${{ inputs.fedora_version }}
         exclude:
-          - major_version: 38
+          - fedora_version: 38
             image_flavor: asus
-          - major_version: 38
+          - fedora_version: 38
             image_flavor: asus-nvidia
-          - major_version: 38
+          - fedora_version: 38
             image_flavor: surface
-          - major_version: 38
+          - fedora_version: 38
             image_flavor: surface-nvidia
-          - major_version: 40
+          - fedora_version: 40
             image_flavor: framework
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@v0.2.2
-        with:
-          containers: silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }}
-
-      - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin'
-        uses: EyeCantCU/cosign-action/verify@v0.2.2
-        with:
-          containers: dive, flux, helm, ko, minio, kubectl
-          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
-          oidc-issuer: https://token.actions.githubusercontent.com
-          registry: cgr.dev/chainguard
-
-      - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v6
-
-      - name: Check just syntax
-        uses: ublue-os/just-action@v1
 
       - name: Matrix Variables
         run: |
@@ -108,29 +79,65 @@ jobs:
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
           fi
 
+      - name: Verify base image
+        uses: EyeCantCU/cosign-action/verify@v0.2.2
+        with:
+          containers: ${{ env.BASE_IMAGE_NAME}}-${{ matrix.image_flavor }}:${{ matrix.fedora_version }}
+
+      - name: Verify Chainguard images
+        if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
+        uses: EyeCantCU/cosign-action/verify@v0.2.2
+        with:
+          containers: dive, flux, helm, ko, minio, kubectl
+          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+          oidc-issuer: https://token.actions.githubusercontent.com
+          registry: cgr.dev/chainguard
+
+      - name: Maximize build space
+        uses: ublue-os/remove-unwanted-software@v6
+
+      - name: Check just syntax
+        uses: ublue-os/just-action@v1
+
       - name: Generate tags
         id: generate-tags
         shell: bash
         run: |
           # Generate a timestamp for creating an image version history
           TIMESTAMP="$(date +%Y%m%d)"
-          MAJOR_VERSION="${{ matrix.major_version }}"
+          FEDORA_VERSION="${{ matrix.fedora_version }}"
+
+          if [[ "${{ matrix.fedora_version }}" -eq "38" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=true
+          elif [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
+            IS_LATEST_VERSION=true
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=false
+          elif [[ "${{ matrix.fedora_version }}" -eq "40" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=false
+            IS_GTS_VERSION=false
+          fi
+
           COMMIT_TAGS=()
           BUILD_TAGS=()
+
           # Have tags for tracking builds during pull request
           SHA_SHORT="${GITHUB_SHA::7}"
-          COMMIT_TAGS+=("pr-${{ github.event.number }}-${MAJOR_VERSION}")
-          COMMIT_TAGS+=("${SHA_SHORT}-${MAJOR_VERSION}")
+          COMMIT_TAGS+=("pr-${{ github.event.number }}-${FEDORA_VERSION}")
+          COMMIT_TAGS+=("${SHA_SHORT}-${FEDORA_VERSION}")
           if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
              [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
               COMMIT_TAGS+=("pr-${{ github.event.number }}")
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          BUILD_TAGS=("${MAJOR_VERSION}" "${MAJOR_VERSION}-${TIMESTAMP}")
+          BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
-             BUILD_TAGS=("${MAJOR_VERSION}-testing" "${MAJOR_VERSION}-testing-${TIMESTAMP}")
+             BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
              if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
                 [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
                  BUILD_TAGS+=("testing")
@@ -164,7 +171,7 @@ jobs:
         shell: bash
         run: |
           set -eo pipefail
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
+          ver=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ matrix.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
           if [ -z "$ver" ] || [ "null" = "$ver" ]; then
             echo "inspected image version must not be empty or null"
             exit 1
@@ -200,7 +207,7 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
+            FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -261,10 +268,10 @@ jobs:
           echo "${{ toJSON(steps.push.outputs) }}"
 
   check:
-    name: Check all builds successful
+    name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    needs: [build-container]
+    needs: [build_container]
     steps:
       - name: Exit on failure
         if: ${{ needs.build_container.result == 'failure' }}
@@ -275,7 +282,7 @@ jobs:
         run: exit 0
 
   build_iso:
-    name: build iso
+    name: iso
     needs: [check]
     if: github.ref_name == 'testing'
     # Eventually would be nice for building images in PRs
