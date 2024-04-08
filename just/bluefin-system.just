@@ -36,7 +36,7 @@ devmode:
         echo "and reboot your system when the update is finished."
         exit
     fi
-    if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+    if grep -q "dx" <<< $CURRENT_IMAGE
     then
         CURRENT_STATE="enabled"
     else
@@ -52,7 +52,11 @@ devmode:
             echo "You are already on a developer image"
         else
             echo "Rebasing to a developer image"
-            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin/bluefin-dx/")
+            if [[ "${CURRENT_IMAGE}" =~ "bluefin" ]]; then
+              NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin/bluefin-dx/")
+            elif [[ "${CURRENT_IMAGE}" =~ "aurora" ]]; then
+              NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/aurora/aurora-dx/")
+            fi
             rpm-ostree rebase $NEW_IMAGE
         fi
     elif [ "$OPTION" = "Disable" ]
@@ -60,7 +64,11 @@ devmode:
         if [ "$CURRENT_STATE" = "enabled" ]
         then
             echo "Rebasing to a non developer image"
-            NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
+            if [[ "${CURRENT_IMAGE}" =~ "bluefin" ]]; then
+              NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/bluefin-dx/bluefin/")
+            elif [[ "${CURRENT_IMAGE}" =~ "aurora" ]]; then
+              NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/aurora-dx/aurora/")
+            fi
             rpm-ostree rebase $NEW_IMAGE
         else
             echo "You are currently not on a developer image"
