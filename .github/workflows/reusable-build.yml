@@ -39,29 +39,33 @@ jobs:
 
       - name: Matrix Variables
         run: |
+          echo "BASE_IMAGE_NAME"="aurora" >> $GITHUB_ENV
+          FULL_BASE_IMAGE_NAME="aurora"
+          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
+              echo "TARGET_NAME"="dx" >> $GITHUB_ENV
+              FULL_BASE_IMAGE_NAME="${FULL_BASE_IMAGE_NAME}-dx"
+          else
+              echo "TARGET_NAME"="base" >> $GITHUB_ENV
+          fi
           if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
               echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
           else
               echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+              FULL_BASE_IMAGE_NAME="${FULL_BASE_IMAGE_NAME}-${{ matrix-image_flavor }}"
           fi
-          echo "BASE_IMAGE_NAME"="aurora" >> $GITHUB_ENV
-          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
-              echo "TARGET_NAME"="dx" >> $GITHUB_ENV
-          else
-              echo "TARGET_NAME"="base" >> $GITHUB_ENV
-          fi
+          echo "FULL_BASE_IMAGE_NAME=$FULL_BASE_IMAGE_NAME" >> $GITHUB_ENV
           if [[ "${{ matrix.image_flavor }}" =~ "asus" ]]; then
               echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
           else
-              echo "AKMODS_FLAVOR=" >> $GITHUB_ENV
+              echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
           fi
 
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
-          containers: ${{ env.BASE_IMAGE_NAME}}-${{ matrix.image_flavor }}:${{ matrix.fedora_version }}
+          containers: ${{ env.FULL_BASE_IMAGE_NAME }}:${{ matrix.fedora_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
