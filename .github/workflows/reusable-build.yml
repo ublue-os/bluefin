@@ -55,7 +55,7 @@ jobs:
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
           else
-              echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
+              echo "AKMODS_FLAVOR=" >> $GITHUB_ENV
           fi
 
       - name: Verify base image
