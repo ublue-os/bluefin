@@ -169,6 +169,16 @@ jobs:
           compression-level: 0
           overwrite: true
 
+      - name: Move ISOs to Upload Directory
+        id: upload-directory
+        shell: bash
+        run: |
+          ISO_UPLOAD_DIR=${{ github.workspace }}/upload
+          mkdir ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }} ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM ${ISO_UPLOAD_DIR}
+          echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
+
       - name: Upload ISOs and Checksum to R2
         if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main'
         shell: bash
