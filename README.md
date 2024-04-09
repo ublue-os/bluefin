@@ -1,7 +1,7 @@
 # bluefin and aurora
 **These images are considered Beta** 
 
-## Bluefin [projectbluefin.io](https://projectbluefin.io)
+## Bluefin - [projectbluefin.io](https://projectbluefin.io)
 ![image](https://github.com/ublue-os/bluefin/assets/1264109/c0b3fa8a-f513-4bb1-b314-e134d1802e18)
 
 > "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
@@ -10,7 +10,7 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
 - [Download Bluefin](https://projectbluefin.io/#scene-picker)
 
-## Aurora [getaurora.dev](https://getaurora.dev)
+## Aurora - [getaurora.dev](https://getaurora.dev)
 ![Screenshot_20240409_234125](https://github.com/ublue-os/bluefin/assets/1264109/08a294ba-c182-4329-aaa2-0d402a92071f)
 
 Aurora is a delightful KDE desktop experience for end-users that are looking for reliability and developers for the most-hassle free setup. Zero maintenance included.
