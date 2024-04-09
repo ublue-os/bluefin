@@ -71,7 +71,6 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
-				"devpod",
 				"docker-ce",
 				"docker-ce-cli",
 				"docker-buildx-plugin",
@@ -139,6 +138,7 @@
 			],
 			"dx": [
 				"distrobuilder",
+				"devpod",
 				"podman-plugins"
 			]
 		},
@@ -164,6 +164,7 @@
 			],
 			"dx": [
 				"distrobuilder",
+				"devpod",
 				"podman-plugins"
 			]
 		},
