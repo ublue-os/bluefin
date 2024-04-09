@@ -155,6 +155,16 @@ jobs:
           flatpak_remote_refs_dir: /github/workspace/flatpaks
           enable_flatpak_dependencies: "false"
 
+      - name: Move ISOs to Upload Directory
+        id: upload-directory
+        shell: bash
+        run: |
+          ISO_UPLOAD_DIR=${{ github.workspace }}/upload
+          mkdir ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }} ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM ${ISO_UPLOAD_DIR}
+          echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
+
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.ref_name == 'testing'
         #if: github.event_name == 'pull_request'
@@ -168,16 +178,6 @@ jobs:
           retention-days: 0
           compression-level: 0
           overwrite: true
-
-      - name: Move ISOs to Upload Directory
-        id: upload-directory
-        shell: bash
-        run: |
-          ISO_UPLOAD_DIR=${{ github.workspace }}/upload
-          mkdir ${ISO_UPLOAD_DIR}
-          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }} ${ISO_UPLOAD_DIR}
-          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM ${ISO_UPLOAD_DIR}
-          echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
 
       - name: Upload ISOs and Checksum to R2
         if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main'
