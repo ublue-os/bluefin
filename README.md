@@ -1,5 +1,5 @@
-# bluefin
-**This image is considered Beta** 
+# bluefin and aurora
+**These images are considered Beta** 
 
 ![image](https://github.com/ublue-os/bluefin/assets/1264109/c0b3fa8a-f513-4bb1-b314-e134d1802e18)
 
@@ -9,6 +9,15 @@
 - [Announcement Blog Post](https://www.ypsidanger.com/announcing-project-bluefin/)
 
 A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these two use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of Ubuntu and Fedora fused together. For gamers we strive to deliver a world-class Flathub gaming experience. Check [Introduction to Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41) for a feature walkthrough. 
+
+## Aurora
+[screenshot goes here]
+
+[Aurora description will go here]
+
+### What's the relationship between Aurora and Bluefin?
+
+Both Aurora and Bluefin strive to offer a curated out of the box experience for users, they only differ in the default desktop and recommended applications: Bluefin uses GNOME, Aurora uses KDE. They are both maintained and built in this repository.  
 
 # Download
 
