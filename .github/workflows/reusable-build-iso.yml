@@ -46,6 +46,8 @@ jobs:
             image_flavor: surface
           - fedora_version: 38
             image_flavor: surface-nvidia
+          # Don't build version 40 yet
+          - fedora_version: 40
         include:
           - fedora_version: 38
             is_gts_version: true
