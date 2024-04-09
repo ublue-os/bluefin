@@ -149,10 +149,10 @@ jobs:
           image_tag: ${{ steps.generate-tag.outputs.tag }}
           secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           enrollment_password: 'ublue-os'
-          iso_name: ${{ env.IMAGE_NAME }}-${{ steps.generate-tag.outputs.tag }}
+          iso_name: ${{ env.IMAGE_NAME }}-${{ steps.generate-tag.outputs.tag }}.iso
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
-          flatpak_remote_refs_dir: /github/workspace/flatpaks
+          flatpak_remote_refs_dir: ${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
           enable_flatpak_dependencies: "false"
 
       - name: Move ISOs to Upload Directory
@@ -189,6 +189,7 @@ jobs:
           RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           RCLONE_CONFIG_R2_REGION: auto
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          SOURCE_DIR: ${{ steps.upload-directory.outputs.iso-upload-dir }}
           SOURCE_ISO_NAME: ${{ steps.build.outputs.iso_name }}
           SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_name }}-CHECKSUM
           SOURCE_ISO_PATH: ${{ steps.build.outputs.iso_path }}
@@ -196,5 +197,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
+          rclone copy $SOURCE_DIR R2:bluefin
           rclone copyto --s3-no-check-bucket --progress $SOURCE_ISO_PATH R2:bluefin/$SOURCE_ISO_NAME && \
           rclone copyto --s3-no-check-bucket --progress $SOURCE_ISO_CHECKSUM_PATH R2:bluefin/$SOURCE_ISO_CHECKSUM
