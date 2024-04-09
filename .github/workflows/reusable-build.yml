@@ -128,8 +128,8 @@ jobs:
           SHA_SHORT="${GITHUB_SHA::7}"
           COMMIT_TAGS+=("pr-${{ github.event.number }}-${FEDORA_VERSION}")
           COMMIT_TAGS+=("${SHA_SHORT}-${FEDORA_VERSION}")
-          if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
-             [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+          if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+             [[ "$IS_STABLE_VERSION" == "true" ]]; then
               COMMIT_TAGS+=("pr-${{ github.event.number }}")
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
@@ -138,16 +138,16 @@ jobs:
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
              BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
-             if [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
-                [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+                [[ "$IS_STABLE_VERSION" == "true" ]]; then
                  BUILD_TAGS+=("testing")
-             elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+             elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                  BUILD_TAGS+=("gts-testing")
              fi
-          elif [[ "${{ matrix.is_latest_version }}" == "true" ]] && \
-               [[ "${{ matrix.is_stable_version }}" == "true" ]]; then
+          elif [[ "$IS_LATEST_VERSION" == "true" ]] && \
+               [[ "$IS_STABLE_VERSION" == "true" ]]; then
               BUILD_TAGS+=("latest")
-          elif [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+          elif [[ "$IS_GTS_VERSION" == "true" ]]; then
               BUILD_TAGS+=("gts")
           fi
 
