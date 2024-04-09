@@ -28,7 +28,6 @@ jobs:
         image_flavor:
           - main
         base_name:
-          - ${{ inputs.brand_name }}
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
@@ -179,6 +178,7 @@ jobs:
             FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
+            SOURCE_IMAGE=${{ env.FULL_BASE_IMAGE_NAME }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
           # TODO(GH-280)

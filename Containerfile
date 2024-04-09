@@ -1,13 +1,12 @@
-ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-aurora}"
-ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
+ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-aurora-dx}"
+ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-39}"
 ARG TARGET_BASE="${TARGET_BASE:-lutho}"
 
-## lutho image section
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS lutho
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS lutho-dx
 
 ARG IMAGE_NAME="${IMAGE_NAME}"
 ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
@@ -34,27 +33,3 @@ RUN wget https://github.com/OpenTabletDriver/OpenTabletDriver/releases/latest/do
     rpm-ostree install /tmp/opentabletdriver.rpm && \
     rm -rf /tmp/*
     # note: the user needs to manually enable the systemctl service according to https://opentabletdriver.net/Wiki/FAQ/Linux#autostart
-
-## lutho-dx developer edition image section
-FROM lutho AS lutho-dx
-
-ARG IMAGE_NAME="${IMAGE_NAME}"
-ARG IMAGE_VENDOR="${IMAGE_VENDOR}"
-ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
-ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
-ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG PACKAGE_LIST="lutho-dx"
-
-COPY packages.json \
-     build.sh \
-     image-info.sh \
-    /tmp
-
-# Handle packages via packages.json
-RUN /tmp/build.sh && \
-    /tmp/image-info.sh
-
-# Clean up repos, everything is on the image so we don't need them
-RUN fc-cache --system-only --really-force --verbose && \
-    rm -rf /tmp/* /var/* && \
-    ostree container commit
