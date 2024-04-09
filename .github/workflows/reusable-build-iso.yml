@@ -6,6 +6,10 @@ on:
         description: "'aurora' or 'bluefin'"
         required: true
         type: string
+      fedora_version:
+        description: 'The Fedora release version: 38, 39, 40, etc'
+        required: true
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-iso
@@ -31,7 +35,8 @@ jobs:
         base_name:
           - ${{ inputs.brand_name }}
           - ${{ inputs.brand_name }}-dx
-        fedora_version: [38, 39]
+        fedora_version:
+          - ${{ inputs.fedora_version }}
         exclude:
           - fedora_version: 38
             image_flavor: asus
@@ -131,7 +136,7 @@ jobs:
           docker rmi ${image}
 
       - name: Build ISOs
-        uses: jasonn3/build-container-installer@v1.1.1
+        uses: jasonn3/build-container-installer@main
         id: build
         with:
           arch: x86_64
