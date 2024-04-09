@@ -20,10 +20,10 @@ COPY packages.json /tmp/packages.json
 COPY build.sh /tmp/build.sh
 COPY image-info.sh /tmp/image-info.sh
 
-RUN /tmp/build.sh && \
-    /tmp/image-info.sh && \
-    #sed -i '/^PRETTY_NAME/s/Aurora/Lutho/' /usr/lib/os-release && \
-    rm -rf /tmp/* /var/* && \
+RUN /tmp/build.sh
+RUN /tmp/image-info.sh
+# RUN sed -i '/^PRETTY_NAME/s/Aurora/Lutho/' /usr/lib/os-release
+RUN rm -rf /tmp/* /var/* && \
     ostree container commit && \
     mkdir -p /var/tmp && \
     chmod -R 1777 /var/tmp
