@@ -13,7 +13,11 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 ## Aurora
 [screenshot goes here]
 
-[Aurora description will go here]
+Aurora is a delightful KDE desktop experience for end-users that are looking for reliability and developers for the most-hassle free setup. Zero maintenance included.
+
+**To get more infos and ISOs for your exact hardware visit:**
+
+**[getaurora.dev](https://getaurora.dev)**
 
 ### What's the relationship between Aurora and Bluefin?
 
