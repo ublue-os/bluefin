@@ -48,11 +48,6 @@ jobs:
             image_flavor: surface-nvidia
           # Don't build version 40 yet
           - fedora_version: 40
-        include:
-          - fedora_version: 38
-            is_gts_version: true
-          - fedora_version: 39
-            is_gts_version: false
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
@@ -71,20 +66,25 @@ jobs:
           elif [[ ${{ inputs.brand_name }} == "aurora" ]]; then
             echo "VARIANT=Kinoite" >> $GITHUB_ENV
           fi
+          if [[ ${{ inputs.fedora_version }} == "38" ]]; then
+            echo "IS_GTS_VERSION=true" >> $GITHUB_ENV
+          elif [[ ${{ inputs.fedora_version }} == "39" ]]; then
+            echo "IS_LATEST_VERSION=true" >> $GITHUB_ENV
+          fi
       - name: Set Image Tag
         id: generate-tag
         shell: bash
         run: |
-          TAG="latest"
-
-          if [[ ${{ matrix.is_gts_version }} == "true" ]]; then
+          if [[ ${{ env.IS_LATEST_VERSION }} == "true" ]]; then
+            TAG="latest"
+          elif [[ ${{ env.IS_GTS_VERSION }} == "true" ]]; then
             TAG="gts"
           fi
 
           if [[ "${{ github.ref_name }}" == "testing" ]]; then
-            if [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+            if [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
               TAG="gts-testing"
-            else
+            elif [[ ${{ env.IS_LATEST_VERSION }} == "true" ]]; then
               TAG="testing"
             fi
           fi
@@ -95,6 +95,7 @@ jobs:
           #fi
 
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
       - name: Set Flatpaks Directory Shortname
         id: generate-flatpak-dir-shortname
         shell: bash
