@@ -48,17 +48,13 @@ jobs:
             image_flavor: surface-nvidia
           # Don't build version 40 yet
           - fedora_version: 40
-        include:
-          - fedora_version: 38
-            is_gts_version: true
-          - fedora_version: 39
-            is_gts_version: false
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@v1.3.1
 
       - name: Checkout Repo
         uses: actions/checkout@v4
+
       - name: Matrix Variables
         run: |
           if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
@@ -71,18 +67,23 @@ jobs:
           elif [[ ${{ inputs.brand_name }} == "aurora" ]]; then
             echo "VARIANT=Kinoite" >> $GITHUB_ENV
           fi
+
       - name: Set Image Tag
         id: generate-tag
         shell: bash
         run: |
           TAG="latest"
 
-          if [[ ${{ matrix.is_gts_version }} == "true" ]]; then
+          if [[ ${{ matrix.fedora_version }} == 38 ]]; then
+            IS_GTS_VERSION=true
+          fi
+
+          if [[ ${IS_GTS_VERSION} ]]; then
             TAG="gts"
           fi
 
           if [[ "${{ github.ref_name }}" == "testing" ]]; then
-            if [[ "${{ matrix.is_gts_version }}" == "true" ]]; then
+            if [[ ${IS_GTS_VERSION} ]]; then
               TAG="gts-testing"
             else
               TAG="testing"
@@ -95,6 +96,7 @@ jobs:
           #fi
 
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
       - name: Set Flatpaks Directory Shortname
         id: generate-flatpak-dir-shortname
         shell: bash
