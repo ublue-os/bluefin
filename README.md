@@ -1,7 +1,12 @@
 # bluefin and aurora
 **These images are considered Beta** 
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2503a44c1105456483517f793af75ee7)](https://app.codacy.com/gh/ublue-os/bluefin/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) 
+
 ## Bluefin - [projectbluefin.io](https://projectbluefin.io)
+
+[![bluefin 38](https://github.com/ublue-os/bluefin/actions/workflows/build-38-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-38-bluefin.yml) [![bluefin 39](https://github.com/ublue-os/bluefin/actions/workflows/build-39-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-39-bluefin.yml) [![bluefin 40](https://github.com/ublue-os/bluefin/actions/workflows/build-40-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-40-bluefin.yml)
+
 ![image](https://github.com/ublue-os/bluefin/assets/1264109/c0b3fa8a-f513-4bb1-b314-e134d1802e18)
 
 > "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
@@ -11,6 +16,9 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 - [Download Bluefin](https://projectbluefin.io/#scene-picker)
 
 ## Aurora - [getaurora.dev](https://getaurora.dev)
+
+[![aurora 39](https://github.com/ublue-os/bluefin/actions/workflows/build-39-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-39-aurora.yml) [![aurora 40](https://github.com/ublue-os/bluefin/actions/workflows/build-40-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-40-aurora.yml)
+
 ![Screenshot_20240409_234125](https://github.com/ublue-os/bluefin/assets/1264109/08a294ba-c182-4329-aaa2-0d402a92071f)
 
 Aurora is a delightful KDE desktop experience for end-users that are looking for reliability and developers for the most-hassle free setup. Zero maintenance included.
