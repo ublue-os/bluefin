@@ -287,5 +287,8 @@ jobs:
     if: github.ref_name == 'testing'
     # Eventually would be nice for building images in PRs
     #if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
-    uses: ./.github/workflows/build_iso.yml
+    uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
+    with:
+      brand_name: ${{ inputs.brand_name }}
+      fedora_version: ${{ inputs.fedora_version }}
