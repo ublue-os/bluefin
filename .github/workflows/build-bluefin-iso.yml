@@ -3,13 +3,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-38:
-    name: Bluefin 38
-    uses: ./.github/workflows/reusable-build-iso.yml
-    secrets: inherit
-    with:
-      brand_name: bluefin
-      fedora_version: 38
   build-39:
     name: Bluefin 39
     uses: ./.github/workflows/reusable-build-iso.yml

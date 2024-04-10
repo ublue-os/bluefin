@@ -3,13 +3,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-38:
-    name: Aurora 38
-    uses: ./.github/workflows/reusable-build-iso.yml
-    secrets: inherit
-    with:
-      brand_name: aurora
-      fedora_version: 38
   build-39:
     name: Aurora 39
     uses: ./.github/workflows/reusable-build-iso.yml
