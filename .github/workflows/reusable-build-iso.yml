@@ -171,9 +171,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.build.outputs.iso_name }}
-          path: |
-            ${{ steps.build.outputs.iso_path }}
-            ${{ steps.build.outputs.iso_path }}-CHECKSUM
+          path: ${{ steps.upload-directory.outputs.iso-upload-dir }}
           if-no-files-found: error
           retention-days: 0
           compression-level: 0
@@ -190,13 +188,7 @@ jobs:
           RCLONE_CONFIG_R2_REGION: auto
           RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: ${{ steps.upload-directory.outputs.iso-upload-dir }}
-          SOURCE_ISO_NAME: ${{ steps.build.outputs.iso_name }}
-          SOURCE_ISO_CHECKSUM: ${{ steps.build.outputs.iso_name }}-CHECKSUM
-          SOURCE_ISO_PATH: ${{ steps.build.outputs.iso_path }}
-          SOURCE_ISO_CHECKSUM_PATH: ${{ steps.build.outputs.iso_path }}-CHECKSUM
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
           rclone copy $SOURCE_DIR R2:bluefin
-          rclone copyto --s3-no-check-bucket --progress $SOURCE_ISO_PATH R2:bluefin/$SOURCE_ISO_NAME && \
-          rclone copyto --s3-no-check-bucket --progress $SOURCE_ISO_CHECKSUM_PATH R2:bluefin/$SOURCE_ISO_CHECKSUM
