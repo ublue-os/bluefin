@@ -77,16 +77,16 @@ jobs:
         id: generate-tag
         shell: bash
         run: |
-          if [[ ${{ env.IS_LATEST_VERSION }} == "true" ]]; then
+          if [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
             TAG="latest"
-          elif [[ ${{ env.IS_GTS_VERSION }} == "true" ]]; then
+          elif [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
             TAG="gts"
           fi
 
           if [[ "${{ github.ref_name }}" == "testing" ]]; then
             if [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
               TAG="gts-testing"
-            elif [[ ${{ env.IS_LATEST_VERSION }} == "true" ]]; then
+            elif [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
               TAG="testing"
             fi
           fi
