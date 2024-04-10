@@ -18,3 +18,6 @@ wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remo
 
 # Topgrade Install
 pip install --prefix=/usr topgrade
+
+# Install ublue-update - Breaks when trying to do with packages.sh
+rpm-ostree install ublue-update

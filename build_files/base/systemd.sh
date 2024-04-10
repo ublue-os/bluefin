@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+set -eou pipefail
 
 if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
     systemctl enable tuned.service \

@@ -22,8 +22,9 @@ COPY system_files/shared system_files/${BASE_IMAGE_NAME} /
 COPY just /tmp/just
 COPY packages.json /tmp/packages.json
 
-# Copy ublue-update.toml to tmp first, to avoid being overwritten.
+# Copy Files that get overwritten to /tmp to prevent overwritten
 COPY /system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
+COPY /system_files/shared/usr/share/pixmaps /tmp/pixmaps
 # Copy Bluefin CLI packages
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
 COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
