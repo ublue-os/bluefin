@@ -1,4 +1,7 @@
 # bluefin and aurora
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f09e0bef0801479c8f0b09f59fe7539e)](https://app.codacy.com/gh/ublue-os/bluefin?utm_source=github.com&utm_medium=referral&utm_content=ublue-os/bluefin&utm_campaign=Badge_Grade)
+
 **These images are considered Beta** 
 
 ## Bluefin - [projectbluefin.io](https://projectbluefin.io)
