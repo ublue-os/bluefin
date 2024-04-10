@@ -284,7 +284,7 @@ jobs:
   build_iso:
     name: iso
     needs: [check]
-    if: github.ref_name == 'testing' && inputs.fedora_version != 40
+    if: github.ref_name == 'testing' && inputs.fedora_version != "40"
     # Eventually would be nice for building images in PRs
     #if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
     uses: ./.github/workflows/reusable-build-iso.yml
