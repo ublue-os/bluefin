@@ -8,4 +8,5 @@ elif test "$BASE_IMAGE_NAME" = "kinoite"; then
     sed -i '/^PRETTY_NAME/s/Kinoite/Aurora/' /usr/lib/os-release
     sed -i 's/Bluefin/Aurora/g' /usr/etc/yafti.yml
     sed -i 's/Aurora (Beta)/Aurora \- Bluefin\-KDE (Alpha)/' /usr/etc/yafti.yml
+    sed -i 's/Bluefin/Aurora/' /usr/libexec/ublue-flatpak-manager
 fi
