@@ -3,10 +3,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-39:
-    name: Aurora 39
+  build_isos:
+    name: Build Aurora ${{ matrix.fedora_version }}
     uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
     with:
       brand_name: aurora
-      fedora_version: 39
+      fedora_version: ${{ matrix.fedora_version }}
+    strategy:
+      matrix:
+        fedora_version: [39, 40] 
