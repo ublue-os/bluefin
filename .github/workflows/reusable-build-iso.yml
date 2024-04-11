@@ -66,6 +66,9 @@ jobs:
           elif [[ ${{ inputs.brand_name }} == "aurora" ]]; then
             echo "VARIANT=Kinoite" >> $GITHUB_ENV
           fi
+          elif [[ ${{ inputs.brand_name }} == "stellar" ]]; then
+            echo "VARIANT=Cosmic" >> $GITHUB_ENV
+          fi
           if [[ ${{ inputs.fedora_version }} == "38" ]]; then
             echo "IS_GTS_VERSION=true" >> $GITHUB_ENV
           elif [[ ${{ inputs.fedora_version }} == "39" ]]; then
@@ -106,6 +109,10 @@ jobs:
           elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
             FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
           fi
+          elif [[ ${{ inputs.brand_name }} = "stellar" ]]; then
+            FLATPAK_DIR_SHORTNAME="stellar_flatpaks"
+          fi
+
           echo "flatpak-dir-shortname=${FLATPAK_DIR_SHORTNAME}" >> $GITHUB_OUTPUT
 
       - name: Determine Flatpak Dependencies
@@ -194,6 +201,13 @@ jobs:
             RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.AURORA_R2_ENDPOINT }}
             BUCKET_PATH="R2:aurora-dl"
           fi
+          elif [[ ${{ inputs.brand_name }} = "stellar" ]]; then
+            RCLONE_CONFIG_R2_ACCESS_KEY_ID=${{ secrets.STELLAR_R2_ACCESS_KEY_ID }}
+            RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=${{ secrets.STELLAR_R2_SECRET_ACCESS_KEY }}
+            RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.STELLAR_R2_ENDPOINT }}
+            BUCKET_PATH="R2:stellar-dl"
+          fi
+
           echo "rclone-config-r2-access-key-id=${RCLONE_CONFIG_R2_ACCESS_KEY_ID}" >> $GITHUB_OUTPUT
           echo "rclone-config-r2-secret-access-key=${RCLONE_CONFIG_R2_SECRET_ACCESS_KEY}" >> $GITHUB_OUTPUT
           echo "rclone-config-r2-endpoint=${RCLONE_CONFIG_R2_ENDPOINT}" >> $GITHUB_OUTPUT
