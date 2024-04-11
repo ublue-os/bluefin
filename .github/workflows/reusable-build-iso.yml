@@ -46,8 +46,6 @@ jobs:
             image_flavor: surface
           - fedora_version: 38
             image_flavor: surface-nvidia
-          # Don't build version 40 yet
-          - fedora_version: 40
 
     steps:
       - name: Free Disk Space (Ubuntu)
