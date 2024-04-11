@@ -3,10 +3,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-39:
-    name: Bluefin 39
+  build_isos:
+    name: Build Bluefin ${{ matrix.fedora_version }}
     uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
     with:
-      brand_name: bluefin
-      fedora_version: 39
+      brand_name: aurora
+      fedora_version: ${{ matrix.fedora_version }}
+    strategy:
+      matrix:
+        fedora_version: [39, 40] 
