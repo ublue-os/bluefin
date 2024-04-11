@@ -1,0 +1,12 @@
+name: Aurora ISO Build
+on:
+  workflow_dispatch:
+
+jobs:
+  build-39:
+    name: Aurora 39
+    uses: ./.github/workflows/reusable-build-iso.yml
+    secrets: inherit
+    with:
+      brand_name: aurora
+      fedora_version: 39

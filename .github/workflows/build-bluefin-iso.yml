@@ -1,0 +1,12 @@
+name: Bluefin ISO Build
+on:
+  workflow_dispatch:
+
+jobs:
+  build-39:
+    name: Bluefin 39
+    uses: ./.github/workflows/reusable-build-iso.yml
+    secrets: inherit
+    with:
+      brand_name: bluefin
+      fedora_version: 39

@@ -1,0 +1,216 @@
+name: Reusable Build ISOs
+on:
+  workflow_call:
+    inputs:
+      brand_name:
+        description: "'aurora' or 'bluefin'"
+        required: true
+        type: string
+      fedora_version:
+        description: 'The Fedora release version: 38, 39, 40, etc'
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-iso
+  cancel-in-progress: true
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        image_flavor:
+          - main
+          - nvidia
+          - asus
+          - asus-nvidia
+          - surface
+          - surface-nvidia
+        base_name:
+          - ${{ inputs.brand_name }}
+          - ${{ inputs.brand_name }}-dx
+        fedora_version:
+          - ${{ inputs.fedora_version }}
+        exclude:
+          - fedora_version: 38
+            image_flavor: asus
+          - fedora_version: 38
+            image_flavor: asus-nvidia
+          - fedora_version: 38
+            image_flavor: surface
+          - fedora_version: 38
+            image_flavor: surface-nvidia
+
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.3.1
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Matrix Variables
+        run: |
+          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
+            echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
+          else
+            echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+          fi
+          if [[ ${{ inputs.brand_name }} == "bluefin" ]]; then
+            echo "VARIANT=Silverblue" >> $GITHUB_ENV
+          elif [[ ${{ inputs.brand_name }} == "aurora" ]]; then
+            echo "VARIANT=Kinoite" >> $GITHUB_ENV
+          fi
+          if [[ ${{ inputs.fedora_version }} == "38" ]]; then
+            echo "IS_GTS_VERSION=true" >> $GITHUB_ENV
+          elif [[ ${{ inputs.fedora_version }} == "39" ]]; then
+            echo "IS_LATEST_VERSION=true" >> $GITHUB_ENV
+          fi
+
+      - name: Set Image Tag
+        id: generate-tag
+        shell: bash
+        run: |
+          if [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
+            TAG="latest"
+          elif [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
+            TAG="gts"
+          fi
+
+          if [[ "${{ github.ref_name }}" == "testing" ]]; then
+            if [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
+              TAG="gts-testing"
+            elif [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
+              TAG="testing"
+            fi
+          fi
+
+          # Would like to implement in the future. This will allow us to support image tags from a PR.
+          #if [[ github.event.number ]]; then
+          #  TAG="pr-${{ github.event.number }}-${{ matrix.fedora_version }}"
+          #fi
+
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Set Flatpaks Directory Shortname
+        id: generate-flatpak-dir-shortname
+        shell: bash
+        run: |
+          if [[ ${{ inputs.brand_name }} = "bluefin" ]]; then
+            FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
+          elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
+            FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
+          fi
+          echo "flatpak-dir-shortname=${FLATPAK_DIR_SHORTNAME}" >> $GITHUB_OUTPUT
+
+      - name: Determine Flatpak Dependencies
+        id: flatpak_dependencies
+        shell: bash
+        run: |
+          set -ex
+          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ steps.generate-tag.outputs.tag }}"
+          # Make temp space
+          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
+          # Get list of refs from directory
+          FLATPAK_REFS_DIR=${{ github.workspace }}/${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
+          FLATPAK_REFS_DIR_LIST=$(cat ${FLATPAK_REFS_DIR}/* | tr '\n' ' ' )
+          # Generate install script
+          cat << EOF > ${TEMP_FLATPAK_INSTALL_DIR}/script.sh
+          cat /temp_flatpak_install_dir/script.sh
+          mkdir -p /flatpak/flatpak /flatpak/triggers
+          mkdir /var/tmp || true
+          chmod -R 1777 /var/tmp
+          flatpak config --system --set languages "*"
+          flatpak remote-add --system flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --system -y ${FLATPAK_REFS_DIR_LIST}
+          ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v 'org\.freedesktop\.Platform\.openh264' | sed 's/^deploy\///g' > /output/flatpaks_with_deps
+          EOF
+          docker run --rm --privileged \
+            --entrypoint bash \
+            -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak \
+            -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
+            --volume ${FLATPAK_REFS_DIR}:/output \
+            --volume ${TEMP_FLATPAK_INSTALL_DIR}:/temp_flatpak_install_dir \
+            ${image} /temp_flatpak_install_dir/script.sh
+          docker rmi ${image}
+
+      - name: Build ISOs
+        uses: jasonn3/build-container-installer@v1.2.0
+        id: build
+        with:
+          arch: x86_64
+          image_name: ${{ env.IMAGE_NAME }}
+          image_repo: ghcr.io/ublue-os
+          variant: ${{ env.VARIANT }}
+          version: ${{ matrix.fedora_version }}
+          image_tag: ${{ steps.generate-tag.outputs.tag }}
+          secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
+          enrollment_password: 'ublue-os'
+          iso_name: ${{ env.IMAGE_NAME }}-${{ steps.generate-tag.outputs.tag }}.iso
+          enable_cache_dnf: "false"
+          enable_cache_skopeo: "false"
+          flatpak_remote_refs_dir: ${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
+          enable_flatpak_dependencies: "false"
+
+      - name: Move ISOs to Upload Directory
+        id: upload-directory
+        shell: bash
+        run: |
+          ISO_UPLOAD_DIR=${{ github.workspace }}/upload
+          mkdir ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }} ${ISO_UPLOAD_DIR}
+          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM ${ISO_UPLOAD_DIR}
+          echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
+
+      - name: Upload ISOs and Checksum to Job Artifacts
+        if: github.ref_name == 'testing'
+        #if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.iso_name }}
+          path: ${{ steps.upload-directory.outputs.iso-upload-dir }}
+          if-no-files-found: error
+          retention-days: 0
+          compression-level: 0
+          overwrite: true
+
+      - name: Determine R2 Secrets
+        id: r2-secrets
+        shell: bash
+        run: |
+          if [[ ${{ inputs.brand_name }} = "bluefin" ]]; then
+            RCLONE_CONFIG_R2_ACCESS_KEY_ID=${{ secrets.R2_ACCESS_KEY_ID }}
+            RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }}
+            RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
+            BUCKET_PATH="R2:bluefin"
+          elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
+            RCLONE_CONFIG_R2_ACCESS_KEY_ID=${{ secrets.AURORA_R2_ACCESS_KEY_ID }}
+            RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=${{ secrets.AURORA_R2_SECRET_ACCESS_KEY }}
+            RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.AURORA_R2_ENDPOINT }}
+            BUCKET_PATH="R2:aurora-dl"
+          fi
+          echo "rclone-config-r2-access-key-id=${RCLONE_CONFIG_R2_ACCESS_KEY_ID}" >> $GITHUB_OUTPUT
+          echo "rclone-config-r2-secret-access-key=${RCLONE_CONFIG_R2_SECRET_ACCESS_KEY}" >> $GITHUB_OUTPUT
+          echo "rclone-config-r2-endpoint=${RCLONE_CONFIG_R2_ENDPOINT}" >> $GITHUB_OUTPUT
+          echo "bucket-path=${BUCKET_PATH}" >> $GITHUB_OUTPUT
+
+      - name: Upload ISOs and Checksum to R2
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main'
+        shell: bash
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ steps.r2-secrets.outputs.rclone-config-r2-access-key-id }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ steps.r2-secrets.outputs.rclone-config-r2-secret-access-key }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ steps.r2-secrets.outputs.rclone-config-r2-endpoint }}
+          SOURCE_DIR: ${{ steps.upload-directory.outputs.iso-upload-dir }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          rclone copy $SOURCE_DIR ${{ steps.r2-secrets.outputs.bucket-path }}
