@@ -8,7 +8,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
     with:
-      brand_name: aurora
+      brand_name: bluefin
       fedora_version: ${{ matrix.fedora_version }}
     strategy:
       matrix:
