@@ -7,5 +7,5 @@ if test "$BASE_IMAGE_NAME" = "silverblue"; then
     sed -i 's/Bluefin/Bluefin-dx/' /tmp/yafti.yml
 elif test "$BASE_IMAGE_NAME" = "kinoite"; then
     sed -i '/^PRETTY_NAME/s/Aurora/Aurora-dx/' /usr/lib/os-release
-    sed -i 's/Aurora/Aurora-dx/' /tmp/yafti.yml
+    sed -i 's/Aurora/Aurora-dx/' /usr/etc/yafti.yml
 fi
