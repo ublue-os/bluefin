@@ -179,38 +179,34 @@ jobs:
           compression-level: 0
           overwrite: true
 
-      - name: Determine R2 Secrets
-        id: r2-secrets
-        shell: bash
-        run: |
-          if [[ ${{ inputs.brand_name }} = "bluefin" ]]; then
-            RCLONE_CONFIG_R2_ACCESS_KEY_ID=${{ secrets.R2_ACCESS_KEY_ID }}
-            RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }}
-            RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.R2_ENDPOINT }}
-            BUCKET_PATH="R2:bluefin"
-          elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
-            RCLONE_CONFIG_R2_ACCESS_KEY_ID=${{ secrets.AURORA_R2_ACCESS_KEY_ID }}
-            RCLONE_CONFIG_R2_SECRET_ACCESS_KEY=${{ secrets.AURORA_R2_SECRET_ACCESS_KEY }}
-            RCLONE_CONFIG_R2_ENDPOINT=${{ secrets.AURORA_R2_ENDPOINT }}
-            BUCKET_PATH="R2:aurora-dl"
-          fi
-          echo "rclone-config-r2-access-key-id=${RCLONE_CONFIG_R2_ACCESS_KEY_ID}" >> $GITHUB_OUTPUT
-          echo "rclone-config-r2-secret-access-key=${RCLONE_CONFIG_R2_SECRET_ACCESS_KEY}" >> $GITHUB_OUTPUT
-          echo "rclone-config-r2-endpoint=${RCLONE_CONFIG_R2_ENDPOINT}" >> $GITHUB_OUTPUT
-          echo "bucket-path=${BUCKET_PATH}" >> $GITHUB_OUTPUT
-
-      - name: Upload ISOs and Checksum to R2
-        if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main'
+      - name: Upload ISOs and Checksum to R2 to Bluefin Bucket
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main' && inputs.brand_name == 'bluefin'
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
           RCLONE_CONFIG_R2_PROVIDER: Cloudflare
-          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ steps.r2-secrets.outputs.rclone-config-r2-access-key-id }}
-          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ steps.r2-secrets.outputs.rclone-config-r2-secret-access-key }}
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           RCLONE_CONFIG_R2_REGION: auto
-          RCLONE_CONFIG_R2_ENDPOINT: ${{ steps.r2-secrets.outputs.rclone-config-r2-endpoint }}
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           SOURCE_DIR: ${{ steps.upload-directory.outputs.iso-upload-dir }}
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
-          rclone copy $SOURCE_DIR ${{ steps.r2-secrets.outputs.bucket-path }}
+          rclone copy $SOURCE_DIR R2:bluefin
+
+      - name: Upload ISOs and Checksum to R2 to Aurora Bucket
+        if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main' && inputs.brand_name == 'aurora'
+        shell: bash
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.AURORA_R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.AURORA_R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.AURORA_R2_ENDPOINT }}
+          SOURCE_DIR: ${{ steps.upload-directory.outputs.iso-upload-dir }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          rclone copy $SOURCE_DIR R2:aurora-dl
