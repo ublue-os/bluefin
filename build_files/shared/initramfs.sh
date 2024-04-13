@@ -3,7 +3,7 @@
 set -oue pipefail
 
 # Remove nvidia specific files
-if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then
+if [[ ! "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then
   rm /usr/lib/dracut/dracut.conf.d/nvidia.conf
   rm /usr/lib/modprobe.d/nvidia.conf
 fi
