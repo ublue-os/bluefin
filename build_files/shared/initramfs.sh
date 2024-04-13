@@ -2,6 +2,12 @@
 
 set -oue pipefail
 
+# Remove nvidia specific files
+if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then
+  rm /usr/lib/dracut/dracut.conf.d/nvidia.conf
+  rm /usr/lib/modprobe.d/nvidia.conf
+fi
+
 if [[ "${AKMODS_FLAVOR}" == "surface" ]]; then
     KERNEL_SUFFIX="surface"
 else
