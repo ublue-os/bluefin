@@ -6,6 +6,7 @@ set -oue pipefail
 curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
 tar -xzf /tmp/starship.tar.gz -C /tmp
 install -c -m 0755 /tmp/starship /usr/bin
+# shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
 # Brew Install Script
@@ -18,3 +19,6 @@ wget -q https://dl.flathub.org/repo/flathub.flatpakrepo -P /usr/etc/flatpak/remo
 
 # Topgrade Install
 pip install --prefix=/usr topgrade
+
+# Install ublue-update -- breaks with packages.json
+rpm-ostree install ublue-update

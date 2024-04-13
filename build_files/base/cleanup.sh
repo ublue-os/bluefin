@@ -2,10 +2,6 @@
 
 set -ouex pipefail
 
-if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then
-    rm /usr/lib/modprobe.d/nvidia.conf
-fi
-
 rm -f /etc/yum.repos.d/tailscale.repo
 rm -f /etc/yum.repos.d/charm.repo
 rm -f /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
