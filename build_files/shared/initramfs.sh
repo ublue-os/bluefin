@@ -5,6 +5,7 @@ set -oue pipefail
 # Remove nvidia specific files
 if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then
   rm /usr/lib/modprobe.d/nvk.conf
+  rm /usr/lib/modprobe.d/amd-legacy.conf
 else
   rm /usr/lib/dracut/dracut.conf.d/95-nvidia.conf
   rm /usr/lib/modprobe.d/nvidia.conf
