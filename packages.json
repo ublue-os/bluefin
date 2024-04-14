@@ -7,6 +7,7 @@
 				"evtest",
 				"epson-inkjet-printer-escpr",
 				"epson-inkjet-printer-escpr2",
+				"fastfetch",
 				"fish",
 				"firewall-config",
 				"gcc",
@@ -54,8 +55,10 @@
 				"yaru-theme"
 			],
 			"kinoite": [
-				"fastfetch",
-				"libadwaita-qt5"
+				"libadwaita-qt5",
+				"libadwaita-qt6",
+				"kdeplasma-addons",
+				"plasma-wallpapers-dynamic"
 			],
 			"dx": [
 				"adobe-source-code-pro-fonts",
