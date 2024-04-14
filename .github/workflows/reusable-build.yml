@@ -61,10 +61,10 @@ jobs:
         run: |
           if [[ "${{ matrix.base_name }}" =~ "dx" && "${{ matrix.image_flavor}}" == "main" ]]; then
               echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
-              echo "IMAGE_BASE_FROM=${{ inputs.brand_name }}" >> $GITHUB_ENV
+              echo "IMAGE_BASE_FROM=ghcr.io/ublue-os/${{ inputs.brand_name }}" >> $GITHUB_ENV
           elif [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
               echo "IMAGE_NAME=${{ inputs.brand_name }}" >> $GITHUB_ENV
-              echo "IMAGE_BASE_FROM=${{ format('{0}-{1}', inputs.brand_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+              echo "IMAGE_BASE_FROM=ghcr.io/ublue-os/${{ format('{0}-{1}', inputs.brand_name, matrix.image_flavor) }}" >> $GITHUB_ENV
           elif [[ "${{ matrix.base_name }}" =~ "base" && "${{ matrix.image_flavor}}" == "main" ]]; then
               echo "IMAGE_NAME=${{ inputs.brand_name }}" >> $GITHUB_ENV
           elif [[ "${{ matrix.base_name }}" =~ "base" ]]; then
