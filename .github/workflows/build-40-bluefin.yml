@@ -23,6 +23,7 @@ jobs:
       target_version: base
   build-dx:
     name: build-dx
+    needs: build-base
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     with:
