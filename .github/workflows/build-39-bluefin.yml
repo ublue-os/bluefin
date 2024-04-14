@@ -13,10 +13,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: build
+  build-base:
+    name: build-base
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     with:
       brand_name: bluefin
       fedora_version: 39
+      target_version: base
+  build-dx:
+    name: build-dx
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      brand_name: bluefin
+      fedora_version: 39
+      target_version: dx

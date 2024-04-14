@@ -10,6 +10,10 @@ on:
         description: "'aurora' or 'bluefin'"
         required: true
         type: string
+      target_version:
+        description: "'base' or 'dx'"
+        required: true
+        type: string
 env:
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
@@ -34,8 +38,7 @@ jobs:
           - surface
           - surface-nvidia
         base_name:
-          - ${{ inputs.brand_name }}
-          - ${{ inputs.brand_name }}-dx
+          - ${{ inputs.brand_name }}-${{ inputs.target_version }}
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
@@ -56,20 +59,21 @@ jobs:
 
       - name: Matrix Variables
         run: |
-          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
+          if [[ "${{ matrix.base_name }}" =~ "dx" && "${{ matrix.image_flavor}}" == "main" ]]; then
               echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
-          else
-              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+              echo "IMAGE_BASE_FROM=${{ inputs.brand_name }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
+              echo "IMAGE_NAME=${{ inputs.brand_name }}" >> $GITHUB_ENV
+              echo "IMAGE_BASE_FROM=${{ format('{0}-{1}', inputs.brand_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.base_name }}" =~ "base" && "${{ matrix.image_flavor}}" == "main" ]]; then
+              echo "IMAGE_NAME=${{ inputs.brand_name }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.base_name }}" =~ "base" ]]; then
+              echo "IMAGE_NAME=${{ format('{0}-{1}', inputs.brand_name, matrix.image_flavor) }}" >> $GITHUB_ENV
           fi
           if [[ "${{ matrix.base_name }}" =~ "bluefin" ]]; then
               echo "BASE_IMAGE_NAME"="silverblue" >> $GITHUB_ENV
           elif [[ "${{ matrix.base_name }}" =~ "aurora" ]]; then
               echo "BASE_IMAGE_NAME"="kinoite" >> $GITHUB_ENV
-          fi
-          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
-              echo "TARGET_NAME"="dx" >> $GITHUB_ENV
-          else
-              echo "TARGET_NAME"="base" >> $GITHUB_ENV
           fi
           if [[ "${{ matrix.image_flavor }}" =~ "asus" ]]; then
               echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
@@ -85,7 +89,7 @@ jobs:
           containers: ${{ env.BASE_IMAGE_NAME}}-${{ matrix.image_flavor }}:${{ matrix.fedora_version }}
 
       - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
+        if: matrix.base_name != ${{ inputs.brand_name }}-base
         uses: EyeCantCU/cosign-action/verify@v0.2.2
         with:
           containers: dive, flux, helm, ko, minio, kubectl
@@ -198,7 +202,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           containerfiles: |
-            ./Containerfile
+            ./Containerfile.${{ inputs.target_version }}
           image: ${{ env.IMAGE_NAME }}
           tags: |
             ${{ steps.generate-tags.outputs.alias_tags }}
@@ -208,15 +212,10 @@ jobs:
             IMAGE_FLAVOR=${{ matrix.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
             FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
-            TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
+            IMAGE_BASE_FROM=${{ env.IMAGE_BASE_FROM }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
-          # TODO(GH-280)
-          # extra-args: |
-          #   --target=${{ matrix.target_name || matrix.base_name }}
-          extra-args: |
-            --target=${{ env.TARGET_NAME }}
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
