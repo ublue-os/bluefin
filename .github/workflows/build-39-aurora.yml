@@ -8,13 +8,6 @@ on:
     paths-ignore:
       - '**.md'
       - 'system_files/silverblue/**'
-  push:
-    branches:
-      - main
-      - testing
-    paths-ignore:
-      - '**.md'
-      - 'system_files/silverblue/**'
   schedule:
     - cron: '41 16 * * *'  # 16:41 UTC everyday
   workflow_dispatch:
