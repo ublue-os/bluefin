@@ -156,11 +156,7 @@
 	"39": {
 		"include": {
 			"all": [
-				"input-leap",
-				"tuned",
-				"tuned-ppd",
-				"tuned-utils",
-				"tuned-profiles-atomic"
+				"input-leap"
 			],
 			"silverblue": [
 				"gnome-shell-extension-blur-my-shell",
@@ -189,11 +185,7 @@
 	"40": {
 		"include": {
 			"all": [
-				"input-leap",
-				"tuned",
-				"tuned-ppd",
-				"tuned-utils",
-				"tuned-profiles-atomic"
+				"input-leap"
 			],
 			"silverblue": [
 				"gnome-shell-extension-tailscale-gnome-qs",

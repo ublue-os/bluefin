@@ -4,6 +4,7 @@ set -oue pipefail
 
 # Add Staging repo
 wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
+
 # 39 gets VRR and Ptyxis
 if [ ${FEDORA_MAJOR_VERSION} -eq "39" ]; then
     wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
@@ -18,6 +19,7 @@ if [ ${FEDORA_MAJOR_VERSION} -eq "39" ]; then
         libadwaita
     rpm-ostree install ptyxis
 fi
+
 # 40 gets only Ptyxis
 if [ ${FEDORA_MAJOR_VERSION} -eq "40" ]; then
     rpm-ostree override replace \
@@ -27,5 +29,6 @@ if [ ${FEDORA_MAJOR_VERSION} -eq "40" ]; then
         vte-profile
     rpm-ostree install ptyxis
 fi
+
 # Add Nerd Fonts
 wget https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/che-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo

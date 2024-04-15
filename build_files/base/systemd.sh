@@ -1,9 +1,7 @@
 #!/usr/bin/bash
 
+set -ouex pipefail
 
-if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then \
-    systemctl enable tuned.service \
-; fi
 systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
 systemctl enable dconf-update.service
