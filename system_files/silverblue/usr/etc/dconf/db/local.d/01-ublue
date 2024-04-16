@@ -35,7 +35,7 @@ switch-applications-backward = ['<Shift><Super>Tab']
 switch-windows = ['<Alt>Tab']
 switch-windows-backward = ['<Shift><Alt>Tab']
 switch-input-source = ['<Shift><Super>space']
-switch-input-source-backwards = ['']
+switch-input-source-backward = ['']
 
 [org/gnome/desktop/peripherals/touchpad]
 tap-to-click=true
