@@ -171,10 +171,7 @@
 		},
 		"exclude": {
 			"all": [
-				"podman-docker",
-				"power-profiles-daemon",
-				"tlp",
-				"tlp-rdw"
+				"podman-docker"
 			],
 			"silverblue": [
 				"gnome-terminal-nautilus"
@@ -195,10 +192,7 @@
 		},
 		"exclude": {
 			"all":	[
-				"podman-docker",
-				"power-profiles-daemon",
-				"tlp",
-				"tlp-rdw"
+				"podman-docker"
 			],
 			"silverblue": [
 				"gnome-terminal-nautilus"
