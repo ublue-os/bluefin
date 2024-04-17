@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+#shellcheck disable=SC2076
 
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
@@ -7,40 +8,13 @@ IMAGE_FLAVOR=$(jq -r '."image-flavor"' < $IMAGE_INFO)
 # SCRIPT VERSION
 HWS_VER=2
 HWS_VER_FILE="/etc/ublue/hws_version"
-HWS_VER_RAN=$(cat $HWS_VER_FILE)
+[[ -f HWS_VER_FILE ]] && HWS_VER_RAN=$(cat $HWS_VER_FILE)
 
 # IMAGE IDENTIFIERS
 KNOWN_IMAGE_NAME_FILE="/etc/ublue/image_name"
-KNOWN_IMAGE_NAME=$(cat $KNOWN_IMAGE_NAME_FILE)
+[[ -f KNOWN_IMAGE_NAME_FILE ]] && KNOWN_IMAGE_NAME=$(cat $KNOWN_IMAGE_NAME_FILE)
 KNOWN_IMAGE_FLAVOR_FILE="/etc/ublue/image_flavor"
-KNOWN_IMAGE_FLAVOR=$(cat $KNOWN_IMAGE_FLAVOR_FILE)
-
-# GLOBAL
-KARGS=$(rpm-ostree kargs)
-NEEDED_KARGS=""
-echo "Current kargs: $KARGS"
-mkdir -p /etc/ublue
-
-if [[ "$IMAGE_FLAVOR" =~ "nvidia" && ! "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
-  NEEDED_KARGS="$NEEDED_KARGS --append=initcall_blacklist=simpledrm_platform_driver_init"
-fi
-
-if [[ $KARGS =~ "nomodeset" ]]; then
-  echo "Removing nomodeset"
-  NEEDED_KARGS="$NEEDED_KARGS --delete-if-present=nomodeset"
-fi
-
-if [[ ! $KARGS =~ "rd.luks.options" ]]; then
-  NEEDED_KARGS="$NEEDED_KARGS --append=rd.luks.options=discard"
-fi
-
-if [[ -n "$NEEDED_KARGS" ]]; then
-  echo "Found needed karg changes, applying the following: $NEEDED_KARGS"
-  plymouth display-message --text="Updating kargs - Please wait, this may take a while" || true
-  rpm-ostree kargs "${NEEDED_KARGS}" --reboot || exit 1
-else
-  echo "No karg changes needed"
-fi
+[[ -f KNOWN_IMAGE_FLAVOR_FILE ]] && KNOWN_IMAGE_FLAVOR=$(cat $KNOWN_IMAGE_FLAVOR_FILE)
 
 # Run script if updated
 if [[ -f "$HWS_VER_FILE" && "$HWS_VER" = "$HWS_VER_RAN" ]]; then
@@ -53,6 +27,34 @@ if [[ -f "$HWS_VER_FILE" && "$HWS_VER" = "$HWS_VER_RAN" ]]; then
   fi
 fi
 
-echo "$HWS_VER" > $HWS_VER_FILE
+# GLOBAL
+KARGS=$(rpm-ostree kargs)
+NEEDED_KARGS=()
+echo "Current kargs: $KARGS"
+mkdir -p /etc/ublue
+
+if [[ "$IMAGE_FLAVOR" =~ "nvidia" && ! "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=initcall_blacklist=simpledrm_platform_driver_init")
+fi
+
+if [[ $KARGS =~ "nomodeset" ]]; then
+  echo "Removing nomodeset"
+  NEEDED_KARGS+=("--delete-if-present=nomodeset")
+fi
+
+if [[ ! $KARGS =~ "rd.luks.options" && $KARGS =~ "rd.luks.uuid" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=rd.luks.options=discard")
+fi
+
+#shellcheck disable=SC2128
+if [[ -n "$NEEDED_KARGS" ]]; then
+  echo "Found needed karg changes, applying the following: ${NEEDED_KARGS[*]}"
+  plymouth display-message --text="Updating kargs - Please wait, this may take a while" || true
+  rpm-ostree kargs "${NEEDED_KARGS[*]}" --reboot || exit 1
+else
+  echo "No karg changes needed"
+fi
+
 echo "$IMAGE_NAME" > $KNOWN_IMAGE_NAME_FILE
 echo "$IMAGE_FLAVOR" > $KNOWN_IMAGE_FLAVOR_FILE
+echo "$HWS_VER" > $HWS_VER_FILE
