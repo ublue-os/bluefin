@@ -48,10 +48,17 @@ jobs:
           output-format: json
           fail-build: false
 
+      - name: Generate artifact name
+        id: artifact-name
+        run: |
+          # Get the text after the final `/` in the image name
+          # Replace the `:` with a `-`
+          echo "name=$(echo ${{ matrix.image }} | awk -F'/' '{print $NF}' | sed 's/:/-/g')" >> $GITHUB_OUTPUT
+
       - name: Upload scan results
         uses: actions/upload-artifact@v4
         with:
-          name: scan-results
+          name: ${{ steps.artifact-name.outputs.name }}
           path: |
             sbom-output.json
             ${{ steps.scan.outputs.json }}
