@@ -1,0 +1,34 @@
+name: Scan Image
+on:
+  workflow_call:
+    inputs:
+      images:
+        description: "A comma-separated list of images to scan.  E.G. '[\"docker.io/library/alpine:3.14.0\", \"docker.io/library/alpine:3.13.6\"]'"
+        required: true
+        type: string
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Set matrix
+        id: set-matrix
+        env:
+          IMAGES: ${{ inputs.images }}
+        run: |
+          echo "matrix=$IMAGES" >> $GITHUB_OUTPUT
+
+  scan-image:
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Scan image
+        run: echo "Scanning image ${{ matrix.image }}"

@@ -6,17 +6,23 @@ on:
       - main
       - testing
     paths-ignore:
-      - '**.md'
-      - 'system_files/kinoite/**'
+      - "**.md"
+      - "system_files/kinoite/**"
   schedule:
-    - cron: '42 16 * * *'  # 16:42 UTC everyday
+    - cron: "42 16 * * *" # 16:42 UTC everyday
   workflow_dispatch:
 
 jobs:
-  build:
-    name: build
-    uses: ./.github/workflows/reusable-build.yml
+  # build:
+  #   name: build
+  #   uses: ./.github/workflows/reusable-build.yml
+  #   secrets: inherit
+  #   with:
+  #     brand_name: bluefin
+  #     fedora_version: 38
+
+  scan:
+    uses: ./.github/workflows/reusable-image-scan.yml
     secrets: inherit
     with:
-      brand_name: bluefin
-      fedora_version: 38
+      images: '["docker.io/library/fedora:38", "docker.io/library/fedora:39"]'

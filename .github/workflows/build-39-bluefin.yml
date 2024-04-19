@@ -1,13 +1,13 @@
 name: bluefin 39
 on:
   merge_group:
-  pull_request:
-    branches:
-      - main
-      - testing
-    paths-ignore:
-      - '**.md'
-      - 'system_files/kinoite/**'
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - testing
+  #   paths-ignore:
+  #     - '**.md'
+  #     - 'system_files/kinoite/**'
   schedule:
     - cron: '41 16 * * *'  # 16:41 UTC everyday
   workflow_dispatch:
