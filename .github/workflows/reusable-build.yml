@@ -283,7 +283,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_container]
     outputs:
-      images: ${{ steps.generate-outputs.outputs.image }}
+      images: ${{ steps.generate-outputs.outputs.images }}
     steps:
       - name: Check Jobs
         env:
