@@ -99,8 +99,8 @@ jobs:
           oidc-issuer: https://token.actions.githubusercontent.com
           registry: cgr.dev/chainguard
 
-      - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v6
+      # - name: Maximize build space
+      #   uses: ublue-os/remove-unwanted-software@v6
 
       - name: Check just syntax
         uses: ublue-os/just-action@v1
@@ -305,7 +305,7 @@ jobs:
         env:
           JOBS: ${{ toJson(needs) }}
         run: |
-          images=$(echo $JOBS | jq -r 'to_entries[] | .value.outputs.image_full')
+          images=$(echo $JOBS | jq -r '[to_entries[] | .value.outputs.image_full]')
           echo "images=$images" >> $GITHUB_OUTPUT
 
       - name: List outputs
