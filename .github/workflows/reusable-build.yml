@@ -33,7 +33,7 @@ jobs:
       matrix:
         image_flavor:
           - main
-          # - nvidia
+          - nvidia
           # - asus
           # - asus-nvidia
           # - framework
@@ -272,7 +272,7 @@ jobs:
         id: generate-outputs
         env:
           # DIGEST: ${{ steps.push.outputs.digest }}
-          DIGEST: sha256:21e6bb281ebaa598f05dc23e74b704a8fd67754f29c224e246091001670cf616
+          DIGEST: ${{ matrix.image_flavor == 'main' && 'sha256:21e6bb281ebaa598f05dc23e74b704a8fd67754f29c224e246091001670cf61' || 'sha256:5d2383447773904988d4d97d695ceee3ff43484b1015554a8394789a1be2e8c8' }}
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
         run: |
           echo "image=${IMAGE_REGISTRY}:${DIGEST}" >> $GITHUB_OUTPUT
@@ -305,8 +305,12 @@ jobs:
         env:
           JOBS: ${{ toJson(needs) }}
         run: |
-          # Create a list of images (e.g. '["ghcr.io/ublue-os/bluefin:sha256:21e6bb281ebaa598f05dc23e74b704a8fd67754f29c224e246091001670cf616", ...]')
-          images=$(echo $JOBS | jq -r 'to_entries[] | .value.outputs.image_full') >> $GITHUB_OUTPUT
+          images=$(echo $JOBS | jq -r 'to_entries[] | .value.outputs.image_full')
+          echo "images=$images" >> $GITHUB_OUTPUT
+
+      - name: List outputs
+        run: |
+          echo "Images: ${{ steps.generate-outputs.outputs.images }}"
 
   build_iso:
     name: iso
