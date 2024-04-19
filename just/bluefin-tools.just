@@ -56,6 +56,8 @@ ollama:
             ;;
     esac
 
+    mkdir -p "$HOME/.ollama"
+
     read -r -d '' QUADLET <<-EOF
     [Unit]
     Description=The Ollama container
