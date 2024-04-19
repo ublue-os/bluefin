@@ -23,6 +23,7 @@ jobs:
 
   scan:
     uses: ./.github/workflows/reusable-image-scan.yml
+    needs: build
     secrets: inherit
     with:
-      images: '["docker.io/library/fedora:38", "docker.io/library/fedora:39"]'
+      images: ${{ needs.build.outputs.images }}
