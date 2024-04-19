@@ -40,11 +40,6 @@ jobs:
         run: |
           syft ${{ matrix.image }} --output cyclonedx-json=sbom-output.json
 
-      - name: Install Grype
-        shell: bash
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main
-
       - name: Scan SBOM
         id: scan
         uses: anchore/scan-action@3343887d815d7b07465f6fdcd395bd66508d486a # v3
