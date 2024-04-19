@@ -28,7 +28,7 @@ if [ ${FEDORA_MAJOR_VERSION} -eq "40" ]; then
         vte291 \
         vte-profile
     rpm-ostree install ptyxis
-    if [[ "${IMAGE_FLAVOR}" =~ "bluefin" ]]; then
+    if [[ "${BASE_IMAGE_NAME}" =~ "silverblue" ]]; then
         rpm-ostree override replace \
         --experimental \
         --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
