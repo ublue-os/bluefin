@@ -15,7 +15,7 @@ if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then
     #     rpm-ostree install \
     #         /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
     # fi
-    if [[ "${FEDORA_MAJOR_VERSION}" == "40" ]] && grep -Eqv "(surface|asus)" <<< "${AKMODS_FLAVOR}"; then
+    if grep -Eqv "(surface|asus)" <<< "${AKMODS_FLAVOR}"; then
         rpm-ostree install \
             /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
     fi
