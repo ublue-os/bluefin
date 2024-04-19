@@ -22,12 +22,14 @@ jobs:
     name: image
     runs-on: ubuntu-latest
     continue-on-error: false
+    outputs:
+      image_full: ${{ steps.generate-outputs.outputs.image }}
     strategy:
       fail-fast: false
       matrix:
         image_flavor:
           - main
-          - nvidia
+          # - nvidia
           # - asus
           # - asus-nvidia
           # - framework
@@ -192,90 +194,95 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
-      # # Build image using Buildah action
-      # - name: Build Image
-      #   id: build_image
-      #   uses: redhat-actions/buildah-build@v2
-      #   with:
-      #     containerfiles: |
-      #       ./Containerfile
-      #     image: ${{ env.IMAGE_NAME }}
-      #     tags: |
-      #       ${{ steps.generate-tags.outputs.alias_tags }}
-      #     build-args: |
-      #       BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}
-      #       IMAGE_NAME=${{ env.IMAGE_NAME }}
-      #       IMAGE_FLAVOR=${{ matrix.image_flavor }}
-      #       IMAGE_VENDOR=${{ github.repository_owner }}
-      #       FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
-      #       TARGET_BASE=${{ matrix.target_base }}
-      #       AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
-      #     labels: ${{ steps.meta.outputs.labels }}
-      #     oci: false
-      #     # TODO(GH-280)
-      #     # extra-args: |
-      #     #   --target=${{ matrix.target_name || matrix.base_name }}
-      #     extra-args: |
-      #       --target=${{ env.TARGET_NAME }}
+      # Build image using Buildah action
+      - name: Build Image
+        id: build_image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          containerfiles: |
+            ./Containerfile
+          image: ${{ env.IMAGE_NAME }}
+          tags: |
+            ${{ steps.generate-tags.outputs.alias_tags }}
+          build-args: |
+            BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}
+            IMAGE_NAME=${{ env.IMAGE_NAME }}
+            IMAGE_FLAVOR=${{ matrix.image_flavor }}
+            IMAGE_VENDOR=${{ github.repository_owner }}
+            FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
+            TARGET_BASE=${{ matrix.target_base }}
+            AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
+          labels: ${{ steps.meta.outputs.labels }}
+          oci: false
+          # TODO(GH-280)
+          # extra-args: |
+          #   --target=${{ matrix.target_name || matrix.base_name }}
+          extra-args: |
+            --target=${{ env.TARGET_NAME }}
 
-      # # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
-      # # https://github.com/macbre/push-to-ghcr/issues/12
-      # - name: Lowercase Registry
-      #   id: registry_case
-      #   uses: ASzc/change-string-case-action@v6
-      #   with:
-      #     string: ${{ env.IMAGE_REGISTRY }}
+      # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
+      # https://github.com/macbre/push-to-ghcr/issues/12
+      - name: Lowercase Registry
+        id: registry_case
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ env.IMAGE_REGISTRY }}
 
-      # # Push the image to GHCR (Image Registry)
-      # - name: Push To GHCR
-      #   uses: redhat-actions/push-to-registry@v2
-      #   id: push
-      #   if: github.event_name != 'pull_request'
-      #   env:
-      #     REGISTRY_USER: ${{ github.actor }}
-      #     REGISTRY_PASSWORD: ${{ github.token }}
-      #   with:
-      #     image: ${{ steps.build_image.outputs.image }}
-      #     tags: ${{ steps.build_image.outputs.tags }}
-      #     registry: ${{ steps.registry_case.outputs.lowercase }}
-      #     username: ${{ env.REGISTRY_USER }}
-      #     password: ${{ env.REGISTRY_PASSWORD }}
+      # Push the image to GHCR (Image Registry)
+      - name: Push To GHCR
+        uses: redhat-actions/push-to-registry@v2
+        id: push
+        if: github.event_name != 'pull_request'
+        env:
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_PASSWORD: ${{ github.token }}
+        with:
+          image: ${{ steps.build_image.outputs.image }}
+          tags: ${{ steps.build_image.outputs.tags }}
+          registry: ${{ steps.registry_case.outputs.lowercase }}
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
-      # - name: Login to GitHub Container Registry
-      #   uses: docker/login-action@v3
-      #   if: github.event_name != 'pull_request'
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        if: github.event_name != 'pull_request'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # # Sign container
-      # - uses: sigstore/cosign-installer@v3.4.0
-      #   if: github.event_name != 'pull_request'
+      # Sign container
+      - uses: sigstore/cosign-installer@v3.4.0
+        if: github.event_name != 'pull_request'
 
-      # - name: Sign container image
-      #   if: github.event_name != 'pull_request'
-      #   run: |
-      #     cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
-      #   env:
-      #     TAGS: ${{ steps.push.outputs.digest }}
-      #     COSIGN_EXPERIMENTAL: false
-      #     COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+      - name: Sign container image
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
+        env:
+          TAGS: ${{ steps.push.outputs.digest }}
+          COSIGN_EXPERIMENTAL: false
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      # - name: Echo outputs
-      #   if: github.event_name != 'pull_request'
-      #   run: |
-      #     echo "${{ toJSON(steps.push.outputs) }}"
+      - name: Output single image
+        id: generate-outputs
+        env:
+          # DIGEST: ${{ steps.push.outputs.digest }}
+          DIGEST: sha256:21e6bb281ebaa598f05dc23e74b704a8fd67754f29c224e246091001670cf616
+          IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+        run: |
+          echo "image=${IMAGE_REGISTRY}:${DIGEST}" >> $GITHUB_OUTPUT
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
-    if: ${{ !cancelled() }}
+    if: always()
     runs-on: ubuntu-latest
     needs: [build_container]
     steps:
       - name: Debug
         run: |
           echo ${{ toJson(needs) }}
+
       - name: Check Jobs
         env:
           JOBS: ${{ toJson(needs) }}
