@@ -305,7 +305,7 @@ jobs:
         env:
           JOBS: ${{ toJson(needs) }}
         run: |
-          images=$(echo $JOBS | jq -r '[to_entries[] | .value.outputs.image_full]')
+          images=$(echo $JOBS | jq -c '[to_entries[] | .value.outputs.image_full]')
           echo "images=$images" >> $GITHUB_OUTPUT
 
       - name: List outputs
