@@ -37,8 +37,10 @@ jobs:
           syft version
 
       - name: Scan image
+        env:
+          IMAGE: ${{ matrix.image }}
         run: |
-          syft ${{ matrix.image }} --output cyclonedx-json=sbom-output.json
+          syft ${IMAGE} --output cyclonedx-json=sbom-output.json
 
       - name: Scan SBOM
         id: scan
@@ -50,15 +52,16 @@ jobs:
 
       - name: Generate artifact name
         id: artifact-name
+        env:
+          IMAGE: ${{ matrix.image }}
         run: |
-          # Get the text after the final `/` in the image name
-          # Replace the `:` with a `-`
-          echo "name=$(echo ${{ matrix.image }} | awk -F'/' '{print $NF}' | sed 's/:/-/g')" >> $GITHUB_OUTPUT
+          echo "name=$(echo ${IMAGE} | awk -F'/' '{print $NF}' | sed 's/:/-/g')" >> $GITHUB_OUTPUT
 
       - name: Upload scan results
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.artifact-name.outputs.name }}
+          if-no-files-found: error
           path: |
             sbom-output.json
             ${{ steps.scan.outputs.json }}

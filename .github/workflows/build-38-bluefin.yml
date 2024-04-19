@@ -13,13 +13,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  # build:
-  #   name: build
-  #   uses: ./.github/workflows/reusable-build.yml
-  #   secrets: inherit
-  #   with:
-  #     brand_name: bluefin
-  #     fedora_version: 38
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      brand_name: bluefin
+      fedora_version: 38
 
   scan:
     uses: ./.github/workflows/reusable-image-scan.yml
