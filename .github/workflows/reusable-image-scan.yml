@@ -30,5 +30,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Syft
+        shell: bash
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          syft version
+
       - name: Scan image
-        run: echo "Scanning image ${{ matrix.image }}"
+        run: |
+          syft ${{ matrix.image }} --output cyclonedx-json=sbom-output.json
+
+      - name: Install Grype
+        shell: bash
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main
+
+      - name: Scan SBOM
+        id: scan
+        uses: anchore/scan-action@3343887d815d7b07465f6fdcd395bd66508d486a # v3
+        with:
+          sbom: sbom-output.json
+          output-format: json
+          fail-build: false
+
+      - name: Upload scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-results
+          path: |
+            sbom-output.json
+            ${{ steps.scan.outputs.json }}
