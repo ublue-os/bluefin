@@ -45,7 +45,7 @@ jobs:
           IMAGE: ${{ matrix.image }}
           SYFT_LOG_LEVEL: debug
         run: |
-          syft ${IMAGE} --vv \
+          syft ${IMAGE} \
             --output cyclonedx-json=sbom.json \
             --config ./.github/syft.yml \
 
