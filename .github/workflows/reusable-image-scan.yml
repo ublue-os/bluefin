@@ -46,7 +46,7 @@ jobs:
         run: |
           syft ${IMAGE} \
             --output cyclonedx-json=sbom.json \
-            --config ./.github/syft.yml \
+            --config ./.github/syft.yml
 
       - name: Scan SBOM
         id: scan
