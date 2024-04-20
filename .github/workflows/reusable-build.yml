@@ -297,21 +297,6 @@ jobs:
     outputs:
       images: ${{ steps.generate-outputs.outputs.images }}
     steps:
-      - name: Check Jobs
-        env:
-          JOBS: ${{ toJson(needs) }}
-        run: |
-          echo "Job status:"
-          echo $JOBS | jq -r 'to_entries[] | " - \(.key): \(.value.result)"'
-
-          for i in $(echo $JOBS | jq -r 'to_entries[] | .value.result'); do
-            if [ "$i" != "success" ] && [ "$i" != "skipped" ]; then
-              echo ""
-              echo "Status check not okay!"
-              exit 1
-            fi
-          done
-
       - name: Download artifacts
         if: github.event_name != 'pull_request'
         id: download-artifacts
@@ -339,6 +324,21 @@ jobs:
 
           # Create the GITHUB_OUTPUT in the format '["image1", "image2", ...]'
           echo "images=$(printf '%s\n' "${images[@]}" | jq -R -s -c 'split("\n") | .[:-1]')" >> $GITHUB_OUTPUT
+
+      - name: Check Jobs
+        env:
+          JOBS: ${{ toJson(needs) }}
+        run: |
+          echo "Job status:"
+          echo $JOBS | jq -r 'to_entries[] | " - \(.key): \(.value.result)"'
+
+          for i in $(echo $JOBS | jq -r 'to_entries[] | .value.result'); do
+            if [ "$i" != "success" ] && [ "$i" != "skipped" ]; then
+              echo ""
+              echo "Status check not okay!"
+              exit 1
+            fi
+          done
 
   build_iso:
     name: iso

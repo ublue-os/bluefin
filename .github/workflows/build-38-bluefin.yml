@@ -22,7 +22,9 @@ jobs:
       fedora_version: 38
 
   scan:
-    if: github.event_name != 'pull_request'
+    # Scan can still be ran when some builds fail since only successfully built
+    # images will be stored in the output
+    if: github.event_name != 'pull_request' && always()
     uses: ./.github/workflows/reusable-image-scan.yml
     needs: build
     secrets: inherit
