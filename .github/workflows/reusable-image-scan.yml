@@ -40,17 +40,19 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
           syft version
 
-      - name: Scan image
+      - name: Generate SBOM
         env:
           IMAGE: ${{ matrix.image }}
         run: |
-          syft ${IMAGE} --output cyclonedx-json=sbom-output.json
+          syft ${IMAGE} --vv \
+            --output cyclonedx-json=sbom.json \
+            --config ./.github/syft.yml \
 
       - name: Scan SBOM
         id: scan
         uses: anchore/scan-action@3343887d815d7b07465f6fdcd395bd66508d486a # v3
         with:
-          sbom: sbom-output.json
+          sbom: sbom.json
           output-format: json
           fail-build: false
 
@@ -64,8 +66,8 @@ jobs:
       - name: Upload scan results
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.artifact-name.outputs.name }}
+          name: security-${{ steps.artifact-name.outputs.name }}
           if-no-files-found: error
           path: |
-            sbom-output.json
+            sbom.json
             ${{ steps.scan.outputs.json }}

@@ -282,6 +282,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: image-${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}
+          retention-days: 1
+          if-no-files-found: error
           path: |
             ${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}.txt
 
@@ -308,17 +310,12 @@ jobs:
             fi
           done
 
-      - name: Merge artifacts
-        id: merge-artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: merged-images
-
       - name: Download artifacts
         id: download-artifacts
         uses: actions/download-artifact@v4
         with:
-          name: merged-images
+          pattern: image-*
+          merge-multiple: true
 
       - name: Create output
         id: generate-outputs
