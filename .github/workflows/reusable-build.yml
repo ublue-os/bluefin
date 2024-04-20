@@ -326,14 +326,18 @@ jobs:
           JOBS: ${{ toJson(needs) }}
           ARTIFACT_PATH: ${{ steps.download-artifacts.outputs.download-path }}
         run: |
-          # Combine all files from the artifacts into a single array
+          # Initialize the array
           images=()
+
+          # Populate the array with each line from each file in the artifacts directory
           for file in $ARTIFACT_PATH/*; do
-            images+=($(cat $file))
+              while IFS= read -r line; do
+                images+=("$line")
+              done < "$file"
           done
 
           # Create the GITHUB_OUTPUT in the format '["image1", "image2", ...]'
-          echo "images=$(echo ${images[@]} | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "images=$(printf '%s\n' "${images[@]}" | jq -R -s -c 'split("\n") | .[:-1]')" >> $GITHUB_OUTPUT
 
       - name: List outputs
         run: |
