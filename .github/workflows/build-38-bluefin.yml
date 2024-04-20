@@ -22,6 +22,7 @@ jobs:
       fedora_version: 38
 
   scan:
+    if: github.event_name != 'pull_request'
     uses: ./.github/workflows/reusable-image-scan.yml
     needs: build
     secrets: inherit
