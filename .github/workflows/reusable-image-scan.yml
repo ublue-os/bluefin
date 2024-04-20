@@ -31,6 +31,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Maximize build space
+        uses: ublue-os/remove-unwanted-software@v6
+
       - name: Install Syft
         shell: bash
         run: |
