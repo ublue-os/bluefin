@@ -52,6 +52,7 @@
 				"libgda",
 				"libratbag-ratbagd",
 				"nautilus-gsconnect",
+				"openssh-askpass",
 				"yaru-theme"
 			],
 			"kinoite": [
@@ -157,11 +158,7 @@
 	"39": {
 		"include": {
 			"all": [
-				"input-leap",
-				"tuned",
-				"tuned-ppd",
-				"tuned-utils",
-				"tuned-profiles-atomic"
+				"input-leap"
 			],
 			"silverblue": [
 				"gnome-shell-extension-blur-my-shell",
@@ -176,10 +173,7 @@
 		},
 		"exclude": {
 			"all": [
-				"podman-docker",
-				"power-profiles-daemon",
-				"tlp",
-				"tlp-rdw"
+				"podman-docker"
 			],
 			"silverblue": [
 				"gnome-terminal-nautilus"
@@ -190,11 +184,7 @@
 	"40": {
 		"include": {
 			"all": [
-				"input-leap",
-				"tuned",
-				"tuned-ppd",
-				"tuned-utils",
-				"tuned-profiles-atomic"
+				"input-leap"
 			],
 			"silverblue": [
 				"gnome-shell-extension-tailscale-gnome-qs",
@@ -204,10 +194,7 @@
 		},
 		"exclude": {
 			"all":	[
-				"podman-docker",
-				"power-profiles-daemon",
-				"tlp",
-				"tlp-rdw"
+				"podman-docker"
 			],
 			"silverblue": [
 				"gnome-terminal-nautilus"

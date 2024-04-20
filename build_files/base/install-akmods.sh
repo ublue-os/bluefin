@@ -9,16 +9,8 @@ if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then
         /tmp/akmods-rpms/kmods/*xpadneo*.rpm \
         /tmp/akmods-rpms/kmods/*xone*.rpm \
         /tmp/akmods-rpms/kmods/*openrazer*.rpm \
-        /tmp/akmods-rpms/kmods/*wl*.rpm
-    # Temporarily disable v4l2loopback until RPMFusion rebuilds module.
-    # if grep -Eqv "(surface|asus)" <<< "${AKMODS_FLAVOR}"; then
-    #     rpm-ostree install \
-    #         /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
-    # fi
-    if [[ "${FEDORA_MAJOR_VERSION}" == "40" ]] && grep -Eqv "(surface|asus)" <<< "${AKMODS_FLAVOR}"; then
-        rpm-ostree install \
-            /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
-    fi
+        /tmp/akmods-rpms/kmods/*wl*.rpm \
+        /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
 fi
 if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then
     rpm-ostree install \

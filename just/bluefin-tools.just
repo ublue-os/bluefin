@@ -66,6 +66,8 @@ ollama:
     TimeoutStartSec=60
     # Ensure there's a userland podman.sock
     ExecStartPre=/bin/systemctl --user enable podman.socket
+    # Ensure that the dir exists
+    ExecStartPre=-mkdir -p %h/.ollama
 
     [Container]
     ContainerName=ollama
