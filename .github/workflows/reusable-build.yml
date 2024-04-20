@@ -283,7 +283,7 @@ jobs:
         with:
           name: image-${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}
           path: |
-            ${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt
+            ${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}.txt
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
