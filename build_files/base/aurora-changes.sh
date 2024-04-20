@@ -13,6 +13,5 @@ if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
     cp /usr/share/applications/org.gnome.Ptyxis.desktop /usr/share/kglobalaccel/org.gnome.Ptyxis.desktop
     sed -i 's@\[Desktop Action new-window\]@\[Desktop Action new-window\]\nX-KDE-Shortcuts=Ctrl+Alt+T@g' /usr/share/applications/org.gnome.Ptyxis.desktop
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.kde.konsole.desktop
-    rm -f /usr/share/kglobalaccel/org.kde.konsole.desktop
     systemctl enable kde-sysmonitor-workaround.service
 fi
