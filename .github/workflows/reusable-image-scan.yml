@@ -43,7 +43,6 @@ jobs:
       - name: Generate SBOM
         env:
           IMAGE: ${{ matrix.image }}
-          SYFT_LOG_LEVEL: debug
         run: |
           syft ${IMAGE} \
             --output cyclonedx-json=sbom.json \
