@@ -276,14 +276,14 @@ jobs:
           IMAGE_FLAVOR: ${{ matrix.image_flavor }}
           FEDORA_VERSION: ${{ matrix.fedora_version }}
         run:
-          echo "${IMAGE_REGISTRY}:${DIGEST}" > ${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt
+          echo "${IMAGE_REGISTRY}:${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: image-${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}
           path: |
-            image.txt
+            ${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
