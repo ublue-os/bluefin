@@ -6,10 +6,10 @@ on:
       - main
       - testing
     paths-ignore:
-      - "**.md"
-      - "system_files/kinoite/**"
+      - '**.md'
+      - 'system_files/kinoite/**'
   schedule:
-    - cron: "42 16 * * *" # 16:42 UTC everyday
+    - cron: '42 16 * * *' # 16:42 UTC everyday
   workflow_dispatch:
 
 jobs:
