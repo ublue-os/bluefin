@@ -270,7 +270,7 @@ jobs:
 
       - name: Generate file containing only image
         env:
-          DIGEST: ${{ matrix.image_flavor == 'main' && 'sha256:21e6bb281ebaa598f05dc23e74b704a8fd67754f29c224e246091001670cf61' || 'sha256:5d2383447773904988d4d97d695ceee3ff43484b1015554a8394789a1be2e8c8' }}
+          DIGEST: ${{ matrix.image_flavor == 'main' && 'sha256:21e6bb281ebaa598f05dc23e74b704a8fd67754f29c224e246091001670cf616' || 'sha256:5d2383447773904988d4d97d695ceee3ff43484b1015554a8394789a1be2e8c8' }}
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_FLAVOR: ${{ matrix.image_flavor }}
