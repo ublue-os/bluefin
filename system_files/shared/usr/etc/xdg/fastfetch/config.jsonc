@@ -6,21 +6,24 @@
       {
         "type": "command",
         "key": "OCI",
-        "text": "jq -r '.\"image-ref\"' < /usr/share/ublue-os/image-info.json",
-        "shell": "/bin/bash"
+        "text": "jq -r '.\"image-name\"' < /usr/share/ublue-os/image-info.json",
       },
       {
         "type": "command",
         "key": "Flavor",
         "text": "jq -r '.\"image-flavor\"' < /usr/share/ublue-os/image-info.json",
-        "shell": "/bin/bash"
       },
       {
         "type": "command",
         "key": "Image Tag",
         "text": "jq -r '.\"image-tag\"' < /usr/share/ublue-os/image-info.json",
-        "shell": "/bin/bash"
+      }, 
+      {
+        "type": "command",
+        "key": "Signed",
+        "text": "/usr/libexec/get-image-sign.sh"
       },
+      "break",
       "host",
       "kernel",
       "uptime",
