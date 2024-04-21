@@ -3,7 +3,7 @@
   "display": {
     "separator": "  ",
     "color": {
-      "keys": "bright_blue"
+      "keys": "bright_cyan"
     },
   },
   "modules": [
@@ -11,9 +11,9 @@
       "type": "title",
       "key": " ",
       "color": {
-        "user": "bright_blue",
+        "user": "cyan",
         "at": "white",
-        "host": "blue"
+        "host": "bright_white"
       }
     },
     "break",
@@ -52,7 +52,7 @@
     },
     {
       "type": "memory",
-      "key": " "
+      "key": " 󰧑"
     },
     {
       "type": "disk",
