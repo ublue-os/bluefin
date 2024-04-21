@@ -1,0 +1,39 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "modules": [
+      "title",
+      "separator",
+      {
+        "type": "command",
+        "key": "OCI",
+        "text": "jq -r '.\"image-ref\"' < /usr/share/ublue-os/image-info.json",
+        "shell": "/bin/bash"
+      },
+      {
+        "type": "command",
+        "key": "Flavor",
+        "text": "jq -r '.\"image-flavor\"' < /usr/share/ublue-os/image-info.json",
+        "shell": "/bin/bash"
+      },
+      {
+        "type": "command",
+        "key": "Image Tag",
+        "text": "jq -r '.\"image-tag\"' < /usr/share/ublue-os/image-info.json",
+        "shell": "/bin/bash"
+      },
+      "host",
+      "kernel",
+      "uptime",
+      "break",
+      "packages",
+      "shell",
+      "display",
+      "terminal",
+      "break",
+      "cpu",
+      "gpu",
+      "memory",
+      "break",
+      "colors"
+    ]
+  }
