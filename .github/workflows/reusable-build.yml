@@ -10,6 +10,10 @@ on:
         description: "'aurora' or 'bluefin'"
         required: true
         type: string
+    outputs:
+      images:
+        description: 'An array of images built and pushed to the registry'
+        value: ${{ jobs.check.outputs.images }}
 env:
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
@@ -22,6 +26,8 @@ jobs:
     name: image
     runs-on: ubuntu-latest
     continue-on-error: false
+    outputs:
+      image_full: ${{ steps.generate-outputs.outputs.image }}
     strategy:
       fail-fast: false
       matrix:
@@ -262,24 +268,77 @@ jobs:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      - name: Echo outputs
+      - name: Generate file containing outputs
         if: github.event_name != 'pull_request'
-        run: |
-          echo "${{ toJSON(steps.push.outputs) }}"
+        env:
+          DIGEST: ${{ steps.push.outputs.digest }}
+          IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_FLAVOR: ${{ matrix.image_flavor }}
+          FEDORA_VERSION: ${{ matrix.fedora_version }}
+        run:
+          echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
+
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}
+          retention-days: 1
+          if-no-files-found: error
+          path: |
+            ${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}.txt
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
-    if: ${{ !cancelled() }}
+    if: always()
     runs-on: ubuntu-latest
     needs: [build_container]
+    outputs:
+      images: ${{ steps.generate-outputs.outputs.images }}
     steps:
-      - name: Exit on failure
-        if: ${{ needs.build_container.result == 'failure' }}
-        shell: bash
-        run: exit 1
-      - name: Exit
-        shell: bash
-        run: exit 0
+      - name: Download artifacts
+        if: github.event_name != 'pull_request'
+        id: download-artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: image-*
+          merge-multiple: true
+
+      - name: Create output
+        if: github.event_name != 'pull_request'
+        id: generate-outputs
+        env:
+          JOBS: ${{ toJson(needs) }}
+          ARTIFACT_PATH: ${{ steps.download-artifacts.outputs.download-path }}
+        run: |
+          # Initialize the array
+          images=()
+
+          # Populate the array with each line from each file in the artifacts directory
+          for file in $ARTIFACT_PATH/*; do
+              while IFS= read -r line; do
+                images+=("$line")
+              done < "$file"
+          done
+
+          # Create the GITHUB_OUTPUT in the format '["image1", "image2", ...]'
+          echo "images=$(printf '%s\n' "${images[@]}" | jq -R -s -c 'split("\n") | .[:-1]')" >> $GITHUB_OUTPUT
+
+      - name: Check Jobs
+        env:
+          JOBS: ${{ toJson(needs) }}
+        run: |
+          echo "Job status:"
+          echo $JOBS | jq -r 'to_entries[] | " - \(.key): \(.value.result)"'
+
+          for i in $(echo $JOBS | jq -r 'to_entries[] | .value.result'); do
+            if [ "$i" != "success" ] && [ "$i" != "skipped" ]; then
+              echo ""
+              echo "Status check not okay!"
+              exit 1
+            fi
+          done
 
   build_iso:
     name: iso

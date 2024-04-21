@@ -1,0 +1,5 @@
+# Exclude some files Syft will never get anything useful from
+exclude:
+  - '/sysroot/ostree/repo/objects/**'
+  - '/usr/share/icons/**'
+  - '/usr/share/doc/**'
