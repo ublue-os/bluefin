@@ -5,5 +5,5 @@ echo -n $(jq -r '"\(.["image-name"]):\(.["image-tag"])"' < /usr/share/ublue-os/i
 if [[ $(rpm-ostree status --booted) =~ "signed" ]]; then
 	echo -n " 🔐"
 else
-	echo -n -e " \033[5m🔒\033[0m"
+	echo -n -e " \033[5m🔓\033[0m"
 fi
