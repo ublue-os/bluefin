@@ -58,6 +58,7 @@
 			"kinoite": [
 				"libadwaita-qt5",
 				"libadwaita-qt6",
+				"kde-runtime-docs",
 				"kdeplasma-addons",
 				"plasma-wallpapers-dynamic"
 			],
