@@ -11,3 +11,4 @@ Use `brew search` and `brew install` to install packages. Bluefin will take care
 Use `Ctrl`-`Alt`-`Enter` to quickly open a terminal
 Use `Super`-`Space` to run Search Light (Super is your Windows key!)
 Tailscale is included, check out [their docs](https://tailscale.com/kb/1017/install)
+Bluefin is your gateway to AI and LLMs 🦙 `ujust ollama` to [get started](https://ollama.com/)
