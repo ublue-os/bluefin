@@ -3,7 +3,7 @@ escape() {
 	sed 's/[&/\]/\\&/g' <<< "$1"
 }
 
-TIP_FILE=$(ls "/usr/share/ublue-os/motd/tips/"*".md" | shuf -n 1)
+TIP_FILE=$(find /usr/share/ublue-os/motd/tips/*.md | shuf -n 1)
 if [[ -f "$TIP_FILE" ]]; then
 	IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 	IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
@@ -18,6 +18,7 @@ if [[ -f "$TIP_FILE" ]]; then
 	DIFFERENCE=$((CURRENT_SECONDS - IMAGE_DATE_SECONDS))
 	MONTH=$((30 * 24 * 60 * 60))
 	if [ "$DIFFERENCE" -ge "$MONTH" ]; then
+		#shellcheck disable=2016
 		TIP='# 󰇻 Your current image is over 1 month old, run `ujust update`'
 	fi
 

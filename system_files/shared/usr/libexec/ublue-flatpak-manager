@@ -3,12 +3,12 @@
 # Script Version
 VER=1
 VER_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/ublue/flatpak_manager_version"
-VER_RAN=$(cat $VER_FILE)
+VER_RAN=$(cat "$VER_FILE")
 
 mkdir -p "$(dirname "$VER_FILE")" || exit 1
 
 # Run script if updated
-if [[ -f $VER_FILE && $VER = $VER_RAN ]]; then
+if [[ -f $VER_FILE && $VER = "$VER_RAN" ]]; then
 	echo "Flatpak manager v$VER has already ran. Exiting..."
 	exit 0
 fi
@@ -18,4 +18,4 @@ flatpak --system update -y
 
 notify-send "Welcome to Bluefin" "Your computer is ready!" --app-name="Flatpak Manager Service" -u NORMAL
 
-echo $VER >$VER_FILE
+echo $VER >"$VER_FILE"
