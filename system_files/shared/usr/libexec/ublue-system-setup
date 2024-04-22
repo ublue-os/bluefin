@@ -8,13 +8,13 @@ IMAGE_FLAVOR=$(jq -r '."image-flavor"' < $IMAGE_INFO)
 # SCRIPT VERSION
 HWS_VER=2
 HWS_VER_FILE="/etc/ublue/hws_version"
-[[ -f HWS_VER_FILE ]] && HWS_VER_RAN=$(cat $HWS_VER_FILE)
+[[ -f "$HWS_VER_FILE" ]] && HWS_VER_RAN=$(cat $HWS_VER_FILE)
 
 # IMAGE IDENTIFIERS
 KNOWN_IMAGE_NAME_FILE="/etc/ublue/image_name"
-[[ -f KNOWN_IMAGE_NAME_FILE ]] && KNOWN_IMAGE_NAME=$(cat $KNOWN_IMAGE_NAME_FILE)
+[[ -f "$KNOWN_IMAGE_NAME_FILE" ]] && KNOWN_IMAGE_NAME=$(cat $KNOWN_IMAGE_NAME_FILE)
 KNOWN_IMAGE_FLAVOR_FILE="/etc/ublue/image_flavor"
-[[ -f KNOWN_IMAGE_FLAVOR_FILE ]] && KNOWN_IMAGE_FLAVOR=$(cat $KNOWN_IMAGE_FLAVOR_FILE)
+[[ -f "$KNOWN_IMAGE_FLAVOR_FILE" ]] && KNOWN_IMAGE_FLAVOR=$(cat $KNOWN_IMAGE_FLAVOR_FILE)
 
 # Run script if updated
 if [[ -f "$HWS_VER_FILE" && "$HWS_VER" = "$HWS_VER_RAN" ]]; then

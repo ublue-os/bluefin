@@ -31,6 +31,7 @@ name="$1"
 default="$2"
 palette="$3"
 
+# shellcheck disable=2154
 for check in "${!known_container[@]}"; do
 	if test "$check" = "$name"; then
 		guid=${known_container[$check]}

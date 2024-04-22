@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+# shellcheck disable=2046
 echo -n $(jq -r '"\(.["image-name"]):\(.["image-tag"])"' < /usr/share/ublue-os/image-info.json)
 
 if [[ $(rpm-ostree status --booted) =~ "signed" ]]; then
