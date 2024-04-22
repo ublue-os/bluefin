@@ -19,7 +19,7 @@
     "break",
     {
       "type": "command",
-      "key": "󱋩",
+      "key": " 󱋩",
       "text": "/usr/libexec/ublue-image-info.sh"
     },
     {
