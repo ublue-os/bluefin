@@ -41,9 +41,15 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
           syft version
 
+      - name: Lowercase Registry
+        id: registry_case
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ matrix.image }}
+
       - name: Generate SBOM
         env:
-          IMAGE: ${{ matrix.image }}
+          IMAGE: ${{ steps.registry_case.outputs.lowercase }}
         run: |
           syft ${IMAGE} \
             --output cyclonedx-json=sbom.json \
@@ -60,7 +66,7 @@ jobs:
       - name: Generate artifact name
         id: artifact-name
         env:
-          IMAGE: ${{ matrix.image }}
+          IMAGE: ${{ steps.registry_case.outputs.lowercase }}
         run: |
           echo "name=$(echo ${IMAGE} | awk -F'/' '{print $NF}' | sed 's/:/-/g')" >> $GITHUB_OUTPUT
 
