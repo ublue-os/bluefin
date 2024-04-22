@@ -4,7 +4,7 @@ Let's trace the stars.
 
 |  Command | Description |
 | ------- | ----------- |
-| `ujust`  | List all available commands |
+| `ujust --choose`  | Display available commands |
 | `ujust toggle-user-motd` | Toggle this banner on/off | 
 | `ujust brew` | Install Homebrew (Strongly Recommended) |
 
