@@ -23,13 +23,13 @@ else
 
 # Check if quadlet target is enabled
     if ! eval systemctl --user --quiet is-enabled "${name}".target; then
-        notify-send "${name} quadlet not enabled... enabling"
+        notify-send "Starting ${name}, please be patient"
         systemctl --user enable --now "${name}".target
     fi
 
 # Check if quadlet is running
     if ! eval systemctl --user --quiet is-active "${name}".service; then
-        notify-send "${name} quadlet not running... this may take awhile to start"
+        notify-send "Restarting ${name}, please be patient"
         systemctl --user restart "${name}".service
         # Give the Quadlet a second to startup
         sleep 1
