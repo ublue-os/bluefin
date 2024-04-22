@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.3.0](https://github.com/ublue-os/bluefin/compare/v2.2.0...v2.3.0) (2024-04-22)
+
+
+### Features
+
+* add a flatpak install for rebasers ([#1175](https://github.com/ublue-os/bluefin/issues/1175)) ([ae069c7](https://github.com/ublue-os/bluefin/commit/ae069c7b4fd5d7d1ea3a4a75fe9f1127812ece40))
+* **motd:** recommend ujust choose in the motd. ([#1177](https://github.com/ublue-os/bluefin/issues/1177)) ([4d3b0bb](https://github.com/ublue-os/bluefin/commit/4d3b0bbe347c4359c6e02fc06a3c534de0222163))
+* **motd:** suggest ujust --choose in motd ([#1185](https://github.com/ublue-os/bluefin/issues/1185)) ([2ac97af](https://github.com/ublue-os/bluefin/commit/2ac97afa186ea91c1d308ef373497d572fd80e16))
+
+
+### Bug Fixes
+
+* **bluefin:** add blur-my-shell to Fedora 40 ([#1184](https://github.com/ublue-os/bluefin/issues/1184)) ([1ff846f](https://github.com/ublue-os/bluefin/commit/1ff846fd07d58cdcc67647a282a4e8bde4329200))
+* **ci:** Update reusable-image-scan.yml to use lowercase registry name ([#1183](https://github.com/ublue-os/bluefin/issues/1183)) ([9c8f6de](https://github.com/ublue-os/bluefin/commit/9c8f6de89f040618b7185ad975263922a499c13d))
+* exclude Syft ELF package cataloger ([#1182](https://github.com/ublue-os/bluefin/issues/1182)) ([dd7c210](https://github.com/ublue-os/bluefin/commit/dd7c210ffaa5ea6bb918958a0ab29669c4814d65))
+
 ## [2.2.0](https://github.com/ublue-os/bluefin/compare/v2.1.0...v2.2.0) (2024-04-22)
 
 
