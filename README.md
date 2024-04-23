@@ -19,7 +19,8 @@ A familiar(ish) Ubuntu desktop for Fedora Silverblue. It strives to cover these 
 
 [![aurora 39](https://github.com/ublue-os/bluefin/actions/workflows/build-39-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-39-aurora.yml) [![aurora 40](https://github.com/ublue-os/bluefin/actions/workflows/build-40-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-40-aurora.yml)
 
-![Screenshot_20240409_234125](https://github.com/ublue-os/bluefin/assets/1264109/08a294ba-c182-4329-aaa2-0d402a92071f)
+![Screenshot_20240423_211805](https://github.com/ublue-os/bluefin/assets/40402114/1bea1ed8-d97a-402a-957b-e0f338d38230)
+
 
 Aurora is a delightful KDE desktop experience for end-users that are looking for reliability and developers for the most-hassle free setup. Zero maintenance included.
 
