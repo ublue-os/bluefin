@@ -1,4 +1,4 @@
-# 󱍢 Welcome to Bluefin (󰂡eta) 
+# 󱍢 Welcome to Bluefin
 󱋩 `%IMAGE_NAME%:%IMAGE_TAG%`
 
 |  Command | Description |
