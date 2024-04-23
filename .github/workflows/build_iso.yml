@@ -20,20 +20,11 @@ jobs:
         image_name:
           - lutho
           - lutho-dx
-        major_version: [38, 39]
-        exclude:
-          - major_version: 38
-            image_name: bluefin-asus
-          - major_version: 38
-            image_name: bluefin-asus-nvidia
-          - major_version: 38
-            image_name: bluefin-dx-asus
-          - major_version: 38
-            image_name: bluefin-dx-asus-nvidia
+        major_version: [39, 40]
         include:
-          - major_version: 38
-            is_gts_version: true
           - major_version: 39
+            is_gts_version: true
+          - major_version: 40
             is_gts_version: false
     steps:
       - name: Free Disk Space (Ubuntu)
