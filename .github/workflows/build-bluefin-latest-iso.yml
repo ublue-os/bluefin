@@ -1,12 +1,12 @@
-name: Bluefin ISO Build
+name: Bluefin Latest ISO Build
 on:
   workflow_dispatch:
 
 jobs:
-  build-39:
-    name: Bluefin 39
+  build-latest:
+    name: Bluefin Latest
     uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
     with:
       brand_name: bluefin
-      fedora_version: 39
+      fedora_version: 40
