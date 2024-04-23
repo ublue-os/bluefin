@@ -116,12 +116,16 @@ jobs:
           if [[ "${{ matrix.fedora_version }}" -eq "38" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=true
-            IS_GTS_VERSION=true
+            IS_GTS_VERSION=false
           elif [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=true
+          elif [[ "${{ matrix.fedora_version }}" -eq "40" ]]; then
             IS_LATEST_VERSION=true
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
-          elif [[ "${{ matrix.fedora_version }}" -eq "40" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" -eq "41" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=false
             IS_GTS_VERSION=false
