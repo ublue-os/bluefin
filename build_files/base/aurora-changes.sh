@@ -16,4 +16,7 @@ if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
     rm -f /usr/share/kglobalaccel/org.kde.konsole.desktop
     rm -f /usr/etc/profile.d/gnome-ssh-askpass.{csh,sh} # This shouldn't be pulled in
     systemctl enable kde-sysmonitor-workaround.service
+    if [[ "$FEDORA_MAJOR_VERSION " -eq "38" ]]; then
+        rm -f /usr/etc/profile.d/aurora-fastfetch.sh
+    fi
 fi

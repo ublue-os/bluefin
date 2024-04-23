@@ -13,6 +13,7 @@ set -oue pipefail
 . /tmp/build/font-install.sh
 . /tmp/build/install-tmp.sh
 . /tmp/build/systemd.sh
+. /tmp/build/bluefin-changes.sh
 . /tmp/build/aurora-changes.sh
 . /tmp/build/branding.sh
 . /tmp/build/initramfs.sh
