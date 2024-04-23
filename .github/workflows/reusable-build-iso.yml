@@ -66,9 +66,9 @@ jobs:
           elif [[ ${{ inputs.brand_name }} == "aurora" ]]; then
             echo "VARIANT=Kinoite" >> $GITHUB_ENV
           fi
-          if [[ ${{ inputs.fedora_version }} == "38" ]]; then
+          if [[ ${{ inputs.fedora_version }} == "39" ]]; then
             echo "IS_GTS_VERSION=true" >> $GITHUB_ENV
-          elif [[ ${{ inputs.fedora_version }} == "39" ]]; then
+          elif [[ ${{ inputs.fedora_version }} == "40" ]]; then
             echo "IS_LATEST_VERSION=true" >> $GITHUB_ENV
           fi
 
