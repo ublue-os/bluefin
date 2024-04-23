@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.4.0](https://github.com/ublue-os/bluefin/compare/v2.3.0...v2.4.0) (2024-04-23)
+
+
+### Features
+
+* bump Fedora 40 to latest and Fedora 39 to gts ([21f6e2c](https://github.com/ublue-os/bluefin/commit/21f6e2cc030d489a589338070757584ba515240b))
+* bump Fedora 40 to latest and Fedora 39 to gts ([#1186](https://github.com/ublue-os/bluefin/issues/1186)) ([21f6e2c](https://github.com/ublue-os/bluefin/commit/21f6e2cc030d489a589338070757584ba515240b))
+* update ISO build for F40 ([21f6e2c](https://github.com/ublue-os/bluefin/commit/21f6e2cc030d489a589338070757584ba515240b))
+
+
+### Bug Fixes
+
+* **ci:** Add ISO workflow for Bluefin for building latest ([#1190](https://github.com/ublue-os/bluefin/issues/1190)) ([5b76ec7](https://github.com/ublue-os/bluefin/commit/5b76ec743971a3a4ec337e807190f8ffd9c8120c))
+* remove beta label, let's go ([1e05545](https://github.com/ublue-os/bluefin/commit/1e05545353a13c58ad787f27316ac1561be7b927))
+
 ## [2.3.0](https://github.com/ublue-os/bluefin/compare/v2.2.0...v2.3.0) (2024-04-22)
 
 
