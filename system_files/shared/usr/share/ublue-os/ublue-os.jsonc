@@ -3,7 +3,7 @@
   "display": {
     "separator": "  ",
     "color": {
-      "keys": "bright_cyan"
+      "keys": "\u001b[38;2;107;121;232"
     }
   },
   "modules": [
