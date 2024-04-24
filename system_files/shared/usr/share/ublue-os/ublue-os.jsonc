@@ -3,7 +3,7 @@
   "display": {
     "separator": "  ",
     "color": {
-      "keys": "\u001b[38;2;107;121;232"
+      "keys": "\u001b[38;2;87;160;198;48"
     }
   },
   "modules": [
@@ -11,7 +11,7 @@
       "type": "title",
       "key": " ",
       "color": {
-        "user": "u001b[38;2;107;121;232",
+        "user": "\u001b[38;2;87;160;198;48",
         "at": "white",
         "host": "bright_white"
       }
