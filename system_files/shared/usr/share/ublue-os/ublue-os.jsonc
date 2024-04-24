@@ -3,15 +3,15 @@
   "display": {
     "separator": "  ",
     "color": {
-      "keys": "bright_cyan"
+      "keys": "\u001b[38;2;87;160;198;48"
     }
   },
   "modules": [
     {
       "type": "title",
-      "key": " ",
+      "key": "",
       "color": {
-        "user": "cyan",
+        "user": "\u001b[38;2;87;160;198;48",
         "at": "white",
         "host": "bright_green"
       }
@@ -19,83 +19,82 @@
     "break",
     {
       "type": "command",
-      "key": " 󱋩",
+      "key": "󱋩",
       "text": "/usr/libexec/ublue-image-info.sh"
     },
     {
       "type": "os",
-      "key": " 󰣛"
+      "key": "󰣛"
     },
     {
       "type": "kernel",
-      "key": " ",
+      "key": "",
       "format": "{1} {2}"
     },
     {
       "type": "uptime",
-      "key": " 󰅐"
+      "key": "󰅐"
     },
     "break",
     {
       "type": "command",
-      "key": " 󰾰",
+      "key": "󰾰",
       "text": "cat /sys/devices/virtual/dmi/id/product_name",
       "shell": "/bin/bash"
     },
     {
       "type": "cpu",
-      "key": " 󰻠"
+      "key": "󰻠"
     },
     {
       "type": "gpu",
-      "key": " 󰍛"
+      "key": "󰍛"
     },
     {
       "type": "memory",
-      "key": " 󰧑"
+      "key": "󰧑"
     },
     {
       "type": "disk",
-      "key": " "
+      "key": ""
     },
     {
       "type": "display",
-      "key": " 󰍹"
+      "key": "󰍹"
     },
     {
       "type": "battery",
-      "key": " "
+      "key": ""
     },
     {
       "type": "gamepad",
-      "key": " 󰖺"
+      "key": "󰖺"
     },
     "break",
     {
       "type": "de",
-      "key": " 󰕮"
+      "key": "󰕮"
     },
     {
       "type": "wm",
-      "key": " "
+      "key": ""
     },
     {
       "type": "shell",
-      "key": " "
+      "key": ""
     },
     {
       "type": "terminal",
-      "key": " "
+      "key": ""
     },
     {
       "type": "packages",
-      "key": " 󰏖"
+      "key": "󰏖"
     },
     "break",
     {
       "type": "colors",
-      "paddingLeft": 2,
-      "symbol": "circle"
+      "paddingLeft": 2
     }
   ]
 }
