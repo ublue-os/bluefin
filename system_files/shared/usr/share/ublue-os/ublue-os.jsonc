@@ -94,8 +94,7 @@
     "break",
     {
       "type": "colors",
-      "paddingLeft": 2,
-      "symbol": "circle"
+      "paddingLeft": 2
     }
   ]
 }
