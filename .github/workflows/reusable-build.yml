@@ -36,7 +36,6 @@ jobs:
           - nvidia
           - asus
           - asus-nvidia
-          - framework
           - surface
           - surface-nvidia
         base_name:
@@ -53,8 +52,6 @@ jobs:
             image_flavor: surface
           - fedora_version: 38
             image_flavor: surface-nvidia
-          - fedora_version: 40
-            image_flavor: framework
 
     steps:
       - name: Checkout
