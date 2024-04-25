@@ -199,7 +199,6 @@ configure-grub ACTION="":
     fi
     if [[ "${OPTION,,}" =~ ^hide ]]; then
       sudo grub2-editenv - set menu_auto_hide=2 boot_success=1
-      fi
     elif [[ "${OPTION,,}" =~ ^unhide ]]; then
       sudo grub2-editenv - set menu_auto_hide=0 boot_success=1
-      fi
+    fi
