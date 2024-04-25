@@ -176,29 +176,5 @@ install-system-flatpaks:
     flatpak --system -y install ${FLATPAK_LIST}
     
 # Configure grub bootmenu visibility
-configure-grub ACTION="":
-    #!/bin/bash
-    source /usr/lib/ujust/ujust.sh
-    GRUB_STATE="$(sudo grub2-editenv list | grep "menu_auto_hide")"
-    OPTION={{ ACTION }}
-    if [ "$GRUB_STATE" == "menu_auto_hide=2" ]; then
-        GRUB_STATE="${b}Hidden${n}"
-    else
-        GRUB_STATE="${b}Not Hidden${n}"
-    fi
-    if [ "$OPTION" == "help" ]; then
-      echo "Usage: ujust configure-grub <option>"
-      echo "  <option>: Specify the quick option to skip the prompt"
-      echo "  Use 'hide' to select Hide Grub"
-      echo "  Use 'unhide' to select Unhide Grub"
-      exit 0
-    elif [ "$OPTION" == "" ]; then
-      echo "${bold}Grub menu configuration${normal}"
-      echo "Grub menu is set to: $GRUB_STATE"
-      OPTION=$(Choose "Hide Grub" "Unhide Grub" )
-    fi
-    if [[ "${OPTION,,}" =~ ^hide ]]; then
-      sudo grub2-editenv - set menu_auto_hide=2 boot_success=1
-    elif [[ "${OPTION,,}" =~ ^unhide ]]; then
-      sudo grub2-editenv - set menu_auto_hide=0 boot_success=1
-    fi
+configure-grub:
+    @/usr/libexec/configure-grub.sh
