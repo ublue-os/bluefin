@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-set -oue pipefail
+set -ouex pipefail
 
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 
 case $FEDORA_MAJOR_VERSION in
-  38)
+  39)
     IMAGE_TAG="gts"
     ;;
   *)

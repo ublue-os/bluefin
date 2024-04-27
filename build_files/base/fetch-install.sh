@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -oue pipefail
+set -ouex pipefail
 
 # Starship Shell Prompt
 curl -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
@@ -22,3 +22,9 @@ pip install --prefix=/usr topgrade
 
 # Install ublue-update -- breaks with packages.json
 rpm-ostree install ublue-update
+
+# Consolidate Just Files
+find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
+
+# Copy over ublue-update config
+cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml

@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # shellcheck disable=SC1091
 
-set -oue pipefail
+set -ouex pipefail
 
 # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
 sysctl -p
