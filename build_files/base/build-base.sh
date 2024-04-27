@@ -10,7 +10,6 @@ set -ouex pipefail
 . /tmp/build/image-info.sh
 . /tmp/build/fetch-quadlets.sh
 . /tmp/build/font-install.sh
-. /tmp/build/install-tmp.sh
 . /tmp/build/systemd.sh
 . /tmp/build/bluefin-changes.sh
 . /tmp/build/aurora-changes.sh
