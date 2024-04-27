@@ -1,0 +1,15 @@
+[Wayland]
+InputMethod[$e]=/usr/share/applications/com.github.maliit.keyboard.desktop
+VirtualKeyboardEnabled=true
+
+[Effect-wobblywindows]
+AdvancedMode=true
+Drag=97
+MoveFactor=25
+Stiffness=7
+WobblynessLevel=4
+
+[Plugins]
+blurEnabled=true
+fallapartEnabled=true
+wobblywindowsEnabled=true

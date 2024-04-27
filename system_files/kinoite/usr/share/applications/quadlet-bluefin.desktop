@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=/usr/libexec/distrobox-quadlet-ptyxis.sh bluefin-cli
+Name=Bluefin-CLI
+NoDisplay=true
+StartupNotification=false
+Type=Application
+X-KDE-GlobalAccel-CommandShortcut=true

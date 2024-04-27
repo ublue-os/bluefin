@@ -1,0 +1,11 @@
+[services][org.kde.krunner.desktop]
+_launch=Alt+F2\tMeta+Space\tSearch\tAlt+Space
+
+[services][quadlet-bluefin.desktop]
+_launch=Meta+Return
+
+[services][quadlet-ubuntu.desktop]
+_launch=Ctrl+Alt+U
+
+[services][quadlet-fedora.desktop]
+_launch=Ctrl+Alt+F
