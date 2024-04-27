@@ -3,13 +3,13 @@ InputMethod[$e]=/usr/share/applications/com.github.maliit.keyboard.desktop
 VirtualKeyboardEnabled=true
 
 [Effect-wobblywindows]
-AdvancedMode=true
-Drag=97
-MoveFactor=25
-Stiffness=7
-WobblynessLevel=4
+AdvancedMode=false
+Drag=80
+MoveFactor=10
+Stiffness=15
+WobblynessLevel=0
 
 [Plugins]
 blurEnabled=true
-fallapartEnabled=true
 wobblywindowsEnabled=true
+
