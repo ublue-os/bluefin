@@ -1,6 +1,6 @@
 [Desktop Entry]
-Exec=/usr/libexec/distrobox-quadlet-ptyxis.sh bluefin-cli
-Name=Bluefin-CLI
+Exec=/usr/libexec/distrobox-quadlet-ptyxis.sh ubuntu-toolbox
+Name=Ubuntu-Toolbox
 NoDisplay=true
 StartupNotification=false
 Type=Application
