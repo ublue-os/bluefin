@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/usr/libexec/distrobox-quadlet-ptyxis.sh bluefin-cli
+Exec=Bluefin-CLI
+NoDisplay=true
+StartupNotification=false
+Type=Application

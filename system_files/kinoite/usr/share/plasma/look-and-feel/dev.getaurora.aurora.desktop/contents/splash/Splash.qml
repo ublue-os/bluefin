@@ -55,8 +55,8 @@ Rectangle {
             y: parent.height - (parent.height - logo.y) / 3 - height/2
             anchors.horizontalCenter: parent.horizontalCenter
             source: "images/busywidget.svgz"
-            sourceSize.height: PlasmaCore.Units.gridUnit * 2
-            sourceSize.width: PlasmaCore.Units.gridUnit * 2
+            sourceSize.height: PlasmaCore.Units.gridUnit
+            sourceSize.width: PlasmaCore.Units.gridUnit
             RotationAnimator on rotation {
                 id: rotationAnimator
                 from: 0

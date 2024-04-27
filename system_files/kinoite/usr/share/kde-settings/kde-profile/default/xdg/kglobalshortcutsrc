@@ -1,0 +1,11 @@
+[services][org.kde.krunner.desktop]
+_launch=Alt+F2\tMeta+Space\tSearch\tAlt+Space
+
+[services][distrobox-quadlet-ptyxis-bluefin.desktop][Global Shortcuts]
+_launch=Meta+Return
+
+[services][distrobox-quadlet-ptyxis-ubuntu.desktop][Global Shortcuts]
+_launch=Ctrl+Alt+U
+
+[services][distrobox-quadlet-ptyxis-fedora.desktop][Global Shortcuts]
+_launch=Ctrl+Alt+F
