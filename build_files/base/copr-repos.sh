@@ -28,12 +28,13 @@ if [ "${FEDORA_MAJOR_VERSION}" -eq "40" ]; then
         vte291 \
         vte-profile
     rpm-ostree install ptyxis
-    if [[ "${BASE_IMAGE_NAME}" =~ "silverblue" ]]; then
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-            mutter
-    fi
+    # This has been quite broken
+    # if [[ "${BASE_IMAGE_NAME}" =~ "silverblue" ]]; then
+    #     rpm-ostree override replace \
+    #     --experimental \
+    #     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+    #         mutter
+    # fi
 fi
 
 # Add Nerd Fonts
