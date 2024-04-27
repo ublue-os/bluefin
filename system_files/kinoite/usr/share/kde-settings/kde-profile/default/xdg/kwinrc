@@ -10,5 +10,6 @@ Stiffness=7
 WobblynessLevel=4
 
 [Plugins]
+blurEnabled=true
 fallapartEnabled=true
 wobblywindowsEnabled=true
