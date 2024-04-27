@@ -11,5 +11,5 @@ WobblynessLevel=0
 
 [Plugins]
 blurEnabled=true
-fallapartEnabled=true
 wobblywindowsEnabled=true
+

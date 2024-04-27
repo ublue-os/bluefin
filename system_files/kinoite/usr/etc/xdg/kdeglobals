@@ -1,9 +1,1 @@
-[KDE]
-LookAndFeelPackage=dev.getaurora.aurora.desktop
-
-[KDE Control Module Restrictions][$i]
-kcm_plymouth.desktop=false
-
-[General]
-TerminalApplication=kde-ptyxis
-TerminalService=org.gnome.Ptyxis.desktop
+../../share/kde-settings/kde-profile/default/xdg/kdeglobals
