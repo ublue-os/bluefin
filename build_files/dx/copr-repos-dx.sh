@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -oue pipefail
+set -ouex pipefail
 
 #incus, lxc, lxd
 wget https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo

@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -oue pipefail
+set -ouex pipefail
 
 # Add Staging repo
 wget https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo -O /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo

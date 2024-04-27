@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -oue pipefail
+set -ouex pipefail
 
 if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
     ln -sf ../places/distributor-logo.svg /usr/share/icons/hicolor/scalable/apps/start-here.svg

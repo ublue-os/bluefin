@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -oue pipefail
+set -ouex pipefail
 
 if test "$BASE_IMAGE_NAME" = "silverblue"; then
     sed -i '/^PRETTY_NAME/s/Bluefin/Bluefin-dx/' /usr/lib/os-release

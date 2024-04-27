@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -oue pipefail
+set -ouex pipefail
 
 # Make Directory
 mkdir -p /usr/etc/containers/systemd/users

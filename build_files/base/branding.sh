@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
-set -oue pipefail
-
+set -ouex pipefail
 
 # Branding for Bluefin/Aurora
 if test "$BASE_IMAGE_NAME" = "silverblue"; then

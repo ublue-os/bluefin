@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -oue pipefail
+set -ouex pipefail
 
 systemctl enable docker.socket
 systemctl enable podman.socket
