@@ -97,3 +97,40 @@ ollama:
     systemctl --user daemon-reload
     systemctl --user start ollama.service
     echo "Please install the ollama cli via \`brew install ollama\`"
+
+# Setup a local Ollama WebUI in a container
+ollama-web: ollama
+    #!/usr/bin/env bash
+
+    read -r -d '' QUADLET <<-EOF
+    [Unit]
+    Description=An Ollama WebUI container
+    After=network-online.target ollama.service
+    Requires=ollama.service
+
+    [Container]
+    Image=ghcr.io/open-webui/open-webui:latest
+    AutoUpdate=registry
+    ContainerName=ollama-web
+    Environment=OLLAMA_BASE_URL=http://ollama:11434
+    Environment=WEBUI_SECRET_KEY=abc123
+    Environment=DEFAULT_USER_ROLE=admin
+    # Open WebUI does not allow access without a user account, nor does it allow
+    # account creation via environment variables.
+    Environment=ENABLE_SIGNUP=true
+    PublishPort=8080:8080
+
+    [Service]
+    TimeoutStartSec=900
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+    if [  ! -f ~/.config/containers/systemd/ollama-web.container ]; then
+        mkdir -p ~/.config/containers/systemd
+        echo "${QUADLET}" > ~/.config/containers/systemd/ollama-web.container
+    else
+        echo "Ollama WebUI container already exists, skipping..."
+    fi
+    systemctl --user daemon-reload
+    systemctl --user start ollama-web.service
