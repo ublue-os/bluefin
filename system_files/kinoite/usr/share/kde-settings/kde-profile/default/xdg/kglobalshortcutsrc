@@ -9,3 +9,9 @@ _launch=Ctrl+Alt+U
 
 [services][quadlet-fedora.desktop]
 _launch=Ctrl+Alt+F
+
+[services][org.gnome.Ptyxis.desktop]
+_launch=Ctrl+Alt+T
+
+[services][org.gnome.konsole.desktop]
+_launch=none
