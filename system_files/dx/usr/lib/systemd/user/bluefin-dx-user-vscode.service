@@ -5,7 +5,7 @@ After=network-online.target ublue-user-setup.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/bluefin-dx-user-vscode
+ExecStart=/usr/libexec/bluefin-dx-user-vscode
 Restart=on-failure
 RestartSec=30
 StartLimitInterval=0
