@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/LookAndFeel",
     "KPlugin": {
         "Authors": [
             {
@@ -15,7 +16,7 @@
             "Plasma/LookAndFeel"
         ],
         "Version": "0.01",
-        "Website": ""
+        "Website": "https://getaurora.dev"
     },
     "X-KDE-ParentApp": "",
     "X-Plasma-MainScript": "defaults"
