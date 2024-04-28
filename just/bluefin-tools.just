@@ -107,4 +107,3 @@ ollama:
     systemctl --user daemon-reload
     systemctl --user start ollama.service || echo "Error starting Ollama Quadlet."
     echo "Please install the ollama cli via \`brew install ollama\`"
-
