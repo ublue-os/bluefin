@@ -28,18 +28,24 @@ tensorflow:
 # Setup a local Ollama instance in a container. Detect hardware, offer a choice if needed.
 ollama:
     #!/usr/bin/env bash
-    echo 'Follow the prompts and check the tutorial: '
+    echo 'Detecting Hardware...'
     echo
-    GPU_CHOICES=()
+    GPU_CHOICES=("Nvidia (CUDA)" "AMD (ROCm)" "CPU (slow)")
+    DETECTED_OPTIONS=()
     # Detect nvidia drivers
     if which nvidia-smi > /dev/null 2>&1; then
-        GPU_CHOICES+=("Nvidia (CUDA)")
+        DETECTED_OPTIONS+=("${GPU_CHOICES[0]}")
     fi
-    # Detect radeon hardware
-    if lspci | grep ' VGA ' | grep -sq Radeon; then
-        GPU_CHOICES+=("AMD (ROCm)")
+    # Detect AMD hardware
+    if lspci | grep ' VGA ' | grep -sq AMD; then
+        DETECTED_OPTIONS+=("${GPU_CHOICES[1]}")
     fi
-    GPU_SELECTION=$(printf '%s\n' "${GPU_CHOICES[@]}" | gum choose --select-if-one --header "Select the type of graphics card you have")
+    # Nothing detected, ask the user
+    if [ ${#DETECTED_OPTIONS[@]} -eq 0 ]; then
+        GPU_SELECTION=$(printf '%s\n' "${GPU_CHOICES[@]}" | gum choose --select-if-one --header "Select the type of graphics card you want to use")
+    else
+        GPU_SELECTION=$(printf '%s\n' "${DETECTED_OPTIONS[@]}" | gum choose --select-if-one --header "Select the type of graphics card you want to use")
+    fi
     echo "Selected ${GPU_SELECTION}!"
     case "$GPU_SELECTION" in
         "Nvidia (CUDA)")
@@ -53,6 +59,10 @@ ollama:
     AddDevice=/dev/dri
     AddDevice=/dev/kfd
     EOF
+            ;;
+        *)
+            IMAGE=latest
+            CUSTOM_ARGS=""
             ;;
     esac
 
@@ -95,5 +105,5 @@ ollama:
         echo "Ollama container already exists, skipping..."
     fi
     systemctl --user daemon-reload
-    systemctl --user start ollama.service
+    systemctl --user start ollama.service || echo "Error starting Ollama Quadlet."
     echo "Please install the ollama cli via \`brew install ollama\`"
