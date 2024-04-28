@@ -111,10 +111,10 @@ install-incus:
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-    if grep -q "bluefin-dx" <<< $CURRENT_IMAGE
+    if grep -Eq "bluefin-dx|aurora-dx" <<< $CURRENT_IMAGE
     then
         echo 'Installing and configuring Incus.'
-        /usr/bin/bluefin-incus
+        /usr/libexec/bluefin-incus
     else
         echo "Developer mode is currently ${b}${red}Disabled${n}."
         echo "Run \"just devmode\" to turn on Developer mode."
