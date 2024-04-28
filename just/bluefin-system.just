@@ -252,7 +252,7 @@ configure-vfio ACTION="":
         $VFIO_IDS_KARG
       fi
     elif [[ "${OPTION,,}" =~ kvmfr ]]; then
-      sudo bluefin-dx-kvmfr-setup
+      sudo /usr/libexec/bluefin-dx-kvmfr-setup
     fi
 
 # Install system flatpaks for rebasers
