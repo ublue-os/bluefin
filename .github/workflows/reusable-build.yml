@@ -110,11 +110,7 @@ jobs:
           TIMESTAMP="$(date +%Y%m%d)"
           FEDORA_VERSION="${{ matrix.fedora_version }}"
 
-          if [[ "${{ matrix.fedora_version }}" -eq "38" ]]; then
-            IS_LATEST_VERSION=false
-            IS_STABLE_VERSION=true
-            IS_GTS_VERSION=false
-          elif [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
+          if [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=true

@@ -137,24 +137,6 @@
 			"dx": []
 		}
 	},
-	"38": {
-		"include": {
-			"silverblue": [
-				"gnome-shell-extension-tailscale-status"
-			],
-			"dx": [
-				"distrobuilder",
-				"devpod",
-				"podman-plugins"
-			]
-		},
-		"exclude": {
-			"silverblue": [
-				"podman-docker"
-			],
-			"dx": []
-		}
-	},
 	"39": {
 		"include": {
 			"all": [
