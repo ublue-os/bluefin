@@ -1,5 +1,36 @@
 # Changelog
 
+## [2.5.0](https://github.com/ublue-os/bluefin/compare/v2.4.0...v2.5.0) (2024-04-29)
+
+
+### Features
+
+* add kvmfr module (looking-glass) and vfio support ([#1226](https://github.com/ublue-os/bluefin/issues/1226)) ([49e7d04](https://github.com/ublue-os/bluefin/commit/49e7d0475ea0c362035c32dfded38e0f55c0b560))
+* Allow just to turn off transparency for terminals ([#1230](https://github.com/ublue-os/bluefin/issues/1230)) ([89b41d4](https://github.com/ublue-os/bluefin/commit/89b41d4fb71f7daf68c6c06db6a2f2979487c1c2))
+* **Aurora:** Add Pytxis shortcuts, branding, Desktop Effects ([#1213](https://github.com/ublue-os/bluefin/issues/1213)) ([0877a1e](https://github.com/ublue-os/bluefin/commit/0877a1e59b532bb6bf792dd71a0b611f3c8dda6d))
+* **bluefin:** add more logos ([#1221](https://github.com/ublue-os/bluefin/issues/1221)) ([4466818](https://github.com/ublue-os/bluefin/commit/4466818dfd6b16ea498657733a9e025a86267988))
+* Update bluefin-logo to a portrait version ([#1196](https://github.com/ublue-os/bluefin/issues/1196)) ([afd3645](https://github.com/ublue-os/bluefin/commit/afd36453f5238edb310c5d91dfffcfb6be1de190))
+
+
+### Bug Fixes
+
+* actually shuffle dinos ([#1217](https://github.com/ublue-os/bluefin/issues/1217)) ([6f0941d](https://github.com/ublue-os/bluefin/commit/6f0941d0c83d0676312683e73e3c7d514a8fcfc9))
+* **Aurora:** Change the default values for the wobbly windows desktop effect ([#1218](https://github.com/ublue-os/bluefin/issues/1218)) ([9229292](https://github.com/ublue-os/bluefin/commit/922929209663efc1b5b1cc2601802c5fd3b71821))
+* **Aurora:** consolidate locations for setting changes ([#1219](https://github.com/ublue-os/bluefin/issues/1219)) ([9bf6017](https://github.com/ublue-os/bluefin/commit/9bf601711eb8c61d14b18f07defe240a36452fce))
+* **aurora:** Fira Code NF for KDE ([#1223](https://github.com/ublue-os/bluefin/issues/1223)) ([e9436f6](https://github.com/ublue-os/bluefin/commit/e9436f608e9bb5d2d72eca5cefec98a621dcbb81))
+* **aurora:** make image backgrounds transparent ([#1229](https://github.com/ublue-os/bluefin/issues/1229)) ([3fe3db2](https://github.com/ublue-os/bluefin/commit/3fe3db2b95d5360a27e849b654fe7045af70e07f))
+* **Aurora:** Restore x11 for 40 ([#1214](https://github.com/ublue-os/bluefin/issues/1214)) ([737c555](https://github.com/ublue-os/bluefin/commit/737c5555021af65182bcef9e5a8409d23130d65a))
+* **bluefin:** remove mutter patch on 40 ([#1215](https://github.com/ublue-os/bluefin/issues/1215)) ([881a830](https://github.com/ublue-os/bluefin/commit/881a830fb6b69c0512c4850906f25377acc51501))
+* **ci:** Update Aurora ISO to 40 ([#1192](https://github.com/ublue-os/bluefin/issues/1192)) ([4d2b473](https://github.com/ublue-os/bluefin/commit/4d2b47379649a6cf8137b6621edb821a653ea93b))
+* correct typo for neofetch.fish function ([#1227](https://github.com/ublue-os/bluefin/issues/1227)) ([52a2d8f](https://github.com/ublue-os/bluefin/commit/52a2d8f65b7589b2cfa962ac3f59ef4bf50c4eb9))
+* Do not set SSH_ASKPASS_REQUIRE in Aurora ([#1210](https://github.com/ublue-os/bluefin/issues/1210)) ([95dd578](https://github.com/ublue-os/bluefin/commit/95dd57890ddd7c4441adafcabf230d25cafbf1ab))
+* **dx:** rework dx incus/swtpm and systemd services. Make incus setup work with Aurora ([#1231](https://github.com/ublue-os/bluefin/issues/1231)) ([020f325](https://github.com/ublue-os/bluefin/commit/020f325bae4ad3c02b93dc70d0bb6341d8ce1d6c))
+* enable common flatpak overrides ([#1211](https://github.com/ublue-os/bluefin/issues/1211)) ([4d50eca](https://github.com/ublue-os/bluefin/commit/4d50eca78407e0a6f7ac14b50a9a80fbc6914d59))
+* initramfs permissions ([#1233](https://github.com/ublue-os/bluefin/issues/1233)) ([1492ec8](https://github.com/ublue-os/bluefin/commit/1492ec8f60d94445a1d2cbfa9eb707954c95b3be))
+* move fish and zsh brew code to shared code branch. ([#1207](https://github.com/ublue-os/bluefin/issues/1207)) ([2999fc0](https://github.com/ublue-os/bluefin/commit/2999fc0c083c0aaad9ac39decd4d8030f5831b91))
+* remove already sunset framework builds ([#1203](https://github.com/ublue-os/bluefin/issues/1203)) ([62d3dd5](https://github.com/ublue-os/bluefin/commit/62d3dd564776c4b3500854c6be741058c37d0639))
+* update ollama install action ([#1222](https://github.com/ublue-os/bluefin/issues/1222)) ([ae8792e](https://github.com/ublue-os/bluefin/commit/ae8792e37344a85a823919453f784e5379a99fb6))
+
 ## [2.4.0](https://github.com/ublue-os/bluefin/compare/v2.3.0...v2.4.0) (2024-04-23)
 
 
