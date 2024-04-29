@@ -1,6 +1,9 @@
 name: Bluefin Latest ISO Build
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * sun'  # 03:00 Sunday
+  
 
 jobs:
   build-latest:

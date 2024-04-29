@@ -1,7 +1,8 @@
 name: Aurora ISO Build
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: '0 2 * * sun'  # 02:00 Sunday
 jobs:
   build-40:
     name: Aurora 40

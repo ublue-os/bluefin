@@ -1,6 +1,9 @@
 name: Bluefin GTS ISO Build
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * sun'  # 02:00 Sunday
+ 
 
 jobs:
   build-gts:
