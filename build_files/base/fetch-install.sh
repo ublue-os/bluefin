@@ -21,7 +21,7 @@ curl -Lo /usr/etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/r
 pip install --prefix=/usr topgrade
 
 # Install ublue-update -- breaks with packages.json
-rpm-ostree install ublue-update
+rpm-ostree install --from repo=copr:copr.fedorainfracloud.org:ublue-os:bling ublue-update
 
 # Consolidate Just Files
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
