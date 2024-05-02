@@ -54,6 +54,10 @@ ollama:
     AddDevice=/dev/kfd
     EOF
             ;;
+        *)
+            IMAGE=latest  # Default case if no other case matches
+            CUSTOM_ARGS=""  # Default to no custom arguments or set as necessary
+            ;;
     esac
 
     read -r -d '' QUADLET <<-EOF
