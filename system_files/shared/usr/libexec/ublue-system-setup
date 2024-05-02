@@ -5,8 +5,11 @@ IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 IMAGE_FLAVOR=$(jq -r '."image-flavor"' < $IMAGE_INFO)
 
+VEN_ID="$(cat /sys/devices/virtual/dmi/id/chassis_vendor)"
+CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
+
 # SCRIPT VERSION
-HWS_VER=2
+HWS_VER=3
 HWS_VER_FILE="/etc/ublue/hws_version"
 [[ -f "$HWS_VER_FILE" ]] && HWS_VER_RAN=$(cat $HWS_VER_FILE)
 
@@ -42,8 +45,13 @@ if [[ $KARGS =~ "nomodeset" ]]; then
   NEEDED_KARGS+=("--delete-if-present=nomodeset")
 fi
 
-if [[ ! $KARGS =~ "rd.luks.options" && $KARGS =~ "rd.luks.uuid" ]]; then
-  NEEDED_KARGS+=("--append-if-missing=rd.luks.options=discard")
+if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
+  if [[ "GenuineIntel" == "$CPU_VENDOR" ]]; then
+    if [[ ! $KARGS =~ "hid_sensor_hub" ]]; then
+      echo "Intel Framework Laptop detected, applying needed keyboard fix"
+      NEEDED_KARGS+=("--append-if-missing=module_blacklist=hid_sensor_hub");
+    fi
+  fi
 fi
 
 #shellcheck disable=SC2128
