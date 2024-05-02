@@ -16,7 +16,7 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ublue-os-staging-fedora-"${FED
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
-if [[ ${FEDORA_MAJOR_VERSION} -eq "39" ]]; then
+if [[ "${FEDORA_MAJOR_VERSION}" -eq "39" && "${BASE_IMAGE_NAME}" =~ "silverblue" ]]; then
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo
 fi
 for i in /etc/yum.repos.d/rpmfusion-*; do
