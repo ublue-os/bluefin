@@ -75,6 +75,7 @@ ollama:
     RemapUsers=keep-id
     RunInit=yes
     NoNewPrivileges=no
+    Network=ollama.network
     Volume=%h/.ollama:/.ollama
     PodmanArgs=--userns=keep-id
     PodmanArgs=--group-add=keep-groups
@@ -94,6 +95,18 @@ ollama:
     else
         echo "Ollama container already exists, skipping..."
     fi
+
+    read -r -d '' QUADLET_NETWORK <<-EOF
+    [Network]
+    NetworkName=ollama
+    EOF
+    if [  ! -f ~/.config/containers/systemd/ollama.network ]; then
+        mkdir -p ~/.config/containers/systemd
+        echo "${QUADLET_NETWORK}" > ~/.config/containers/systemd/ollama.network
+    else
+        echo "Ollama network already exists, skipping..."
+    fi
+
     systemctl --user daemon-reload
     systemctl --user start ollama.service
     echo "Please install the ollama cli via \`brew install ollama\`"
@@ -119,6 +132,7 @@ ollama-web: ollama
     # account creation via environment variables.
     Environment=ENABLE_SIGNUP=true
     PublishPort=8080:8080
+    Network=ollama.network
 
     [Service]
     TimeoutStartSec=900
