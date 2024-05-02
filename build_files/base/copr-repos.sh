@@ -40,7 +40,7 @@ if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
     --experimental \
     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
         gnome-shell
-elif [[ "${BASE_IMAGE_NAME}" = "kinoite" && "${FEDORA_MAJOR_VERSION}" -eq "40" ]]; then
+elif [[ "${BASE_IMAGE_NAME}" = "kinoite" && "${FEDORA_MAJOR_VERSION}" -gt "39" ]]; then
     rpm-ostree override replace \
     --experimental \
     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
