@@ -20,8 +20,9 @@ curl -Lo /usr/etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/r
 # Topgrade Install
 pip install --prefix=/usr topgrade
 
-# Install ublue-update -- breaks with packages.json
-rpm-ostree install --from repo=copr:copr.fedorainfracloud.org:ublue-os:bling ublue-update
+# Install ublue-update -- breaks with packages.json disable staging to use bling.
+sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
+rpm-ostree install repo=copr:copr.fedorainfracloud.org:ublue-os:bling ublue-update
 
 # Consolidate Just Files
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
