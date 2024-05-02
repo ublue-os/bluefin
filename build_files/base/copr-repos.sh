@@ -31,37 +31,47 @@ if [ "${FEDORA_MAJOR_VERSION}" -eq "40" ]; then
 fi
 
 # Patched switcheroo
-if [[ "${FEDORA_MAJOR_VERSION}" -eq "40" ]]; then
-    # Add repo
-    curl -Lo /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo https://copr.fedorainfracloud.org/coprs/sentry/switcheroo-control_discrete/repo/fedora-"${FEDORA_MAJOR_VERSION}"/sentry-switcheroo-control_discrete-fedora-"${FEDORA_MAJOR_VERSION}".repo
+# Add repo
+curl -Lo /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo https://copr.fedorainfracloud.org/coprs/sentry/switcheroo-control_discrete/repo/fedora-"${FEDORA_MAJOR_VERSION}"/sentry-switcheroo-control_discrete-fedora-"${FEDORA_MAJOR_VERSION}".repo
 
-    # Patched shells
-    if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-            gnome-shell
-    elif [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
-        rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-            kf6-kio-doc \
-            kf6-kio-widgets-libs \
-            kf6-kio-core-libs \
-            kf6-kio-widgets \
-            kf6-kio-file-widgets \
-            kf6-kio-core \
-            kf6-kio-gui
-    fi
-
-    # Switcheroo patch
+# Patched shells
+if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
     rpm-ostree override replace \
-        --experimental \
-        --from repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
-            switcheroo-control
-
-    rm /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        gnome-shell
+elif [[ "${BASE_IMAGE_NAME}" = "kinoite" && "${FEDORA_MAJOR_VERSION}" -eq "40" ]]; then
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        kf6-kio-doc \
+        kf6-kio-widgets-libs \
+        kf6-kio-core-libs \
+        kf6-kio-widgets \
+        kf6-kio-file-widgets \
+        kf6-kio-core \
+        kf6-kio-gui
+elif [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        kf5-kio-ntlm \
+        kf5-kio-doc \
+        kf5-kio-widgets-libs \
+        kf5-kio-core-libs \
+        kf5-kio-widgets \
+        kf5-kio-file-widgets \
+        kf5-kio-core \
+        kf5-kio-gui
 fi
+
+# Switcheroo patch
+rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
+        switcheroo-control
+
+rm /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo
 
 # Add Nerd Fonts
 curl -Lo /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/che-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
