@@ -49,6 +49,7 @@
 				"gnome-shell-extension-gsconnect",
 				"gnome-shell-extension-logo-menu",
 				"gnome-shell-extension-search-light",
+				"gnome-shell-extension-power-profile-switcher",
 				"libgda-sqlite",
 				"libgda",
 				"libratbag-ratbagd",

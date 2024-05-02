@@ -5,7 +5,7 @@ set -ouex pipefail
 # Add Staging repo
 curl -Lo /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
 
-# 39 gets VRR and Ptyxis
+# 39 Ptyxis
 if [ "${FEDORA_MAJOR_VERSION}" -eq "39" ]; then
     curl -Lo /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo
     rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:kylegospo:gnome-vrr mutter mutter-common gnome-control-center gnome-control-center-filesystem
@@ -20,7 +20,7 @@ if [ "${FEDORA_MAJOR_VERSION}" -eq "39" ]; then
     rpm-ostree install ptyxis
 fi
 
-# 40 gets Ptyxis and patched Mutter
+# 40 Ptyxis
 if [ "${FEDORA_MAJOR_VERSION}" -eq "40" ]; then
     rpm-ostree override replace \
     --experimental \
@@ -28,13 +28,39 @@ if [ "${FEDORA_MAJOR_VERSION}" -eq "40" ]; then
         vte291 \
         vte-profile
     rpm-ostree install ptyxis
-    # This has been quite broken
-    # if [[ "${BASE_IMAGE_NAME}" =~ "silverblue" ]]; then
-    #     rpm-ostree override replace \
-    #     --experimental \
-    #     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-    #         mutter
-    # fi
+fi
+
+# Patched switcheroo
+if [[ "${FEDORA_MAJOR_VERSION}" -eq "40" ]]; then
+    # Add repo
+    curl -Lo /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo https://copr.fedorainfracloud.org/coprs/sentry/switcheroo-control_discrete/repo/fedora-"${FEDORA_MAJOR_VERSION}"/sentry-switcheroo-control_discrete-fedora-"${FEDORA_MAJOR_VERSION}".repo
+
+    # Patched shells
+    if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
+        rpm-ostree override replace \
+        --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+            gnome-shell
+    elif [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
+        rpm-ostree override replace \
+        --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+            kf6-kio-doc \
+            kf6-kio-widgets-libs \
+            kf6-kio-core-libs \
+            kf6-kio-widgets \
+            kf6-kio-file-widgets \
+            kf6-kio-core \
+            kf6-kio-gui
+    fi
+
+    # Switcheroo patch
+    rpm-ostree override replace \
+        --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
+            switcheroo-control
+
+    rm /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo
 fi
 
 # Add Nerd Fonts
