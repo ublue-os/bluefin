@@ -6,27 +6,27 @@ set -ouex pipefail
 mkdir -p /usr/etc/containers/systemd/users
 
 # bluefin-cli
-wget --output-document="/usr/etc/containers/systemd/users/bluefin-cli.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-cli.container 
+curl -Lo /usr/etc/containers/systemd/users/bluefin-cli.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-cli.container 
 sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /usr/etc/containers/systemd/users/bluefin-cli.container
 
 # bluefin-dx-cli
-wget --output-document="/usr/etc/containers/systemd/users/bluefin-dx-cli.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-dx-cli.container 
+curl -Lo /usr/etc/containers/systemd/users/bluefin-dx-cli.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-dx-cli.container 
 sed -i 's/ContainerName=bluefin/ContainerName=bluefin-dx-cli/' /usr/etc/containers/systemd/users/bluefin-dx-cli.container
 
 # fedora-toolbox
-wget --output-document="/usr/etc/containers/systemd/users/fedora-toolbox.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/fedora-toolbox/fedora-distrobox-quadlet.container 
+curl -Lo /usr/etc/containers/systemd/users/fedora-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/fedora-toolbox/fedora-distrobox-quadlet.container 
 sed -i 's/ContainerName=fedora-distrobox-quadlet/ContainerName=fedora-toolbox/' /usr/etc/containers/systemd/users/fedora-toolbox.container
 
 # ubuntu-toolbox
-wget --output-document="/usr/etc/containers/systemd/users/ubuntu-toolbox.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/ubuntu-toolbox/ubuntu-distrobox-quadlet.container 
+curl -Lo /usr/etc/containers/systemd/users/ubuntu-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/ubuntu-toolbox/ubuntu-distrobox-quadlet.container 
 sed -i 's/ContainerName=ubuntu-distrobox-quadlet/ContainerName=ubuntu-toolbox/' /usr/etc/containers/systemd/users/ubuntu-toolbox.container
 
 # wolfi-toolbox
-wget --output-document="/usr/etc/containers/systemd/users/wolfi-toolbox.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-distrobox-quadlet.container
+curl -Lo /usr/etc/containers/systemd/users/wolfi-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-distrobox-quadlet.container
 sed -i 's/ContainerName=wolfi-quadlet/ContainerName=wolfi-toolbox/' /usr/etc/containers/systemd/users/wolfi-toolbox.container
 
 # wolfi-dx-toolbox
-wget --output-document="/usr/etc/containers/systemd/users/wolfi-dx-toolbox.container" --quiet https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-dx-distrobox-quadlet.container
+curl -Lo /usr/etc/containers/systemd/users/wolfi-dx-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-dx-distrobox-quadlet.container
 sed -i 's/ContainerName=wolfi-quadlet/ContainerName=wolfi-dx-toolbox/' /usr/etc/containers/systemd/users/wolfi-dx-toolbox.container
 
 # Make systemd targets 

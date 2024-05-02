@@ -142,7 +142,7 @@ ptyxis-transparency opacity="0.95":
     set -euxo pipefail
     if [[ -n "$(echo "{{ opacity }}" | grep -v '^[.0-9]*$')" ]]; then
       printf "Value must be numeric: %s.\n" "{{ opacity }}"
-    elif [[ $(echo "0<{{ opacity }} && 1>{{ opacity }}" | bc -q) -eq 1 ]]; then
+    elif [[ $(echo "0<{{ opacity }} && 1>={{ opacity }}" | bc -q) -eq 1 ]]; then
       raw="$(gsettings get org.gnome.Ptyxis profile-uuids)"
       uuids="$(sed -En 's|[^0-9a-z]*||g; s|([0-9a-z]{32})|\1\n|gp' <<<${raw})"
       for i in ${uuids}; do
@@ -150,7 +150,7 @@ ptyxis-transparency opacity="0.95":
         gsettings set "${location}" opacity "{{ opacity }}"; done
       printf "Ptyxis opacity is now %s.\n" "{{ opacity }}"
     else
-      printf "Value must be between 0 and 1: %s.\n" "{{ opacity }}"
+      printf "Value must be greater than 0 and less than or equal to 1: %s.\n" "{{ opacity }}"
     fi
 
 # Configure docker,incus-admin,lxd,libvirt container manager permissions
@@ -160,6 +160,100 @@ dx-group:
     sudo usermod -aG lxd $USER
     sudo usermod -aG libvirt $USER
     @echo "Logout to use docker, incus-admin, lxd, libvirt"
+
+# Configure system to use vfio and kvmfr
+configure-vfio ACTION="":
+    #!/usr/bin/bash
+    source /usr/lib/ujust/ujust.sh
+    CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
+    if grep -q "dx" <<< $CURRENT_IMAGE
+    then
+      DEVMODE="enabled"
+    else
+      DEVMODE="disabled"
+    fi
+    if [ "$DEVMODE" == "disabled" ]; then
+      echo 'Please run "ujust devmode" first'
+      exit 0
+    fi
+    OPTION={{ ACTION }}
+    if [ "$OPTION" == "help" ]; then
+      echo "Usage: ujust configure-vfio <option>"
+      echo "  <option>: Specify the quick option to skip the prompt"
+      echo "  Use 'vfio-on' to select Enable VFIO drivers"
+      echo "  Use 'vfio-off' to select Disable VFIO drivers"
+      echo "  Use 'kvmfr' to select Autocreate Looking-Glass shm"
+      exit 0
+    elif [ "$OPTION" == "" ]; then
+      echo "${bold}VFIO and kvmfr Configuration${normal}"
+      echo "This is only used for GPU passthrough of a secondary dGPU."
+      echo "It will enable vfio and configure kvmfr for use with $(Urllink "https://looking-glass.io" "Looking Glass")"
+      echo "If you do not plan to use any of this then press ESC."
+      echo "${bold}NOTE:${normal} Since this is a niche use case, support will be ${b}very limited${n}"
+      OPTION=$(Choose \
+        "Enable VFIO drivers" \
+        "Disable VFIO drivers" \
+        "Enable kvmfr module" \
+      )
+    fi
+    if [[ "${OPTION,,}" =~ (^enable[[:space:]]vfio|vfio-on) ]]; then
+      echo "Enabling VFIO..."
+      VIRT_TEST=$(rpm-ostree kargs)
+      CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
+      VENDOR_KARG="unset"
+      if [[ ${VIRT_TEST} == *kvm.report_ignored_msrs* ]]; then
+        echo 'add_drivers+=" vfio vfio_iommu_type1 vfio-pci "' | sudo tee /etc/dracut.conf.d/vfio.conf
+        rpm-ostree initramfs --enable
+        if [[ ${CPU_VENDOR} == "AuthenticAMD" ]]; then
+          VENDOR_KARG="amd_iommu=on"
+        elif [[ ${CPU_VENDOR} == "GenuineIntel" ]]; then
+          VENDOR_KARG="intel_iommu=on"  
+        fi
+        if [[ ${VENDOR_KARG} == "unset" ]]; then
+          echo "Failed to get CPU vendor, exiting..."
+          exit 1
+        else
+          rpm-ostree kargs \
+            --append-if-missing="${VENDOR_KARG}" \
+            --append-if-missing="iommu=pt" \
+            --append-if-missing="rd.driver.pre=vfio_pci" \
+            --append-if-missing="vfio_pci.disable_vga=1"
+          echo "VFIO will be enabled on next boot, make sure you enable IOMMU, VT-d or AMD-v in your BIOS!"
+          echo "Please understand that since this is such a niche use case, support will be very limited!"
+          echo "To add your unused/second GPU device ids to the vfio driver by running"
+          echo 'rpm-ostree kargs --append-if-missing="vfio-pci.ids=xxxx:yyyy,xxxx:yyzz"'
+          echo "NOTE: Your second GPU will not be usable by the host after you do this!"
+        fi
+      fi
+    elif [[ "${OPTION,,}" =~ (^disable[[:space:]]vfio|vfio-off) ]]; then
+      echo ""
+      echo "Make sure you have ${b}disabled autostart of all VMs using VFIO${n} before continuing!"
+      CONFIRM=$(Choose Cancel Continue)
+      if [ "$CONFIRM" == "Continue" ]; then
+        echo "Disabling VFIO..."
+        VFIO_IDS="$(rpm-ostree kargs | sed -E 's/.+(vfio_pci.ids=.+\s)/\1/' | awk '{ print $1 }' | grep vfio_pci.ids)"
+        VFIO_IDS_KARG=""
+        if [ -n "$VFIO_IDS" ]; then
+          echo "Found VFIO ids in kargs, adding the below line to removal list"
+          echo "$VFIO_IDS"
+          VFIO_IDS_KARG="--delete-if-present=\"$VFIO_IDS\""
+        fi
+        echo "Removing dracut modules"
+        sudo rm /etc/dracut.conf.d/vfio.conf
+        rpm-ostree initramfs --enable
+        rpm-ostree kargs \
+        --delete-if-present="iommu=pt" \
+        --delete-if-present="iommu=on" \
+        --delete-if-present="amd_iommu=on" \
+        --delete-if-present="intel_iommu=on" \
+        --delete-if-present="rd.driver.pre=vfio_pci" \
+        --delete-if-present="vfio_pci.disable_vga=1" \
+        --delete-if-present="vfio_pci.disable_vga=0" \
+        $VFIO_IDS_KARG
+      fi
+    elif [[ "${OPTION,,}" =~ kvmfr ]]; then
+      sudo /usr/libexec/bluefin-dx-kvmfr-setup
+    fi
 
 # Install system flatpaks for rebasers
 [private]

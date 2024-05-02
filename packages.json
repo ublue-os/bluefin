@@ -49,6 +49,7 @@
 				"gnome-shell-extension-gsconnect",
 				"gnome-shell-extension-logo-menu",
 				"gnome-shell-extension-search-light",
+				"gnome-shell-extension-power-profile-switcher",
 				"libgda-sqlite",
 				"libgda",
 				"libratbag-ratbagd",
@@ -60,6 +61,7 @@
 				"libadwaita-qt5",
 				"libadwaita-qt6",
 				"kde-runtime-docs",
+				"kdenetwork-filesharing",
 				"kdeplasma-addons",
 				"plasma-wallpapers-dynamic"
 			],
@@ -77,6 +79,7 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
+				"devpod",
 				"docker-ce",
 				"docker-ce-cli",
 				"docker-buildx-plugin",
@@ -148,7 +151,6 @@
 			],
 			"dx": [
 				"distrobuilder",
-				"devpod",
 				"podman-plugins"
 			]
 		},

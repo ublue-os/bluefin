@@ -7,6 +7,7 @@ set -ouex pipefail
 sysctl -p
 
 . /tmp/build/copr-repos-dx.sh
+. /tmp/build/install-akmods-dx.sh
 . /tmp/build/packages-dx.sh
 . /tmp/build/image-info.sh
 . /tmp/build/fetch-install-dx.sh
