@@ -20,7 +20,8 @@ curl -Lo /usr/etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/r
 # Topgrade Install
 pip install --prefix=/usr topgrade
 
-# Install ublue-update -- breaks with packages.json
+# Install ublue-update -- breaks with packages.json disable staging to use bling.
+sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
 rpm-ostree install ublue-update
 
 # Consolidate Just Files
