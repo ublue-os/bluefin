@@ -22,6 +22,7 @@
 				"mesa-libGLU",
 				"nerd-fonts",
 				"playerctl",
+				"printer-driver-brlaser",
 				"pulseaudio-utils",
 				"python3-pip",
 				"rclone",
@@ -49,6 +50,7 @@
 				"gnome-shell-extension-gsconnect",
 				"gnome-shell-extension-logo-menu",
 				"gnome-shell-extension-search-light",
+				"gnome-shell-extension-power-profile-switcher",
 				"libgda-sqlite",
 				"libgda",
 				"libratbag-ratbagd",
@@ -60,6 +62,7 @@
 				"libadwaita-qt5",
 				"libadwaita-qt6",
 				"kde-runtime-docs",
+				"kdenetwork-filesharing",
 				"kdeplasma-addons",
 				"plasma-wallpapers-dynamic"
 			],
