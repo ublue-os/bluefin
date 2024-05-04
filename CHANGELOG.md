@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.6.0](https://github.com/ublue-os/bluefin/compare/v2.5.0...v2.6.0) (2024-05-04)
+
+
+### Features
+
+* add Ollama WebUI Just script ([#1224](https://github.com/ublue-os/bluefin/issues/1224)) ([6b58f98](https://github.com/ublue-os/bluefin/commit/6b58f9836bffb7ec0250296d2809e30e2c9325b6))
+* add support for old Brother printers ([#1250](https://github.com/ublue-os/bluefin/issues/1250)) ([687cece](https://github.com/ublue-os/bluefin/commit/687cecec28faca56df33e82060dc917856e7f436))
+* **aurora:** enable kde filesharing ([#1241](https://github.com/ublue-os/bluefin/issues/1241)) ([d16a7df](https://github.com/ublue-os/bluefin/commit/d16a7df502e3470bd2878062a65ab8fa19098461))
+* **framework:** Add color calibration files for the Framework 16 ([#1252](https://github.com/ublue-os/bluefin/issues/1252)) ([11e2685](https://github.com/ublue-os/bluefin/commit/11e26855aace46313a9f5d99cc9b188377f7110c))
+* **framework:** Add full/automatic support for Framework hardware ([#1247](https://github.com/ublue-os/bluefin/issues/1247)) ([7765bd6](https://github.com/ublue-os/bluefin/commit/7765bd6970fbc027a9dbe722927c0a98cc854cd3))
+* **framework:** Add switcheroo support for Fedora 39 builds ([#1248](https://github.com/ublue-os/bluefin/issues/1248)) ([6ca72a8](https://github.com/ublue-os/bluefin/commit/6ca72a87b400c5a87e24642fc112b4da4577c582))
+
+
+### Bug Fixes
+
+* correct ublue-update and disable rpmfusion/coprs after build time ([#1249](https://github.com/ublue-os/bluefin/issues/1249)) ([b9cf82c](https://github.com/ublue-os/bluefin/commit/b9cf82c3fa5760b6e29308ce4da6a048feeb9cf9))
+* **dx:** Restore Devpod to F40 ([#1244](https://github.com/ublue-os/bluefin/issues/1244)) ([84a14d3](https://github.com/ublue-os/bluefin/commit/84a14d35111eb9da2dcb638e6162f21e7f8099ec))
+* fastfetch don't include directory as option ([#1235](https://github.com/ublue-os/bluefin/issues/1235)) ([3e1369c](https://github.com/ublue-os/bluefin/commit/3e1369c98953a094341b9348d22acd2828111ba6))
+
 ## [2.5.0](https://github.com/ublue-os/bluefin/compare/v2.4.0...v2.5.0) (2024-04-29)
 
 
