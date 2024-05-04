@@ -8,6 +8,7 @@
 				"hangxingliu.vscode-systemd-support",
 				"mads-hartmann.bash-ide-vscode",
 				"ms-azuretools.vscode-docker",
+				"sclu1034.justfile",
 				"timonwong.shellcheck"
 			]
 		}
@@ -19,6 +20,7 @@
 		"--userns=keep-id"
 	],
 	"features": {
-		"ghcr.io/guiyomh/features/just:0": {}
+		"ghcr.io/guiyomh/features/just:0": {},
+		"ghcr.io/lukewiwa/features/shellcheck:0": {}
 	}
 }
