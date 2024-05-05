@@ -16,9 +16,13 @@
 	"securityOpt": [
 		"label=disable"
 	],
+	// --userns=keep-id is necessary for Podman
 	"runArgs": [
 		"--userns=keep-id"
 	],
+	// privileged w/ Docker can be used for making an ISO inside the devcontainer.
+	// Disable if not used.
+	// "privileged": true,
 	"features": {
 		"ghcr.io/guiyomh/features/just:0": {},
 		"ghcr.io/lukewiwa/features/shellcheck:0": {}
