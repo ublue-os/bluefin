@@ -19,18 +19,21 @@ if "${container_mgr}" info | grep Root | grep -q /home; then
     exit 1
 fi
 
-# Get Inputs
+# Inputs
 image=$1
 target=$2
 version=$3
 
-# Set image/target/version based on inputs
+# Set image/target/version based off of inputs
 # shellcheck disable=SC2154,SC1091
 . "${project_root}/scripts/get-defaults.sh"
 
-# Set base_image and tag
+# Get Base-Image and set container tag name
 base_image=$(just _base_image "${image}")
 tag=$(just _tag "${image}" "${target}")
+
+# Don't use -build suffix, getting images from ghcr
+tag=${tag::-6}
 
 # Set variant and flatpak dir
 if [[ "${base_image}" =~ "silverblue" ]]; then
@@ -43,14 +46,8 @@ else
     exit 1
 fi
 
-# Make sure image actually exists, build if it doesn't
-ID=$(${container_mgr} images --filter reference=localhost/"${tag}":"${version}" --format "{{.ID}}")
-if [[ -z ${ID} ]]; then
-    just build "${image}" "${target}" "${version}"
-fi
-
 # Make temp space
-TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p "${project_root}" flatpak.XXX)
+TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p /tmp flatpak.XXX)
 # Get list of refs from directory
 FLATPAK_REFS_DIR=${project_root}/${flatpak_dir_shortname}
 FLATPAK_REFS_DIR_LIST=$(tr '\n' ' ' < "${FLATPAK_REFS_DIR}/flatpaks")
@@ -81,7 +78,7 @@ fi
     -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
     --volume "${FLATPAK_REFS_DIR}":/output \
     --volume "${TEMP_FLATPAK_INSTALL_DIR}":/temp_flatpak_install_dir \
-    "localhost/${tag}:${version}" /temp_flatpak_install_dir/script.sh
+    "ghcr.io/ublue-os/${tag}:${version}" /temp_flatpak_install_dir/script.sh
 
 # Remove Temp Directory
 if [[ -f /.dockerenv ]]; then
@@ -91,7 +88,6 @@ rm -rf "${TEMP_FLATPAK_INSTALL_DIR}"
 
 # Make ISO
 ${container_mgr} run --rm --privileged --volume "${workspace}":/build-container-installer/build  \
-    --volume "${workspace}"/scripts/files/build-iso-makefile-patch:/build-container-intaller/container/Makefile \
     ghcr.io/jasonn3/build-container-installer:latest \
     ARCH="x86_64" \
     ENABLE_CACHE_DNF="false" \
@@ -100,9 +96,9 @@ ${container_mgr} run --rm --privileged --volume "${workspace}":/build-container-
     ENROLLMENT_PASSWORD="ublue-os" \
     FLATPAK_REMOTE_REFS_DIR="${flatpak_dir_shortname}" \
     IMAGE_NAME="${tag}" \
-    IMAGE_REPO="localhost" \
+    IMAGE_REPO="ghcr.io/ublue-os" \
     IMAGE_TAG="${version}" \
-    ISO_NAME="${tag}-${version}.iso" \
+    ISO_NAME="${tag}-${version}-ghcr.iso" \
     SECURE_BOOT_KEY_URL='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der' \
     VARIANT="${variant}" \
     VERSION="${version}"

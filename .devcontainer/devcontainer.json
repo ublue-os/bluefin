@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json.
 {
 	"name": "Bluefin-devcontainer",
-	"image": "mcr.microsoft.com/devcontainers/universal:latest",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -13,18 +13,15 @@
 			]
 		}
 	},
+	"runArgs": ["--init"],
+	"remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" },
+	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
 	"securityOpt": [
 		"label=disable"
 	],
-	// --userns=keep-id is necessary for Podman
-	"runArgs": [
-		"--userns=keep-id"
-	],
-	// privileged w/ Docker can be used for making an ISO inside the devcontainer.
-	// Disable if not used.
-	// "privileged": true,
 	"features": {
 		"ghcr.io/guiyomh/features/just:0": {},
-		"ghcr.io/lukewiwa/features/shellcheck:0": {}
+		"ghcr.io/lukewiwa/features/shellcheck:0": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	}
 }

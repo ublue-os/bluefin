@@ -22,17 +22,25 @@ build image="" target="" version="":
 run image="" target="" version="":
 	@{{project_root}}/scripts/run-image.sh {{image}} {{target}} {{version}}
 
-# Run Booted Image Session; User = $USER, Password = ublue-os
+# Run Booted Image Session
 run-booted image="" target="" version="":
 	@{{project_root}}/scripts/run-booted.sh {{image}} {{target}} {{version}}
 
-# Create ISO; DevContainer requires Docker. Host requires Root Privileges
+# Create ISO from local dev build image
 build-iso image="" target="" version="":
 	@{{project_root}}/scripts/build-iso.sh {{image}} {{target}} {{version}}
 
-# Remove built images, build files, and ISOs
+# Create ISO from currenct ghcr image
+build-iso-ghcr image="" target="" version="":
+	@{{project_root}}/scripts/build-iso-ghcr.sh {{image}} {{target}} {{version}}
+
+# Clean Directory. Remove ISOs and Build Files
 clean:
-	@{{project_root}}/scripts/cleanup.sh
+	@{{project_root}}/scripts/cleanup-dir.sh
+
+# Remove built images
+clean-images:
+	@{{project_root}}/scripts/cleanup-images.sh
 
 # List Built Images
 list-images:
