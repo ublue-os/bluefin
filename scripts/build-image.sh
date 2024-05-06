@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 set -eo pipefail
+if [[ -z ${project_root} ]]; then
+    project_root=$(git rev-parse --show-toplevel)
+fi
 
 # Get Inputs
 image=$1
@@ -21,6 +24,9 @@ $container_mgr build -f Containerfile \
     --build-arg="BASE_IMAGE_NAME=${base_image}" \
     --build-arg="SOURCE_IMAGE=${base_image}-main" \
     --build-arg="FEDORA_MAJOR_VERSION=${version}" \
+    --build-arg="IMAGE_NAME=${tag}" \
+    --build-arg="IMAGE_FLAVOR=main" \
+    --build-arg="IMAGE_VENDOR=localhost" \
     --tag localhost/"${tag}":"${version}" \
     --target "${target}" \
     "${project_root}"

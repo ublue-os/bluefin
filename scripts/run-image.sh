@@ -1,4 +1,7 @@
 #!/usr/bin/bash
+if [[ -z ${project_root} ]]; then
+    project_root=$(git rev-parse --show-toplevel)
+fi
 set -eo pipefail
 
 # Get Inputs

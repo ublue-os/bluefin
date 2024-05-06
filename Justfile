@@ -2,6 +2,8 @@ export project_root := `git rev-parse --show-toplevel`
 export gts := "39"
 export latest := "40"
 
+alias run := run-booted-guest
+
 _default:
 	@just help
 
@@ -19,12 +21,16 @@ build image="" target="" version="":
 	@{{project_root}}/scripts/build-image.sh {{image}} {{target}} {{version}}
 
 # Run image
-run image="" target="" version="":
+run-container image="" target="" version="":
 	@{{project_root}}/scripts/run-image.sh {{image}} {{target}} {{version}}
 
-# Run Booted Image Session
-run-booted image="" target="" version="":
-	@{{project_root}}/scripts/run-booted.sh {{image}} {{target}} {{version}}
+# Run Booted Image Session w/ Guest
+run-booted-guest image="" target="" version="":
+	@{{project_root}}/scripts/run-booted-guest.sh {{image}} {{target}} {{version}}
+
+# Run Booted Image Session w/ mounted in $USER and $HOME
+run-booted-home image="" target="" version="":
+	@{{project_root}}/scripts/run-booted-home.sh {{image}} {{target}} {{version}}
 
 # Create ISO from local dev build image
 build-iso image="" target="" version="":
@@ -55,8 +61,8 @@ help:
 	echo "You can run dev images either in 'booted like' setup with 'just run-booted'   "
 	echo "Or in a more stripped down version with 'just run'                            "
 	echo "Specify which image you wish to build and run by name.                        "
-	echo "Example: 'just run aurora' -> runs aurora without systemd                     "
-	echo "Example: 'just run-booted bluefin-dx' -> runs bluefin-dx with systemd         "
+	echo "Example: 'just run-container aurora' -> runs aurora without systemd           "
+	echo "Example: 'just run bluefin-dx' -> runs bluefin-dx with systemd                "
 	echo "                                                                              "
 	echo "Helper scripts are in 'project_root/scripts'.                                 "
 	echo "                                                                              "
@@ -66,20 +72,20 @@ help:
 	echo "                                                                              "
 	just --list
 	
-# Run Bluefin - Build if not already built
-bluefin: (run "bluefin" "base" "{{gts}}")
+# Build Bluefin
+bluefin: (build "bluefin" "base" "{{gts}}")
 
-# Run Bluefin-DX - Build if not already built
-bluefin-dx: (run "bluefin" "dx" "{{gts}}")
+# Build Bluefin-DX
+bluefin-dx: (build "bluefin" "dx" "{{gts}}")
 
-# Run Bluefin Latest - Build if not already built
-bluefin-latest: (run "bluefin" "base" "{{latest}}")
+# Build Bluefin Latest
+bluefin-latest: (build "bluefin" "base" "{{latest}}")
 
-# Run Bluefin-DX Latest - Build if not already built
-bluefin-dx-latest: (run "bluefin" "dx" "{{latest}}")
+# Build Bluefin-DX Latest
+bluefin-dx-latest: (build "bluefin" "dx" "{{latest}}")
 
-# Run Aurora - Build if not already built
-aurora: (run "aurora" "base" "{{latest}}")
+# Build Aurora
+aurora: (build "aurora" "base" "{{latest}}")
 
-# Run Aurora-DX - Build if not already built
-aurora-dx: (run "aurora" "dx" "{{latest}}")
+# Builed Aurora-DX
+aurora-dx: (build "aurora" "dx" "{{latest}}")
