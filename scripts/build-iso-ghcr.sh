@@ -72,13 +72,15 @@ if [[ -f /.dockerenv ]]; then
 fi
 
 # Generate Flatpak Dependency List
-"${container_mgr}" run --rm --privileged \
-    --entrypoint bash \
-    -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak \
-    -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
-    --volume "${FLATPAK_REFS_DIR}":/output \
-    --volume "${TEMP_FLATPAK_INSTALL_DIR}":/temp_flatpak_install_dir \
-    "ghcr.io/ublue-os/${tag}:${version}" /temp_flatpak_install_dir/script.sh
+if [[ ! -f ${project_root}/${flatpak_dir_shortname}/flatpaks_with_deps ]]; then
+    "${container_mgr}" run --rm --privileged \
+        --entrypoint bash \
+        -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak \
+        -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
+        --volume "${FLATPAK_REFS_DIR}":/output \
+        --volume "${TEMP_FLATPAK_INSTALL_DIR}":/temp_flatpak_install_dir \
+        "ghcr.io/ublue-os/${tag}:${version}" /temp_flatpak_install_dir/script.sh
+fi
 
 # Remove Temp Directory
 if [[ -f /.dockerenv ]]; then
