@@ -59,15 +59,6 @@ run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/rtkit-daemon.service"
 run_cmd="${run_cmd} -v /var/log/journal"
 run_cmd="${run_cmd} -v /sys/fs/selinux"
 
-# Set workspace variable
-workspace=${project_root}
-if [[ -f /.dockerenv ]]; then
-    workspace=${LOCAL_WORKSPACE_FOLDER}
-fi
-workspace_files=${workspace}/scripts/files
-# Set Hostname
-run_cmd="{run_cmd} -v ${workspace_files}/etc/hostname:/etc/hostname"
-
 # Boot the container
 #shellcheck disable=SC2086
 "${container_mgr}" $run_cmd localhost/"${tag}":"${version}" /usr/lib/systemd/systemd rhgb --system 
