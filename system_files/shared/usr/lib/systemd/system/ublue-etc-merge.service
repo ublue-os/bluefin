@@ -1,0 +1,16 @@
+[Unit]
+Description=Merge /etc files
+After=local-fs.target
+Before=ublue-guest-user.service
+ConditionVirtualization=yes
+ConditionPathExists=!/run/ostree-booted
+ConditionPathExists=!/etc/.%N.stamp
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c "for i in /usr/etc/*; do cp -r -n $i /etc; done"
+ExecStart=/usr/bin/systemctl restart dconf-update.service
+ExecStart=/usr/bin/touch /etc/.%N.stamp
+
+[Install]
+WantedBy=multi-user.target default.target
