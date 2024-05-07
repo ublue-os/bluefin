@@ -10,8 +10,9 @@ fi
 . "${project_root}/scripts/common-build-iso.sh"
 
 # Make ISO
-${container_mgr} run --rm --privileged --volume "${workspace}":/build-container-installer/build  \
+${container_mgr} run --rm --privileged  \
     --volume "${workspace}"/scripts/files/build-iso-makefile-patch:/build-container-intaller/container/Makefile \
+    --volume "${workspace}":/build-container-installer/build  \
     ghcr.io/jasonn3/build-container-installer:latest \
     ARCH="x86_64" \
     ENABLE_CACHE_DNF="false" \
