@@ -28,7 +28,7 @@ if "${container_mgr}" info | grep Root | grep -q /home; then
 fi
 
 # Check to see if image exists, build it if it doesn't
-ID=$(${container_mgr} images --filter reference=localhost/"${tag}":"${version}" --format "{{.ID}}")
+ID=$(${container_mgr} images --filter reference=localhost/"${tag}:${version}" --format "{{.ID}}")
 if [[ -z ${ID} ]]; then
     just build "${image}" "${target}" "${version}"
 fi
@@ -43,24 +43,19 @@ workspace_files=${workspace}/scripts/files
 # Start building run command
 run_cmd+=(run -it --rm --privileged)
 
-# Sharable /tmp
-run_cmd+=(-v /tmp:/tmp:rslave)
-
 # Mount in $HOME.
 run_cmd+=(-v /var/home)
 mkdir -p "${project_root}"/scripts/files/home/ublue-os
 if [[ -n "${SUDO_USER}" ]]; then
     chown "${SUDO_USER}:${SUDO_GID}" "${project_root}"/scripts/files/home/ublue-os
 fi
-run_cmd+=(-v ${workspace_files}/home/ublue-os:/var/home/ublue-os:rslave)
+run_cmd+=(-v "${workspace_files}"/home/ublue-os:/var/home/ublue-os:rslave)
 
-# Mount in VAR
-run_cmd+=(-v /var/lib/gdm)
-run_cmd+=(-v /var/lib/sddm)
-run_cmd+=(-v /var/roothome)
-run_cmd+=(-v /var:/var:rslave)
+# Mount in System Flatpaks and TMP
+run_cmd+=(-v /tmp:/tmp:rslave)
+run_cmd+=(-v /var/lib/flatpak:/var/lib/flatpak:rslave)
 
-# Blank out items
+# Blank out items SystemD units / don't mess with journal/selinux
 run_cmd+=(-v /dev/null:/usr/lib/systemd/system/auditd.service)
 run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.path)
 run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.service)
@@ -86,7 +81,7 @@ if [[ -n ${HOST_NETWORK} ]]; then
 fi
 
 # Boot the container
-"$container_mgr" "${run_cmd[@]}" "localhost/${tag}:${version}" /usr/lib/systemd/systemd rhgb --system
+"$container_mgr" "${run_cmd[@]}" "localhost/${tag}:${version}" /sbin/init 
 
 # Clean Up
 if [[ -z ${project_root} ]]; then

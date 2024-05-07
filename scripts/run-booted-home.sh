@@ -41,11 +41,9 @@ run_cmd+=(-v /etc/passwd:/etc/passwd:ro)
 run_cmd+=(-v /etc/group:/etc/group:ro)
 run_cmd+=(-v /etc/shadow:/etc/shadow:ro)
 
-# Mount in VAR
-run_cmd+=(-v /var/lib/gdm)
-run_cmd+=(-v /var/lib/sddm)
-run_cmd+=(-v /var/roothome)
-run_cmd+=(-v /var:/var:rslave)
+# Mount in System Flatpaks and TMP
+run_cmd+=(-v /tmp:/tmp:rslave)
+run_cmd+=(-v /var/lib/flatpak:/var/lib/flatpak:rslave)
 
 # Mount in $HOME.
 home_location=/home
@@ -53,9 +51,6 @@ if [[ -L /home ]]; then
     home_location=/$(readlink /home)
 fi
 run_cmd+=(-v "${home_location}":/var/home:rslave)
-
-# Sharable /tmp
-run_cmd+=(-v /tmp:/tmp:rslave)
 
 # Blank out items
 run_cmd+=(-v /dev/null:/usr/lib/systemd/system/auditd.service)
@@ -75,6 +70,6 @@ if [[ -n ${HOST_NETWORK} ]]; then
 fi
 
 # Boot the container
-"$container_mgr" "${run_cmd[@]}" "localhost/${tag}:${version}" /usr/lib/systemd/systemd rhgb --system 
+"$container_mgr" "${run_cmd[@]}" "localhost/${tag}:${version}" /sbin/init
 
 exit 0
