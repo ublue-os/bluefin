@@ -9,7 +9,7 @@ ConditionPathExists=!/var/home/ublue-os/.%N.stamp
 [Service]
 User=ublue-os
 Type=oneshot
-ExecStart=/usr/bin/cp -r /etc/skel/* /var/home/ublue-os/
+ExecStart=/usr/bin/cp -r /etc/skel/.* /var/home/ublue-os/
 ExecStart=-/usr/bin/dconf load / < /usr/etc/dconf/db/local.d/01-ublue
 ExecStart=-/usr/bin/dconf load / < /usr/etc/dconf/db/local.d/01-ptyxis
 ExecStart=-/usr/bin/dconf load / < /usr/etc/dconf/db/local.d/02-bluefin-folders

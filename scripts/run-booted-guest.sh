@@ -14,6 +14,9 @@ version=$3
 
 # Get items
 container_mgr=$(just _container_mgr)
+tag=$(just _tag "${image}" "${target}")
+
+# Graphical Warning
 if "${container_mgr}" info | grep Root | grep -q /home; then
     echo "Cannot run Graphical Session wiht rootless container..."
     secs=5
@@ -23,7 +26,6 @@ if "${container_mgr}" info | grep Root | grep -q /home; then
         sleep 1
     done
 fi
-tag=$(just _tag "${image}" "${target}")
 
 # Check to see if image exists, build it if it doesn't
 ID=$(${container_mgr} images --filter reference=localhost/"${tag}":"${version}" --format "{{.ID}}")
@@ -39,40 +41,55 @@ fi
 workspace_files=${workspace}/scripts/files
 
 # Start building run command
-run_cmd="run -it --rm --privileged"
+run_cmd+=(run -it --rm --privileged)
 
 # Sharable /tmp
-run_cmd="${run_cmd} -v /tmp:/tmp:rslave"
+run_cmd+=(-v /tmp:/tmp:rslave)
 
 # Mount in $HOME.
-run_cmd="${run_cmd} -v /var/home"
+run_cmd+=(-v /var/home)
 mkdir -p "${project_root}"/scripts/files/home/ublue-os
-run_cmd="${run_cmd} -v ${workspace_files}/home/ublue-os:/var/home/ublue-os:rslave"
+if [[ -n "${SUDO_USER}" ]]; then
+    chown "${SUDO_USER}:${SUDO_GID}" "${project_root}"/scripts/files/home/ublue-os
+fi
+run_cmd+=(-v ${workspace_files}/home/ublue-os:/var/home/ublue-os:rslave)
 
 # Mount in VAR
-run_cmd="${run_cmd} -v /var:/var:rslave"
+run_cmd+=(-v /var/lib/gdm)
+run_cmd+=(-v /var/lib/sddm)
+run_cmd+=(-v /var/roothome)
+run_cmd+=(-v /var:/var:rslave)
 
 # Blank out items
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/auditd.service"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/cups.path"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/cups.service"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/cups.socket"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/rtkit-daemon.service"
-run_cmd="${run_cmd} -v /var/log/journal"
-run_cmd="${run_cmd} -v /sys/fs/selinux"
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/auditd.service)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.path)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.service)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.socket)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/rtkit-daemon.service)
+run_cmd+=(-v /var/log/journal)
+run_cmd+=(-v /sys/fs/selinux)
 
 # Mount in passwd/group for user account to work
-run_cmd="${run_cmd} -v ${workspace_files}/etc/passwd:/etc/passwd:ro -v ${workspace_files}/etc/group:/etc/group:ro -v ${workspace_files}/etc/shadow:/etc/shadow:ro"
+run_cmd+=(-v "${workspace_files}"/etc/passwd:/etc/passwd:ro)
+run_cmd+=(-v "${workspace_files}"/etc/group:/etc/group:ro)
+run_cmd+=(-v "${workspace_files}"/etc/shadow:/etc/shadow:ro)
 
 # Set Hostname
-run_cmd="{run_cmd} -v ${workspace_files}/etc/hostname:/etc/hostname"
+run_cmd+=(-v "${workspace_files}"/etc/hostname:/etc/hostname)
+
+# Host Network Option
+if [[ -n ${HOST_NETWORK} ]]; then
+    run_cmd+=(--network host)
+    run_cmd+=(-v /etc/NetworkManager:/etc/NetworkManager)
+    run_cmd+=(-v /etc/hosts:/etc/hosts)
+    run_cmd+=(-v /etc/resolv.conf:/etc/resolv.conf)
+fi
 
 # Boot the container
-#shellcheck disable=SC2086
-"${container_mgr}" $run_cmd localhost/"${tag}":"${version}" /usr/lib/systemd/systemd rhgb --system 
+"$container_mgr" "${run_cmd[@]}" "localhost/${tag}:${version}" /usr/lib/systemd/systemd rhgb --system
 
 # Clean Up
 if [[ -z ${project_root} ]]; then
     project_root=$(git rev-parse --show-toplevel)
 fi
-rm -rf "${project_root}/scripts/files/home/ublue-os/*"
+rm -rf "${project_root}/scripts/files/home/ublue-os"

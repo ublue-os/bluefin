@@ -14,8 +14,11 @@ version=$3
 
 # Get items
 container_mgr=$(just _container_mgr)
+tag=$(just _tag "${image}" "${target}")
+
+# Graphical Warning
 if "${container_mgr}" info | grep Root | grep -q /home; then
-    echo "Cannot run Graphical Session wiht rootless container..."
+    echo "Cannot run Graphical Session with rootless container..."
     secs=5
     while [ $secs -gt 0 ]
     do
@@ -23,44 +26,55 @@ if "${container_mgr}" info | grep Root | grep -q /home; then
         sleep 1
     done
 fi
-tag=$(just _tag "${image}" "${target}")
 
 # Check to see if image exists, build it if it doesn't
-ID=$(${container_mgr} images --filter reference=localhost/"${tag}":"${version}" --format "{{.ID}}")
+ID=$(${container_mgr} images --filter reference=localhost/"${tag}:${version}" --format "{{.ID}}")
 if [[ -z ${ID} ]]; then
     just build "${image}" "${target}" "${version}"
 fi
 
 # Start building run command
-run_cmd="run -it --rm --privileged"
+run_cmd+=(run -it --rm --privileged)
 
 # Mount in passwd/group for user account to work
-run_cmd="${run_cmd} -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/shadow:/etc/shadow:ro"
+run_cmd+=(-v /etc/passwd:/etc/passwd:ro)
+run_cmd+=(-v /etc/group:/etc/group:ro)
+run_cmd+=(-v /etc/shadow:/etc/shadow:ro)
 
 # Mount in VAR
-run_cmd="${run_cmd} -v /var:/var:rslave"
+run_cmd+=(-v /var/lib/gdm)
+run_cmd+=(-v /var/lib/sddm)
+run_cmd+=(-v /var/roothome)
+run_cmd+=(-v /var:/var:rslave)
 
 # Mount in $HOME.
 home_location=/home
 if [[ -L /home ]]; then
     home_location=/$(readlink /home)
 fi
-run_cmd="${run_cmd} -v ${home_location}:/var/home:rslave"
+run_cmd+=(-v "${home_location}":/var/home:rslave)
 
 # Sharable /tmp
-run_cmd="${run_cmd} -v /tmp:/tmp:rslave"
+run_cmd+=(-v /tmp:/tmp:rslave)
 
 # Blank out items
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/auditd.service"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/cups.path"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/cups.service"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/cups.socket"
-run_cmd="${run_cmd} -v /dev/null:/usr/lib/systemd/system/rtkit-daemon.service"
-run_cmd="${run_cmd} -v /var/log/journal"
-run_cmd="${run_cmd} -v /sys/fs/selinux"
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/auditd.service)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.path)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.service)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/cups.socket)
+run_cmd+=(-v /dev/null:/usr/lib/systemd/system/rtkit-daemon.service)
+run_cmd+=(-v /var/log/journal)
+run_cmd+=(-v /sys/fs/selinux)
+
+# Host Network Option
+if [[ -n ${HOST_NETWORK} ]]; then
+    run_cmd+=(--network host)
+    run_cmd+=(-v /etc/NetworkManager:/etc/NetworkManager)
+    run_cmd+=(-v /etc/hosts:/etc/hosts)
+    run_cmd+=(-v /etc/resolv.conf:/etc/resolv.conf)
+fi
 
 # Boot the container
-#shellcheck disable=SC2086
-"${container_mgr}" $run_cmd localhost/"${tag}":"${version}" /usr/lib/systemd/systemd rhgb --system 
+"$container_mgr" "${run_cmd[@]}" "localhost/${tag}:${version}" /usr/lib/systemd/systemd rhgb --system 
 
 exit 0
