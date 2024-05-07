@@ -38,8 +38,9 @@
 				"tmux",
 				"usbmuxd",
 				"wireguard-tools",
-				"xprop",
 				"wl-clipboard", 
+				"xprop",
+				"xwaylandvideobridge",
 				"zsh"
 			],
 			"silverblue": [
