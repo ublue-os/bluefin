@@ -74,7 +74,7 @@ if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
       fi
       if [[ ! -f /etc/udev/rules.d/20-suspend-fixes.rules ]]; then
         echo 'Fixing suspend issue'
-        echo "ACTION==\"add\", SUBSYSTEM==\"serio\", DRIVERS==\"atkbd\", ATTR{power/wakeup}=\"disabled\"" > /etc/udev/rules.d/20-suspend-fixes.rules'
+        echo "ACTION==\"add\", SUBSYSTEM==\"serio\", DRIVERS==\"atkbd\", ATTR{power/wakeup}=\"disabled\"" > /etc/udev/rules.d/20-suspend-fixes.rules
       fi
     fi
   fi
