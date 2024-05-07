@@ -74,7 +74,8 @@ if [[ "${BASE_IMAGE_NAME}" = "silverblue" && "${FEDORA_MAJOR_VERSION}" -gt "39" 
     rpm-ostree override replace \
     --experimental \
     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        mutter
+        mutter \
+        mutter-common
 fi
 
 # Switcheroo patch
