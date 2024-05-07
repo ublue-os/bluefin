@@ -32,10 +32,10 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor:
-          # - main
+          - main
           - nvidia
         base_name:
-          # - ${{ inputs.brand_name }}
+          - ${{ inputs.brand_name }}
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
@@ -48,7 +48,10 @@ jobs:
             image_flavor: surface
           - fedora_version: 38
             image_flavor: surface-nvidia
-
+          - fedora_version: 39
+            image_flavor: main            
+          - fedora_version: 40
+            image_flavor: main  
     steps:
       - name: Checkout
         uses: actions/checkout@v4
