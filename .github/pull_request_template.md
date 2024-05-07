@@ -1,4 +1,4 @@
-<!---
+<!--
 
 ## Thank you for contributing to the Universal Blue project!
 
