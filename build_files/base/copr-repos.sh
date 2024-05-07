@@ -69,6 +69,15 @@ elif [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
         kf5-kio-gui
 fi
 
+# GNOME Triple Buffering
+if [[ "${BASE_IMAGE_NAME}" = "silverblue" && "${FEDORA_MAJOR_VERSION}" -gt "39" ]]; then
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        mutter \
+        mutter-common
+fi
+
 # Switcheroo patch
 rpm-ostree override replace \
     --experimental \
