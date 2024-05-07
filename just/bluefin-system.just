@@ -268,3 +268,7 @@ install-system-flatpaks:
     fi
     FLATPAK_LIST="$(curl https://raw.githubusercontent.com/ublue-os/bluefin/main/${FLATPAKS} | tr '\n' ' ')"
     flatpak --system -y install ${FLATPAK_LIST}
+
+# Configure grub bootmenu visibility
+configure-grub:
+    /usr/libexec/configure-grub.sh
