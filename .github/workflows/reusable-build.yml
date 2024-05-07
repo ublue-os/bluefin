@@ -32,10 +32,10 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor:
-          - main
+          # - main
           - nvidia
         base_name:
-          - ${{ inputs.brand_name }}
+          # - ${{ inputs.brand_name }}
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
