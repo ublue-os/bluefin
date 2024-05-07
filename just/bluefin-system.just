@@ -272,3 +272,9 @@ install-system-flatpaks:
 # Configure grub bootmenu visibility
 configure-grub:
     /usr/libexec/configure-grub.sh
+
+update-ng:
+    echo "Note: This command doesn't work if you have locally layered packages" 
+    sudo bootc upgrade
+    flatpak update -y
+    brew upgrade
