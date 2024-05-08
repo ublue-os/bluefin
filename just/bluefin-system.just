@@ -271,4 +271,10 @@ install-system-flatpaks:
 
 # Configure grub bootmenu visibility
 configure-grub:
-    /usr/libexec/configure-grub.sh
+    @/usr/libexec/configure-grub.sh
+
+# Rebase assistant
+rebase-helper:
+    @/usr/bin/ublue-rollback-helper
+
+alias rollback-helper := rebase-helper
