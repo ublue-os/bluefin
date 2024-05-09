@@ -33,6 +33,7 @@
 				"samba-winbind-clients",
 				"samba-winbind-modules",
 				"samba",
+				"sl",
 				"solaar",
 				"stress-ng",
 				"tailscale",
