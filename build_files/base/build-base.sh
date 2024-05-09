@@ -16,4 +16,5 @@ set -ouex pipefail
 . /tmp/build/aurora-changes.sh
 . /tmp/build/branding.sh
 . /tmp/build/initramfs.sh
+. /tmp/build/bootc.sh
 . /tmp/build/cleanup.sh
