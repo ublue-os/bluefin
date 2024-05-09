@@ -4,6 +4,7 @@
 			"all": [
 				"bash-color-prompt",
 				"bcache-tools",
+				"bootc",
 				"evtest",
 				"epson-inkjet-printer-escpr",
 				"epson-inkjet-printer-escpr2",
