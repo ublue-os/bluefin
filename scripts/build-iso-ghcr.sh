@@ -12,6 +12,7 @@ fi
 # Make ISO
 ${container_mgr} run --rm --privileged \
     --volume "${workspace}"/scripts/files/output:/build-container-installer/build  \
+    --volume "${workspace}/${flatpak_dir_shortname}":"/build-container-installer/${flatpak_dir_shortname}" \
     ghcr.io/jasonn3/build-container-installer:latest \
     ARCH="x86_64" \
     ENABLE_CACHE_DNF="false" \
