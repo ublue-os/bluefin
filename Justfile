@@ -36,6 +36,10 @@ run-booted-home image="" target="" version="":
 build-iso image="" target="" version="":
 	@{{project_root}}/scripts/build-iso.sh {{image}} {{target}} {{version}}
 
+# Run ISO from local dev build image
+run-iso image="" target="" version="":
+	@{{project_root}}/scripts/run-iso.sh {{image}} {{target}} {{version}}
+
 # Create ISO from currenct ghcr image
 build-iso-ghcr image="" target="" version="":
 	@{{project_root}}/scripts/build-iso-ghcr.sh {{image}} {{target}} {{version}}

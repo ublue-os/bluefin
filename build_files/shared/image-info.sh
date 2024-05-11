@@ -9,6 +9,9 @@ case $FEDORA_MAJOR_VERSION in
   39)
     IMAGE_TAG="gts"
     ;;
+  40)
+    IMAGE_TAG="latest"
+    ;;
   *)
     IMAGE_TAG="$FEDORA_MAJOR_VERSION"
     ;;
