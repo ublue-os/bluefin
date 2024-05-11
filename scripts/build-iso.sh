@@ -19,6 +19,7 @@ fi
 ${container_mgr} run --rm --privileged  \
     --volume "${api_socket}":/var/run/docker.sock \
     --volume "${workspace}"/scripts/files/build-iso-makefile-patch:/build-container-installer/container/Makefile \
+    --volume "${workspace}/${flatpak_dir_shortname}":"/build-container-installer/${flatpak_dir_shortname}" \
     --volume "${workspace}"/scripts/files/output:/build-container-installer/build  \
     ghcr.io/jasonn3/build-container-installer:latest \
     ARCH="x86_64" \
