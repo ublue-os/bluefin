@@ -9,9 +9,15 @@ fi
 # shellcheck disable=SC1091
 . "${project_root}/scripts/common-build-iso.sh"
 
+if [[ ${container_mgr} =~ "podman" ]]; then
+    api_socket=/run/podman/podman.sock
+elif [[ ${container_mgr} =~ "docker" ]]; then
+    api_socket=/var/run/docker.sock
+fi
+
 # Make ISO
 ${container_mgr} run --rm --privileged  \
-    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --volume "${api_socket}":/var/run/docker.sock \
     --volume "${workspace}"/scripts/files/build-iso-makefile-patch:/build-container-installer/container/Makefile \
     --volume "${workspace}"/scripts/files/output:/build-container-installer/build  \
     ghcr.io/jasonn3/build-container-installer:latest \
