@@ -29,7 +29,9 @@ fi
 
 ${container_mgr} run --rm --cap-add NET_ADMIN \
     --publish 127.0.0.1:8006:8006 \
-    --env "DISK_SIZE=50G" \
+    --env "CPU_CORES=2" \
+    --env "RAM_SIZE=4G" \
+    --env "DISK_SIZE=64G" \
     --env "BOOT_MODE=uefi" \
     --device=/dev/kvm \
     --volume "${workspace}/scripts/files/output/${tag}-${version}.iso":/boot.iso \
