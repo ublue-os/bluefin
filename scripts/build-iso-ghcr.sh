@@ -27,3 +27,5 @@ ${container_mgr} run --rm --privileged \
     SECURE_BOOT_KEY_URL='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der' \
     VARIANT="${variant}" \
     VERSION="${version}"
+
+sudo chown -R "${USER}:${USER}" "${project_root}/scripts/files/output"

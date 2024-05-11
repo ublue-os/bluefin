@@ -107,5 +107,5 @@ fi
 rm -rf "${TEMP_FLATPAK_INSTALL_DIR}"
 
 # Remove old ISO if present
-rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso"
-rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso-CHECKSUM"
+sudo rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso"
+sudo rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso-CHECKSUM"
