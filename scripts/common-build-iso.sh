@@ -105,3 +105,7 @@ if [[ -f /.dockerenv ]]; then
     TEMP_FLATPAK_INSTALL_DIR=${project_root}/$(echo "${TEMP_FLATPAK_INSTALL_DIR}" | rev | cut -d / -f 1 | rev)
 fi
 rm -rf "${TEMP_FLATPAK_INSTALL_DIR}"
+
+# Remove old ISO if present
+rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso"
+rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso-CHECKSUM"

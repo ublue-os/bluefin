@@ -9,10 +9,18 @@ fi
 # shellcheck disable=SC1091
 . "${project_root}/scripts/common-build-iso.sh"
 
+if [[ ${container_mgr} =~ "podman" ]]; then
+    api_socket=/run/podman/podman.sock
+elif [[ ${container_mgr} =~ "docker" ]]; then
+    api_socket=/var/run/docker.sock
+fi
+
 # Make ISO
 ${container_mgr} run --rm --privileged  \
-    --volume "${workspace}"/scripts/files/build-iso-makefile-patch:/build-container-intaller/container/Makefile \
-    --volume "${workspace}":/build-container-installer/build  \
+    --volume "${api_socket}":/var/run/docker.sock \
+    --volume "${workspace}"/scripts/files/build-iso-makefile-patch:/build-container-installer/container/Makefile \
+    --volume "${workspace}/${flatpak_dir_shortname}":"/build-container-installer/${flatpak_dir_shortname}" \
+    --volume "${workspace}"/scripts/files/output:/build-container-installer/build  \
     ghcr.io/jasonn3/build-container-installer:latest \
     ARCH="x86_64" \
     ENABLE_CACHE_DNF="false" \
@@ -23,7 +31,7 @@ ${container_mgr} run --rm --privileged  \
     IMAGE_NAME="${tag}" \
     IMAGE_REPO="localhost" \
     IMAGE_TAG="${version}" \
-    ISO_NAME="${tag}-${version}.iso" \
+    ISO_NAME="build/${tag}-${version}.iso" \
     SECURE_BOOT_KEY_URL='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der' \
     VARIANT="${variant}" \
     VERSION="${version}"

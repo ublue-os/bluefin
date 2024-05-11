@@ -10,7 +10,9 @@ fi
 . "${project_root}/scripts/common-build-iso.sh"
 
 # Make ISO
-${container_mgr} run --rm --privileged --volume "${workspace}":/build-container-installer/build  \
+${container_mgr} run --rm --privileged \
+    --volume "${workspace}"/scripts/files/output:/build-container-installer/build  \
+    --volume "${workspace}/${flatpak_dir_shortname}":"/build-container-installer/${flatpak_dir_shortname}" \
     ghcr.io/jasonn3/build-container-installer:latest \
     ARCH="x86_64" \
     ENABLE_CACHE_DNF="false" \
@@ -21,7 +23,7 @@ ${container_mgr} run --rm --privileged --volume "${workspace}":/build-container-
     IMAGE_NAME="${ghcr_tag}" \
     IMAGE_REPO="ghcr.io/ublue-os" \
     IMAGE_TAG="${version}" \
-    ISO_NAME="${ghcr_tag}-${version}-ghcr.iso" \
+    ISO_NAME="build/${ghcr_tag}-${version}-ghcr.iso" \
     SECURE_BOOT_KEY_URL='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der' \
     VARIANT="${variant}" \
     VERSION="${version}"
