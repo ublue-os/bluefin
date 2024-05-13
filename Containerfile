@@ -32,7 +32,7 @@ COPY /system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-upda
 # Copy Bluefin CLI packages
 COPY --from=bluefin-cli /usr/bin/atuin /usr/bin/atuin
 COPY --from=bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
-COPY --from=bluefin-cli /home/homebrew /usr/share/homebrew
+# COPY --from=bluefin-cli /home/homebrew /usr/share/homebrew
 # COPY ublue kmods, add needed negativo17 repo and then immediately disable due to incompatibility with RPMFusion
 COPY --from=akmods /rpms /tmp/akmods-rpms
 

@@ -9,6 +9,7 @@ set -ouex pipefail
 . /tmp/build/nvidia.sh
 . /tmp/build/image-info.sh
 . /tmp/build/fetch-install.sh
+. /tmp/build/brew.sh
 . /tmp/build/fetch-quadlets.sh
 . /tmp/build/font-install.sh
 . /tmp/build/systemd.sh

@@ -5,6 +5,7 @@ After=cleanup-homebrew.service
 After=var-mount.mount
 ConditionPathIsDirectory=%S/homebrew
 ConditionPathIsDirectory=%C/homebrew
+ConditionPathExists=!/var/home/linuxbrew/.linuxbrew
 
 [Mount]
 Type=overlay
