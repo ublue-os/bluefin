@@ -9,6 +9,7 @@ if status --is-interactive
         end
         set -p fish_complete_path /home/linuxbrew/.linuxbrew/share/fish/vendor_completions.d
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    end
     if systemctl --quiet is-active var-home-linuxbrew.mount
         set -gx HOMEBREW_NO_AUTO_UPDATE 1
     end
