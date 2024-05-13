@@ -10,14 +10,14 @@ if [ "x${BASH_VERSION-}" != x -a "x${PS1-}" != x -a "x${BREW_BASH_COMPLETION-}" 
             if ! test -L /home/linuxbrew/.linuxbrew/etc/bash_completion.d/brew; then
                 /home/linuxbrew/.linuxbrew/bin/brew completions link > /dev/null
             fi
-            if test -d /home/linuxbrew/.linuxbrew/etc/bash_completion.d; then
-                for rc in /home/linuxbrew/.linuxbrew/etc/bash_completion.d/*; do
-                    if test -r "$rc"; then
-                    . "$rc"
-                    fi
-                done
-                unset rc
-            fi
+        fi
+        if test -d /home/linuxbrew/.linuxbrew/etc/bash_completion.d; then
+            for rc in /home/linuxbrew/.linuxbrew/etc/bash_completion.d/*; do
+                if test -r "$rc"; then
+                . "$rc"
+                fi
+            done
+            unset rc
         fi
     fi
     BREW_BASH_COMPLETION=1
