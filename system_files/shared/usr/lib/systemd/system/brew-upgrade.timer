@@ -1,8 +1,6 @@
 [Unit]
 Description=Timer for brew upgrade for on image brew
 Wants=network-online.target
-After=local-fs.target
-ConditionPathExists=/home/linuxbrew/.linuxbrew/bin/brew
 
 [Timer]
 OnBootSec=20min
