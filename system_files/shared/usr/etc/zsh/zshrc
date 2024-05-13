@@ -13,19 +13,6 @@
 #
 # zmodload zsh/zprof
 
-# Brew needs to be loaded before compinit is called
-if [[ -o interactive ]] && [[ -d /home/linuxbrew/.linuxbrew ]]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  if type brew &>/dev/null; then
-    if [[ -w /home/linuxbrew/.linuxbrew ]]; then
-      if [[ ! -L "$(brew --prefix)/share/zsh/site-functions/_brew" ]]; then
-        brew completions link
-      fi
-    fi
-    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  fi
-fi
-
 # Load and initialize the completion system ignoring insecure directories with a
 # cache time of 20 hours, so it should almost always regenerate the first time a
 # shell is opened each day.
@@ -207,6 +194,18 @@ colors
 #####################
 # Sourcing
 #####################
+
+# Brew 
+if [[ -o interactive ]] && [[ -d /home/linuxbrew/.linuxbrew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  if type brew &>/dev/null; then
+    if [[ -w /home/linuxbrew/.linuxbrew ]]; then
+      if [[ ! -L "$(brew --prefix)/share/zsh/site-functions/_brew" ]]; then
+        brew completions link
+      fi
+    fi
+  fi
+fi
 
 # Starship
 if type "starship" > /dev/null; then
