@@ -1,4 +1,5 @@
 #!/usr/bin/fish
+#shellcheck disable=all
 if status --is-interactive
     [ -d /home/linuxbrew/.linuxbrew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     if systemctl --quiet is-active var-home-linuxbrew.mount

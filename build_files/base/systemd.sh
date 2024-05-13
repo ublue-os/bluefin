@@ -10,5 +10,8 @@ systemctl enable ublue-update.timer
 systemctl enable ublue-system-setup.service
 systemctl enable ublue-etc-merge.service
 systemctl enable ublue-guest-user.service
+systemctl enable var-home-linuxbrew.mount
+systemctl enable brew-upgrade.timer
+systemctl enable brew-update.timer
 systemctl --global enable ublue-user-setup.service
 systemctl --global enable podman-auto-update.timer
