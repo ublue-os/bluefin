@@ -2,9 +2,6 @@
 
 set -xeou pipefail
 
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh > /tmp/brew.sh
-chmod +x /tmp/brew.sh
-
 # Convince the installer we are in CI
 if [[ ! -f /.dockerenv ]]; then
     touch /.dockerenv
@@ -15,7 +12,7 @@ mkdir -p /var/home
 mkdir -p /var/roothome
 
 # Install brew, Get portable Ruby
-/tmp/brew.sh
+/usr/libexec/brew-install
 /home/linuxbrew/.linuxbrew/bin/brew update
 
 # Copy to image and own by UID 1000
