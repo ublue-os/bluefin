@@ -1,0 +1,14 @@
+[Unit]
+Description=Timer for brew update for mutable brew
+Wants=network-online.target
+After=local-fs.target
+ConditionPathIsMountPoint=!/var/home/linuxbrew
+ConditionPathExists=/home/linuxbrew/.linuxbrew/bin/brew
+
+[Timer]
+OnBootSec=20min
+OnUnitInactiveSec=6h
+Persistent=true
+
+[Install]
+WantedBy=timers.target
