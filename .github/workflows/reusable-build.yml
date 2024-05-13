@@ -24,7 +24,7 @@ concurrency:
 jobs:
   build_container:
     name: image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     continue-on-error: false
     outputs:
       image_full: ${{ steps.generate-outputs.outputs.image }}
