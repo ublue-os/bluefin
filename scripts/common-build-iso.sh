@@ -1,6 +1,9 @@
 #!/usr/bin/bash
 #shellcheck disable=SC2154,SC2034
 
+# shellcheck disable=SC1091
+. "${project_root}/scripts/sudoif.sh"
+
 # Check if inside rootless container
 if [[ -f /run/.containerenv ]]; then
     #shellcheck disable=SC1091
@@ -42,7 +45,9 @@ tag=$(just _tag "${image}" "${target}")
 
 # Don't use -build suffix, flatpak dependency using ghcr
 ghcr_tag=${tag::-6}
-
+# Remove old ISO if present
+sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branch}.iso"
+sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branch}.iso-CHECKSUM"
 
 # Set Base Image
 base_image=$(just _base_image "${image}")
@@ -59,7 +64,7 @@ else
 fi
 
 # Make sure image actually exists, build if it doesn't
-ID=$(${container_mgr} images --filter reference=localhost/"${tag}":"${version}" --format "{{.ID}}")
+ID=$(${container_mgr} images --filter reference=localhost/"${tag}:${version}-${git_branch}" --format "{{.ID}}")
 if [[ -z ${ID} ]]; then
     just build "${image}" "${target}" "${version}"
 fi

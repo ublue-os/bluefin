@@ -7,16 +7,10 @@ fi
 if [[ -z ${git_branch} ]]; then
     git_branch=$(git branch --show-current)
 fi
-# shellcheck disable=SC1091
-. "${project_root}/scripts/sudoif.sh"
 
 # Common Build ISO
 # shellcheck disable=SC1091
 . "${project_root}/scripts/common-build-iso.sh"
-
-# Remove old ISO if present
-sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branch}.iso"
-sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branch}.iso-CHECKSUM"
 
 if [[ ${container_mgr} =~ "podman" ]]; then
     api_socket=/run/podman/podman.sock
