@@ -17,16 +17,16 @@ if "${container_mgr}" info | grep Root | grep -q /home; then
     echo "Cannot build ISO with rootless container..."
     exit 1
 fi
-function work-in-process(){
-    echo "ISO Builder script is a Work In Process"
-    secs=5
-    while [ $secs -gt 0 ]
-    do
-        printf "\r\033[KWaiting %.d seconds." $((secs--))
-        sleep 1
-    done
-}
-work-in-process
+# function work-in-process(){
+#     echo "ISO Builder script is a Work In Process"
+#     secs=5
+#     while [ $secs -gt 0 ]
+#     do
+#         printf "\r\033[KWaiting %.d seconds." $((secs--))
+#         sleep 1
+#     done
+# }
+# work-in-process
 
 # Get Inputs
 image=$1
@@ -97,7 +97,7 @@ if [[ ! -f ${project_root}/${flatpak_dir_shortname}/flatpaks_with_deps ]]; then
         -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
         --volume "${FLATPAK_REFS_DIR}":/output \
         --volume "${TEMP_FLATPAK_INSTALL_DIR}":/temp_flatpak_install_dir \
-        "ghcr.io/ublue-os/${ghcr_tag}:${version}" /temp_flatpak_install_dir/script.sh
+        "ghcr.io/ublue-os/${base_name}-main:${version}" /temp_flatpak_install_dir/script.sh
 fi
 
 # Remove Temp Directory
@@ -105,7 +105,3 @@ if [[ -f /.dockerenv ]]; then
     TEMP_FLATPAK_INSTALL_DIR=${project_root}/$(echo "${TEMP_FLATPAK_INSTALL_DIR}" | rev | cut -d / -f 1 | rev)
 fi
 rm -rf "${TEMP_FLATPAK_INSTALL_DIR}"
-
-# Remove old ISO if present
-rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso"
-rm -f "${project_root}/scripts/files/output/${tag}-${version}.iso-CHECKSUM"

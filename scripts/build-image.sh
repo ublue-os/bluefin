@@ -2,6 +2,9 @@
 set -eo pipefail
 if [[ -z ${project_root} ]]; then
     project_root=$(git rev-parse --show-toplevel)
+fi 
+if [[ -z ${git_branch} ]]; then
+    git_branch=$(git branch --show-current)
 fi
 
 # Get Inputs
@@ -27,6 +30,6 @@ $container_mgr build -f Containerfile \
     --build-arg="IMAGE_NAME=${tag}" \
     --build-arg="IMAGE_FLAVOR=main" \
     --build-arg="IMAGE_VENDOR=localhost" \
-    --tag localhost/"${tag}":"${version}" \
+    --tag localhost/"${tag}:${version}-${git_branch}" \
     --target "${target}" \
     "${project_root}"

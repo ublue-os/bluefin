@@ -1,4 +1,5 @@
 export project_root := `git rev-parse --show-toplevel`
+export git_branch := ` git branch --show-current`
 export gts := "39"
 export latest := "40"
 

@@ -4,10 +4,16 @@
 if [[ -z ${project_root} ]]; then
     project_root=$(git rev-parse --show-toplevel)
 fi
+# shellcheck disable=SC1091
+. "${project_root}/scripts/sudoif.sh"
 
 # Common Build ISO
 # shellcheck disable=SC2154,SC1091
 . "${project_root}/scripts/common-build-iso.sh"
+
+# Remove old ISO if present
+sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-ghcr.iso"
+sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-ghcr.iso-CHECKSUM"
 
 # Make ISO
 ${container_mgr} run --rm --privileged \
