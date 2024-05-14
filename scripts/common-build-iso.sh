@@ -20,16 +20,6 @@ if "${container_mgr}" info | grep Root | grep -q /home; then
     echo "Cannot build ISO with rootless container..."
     exit 1
 fi
-# function work-in-process(){
-#     echo "ISO Builder script is a Work In Process"
-#     secs=5
-#     while [ $secs -gt 0 ]
-#     do
-#         printf "\r\033[KWaiting %.d seconds." $((secs--))
-#         sleep 1
-#     done
-# }
-# work-in-process
 
 # Get Inputs
 image=$1
@@ -45,6 +35,7 @@ tag=$(just _tag "${image}" "${target}")
 
 # Don't use -build suffix, flatpak dependency using ghcr
 ghcr_tag=${tag::-6}
+
 # Remove old ISO if present
 sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branch}.iso"
 sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branch}.iso-CHECKSUM"
@@ -88,7 +79,7 @@ ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v 'org\
 EOF
 
 workspace=${project_root}
-if [[ -f /.dockerenv ]]; then
+if [[ -f /.dockerenv || -f /run/.containerenv ]]; then
     FLATPAK_REFS_DIR=${LOCAL_WORKSPACE_FOLDER}/${flatpak_dir_shortname}
     TEMP_FLATPAK_INSTALL_DIR="${LOCAL_WORKSPACE_FOLDER}/$(echo "${TEMP_FLATPAK_INSTALL_DIR}" | rev | cut -d / -f 1 | rev)"
     workspace=${LOCAL_WORKSPACE_FOLDER}
@@ -102,7 +93,7 @@ if [[ ! -f ${project_root}/${flatpak_dir_shortname}/flatpaks_with_deps ]]; then
         -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
         --volume "${FLATPAK_REFS_DIR}":/output \
         --volume "${TEMP_FLATPAK_INSTALL_DIR}":/temp_flatpak_install_dir \
-        "ghcr.io/ublue-os/${base_name}-main:${version}" /temp_flatpak_install_dir/script.sh
+        "ghcr.io/ublue-os/${base_image}-main:${version}" /temp_flatpak_install_dir/script.sh
 fi
 
 # Remove Temp Directory
