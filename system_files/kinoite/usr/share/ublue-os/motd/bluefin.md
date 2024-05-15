@@ -6,7 +6,7 @@ Let's trace the stars.
 | ------- | ----------- |
 | `ujust --choose`  | Display available commands with search |
 | `ujust toggle-user-motd` | Toggle this banner on/off | 
-| `ujust bluefin-cli` | Install Terminal Bling w/ Brew | 
+| `ujust bluefin-cli` | Enable terminal bling | 
 
 %TIP%
 
