@@ -17,7 +17,7 @@ benchmark:
 
 # Configure Bluefin-CLI Terminal Experience with Brew
 bluefin-cli:
-    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-cli.Brewfile
+    @brew bundle --file /usr/share/ublue-os/homebrew/bluefin-cli.Brewfile --no-lock
     echo 'Installation complete ... please close and reopen your terminal!'
 # Configure Bluefin-CLI Terminal Experience
 [private]
