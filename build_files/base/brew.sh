@@ -18,3 +18,7 @@ mkdir -p /var/roothome
 # Copy to image and own by UID 1000
 cp -R /home/linuxbrew /usr/share/homebrew
 chown -R 1000:1000 /usr/share/homebrew
+
+# Remove update functions to prevent user
+rm -f /usr/share/homebrew/.linuxbrew/Homebrew/Library/Homebrew/cmd/update.sh
+rm -f /usr/share/homebrew/.linuxbrew/Homebrew/Library/Homebrew/cmd/update-reset.sh
