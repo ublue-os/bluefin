@@ -16,9 +16,14 @@ fi
 # if no target, base
 if [[ -z "${target}" ]]; then
     target="base"
-
 # if $2 is numeric, assume that is version and target is base
 elif [[ ${target} =~ ^[0-9]+$ ]]; then
+    version=${target}
+    target="base"
+elif [[ ${target} =~ latest ]]; then
+    version=${target}
+    target="base"
+elif [[ ${target} =~ gts ]]; then
     version=${target}
     target="base"
 fi

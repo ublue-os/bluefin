@@ -2,6 +2,9 @@
 if [[ -z ${project_root} ]]; then
     project_root=$(git rev-parse --show-toplevel)
 fi
+if [[ -z ${git_branch} ]]; then
+    git_branch=$(git branch --show-current)
+fi
 set -eo pipefail
 
 # Get Inputs
@@ -18,7 +21,7 @@ container_mgr=$(just _container_mgr)
 tag=$(just _tag "${image}" "${target}")
 
 #check if ISO exists. Create if it doesn't
-if [[ ! -f "${project_root}/scripts/files/output/${tag}-${version}.iso" ]]; then
+if [[ ! -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branch}.iso" ]]; then
     just build-iso "$image" "$target" "$version"
 fi
 
@@ -34,5 +37,5 @@ ${container_mgr} run --rm --cap-add NET_ADMIN \
     --env "DISK_SIZE=64G" \
     --env "BOOT_MODE=uefi" \
     --device=/dev/kvm \
-    --volume "${workspace}/scripts/files/output/${tag}-${version}.iso":/boot.iso \
+    --volume "${workspace}/scripts/files/output/${tag}-${version}-${git_branch}.iso":/boot.iso \
     docker.io/qemux/qemu-docker

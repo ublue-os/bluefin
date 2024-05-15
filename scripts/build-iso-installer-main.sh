@@ -24,7 +24,7 @@ ${container_mgr} run --rm --privileged  \
     --volume "${workspace}"/scripts/files/build-iso-makefile-patch:/build-container-installer/container/Makefile \
     --volume "${workspace}/${flatpak_dir_shortname}":"/build-container-installer/${flatpak_dir_shortname}" \
     --volume "${workspace}"/scripts/files/output:/build-container-installer/build  \
-    ghcr.io/jasonn3/build-container-installer:latest \
+    ghcr.io/jasonn3/build-container-installer:main \
     ARCH="x86_64" \
     ENABLE_CACHE_DNF="false" \
     ENABLE_CACHE_SKOPEO="false" \

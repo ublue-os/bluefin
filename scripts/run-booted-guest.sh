@@ -2,6 +2,11 @@
 if [[ -z ${project_root} ]]; then
     project_root=$(git rev-parse --show-toplevel)
 fi
+if [[ -z ${git_branch} ]]; then
+    git_branch=$(git branch --show-current)
+fi
+# shellcheck disable=SC2154,SC1091
+. "${project_root}/scripts/sudoif.sh"
 
 # Get inputs
 image=$1
@@ -28,7 +33,7 @@ if "${container_mgr}" info | grep Root | grep -q /home; then
 fi
 
 # Check to see if image exists, build it if it doesn't
-ID=$(${container_mgr} images --filter reference=localhost/"${tag}:${version}" --format "{{.ID}}")
+ID=$(${container_mgr} images --filter reference=localhost/"${tag}:${version}-${git_branch}" --format "{{.ID}}")
 if [[ -z ${ID} ]]; then
     just build "${image}" "${target}" "${version}"
 fi
@@ -87,4 +92,4 @@ fi
 if [[ -z ${project_root} ]]; then
     project_root=$(git rev-parse --show-toplevel)
 fi
-rm -rf "${project_root}/scripts/files/home/ublue-os"
+sudoif rm -rf "${project_root}/scripts/files/home/ublue-os"
