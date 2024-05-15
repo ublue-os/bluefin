@@ -1,4 +1,5 @@
 export project_root := `git rev-parse --show-toplevel`
+export git_branch := ` git branch --show-current`
 export gts := "39"
 export latest := "40"
 
@@ -32,7 +33,7 @@ just-fix:
     #!/usr/bin/bash
     find "${project_root}" -type f -name "*.just" | while read -r file; do
     	echo "Checking syntax: $file"
-    	just --unstable --fmt -f $file || { exit 1; }
+    	just --unstable --fmt -f $file
     done
     echo "Checking syntax: ${project_root}/Justfile"
     just --unstable --fmt -f ${project_root}/Justfile || { exit 1; }
@@ -56,6 +57,10 @@ run-booted-home image="" target="" version="":
 # Create ISO from local dev build image
 build-iso image="" target="" version="":
     @{{ project_root }}/scripts/build-iso.sh {{ image }} {{ target }} {{ version }}
+
+# Create ISO from local dev build image - use build-container-installer:main
+build-iso-installer-main image="" target="" version="":
+    @{{ project_root }}/scripts/build-iso-intstaller-main.sh {{ image }} {{ target }} {{ version }}
 
 # Run ISO from local dev build image
 run-iso image="" target="" version="":
