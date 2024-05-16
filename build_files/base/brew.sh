@@ -3,16 +3,18 @@
 set -xeou pipefail
 
 # Convince the installer we are in CI
-if [[ ! -f /.dockerenv ]]; then
-    touch /.dockerenv
-fi
+touch /.dockerenv
 
 # Make these so script will work
 mkdir -p /var/home
 mkdir -p /var/roothome
 
-# Install brew
-/usr/libexec/brew-install
+# Brew Install Script
+curl -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+chmod +x /tmp/brew-install
+/tmp/brew-install
 
-# Copy to image and own by UID 1000
+rm -rf /home/linuxbrew/.linuxbrew/Homebrew/Library/vendor
+rm -rf /home/linuxbrew/.linuxbrew/Homebrew/.git
+# Copy to image
 cp -R /home/linuxbrew /usr/share/homebrew
