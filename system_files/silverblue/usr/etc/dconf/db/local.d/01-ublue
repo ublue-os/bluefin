@@ -110,7 +110,8 @@ new-tab=false
 flatpak='off'
 
 [org/gnome/shell/extensions/Logo-menu]
-menu-button-icon-image=1
+symbolic-icon=true
+menu-button-icon-image=30
 menu-button-terminal='xdg-terminal-exec'
 menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
 menu-button-extensions-app='com.mattjakeman.ExtensionManager.desktop'
