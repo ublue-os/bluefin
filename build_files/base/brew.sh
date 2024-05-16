@@ -15,4 +15,4 @@ mkdir -p /var/roothome
 curl -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
 chmod +x /tmp/brew-install
 /tmp/brew-install
-tar --zstd -xvf /usr/share/homebrew.tar.zst /home/linuxbrew/.linuxbrew
+tar --zstd -cvf /usr/share/homebrew.tar.zst /home/linuxbrew/.linuxbrew
