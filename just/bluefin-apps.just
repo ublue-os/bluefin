@@ -10,13 +10,6 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-alias brew-fleek := install-brew-fleek
-
-# Install "fleek" set of packages for brew | none, low, default, high
-install-brew-fleek level="high":
-    #!/usr/bin/env bash
-    curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- {{ level }}
-
 alias cockpit := setup-cockpit
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
