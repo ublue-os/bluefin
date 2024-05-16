@@ -158,3 +158,81 @@ ollama-web: ollama
     fi
     systemctl --user daemon-reload
     systemctl --user start ollama-web.service
+
+# Setup InvokeAI in a container
+invokeai:
+    #!/usr/bin/env bash
+    echo 'Detecting Hardware...'
+    echo
+    GPU_CHOICES=("Nvidia (CUDA)" "AMD (ROCm)" "CPU (slow)")
+    DETECTED_OPTIONS=()
+    # Detect nvidia drivers
+    if which nvidia-smi > /dev/null 2>&1; then
+        DETECTED_OPTIONS+=("${GPU_CHOICES[0]}")
+    fi
+    # Detect AMD hardware
+    if lspci | grep ' VGA ' | grep -sq AMD; then
+        DETECTED_OPTIONS+=("${GPU_CHOICES[1]}")
+    fi
+    # Nothing detected, ask the user
+    if [ ${#DETECTED_OPTIONS[@]} -eq 0 ]; then
+        GPU_SELECTION=$(printf '%s\n' "${GPU_CHOICES[@]}" | gum choose --select-if-one --header "Select the type of graphics card you want to use")
+    else
+        GPU_SELECTION=$(printf '%s\n' "${DETECTED_OPTIONS[@]}" | gum choose --select-if-one --header "Select the type of graphics card you want to use")
+    fi
+    echo "Selected ${GPU_SELECTION}!"
+    case "${GPU_SELECTION}" in
+        "Nvidia (CUDA)")
+            IMAGE=latest
+            CUSTOM_ARGS="AddDevice=nvidia.com/gpu=all"
+            ;;
+        "AMD (ROCm)")
+            IMAGE=main-rocm
+            read -r -d '' CUSTOM_ARGS <<-'EOF'
+    AddDevice=/dev/dri
+    AddDevice=/dev/kfd
+    EOF
+            ;;
+        *)
+            IMAGE=latest
+            CUSTOM_ARGS=""
+            ;;
+    esac
+
+    read -r -d '' CONTAINER_QUADLET <<-EOF
+    [Unit]
+    Description=The InvokeAI container
+    After=network-online.target
+
+    [Service]
+    TimeoutStartSec=1200
+
+    [Container]
+    Image=ghcr.io/invoke-ai/invokeai:${IMAGE}
+    ContainerName=invokeai
+    AutoUpdate=registry
+    Environment=INVOKEAI_ROOT=/var/lib/invokeai
+    PublishPort=9090:9090
+    Volume=invoke-ai.volume:/var/lib/invokeai
+    SecurityLabelDisable=true
+    ${CUSTOM_ARGS}
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    read -r -d '' VOLUME_QUADLET <<-EOF
+    [Volume]
+    VolumeName=invoke-ai
+    EOF
+
+    if [ ! -f ~/.config/containers/systemd/invokeai.container ] || [ ! -f ~/.config/containers/systemd/invokeai.volume ]; then
+        mkdir -p ~/.config/containers/systemd
+        echo "${CONTAINER_QUADLET}" > ~/.config/containers/systemd/invokeai.container
+        echo "${VOLUME_QUADLET}" > ~/.config/containers/systemd/invokeai.volume
+    else
+        echo "InvokeAI container already exists, skipping..."
+    fi
+    systemctl --user daemon-reload
+    systemctl --user start invokeai.service
+    echo "InvokeAI container started. You can access it at http://localhost:9090"
