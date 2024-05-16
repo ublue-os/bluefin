@@ -1,5 +1,7 @@
 [Unit]
 Description=Setup Brew
+Wants=network-online.target
+After=network-online.target
 ConditionPathExists=!/etc/.linuxbrew
 ConditionPathExists=!/var/home/linuxbrew/.linuxbrew
 

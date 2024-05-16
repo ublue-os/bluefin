@@ -9,14 +9,6 @@ install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
-# Brew Install Script
-curl -Lo /usr/libexec/brew-install https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
-chmod +x /usr/libexec/brew-install
-
-# Flatpak Remotes
-mkdir -p /usr/etc/flatpak/remotes.d
-curl -Lo /usr/etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
-
 # Topgrade Install
 pip install --prefix=/usr topgrade
 
