@@ -8,7 +8,6 @@ curl -Lo /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
 # Add Bling repo
 curl -Lo /etc/yum.repos.d/ublue-os-bling-fedora-"${FEDORA_MAJOR_VERSION}".repo https://copr.fedorainfracloud.org/coprs/ublue-os/bling/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ublue-os-bling-fedora-"${FEDORA_MAJOR_VERSION}".repo
 
-
 # 39 Ptyxis
 if [ "${FEDORA_MAJOR_VERSION}" -eq "39" ]; then
     curl -Lo /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-"${FEDORA_MAJOR_VERSION}"/kylegospo-gnome-vrr-fedora-"${FEDORA_MAJOR_VERSION}".repo
@@ -67,6 +66,15 @@ elif [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
         kf5-kio-file-widgets \
         kf5-kio-core \
         kf5-kio-gui
+fi
+
+# GNOME Triple Buffering
+if [[ "${BASE_IMAGE_NAME}" = "silverblue" && "${FEDORA_MAJOR_VERSION}" -gt "39" ]]; then
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        mutter \
+        mutter-common
 fi
 
 # Switcheroo patch

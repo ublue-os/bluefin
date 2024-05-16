@@ -30,6 +30,12 @@ body:
       description: Please run `rpm-ostree status` and paste the output here.
       render: shell
   - type: textarea
+    id: groups
+    attributes:
+      label: Output of `groups`
+      description: Please run `groups` and paste the output here.
+      render: shell    
+  - type: textarea
     id: extra-context
     attributes:
       label: Extra information or context

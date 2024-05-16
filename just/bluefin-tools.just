@@ -97,7 +97,7 @@ ollama:
     ${CUSTOM_ARGS}
 
     [Install]
-    RequiredBy=default.target
+    RequiredBy=multi-user.target
     EOF
     if [  ! -f ~/.config/containers/systemd/ollama.container ]; then
         mkdir -p ~/.config/containers/systemd

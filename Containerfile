@@ -1,10 +1,15 @@
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME:-silverblue}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR:-main}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR:-main}"
-ARG SOURCE_IMAGE="${SOURCE_IMAGE:-$BASE_IMAGE_NAME-$IMAGE_FLAVOR}"
+ARG SOURCE_IMAGE="${SOURCE_IMAGE:-${BASE_IMAGE_NAME}-${IMAGE_FLAVOR}}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
 ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
+
+# FROM's for copying
+ARG KMOD_SOURCE_COMMON="ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
+FROM ${KMOD_SOURCE_COMMON} as akmods
+FROM ghcr.io/ublue-os/bluefin-cli as bluefin-cli
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
@@ -25,13 +30,20 @@ COPY packages.json /tmp/packages.json
 # Copy ublue-update.toml to tmp first, to avoid being overwritten.
 COPY /system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 # Copy Bluefin CLI packages
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/bin/atuin /usr/bin/atuin
-COPY --from=ghcr.io/ublue-os/bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
+COPY --from=bluefin-cli /usr/bin/atuin /usr/bin/atuin
+COPY --from=bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
 # COPY ublue kmods, add needed negativo17 repo and then immediately disable due to incompatibility with RPMFusion
-COPY --from=ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION} /rpms /tmp/akmods-rpms
+COPY --from=akmods /rpms /tmp/akmods-rpms
 
 # Build, cleanup, commit.
 RUN rpm-ostree cliwrap install-to-root / && \
+    mkdir -p /tmp/mediatek-firmware && \
+    curl -Lo /tmp/mediatek-firmware/WIFI_MT7922_patch_mcu_1_1_hdr.bin https://gitlab.com/kernel-firmware/linux-firmware/-/raw/8f08053b2a7474e210b03dbc2b4ba59afbe98802/mediatek/WIFI_MT7922_patch_mcu_1_1_hdr.bin?inline=false && \
+    curl -Lo /tmp/mediatek-firmware/WIFI_RAM_CODE_MT7922_1.bin https://gitlab.com/kernel-firmware/linux-firmware/-/raw/8f08053b2a7474e210b03dbc2b4ba59afbe98802/mediatek/WIFI_RAM_CODE_MT7922_1.bin?inline=false && \
+    xz --check=crc32 /tmp/mediatek-firmware/WIFI_MT7922_patch_mcu_1_1_hdr.bin && \
+    xz --check=crc32 /tmp/mediatek-firmware/WIFI_RAM_CODE_MT7922_1.bin && \
+    mv -vf /tmp/mediatek-firmware/* /usr/lib/firmware/mediatek/ && \
+    rm -rf /tmp/mediatek-firmware && \
     bash -c ". /tmp/build/build-base.sh"  && \
     rm -rf /tmp/* /var/* && \
     mkdir -p /var/tmp && \
@@ -54,7 +66,7 @@ COPY system_files/dx /
 COPY packages.json /tmp/packages.json
 
 # Copy akmods-extra from ublue
-COPY --from=ghcr.io/ublue-os/akmods-extra:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION} /rpms /tmp/akmods-rpms
+COPY --from=akmods /rpms /tmp/akmods-rpms
 
 # Build, Clean-up, Commit
 RUN bash -c ". /tmp/build/build-dx.sh"  && \

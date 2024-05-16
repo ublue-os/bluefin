@@ -195,9 +195,16 @@ colors
 # Sourcing
 #####################
 
-# Brew
+# Brew 
 if [[ -o interactive ]] && [[ -d /home/linuxbrew/.linuxbrew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  if type brew &>/dev/null; then
+    if [[ -w /home/linuxbrew/.linuxbrew ]]; then
+      if [[ ! -L "$(brew --prefix)/share/zsh/site-functions/_brew" ]]; then
+        brew completions link
+      fi
+    fi
+  fi
 fi
 
 # Starship
