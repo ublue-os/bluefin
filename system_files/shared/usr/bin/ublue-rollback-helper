@@ -14,14 +14,14 @@ function list_tags(){
 function rebase_helper(){
     base_image="ghcr.io/ublue-os/${IMAGE_NAME}"
     echo "Which Tag would you like to rebase to?"
-    choose_target=$(Choose latest gts date cancel)
+    choose_target=$(Choose date latest gts cancel)
     if [[ "$choose_target" == "latest" || "$choose_target" == "gts" ]]; then
         rebase_target="${base_image}:$choose_target"
     elif [[ "$choose_target" == "date" ]]; then
-        valid_tags=($(list_tags))
+        valid_tags=( $(list_tags | sed 's/\"//g' | sed 's/,//g'))
         target_tag=$(Choose cancel "${valid_tags[@]}")
         if  grep -Eq "$FEDORA_VERSION-([0-9]+)" <<< "${target_tag}"; then
-            target_tag=${target_tag:1:-2}
+            # target_tag=${target_tag:1:-2}
             rebase_target="${base_image}:$target_tag"
         else
             return 1
@@ -41,32 +41,9 @@ function rebase_helper(){
     fi
 }
 
-function current_image_info(){
-    bootedimage=$(rpm-ostree status --booted | grep --color=never "●" | cut -d "●" -f 2)
-    currentversion=$(rpm-ostree status --booted | grep --color=never "Version:")
-    currentdigest=$(rpm-ostree status --booted | grep --color=never "Digest:")
-    printf "Current Image:\t %s \n" "${bootedimage}"
-    printf "Current Version: %s \n" "${currentversion#*Version:}"
-    printf "Current Digest:\t %s \n" "${currentdigest#*Digest:}"
-}
+option=$(Choose rebase cancel)
 
-option=$(Choose list rollback current rebase cancel)
-
-if [[ "$option" == "list" ]]; then
-    echo "Listing images for ${IMAGE_NAME} version ${FEDORA_VERSION}"
-    list_tags | sort -V
-    /usr/bin/ublue-rollback-helper
-elif [[ "$option" == "rollback" ]]; then
-    echo "Confirm Rollback"
-    if [[ $(Confirm) -eq "0" ]]; then
-        rpm-ostree rollback
-    else
-        /usr/bin/ublue-rollback-helper
-    fi
-elif [[ "$option" == "current" ]]; then
-    current_image_info
-    /usr/bin/ublue-rollback-helper
-elif [[ "$option" == "rebase" ]]; then
+if [[ "$option" == "rebase" ]]; then
     rebase_helper || /usr/bin/ublue-rollback-helper
 else
     exit 0
