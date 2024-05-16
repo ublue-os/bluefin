@@ -11,8 +11,8 @@ fi
 mkdir -p /var/home
 mkdir -p /var/roothome
 
-# Install brew
-/usr/libexec/brew-install
-
-# Copy to image and own by UID 1000
-cp -R /home/linuxbrew /usr/share/homebrew
+# Brew Install Script
+curl -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+chmod +x /tmp/brew-install
+/tmp/brew-install
+tar --zstd -xvf /usr/share/homebrew.tar.zst /home/linuxbrew/.linuxbrew
