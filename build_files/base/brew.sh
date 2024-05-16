@@ -13,8 +13,4 @@ mkdir -p /var/roothome
 curl -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
 chmod +x /tmp/brew-install
 /tmp/brew-install
-
-rm -rf /home/linuxbrew/.linuxbrew/Homebrew/Library/Homebrew/vendor
-rm -rf /home/linuxbrew/.linuxbrew/Homebrew/.git
-# Copy to image
-cp -R /home/linuxbrew /usr/share/homebrew
+tar --zstd -cvf /usr/share/homebrew.tar.zst /home/linuxbrew/.linuxbrew
