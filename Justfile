@@ -22,8 +22,9 @@ just-check:
     #!/usr/bin/bash
     find "${project_root}" -type f -name "*.just" | while read -r file; do
     	echo "Checking syntax: $file"
-    	just --unstable --fmt --check -f $file
+    	just --unstable --fmt --check -f $file 
     done
+    echo "Checking syntax: ${project_root}/Justfile"
     just --unstable --fmt --check -f ${project_root}/Justfile
 
 # Fix Just Syntax
@@ -34,7 +35,8 @@ just-fix:
     	echo "Checking syntax: $file"
     	just --unstable --fmt -f $file
     done
-    just --unstable --fmt -f ${project_root}/Justfile
+    echo "Checking syntax: ${project_root}/Justfile"
+    just --unstable --fmt -f ${project_root}/Justfile || { exit 1; }
 
 # Build Image
 build image="" target="" version="":

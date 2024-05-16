@@ -15,8 +15,14 @@ benchmark:
     echo 'Running a 1 minute benchmark ...'
     cd /tmp && stress-ng --matrix 0 -t 1m --times
 
-# Configure Bluefin-CLI Terminal Experience
+# Configure Bluefin-CLI Terminal Experience with Brew
 bluefin-cli:
+    @brew bundle --file /usr/share/ublue-os/homebrew/bluefin-cli.Brewfile --no-lock
+    echo 'Installation complete ... please close and reopen your terminal!'
+
+# Configure Bluefin-CLI Terminal Experience
+[private]
+bluefin-cli-container:
     @/usr/libexec/enable-bluefin-cli.sh
 
 # Configure Terminal Experience
@@ -283,7 +289,7 @@ install-system-flatpaks:
         FLATPAKS="aurora_flatpaks/flatpaks"
     fi
     FLATPAK_LIST="$(curl https://raw.githubusercontent.com/ublue-os/bluefin/main/${FLATPAKS} | tr '\n' ' ')"
-    flatpak --system -y install ${FLATPAK_LIST}
+    flatpak --system -y install --or-update ${FLATPAK_LIST}
 
 # Configure grub bootmenu visibility
 configure-grub:

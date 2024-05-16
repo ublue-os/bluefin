@@ -5,7 +5,7 @@
 | ------- | ----------- |
 | `ujust --choose`  | Display available commands with search |
 | `ujust toggle-user-motd` | Toggle this banner on/off | 
-| `ujust brew` | Install Homebrew (Strongly Recommended) |
+| `ujust bluefin-cli` | Enable terminal bling | 
 
 %TIP%
 
