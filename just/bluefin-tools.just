@@ -213,7 +213,7 @@ invokeai:
     AutoUpdate=registry
     Environment=INVOKEAI_ROOT=/var/lib/invokeai
     PublishPort=9090:9090
-    Volume=invoke-ai.volume:/var/lib/invokeai
+    Volume=invokeai.volume:/var/lib/invokeai
     SecurityLabelDisable=true
     ${CUSTOM_ARGS}
 
@@ -223,7 +223,7 @@ invokeai:
 
     read -r -d '' VOLUME_QUADLET <<-EOF
     [Volume]
-    VolumeName=invoke-ai
+    VolumeName=invokeai
     EOF
 
     if [ ! -f ~/.config/containers/systemd/invokeai.container ] || [ ! -f ~/.config/containers/systemd/invokeai.volume ]; then
