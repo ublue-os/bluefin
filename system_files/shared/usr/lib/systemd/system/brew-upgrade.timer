@@ -3,7 +3,7 @@ Description=Timer for brew upgrade for on image brew
 Wants=network-online.target
 
 [Timer]
-OnBootSec=20min
+OnBootSec=21min
 OnUnitInactiveSec=6h
 Persistent=true
 

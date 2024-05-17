@@ -2,6 +2,7 @@
 Description=Upgrade Brew packages
 After=local-fs.target
 After=network-online.target
+After=brew-update.service
 ConditionPathIsSymbolicLink=/home/linuxbrew/.linuxbrew/bin/brew
 
 [Service]
