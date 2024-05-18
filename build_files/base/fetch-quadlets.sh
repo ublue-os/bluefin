@@ -30,8 +30,8 @@ curl -Lo /usr/etc/containers/systemd/users/wolfi-dx-toolbox.container https://ra
 sed -i 's/ContainerName=wolfi-quadlet/ContainerName=wolfi-dx-toolbox/' /usr/etc/containers/systemd/users/wolfi-dx-toolbox.container
 
 # Brew Integration for Fedora and Ubuntu Toolboxes
-printf "Volume=/home/linuxbrew:/home/linuxbrew:rslave\nVolume=/usr/etc/profile.d/brew.sh:/etc/profile.d/brew.sh:ro\nVolume=/usr/share/fish/vendor_conf.d/brew.fish:/usr/share/fish/vendor_conf.d/brew.fish:ro\n" >> /usr/etc/containers/systemd/users/ubuntu-toolbox.container
-printf "Volume=/home/linuxbrew:/home/linuxbrew:rslave\nVolume=/usr/etc/profile.d/brew.sh:/etc/profile.d/brew.sh:ro\nVolume=/usr/share/fish/vendor_conf.d/brew.fish:/usr/share/fish/vendor_conf.d/brew.fish:ro\n" >> /usr/etc/containers/systemd/users/fedora-toolbox.container
+printf "\nVolume=/home/linuxbrew:/home/linuxbrew:rslave\nVolume=/usr/etc/profile.d/brew.sh:/etc/profile.d/brew.sh:ro\nVolume=/usr/share/fish/vendor_conf.d/brew.fish:/usr/share/fish/vendor_conf.d/brew.fish:ro\n" >> /usr/etc/containers/systemd/users/ubuntu-toolbox.container
+printf "\nVolume=/home/linuxbrew:/home/linuxbrew:rslave\nVolume=/usr/etc/profile.d/brew.sh:/etc/profile.d/brew.sh:ro\nVolume=/usr/share/fish/vendor_conf.d/brew.fish:/usr/share/fish/vendor_conf.d/brew.fish:ro\n" >> /usr/etc/containers/systemd/users/fedora-toolbox.container
 
 # Make systemd targets 
 mkdir -p /usr/lib/systemd/user
