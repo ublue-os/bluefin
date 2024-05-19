@@ -9,8 +9,9 @@ on:
       - '**.md'
       - 'system_files/kinoite/**'
   push:
+    branches:
       - main
-  paths-ignore:
+    paths-ignore:
       - '**.md'
       - 'system_files/kinoite/**'
   schedule:
