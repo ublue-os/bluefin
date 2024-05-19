@@ -8,6 +8,12 @@ on:
     paths-ignore:
       - '**.md'
       - 'system_files/kinoite/**'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'system_files/kinoite/**'
   schedule:
     - cron: '41 16 * * *'  # 16:41 UTC everyday
   workflow_dispatch:
