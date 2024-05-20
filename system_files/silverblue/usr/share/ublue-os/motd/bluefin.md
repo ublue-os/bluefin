@@ -3,10 +3,10 @@
 
 |  Command | Description |
 | ------- | ----------- |
-| `ujust --choose`  | Display available commands with search |
-| `ujust toggle-user-motd` | Toggle this banner on/off | 
+| `ujust --choose`  | Show available commands  |
+| `ujust toggle-user-motd` | Toggle banner on/off | 
 | `ujust bluefin-cli` | Enable terminal bling | 
-| `brew help` | Install and manage command line packages | 
+| `brew help` | Manage command line packages | 
 
 %TIP%
 
