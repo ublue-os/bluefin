@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v6
+        uses: ublue-os/remove-unwanted-software@v7
 
       - name: Install Syft
         shell: bash
