@@ -18,9 +18,10 @@ categories=['Game']
 name='Games'
 translate=false
 
-[org/gnome/desktop/app-folders/folders/Distrobox]
+[org/gnome/desktop/app-folders/folders/Containers]
+apps=['io.github.dvlv.boxbuddyrs.desktop', 'io.podman_desktop.PodmanDesktop.desktop', 'com.github.marhkb.Pods.desktop']
 categories=['Distrobox']
-name='Distrobox'
+name='Containers'
 translate=false
 
 [org/gnome/desktop/app-folders/folders/Wine]
