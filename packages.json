@@ -181,7 +181,8 @@
 				"podman-docker"
 			],
 			"silverblue": [
-				"gnome-terminal-nautilus"
+				"gnome-terminal-nautilus",
+				"toolbox"
 			],
 			"dx": []
 		}
