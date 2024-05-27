@@ -35,6 +35,12 @@
       "type": "uptime",
       "key": "󰅐"
     },
+    {
+      "type": "command",
+      "key": " 󰔠",
+      "text": "date -d$(ls -alct / --time-style=full-iso|tail -1|awk '{print $6}') +'Installed %b %d %G'",
+      "shell": "/bin/bash"
+    },
     "break",
     {
       "type": "command",
