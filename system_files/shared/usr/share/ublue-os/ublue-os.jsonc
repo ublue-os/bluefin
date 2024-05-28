@@ -37,7 +37,7 @@
     },
     {
       "type": "command",
-      "key": " 󰔠",
+      "key": "󰔠",
       "text": "date -d$(ls -alct / --time-style=full-iso|tail -1|awk '{print $6}') +'Forged on %b %d %G'",
       "shell": "/bin/bash"
     },
