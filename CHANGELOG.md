@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.8.0](https://github.com/ublue-os/bluefin/compare/v2.7.0...v2.8.0) (2024-06-01)
+
+
+### Features
+
+* add android-tools to dx images ([#1349](https://github.com/ublue-os/bluefin/issues/1349)) ([e2dfd17](https://github.com/ublue-os/bluefin/commit/e2dfd174590555958ebe1b959483e7586cb5f0be))
+* Add Containers folder from bazzite ([#1339](https://github.com/ublue-os/bluefin/issues/1339)) ([3e094c5](https://github.com/ublue-os/bluefin/commit/3e094c53e354114c556c8fce3a9c1bd4bb88c2ee))
+* add lm_sensors ([#1329](https://github.com/ublue-os/bluefin/issues/1329)) ([6ff9de4](https://github.com/ublue-os/bluefin/commit/6ff9de437f83701d876cfab3e7d09a843f95b40c))
+* **motd:** add install date ([#1351](https://github.com/ublue-os/bluefin/issues/1351)) ([a5b41bd](https://github.com/ublue-os/bluefin/commit/a5b41bd7f8b6c365595b7668cfc2b589dec93261))
+
+
+### Bug Fixes
+
+* **aurora:** kf.svg log spam and splash gear size ([#1325](https://github.com/ublue-os/bluefin/issues/1325)) ([065b90b](https://github.com/ublue-os/bluefin/commit/065b90bdd7fb9ef8210593fb0f94ea2bf8a7b4ff))
+* auto update brew service files ([2afbfc6](https://github.com/ublue-os/bluefin/commit/2afbfc641b7d33a76c69fb32db78fc8be98d4c5e))
+* brew upgrade servie ([0fb468a](https://github.com/ublue-os/bluefin/commit/0fb468a54902514a5c8cec9c51d9fe5c3231a16a))
+* change dash-to-dock running indicator to DOTS ([#1359](https://github.com/ublue-os/bluefin/issues/1359)) ([c98c8a0](https://github.com/ublue-os/bluefin/commit/c98c8a0eda3a47a799406014efc289a7491c1785))
+* correct invokeai volume service name ([#1316](https://github.com/ublue-os/bluefin/issues/1316)) ([a8008cd](https://github.com/ublue-os/bluefin/commit/a8008cd8e9daa9dbd591c8d527413751720b8c10))
+* disable auto power management extension by default ([#1318](https://github.com/ublue-os/bluefin/issues/1318)) ([4f88cf4](https://github.com/ublue-os/bluefin/commit/4f88cf45926dab76a102e4b024b64da57128f2fe))
+* **just:** remove fleekbrew alias ([#1309](https://github.com/ublue-os/bluefin/issues/1309)) ([f9aee2d](https://github.com/ublue-os/bluefin/commit/f9aee2db923f17e43bc1bcf00d51e7a00b40907c))
+* **motd:** be less boring than bazzite ([#1352](https://github.com/ublue-os/bluefin/issues/1352)) ([e80303f](https://github.com/ublue-os/bluefin/commit/e80303fce087b47571ee3c0d740f47127ab09e57))
+* **motd:** shorten motd descriptions ([#1330](https://github.com/ublue-os/bluefin/issues/1330)) ([bfdfd7a](https://github.com/ublue-os/bluefin/commit/bfdfd7ae1422ee06cedf2581d43c68eee015bd73))
+* remove extra whitespace in fastfetch ([062b602](https://github.com/ublue-os/bluefin/commit/062b60241ed0c067c0ef01799a31eb6c42735770))
+* remove vestigial extensions command ([#1348](https://github.com/ublue-os/bluefin/issues/1348)) ([f699d82](https://github.com/ublue-os/bluefin/commit/f699d82c880eb5719b0bcdc1db9117fb8b42e695))
+* update brew packages only after brew itself is fully updated ([#1315](https://github.com/ublue-os/bluefin/issues/1315)) ([9777785](https://github.com/ublue-os/bluefin/commit/977778579b479db96bbaff59d57c27a41e92f9c8))
+* update initial description ([#1346](https://github.com/ublue-os/bluefin/issues/1346)) ([4e4ff0b](https://github.com/ublue-os/bluefin/commit/4e4ff0b59a6a0c548aa35e4e8dcab096043f8a02))
+
 ## [2.7.0](https://github.com/ublue-os/bluefin/compare/v2.6.0...v2.7.0) (2024-05-16)
 
 
