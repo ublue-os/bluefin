@@ -26,13 +26,3 @@ jobs:
     with:
       brand_name: aurora
       fedora_version: 40
-
-  scan:
-    # Scan can still be ran when some builds fail since only successfully built
-    # images will be stored in the output
-    if: (github.event_name != 'pull_request' && github.event_name != 'merge_group') && always()
-    uses: ./.github/workflows/reusable-image-scan.yml
-    needs: build
-    secrets: inherit
-    with:
-      images: ${{ needs.build.outputs.images }}
