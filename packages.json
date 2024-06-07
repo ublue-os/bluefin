@@ -89,6 +89,7 @@
 				"docker-buildx-plugin",
 				"docker-compose-plugin",
 				"edk2-ovmf",
+				"flatpak-builder",
 				"genisoimage",
 				"google-droid-sans-mono-fonts",
 				"google-go-mono-fonts",
