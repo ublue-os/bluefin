@@ -40,7 +40,7 @@
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
-				"wl-clipboard", 
+				"wl-clipboard",
 				"zsh"
 			],
 			"silverblue": [
@@ -140,6 +140,8 @@
 				"gnome-tour"
 			],
 			"kinoite": [
+				"krfb",
+				"krfb-libs",
 				"plasma-welcome"
 			],
 			"dx": []
