@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.9.0](https://github.com/ublue-os/bluefin/compare/v2.8.0...v2.9.0) (2024-06-09)
+
+
+### Features
+
+* add skanpage and simple-scan ([#1368](https://github.com/ublue-os/bluefin/issues/1368)) ([77ffb28](https://github.com/ublue-os/bluefin/commit/77ffb2870e51d35a29cdd042f8b669c1cc94f1d2))
+* install flatpak-builder in dx ([#1372](https://github.com/ublue-os/bluefin/issues/1372)) ([eafc971](https://github.com/ublue-os/bluefin/commit/eafc9711c2217da6f26772801d0462aabe7f6cc3))
+* **just:** enable volume and add access info for ollama-web ([#1380](https://github.com/ublue-os/bluefin/issues/1380)) ([795e749](https://github.com/ublue-os/bluefin/commit/795e74975f393ff84ecf6b9052860a14df846c73))
+* **motd:** add link to feedback survey ([#1370](https://github.com/ublue-os/bluefin/issues/1370)) ([daaca5c](https://github.com/ublue-os/bluefin/commit/daaca5c7fcba258500f33f537953088c37cd863c))
+* switch to Clapper from Celluloid ([#1374](https://github.com/ublue-os/bluefin/issues/1374)) ([bd63bf2](https://github.com/ublue-os/bluefin/commit/bd63bf2467ba98f2ad051ecf1b8842e6de3b0b27))
+
+
+### Bug Fixes
+
+* broken path in brew setup script for fish ([#1365](https://github.com/ublue-os/bluefin/issues/1365)) ([379ca28](https://github.com/ublue-os/bluefin/commit/379ca2821d9b8361e5d31830f3a12522ad798ab5))
+* fix bad fastfetch output in kitty ([#1364](https://github.com/ublue-os/bluefin/issues/1364)) ([6a87517](https://github.com/ublue-os/bluefin/commit/6a875177c62f12a1f572af96667332857a1ab8b1))
+
 ## [2.8.0](https://github.com/ublue-os/bluefin/compare/v2.7.0...v2.8.0) (2024-06-01)
 
 
