@@ -180,6 +180,10 @@
 				"gnome-shell-extension-tailscale-gnome-qs",
 				"nautilus-open-any-terminal"
 			],
+			"kinoite": [
+				"kf6-kimageformats",
+				"qt6-qtimageformats"
+			],
 			"dx": []
 		},
 		"exclude": {
