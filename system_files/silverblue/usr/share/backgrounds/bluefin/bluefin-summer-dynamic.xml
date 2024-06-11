@@ -30,4 +30,9 @@
 		<from>/usr/share/backgrounds/bluefin/WallPaper_SummerNight_Post.webp</from>
 		<to>/usr/share/backgrounds/bluefin/WallPaper_SummerDay_Post.webp</to>
 	</transition>
+	<!-- Return to start -->
+	<static>
+		<duration>1</duration>
+		<file>/usr/share/backgrounds/bluefin/WallPaper_SummerDay_Post.webp</file>
+	</static>
 </background>
