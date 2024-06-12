@@ -1,37 +1,32 @@
 <background>
-	<starttime>
-		<year>2023</year>
-		<month>4</month>
-		<day>18</day>
-		<hour>8</hour>
-		<minute>0</minute>
-		<second>0</second>
-	</starttime>
+        <starttime>
+                <year>2018</year>
+                <month>1</month>
+                <day>1</day>
+                <hour>6</hour>
+                <minute>0</minute>
+                <second>0</second>
+        </starttime>
 
-	<static>
-		<file>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</file>
-		<duration>1.0</duration>
-	</static>
+        <static>
+                <file>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</file>
+                <duration>36000.0</duration>
+        </static>
 
-	<transition type="overlay">
-		<duration>43199.0</duration>
-		<from>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</from>
-		<to>/usr/share/backgrounds/bluefin/WallPaper_SpringNight_Post.webp</to>
-	</transition>
+        <transition type="overlay">
+                <duration>7200.0</duration>
+                <from>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</from>
+                <to>/usr/share/backgrounds/bluefin/WallPaper_SpringNight_Post.webp</to>
+        </transition>
 
-	<static>
-		<file>/usr/share/backgrounds/bluefin/WallPaper_SpringNight_Post.webp</file>
-		<duration>1.0</duration>
-	</static> 
+        <static>
+                <file>/usr/share/backgrounds/bluefin/WallPaper_SpringNight_Post.webp</file>
+                <duration>36000.0</duration>
+        </static>
 
-	<transition type="overlay">
-		<duration>43198.0</duration>
-		<from>/usr/share/backgrounds/bluefin/WallPaper_SpringNight_Post.webp</from>
-		<to>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</to>
-	</transition>
-
-	<static>
-		<file>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</file>
-		<duration>1.0</duration>
-	</static>
+        <transition type="overlay">
+                <duration>7200.0</duration>
+                <from>/usr/share/backgrounds/bluefin/WallPaper_SpringNight_Post.webp</from>
+                <to>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</to>
+        </transition>
 </background>
