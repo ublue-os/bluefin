@@ -214,7 +214,7 @@ invokeai:
     ContainerName=invokeai
     AutoUpdate=registry
     Environment=INVOKEAI_ROOT=/var/lib/invokeai
-    PublishPort=9090:9090
+    PublishPort=9091:9090
     Volume=invokeai.volume:/var/lib/invokeai
     SecurityLabelDisable=true
     ${CUSTOM_ARGS}
@@ -237,4 +237,4 @@ invokeai:
     fi
     systemctl --user daemon-reload
     systemctl --user start invokeai.service
-    echo "InvokeAI container started. You can access it at http://localhost:9090"
+    echo "InvokeAI container started. You can access it at http://localhost:9091"
