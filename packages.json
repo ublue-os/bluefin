@@ -24,6 +24,7 @@
 				"make",
 				"mesa-libGLU",
 				"nerd-fonts",
+				"openrazer-daemon",
 				"playerctl",
 				"printer-driver-brlaser",
 				"pulseaudio-utils",
