@@ -164,6 +164,7 @@ jobs:
                   echo "${TAG}"
               done
               alias_tags=("${COMMIT_TAGS[@]}")
+              echo "DEFAULT_TAG=${SHA_SHORT}" >> $GITHUB_ENV
           else
               alias_tags=("${BUILD_TAGS[@]}")
           fi
