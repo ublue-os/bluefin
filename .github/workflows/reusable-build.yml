@@ -78,6 +78,7 @@ jobs:
               echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
+              echo "KERNEL_SUFFIX=surface" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
           fi
@@ -144,14 +145,18 @@ jobs:
              if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
                  BUILD_TAGS+=("testing")
+                 echo "DEFAULT_TAG=testing" >> $GITHUB_ENV
              elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                  BUILD_TAGS+=("gts-testing")
+                 echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
              fi
           elif [[ "$IS_LATEST_VERSION" == "true" ]] && \
                [[ "$IS_STABLE_VERSION" == "true" ]]; then
               BUILD_TAGS+=("latest")
+              echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
           elif [[ "$IS_GTS_VERSION" == "true" ]]; then
               BUILD_TAGS+=("gts")
+              echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
           fi
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -160,6 +165,7 @@ jobs:
                   echo "${TAG}"
               done
               alias_tags=("${COMMIT_TAGS[@]}")
+              echo "DEFAULT_TAG=${SHA_SHORT}-${FEDORA_VERSION}" >> $GITHUB_ENV
           else
               alias_tags=("${BUILD_TAGS[@]}")
           fi
@@ -220,6 +226,17 @@ jobs:
           #   --target=${{ matrix.target_name || matrix.base_name }}
           extra-args: |
             --target=${{ env.TARGET_NAME }}
+
+      - name: Sign kernel
+        uses: ublue-os/kernel-signer@v0.2.3
+        with:
+          image: ${{ steps.build_image.outputs.image }}
+          default-tag: ${{ env.DEFAULT_TAG }}
+          privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
+          pubkey: /etc/pki/akmods/certs/akmods-ublue.der
+          tags: ${{ steps.build_image.outputs.tags }}
+          kernel_suffix: ${{ env.KERNEL_SUFFIX }}
+          strip: false
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
