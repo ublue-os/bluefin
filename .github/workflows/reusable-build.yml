@@ -165,7 +165,7 @@ jobs:
                   echo "${TAG}"
               done
               alias_tags=("${COMMIT_TAGS[@]}")
-              echo "DEFAULT_TAG=${SHA_SHORT}" >> $GITHUB_ENV
+              echo "DEFAULT_TAG=${SHA_SHORT}-${FEDORA_VERSION}" >> $GITHUB_ENV
           else
               alias_tags=("${BUILD_TAGS[@]}")
           fi
@@ -235,7 +235,7 @@ jobs:
           privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
           pubkey: /etc/pki/akmods/certs/akmods-ublue.der
           tags: ${{ steps.build_image.outputs.tags }}
-          suffix: ${{ env.KERNEL_SUFFIX }}
+          kernel_suffix: ${{ env.KERNEL_SUFFIX }}
           strip: false
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
