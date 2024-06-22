@@ -3,12 +3,14 @@
 
 set -ouex pipefail
 
+. /tmp/build/firmware.sh
 . /tmp/build/copr-repos.sh
 . /tmp/build/install-akmods.sh
 . /tmp/build/packages.sh
 . /tmp/build/nvidia.sh
 . /tmp/build/image-info.sh
 . /tmp/build/fetch-install.sh
+. /tmp/build/brew.sh
 . /tmp/build/fetch-quadlets.sh
 . /tmp/build/font-install.sh
 . /tmp/build/systemd.sh
@@ -17,4 +19,5 @@ set -ouex pipefail
 . /tmp/build/branding.sh
 . /tmp/build/bootc.sh
 . /tmp/build/initramfs.sh
+. /tmp/build/bootc.sh
 . /tmp/build/cleanup.sh

@@ -1,5 +1,5 @@
 app/io.github.dvlv.boxbuddyrs/x86_64/stable
-app/io.github.celluloid_player.Celluloid/x86_64/stable
+app/com.github.rafostar.Clapper/x86_64/stable
 app/org.fedoraproject.MediaWriter/x86_64/stable
 app/com.github.tchx84.Flatseal/x86_64/stable
 app/io.github.flattool.Warehouse/x86_64/stable
@@ -11,7 +11,7 @@ app/org.gnome.clocks/x86_64/stable
 app/org.gnome.Connections/x86_64/stable
 app/org.gnome.Contacts/x86_64/stable
 app/org.gnome.DejaDup/x86_64/stable
-app/org.gnome.Evince/x86_64/stable
+app/org.gnome.Papers/x86_64/stable
 app/com.mattjakeman.ExtensionManager/x86_64/stable
 app/org.gnome.font-viewer/x86_64/stable
 app/org.gnome.Logs/x86_64/stable

@@ -4,6 +4,9 @@
 if [[ -z ${project_root} ]]; then
     project_root=$(git rev-parse --show-toplevel)
 fi
+if [[ -z ${git_branch} ]]; then
+    git_branch=$(git branch --show-current)
+fi
 
 # Common Build ISO
 # shellcheck disable=SC1091
@@ -30,8 +33,8 @@ ${container_mgr} run --rm --privileged  \
     FLATPAK_REMOTE_REFS_DIR="${flatpak_dir_shortname}" \
     IMAGE_NAME="${tag}" \
     IMAGE_REPO="localhost" \
-    IMAGE_TAG="${version}" \
-    ISO_NAME="build/${tag}-${version}.iso" \
+    IMAGE_TAG="${version}-${git_branch}" \
+    ISO_NAME="build/${tag}-${version}-${git_branch}.iso" \
     SECURE_BOOT_KEY_URL='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der' \
     VARIANT="${variant}" \
     VERSION="${version}"

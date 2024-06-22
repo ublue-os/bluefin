@@ -3,8 +3,8 @@ favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop
 enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@micxgx.gmail.com', 'blur-my-shell@aunetx', 'gsconnect@andyholmes.github.io', 'logomenu@aryan_k', 'tailscale@joaophi.github.com', 'search-light@icedman.github.com']
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-spring-dynamic.xml'
-picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-spring-dynamic.xml'
+picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-summer-dynamic.xml'
+picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-summer-dynamic.xml'
 picture-options='zoom'
 primary-color='000000'
 secondary-color='FFFFFF'
@@ -56,6 +56,7 @@ custom-background-color=true
 customize-alphas=true
 max-alpha=0.8
 min-alpha=0.5
+running-indicator-style='DOTS'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control><Alt>t'
@@ -110,7 +111,8 @@ new-tab=false
 flatpak='off'
 
 [org/gnome/shell/extensions/Logo-menu]
-menu-button-icon-image=1
+symbolic-icon=true
+menu-button-icon-image=30
 menu-button-terminal='xdg-terminal-exec'
 menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
 menu-button-extensions-app='com.mattjakeman.ExtensionManager.desktop'
@@ -141,9 +143,3 @@ default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
 
 [org/gnome/Ptyxis/Profiles/2871e8027773ae74d6c87a5f659bbc74]
 palette='catppuccin-dynamic'
-
-[org/gnome/shell/extensions/auto-power-profile]
-ac='balanced'
-bat='power-saver'
-notify=true
-lapmode=true

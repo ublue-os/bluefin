@@ -180,7 +180,7 @@ jobs:
           overwrite: true
 
       - name: Upload ISOs and Checksum to R2 to Bluefin Bucket
-        if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main' && inputs.brand_name == 'bluefin'
+        if: github.ref_name == 'main' && inputs.brand_name == 'bluefin'
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
@@ -196,7 +196,7 @@ jobs:
           rclone copy $SOURCE_DIR R2:bluefin
 
       - name: Upload ISOs and Checksum to R2 to Aurora Bucket
-        if: github.event_name == 'workflow_dispatch' && github.ref_name == 'main' && inputs.brand_name == 'aurora'
+        if: github.ref_name == 'main' && inputs.brand_name == 'aurora'
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3

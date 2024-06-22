@@ -11,14 +11,18 @@
 				"fastfetch",
 				"fish",
 				"firewall-config",
+				"foo2zjs",
 				"gcc",
 				"glow",
 				"gum",
 				"hplip",
+				"krb5-workstation",
 				"ifuse",
+				"input-leap",
 				"input-remapper",
 				"libimobiledevice",
 				"libxcrypt-compat",
+				"lm_sensors",
 				"make",
 				"mesa-libGLU",
 				"nerd-fonts",
@@ -40,10 +44,11 @@
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
-				"wl-clipboard", 
+				"wl-clipboard",
 				"zsh"
 			],
 			"silverblue": [
+				"simple-scan",
 				"gnome-shell-extension-appindicator",
 				"gnome-shell-extension-blur-my-shell",
 				"gnome-shell-extension-caffeine",
@@ -51,15 +56,17 @@
 				"gnome-shell-extension-gsconnect",
 				"gnome-shell-extension-logo-menu",
 				"gnome-shell-extension-search-light",
-				"gnome-shell-extension-auto-power-profile",
+				"gnome-shell-extension-tailscale-gnome-qs",
 				"libgda-sqlite",
 				"libgda",
 				"libratbag-ratbagd",
 				"nautilus-gsconnect",
+				"nautilus-open-any-terminal",
 				"openssh-askpass",
 				"yaru-theme"
 			],
 			"kinoite": [
+				"skanpage",
 				"libadwaita-qt5",
 				"libadwaita-qt6",
 				"kde-runtime-docs",
@@ -69,6 +76,7 @@
 			],
 			"dx": [
 				"adobe-source-code-pro-fonts",
+				"android-tools",
 				"cascadia-code-fonts",
 				"cockpit-machines",
 				"cockpit-networkmanager",
@@ -87,6 +95,7 @@
 				"docker-buildx-plugin",
 				"docker-compose-plugin",
 				"edk2-ovmf",
+				"flatpak-builder",
 				"genisoimage",
 				"google-droid-sans-mono-fonts",
 				"google-go-mono-fonts",
@@ -129,14 +138,18 @@
 			"all": [
 				"firefox-langpacks",
 				"firefox",
+				"podman-docker",
 				"ublue-os-update-services"
 			],
 			"silverblue": [
 				"gnome-extensions-app",
 				"gnome-software-rpm-ostree",
+				"gnome-terminal-nautilus",
 				"gnome-tour"
 			],
 			"kinoite": [
+				"krfb",
+				"krfb-libs",
 				"plasma-welcome"
 			],
 			"dx": []
@@ -144,46 +157,30 @@
 	},
 	"39": {
 		"include": {
-			"all": [
-				"input-leap"
-			],
-			"silverblue": [
-				"gnome-shell-extension-tailscale-gnome-qs",
-				"nautilus-open-any-terminal"
-			],
+			"all": [],
+			"silverblue": [],
 			"dx": [
 				"distrobuilder",
 				"podman-plugins"
 			]
 		},
 		"exclude": {
-			"all": [
-				"podman-docker"
-			],
+			"all": [],
 			"silverblue": [
-				"gnome-terminal-nautilus"
+				
 			],
 			"dx": []
 		}
 	},
 	"40": {
 		"include": {
-			"all": [
-				"input-leap"
-			],
-			"silverblue": [
-				"gnome-shell-extension-tailscale-gnome-qs",
-				"nautilus-open-any-terminal"
-			],
+			"all": [],
+			"silverblue": [],
 			"dx": []
 		},
 		"exclude": {
-			"all":	[
-				"podman-docker"
-			],
-			"silverblue": [
-				"gnome-terminal-nautilus"
-			],
+			"all":	[],
+			"silverblue": [],
 			"dx": []
 		}
 	}
