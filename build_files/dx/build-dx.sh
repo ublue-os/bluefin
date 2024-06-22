@@ -13,5 +13,6 @@ sysctl -p
 . /tmp/build/fetch-install-dx.sh
 . /tmp/build/workarounds.sh
 . /tmp/build/systemd-dx.sh
+. /tmp/build/bootc.sh
 . /tmp/build/branding-dx.sh
 . /tmp/build/cleanup-dx.sh
