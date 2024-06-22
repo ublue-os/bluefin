@@ -18,7 +18,6 @@ if [ "${FEDORA_MAJOR_VERSION}" -eq "39" ]; then
     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
         gtk4 \
         vte291 \
-        vte-profile \
         libadwaita
     rpm-ostree install ptyxis
 fi
