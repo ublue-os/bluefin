@@ -60,7 +60,7 @@ build-iso image="" target="" version="":
 
 # Create ISO from local dev build image - use build-container-installer:main
 build-iso-installer-main image="" target="" version="":
-    @{{ project_root }}/scripts/build-iso-intstaller-main.sh {{ image }} {{ target }} {{ version }}
+    @{{ project_root }}/scripts/build-iso-installer-main.sh {{ image }} {{ target }} {{ version }}
 
 # Run ISO from local dev build image
 run-iso image="" target="" version="":
