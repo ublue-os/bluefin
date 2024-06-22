@@ -21,15 +21,21 @@ container_mgr=$(just _container_mgr)
 base_image=$(just _base_image "${image}")
 tag=$(just _tag "${image}" "${target}")
 
+# Build Command
+command=( build -f Containerfile )
+if [[ ${container_mgr} == "docker" && ${TERM} == "dumb" ]]; then
+    command+=(--progress=plain)
+fi
+command+=( --build-arg="AKMODS_FLAVOR=main" )
+command+=( --build-arg="BASE_IMAGE_NAME=${base_image}" )
+command+=( --build-arg="SOURCE_IMAGE=${base_image}-main" )
+command+=( --build-arg="FEDORA_MAJOR_VERSION=${version}" )
+command+=( --build-arg="IMAGE_NAME=${tag}" )
+command+=( --build-arg="IMAGE_FLAVOR=main" )
+command+=( --build-arg="IMAGE_VENDOR=localhost" )
+command+=( --tag localhost/"${tag}:${version}-${git_branch}" )
+command+=( --target "${target}" )
+command+=( "${project_root}" )
+
 # Build Image
-$container_mgr build -f Containerfile \
-    --build-arg="AKMODS_FLAVOR=main" \
-    --build-arg="BASE_IMAGE_NAME=${base_image}" \
-    --build-arg="SOURCE_IMAGE=${base_image}-main" \
-    --build-arg="FEDORA_MAJOR_VERSION=${version}" \
-    --build-arg="IMAGE_NAME=${tag}" \
-    --build-arg="IMAGE_FLAVOR=main" \
-    --build-arg="IMAGE_VENDOR=localhost" \
-    --tag localhost/"${tag}:${version}-${git_branch}" \
-    --target "${target}" \
-    "${project_root}"
+$container_mgr ${command[@]}
