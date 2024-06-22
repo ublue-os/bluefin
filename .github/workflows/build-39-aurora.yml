@@ -9,7 +9,7 @@ on:
       - '**.md'
       - 'system_files/silverblue/**'
   schedule:
-    - cron: '41 16 * * *'  # 16:41 UTC everyday
+    - cron: '41 5 * * *'  # 5:41 UTC everyday
   workflow_dispatch:
 
 jobs:
