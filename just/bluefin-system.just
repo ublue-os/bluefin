@@ -15,8 +15,14 @@ benchmark:
     echo 'Running a 1 minute benchmark ...'
     cd /tmp && stress-ng --matrix 0 -t 1m --times
 
-# Configure Bluefin-CLI Terminal Experience
+# Configure Bluefin-CLI Terminal Experience with Brew
 bluefin-cli:
+    @brew bundle --file /usr/share/ublue-os/homebrew/bluefin-cli.Brewfile --no-lock
+    echo 'Installation complete ... please close and reopen your terminal!'
+
+# Configure Bluefin-CLI Terminal Experience
+[private]
+bluefin-cli-container:
     @/usr/libexec/enable-bluefin-cli.sh
 
 # Configure Terminal Experience
@@ -101,15 +107,6 @@ configure-shell ACTION="":
       sudo usermod $USER --shell /usr/bin/$OPTION 
       printf "${USER}'s shell is now %s.\n" "$(cat /etc/passwd | grep ":$UID:" | cut '-d:' '-f7')"
     fi
-
-alias gnome-extensions := get-gnome-extensions
-
-# Install recommended GNOME extensions
-get-gnome-extensions:
-    pip install --upgrade gnome-extensions-cli
-    gext install nightthemeswitcher@romainvigier.fr
-    gext install pano@elhan.io
-    gext install weatheroclock@CleoMenezesJr.github.io
 
 alias gnome-vrr := toggle-gnome-vrr
 
@@ -267,8 +264,20 @@ install-system-flatpaks:
         FLATPAKS="aurora_flatpaks/flatpaks"
     fi
     FLATPAK_LIST="$(curl https://raw.githubusercontent.com/ublue-os/bluefin/main/${FLATPAKS} | tr '\n' ' ')"
-    flatpak --system -y install ${FLATPAK_LIST}
+    flatpak --system -y install --or-update ${FLATPAK_LIST}
 
 # Configure grub bootmenu visibility
 configure-grub:
-    /usr/libexec/configure-grub.sh
+    @/usr/libexec/configure-grub.sh
+
+# Rebase assistant
+rebase-helper:
+    @/usr/bin/ublue-rollback-helper
+
+alias rollback-helper := rebase-helper
+
+update-ng:
+    echo "Note: This command doesn't work if you have locally layered packages" 
+    sudo bootc upgrade
+    flatpak update -y
+    brew upgrade

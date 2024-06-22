@@ -1,0 +1,6 @@
+*.iso
+*.iso-CHECKSUM
+flatpaks_with_deps
+flatpak.*
+
+scripts/files/home/ublue-os/*

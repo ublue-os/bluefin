@@ -10,13 +10,6 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-alias brew-fleek := install-brew-fleek
-
-# Install "fleek" set of packages for brew | none, low, default, high
-install-brew-fleek level="high":
-    #!/usr/bin/env bash
-    curl --proto '=https' --tlsv1.2 -sSf -L https://brew.getfleek.dev/s/fleek | bash -s -- {{ level }}
-
 alias cockpit := setup-cockpit
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
@@ -58,6 +51,12 @@ setup-cockpit ACTION="":
       OPTION="Enable Cockpit"
     fi
     if [[ "${OPTION,,}" =~ ^enable ]]; then
+      echo "${green}${b}Enabling${n} pmlogger"
+      sudo mkdir /var/lib/pcp/tmp
+      sudo mkdir /var/log/pcp/pmlogger
+      sudo chown -R pcp:pcp /var/lib/pcp
+      sudo chown pcp:pcp /var/log/pcp/pmlogger
+      sudo systemctl enable --now pmlogger
       echo "${green}${b}Enabling${n} Cockpit"
       sudo systemctl enable cockpit.service
       echo "$(Urllink "http://localhost:9090" "Open Cockpit${n}") -> http://localhost:9090"

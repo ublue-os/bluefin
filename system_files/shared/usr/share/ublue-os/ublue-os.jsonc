@@ -3,7 +3,7 @@
   "display": {
     "separator": "  ",
     "color": {
-      "keys": "\u001b[38;2;87;160;198;48"
+      "keys": "38;2;87;160;198"
     }
   },
   "modules": [
@@ -11,7 +11,7 @@
       "type": "title",
       "key": "",
       "color": {
-        "user": "\u001b[38;2;87;160;198;48",
+        "user": "38;2;87;160;198",
         "at": "white",
         "host": "bright_green"
       }
@@ -35,12 +35,16 @@
       "type": "uptime",
       "key": "󰅐"
     },
-    "break",
     {
       "type": "command",
-      "key": "󰾰",
-      "text": "cat /sys/devices/virtual/dmi/id/product_name",
+      "key": "󰔠",
+      "text": "date -d$(ls -alct / --time-style=full-iso|tail -1|awk '{print $6}') +'Forged on %b %d %G'",
       "shell": "/bin/bash"
+    },
+    "break",
+    {
+      "type": "host",
+      "key": "󰾰"
     },
     {
       "type": "cpu",

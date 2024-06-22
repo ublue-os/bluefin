@@ -1,45 +1,33 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/alpine
+// For format details, see https://aka.ms/devcontainer.json.
 {
 	"name": "Bluefin-devcontainer",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.19",
-
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"eamodio.gitlens",
 				"hangxingliu.vscode-systemd-support",
 				"mads-hartmann.bash-ide-vscode",
 				"ms-azuretools.vscode-docker",
+				"sclu1034.justfile",
 				"timonwong.shellcheck"
 			]
 		}
 	},
-
-	"containerEnv": {
-		"HOME": "/home/vscode"
-	},
-
+	// Likely need to add "--userns=keep-id, --group-add=keep-groups" for podman support 
+	"runArgs": ["--init"],
+	"remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" },
 	"securityOpt": [
 		"label=disable"
 	],
-
-	"runArgs": [
-		"--userns=keep-id"
-	]
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	"features": {
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+		"ghcr.io/guiyomh/features/just:0": {},
+		"ghcr.io/lukewiwa/features/shellcheck:0": {}
+	},
+	"onCreateCommand": {
+		"bash-completions": "sudo apt-get install -y bash-completion; echo 'source /etc/profile.d/bash_completion.sh' | sudo tee -a /etc/bash.bashrc > /dev/null",
+		"just-completions": "just --completions bash | sudo tee -a /etc/bash_completion.d/just > /dev/null",
+		"docker-completions": "docker completion bash | sudo tee -a /etc/bash_completion.d/docker.sh > /dev/null"
+	}
 }

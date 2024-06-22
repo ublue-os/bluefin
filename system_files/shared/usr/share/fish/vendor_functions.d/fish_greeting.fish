@@ -1,3 +1,6 @@
+#!/usr/bin/fish
+#shellcheck disable=all
+
 function fish_greeting
 	if test -d "$HOME"
 		if test ! -e "$HOME"/.config/no-show-user-motd
