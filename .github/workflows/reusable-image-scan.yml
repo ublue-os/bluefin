@@ -1,4 +1,4 @@
-name: Scan Image
+name: Scan and SBOM
 on:
   workflow_call:
     inputs:

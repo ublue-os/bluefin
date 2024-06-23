@@ -1,4 +1,4 @@
-name: Build and Push Image
+name: Reusable Build and Push
 on:
   workflow_call:
     inputs:

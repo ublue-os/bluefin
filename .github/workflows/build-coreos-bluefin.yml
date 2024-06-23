@@ -1,4 +1,4 @@
-name: bluefin CoreOS Kernel
+name: CoreOS Kernel
 on:
   merge_group:
   pull_request:
