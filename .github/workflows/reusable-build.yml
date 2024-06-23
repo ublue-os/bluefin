@@ -89,7 +89,7 @@ jobs:
         shell: bash
         if: ${{ matrix.fedora_version }} == 'coreos'
         run: |
-         KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:$COREOS_STREAM | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+         KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
          echo "kernel-release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
          FEDORA_VERSION=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
          echo "FEDORA_MAJOR_VERSION=$FEDORA_VERSION" >> $GITHUB_ENV
