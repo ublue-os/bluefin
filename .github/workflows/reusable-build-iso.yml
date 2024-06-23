@@ -49,10 +49,10 @@ jobs:
 
     steps:
       - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@v1.3.1
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Matrix Variables
         run: |
@@ -140,7 +140,7 @@ jobs:
           docker rmi ${image}
 
       - name: Build ISOs
-        uses: jasonn3/build-container-installer@v1.2.1
+        uses: jasonn3/build-container-installer@92531089f947bc6493e9d11aafd2b412dc128ea4 # v1.2.1
         id: build
         with:
           arch: x86_64
@@ -170,7 +170,7 @@ jobs:
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.ref_name == 'testing'
         #if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
           name: ${{ steps.build.outputs.iso_name }}
           path: ${{ steps.upload-directory.outputs.iso-upload-dir }}
