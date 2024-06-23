@@ -9,7 +9,7 @@ ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
 # FROM's for copying
 ARG KMOD_SOURCE_COMMON="ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
 FROM ${KMOD_SOURCE_COMMON} as akmods
-FROM ghcr.io/ublue-os/bluefin-cli as bluefin-cli
+FROM ghcr.io/ublue-os/bluefin-cli@sha256:09f092c19e7c1e6c965e88f17005c20c5298eeece3f644e259616adddb99462c as bluefin-cli
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
