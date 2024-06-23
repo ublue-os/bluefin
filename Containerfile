@@ -5,11 +5,12 @@ ARG SOURCE_IMAGE="${SOURCE_IMAGE:-${BASE_IMAGE_NAME}-${IMAGE_FLAVOR}}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
 ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
+ARG COREOS_KERNEL="${KERNEL:-}"
 
 # FROM's for copying
 ARG KMOD_SOURCE_COMMON="ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
 FROM ${KMOD_SOURCE_COMMON} as akmods
-FROM ghcr.io/ublue-os/bluefin-cli as bluefin-cli
+FROM ghcr.io/ublue-os/bluefin-cli:latest as bluefin-cli
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
@@ -20,6 +21,7 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
+ARG COREOS_KERNEL="${KERNEL}"
 
 # COPY Build Files
 COPY build_files/base build_files/shared /tmp/build/
@@ -52,13 +54,14 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
+ARG COREOS_KERNEL="${KERNEL}"
 
 # dx specific files come from the dx directory in this repo
 COPY build_files/dx build_files/shared /tmp/build/
 COPY system_files/dx /
 COPY packages.json /tmp/packages.json
 
-# Copy akmods-extra from ublue
+# Copy akmods from ublue
 COPY --from=akmods /rpms /tmp/akmods-rpms
 
 # Build, Clean-up, Commit
