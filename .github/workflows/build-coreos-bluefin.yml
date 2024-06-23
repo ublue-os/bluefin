@@ -1,0 +1,19 @@
+name: bluefin CoreOS Kernel
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - testing
+    paths-ignore:
+      - '**.md'
+      - 'system_files/kinoite/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      brand_name: bluefin
+      fedora_version: coreos
