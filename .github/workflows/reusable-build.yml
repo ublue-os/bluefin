@@ -44,13 +44,20 @@ jobs:
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
+          - fedora_version: 39
+            image_flavor: asus
+          - fedora_version: 39
+            image_flavor: asus-nvidia
           - fedora_version: coreos
-            image_flavor:
-              - nvidia
-              - asus
-              - asus-nvidia
-              - surface
-              - surface-nvidia
+            image_flavor: nvidia
+          - fedora_version: coreos
+            image_flavor: asus
+          - fedora_version: coreos
+            image_flavor: asus-nvidia
+          - fedora_version: coreos
+            image_flavor: surface
+          - fedora_version: coreos
+            image_flavor: surface-nvidia
 
     steps:
       - name: Checkout
