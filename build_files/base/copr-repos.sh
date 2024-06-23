@@ -18,18 +18,12 @@ if [ "${FEDORA_MAJOR_VERSION}" -eq "39" ]; then
     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
         gtk4 \
         vte291 \
-        vte-profile \
         libadwaita
     rpm-ostree install ptyxis
 fi
 
 # 40 Ptyxis
 if [ "${FEDORA_MAJOR_VERSION}" -eq "40" ]; then
-    rpm-ostree override replace \
-    --experimental \
-    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        vte291 \
-        vte-profile
     rpm-ostree install ptyxis
 fi
 

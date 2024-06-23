@@ -3,7 +3,7 @@ export git_branch := ` git branch --show-current`
 export gts := "39"
 export latest := "40"
 
-alias run := run-booted-guest
+alias run := run-container
 
 _default:
     @just help
@@ -46,13 +46,12 @@ build image="" target="" version="":
 run-container image="" target="" version="":
     @{{ project_root }}/scripts/run-image.sh {{ image }} {{ target }} {{ version }}
 
-# Run Booted Image Session w/ Guest
-run-booted-guest image="" target="" version="":
-    @{{ project_root }}/scripts/run-booted-guest.sh {{ image }} {{ target }} {{ version }}
-
-# Run Booted Image Session w/ mounted in $USER and $HOME
-run-booted-home image="" target="" version="":
-    @{{ project_root }}/scripts/run-booted-home.sh {{ image }} {{ target }} {{ version }}
+# # Run Booted Image Session w/ Guest
+# run-booted-guest image="" target="" version="":
+#     @{{ project_root }}/scripts/run-booted-guest.sh {{ image }} {{ target }} {{ version }}
+# # Run Booted Image Session w/ mounted in $USER and $HOME
+# run-booted-home image="" target="" version="":
+#     @{{ project_root }}/scripts/run-booted-home.sh {{ image }} {{ target }} {{ version }}
 
 # Create ISO from local dev build image
 build-iso image="" target="" version="":
