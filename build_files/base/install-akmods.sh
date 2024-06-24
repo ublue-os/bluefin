@@ -24,7 +24,7 @@ elif [[ ${COREOS_TAG} =~ "coreos" ]]; then
         https://copr.fedorainfracloud.org/coprs/ublue-os/ucore/repo/fedora/ublue-os-ucore-fedora.repo
     KERNEL_FOR_DEPMOD="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
     find /tmp/coreos/rpms
-    rpm-ostree install /tmp/coreos/rpms/ublue-os-ucore-addons-*.rpm
+    rpm-ostree install /tmp/coreos/rpms/kmods/ublue-os-ucore-addons-*.rpm
     rpm-ostree install /tmp/coreos/rpms/kmods/zfs/*.rpm pv
     depmod -A ${KERNEL_FOR_DEPMOD}
     if [[ "${COREOS_TAG}" =~ "coreos-nv" ]]; then
