@@ -52,25 +52,25 @@ jobs:
             image_flavor: asus
           - fedora_version: 39
             image_flavor: asus-nvidia
-          - coreos_tag: coreos
+          - coreos_tag: -coreos
             image_flavor: nvidia
-          - coreos_tag: coreos
+          - coreos_tag: -coreos
             image_flavor: asus
-          - coreos_tag: coreos
+          - coreos_tag: -coreos
             image_flavor: asus-nvidia
-          - coreos_tag: coreos
+          - coreos_tag: -coreos
             image_flavor: surface
-          - coreos_tag: coreos
+          - coreos_tag: -coreos
             image_flavor: surface-nvidia
-          - coreos_tag: coreos-nv
+          - coreos_tag: -coreos-nv
             image_flavor: nvidia
-          - coreos_tag: coreos-nv
+          - coreos_tag: -coreos-nv
             image_flavor: asus
-          - coreos_tag: coreos-nv
+          - coreos_tag: -coreos-nv
             image_flavor: asus-nvidia
-          - coreos_tag: coreos-nv
+          - coreos_tag: -coreos-nv
             image_flavor: surface
-          - coreos_tag: coreos-nv
+          - coreos_tag: -coreos-nv
             image_flavor: surface-nvidia
 
     steps:
