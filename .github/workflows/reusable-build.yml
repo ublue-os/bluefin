@@ -44,8 +44,8 @@ jobs:
         fedora_version:
           - ${{ inputs.fedora_version }}
         coreos_tag:
-          - -coreos
-          - -coreos-nv
+          - "-coreos"
+          - "-coreos-nv"
           - ""
         exclude:
           - fedora_version: 39
