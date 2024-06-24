@@ -19,7 +19,7 @@ if [[ -z ${COREOS_TAG:-} ]]; then
             /tmp/akmods-rpms/kmods/*evdi*.rpm
     fi
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
-elif [[ ${COREOS_TAG} =~ "coreos" ]]
+elif [[ ${COREOS_TAG} =~ "coreos" ]]; then
     curl -Lo /etc/yum.repos.d/ublue-os-ucore-fedora.repo \
         https://copr.fedorainfracloud.org/coprs/ublue-os/ucore/repo/fedora/ublue-os-ucore-fedora.repo
     KERNEL_FOR_DEPMOD="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
