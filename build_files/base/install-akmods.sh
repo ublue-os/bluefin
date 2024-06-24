@@ -27,15 +27,15 @@ elif [[ ${COREOS_TAG} =~ "coreos" ]]; then
     rpm-ostree install /tmp/coreos/rpms/kmods/ublue-os-ucore-addons-*.rpm
     rpm-ostree install /tmp/coreos/rpms/kmods/zfs/*.rpm pv
     depmod -A ${KERNEL_FOR_DEPMOD}
-    if [[ "${COREOS_TAG}" =~ "coreos-nv" ]]; then
-        curl -Lo /etc/yum.repos.d/negativo17-fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo
-        rpm-ostree install /tmp/coreos/rpms/kmods/nvidia/ublue-os-ucore-nvidia-*.rpm
-        sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
-        rpm-ostree install \
-            /tmp/coreos/rpms/kmods/nvidia/kmod-nvidia-*.rpm \
-            nvidia-driver-cuda \
-            nvidia-container-toolkit
-        sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
-        sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-nvidia.repo.
-    fi
+    # if [[ "${COREOS_TAG}" =~ "coreos-nv" ]]; then
+    #     curl -Lo /etc/yum.repos.d/negativo17-fedora-nvidia.repo https://negativo17.org/repos/fedora-nvidia.repo
+    #     rpm-ostree install /tmp/coreos/rpms/kmods/nvidia/ublue-os-ucore-nvidia-*.rpm
+    #     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
+    #     rpm-ostree install \
+    #         /tmp/coreos/rpms/kmods/nvidia/kmod-nvidia-*.rpm \
+    #         nvidia-driver-cuda \
+    #         nvidia-container-toolkit
+    #     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
+    #     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-nvidia.repo.
+    # fi
 fi
