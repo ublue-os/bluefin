@@ -17,7 +17,23 @@ benchmark:
 
 # Configure Bluefin-CLI Terminal Experience with Brew
 bluefin-cli:
-    @brew bundle --file /usr/share/ublue-os/homebrew/bluefin-cli.Brewfile --no-lock
+    #!/usr/bin/bash
+    echo 'Installing bling from Homebrew 🍻🍻🍻'
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-cli.Brewfile --no-lock
+    echo 'Setting up your Shell 🐚🐚🐚'
+    shell=$(basename $SHELL)
+    if test $shell -eq "fish"; then
+        echo 'Adding bling to your config.fish 🐟🐟🐟'
+        printf 'source /usr/share/ublue-os/bluefin-cli/bling.fish' >> ${XDG_CONFIG_HOME:-$HOME/.config}/fish/config.fish
+    elif test $shell -eq "zsh"; then
+        echo 'Adding bling to your .zshrc 💤💤💤'
+        printf 'source /usr/share/ublue-os/bluefin-cli/bling.sh' >> ${ZDOTDIR:-$HOME}/.zshrc
+    elif test $shell -eq "bash"; then
+        echo 'Adding bling to your .bashrc 💥💥💥'
+        printf 'source /usr/share/ublue-os/bluefin-cli/bling.sh' >> ${HOME}/.bashrc
+    else
+        echo 'Unknown Shell ... You are on your own'
+    fi
     echo 'Installation complete ... please close and reopen your terminal!'
 
 # Configure Bluefin-CLI Terminal Experience
