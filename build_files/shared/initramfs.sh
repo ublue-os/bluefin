@@ -3,7 +3,7 @@
 set -oue pipefail
 
 # Remove nvidia specific files
-if [[ "${IMAGE_FLAVOR}" =~ "nvidia" ]]; then
+if [[ "${IMAGE_FLAVOR}" =~ "nvidia" || ${COREOS_TAG} =~ "coreos-nv" ]]; then
   rm -f /usr/lib/modprobe.d/nvk.conf
   rm -f /usr/lib/modprobe.d/amd-legacy.conf
 else

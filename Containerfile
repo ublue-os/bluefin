@@ -5,11 +5,14 @@ ARG SOURCE_IMAGE="${SOURCE_IMAGE:-${BASE_IMAGE_NAME}-${IMAGE_FLAVOR}}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
 ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
+ARG COREOS_TAG="${COREOS_TAG:-}"
 ARG COREOS_KERNEL="${COREOS_KERNEL:-}"
 
 # FROM's for copying
 ARG KMOD_SOURCE_COMMON="ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
+ARG COREOS_KMODS="ghcr.io/ublue-os/ucore-kmods:stable"
 FROM ${KMOD_SOURCE_COMMON} as akmods
+FROM ${COREOS_KMODS} as coreos_kmods
 FROM ghcr.io/ublue-os/bluefin-cli:latest as bluefin-cli
 
 ## bluefin image section
@@ -21,6 +24,7 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
+ARG COREOS_TAG="${COREOS_TAG:-}"
 ARG COREOS_KERNEL="${COREOS_KERNEL:-}"
 
 # COPY Build Files
@@ -36,6 +40,7 @@ COPY --from=bluefin-cli /usr/bin/atuin /usr/bin/atuin
 COPY --from=bluefin-cli /usr/share/bash-prexec /usr/share/bash-prexec
 # COPY ublue kmods, add needed negativo17 repo and then immediately disable due to incompatibility with RPMFusion
 COPY --from=akmods /rpms /tmp/akmods-rpms
+COPY --from=coreos_kmods /rpms /tmp/coreos/rpms
 
 # Build, cleanup, commit.
 RUN rpm-ostree cliwrap install-to-root / && \
@@ -54,6 +59,7 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
+ARG COREOS_TAG="${COREOS_TAG:-}"
 ARG COREOS_KERNEL="${COREOS_KERNEL:-}"
 
 # dx specific files come from the dx directory in this repo

@@ -45,6 +45,7 @@ jobs:
           - ${{ inputs.fedora_version }}
         coreos_tag:
           - coreos
+          - coreos-nv
           - ""
         exclude:
           - fedora_version: 39
@@ -60,6 +61,16 @@ jobs:
           - coreos_tag: coreos
             image_flavor: surface
           - coreos_tag: coreos
+            image_flavor: surface-nvidia
+          - coreos_tag: coreos-nv
+            image_flavor: nvidia
+          - coreos_tag: coreos-nv
+            image_flavor: asus
+          - coreos_tag: coreos-nv
+            image_flavor: asus-nvidia
+          - coreos_tag: coreos-nv
+            image_flavor: surface
+          - coreos_tag: coreos-nv
             image_flavor: surface-nvidia
 
     steps:
@@ -161,7 +172,7 @@ jobs:
           fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
-            if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
+            if [[ "${{ matrix.coreos_tag }}" == "coreos" ]]; then
               BUILD_TAGS=("${FEDORA_VERSION}-testing-coreos" "${FEDORA_VERSION}-testing-coreos-${TIMESTAMP}")
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
@@ -171,6 +182,17 @@ jobs:
                    [[ "$IS_COREOS" == "true" ]]; then
                    BUILD_TAGS+=("gts-testing-coreos")
                    echo "DEFAULT_TAG=gts-testing-coreos" >> $GITHUB_ENV
+              fi
+            elif [[ "${{ matrix.coreos_tag }}" == "coreos-nv" ]]; then
+              BUILD_TAGS=("${FEDORA_VERSION}-testing-coreos-nv" "${FEDORA_VERSION}-testing-coreos-nv-${TIMESTAMP}")
+              if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                 BUILD_TAGS+=("testing-coreos-nv")
+                 echo "DEFAULT_TAG=testing-coreos-nv" >> $GITHUB_ENV
+              elif [[ "$IS_GTS_VERSION" == "true" ]] && \
+                   [[ "$IS_COREOS" == "true" ]]; then
+                   BUILD_TAGS+=("gts-testing-coreos-nv")
+                   echo "DEFAULT_TAG=gts-testing-coreos-nv" >> $GITHUB_ENV
               fi
             else
               BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
@@ -184,7 +206,7 @@ jobs:
               fi
             fi
           else
-            if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
+            if [[ "${{ matrix.coreos_tag }}" == "coreos" ]]; then
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
                  BUILD_TAGS+=("latest-coreos")
@@ -192,6 +214,15 @@ jobs:
               elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                    BUILD_TAGS+=("gts-coreos")
                    echo "DEFAULT_TAG=gts-coreos" >> $GITHUB_ENV
+              fi
+            elif [[ "${{ matrix.coreos_tag }}" == "coreos-nv" ]]; then
+              if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                 BUILD_TAGS+=("latest-coreos-nv")
+                 echo "DEFAULT_TAG=latest-coreos-nv" >> $GITHUB_ENV
+              elif [[ "$IS_GTS_VERSION" == "true" ]]; then
+                   BUILD_TAGS+=("gts-coreos-nv")
+                   echo "DEFAULT_TAG=gts-coreos-nv" >> $GITHUB_ENV
               fi
             else
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
@@ -275,6 +306,7 @@ jobs:
             FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
+            COREOS_TAG=${{ matrix.coreos_tag }}
             COREOS_KERNEL=${{ steps.coreos_kernel.outputs.kernel-release }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
