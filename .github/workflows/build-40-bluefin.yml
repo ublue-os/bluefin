@@ -11,6 +11,7 @@ on:
   push:
     branches:
       - main
+      - testing
     paths-ignore:
       - '**.md'
       - 'system_files/kinoite/**'

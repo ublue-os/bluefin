@@ -139,6 +139,7 @@ jobs:
           else
             IS_COREOS=false
           fi
+          echo "IS_COREOS=$IS_COREOS" >> $GITHUB_ENV
 
           COMMIT_TAGS=()
           BUILD_TAGS=()
@@ -156,7 +157,7 @@ jobs:
           if [[ ${IS_COREOS} == "true" ]]; then
             BUILD_TAGS=("${FEDORA_VERSION}-coreos" "${FEDORA_VERSION}-coreos-${TIMESTAMP}")
           else
-            BUILD_TAGS=("${FEDORA_VERSION}-coreos" "${FEDORA_VERSION}-coreos-${TIMESTAMP}")
+            BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
           fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
@@ -171,10 +172,12 @@ jobs:
                  BUILD_TAGS+=("gts-testing-coreos")
                  echo "DEFAULT_TAG=gts-testing-coreos" >> $GITHUB_ENV
              elif [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                [[ "$IS_STABLE_VERSION" == "true" ]] && \
+                [[ "$IS_COREOS" == "false" ]]; then
                  BUILD_TAGS+=("testing")
                  echo "DEFAULT_TAG=testing" >> $GITHUB_ENV
-             elif [[ "$IS_GTS_VERSION" == "true" ]]; then
+             elif [[ "$IS_GTS_VERSION" == "true" ]] && \
+                  [[ "$IS_COREOS" == "false" ]]; then
                  BUILD_TAGS+=("gts-testing")
                  echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
              fi
@@ -188,10 +191,12 @@ jobs:
               BUILD_TAGS+=("gts-coreos")
               echo "DEFAULT_TAG=gts-coreos" >> $GITHUB_ENV
           elif [[ "$IS_LATEST_VERSION" == "true" ]] && \
-               [[ "$IS_STABLE_VERSION" == "true" ]]; then
+               [[ "$IS_STABLE_VERSION" == "true" ]] && \
+               [[ "$IS_COREOS" == "false" ]]; then
               BUILD_TAGS+=("latest")
               echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
-          elif [[ "$IS_GTS_VERSION" == "true" ]]; then
+          elif [[ "$IS_GTS_VERSION" == "true" ]] && \
+               [[ "$IS_COREOS" == "false" ]]; then
               BUILD_TAGS+=("gts")
               echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
           fi
@@ -224,12 +229,13 @@ jobs:
           fi
           echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
-      - name: Get CoreOS Kernel Version and Fedora Version
+      - name: Get CoreOS Kernel Version
         id: coreos_kernel
         shell: bash
-        if: ${{ matrix.coreos_tag }} == 'coreos'
         run: |
-         KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+         if [[ ${{ env.IS_COREOS }} == "true" ]]; then
+          KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+         fi
          echo "kernel-release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
 
       # Build metadata
