@@ -161,46 +161,47 @@ jobs:
           fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
-             if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
+            if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
               BUILD_TAGS=("${FEDORA_VERSION}-testing-coreos" "${FEDORA_VERSION}-testing-coreos-${TIMESTAMP}")
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                  BUILD_TAGS+=("testing-coreos")
-                  echo "DEFAULT_TAG=testing-coreos" >> $GITHUB_ENV
+                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                 BUILD_TAGS+=("testing-coreos")
+                 echo "DEFAULT_TAG=testing-coreos" >> $GITHUB_ENV
               elif [[ "$IS_GTS_VERSION" == "true" ]] && \
-                    [[ "$IS_COREOS" == "true" ]]; then
-                  BUILD_TAGS+=("gts-testing-coreos")
-                  echo "DEFAULT_TAG=gts-testing-coreos" >> $GITHUB_ENV
+                   [[ "$IS_COREOS" == "true" ]]; then
+                   BUILD_TAGS+=("gts-testing-coreos")
+                   echo "DEFAULT_TAG=gts-testing-coreos" >> $GITHUB_ENV
               fi
-             else
+            else
               BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                  BUILD_TAGS+=("testing")
-                  echo "DEFAULT_TAG=testing" >> $GITHUB_ENV
+                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                 BUILD_TAGS+=("testing")
+                 echo "DEFAULT_TAG=testing" >> $GITHUB_ENV
               elif [[ "$IS_GTS_VERSION" == "true" ]]; then
-                  BUILD_TAGS+=("gts-testing")
-                  echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
+                 BUILD_TAGS+=("gts-testing")
+                 echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
               fi
+            fi
           else
             if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                  BUILD_TAGS+=("latest-coreos")
-                  echo "DEFAULT_TAG=latest-coreos" >> $GITHUB_ENV
+                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                 BUILD_TAGS+=("latest-coreos")
+                 echo "DEFAULT_TAG=latest-coreos" >> $GITHUB_ENV
               elif [[ "$IS_GTS_VERSION" == "true" ]]; then
-                  BUILD_TAGS+=("gts-coreos")
-                  echo "DEFAULT_TAG=gts-coreos" >> $GITHUB_ENV
+                   BUILD_TAGS+=("gts-coreos")
+                   echo "DEFAULT_TAG=gts-coreos" >> $GITHUB_ENV
               fi
             else
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                  BUILD_TAGS+=("latest")
-                  echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
+                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                 BUILD_TAGS+=("latest")
+                 echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
               elif [[ "$IS_GTS_VERSION" == "true" ]] && \
-                  [[ "$IS_COREOS" == "false" ]]; then
-                  BUILD_TAGS+=("gts")
-                  echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
+                   [[ "$IS_COREOS" == "false" ]]; then
+                   BUILD_TAGS+=("gts")
+                   echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
               fi
             fi
           fi
