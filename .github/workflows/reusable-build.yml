@@ -44,8 +44,8 @@ jobs:
         fedora_version:
           - ${{ inputs.fedora_version }}
         coreos_tag:
-          - coreos
-          - coreos-nv
+          - -coreos
+          - -coreos-nv
           - ""
         exclude:
           - fedora_version: 39
@@ -172,7 +172,7 @@ jobs:
           fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
-            if [[ "${{ matrix.coreos_tag }}" == "coreos" ]]; then
+            if [[ "${{ matrix.coreos_tag }}" == "-coreos" ]]; then
               BUILD_TAGS=("${FEDORA_VERSION}-testing-coreos" "${FEDORA_VERSION}-testing-coreos-${TIMESTAMP}")
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
@@ -183,7 +183,7 @@ jobs:
                    BUILD_TAGS+=("gts-testing-coreos")
                    echo "DEFAULT_TAG=gts-testing-coreos" >> $GITHUB_ENV
               fi
-            elif [[ "${{ matrix.coreos_tag }}" == "coreos-nv" ]]; then
+            elif [[ "${{ matrix.coreos_tag }}" == "-coreos-nv" ]]; then
               BUILD_TAGS=("${FEDORA_VERSION}-testing-coreos-nv" "${FEDORA_VERSION}-testing-coreos-nv-${TIMESTAMP}")
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
@@ -206,7 +206,7 @@ jobs:
               fi
             fi
           else
-            if [[ "${{ matrix.coreos_tag }}" == "coreos" ]]; then
+            if [[ "${{ matrix.coreos_tag }}" == "-coreos" ]]; then
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
                  BUILD_TAGS+=("latest-coreos")
@@ -215,7 +215,7 @@ jobs:
                    BUILD_TAGS+=("gts-coreos")
                    echo "DEFAULT_TAG=gts-coreos" >> $GITHUB_ENV
               fi
-            elif [[ "${{ matrix.coreos_tag }}" == "coreos-nv" ]]; then
+            elif [[ "${{ matrix.coreos_tag }}" == "-coreos-nv" ]]; then
               if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                  [[ "$IS_STABLE_VERSION" == "true" ]]; then
                  BUILD_TAGS+=("latest-coreos-nv")
@@ -387,7 +387,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: image-${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}
+          name: image-${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}${{coreos_tag}}
           retention-days: 1
           if-no-files-found: error
           path: |
