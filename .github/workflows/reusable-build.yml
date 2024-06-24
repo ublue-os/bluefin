@@ -154,7 +154,7 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          if [[ ${IS_COREOS} == "true" ]]; then
+          if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
             BUILD_TAGS=("${FEDORA_VERSION}-coreos" "${FEDORA_VERSION}-coreos-${TIMESTAMP}")
           else
             BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
