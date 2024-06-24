@@ -36,7 +36,6 @@ elif [[ ${COREOS_TAG} =~ "coreos" ]]; then
             nvidia-driver-cuda \
             nvidia-container-toolkit
         sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
-        sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
+        sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-nvidia.repo.
     fi
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-nvidia.repo
 fi
