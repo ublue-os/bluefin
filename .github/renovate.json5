@@ -4,6 +4,9 @@
     "config:best-practices",
   ],
 
+  // Do not rebase when the default branch is updated
+  "rebaseWhen": "never",
+
   "packageRules": [
     {
       "automerge": true,

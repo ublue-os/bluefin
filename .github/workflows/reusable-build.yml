@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Matrix Variables
         run: |
@@ -104,13 +104,13 @@ jobs:
           fi
 
       - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@v0.2.2
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
           containers: ${{ env.BASE_IMAGE_NAME}}-${{ matrix.image_flavor }}:${{ matrix.fedora_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
-        uses: EyeCantCU/cosign-action/verify@v0.2.2
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
           containers: dive, flux, helm, ko, minio, kubectl
           cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
@@ -118,10 +118,10 @@ jobs:
           registry: cgr.dev/chainguard
 
       - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v7
+        uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
 
       - name: Check just syntax
-        uses: ublue-os/just-action@v1
+        uses: ublue-os/just-action@961e70ef33d8e0ef5ecf19dbb20739f3c0ce873b # v1
 
       - name: Generate tags
         id: generate-tags
@@ -276,7 +276,7 @@ jobs:
 
       # Build metadata
       - name: Image Metadata
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
         id: meta
         with:
           images: |
@@ -291,7 +291,7 @@ jobs:
       # Build image using Buildah action
       - name: Build Image
         id: build_image
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
         with:
           containerfiles: |
             ./Containerfile
@@ -317,7 +317,7 @@ jobs:
             --target=${{ env.TARGET_NAME }}
 
       - name: Sign kernel
-        uses: ublue-os/kernel-signer@v0.2.3
+        uses: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
         if: github.event_name != 'pull_request'
         with:
           image: ${{ steps.build_image.outputs.image }}
@@ -332,13 +332,13 @@ jobs:
       # https://github.com/macbre/push-to-ghcr/issues/12
       - name: Lowercase Registry
         id: registry_case
-        uses: ASzc/change-string-case-action@v6
+        uses: ASzc/change-string-case-action@d0603cd0a7dd490be678164909f65c7737470a7f # v6
         with:
           string: ${{ env.IMAGE_REGISTRY }}
 
       # Push the image to GHCR (Image Registry)
       - name: Push To GHCR
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
         id: push
         if: github.event_name != 'pull_request'
         env:
@@ -352,7 +352,7 @@ jobs:
           password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
         if: github.event_name != 'pull_request'
         with:
           registry: ghcr.io
@@ -360,7 +360,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Sign container
-      - uses: sigstore/cosign-installer@v3.5.0
+      - uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
         if: github.event_name != 'pull_request'
 
       - name: Sign container image
@@ -386,7 +386,7 @@ jobs:
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
           name: image-${{ env.IMAGE_NAME }}-${{ matrix.image_flavor }}-${{ matrix.fedora_version }}${{ matrix.coreos_tag }}
           retention-days: 1
@@ -405,7 +405,7 @@ jobs:
       - name: Download artifacts
         if: github.event_name != 'pull_request'
         id: download-artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4
         with:
           pattern: image-*
           merge-multiple: true

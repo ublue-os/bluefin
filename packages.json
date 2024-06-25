@@ -131,7 +131,8 @@
 				"ubuntu-family-fonts",
 				"udica",
 				"virt-manager",
-				"virt-viewer"
+				"virt-viewer",
+				"ydotool"
 			]
 		},
 		"exclude": {
