@@ -21,18 +21,22 @@ if [[ "${AKMODS_FLAVOR}" =~ "coreos" ]]; then
     curl -Lo /etc/yum.repos.d/ublue-os-ucore-fedora.repo \
         https://copr.fedorainfracloud.org/coprs/ublue-os/ucore/repo/fedora/ublue-os-ucore-fedora.repo
     KERNEL_FOR_DEPMOD="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-    find /tmp/coreos/rpms
-    rpm-ostree install /tmp/coreos/rpms/*.rpm pv
+    rpm-ostree install /tmp/coreos/rpms/*.rpm \
+                       /tmp/coreos/rpms/zfs/*rpm \
+                       pv
     depmod -A "${KERNEL_FOR_DEPMOD}"
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ublue-os-ucore-fedora.repo
 fi
 if [[ "${COREOS_TAG}" =~ "coreos-nv" ]]; then
-    rpm-ostree install /tmp/akmods-rpms/ublue-os/ublue-os-nvidia-addons-*.rpm
-    source /tmp/akmods-rpms/kmods/nvidia-vars
+    rpm-ostree install /tmp/nvidia/akmods-rpms/ublue-os/ublue-os-nvidia-addons-*.rpm
+    source /tmp/nvidia/akmods-rpms/kmods/nvidia-vars
     rpm-ostree install \
         xorg-x11-drv-${NVIDIA_PACKAGE_NAME}-{,cuda-,devel-,kmodsrc-,power-}${NVIDIA_FULL_VERSION} \
         xorg-x11-drv-${NVIDIA_PACKAGE_NAME}-libs.i686 \
         nvidia-container-toolkit nvidia-vaapi-driver ${VARIANT_PKGS} \
-        /tmp/akmods-rpms/kmods/kmod-${NVIDIA_PACKAGE_NAME}-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${RELEASE}.rpm
+        /tmp/nvidia/akmods-rpms/kmods/kmod-${NVIDIA_PACKAGE_NAME}-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${RELEASE}.rpm
+    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
+    systemctl enable ublue-nvctk-cdi.service
+    semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
 fi
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo

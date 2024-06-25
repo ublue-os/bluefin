@@ -43,13 +43,12 @@ jobs:
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
-        coreos_tag: ""
+        coreos_tag:
+          - ""
         include:
           - image_flavor: main
-            fedora_version: ${{ inputs.fedora_version }}
             coreos_tag: "-coreos"
           - image_flavor: main
-            fedora_version: ${{ inputs.fedora_version }}
             coreos_tag: "-coreos-nv"
         exclude:
           - fedora_version: 39
