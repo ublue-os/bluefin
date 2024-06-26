@@ -14,11 +14,12 @@ alias xzgrep='ug -z'
 alias xzegrep='ug -zE'
 alias xzfgrep='ug -zF'
 
-if [ $(basename $SHELL) = "bash" ]; then
-    source /usr/share/bash-prexec
+if [ "$(basename "$SHELL")" = "bash" ]; then
+    #shellcheck disable=SC1091
+    . /usr/share/bash-prexec
     eval "$(atuin init bash)"
     eval "$(zoxide init bash)"
-elif [ $(basename $SHELL) = "zsh" ]; then
+elif [ "$(basename "$SHELL")" = "zsh" ]; then
     eval "$(atuin init zsh)"
     eval "$(zoxide init zsh)"
 fi
