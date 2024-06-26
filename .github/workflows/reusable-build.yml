@@ -67,27 +67,6 @@ jobs:
             base_name: ${{ inputs.brand_name }}-dx
             fedora_version: ${{ inputs.fedora_version }}
             coreos_tag: "-coreos"
-          # # TODO Figure out why include doesn't work
-          # - coreos_tag: "-coreos"
-          #   image_flavor: nvidia
-          # - coreos_tag: "-coreos"
-          #   image_flavor: asus
-          # - coreos_tag: "-coreos"
-          #   image_flavor: asus-nvidia
-          # - coreos_tag: "-coreos"
-          #   image_flavor: surface
-          # - coreos_tag: "-coreos"
-          #   image_flavor: surface-nvidia
-          # - coreos_tag: "-coreos-nv"
-          #   image_flavor: nvidia
-          # - coreos_tag: "-coreos-nv"
-          #   image_flavor: asus
-          # - coreos_tag: "-coreos-nv"
-          #   image_flavor: asus-nvidia
-          # - coreos_tag: "-coreos-nv"
-          #   image_flavor: surface
-          # - coreos_tag: "-coreos-nv"
-          #   image_flavor: surface-nvidia
 
     steps:
       - name: Checkout

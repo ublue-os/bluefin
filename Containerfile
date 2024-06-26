@@ -40,7 +40,7 @@ COPY packages.json /tmp/packages.json
 COPY /system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 # COPY ublue kmods, add needed negativo17 repo and then immediately disable due to incompatibility with RPMFusion
 COPY --from=akmods /rpms /tmp/akmods-rpms
-COPY --from=coreos_nvidia /rpms /tmp/nvidia/akmods-rpms
+COPY --from=coreos_nvidia /rpms /tmp/akmods-rpms
 COPY --from=coreos_kmods /rpms/kmods /tmp/coreos/akmods-rpms
 
 # Build, cleanup, commit.
