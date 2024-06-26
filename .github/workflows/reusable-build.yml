@@ -50,6 +50,10 @@ jobs:
             image_flavor: asus
           - fedora_version: 39
             image_flavor: asus-nvidia
+          - fedora_version: 39
+            image_flavor: surface
+          - fedora_version: 39
+            image_flavor: surface-nvidia
         include:
           - image_flavor: main
             base_name: ${{ inputs.brand_name }}
@@ -288,6 +292,7 @@ jobs:
       # Build image using Buildah action
       - name: Build Image
         id: build_image
+        if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
         with:
           containerfiles: |
