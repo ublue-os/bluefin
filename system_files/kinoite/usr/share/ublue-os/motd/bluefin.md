@@ -1,4 +1,5 @@
-# Welcome to Aurora!
+# Welcome to Aurora
+
 🔭  `%IMAGE_NAME%:%IMAGE_TAG%`
 Let's trace the stars.
 
