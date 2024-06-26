@@ -50,27 +50,14 @@ jobs:
             image_flavor: asus
           - fedora_version: 39
             image_flavor: asus-nvidia
-          - fedora_version: 39
+          - fedora_version: coreos
+            image_flavor: asus
+          - fedora_version: coreos
+            image_flavor: asus-nvidia
+          - fedora_version: coreos
             image_flavor: surface
-          - fedora_version: 39
+          - fedora_version: coreos
             image_flavor: surface-nvidia
-        include:
-          - image_flavor: main
-            base_name: ${{ inputs.brand_name }}
-            fedora_version: ${{ inputs.fedora_version }}
-            coreos_tag: "-coreos"
-          - image_flavor: main
-            base_name: ${{ inputs.brand_name }}-dx
-            fedora_version: ${{ inputs.fedora_version }}
-            coreos_tag: "-coreos"
-          - image_flavor: nvidia
-            base_name: ${{ inputs.brand_name }}
-            fedora_version: ${{ inputs.fedora_version }}
-            coreos_tag: "-coreos"
-          - image_flavor: nvidia
-            base_name: ${{ inputs.brand_name }}-dx
-            fedora_version: ${{ inputs.fedora_version }}
-            coreos_tag: "-coreos"
 
     steps:
       - name: Checkout
@@ -105,7 +92,7 @@ jobs:
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
               echo "KERNEL_SUFFIX=surface" >> $GITHUB_ENV
-          elif [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" =~ "coreos" ]]; then
               echo "AKMODS_FLAVOR=coreos" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
@@ -113,21 +100,42 @@ jobs:
 
           # Env for matrix.image_flavor
           if [[ "${{ matrix.image_flavor }}" == "nvidia" ]] && \
-             [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
+             [[ "${{ matrix.fedora_version }}" =~ "coreos" ]]; then
              echo "image_flavor=main" >> $GITHUB_ENV
              echo "coreos_type=nvidia" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" == "main" ]] && \
-               [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
-             echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
-             echo "coreos_type=main" >> $GITHUB_ENV
+               [[ "${{ matrix.fedora_version }}" =~ "coreos" ]]; then
+               echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
+               echo "coreos_type=main" >> $GITHUB_ENV
           else
              echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
           fi
 
+      - name: Get Current Fedora Version
+        id: labels
+        shell: bash
+        run: |
+          set -eo pipefail
+          if [[ ${{ matrix.fedora_version }} == "coreos" ]]; then
+            KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+          else
+            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+          fi
+          fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
+          echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
+          echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
+          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
+            echo "inspected image version must not be empty or null"
+            exit 1
+          fi
+          echo "VERSION=$ver" >> $GITHUB_OUTPUT
+
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ matrix.fedora_version }}
+          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ env.fedora_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
@@ -153,26 +161,27 @@ jobs:
           TIMESTAMP="$(date +%Y%m%d)"
           FEDORA_VERSION="${{ matrix.fedora_version }}"
 
-          if [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
+          if [[ "${{ matrix.fedora_version }}" == "coreos" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=false
+            IS_COREOS=true
+          elif [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=true
+            IS_COREOS=false
           elif [[ "${{ matrix.fedora_version }}" -eq "40" ]]; then
             IS_LATEST_VERSION=true
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
+            IS_COREOS=false
           elif [[ "${{ matrix.fedora_version }}" -eq "41" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=false
             IS_GTS_VERSION=false
-          fi
-
-          if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
-            IS_COREOS=true
-          else
             IS_COREOS=false
           fi
-          echo "IS_COREOS=$IS_COREOS" >> $GITHUB_ENV
 
           COMMIT_TAGS=()
           BUILD_TAGS=()
@@ -187,55 +196,27 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          if [[ "${{ matrix.coreos_tag }}" =~ "coreos" ]]; then
-            BUILD_TAGS=("${FEDORA_VERSION}-coreos" "${FEDORA_VERSION}-coreos-${TIMESTAMP}")
-          else
-            BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
-          fi
+          BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
-            if [[ "${{ matrix.coreos_tag }}" == "-coreos" ]]; then
-              BUILD_TAGS=("${FEDORA_VERSION}-testing-coreos" "${FEDORA_VERSION}-testing-coreos-${TIMESTAMP}")
-              if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                 BUILD_TAGS+=("testing-coreos")
-                 echo "DEFAULT_TAG=testing-coreos" >> $GITHUB_ENV
-              elif [[ "$IS_GTS_VERSION" == "true" ]] && \
-                   [[ "$IS_COREOS" == "true" ]]; then
-                   BUILD_TAGS+=("gts-testing-coreos")
-                   echo "DEFAULT_TAG=gts-testing-coreos" >> $GITHUB_ENV
-              fi
-            else
-              BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
-              if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                 BUILD_TAGS+=("testing")
-                 echo "DEFAULT_TAG=testing" >> $GITHUB_ENV
-              elif [[ "$IS_GTS_VERSION" == "true" ]]; then
-                 BUILD_TAGS+=("gts-testing")
-                 echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
-              fi
+            BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
+            if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+                [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                BUILD_TAGS+=("testing")
+                echo "DEFAULT_TAG=testing" >> $GITHUB_ENV
+            elif [[ "$IS_GTS_VERSION" == "true" ]]; then
+                BUILD_TAGS+=("gts-testing")
+                echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
             fi
           else
-            if [[ "${{ matrix.coreos_tag }}" == "-coreos" ]]; then
-              if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                 BUILD_TAGS+=("latest-coreos")
-                 echo "DEFAULT_TAG=latest-coreos" >> $GITHUB_ENV
-              elif [[ "$IS_GTS_VERSION" == "true" ]]; then
-                   BUILD_TAGS+=("gts-coreos")
-                   echo "DEFAULT_TAG=gts-coreos" >> $GITHUB_ENV
-              fi
-            else
-              if [[ "$IS_LATEST_VERSION" == "true" ]] && \
-                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                 BUILD_TAGS+=("latest")
-                 echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
-              elif [[ "$IS_GTS_VERSION" == "true" ]] && \
-                   [[ "$IS_COREOS" == "false" ]]; then
-                   BUILD_TAGS+=("gts")
-                   echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
-              fi
+            if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+                [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                BUILD_TAGS+=("latest")
+                echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
+            elif [[ "$IS_GTS_VERSION" == "true" ]] && \
+                  [[ "$IS_COREOS" == "false" ]]; then
+                  BUILD_TAGS+=("gts")
+                  echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
             fi
           fi
 
@@ -255,27 +236,6 @@ jobs:
           done
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
 
-      - name: Get Current Fedora Version
-        id: labels
-        shell: bash
-        run: |
-          set -eo pipefail
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
-          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
-            echo "inspected image version must not be empty or null"
-            exit 1
-          fi
-          echo "VERSION=$ver" >> $GITHUB_OUTPUT
-
-      - name: Get CoreOS Kernel Version
-        id: coreos_kernel
-        shell: bash
-        run: |
-         if [[ ${{ env.IS_COREOS }} == "true" ]]; then
-          KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-         fi
-         echo "kernel-release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
-
       # Build metadata
       - name: Image Metadata
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
@@ -287,6 +247,7 @@ jobs:
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
+            ostree.linux=${{ steps.labels.outputs.kernel_release }}
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
@@ -306,11 +267,11 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ env.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
+            FEDORA_MAJOR_VERSION=${{ env.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
             COREOS_TYPE=${{ env.coreos_type }}
-            COREOS_KERNEL=${{ steps.coreos_kernel.outputs.kernel-release }}
+            KERNEL=${{ steps.labels.outputs.kernel_release }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
           # TODO(GH-280)
@@ -382,20 +343,19 @@ jobs:
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_FLAVOR: ${{ env.image_flavor }}
-          FEDORA_VERSION: ${{ matrix.fedora_version }}
-          COREOS_TAG: ${{ matrix.coreos_tag }}
+          FEDORA_VERSION: ${{ env.fedora_version }}
         run:
-          echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}${{ matrix.coreos_tag }}.txt"
+          echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
-          name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}${{ matrix.coreos_tag }}
+          name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ env.fedora_version }}
           retention-days: 1
           if-no-files-found: error
           path: |
-            ${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}${{ matrix.coreos_tag}}.txt
+            ${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ env.fedora_version }}.txt
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful

@@ -8,41 +8,20 @@ IMAGE_TAG=$(jq -r '."image-tag"' < $IMAGE_INFO)
 FEDORA_VERSION=$(jq -r '."fedora-version"' < $IMAGE_INFO)
 
 function list_tags(){
-    coreos=$1
-    skopeo list-tags docker://ghcr.io/ublue-os/"${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)${coreos}" | sort -rV
+    skopeo list-tags docker://ghcr.io/ublue-os/"${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV
 }
-
-function valid_coreos(){
-    if [[ ${IMAGE_NAME} == "bluefin" ]] || \
-       [[ ${IMAGE_NAME} == "bluefin-dx" ]] || \
-       [[ ${IMAGE_NAME} == "bluefin-nvidia" ]] || \
-       [[ ${IMAGE_NAME} == "bluefin-dx-nvidia" ]] || \
-       [[ ${IMAGE_NAME} == "aurora" ]] || \
-       [[ ${IMAGE_NAME} == "aurora-dx" ]] || \
-       [[ ${IMAGE_NAME} == "aurora-nvidia" ]] || \
-       [[ ${IMAGE_NAME} == "aurora-dx-nvidia" ]]; then
-       return 0
-    fi
-    return 1
-}
-
 
 function rebase_helper(){
-    coreos=$1
-    if [[ -n "${coreos}" && ! $(valid_coreos) ]]; then
-        echo "There are no coreos tags for your image..."
-        /usr/bin/ublue-rollback-helper
-    fi
     base_image="ghcr.io/ublue-os/${IMAGE_NAME}"
     echo "Which Tag would you like to rebase to?"
-    choose_target=$(Choose date latest gts cancel)
-    if [[ "$choose_target" =~ "latest" || "$choose_target" =~ "gts" ]]; then
-        rebase_target="${base_image}:${choose_target}${coreos}"
+    choose_target=$(Choose date latest gts coreos cancel)
+    if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
+        rebase_target="${base_image}:${choose_target}"
     elif [[ "$choose_target" == "date" ]]; then
         # shellcheck disable=SC2207
-        valid_tags=( $(list_tags "${coreos}" | sed 's/\"//g' | sed 's/,//g'))
+        valid_tags=( $(list_tags | sed 's/\"//g' | sed 's/,//g'))
         target_tag=$(Choose cancel "${valid_tags[@]}")
-        if  grep -Eq "$FEDORA_VERSION-([0-9]+)${coreos}" <<< "${target_tag}"; then
+        if  grep -Eq "$FEDORA_VERSION-([0-9]+)" <<< "${target_tag}"; then
             # target_tag=${target_tag:1:-2}
             rebase_target="${base_image}:$target_tag"
         else
@@ -51,7 +30,7 @@ function rebase_helper(){
     else
         return 1
     fi
-    if  [[ "$choose_target" =~ "gts" && "$IMAGE_TAG" =~ "latest" ]]; then
+    if  [[ "$choose_target" =~ "gts" && "$IMAGE_TAG" != "$choose_target" ]]; then
         echo "Warning rolling back Major Fedora Versions may not work"
     fi
     echo "Rebase Target is ${rebase_target}"
@@ -64,12 +43,10 @@ function rebase_helper(){
 }
 
 echo "Choose your action."
-option=$(Choose rebase rebase-coreos cancel)
+option=$(Choose rebase cancel)
 
 if [[ "$option" == "rebase" ]]; then
-    rebase_helper "" || /usr/bin/ublue-rollback-helper
-elif [[ "$option" == "rebase-coreos" ]]; then
-    rebase_helper "-coreos" || /usr/bin/ublue-rollback-helper
+    rebase_helper || /usr/bin/ublue-rollback-helper
 else
     exit 0
 fi
