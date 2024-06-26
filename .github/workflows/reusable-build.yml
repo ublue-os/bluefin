@@ -205,6 +205,8 @@ jobs:
             elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                 BUILD_TAGS+=("gts-testing")
                 echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
+            elif [[ "$IS_COREOS" == "true" ]]; then
+                echo "DEFAULT_TAG=stable-testing" >> $GITHUB_ENV
             fi
           else
             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
@@ -214,6 +216,8 @@ jobs:
             elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                   BUILD_TAGS+=("gts")
                   echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
+            elif [[ "$IS_COREOS" == "true" ]]; then
+                  echo "DEFAULT_TAG=stable" >> $GITHUB_ENV
             fi
           fi
 

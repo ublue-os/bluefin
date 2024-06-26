@@ -10,8 +10,8 @@ if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then
         /tmp/akmods-rpms/kmods/*xone*.rpm \
         /tmp/akmods-rpms/kmods/*openrazer*.rpm \
         /tmp/akmods-rpms/kmods/*wl*.rpm \
-        /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
-        /tmp/akmods-rpms/kmods/*framework-laptop*.rpm
+        /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
+        # /tmp/akmods-rpms/kmods/*framework-laptop*.rpm
 fi
 if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then
     rpm-ostree install \
