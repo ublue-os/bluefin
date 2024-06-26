@@ -17,10 +17,16 @@ case $FEDORA_MAJOR_VERSION in
     ;;
 esac
 
+if [[ "${COREOS_TYPE}" == "nvidia" ]]; then
+  image_flavor="nvidia"
+else
+  image_flavor="${IMAGE_FLAVOR}"
+fi
+
 cat > $IMAGE_INFO <<EOF
 {
   "image-name": "$IMAGE_NAME",
-  "image-flavor": "$IMAGE_FLAVOR",
+  "image-flavor": "$image_flavor",
   "image-vendor": "$IMAGE_VENDOR",
   "image-ref": "$IMAGE_REF",
   "image-tag":"$IMAGE_TAG",
