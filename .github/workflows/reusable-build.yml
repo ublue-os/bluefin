@@ -283,7 +283,7 @@ jobs:
         id: coreos_kernel
         shell: bash
         run: |
-         if [[ ${{ matrix.coreos_tag }} =~ "coreos" ]]; then
+         if [[ ${{ env.IS_COREOS }} == "true" ]]; then
           KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
          fi
          echo "kernel-release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
