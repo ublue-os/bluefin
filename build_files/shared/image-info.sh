@@ -17,12 +17,13 @@ case $FEDORA_MAJOR_VERSION in
     ;;
 esac
 
+#shellcheck disable=SC2153
 image_flavor="${IMAGE_FLAVOR}"
 fedora_version="${FEDORA_MAJOR_VERSION}"
 
 if [[ -n "${COREOS_TYPE:-}" ]]; then
-  fedora_version="coreos"
-  IMAGE_TAG="coreos"
+  fedora_version="stable"
+  IMAGE_TAG="stable"
 fi
 
 if [[ "${COREOS_TYPE}" == "nvidia" ]]; then

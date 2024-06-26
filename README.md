@@ -58,7 +58,6 @@ sudo mokutil --import secure_boot.der
 
 If you encounter an issue with a password being recognized as incorrect, try using the `-` key on the numpad instead.
 
-
 ## Repobeats
 
 ![Alt](https://repobeats.axiom.co/api/embed/40b85b252bf6ea25eb90539d1adcea013ccae69a.svg "Repobeats analytics image")
