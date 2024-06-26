@@ -135,7 +135,7 @@ jobs:
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ env.fedora_version }}
+          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
@@ -267,7 +267,7 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ env.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ env.fedora_version }}
+            FEDORA_MAJOR_VERSION=${{ steps.labels.outputs.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
             COREOS_TYPE=${{ env.coreos_type }}
@@ -343,7 +343,7 @@ jobs:
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_FLAVOR: ${{ env.image_flavor }}
-          FEDORA_VERSION: ${{ env.fedora_version }}
+          FEDORA_VERSION: ${{ steps.labels.outputs.fedora_version }}
         run:
           echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
 
@@ -351,11 +351,11 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
-          name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ env.fedora_version }}
+          name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ steps.labels.outputs.fedora_version }}
           retention-days: 1
           if-no-files-found: error
           path: |
-            ${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ env.fedora_version }}.txt
+            ${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ steps.labels.outputs.fedora_version }}.txt
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
