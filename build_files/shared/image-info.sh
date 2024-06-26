@@ -7,13 +7,25 @@ IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 
 case $FEDORA_MAJOR_VERSION in
   39)
-    IMAGE_TAG="gts"
+    if [[ -n "${COREOS_TYPE:-}" ]]; then
+      IMAGE_TAG="gts-coreos"
+    else
+      IMAGE_TAG="gts"
+    fi
     ;;
   40)
-    IMAGE_TAG="latest"
+    if [[ -n "${COREOS_TYPE:-}" ]]; then
+      IMAGE_TAG="latest-coreos"
+    else
+      IMAGE_TAG="latest"
+    fi
     ;;
   *)
-    IMAGE_TAG="$FEDORA_MAJOR_VERSION"
+    if [[ -n "${COREOS_TYPE:-}" ]]; then
+      IMAGE_TAG="${FEDORA_MAJOR_VERSION}-coreos"
+    else
+      IMAGE_TAG="$FEDORA_MAJOR_VERSION"
+    fi
     ;;
 esac
 
