@@ -43,20 +43,18 @@ jobs:
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
-        coreos_tag:
-          - ""
         exclude:
           - fedora_version: 39
             image_flavor: asus
           - fedora_version: 39
             image_flavor: asus-nvidia
-          - fedora_version: coreos
+          - fedora_version: stable
             image_flavor: asus
-          - fedora_version: coreos
+          - fedora_version: stable
             image_flavor: asus-nvidia
-          - fedora_version: coreos
+          - fedora_version: stable
             image_flavor: surface
-          - fedora_version: coreos
+          - fedora_version: stable
             image_flavor: surface-nvidia
 
     steps:
@@ -92,7 +90,7 @@ jobs:
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
               echo "KERNEL_SUFFIX=surface" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" =~ "coreos" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" =~ "stable" ]]; then
               echo "AKMODS_FLAVOR=coreos" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
@@ -100,11 +98,11 @@ jobs:
 
           # Env for matrix.image_flavor
           if [[ "${{ matrix.image_flavor }}" == "nvidia" ]] && \
-             [[ "${{ matrix.fedora_version }}" =~ "coreos" ]]; then
+             [[ "${{ matrix.fedora_version }}" =~ "stable" ]]; then
              echo "image_flavor=main" >> $GITHUB_ENV
              echo "coreos_type=nvidia" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" == "main" ]] && \
-               [[ "${{ matrix.fedora_version }}" =~ "coreos" ]]; then
+               [[ "${{ matrix.fedora_version }}" =~ "stable" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
                echo "coreos_type=main" >> $GITHUB_ENV
           else
@@ -116,7 +114,7 @@ jobs:
         shell: bash
         run: |
           set -eo pipefail
-          if [[ ${{ matrix.fedora_version }} == "coreos" ]]; then
+          if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
             KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
             fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
           else
@@ -161,7 +159,7 @@ jobs:
           TIMESTAMP="$(date +%Y%m%d)"
           FEDORA_VERSION="${{ matrix.fedora_version }}"
 
-          if [[ "${{ matrix.fedora_version }}" == "coreos" ]]; then
+          if [[ "${{ matrix.fedora_version }}" == "stable" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
@@ -213,8 +211,7 @@ jobs:
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
                 BUILD_TAGS+=("latest")
                 echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
-            elif [[ "$IS_GTS_VERSION" == "true" ]] && \
-                  [[ "$IS_COREOS" == "false" ]]; then
+            elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                   BUILD_TAGS+=("gts")
                   echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
             fi

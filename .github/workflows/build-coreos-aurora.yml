@@ -25,4 +25,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: aurora
-      fedora_version: coreos
+      fedora_version: stable

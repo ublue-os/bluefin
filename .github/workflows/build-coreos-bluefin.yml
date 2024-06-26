@@ -25,4 +25,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: bluefin
-      fedora_version: coreos
+      fedora_version: stable
