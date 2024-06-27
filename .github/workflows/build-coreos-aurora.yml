@@ -1,4 +1,4 @@
-name: aurora coreos
+name: Aurora Stable
 on:
   merge_group:
   pull_request:
