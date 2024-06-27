@@ -9,6 +9,9 @@ install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
+# Bash Prexec
+curl -Lo /usr/share/bash-prexec https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh
+
 # Topgrade Install
 pip install --prefix=/usr topgrade
 
