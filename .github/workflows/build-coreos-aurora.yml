@@ -15,7 +15,7 @@ on:
       - '**.md'
       - 'system_files/bluefin/**'
   schedule:
-    - cron: '41 5 * * *'  # 5:41 UTC everyday
+    - cron: '41 5 * * 2'  # 5:41 UTC every Tuesday
   workflow_dispatch:
 
 jobs:
