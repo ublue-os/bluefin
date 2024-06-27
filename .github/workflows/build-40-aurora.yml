@@ -1,4 +1,4 @@
-name: aurora 40
+name: Aurora 40
 on:
   merge_group:
   pull_request:

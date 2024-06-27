@@ -1,4 +1,4 @@
-name: bluefin coreos
+name: Bluefin Stable
 on:
   merge_group:
   pull_request:
