@@ -1,0 +1,28 @@
+name: aurora coreos
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+      - 'system_files/bluefin/**'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'system_files/bluefin/**'
+  schedule:
+    - cron: '41 5 * * *'  # 5:41 UTC everyday
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      brand_name: aurora
+      fedora_version: stable

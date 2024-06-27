@@ -14,6 +14,9 @@ if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
     sed -i 's@Keywords=@Keywords=konsole;console;@g' /usr/share/applications/org.gnome.Ptyxis.desktop
     cp /usr/share/applications/org.gnome.Ptyxis.desktop /usr/share/kglobalaccel/org.gnome.Ptyxis.desktop
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.kde.konsole.desktop
+    sed -i 's@Bluefin@Aurora@g' /usr/share/applications/system-update.desktop
+    sed -i 's@Bluefin@Aurora@g' /usr/share/ublue-os/motd/tips/10-tips.md
+    sed -i 's@Bluefin@Aurora@g' /usr/libexec/ublue-flatpak-manager
     rm -f /usr/etc/profile.d/gnome-ssh-askpass.{csh,sh} # This shouldn't be pulled in
     rm -f /usr/share/kglobalaccel/org.kde.konsole.desktop
     systemctl enable kde-sysmonitor-workaround.service
