@@ -1,7 +1,5 @@
 export project_root := `git rev-parse --show-toplevel`
 export git_branch := ` git branch --show-current`
-export gts := "39"
-export latest := "40"
 
 alias run := run-container
 
@@ -28,7 +26,6 @@ just-check:
     just --unstable --fmt --check -f ${project_root}/Justfile
 
 # Fix Just Syntax
-[private]
 just-fix:
     #!/usr/bin/bash
     find "${project_root}" -type f -name "*.just" | while read -r file; do
@@ -91,7 +88,6 @@ help:
     echo "Or in a more stripped down version with 'just run'                            "
     echo "Specify which image you wish to build and run by name.                        "
     echo "Example: 'just run-container aurora' -> runs aurora without systemd           "
-    echo "Example: 'just run bluefin-dx' -> runs bluefin-dx with systemd                "
     echo "                                                                              "
     echo "Helper scripts are in 'project_root/scripts'.                                 "
     echo "                                                                              "
@@ -101,38 +97,26 @@ help:
     echo "                                                                              "
     just --list
 
-# Build Bluefin
-bluefin: (build "bluefin" "base" "{{gts}}")
+# Build Bluefin GTS
+bluefin: (build "bluefin" "base" "gts")
 
-# Build Bluefin-DX
-bluefin-dx: (build "bluefin" "dx" "{{gts}}")
+# Build Bluefin-DX GTS
+bluefin-dx: (build "bluefin" "dx" "gts")
 
-# Build Bluefin Latest
-bluefin-latest: (build "bluefin" "base" "{{latest}}")
+# Build Bluefin GTS ISO
+bluefin-iso: (build-iso "bluefin" "base" "gts")
 
-# Build Bluefin-DX Latest
-bluefin-dx-latest: (build "bluefin" "dx" "{{latest}}")
+# Build Bluefin-DX GTS ISO
+bluefin-dx-iso: (build-iso "bluefin" "dx" "gts")
 
 # Build Aurora
-aurora: (build "aurora" "base" "{{latest}}")
+aurora: (build "aurora" "base" "stable")
 
 # Builed Aurora-DX
-aurora-dx: (build "aurora" "dx" "{{latest}}")
+aurora-dx: (build "aurora" "dx" "stable")
 
-# Build Bluefin-ISO
-bluefin-iso: (build-iso "bluefin" "base" "{{gts}}")
+# Build Aurora ISO
+aurora-iso: (build-iso "aurora" "base" "stable")
 
-# Build Bluefin-DX-ISO
-bluefin-dx-iso: (build-iso "bluefin" "dx" "{{gts}}")
-
-# Build Bluefin Latest-ISO
-bluefin-latest-iso: (build-iso "bluefin" "base" "{{latest}}")
-
-# Build Bluefin-DX Latest-ISO
-bluefin-dx-latest-iso: (build-iso "bluefin" "dx" "{{latest}}")
-
-# Build Aurora-ISO
-aurora-iso: (build-iso "aurora" "base" "{{latest}}")
-
-# Builed Aurora-DX-ISO
-aurora-dx-iso: (build-iso "aurora" "dx" "{{latest}}")
+# Builed Aurora-DX ISO
+aurora-dx-iso: (build-iso "aurora" "dx" "stable")
