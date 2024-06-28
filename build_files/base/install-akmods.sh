@@ -25,7 +25,7 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.r
 # ZFS for gts/stable
 if [[ -n "${COREOS_TYPE:-}" ]]; then
     KERNEL_FOR_DEPMOD="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-    rpm-ostree install /tmp/akmods-rpms/zfs/*.rpm \
+    rpm-ostree install /tmp/akmods-rpms/kmods/zfs/*.rpm \
                        pv
     depmod -A "${KERNEL_FOR_DEPMOD}"
 fi
