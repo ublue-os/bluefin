@@ -38,13 +38,17 @@ jobs:
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
-          - fedora_version: 38
+          - fedora_version: gts
             image_flavor: asus
-          - fedora_version: 38
+          - fedora_version: gts
             image_flavor: asus-nvidia
-          - fedora_version: 38
+          - fedora_version: stable
+            image_flavor: asus
+          - fedora_version: stable
+            image_flavor: asus-nvidia
+          - fedora_version: stable
             image_flavor: surface
-          - fedora_version: 38
+          - fedora_version: stable
             image_flavor: surface-nvidia
 
     steps:
@@ -66,11 +70,38 @@ jobs:
           elif [[ ${{ inputs.brand_name }} == "aurora" ]]; then
             echo "VARIANT=Kinoite" >> $GITHUB_ENV
           fi
-          if [[ ${{ inputs.fedora_version }} == "39" ]]; then
+          if [[ ${{ inputs.fedora_version }} == "gts" ]]; then
             echo "IS_GTS_VERSION=true" >> $GITHUB_ENV
-          elif [[ ${{ inputs.fedora_version }} == "40" ]]; then
+          if [[ ${{ inputs.fedora_version }} == "stable" ]]; then
+            echo "IS_STABLE_VERSION=true" >> $GITHUB_ENV
+          elif [[ ${{ inputs.fedora_version }} == "latest" ]]; then
             echo "IS_LATEST_VERSION=true" >> $GITHUB_ENV
           fi
+
+      - name: Get Current Fedora Version
+        id: labels
+        shell: bash
+        run: |
+          set -eo pipefail
+          if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
+            KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+          elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
+            coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
+            coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
+            KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1))"
+          else
+            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+          fi
+          fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+          echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
+          echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
+          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
+          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
+            echo "inspected image version must not be empty or null"
+            exit 1
+          fi
+          echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       - name: Set Image Tag
         id: generate-tag
@@ -78,6 +109,8 @@ jobs:
         run: |
           if [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
             TAG="latest"
+          elif [[ "${{ env.IS_STABLE_VERSION }}" == "true" ]]; then
+            TAG="stable"
           elif [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
             TAG="gts"
           fi
@@ -85,6 +118,8 @@ jobs:
           if [[ "${{ github.ref_name }}" == "testing" ]]; then
             if [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
               TAG="gts-testing"
+            elif [[ "${{ env.IS_STABLE_VERSION }}" == "true" ]]; then
+              TAG="stable-testing"
             elif [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
               TAG="testing"
             fi
@@ -147,7 +182,7 @@ jobs:
           image_name: ${{ env.IMAGE_NAME }}
           image_repo: ghcr.io/ublue-os
           variant: ${{ env.VARIANT }}
-          version: ${{ matrix.fedora_version }}
+          version: ${{ steps.labels.outputs.fedora_version }}
           image_tag: ${{ steps.generate-tag.outputs.tag }}
           secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
           enrollment_password: 'ublue-os'
