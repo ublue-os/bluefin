@@ -19,7 +19,7 @@ version=$3
 # Get Fedora Version and Kernel Info
 if [[ "${version}" == "stable" ]]; then
     KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-    fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+    fedora_version=$(echo "$KERNEL_RELEASE" | grep -oP 'fc\K[0-9]+')
 elif [[ ${version} == "gts" ]]; then
     coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
     major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
