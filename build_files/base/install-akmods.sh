@@ -2,6 +2,19 @@
 
 set -ouex pipefail
 
+if [[ -n "${COREOS_TYPE:-}" ]]; then
+    curl -L -o /etc/yum.repos.d/fedora-coreos-pool.repo \
+        https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
+fi
+
+# Nvidia for gts/stable - nvidia
+if [[ "${COREOS_TYPE}" == "nvidia" ]]; then
+    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
+    chmod +x /tmp/nvidia-install.sh && \
+    IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
+    rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
+fi
+
 curl -Lo /etc/yum.repos.d/negativo17-fedora-multimedia.repo https://negativo17.org/repos/fedora-multimedia.repo
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 
@@ -29,11 +42,3 @@ if [[ -n "${COREOS_TYPE:-}" ]]; then
                        pv
     depmod -A "${KERNEL_FOR_DEPMOD}"
 fi
-
-# Nvidia for gts/stable
-if [[ "${COREOS_TYPE}" == "nvidia" ]]; then
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
-    chmod +x /tmp/nvidia-install.sh && \
-    IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
-fi
-
