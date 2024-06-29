@@ -53,16 +53,20 @@ runs:
         tagged_image_refs=()
         sanitized_compression_formats=()
 
-        for tag in "${image_tags_array[@]}"; do
-          for format in "${compression_formats_array[@]}"; do
-            sanitized_format=$(echo "$format" | tr ':' '-')
-            sanitized_compression_formats+=("$sanitized_format")
+        # Images of the same format should be pushed together
+        for format in "${compression_formats_array[@]}"; do
+          sanitized_format=$(echo "$format" | tr ':' '-')
+          sanitized_compression_formats+=("$sanitized_format")
 
+          for tag in "${image_tags_array[@]}"; do
             full_tag="${{ inputs.image-registry }}/${{ inputs.image-name }}:${tag}-${sanitized_format}"
-            echo "Tagging and pushing: ${{ inputs.image-name }}:${tag} as ${full_tag} with ${format} compression"
+            echo "Tagging: ${{ inputs.image-name }}:${tag} as ${full_tag} with ${format} compression"
             podman tag "${{ inputs.image-name }}:${tag}" "${full_tag}"
             podman push --compression-format="$format" "${full_tag}"
           done
+        done
+
+        for tag in "${image_tags_array[@]}"; do
           tagged_image_refs+=("${{ inputs.image-registry }}/${{ inputs.image-name }}:${tag}")
         done
 
