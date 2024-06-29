@@ -1,6 +1,5 @@
 name: Aurora 39
 on:
-  merge_group:
   pull_request:
     branches:
       - main
@@ -9,7 +8,7 @@ on:
       - '**.md'
       - 'system_files/silverblue/**'
   schedule:
-    - cron: '41 5 * * *'  # 5:41 UTC everyday
+    - cron: '41 5 * * 0'  # 5:41 UTC Weekly on Sunday
   workflow_dispatch:
 
 jobs:
