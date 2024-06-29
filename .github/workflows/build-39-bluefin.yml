@@ -4,6 +4,9 @@ on:
     branches:
       - main
       - testing
+    paths-ignore:
+      - '**.md'
+      - 'system_files/kinoite/**'
   schedule:
     - cron: '41 5 * * 0'  # 5:41 UTC Weekly on Sundays
   workflow_dispatch:
