@@ -2,6 +2,18 @@
 
 set -ouex pipefail
 
+if [[ -n "${COREOS_TYPE:-}" ]]; then
+    curl -L -o /etc/yum.repos.d/fedora-coreos-pool.repo \
+        https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
+fi
+
+if [[ "${COREOS_TYPE}" == "nvidia" ]]; then
+    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
+    chmod +x /tmp/nvidia-install.sh && \
+    IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
+    rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
+fi
+
 curl -Lo /etc/yum.repos.d/negativo17-fedora-multimedia.repo https://negativo17.org/repos/fedora-multimedia.repo
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 if [[ "${FEDORA_MAJOR_VERSION}" -ge "39" ]]; then
@@ -19,20 +31,3 @@ if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then
 fi
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
-if [[ "${COREOS_TYPE}" == "nvidia" ]]; then
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
-    chmod +x /tmp/nvidia-install.sh && \
-    IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
-fi
-
-# ZFS is pulled from Ucore which is not in sync
-# if [[ "${AKMODS_FLAVOR}" =~ "coreos" ]]; then
-#     curl -Lo /etc/yum.repos.d/ublue-os-ucore-fedora.repo \
-#         https://copr.fedorainfracloud.org/coprs/ublue-os/ucore/repo/fedora/ublue-os-ucore-fedora.repo
-#     KERNEL_FOR_DEPMOD="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
-#     rpm-ostree install /tmp/coreos/akmods-rpms/*.rpm \
-#                        /tmp/coreos/akmods-rpms/zfs/*.rpm \
-#                        pv
-#     depmod -A "${KERNEL_FOR_DEPMOD}"
-#     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ublue-os-ucore-fedora.repo
-# fi
