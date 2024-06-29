@@ -94,11 +94,12 @@ runs:
 
         manifest_digest=$(skopeo inspect "docker://${tagged_image_refs[0]}" --format '{{.Digest}}')
         echo "digest=${manifest_digest}" >> $GITHUB_OUTPUT
+        echo "tagged-image-references=${tagged_image_refs[*]}" >> $GITHUB_OUTPUT
 
     - name: Set Outputs
       id: set-outputs
       shell: bash
       run: |
-        echo "registry-path=${tagged_image_refs[0]}" >> $GITHUB_OUTPUT
+        echo "registry-path=${{ steps.create-and-push-manifests.outputs.tagged-image-references }}" >> $GITHUB_OUTPUT
         echo "compression-formats=${{ inputs.compression-formats }}" >> $GITHUB_OUTPUT
-        echo "digest=${manifest_digest}" >> $GITHUB_OUTPUT
+        echo "digest=${{ steps.create-and-push-manifests.outputs.digest }}" >> $GITHUB_OUTPUT
