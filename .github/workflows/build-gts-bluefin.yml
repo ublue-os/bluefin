@@ -15,7 +15,7 @@ on:
       - '**.md'
       - 'system_files/kinoite/**'
   schedule:
-    - cron: '41 5 * * 1' # 5:41 UTC Build weekly on Monday
+    - cron: '41 5 * * 0' # 5:41 UTC Build weekly on Sunday
   workflow_dispatch:
 
 jobs:
