@@ -1,0 +1,100 @@
+name: Push Image (Podman)
+
+inputs:
+  image-name:
+    description: 'The name of the image to build'
+    required: true
+  image-tags:
+    description: 'The tags to apply to the image'
+    required: true
+  image-registry:
+    description: 'The registry to push the image to'
+    required: true
+  registry-username:
+    description: 'The username to authenticate with the registry'
+    required: false
+    default: ${{ github.actor }}
+  registry-password:
+    description: 'The password to authenticate with the registry'
+    required: false
+    default: ${{ github.token }}
+  compression-formats:
+    description: 'A space-separated list of compression formats to use. Best to include gzip as the first option for compatibility.'
+    required: false
+    default: 'gzip'
+
+outputs:
+  registry-path:
+    description: 'The path to the pushed image in the registry'
+    value: ${{ steps.set-outputs.outputs.registry-path }}
+  digest:
+    description: 'The digest of the image in the registry'
+    value: ${{ steps.set-outputs.outputs.digest }}
+  compression-formats:
+    description: 'The compression formats used for the image'
+    value: ${{ inputs.compression-formats }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Login to Registry
+      uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
+      with:
+        registry: ${{ inputs.image-registry }}
+        username: ${{ inputs.registry-username }}
+        password: ${{ inputs.registry-password }}
+
+    - name: Tag and Push Image
+      id: tag-and-push
+      shell: bash
+      run: |
+        IFS=' ' read -r -a compression_formats_array <<< "${{ inputs.compression-formats }}"
+        IFS=' ' read -r -a image_tags_array <<< "${{ inputs.image-tags }}"
+        tagged_image_refs=()
+        sanitized_compression_formats=()
+
+        for tag in "${image_tags_array[@]}"; do
+          for format in "${compression_formats_array[@]}"; do
+            sanitized_format=$(echo "$format" | tr ':' '-')
+            sanitized_compression_formats+=("$sanitized_format")
+
+            full_tag="${{ inputs.image-registry }}/${{ inputs.image-name }}:${tag}-${sanitized_format}"
+            echo "Tagging and pushing: ${{ inputs.image-name }}:${tag} as ${full_tag} with ${format} compression"
+            podman tag "${{ inputs.image-name }}:${tag}" "${full_tag}"
+            podman push --compression-format="$format" "${full_tag}"
+          done
+          tagged_image_refs+=("${{ inputs.image-registry }}/${{ inputs.image-name }}:${tag}")
+        done
+
+        echo "tagged-image-references=${tagged_image_refs[*]}" >> $GITHUB_OUTPUT
+        echo "sanitized-compression-formats=${sanitized_compression_formats[*]}" >> $GITHUB_OUTPUT
+
+    - name: Create and Push Manifests
+      id: create-and-push-manifests
+      shell: bash
+      run: |
+        IFS=' ' read -r -a tagged_image_refs <<< "${{ steps.tag-and-push.outputs.tagged-image-references }}"
+        IFS=' ' read -r -a sanitized_compression_formats <<< "${{ steps.tag-and-push.outputs.sanitized-compression-formats }}"
+
+        for tag_reference in "${tagged_image_refs[@]}"; do
+          podman manifest create "$tag_reference"
+
+          for format in "${sanitized_compression_formats[@]}"; do
+            full_image_reference="${tag_reference}-${format}"
+            echo "Adding image ${full_image_reference} to manifest ${tag_reference}"
+            podman manifest add "$tag_reference" "docker://${full_image_reference}"
+          done
+
+          podman manifest push --all=false "$tag_reference" "docker://${tag_reference}"
+        done
+
+        manifest_digest=$(skopeo inspect "docker://${tagged_image_refs[0]}" --format '{{.Digest}}')
+        echo "digest=${manifest_digest}" >> $GITHUB_OUTPUT
+
+    - name: Set Outputs
+      id: set-outputs
+      shell: bash
+      run: |
+        echo "registry-path=${tagged_image_refs[0]}" >> $GITHUB_OUTPUT
+        echo "compression-formats=${{ inputs.compression-formats }}" >> $GITHUB_OUTPUT
+        echo "digest=${manifest_digest}" >> $GITHUB_OUTPUT
