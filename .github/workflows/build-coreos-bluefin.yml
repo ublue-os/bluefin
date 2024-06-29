@@ -1,12 +1,21 @@
-name: bluefin CoreOS Kernel
+name: Bluefin Stable
 on:
   merge_group:
   pull_request:
     branches:
+      - main
       - testing
     paths-ignore:
       - '**.md'
       - 'system_files/kinoite/**'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'system_files/kinoite/**'
+  schedule:
+    - cron: '41 5 * * 2'  # 5:41 UTC every Tuesday
   workflow_dispatch:
 
 jobs:
@@ -16,4 +25,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: bluefin
-      fedora_version: coreos
+      fedora_version: stable

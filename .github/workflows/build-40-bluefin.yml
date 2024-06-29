@@ -1,4 +1,4 @@
-name: bluefin 40
+name: Bluefin 40
 on:
   merge_group:
   pull_request:

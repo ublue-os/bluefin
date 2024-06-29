@@ -1,4 +1,4 @@
-name: Reusable Build ISOs
+name: Reusable ISO 
 on:
   workflow_call:
     inputs:

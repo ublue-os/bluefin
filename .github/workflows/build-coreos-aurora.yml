@@ -1,4 +1,4 @@
-name: Aurora 40
+name: Aurora Stable
 on:
   merge_group:
   pull_request:
@@ -7,15 +7,15 @@ on:
       - testing
     paths-ignore:
       - '**.md'
-      - 'system_files/silverblue/**'
+      - 'system_files/bluefin/**'
   push:
     branches:
       - main
     paths-ignore:
       - '**.md'
-      - 'system_files/silverblue/**'
+      - 'system_files/bluefin/**'
   schedule:
-    - cron: '40 4 * * *'  # 4:40 UTC everyday
+    - cron: '41 5 * * 2'  # 5:41 UTC every Tuesday
   workflow_dispatch:
 
 jobs:
@@ -25,4 +25,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: aurora
-      fedora_version: 40
+      fedora_version: stable
