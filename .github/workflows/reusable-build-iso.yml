@@ -84,24 +84,15 @@ jobs:
         run: |
           set -eo pipefail
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-            KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/bluefin:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
           elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
-            coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-            major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
-            coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
-            KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1))"
+            kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/bluefin:gts | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
           else
-            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
           fi
           fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
-          echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
+          echo "kernel_release=$kernel_release" >> $GITHUB_OUTPUT
           echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
-          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
-            echo "inspected image version must not be empty or null"
-            exit 1
-          fi
-          echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       - name: Set Image Tag
         id: generate-tag
@@ -148,7 +139,7 @@ jobs:
         shell: bash
         run: |
           set -ex
-          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ steps.generate-tag.outputs.tag }}"
+          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.fedora_version }}"
           # Make temp space
           TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
           # Get list of refs from directory
