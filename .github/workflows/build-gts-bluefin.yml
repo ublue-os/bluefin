@@ -1,6 +1,5 @@
 name: Bluefin GTS
 on:
-  merge_group:
   pull_request:
     branches:
       - main
@@ -8,14 +7,8 @@ on:
     paths-ignore:
       - '**.md'
       - 'system_files/kinoite/**'
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
-      - 'system_files/kinoite/**'
   schedule:
-    - cron: '41 5 * * 0' # 5:41 UTC Build weekly on Sunday
+    - cron: '41 5 * * 0'  # 5:41 UTC Weekly on Sundays
   workflow_dispatch:
 
 jobs:

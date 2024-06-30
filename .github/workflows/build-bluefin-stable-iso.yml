@@ -1,8 +1,8 @@
 name: Bluefin Stable ISO Build
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '41 6 * * 2'  # 6:41 UTC every Tuesday
+  # schedule:
+  #   - cron: '41 6 * * 2'  # 6:41 UTC every Tuesday
   
 
 jobs:
