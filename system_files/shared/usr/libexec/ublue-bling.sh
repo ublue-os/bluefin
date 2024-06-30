@@ -69,21 +69,21 @@ if [[ "${shell}" == "fish" ]]; then
     echo 'Adding bling to your config.fish 🐟🐟🐟'
     cat<<-EOF >> "${XDG_CONFIG_HOME:-$HOME/.config}/fish/config.fish"
 ### bling.fish source start
-source /usr/share/ublue-os/bluefin-cli/bling.fish
+test -f /usr/share/ublue-os/bluefin-cli/bling.fish && source /usr/share/ublue-os/bluefin-cli/bling.fish
 ### bling.fish source end
 EOF
 elif [[ "${shell}" == "zsh" ]]; then
     echo 'Adding bling to your .zshrc 💤💤💤'
     cat<<-EOF >> "${ZDOTDIR:-$HOME}/.zshrc"
 ### bling.sh source start
-source /usr/share/ublue-os/bluefin-cli/bling.sh
+test -f /usr/share/ublue-os/bluefin-cli/bling.sh && source /usr/share/ublue-os/bluefin-cli/bling.sh
 ### bling.sh source end
 EOF
 elif [[ "${shell}" == "bash" ]]; then
     echo 'Adding bling to your .bashrc 💥💥💥'
     cat<<-EOF >> "${HOME}/.bashrc"
 ### bling.sh source start
-source /usr/share/ublue-os/bluefin-cli/bling.sh
+test -f /usr/share/ublue-os/bluefin-cli/bling.sh && source /usr/share/ublue-os/bluefin-cli/bling.sh
 ### bling.sh source end
 EOF
 else
