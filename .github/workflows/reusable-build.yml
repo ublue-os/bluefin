@@ -227,7 +227,6 @@ jobs:
                   echo "${TAG}"
               done
               alias_tags=("${COMMIT_TAGS[@]}")
-              echo "DEFAULT_TAG=${SHA_SHORT}-${FEDORA_VERSION}" >> $GITHUB_ENV
           else
               alias_tags=("${BUILD_TAGS[@]}")
           fi
@@ -283,7 +282,7 @@ jobs:
 
       - name: Sign kernel
         uses: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
-        if: github.event_name != 'pull_request'
+        if: matrix.fedora_version == 'stable' && github.event_name != 'pull_request'
         with:
           image: ${{ steps.build_image.outputs.image }}
           default-tag: ${{ env.DEFAULT_TAG }}
