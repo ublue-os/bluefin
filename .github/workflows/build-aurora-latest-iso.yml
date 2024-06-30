@@ -1,4 +1,4 @@
-name: Aurora Latest ISO Build
+name: Aurora Latest ISO
 on:
   workflow_dispatch:
   schedule:

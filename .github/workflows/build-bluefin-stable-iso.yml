@@ -1,4 +1,4 @@
-name: Bluefin Stable ISO Build
+name: Bluefin Stable ISO
 on:
   workflow_dispatch:
   # schedule:

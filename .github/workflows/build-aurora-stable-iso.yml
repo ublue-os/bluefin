@@ -1,4 +1,4 @@
-name: Aurora Stable ISO Build
+name: Aurora Stable ISO
 on:
   workflow_dispatch:
 
