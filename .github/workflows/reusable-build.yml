@@ -435,7 +435,7 @@ jobs:
   build_iso:
     name: iso
     needs: [check]
-    if: github.event_name == 'schedule' && github.ref_name == 'main' && inputs.fedora_version != 'beta'
+    if: github.event_name == 'schedule' && github.ref_name == 'main' && inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest'
     # Eventually would be nice for building images in PRs
     #if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
     uses: ./.github/workflows/reusable-build-iso.yml
