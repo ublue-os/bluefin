@@ -25,6 +25,13 @@ inputs:
   compression-tag:
     description: 'A unique identifier to use for the compression-specific image tags'
     required: false
+  image-format:
+    description: 'The format of the image to be pushed.'
+    default: 'oci'
+  retries:
+    description: 'The number of retries for pushing images.'
+    required: false
+    default: 3
 
 outputs:
   registry-path:
@@ -80,7 +87,7 @@ runs:
         sanitized_compression_formats=()
         tagged_compression_images=()
         for format in "${compression_formats_array[@]}"; do
-          sanitized_format=$(echo "$format" | tr ':' '-')
+          sanitized_format=$(echo "${format}" | tr ':' '-')
           sanitized_compression_formats+=("$sanitized_format")
           full_tag="${COMPRESSION_IMAGE_FULL}-${sanitized_format}"
           echo "Tagging: ${IMAGE_NAME}:${COMPRESSION_TAG} as ${full_tag} with ${format} compression"
@@ -96,6 +103,8 @@ runs:
       env:
         COMPRESSION_FORMATS: ${{ inputs.compression-formats }}
         TAGGED_COMPRESSION_IMAGES: ${{ steps.tag-image.outputs.tagged_compression_images }}
+        IMAGE_FORMAT: ${{ inputs.image-format }}
+        RETRIES: ${{ inputs.retries }}
       run: |
         IFS=' ' read -r -a compression_formats_array <<< "${COMPRESSION_FORMATS}"
         IFS=' ' read -r -a tagged_compression_images_array <<< "${TAGGED_COMPRESSION_IMAGES}"
@@ -103,7 +112,19 @@ runs:
           format="${compression_formats_array[$i]}"
           tagged_compression_image="${tagged_compression_images_array[$i]}"
           echo "Pushing: ${tagged_compression_image} with ${format} compression"
-          podman push --compression-format="$format" "${tagged_compression_image}"
+          success=false
+          for ((j=0; j<${RETRIES}; j++)); do
+            if podman push --format="${IMAGE_FORMAT}" --compression-format="${format}" "${tagged_compression_image}"; then
+              success=true
+              break
+            else
+              echo "Push failed for ${tagged_compression_image} with ${format} compression. Retrying... ($((j+1))/${RETRIES})"
+            fi
+          done
+          if [ "$success" = false ]; then
+            echo "Failed to push ${tagged_compression_image} after ${RETRIES} attempts"
+            exit 1
+          fi
         done
 
     - name: Create Manifests
@@ -146,11 +167,25 @@ runs:
       shell: bash
       env:
         MANIFEST_NAMES: ${{ steps.create-manifests.outputs.manifest_names }}
+        IMAGE_FORMAT: ${{ inputs.image-format }}
+        RETRIES: ${{ inputs.retries }}
       run: |
         IFS=' ' read -r -a manifest_names_array <<< "${MANIFEST_NAMES}"
         manifest_digests=()
         for manifest_name in "${manifest_names_array[@]}"; do
-          podman manifest push --all=false ${manifest_name}
+          success=false
+          for ((j=0; j<${RETRIES}; j++)); do
+            if podman manifest push --all=false --format="${IMAGE_FORMAT}" ${manifest_name}; then
+              success=true
+              break
+            else
+              echo "Manifest push failed for ${manifest_name}. Retrying... ($((j+1))/${RETRIES})"
+            fi
+          done
+          if [ "$success" = false ]; then
+            echo "Failed to push manifest ${manifest_name} after ${RETRIES} attempts"
+            exit 1
+          fi
           manifest_digests+=($(skopeo inspect docker://${manifest_name} --format '{{.Digest}}'))
         done
         echo "digest=${manifest_digests[0]}" >> $GITHUB_OUTPUT

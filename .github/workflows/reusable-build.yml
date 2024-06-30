@@ -274,7 +274,7 @@ jobs:
             COREOS_TYPE=${{ env.coreos_type }}
             KERNEL=${{ steps.labels.outputs.kernel_release }}
           labels: ${{ steps.meta.outputs.labels }}
-          oci: true
+          oci: false
           # TODO(GH-280)
           # extra-args: |
           #   --target=${{ matrix.target_name || matrix.base_name }}
