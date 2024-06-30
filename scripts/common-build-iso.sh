@@ -43,6 +43,18 @@ sudoif rm -f "${project_root}/scripts/files/output/${tag}-${version}-${git_branc
 # Set Base Image
 base_image=$(just _base_image "${image}")
 
+if [[ "${version}" == "stable" ]]; then
+    KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+elif [[ "${version}" == "gts" ]]; then
+    coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+    major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
+    coreos_fedora_version=$(echo "$coreos_kernel_release" | grep -oP 'fc\K[0-9]+')
+    KERNEL_RELEASE="${major_minor_patch}-200.fc$(("$coreos_fedora_version" - 1))"
+else
+    KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-main:"$version" | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+fi
+fedora_version=$(echo "$KERNEL_RELEASE" | grep -oP 'fc\K[0-9]+')
+
 # Set variant and flatpak dir
 if [[ "${base_image}" =~ "silverblue" ]]; then
     variant=Silverblue
