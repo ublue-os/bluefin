@@ -24,7 +24,7 @@ concurrency:
 jobs:
   build_container:
     name: image
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     continue-on-error: false
     outputs:
       image_full: ${{ steps.generate-outputs.outputs.image }}
@@ -326,8 +326,8 @@ jobs:
           string: ${{ env.IMAGE_REGISTRY }}
 
       # Push the image to GHCR (Image Registry)
-      - name: Push To GHCR
-        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
+      - name: Push to Registry
+        uses: ./.github/actions/push-image
         id: push
         if: github.event_name != 'pull_request'
         env:
@@ -335,10 +335,12 @@ jobs:
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
           image: ${{ steps.build_image.outputs.image }}
-          tags: ${{ steps.build_image.outputs.tags }}
+          manifest-tags: ${{ steps.build_image.outputs.tags }}
           registry: ${{ steps.registry_case.outputs.lowercase }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
+          compression-formats: 'gzip zstd:chunked'
+          compression-tag: ${{ env.DEFAULT_TAG }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
