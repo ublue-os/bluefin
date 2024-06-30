@@ -99,7 +99,7 @@ runs:
             podman manifest add ${manifest_name} ${INTERMEDIARY_TAG_REFERENCE}-${format}
           done
 
-          podman manifest push --all ${manifest_name}
+          podman manifest push --all=false ${manifest_name}
           manifest_digests+=($(skopeo inspect docker://${manifest_name} --format '{{.Digest}}'))
           tagged_image_references+=("${manifest_name}")
         done
