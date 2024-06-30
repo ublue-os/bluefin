@@ -306,8 +306,8 @@ jobs:
         uses: ./.github/actions/push-image
         id: push
         if: github.event_name != 'pull_request'
-        env:	
-          REGISTRY_USER: ${{ github.actor }}	
+        env:
+          REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
           image: ${{ steps.build_image.outputs.image }}
