@@ -217,9 +217,9 @@ jobs:
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
             if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-              BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+              BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
             else
-              BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}" "${{ steps.labels.outputs.fedora_version }}-${TIMESTAMP}")
+              BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}-testing" "${{ steps.labels.outputs.fedora_version }}-testing-${TIMESTAMP}")
             fi
             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
