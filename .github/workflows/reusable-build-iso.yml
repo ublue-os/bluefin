@@ -1,4 +1,4 @@
-name: Reusable ISO 
+name: Reusable ISO
 on:
   workflow_call:
     inputs:
@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       fedora_version:
-        description: 'The Fedora release version: 38, 39, 40, etc'
+        description: "The Fedora release version: 38, 39, 40, etc"
         required: true
         type: string
 
@@ -72,7 +72,7 @@ jobs:
           fi
           if [[ ${{ inputs.fedora_version }} == "gts" ]]; then
             echo "IS_GTS_VERSION=true" >> $GITHUB_ENV
-          if [[ ${{ inputs.fedora_version }} == "stable" ]]; then
+          elif [[ ${{ inputs.fedora_version }} == "stable" ]]; then
             echo "IS_STABLE_VERSION=true" >> $GITHUB_ENV
           elif [[ ${{ inputs.fedora_version }} == "latest" ]]; then
             echo "IS_LATEST_VERSION=true" >> $GITHUB_ENV
@@ -184,8 +184,8 @@ jobs:
           variant: ${{ env.VARIANT }}
           version: ${{ steps.labels.outputs.fedora_version }}
           image_tag: ${{ steps.generate-tag.outputs.tag }}
-          secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
-          enrollment_password: 'ublue-os'
+          secure_boot_key_url: "https://github.com/ublue-os/akmods/raw/main/certs/public_key.der"
+          enrollment_password: "ublue-os"
           iso_name: ${{ env.IMAGE_NAME }}-${{ steps.generate-tag.outputs.tag }}.iso
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
