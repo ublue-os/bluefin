@@ -307,11 +307,11 @@ jobs:
         id: push
         if: github.event_name != 'pull_request'
         with:
-          image-name: ${{ env.IMAGE_NAME }}
+          image: ${{ env.IMAGE_NAME }}
           manifest-tags: ${{ steps.build_image.outputs.tags }}
-          image-registry: ${{ steps.registry_case.outputs.lowercase }}
-          registry-username: ${{ github.actor }}
-          registry-password: ${{ github.token }}
+          registry: ${{ steps.registry_case.outputs.lowercase }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
           compression-formats: 'gzip zstd:chunked'
           compression-tag: ${{ env.DEFAULT_TAG }}
 

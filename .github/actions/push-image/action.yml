@@ -1,20 +1,20 @@
 name: Push Image (Podman)
 
 inputs:
-  image-name:
+  image:
     description: 'The name of the image to build'
     required: true
   manifest-tags:
     description: 'The tags to apply to the image'
     required: true
-  image-registry:
+  registry:
     description: 'The registry to push the image to'
     required: true
-  registry-username:
+  username:
     description: 'The username to authenticate with the registry'
     required: false
     default: ${{ github.actor }}
-  registry-password:
+  password:
     description: 'The password to authenticate with the registry'
     required: false
     default: ${{ github.token }}
@@ -43,16 +43,16 @@ runs:
     - name: Login to Registry
       uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
       with:
-        registry: ${{ inputs.image-registry }}
-        username: ${{ inputs.registry-username }}
-        password: ${{ inputs.registry-password }}
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
 
     - name: Determine Compression Tags
       id: determine-compression-tag
       shell: bash
       env:
-        IMAGE_NAME: ${{ inputs.image-name }}
-        IMAGE_REGISTRY: ${{ inputs.image-registry }}
+        IMAGE_NAME: ${{ inputs.image }}
+        IMAGE_REGISTRY: ${{ inputs.registry }}
         COMPRESSION_TAG: ${{ inputs.compression-tag }}
         MANIFEST_TAGS: ${{ inputs.manifest-tags }}
       run: |
@@ -72,7 +72,7 @@ runs:
       shell: bash
       env:
         COMPRESSION_FORMATS: ${{ inputs.compression-formats }}
-        IMAGE_NAME: ${{ inputs.image-name }}
+        IMAGE_NAME: ${{ inputs.image }}
         COMPRESSION_IMAGE_FULL: ${{ steps.determine-compression-tag.outputs.compression_image_full }}
         COMPRESSION_TAG: ${{ steps.determine-compression-tag.outputs.compression_tag }}
       run: |
@@ -111,8 +111,8 @@ runs:
       shell: bash
       env:
         MANIFEST_TAGS: ${{ inputs.manifest-tags }}
-        IMAGE_NAME: ${{ inputs.image-name }}
-        IMAGE_REGISTRY: ${{ inputs.image-registry }}
+        IMAGE_NAME: ${{ inputs.image }}
+        IMAGE_REGISTRY: ${{ inputs.registry }}
       run: |
         IFS=' ' read -r -a manifest_tags_array <<< "${MANIFEST_TAGS}"
         manifest_names=()
