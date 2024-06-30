@@ -1,8 +1,8 @@
 name: Bluefin GTS ISO
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 2 * * sun'  # 02:00 Sunday
+  # schedule:
+  #   - cron: '0 2 * * sun'  # 02:00 Sunday
  
 
 jobs:
