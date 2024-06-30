@@ -6,7 +6,7 @@ Let's trace the stars.
 |  Command | Description |
 | ------- | ----------- |
 | `ujust --choose`  | Show available commands  |
-| `ujust toggle-user-motd` | Toggle banner on/off | 
+| `ujust toggle-user-motd` | Toggle this banner on/off | 
 | `ujust bluefin-cli` | Enable terminal bling | 
 | `brew help` | Manage command line packages | 
 

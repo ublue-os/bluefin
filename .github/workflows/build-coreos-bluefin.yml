@@ -1,16 +1,9 @@
 name: Bluefin Stable
 on:
-  merge_group:
   pull_request:
     branches:
       - main
       - testing
-    paths-ignore:
-      - '**.md'
-      - 'system_files/kinoite/**'
-  push:
-    branches:
-      - main
     paths-ignore:
       - '**.md'
       - 'system_files/kinoite/**'
