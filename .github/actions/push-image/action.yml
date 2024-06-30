@@ -112,19 +112,7 @@ runs:
           format="${compression_formats_array[$i]}"
           tagged_compression_image="${tagged_compression_images_array[$i]}"
           echo "Pushing: ${tagged_compression_image} with ${format} compression"
-          success=false
-          for ((j=0; j<${RETRIES}; j++)); do
-            if podman push --format="${IMAGE_FORMAT}" --compression-format="${format}" "${tagged_compression_image}"; then
-              success=true
-              break
-            else
-              echo "Push failed for ${tagged_compression_image} with ${format} compression. Retrying... ($((j+1))/${RETRIES})"
-            fi
-          done
-          if [ "$success" = false ]; then
-            echo "Failed to push ${tagged_compression_image} after ${RETRIES} attempts"
-            exit 1
-          fi
+          ${GITHUB_ACTION_PATH}/retry.sh ${RETRIES} podman push --format="${IMAGE_FORMAT}" --compression-format="${format}" "${tagged_compression_image}"
         done
 
     - name: Create Manifests
@@ -173,19 +161,7 @@ runs:
         IFS=' ' read -r -a manifest_names_array <<< "${MANIFEST_NAMES}"
         manifest_digests=()
         for manifest_name in "${manifest_names_array[@]}"; do
-          success=false
-          for ((j=0; j<${RETRIES}; j++)); do
-            if podman manifest push --all=false --format="${IMAGE_FORMAT}" ${manifest_name}; then
-              success=true
-              break
-            else
-              echo "Manifest push failed for ${manifest_name}. Retrying... ($((j+1))/${RETRIES})"
-            fi
-          done
-          if [ "$success" = false ]; then
-            echo "Failed to push manifest ${manifest_name} after ${RETRIES} attempts"
-            exit 1
-          fi
+          ${GITHUB_ACTION_PATH}/retry.sh ${RETRIES} podman manifest push --all=false --format="${IMAGE_FORMAT}" ${manifest_name}
           manifest_digests+=($(skopeo inspect docker://${manifest_name} --format '{{.Digest}}'))
         done
         echo "digest=${manifest_digests[0]}" >> $GITHUB_OUTPUT
