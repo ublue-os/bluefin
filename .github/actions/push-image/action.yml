@@ -22,7 +22,7 @@ inputs:
     description: 'A space-separated list of compression formats to use. Best to include gzip as the first option for compatibility.'
     required: false
     default: 'gzip'
-  intermediary-tag:
+  compression-tag:
     description: 'A unique identifier to use for the compression-specific image tags'
     required: false
 
@@ -47,73 +47,124 @@ runs:
         username: ${{ inputs.registry-username }}
         password: ${{ inputs.registry-password }}
 
-    - name: Tag and Push Image
-      id: tag-and-push
+    - name: Determine Compression Tags
+      id: determine-compression-tag
+      shell: bash
+      env:
+        IMAGE_NAME: ${{ inputs.image-name }}
+        IMAGE_REGISTRY: ${{ inputs.image-registry }}
+        COMPRESSION_TAG: ${{ inputs.compression-tag }}
+        MANIFEST_TAGS: ${{ inputs.manifest-tags }}
+      run: |
+        IFS=' ' read -r -a manifest_tags_array <<< "${MANIFEST_TAGS}"
+        if [ -n "${COMPRESSION_TAG}" ]; then
+          compression_image_full="${IMAGE_REGISTRY}/${IMAGE_NAME}:${COMPRESSION_TAG}"
+          compression_tag="${COMPRESSION_TAG}"
+        else
+          compression_image_full="${IMAGE_REGISTRY}/${IMAGE_NAME}:${manifest_tags_array[0]}"
+          compression_tag="${manifest_tags_array[0]}"
+        fi
+        echo "compression_image_full=${compression_image_full}" >> $GITHUB_OUTPUT
+        echo "compression_tag=${compression_tag}" >> $GITHUB_OUTPUT
+
+    - name: Tag Image for Each Compression Format
+      id: tag-image
       shell: bash
       env:
         COMPRESSION_FORMATS: ${{ inputs.compression-formats }}
         IMAGE_NAME: ${{ inputs.image-name }}
-        IMAGE_REGISTRY: ${{ inputs.image-registry }}
-        INTERMEDIARY_TAG: ${{ inputs.intermediary-tag }}
+        COMPRESSION_IMAGE_FULL: ${{ steps.determine-compression-tag.outputs.compression_image_full }}
+        COMPRESSION_TAG: ${{ steps.determine-compression-tag.outputs.compression_tag }}
       run: |
         IFS=' ' read -r -a compression_formats_array <<< "${COMPRESSION_FORMATS}"
         sanitized_compression_formats=()
-        intermediary_tag_reference="${IMAGE_REGISTRY}/${IMAGE_NAME}:${INTERMEDIARY_TAG}"
-
+        tagged_compression_images=()
         for format in "${compression_formats_array[@]}"; do
           sanitized_format=$(echo "$format" | tr ':' '-')
           sanitized_compression_formats+=("$sanitized_format")
-          full_tag="${intermediary_tag_reference}-${sanitized_format}"
-          echo "Tagging: ${IMAGE_NAME}:${INTERMEDIARY_TAG} as ${full_tag} with ${format} compression"
-          podman tag "${IMAGE_NAME}:${INTERMEDIARY_TAG}" "${full_tag}"
-          podman push --compression-format="$format" "${full_tag}"
+          full_tag="${COMPRESSION_IMAGE_FULL}-${sanitized_format}"
+          echo "Tagging: ${IMAGE_NAME}:${COMPRESSION_TAG} as ${full_tag} with ${format} compression"
+          podman tag "${IMAGE_NAME}:${COMPRESSION_TAG}" "${full_tag}"
+          tagged_compression_images+=("${full_tag}")
         done
+        echo "sanitized_compression_formats=${sanitized_compression_formats[*]}" >> $GITHUB_OUTPUT
+        echo "tagged_compression_images=${tagged_compression_images[*]}" >> $GITHUB_OUTPUT
 
-        echo "intermediary-tag-reference=${intermediary_tag_reference}" >> $GITHUB_OUTPUT
-        echo "sanitized-compression-formats=${sanitized_compression_formats[*]}" >> $GITHUB_OUTPUT
-
-    - name: Create and Push Manifests
-      id: create-and-push-manifests
+    - name: Push Tagged Images
+      id: push-tagged-images
       shell: bash
       env:
         COMPRESSION_FORMATS: ${{ inputs.compression-formats }}
-        SANITIZED_COMPRESSION_FORMATS: ${{ steps.tag-and-push.outputs.sanitized-compression-formats }}
+        TAGGED_COMPRESSION_IMAGES: ${{ steps.tag-image.outputs.tagged_compression_images }}
+      run: |
+        IFS=' ' read -r -a compression_formats_array <<< "${COMPRESSION_FORMATS}"
+        IFS=' ' read -r -a tagged_compression_images_array <<< "${TAGGED_COMPRESSION_IMAGES}"
+        for i in "${!compression_formats_array[@]}"; do
+          format="${compression_formats_array[$i]}"
+          tagged_compression_image="${tagged_compression_images_array[$i]}"
+          echo "Pushing: ${tagged_compression_image} with ${format} compression"
+          podman push --compression-format="$format" "${tagged_compression_image}"
+        done
+
+    - name: Create Manifests
+      id: create-manifests
+      shell: bash
+      env:
+        MANIFEST_TAGS: ${{ inputs.manifest-tags }}
         IMAGE_NAME: ${{ inputs.image-name }}
         IMAGE_REGISTRY: ${{ inputs.image-registry }}
-        INTERMEDIARY_TAG_REFERENCE: ${{ steps.tag-and-push.outputs.intermediary-tag-reference }}
-        MANIFEST_TAGS: ${{ inputs.manifest-tags }}
       run: |
-        IFS=' ' read -r -a SANITIZED_COMPRESSION_FORMATS <<< "${SANITIZED_COMPRESSION_FORMATS}"
-        IFS=' ' read -r -a MANIFEST_TAGS <<< "${MANIFEST_TAGS}"
-        IFS=' ' read -r -a COMPRESSION_FORMATS <<< "${COMPRESSION_FORMATS}"
-
-        manifest_digests=()
-        tagged_image_references=()
-        for tag in "${MANIFEST_TAGS[@]}"; do
+        IFS=' ' read -r -a manifest_tags_array <<< "${MANIFEST_TAGS}"
+        manifest_names=()
+        for tag in "${manifest_tags_array[@]}"; do
           manifest_name="${IMAGE_REGISTRY}/${IMAGE_NAME}:${tag}"
           echo "Creating manifest: ${manifest_name}"
           podman manifest create ${manifest_name}
+          manifest_names+=("${manifest_name}")
+        done
+        echo "manifest_names=${manifest_names[*]}" >> $GITHUB_OUTPUT
 
-          for format in ${SANITIZED_COMPRESSION_FORMATS[@]}; do
-            echo "Adding ${INTERMEDIARY_TAG_REFERENCE}-${format} to ${manifest_name}"
-            podman manifest add ${manifest_name} ${INTERMEDIARY_TAG_REFERENCE}-${format}
+    - name: Add Images to Manifests
+      id: add-to-manifests
+      shell: bash
+      env:
+        SANITIZED_COMPRESSION_FORMATS: ${{ steps.tag-image.outputs.sanitized_compression_formats }}
+        COMPRESSION_IMAGE_FULL: ${{ steps.determine-compression-tag.outputs.compression_image_full }}
+        MANIFEST_NAMES: ${{ steps.create-manifests.outputs.manifest_names }}
+      run: |
+        IFS=' ' read -r -a sanitized_compression_formats_array <<< "${SANITIZED_COMPRESSION_FORMATS}"
+        IFS=' ' read -r -a manifest_names_array <<< "${MANIFEST_NAMES}"
+        for manifest_name in "${manifest_names_array[@]}"; do
+          for format in "${sanitized_compression_formats_array[@]}"; do
+            echo "Adding ${COMPRESSION_IMAGE_FULL}-${format} to ${manifest_name}"
+            podman manifest add ${manifest_name} ${COMPRESSION_IMAGE_FULL}-${format}
           done
-
-          podman manifest push --all=false ${manifest_name}
-          manifest_digests+=($(skopeo inspect docker://${manifest_name} --format '{{.Digest}}'))
-          tagged_image_references+=("${manifest_name}")
         done
 
+    - name: Push Manifests
+      id: push-manifests
+      shell: bash
+      env:
+        MANIFEST_NAMES: ${{ steps.create-manifests.outputs.manifest_names }}
+      run: |
+        IFS=' ' read -r -a manifest_names_array <<< "${MANIFEST_NAMES}"
+        manifest_digests=()
+        for manifest_name in "${manifest_names_array[@]}"; do
+          podman manifest push --all=false ${manifest_name}
+          manifest_digests+=($(skopeo inspect docker://${manifest_name} --format '{{.Digest}}'))
+        done
         echo "digest=${manifest_digests[0]}" >> $GITHUB_OUTPUT
-        echo "tagged-image-references=${tagged_image_references[*]}" >> $GITHUB_OUTPUT
-
+        echo "manifest_names=${manifest_names_array[*]}" >> $GITHUB_OUTPUT
 
     - name: Set Outputs
       id: set-outputs
       shell: bash
+      env:
+        COMPRESSION_FORMATS: ${{ inputs.compression-formats }}
+        DIGEST: ${{ steps.push-manifests.outputs.digest }}
+        MANIFEST_NAMES: ${{ steps.push-manifests.outputs.manifest_names }}
       run: |
-        IFS=' ' read -r -a TAGGED_IMAGE_REFERENCES <<< "${{ steps.create-and-push-manifests.outputs.tagged-image-references }}"
-
-        echo "registry-path=${TAGGED_IMAGE_REFERENCES[0]}" >> $GITHUB_OUTPUT
-        echo "compression-formats=${{ inputs.compression-formats }}" >> $GITHUB_OUTPUT
-        echo "digest=${{ steps.create-and-push-manifests.outputs.digest }}" >> $GITHUB_OUTPUT
+        IFS=' ' read -r -a manifest_names_array <<< "${MANIFEST_NAMES}"
+        echo "registry-path=${manifest_names_array[0]}" >> $GITHUB_OUTPUT
+        echo "compression-formats=${COMPRESSION_FORMATS}" >> $GITHUB_OUTPUT
+        echo "digest=${DIGEST}" >> $GITHUB_OUTPUT
