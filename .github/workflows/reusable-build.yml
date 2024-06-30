@@ -306,12 +306,15 @@ jobs:
         uses: ./.github/actions/push-image
         id: push
         if: github.event_name != 'pull_request'
+        env:	
+          REGISTRY_USER: ${{ github.actor }}	
+          REGISTRY_PASSWORD: ${{ github.token }}
         with:
-          image: ${{ env.IMAGE_NAME }}
+          image: ${{ steps.build_image.outputs.image }}
           manifest-tags: ${{ steps.build_image.outputs.tags }}
           registry: ${{ steps.registry_case.outputs.lowercase }}
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
           compression-formats: 'gzip zstd:chunked'
           compression-tag: ${{ env.DEFAULT_TAG }}
 
