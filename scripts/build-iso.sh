@@ -37,4 +37,4 @@ ${container_mgr} run --rm --privileged  \
     ISO_NAME="build/${tag}-${version}-${git_branch}.iso" \
     SECURE_BOOT_KEY_URL='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der' \
     VARIANT="${variant}" \
-    VERSION="${version}"
+    VERSION="${fedora_version}"

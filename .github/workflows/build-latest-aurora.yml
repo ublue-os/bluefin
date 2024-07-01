@@ -1,4 +1,4 @@
-name: Aurora 40
+name: Aurora Latest
 on:
   merge_group:
   pull_request:
@@ -25,4 +25,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: aurora
-      fedora_version: 40
+      fedora_version: latest

@@ -1,4 +1,4 @@
-name: Bluefin 40
+name: Bluefin Latest
 on:
   merge_group:
   pull_request:
@@ -25,4 +25,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: bluefin
-      fedora_version: 40
+      fedora_version: latest

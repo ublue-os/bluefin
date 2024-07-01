@@ -1,4 +1,4 @@
-name: Reusable ISO 
+name: Reusable ISO
 on:
   workflow_call:
     inputs:
@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       fedora_version:
-        description: 'The Fedora release version: 38, 39, 40, etc'
+        description: "The Fedora release version: 38, 39, 40, etc"
         required: true
         type: string
 
@@ -38,13 +38,17 @@ jobs:
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
-          - fedora_version: 38
+          - fedora_version: gts
             image_flavor: asus
-          - fedora_version: 38
+          - fedora_version: gts
             image_flavor: asus-nvidia
-          - fedora_version: 38
+          - fedora_version: stable
+            image_flavor: asus
+          - fedora_version: stable
+            image_flavor: asus-nvidia
+          - fedora_version: stable
             image_flavor: surface
-          - fedora_version: 38
+          - fedora_version: stable
             image_flavor: surface-nvidia
 
     steps:
@@ -66,26 +70,29 @@ jobs:
           elif [[ ${{ inputs.brand_name }} == "aurora" ]]; then
             echo "VARIANT=Kinoite" >> $GITHUB_ENV
           fi
-          if [[ ${{ inputs.fedora_version }} == "39" ]]; then
-            echo "IS_GTS_VERSION=true" >> $GITHUB_ENV
-          elif [[ ${{ inputs.fedora_version }} == "40" ]]; then
-            echo "IS_LATEST_VERSION=true" >> $GITHUB_ENV
-          fi
+
+      - name: Get Current Fedora Version
+        id: labels
+        shell: bash
+        run: |
+          set -eo pipefail
+          kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ inputs.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+          fedora_version=$(echo $kernel_release | grep -oP 'fc\K[0-9]+')
+          echo "kernel_release=$kernel_release" >> $GITHUB_OUTPUT
+          echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
 
       - name: Set Image Tag
         id: generate-tag
         shell: bash
         run: |
-          if [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
-            TAG="latest"
-          elif [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
-            TAG="gts"
-          fi
+          TAG="${{ inputs.fedora_version }}"
 
           if [[ "${{ github.ref_name }}" == "testing" ]]; then
-            if [[ "${{ env.IS_GTS_VERSION }}" == "true" ]]; then
+            if [[ "${{ inputs.fedora_version }}" == "true" ]]; then
               TAG="gts-testing"
-            elif [[ "${{ env.IS_LATEST_VERSION }}" == "true" ]]; then
+            elif [[ "${{ inputs.fedora_version }}" == "true" ]]; then
+              TAG="stable-testing"
+            elif [[ "${{ inputs.fedora_version }}" == "true" ]]; then
               TAG="testing"
             fi
           fi
@@ -113,7 +120,7 @@ jobs:
         shell: bash
         run: |
           set -ex
-          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ steps.generate-tag.outputs.tag }}"
+          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ inputs.fedora_version }}"
           # Make temp space
           TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
           # Get list of refs from directory
@@ -147,10 +154,10 @@ jobs:
           image_name: ${{ env.IMAGE_NAME }}
           image_repo: ghcr.io/ublue-os
           variant: ${{ env.VARIANT }}
-          version: ${{ matrix.fedora_version }}
+          version: ${{ steps.labels.outputs.fedora_version }}
           image_tag: ${{ steps.generate-tag.outputs.tag }}
-          secure_boot_key_url: 'https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
-          enrollment_password: 'ublue-os'
+          secure_boot_key_url: "https://github.com/ublue-os/akmods/raw/main/certs/public_key.der"
+          enrollment_password: "ublue-os"
           iso_name: ${{ env.IMAGE_NAME }}-${{ steps.generate-tag.outputs.tag }}.iso
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"

@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       fedora_version:
-        description: 'The Fedora release version: 38, 39, 40, etc'
+        description: "The Fedora Version: gts, stable, or latest"
         required: true
         type: string
       brand_name:
@@ -12,10 +12,10 @@ on:
         type: string
     outputs:
       images:
-        description: 'An array of images built and pushed to the registry'
+        description: "An array of images built and pushed to the registry"
         value: ${{ jobs.check.outputs.images }}
 env:
-    IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.fedora_version }}
@@ -44,9 +44,9 @@ jobs:
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
-          - fedora_version: 39
+          - fedora_version: gts
             image_flavor: asus
-          - fedora_version: 39
+          - fedora_version: gts
             image_flavor: asus-nvidia
           - fedora_version: stable
             image_flavor: asus
@@ -55,6 +55,14 @@ jobs:
           - fedora_version: stable
             image_flavor: surface
           - fedora_version: stable
+            image_flavor: surface-nvidia
+          - fedora_version: beta
+            image_flavor: asus
+          - fedora_version: beta
+            image_flavor: asus-nvidia
+          - fedora_version: beta
+            image_flavor: surface
+          - fedora_version: beta
             image_flavor: surface-nvidia
 
     steps:
@@ -90,7 +98,8 @@ jobs:
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
               echo "KERNEL_SUFFIX=surface" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" =~ "stable" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" == "stable" || \
+                  "${{ matrix.fedora_version }}" == "gts" ]]; then
               echo "AKMODS_FLAVOR=coreos" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
@@ -98,11 +107,13 @@ jobs:
 
           # Env for matrix.image_flavor
           if [[ "${{ matrix.image_flavor }}" == "nvidia" ]] && \
-             [[ "${{ matrix.fedora_version }}" =~ "stable" ]]; then
-             echo "image_flavor=main" >> $GITHUB_ENV
-             echo "coreos_type=nvidia" >> $GITHUB_ENV
+             [[ "${{ matrix.fedora_version }}" == "stable" || \
+                "${{ matrix.fedora_version }}" == "gts" ]]; then
+                echo "image_flavor=main" >> $GITHUB_ENV
+                echo "coreos_type=nvidia" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" == "main" ]] && \
-               [[ "${{ matrix.fedora_version }}" =~ "stable" ]]; then
+             [[ "${{ matrix.fedora_version }}" == "stable" || \
+                "${{ matrix.fedora_version }}" == "gts" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
                echo "coreos_type=main" >> $GITHUB_ENV
           else
@@ -116,14 +127,18 @@ jobs:
           set -eo pipefail
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
             KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-            fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+          elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
+            coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
+            coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
+            KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1))"
           else
             KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
           fi
           fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
           echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
           echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
+          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
           if [ -z "$ver" ] || [ "null" = "$ver" ]; then
             echo "inspected image version must not be empty or null"
             exit 1
@@ -164,17 +179,17 @@ jobs:
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
             IS_COREOS=true
-          elif [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" == "gts" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=true
             IS_COREOS=false
-          elif [[ "${{ matrix.fedora_version }}" -eq "40" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
             IS_LATEST_VERSION=true
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
             IS_COREOS=false
-          elif [[ "${{ matrix.fedora_version }}" -eq "41" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" == "beta" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=false
             IS_GTS_VERSION=false
@@ -194,10 +209,18 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+          if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
+            BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+          else
+            BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}" "${{ steps.labels.outputs.fedora_version }}-${TIMESTAMP}")
+          fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
-            BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
+            if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
+              BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
+            else
+              BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}-testing" "${{ steps.labels.outputs.fedora_version }}-testing-${TIMESTAMP}")
+            fi
             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
                 BUILD_TAGS+=("testing")
@@ -248,7 +271,7 @@ jobs:
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
-            ostree.linux=${{ steps.labels.outputs.kernel_release }}
+            ostree.linux=${{ steps.labels.outputs.kernel_release }}.x86_64
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
@@ -273,6 +296,7 @@ jobs:
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
             COREOS_TYPE=${{ env.coreos_type }}
             KERNEL=${{ steps.labels.outputs.kernel_release }}
+            UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
           # TODO(GH-280)
@@ -345,8 +369,7 @@ jobs:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_FLAVOR: ${{ env.image_flavor }}
           FEDORA_VERSION: ${{ matrix.fedora_version }}
-        run:
-          echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
+        run: echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
@@ -412,7 +435,7 @@ jobs:
   build_iso:
     name: iso
     needs: [check]
-    if: github.event_name == 'schedule' && github.ref_name == 'main' && ( inputs.brand_name == 'bluefin' && inputs.fedora_version == '39' )
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && (github.ref_name == 'main' || github.ref_name == 'testing') && inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest'
     # Eventually would be nice for building images in PRs
     #if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
     uses: ./.github/workflows/reusable-build-iso.yml

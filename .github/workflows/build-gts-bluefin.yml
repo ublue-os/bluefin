@@ -1,4 +1,4 @@
-name: Bluefin 39
+name: Bluefin GTS
 on:
   pull_request:
     branches:
@@ -18,4 +18,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: bluefin
-      fedora_version: 39
+      fedora_version: gts
