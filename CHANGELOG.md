@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.0.0](https://github.com/ublue-os/bluefin/compare/v2.10.0...v3.0.0) (2024-07-01)
+
+
+### Features
+
+* GTS use coreos matched kernel ([#1456](https://github.com/ublue-os/bluefin/issues/1456)) ([080802f](https://github.com/ublue-os/bluefin/commit/080802f14baf9f5c6100cfc092e32b77214beaf1))
+* seasonal variation in sunrise/sunset times for seasonal Bluefin backgrounds ([#1466](https://github.com/ublue-os/bluefin/issues/1466)) ([24ddce9](https://github.com/ublue-os/bluefin/commit/24ddce9c379fb835c65a40caa6092a6b9754d3a9))
+* Use CoreOS Kernel ([#1429](https://github.com/ublue-os/bluefin/issues/1429)) ([cc22113](https://github.com/ublue-os/bluefin/commit/cc22113a9d88295cba514fbbb434530265baf41c))
+
+
+### Bug Fixes
+
+* **motd:** clarify banner toggle wording ([#1462](https://github.com/ublue-os/bluefin/issues/1462)) ([5937fd0](https://github.com/ublue-os/bluefin/commit/5937fd03bcecc93ee1bb5cc99118f0254b708067))
+* remove conflicting nvidia initramfs files ([#1458](https://github.com/ublue-os/bluefin/issues/1458)) ([97c56f2](https://github.com/ublue-os/bluefin/commit/97c56f257d344cff6051008ed367d66704cf62cc))
+* reorder nvidia install for coreos ([#1459](https://github.com/ublue-os/bluefin/issues/1459)) ([3158ba2](https://github.com/ublue-os/bluefin/commit/3158ba2c3764779feb46ab6d95ad667d6dd1ab92))
+
+
+### Miscellaneous Chores
+
+* release 3.0.0 ([4d21c40](https://github.com/ublue-os/bluefin/commit/4d21c4096ecf8270e77e97d7cbb472587f19e440))
+
 ## [2.10.0](https://github.com/ublue-os/bluefin/compare/v2.9.0...v2.10.0) (2024-06-25)
 
 
