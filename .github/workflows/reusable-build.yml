@@ -10,6 +10,11 @@ on:
         description: "'aurora' or 'bluefin'"
         required: true
         type: string
+      compression_formats:
+        description: 'A space-separated list of compression formats to push'
+        required: false
+        type: string
+        default: 'gzip'
     outputs:
       images:
         description: "An array of images built and pushed to the registry"
@@ -339,7 +344,7 @@ jobs:
           registry: ${{ steps.registry_case.outputs.lowercase }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
-          compression-formats: 'gzip zstd:chunked'
+          compression-formats: ${{ inputs.compression_formats }}
           compression-tag: ${{ env.DEFAULT_TAG }}
 
       - name: Login to GitHub Container Registry

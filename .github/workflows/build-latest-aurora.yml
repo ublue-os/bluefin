@@ -26,3 +26,4 @@ jobs:
     with:
       brand_name: aurora
       fedora_version: latest
+      compression_formats: 'gzip zstd:chunked'
