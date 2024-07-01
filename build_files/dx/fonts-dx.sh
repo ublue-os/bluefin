@@ -8,7 +8,6 @@ curl -Lo /tmp/monaspace-font.zip $DOWNLOAD_URL
 
 unzip -qo /tmp/monaspace-font.zip -d /tmp/monaspace-font
 mkdir -p /usr/share/fonts/monaspace
-mv /tmp/monaspace-font/monaspace-v*/fonts/otf/* /usr/share/fonts/monaspace/
 mv /tmp/monaspace-font/monaspace-v*/fonts/variable/* /usr/share/fonts/monaspace/
 rm -rf /tmp/monaspace-font*
 
