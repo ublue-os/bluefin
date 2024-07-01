@@ -146,7 +146,13 @@ runs:
         for manifest_name in "${manifest_names_array[@]}"; do
           for format in "${sanitized_compression_formats_array[@]}"; do
             echo "Adding ${COMPRESSION_IMAGE_FULL}-${format} to ${manifest_name}"
-            podman manifest add ${manifest_name} ${COMPRESSION_IMAGE_FULL}-${format}
+            if [[ "${format}" == zstd* ]]; then
+              echo "Adding zstd compression annotation to ${COMPRESSION_IMAGE_FULL}-${format}"
+              podman manifest add --annotation="io.github.containers.compression.zstd=true" ${manifest_name} ${COMPRESSION_IMAGE_FULL}-${format}
+            else
+              echo "No annotation needed for ${COMPRESSION_IMAGE_FULL}-${format}"
+              podman manifest add ${manifest_name} ${COMPRESSION_IMAGE_FULL}-${format}
+            fi
           done
         done
 
