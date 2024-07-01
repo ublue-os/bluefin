@@ -1,15 +1,19 @@
-name: Build and Push Image
+name: reusable-build
 on:
   workflow_call:
     inputs:
       fedora_version:
-        description: 'The Fedora release version: 38, 39, 40, etc'
+        description: "The Fedora Version: gts, stable, or latest"
         required: true
         type: string
       brand_name:
-        description: "'lutho'"
+        description: "'aurora' or 'bluefin'"
         required: true
         type: string
+    outputs:
+      images:
+        description: "An array of images built and pushed to the registry"
+        value: ${{ jobs.check.outputs.images }}
 env:
     IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
@@ -22,6 +26,8 @@ jobs:
     name: image
     runs-on: ubuntu-latest
     continue-on-error: false
+    outputs:
+      image_full: ${{ steps.generate-outputs.outputs.image }}
     strategy:
       fail-fast: false
       matrix:
@@ -31,6 +37,27 @@ jobs:
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
+        exclude:
+          - fedora_version: gts
+            image_flavor: asus
+          - fedora_version: gts
+            image_flavor: asus-nvidia
+          - fedora_version: stable
+            image_flavor: asus
+          - fedora_version: stable
+            image_flavor: asus-nvidia
+          - fedora_version: stable
+            image_flavor: surface
+          - fedora_version: stable
+            image_flavor: surface-nvidia
+          - fedora_version: beta
+            image_flavor: asus
+          - fedora_version: beta
+            image_flavor: asus-nvidia
+          - fedora_version: beta
+            image_flavor: surface
+          - fedora_version: beta
+            image_flavor: surface-nvidia
 
     steps:
       - name: Checkout
@@ -38,28 +65,61 @@ jobs:
 
       - name: Matrix Variables
         run: |
-          echo "BASE_IMAGE_NAME"="aurora" >> $GITHUB_ENV
-          FULL_BASE_IMAGE_NAME="aurora"
-          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
-              echo "TARGET_NAME"="dx" >> $GITHUB_ENV
-              FULL_BASE_IMAGE_NAME="$FULL_BASE_IMAGE_NAME-dx"
-          else
-              echo "TARGET_NAME"="base" >> $GITHUB_ENV
-          fi
+          # IMAGE_NAME
           if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
               echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
           else
               echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
-              FULL_BASE_IMAGE_NAME="$FULL_BASE_IMAGE_NAME-${{ matrix.image_flavor }}"
           fi
+
+          # BASE_IMAGE_NAME
+          echo "BASE_IMAGE_NAME"="aurora" >> $GITHUB_ENV
+          FULL_BASE_IMAGE_NAME="$(echo "${{ matrix.base_name }}" | sed 's~lutho~aurora~g')"
           echo "FULL_BASE_IMAGE_NAME"="$FULL_BASE_IMAGE_NAME" >> $GITHUB_ENV
+
+          # AKMODS_FLAVOR
           if [[ "${{ matrix.image_flavor }}" =~ "asus" ]]; then
               echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
+              echo "KERNEL_SUFFIX=surface" >> $GITHUB_ENV
+          elif [[ "${{ matrix.fedora_version }}" == "stable" || \
+                  "${{ matrix.fedora_version }}" == "gts" ]]; then
+              echo "AKMODS_FLAVOR=coreos" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
           fi
+
+          # Env for matrix.image_flavor
+          if [[ "${{ matrix.image_flavor }}" == "nvidia" ]] && \
+             [[ "${{ matrix.fedora_version }}" == "stable" || \
+                "${{ matrix.fedora_version }}" == "gts" ]]; then
+                echo "image_flavor=main" >> $GITHUB_ENV
+                echo "coreos_type=nvidia" >> $GITHUB_ENV
+          elif [[ "${{ matrix.image_flavor }}" == "main" ]] && \
+               [[ "${{ matrix.fedora_version }}" == "stable" || \
+                  "${{ matrix.fedora_version }}" == "gts" ]]; then
+               echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
+               echo "coreos_type=main" >> $GITHUB_ENV
+          else
+             echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
+          fi
+
+      - name: Get Current Fedora Version
+        id: labels
+        shell: bash
+        run: |
+          set -eo pipefail
+          KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.FULL_BASE_IMAGE_NAME }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+          fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+          echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
+          echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
+          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.FULL_BASE_IMAGE_NAME }}:${{ matrix.fedora_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
+          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
+            echo "inspected image version must not be empty or null"
+            exit 1
+          fi
+          echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@v0.2.2
@@ -67,7 +127,8 @@ jobs:
           containers: ${{ env.FULL_BASE_IMAGE_NAME }}:${{ matrix.fedora_version }}
 
       - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@v6
+        if: contains(matrix.base_name, '-dx') && (github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request')
+        uses: ublue-os/remove-unwanted-software@v7
 
       - name: Check just syntax
         uses: ublue-os/just-action@v1
@@ -80,14 +141,26 @@ jobs:
           TIMESTAMP="$(date +%Y%m%d)"
           FEDORA_VERSION="${{ matrix.fedora_version }}"
 
-          if [[ "${{ matrix.fedora_version }}" -eq "39" ]]; then
+          if [[ "${{ matrix.fedora_version }}" == "stable" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=false
+            IS_COREOS=true
+          elif [[ "${{ matrix.fedora_version }}" == "gts" ]]; then
+            IS_LATEST_VERSION=false
+            IS_STABLE_VERSION=true
+            IS_GTS_VERSION=true
+            IS_COREOS=false
+          elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
             IS_LATEST_VERSION=true
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
-          elif [[ "${{ matrix.fedora_version }}" -eq "40" ]]; then
+            IS_COREOS=false
+          elif [[ "${{ matrix.fedora_version }}" == "beta" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=false
             IS_GTS_VERSION=false
+            IS_COREOS=false
           fi
 
           COMMIT_TAGS=()
@@ -103,21 +176,33 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
-          BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
-
           if [[ ${{ github.ref_name }} == "testing" ]]; then
-             BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
-             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+            if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
+              BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
+            else
+              BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}-testing" "${{ steps.labels.outputs.fedora_version }}-testing-${TIMESTAMP}")
+            fi
+            if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
-                 BUILD_TAGS+=("testing")
-             elif [[ "$IS_GTS_VERSION" == "true" ]]; then
-                 BUILD_TAGS+=("gts-testing")
-             fi
-          elif [[ "$IS_LATEST_VERSION" == "true" ]] && \
-               [[ "$IS_STABLE_VERSION" == "true" ]]; then
-              BUILD_TAGS+=("latest")
-          elif [[ "$IS_GTS_VERSION" == "true" ]]; then
-              BUILD_TAGS+=("gts")
+                BUILD_TAGS+=("testing")
+                echo "DEFAULT_TAG=testing" >> $GITHUB_ENV
+            elif [[ "$IS_GTS_VERSION" == "true" ]]; then
+                BUILD_TAGS+=("gts-testing")
+                echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
+            elif [[ "$IS_COREOS" == "true" ]]; then
+                echo "DEFAULT_TAG=stable-testing" >> $GITHUB_ENV
+            fi
+          else
+            if [[ "$IS_LATEST_VERSION" == "true" ]] && \
+                [[ "$IS_STABLE_VERSION" == "true" ]]; then
+                BUILD_TAGS+=("latest")
+                echo "DEFAULT_TAG=latest" >> $GITHUB_ENV
+            elif [[ "$IS_GTS_VERSION" == "true" ]]; then
+                  BUILD_TAGS+=("gts")
+                  echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
+            elif [[ "$IS_COREOS" == "true" ]]; then
+                  echo "DEFAULT_TAG=stable" >> $GITHUB_ENV
+            fi
           fi
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -126,6 +211,7 @@ jobs:
                   echo "${TAG}"
               done
               alias_tags=("${COMMIT_TAGS[@]}")
+              echo "DEFAULT_TAG=${SHA_SHORT}-${FEDORA_VERSION}" >> $GITHUB_ENV
           else
               alias_tags=("${BUILD_TAGS[@]}")
           fi
@@ -134,18 +220,6 @@ jobs:
               echo "${TAG}"
           done
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
-
-      - name: Get Current Fedora Version
-        id: labels
-        shell: bash
-        run: |
-          set -eo pipefail
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/kinoite-${{ matrix.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
-          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
-            echo "inspected image version must not be empty or null"
-            exit 1
-          fi
-          echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       # Build metadata
       - name: Image Metadata
@@ -158,11 +232,13 @@ jobs:
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
             org.opencontainers.image.description=Ethan's layer of personal customizations over Aurora
+            ostree.linux=${{ steps.labels.outputs.kernel_release }}.x86_64
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ethanjli/lutho-os/main/README.md
 
       # Build image using Buildah action
       - name: Build Image
         id: build_image
+        if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         uses: redhat-actions/buildah-build@v2
         with:
           containerfiles: |
@@ -171,21 +247,10 @@ jobs:
           tags: |
             ${{ steps.generate-tags.outputs.alias_tags }}
           build-args: |
-            BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}
-            IMAGE_NAME=${{ env.IMAGE_NAME }}
-            IMAGE_FLAVOR=${{ matrix.image_flavor }}
-            IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
-            TARGET_BASE=${{ matrix.target_base }}
-            AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
             SOURCE_IMAGE=${{ env.FULL_BASE_IMAGE_NAME }}
+            FEDORA_MAJOR_VERSION=${{ matrix.fedora_version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
-          # TODO(GH-280)
-          extra-args: |
-            --target=${{ matrix.target_name || matrix.base_name }}
-          # extra-args: |
-          #   --target=${{ env.TARGET_NAME }}
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
@@ -219,7 +284,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Sign container
-      - uses: sigstore/cosign-installer@v3.4.0
+      - uses: sigstore/cosign-installer@v3.5.0
         if: github.event_name != 'pull_request'
 
       - name: Sign container image
@@ -231,30 +296,85 @@ jobs:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      - name: Echo outputs
+      - name: Generate file containing outputs
         if: github.event_name != 'pull_request'
-        run: |
-          echo "${{ toJSON(steps.push.outputs) }}"
+        env:
+          DIGEST: ${{ steps.push.outputs.digest }}
+          IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_FLAVOR: ${{ env.image_flavor }}
+          FEDORA_VERSION: ${{ matrix.fedora_version }}
+        run: echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
+
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}
+          retention-days: 1
+          if-no-files-found: error
+          path: |
+            ${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}.txt
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
-    if: ${{ !cancelled() }}
+    if: always()
     runs-on: ubuntu-latest
     needs: [build_container]
+    outputs:
+      images: ${{ steps.generate-outputs.outputs.images }}
     steps:
-      - name: Exit on failure
-        if: ${{ needs.build_container.result == 'failure' }}
-        shell: bash
-        run: exit 1
-      - name: Exit
-        shell: bash
-        run: exit 0
+      - name: Download artifacts
+        if: github.event_name != 'pull_request'
+        id: download-artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: image-*
+          merge-multiple: true
+
+      - name: Create output
+        if: github.event_name != 'pull_request'
+        id: generate-outputs
+        env:
+          JOBS: ${{ toJson(needs) }}
+          ARTIFACT_PATH: ${{ steps.download-artifacts.outputs.download-path }}
+        run: |
+          # Initialize the array
+          images=()
+
+          # Populate the array with each line from each file in the artifacts directory
+          for file in $ARTIFACT_PATH/*; do
+              while IFS= read -r line; do
+                images+=("$line")
+              done < "$file"
+          done
+
+          # Create the GITHUB_OUTPUT in the format '["image1", "image2", ...]'
+          echo "images=$(printf '%s\n' "${images[@]}" | jq -R -s -c 'split("\n") | .[:-1]')" >> $GITHUB_OUTPUT
+
+      - name: Check Jobs
+        env:
+          JOBS: ${{ toJson(needs) }}
+        run: |
+          echo "Job status:"
+          echo $JOBS | jq -r 'to_entries[] | " - \(.key): \(.value.result)"'
+
+          for i in $(echo $JOBS | jq -r 'to_entries[] | .value.result'); do
+            if [ "$i" != "success" ] && [ "$i" != "skipped" ]; then
+              echo ""
+              echo "Status check not okay!"
+              exit 1
+            fi
+          done
 
   build_iso:
     name: iso
     needs: [check]
-    if: github.ref_name == 'testing'
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && (github.ref_name == 'main' || github.ref_name == 'testing') && inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest'
     # Eventually would be nice for building images in PRs
     #if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
-    uses: ./.github/workflows/build_iso.yml
+    uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
+    with:
+      brand_name: ${{ inputs.brand_name }}
+      fedora_version: ${{ inputs.fedora_version }}

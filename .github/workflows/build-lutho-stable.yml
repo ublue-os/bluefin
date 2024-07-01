@@ -1,14 +1,17 @@
-name: lutho 40
+name: build-lutho-stable
 on:
   merge_group:
   pull_request:
-    branches: [ main, testing ]
-  push:
     branches:
       - main
       - testing
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
   schedule:
-    - cron: '41 16 * * *'  # 16:41 UTC everyday
+    - cron: '41 15 * * 2'  # 15:41 UTC every Tuesday
   workflow_dispatch:
 
 jobs:
@@ -18,4 +21,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: lutho
-      fedora_version: 40
+      fedora_version: stable

@@ -1,0 +1,13 @@
+name: build-lutho-stable-iso
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build-iso.yml
+    secrets: inherit
+    with:
+      brand_name: lutho
+      fedora_version: stable
