@@ -280,3 +280,29 @@ update-ng:
     sudo bootc upgrade
     flatpak update -y
     brew upgrade
+
+# Toggle tailscaled service
+toggle-tailscaled:
+    #!/bin/bash
+    source /usr/lib/ujust/ujust.sh
+
+    TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
+
+    if [ "$TAILSCALE_STATUS" == "enabled" ]; then
+        echo "Tailscale is enabled. Attempting to disable."
+        systemctl disable --now tailscaled
+        TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
+        if [ "$TAILSCALE_STATUS" == "disabled" ]; then
+            echo "${b}${red}Disabled tailscaled.${n}"
+        fi
+    elif [ "$TAILSCALE_STATUS" == "disabled" ]; then
+        echo "Tailscale is disabled. Attempting to enable."
+        systemctl enable --now tailscaled
+        TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
+        if [ "$TAILSCALE_STATUS" == "enabled" ]; then
+            echo "${b}${green}Enabled tailscaled.${n}"
+        fi
+    else 
+        echo "${b}${red}Failed to enable/disable tailscaled.${n}"
+        echo "tailscaled service status: $TAILSCALE_STATUS"
+    fi
