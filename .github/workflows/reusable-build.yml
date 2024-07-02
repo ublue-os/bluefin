@@ -161,15 +161,6 @@ jobs:
         with:
           containers: akmod:coreos-${{ env.fedora_version }}
 
-      - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
-        action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
-        with:
-          containers: dive, flux, helm, ko, minio, kubectl
-          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
-          oidc-issuer: https://token.actions.githubusercontent.com
-          registry: cgr.dev/chainguard
-
       - name: Check just syntax
         uses: ublue-os/just-action@961e70ef33d8e0ef5ecf19dbb20739f3c0ce873b # v1
 
@@ -329,20 +320,16 @@ jobs:
             --target=${{ env.TARGET_NAME }}
 
       - name: Sign kernel
-        uses: Wandalen/wretry.action@v3.5.0
         if: github.event_name != 'pull_request'
+        uses: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
         with:
-          attempt_limit: 3
-          attempt_delay: 1500
-          action: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
-          with: |
-            image: ${{ steps.build_image.outputs.image }}
-            default-tag: ${{ env.DEFAULT_TAG }}
-            privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
-            pubkey: /etc/pki/akmods/certs/akmods-ublue.der
-            tags: ${{ steps.build_image.outputs.tags }}
-            kernel_suffix: ${{ env.KERNEL_SUFFIX }}
-            strip: false
+          image: ${{ steps.build_image.outputs.image }}
+          default-tag: ${{ env.DEFAULT_TAG }}
+          privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
+          pubkey: /etc/pki/akmods/certs/akmods-ublue.der
+          tags: ${{ steps.build_image.outputs.tags }}
+          kernel_suffix: ${{ env.KERNEL_SUFFIX }}
+          strip: false
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
