@@ -122,49 +122,76 @@ jobs:
 
       - name: Get Current Fedora Version
         id: labels
-        shell: bash
-        run: |
-          set -eo pipefail
-          if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-            KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-          elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
-            coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-            major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
-            coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
-            KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1))"
-          else
-            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-          fi
-          fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
-          echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
-          echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
-          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
-            echo "inspected image version must not be empty or null"
-            exit 1
-          fi
-          echo "VERSION=$ver" >> $GITHUB_OUTPUT
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            set -eo pipefail
+            if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
+              KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
+              coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+              KERNEL_RELEASE="$(skopeo inspect docker://ghcr.io/ublue-os/akmods:coreos-$(($coreos_fedora_version - 1)) | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')"
+            else
+              KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            fi
+            fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+            echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_ENV
+            echo "fedora_version=$fedora_version" >> $GITHUB_ENV
+            ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
+            if [ -z "$ver" ] || [ "null" = "$ver" ]; then
+              echo "inspected image version must not be empty or null"
+              exit 1
+            fi
+            echo "VERSION=$ver" >> $GITHUB_ENV
 
       - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        uses: Wandalen/wretry.action@v3.5.0
         with:
-          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
+          attempt_limit: 3
+          attempt_delay: 1500
+          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+          with: |
+            containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ env.fedora_version }}
+
+      - name: Verify akmods image
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 1500
+          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+          with: |
+            containers: akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+
+      - name: Verify nvidia akmods image
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 1500
+          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+          with: |
+            containers: akmod:coreos-${{ env.fedora_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
-        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        uses: Wandalen/wretry.action@v3.5.0
         with:
-          containers: dive, flux, helm, ko, minio, kubectl
-          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
-          oidc-issuer: https://token.actions.githubusercontent.com
-          registry: cgr.dev/chainguard
+          attempt_limit: 3
+          attempt_delay: 1500
+          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+          with: |
+            containers: dive, flux, helm, ko, minio, kubectl
+            cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+            oidc-issuer: https://token.actions.githubusercontent.com
+            registry: cgr.dev/chainguard
+
+      - name: Check just syntax
+        uses: ublue-os/just-action@961e70ef33d8e0ef5ecf19dbb20739f3c0ce873b # v1
 
       - name: Maximize build space
         if: contains(matrix.base_name, '-dx') && (github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request')
         uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
-
-      - name: Check just syntax
-        uses: ublue-os/just-action@961e70ef33d8e0ef5ecf19dbb20739f3c0ce873b # v1
 
       - name: Generate tags
         id: generate-tags
@@ -212,14 +239,14 @@ jobs:
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
             BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
           else
-            BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}" "${{ steps.labels.outputs.fedora_version }}-${TIMESTAMP}")
+            BUILD_TAGS=("${{ env.fedora_version }}" "${{ env.fedora_version }}-${TIMESTAMP}")
           fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
             if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
               BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
             else
-              BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}-testing" "${{ steps.labels.outputs.fedora_version }}-testing-${TIMESTAMP}")
+              BUILD_TAGS=("${{ env.fedora_version }}-testing" "${{ env.fedora_version }}-testing-${TIMESTAMP}")
             fi
             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
@@ -260,6 +287,18 @@ jobs:
           done
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
 
+      - name: Pull main and akmods images
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            # pull the base images used for FROM in Containerfile so
+            # we can retry on that unfortunately common failure case
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.IMAGE_FLAVOR }}:${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:coreos-${{ env.fedora_version }}
+
       # Build metadata
       - name: Image Metadata
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
@@ -269,9 +308,9 @@ jobs:
             ${{ env.IMAGE_NAME }}
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
-            org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
+            org.opencontainers.image.version=${{ env.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
-            ostree.linux=${{ steps.labels.outputs.kernel_release }}.x86_64
+            ostree.linux=${{ env.kernel_release }}.x86_64
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
@@ -291,11 +330,11 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ env.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ steps.labels.outputs.fedora_version }}
+            FEDORA_MAJOR_VERSION=${{ env.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
             COREOS_TYPE=${{ env.coreos_type }}
-            KERNEL=${{ steps.labels.outputs.kernel_release }}
+            KERNEL=${{ env.kernel_release }}
             UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
@@ -306,16 +345,20 @@ jobs:
             --target=${{ env.TARGET_NAME }}
 
       - name: Sign kernel
-        uses: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
+        uses: Wandalen/wretry.action@v3.5.0
         if: github.event_name != 'pull_request'
         with:
-          image: ${{ steps.build_image.outputs.image }}
-          default-tag: ${{ env.DEFAULT_TAG }}
-          privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
-          pubkey: /etc/pki/akmods/certs/akmods-ublue.der
-          tags: ${{ steps.build_image.outputs.tags }}
-          kernel_suffix: ${{ env.KERNEL_SUFFIX }}
-          strip: false
+          attempt_limit: 3
+          attempt_delay: 1500
+          action: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
+          with: |
+            image: ${{ steps.build_image.outputs.image }}
+            default-tag: ${{ env.DEFAULT_TAG }}
+            privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
+            pubkey: /etc/pki/akmods/certs/akmods-ublue.der
+            tags: ${{ steps.build_image.outputs.tags }}
+            kernel_suffix: ${{ env.KERNEL_SUFFIX }}
+            strip: false
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
@@ -327,18 +370,22 @@ jobs:
 
       # Push the image to GHCR (Image Registry)
       - name: Push To GHCR
-        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
+        uses: Wandalen/wretry.action@v3.5.0
         id: push
         if: github.event_name != 'pull_request'
         env:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
-          image: ${{ steps.build_image.outputs.image }}
-          tags: ${{ steps.build_image.outputs.tags }}
-          registry: ${{ steps.registry_case.outputs.lowercase }}
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+          attempt_limit: 3
+          attempt_delay: 15000
+          action: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
+          with: |
+            image: ${{ steps.build_image.outputs.image }}
+            tags: ${{ steps.build_image.outputs.tags }}
+            registry: ${{ steps.registry_case.outputs.lowercase }}
+            username: ${{ env.REGISTRY_USER }}
+            password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3
@@ -349,22 +396,24 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Sign container
-      - uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
+      - name: Sign Container Image
+        uses: Wandalen/wretry.action@v3.5.0
         if: github.event_name != 'pull_request'
-
-      - name: Sign container image
-        if: github.event_name != 'pull_request'
-        run: |
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
-        env:
-          TAGS: ${{ steps.push.outputs.digest }}
-          COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+        with:
+          action: EyeCantCU/cosign-action/sign@v0.2.2
+          attempt_limit: 3
+          attempt_delay: 15000
+          with: |
+            containers: ${{ env.IMAGE_NAME }}
+            registry: ${{ env.IMAGE_REGISTRY }}
+            registry-token: ${{ secrets.GITHUB_TOKEN }}
+            signing-secret: ${{ secrets.SIGNING_SECRET }}
+            tags: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
 
       - name: Generate file containing outputs
         if: github.event_name != 'pull_request'
         env:
-          DIGEST: ${{ steps.push.outputs.digest }}
+          DIGEST: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_FLAVOR: ${{ env.image_flavor }}
@@ -372,14 +421,18 @@ jobs:
         run: echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${IMAGE_FLAVOR}-${FEDORA_VERSION}.txt"
 
       - name: Upload artifact
+        uses: Wandalen/wretry.action@v3.5.0
         if: github.event_name != 'pull_request'
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
-          name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}
-          retention-days: 1
-          if-no-files-found: error
-          path: |
-            ${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}.txt
+          attempt_limit: 3
+          attempt_delay: 15000
+          action: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
+          with: |
+            name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}
+            retention-days: 1
+            if-no-files-found: error
+            path: |
+              ${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}.txt
 
   check:
     name: Check all ${{ inputs.brand_name }} ${{ inputs.fedora_version }} builds successful
