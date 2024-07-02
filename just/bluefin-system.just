@@ -289,14 +289,14 @@ toggle-tailscaled:
     TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
 
     if [ "$TAILSCALE_STATUS" == "enabled" ]; then
-        echo "Tailscale is enabled. Attempting to disable."
+        echo "The tailscaled service is enabled. Attempting to disable."
         systemctl disable --now tailscaled
         TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
         if [ "$TAILSCALE_STATUS" == "disabled" ]; then
             echo "${b}${red}Disabled tailscaled.${n}"
         fi
     elif [ "$TAILSCALE_STATUS" == "disabled" ]; then
-        echo "Tailscale is disabled. Attempting to enable."
+        echo "The tailscaled service is disabled. Attempting to enable."
         systemctl enable --now tailscaled
         TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
         if [ "$TAILSCALE_STATUS" == "enabled" ]; then
