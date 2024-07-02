@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/ublue-os/bluefin/compare/v3.0.0...v3.1.0) (2024-07-02)
+
+
+### Features
+
+* **dx:** add monaspace font ([#1475](https://github.com/ublue-os/bluefin/issues/1475)) ([de9e5e3](https://github.com/ublue-os/bluefin/commit/de9e5e3faa10a42ae56052ff6fb230161cf49d24))
+
 ## [3.0.0](https://github.com/ublue-os/bluefin/compare/v2.10.0...v3.0.0) (2024-07-01)
 
 
