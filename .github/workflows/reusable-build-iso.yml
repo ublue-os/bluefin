@@ -118,6 +118,16 @@ jobs:
           fi
           echo "flatpak-dir-shortname=${FLATPAK_DIR_SHORTNAME}" >> $GITHUB_OUTPUT
 
+      - name: Pull main and akmods images
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            # pull the base images used for FROM in Containerfile so
+            # we can retry on that unfortunately common failure case
+            docker pull "ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ inputs.fedora_version }}"
+
       - name: Determine Flatpak Dependencies
         id: flatpak_dependencies
         uses: Wandalen/wretry.action@v3.5.0
@@ -150,7 +160,6 @@ jobs:
               --volume ${FLATPAK_REFS_DIR}:/output \
               --volume ${TEMP_FLATPAK_INSTALL_DIR}:/temp_flatpak_install_dir \
               ${image} /temp_flatpak_install_dir/script.sh
-            docker rmi ${image}
 
       - name: Build ISOs
         uses: jasonn3/build-container-installer@v1.2.1
