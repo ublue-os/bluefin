@@ -147,41 +147,28 @@ jobs:
             echo "VERSION=$ver" >> $GITHUB_ENV
 
       - name: Verify base image
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          attempt_limit: 3
-          attempt_delay: 1500
-          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
-          with: "containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ env.fedora_version }}"
+          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ env.fedora_version }}
 
       - name: Verify akmods image
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          attempt_limit: 3
-          attempt_delay: 1500
-          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
-          with: "containers: akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}"
+          containers: akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
 
       - name: Verify nvidia akmods image
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          attempt_limit: 3
-          attempt_delay: 1500
-          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
-          with: "containers: akmod:coreos-${{ env.fedora_version }}"
+          containers: akmod:coreos-${{ env.fedora_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
-        uses: Wandalen/wretry.action@v3.5.0
+        action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          attempt_limit: 3
-          attempt_delay: 1500
-          action: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
-          with: |
-            containers: dive, flux, helm, ko, minio, kubectl
-            cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
-            oidc-issuer: https://token.actions.githubusercontent.com
-            registry: cgr.dev/chainguard
+          containers: dive, flux, helm, ko, minio, kubectl
+          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+          oidc-issuer: https://token.actions.githubusercontent.com
+          registry: cgr.dev/chainguard
 
       - name: Check just syntax
         uses: ublue-os/just-action@961e70ef33d8e0ef5ecf19dbb20739f3c0ce873b # v1
