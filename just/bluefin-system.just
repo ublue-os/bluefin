@@ -313,7 +313,7 @@ toggle-tailscale:
         TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
         if [ "$TAILSCALED_STATUS" == "enabled" ]; then
           gnome-extensions enable tailscale@joaophi.github.com
-          echo "${b}${green}Enabled Tailscale.${n}"
+          echo "${b}${green}Tailscale is enabled.${n}"
           echo "If this is your first time using Tailscale, setup is necessary."
           echo "Refer to Tailscale's documentation at https://tailscale.com/kb/1346/start."
         fi
@@ -322,7 +322,7 @@ toggle-tailscale:
         TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
         if [ "$TAILSCALED_STATUS" == "disabled" ]; then
           gnome-extensions disable tailscale@joaophi.github.com
-          echo "${b}${red}Disabled Tailscale.${n}"
+          echo "${b}${red}Tailscale is disabled.${n}"
         fi
       fi
     fi
