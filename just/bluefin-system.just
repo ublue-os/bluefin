@@ -297,7 +297,7 @@ toggle-tailscale:
         echo "tailscaled service status: $TAILSCALED_STATUS"
     fi
 
-    TAILSCALE_QS="$(gnome-extensions list | grep -q "tailscale"; echo $?)"
+    TAILSCALE_QS="$(gnome-extensions list | grep -q "tailscale@joaophi.github.com"; echo $?)"
     if [ "$TAILSCALE_QS" == 0 ]; then
       TAILSCALE_QS="Installed"
     else
