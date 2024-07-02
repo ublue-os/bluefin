@@ -4,7 +4,7 @@
                 <month>1</month>
                 <day>1</day>
                 <hour>6</hour>
-                <minute>0</minute>
+                <minute>15</minute>
                 <second>0</second>
         </starttime>
 
@@ -14,18 +14,18 @@
         </static>
 
         <transition type="overlay">
-                <duration>7200.0</duration>
+                <duration>1800.0</duration>
                 <from>/usr/share/backgrounds/bluefin/WallPaper_WinterDay_Post.webp</from>
                 <to>/usr/share/backgrounds/bluefin/WallPaper_WinterNight_Post.webp</to>
         </transition>
 
         <static>
                 <file>/usr/share/backgrounds/bluefin/WallPaper_WinterNight_Post.webp</file>
-                <duration>36000.0</duration>
+                <duration>46800.0</duration>
         </static>
 
         <transition type="overlay">
-                <duration>7200.0</duration>
+                <duration>1800.0</duration>
                 <from>/usr/share/backgrounds/bluefin/WallPaper_WinterNight_Post.webp</from>
                 <to>/usr/share/backgrounds/bluefin/WallPaper_WinterDay_Post.webp</to>
         </transition>

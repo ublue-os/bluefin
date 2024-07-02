@@ -10,7 +10,7 @@
 
         <static>
                 <file>/usr/share/backgrounds/bluefin/WallPaper_SpringDay_Post.webp</file>
-                <duration>36000.0</duration>
+                <duration>37800.0</duration>
         </static>
 
         <transition type="overlay">
@@ -21,7 +21,7 @@
 
         <static>
                 <file>/usr/share/backgrounds/bluefin/WallPaper_SpringNight_Post.webp</file>
-                <duration>36000.0</duration>
+                <duration>34200.0</duration>
         </static>
 
         <transition type="overlay">
