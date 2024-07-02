@@ -281,28 +281,48 @@ update-ng:
     flatpak update -y
     brew upgrade
 
-# Toggle tailscaled service
-toggle-tailscaled:
+# Toggle tailscale
+toggle-tailscale:
     #!/bin/bash
     source /usr/lib/ujust/ujust.sh
 
-    TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
+    TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
 
-    if [ "$TAILSCALE_STATUS" == "enabled" ]; then
-        echo "The tailscaled service is enabled. Attempting to disable."
-        systemctl disable --now tailscaled
-        TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
-        if [ "$TAILSCALE_STATUS" == "disabled" ]; then
-            echo "${b}${red}Disabled tailscaled.${n}"
-        fi
-    elif [ "$TAILSCALE_STATUS" == "disabled" ]; then
-        echo "The tailscaled service is disabled. Attempting to enable."
-        systemctl enable --now tailscaled
-        TAILSCALE_STATUS="$(systemctl is-enabled tailscaled)"
-        if [ "$TAILSCALE_STATUS" == "enabled" ]; then
-            echo "${b}${green}Enabled tailscaled.${n}"
-        fi
+    if [ "$TAILSCALED_STATUS" == "enabled" ]; then
+        TAILSCALED="Installed"
+    elif [ "$TAILSCALED_STATUS" == "disabled" ]; then
+        TAILSCALED="Installed"
     else 
-        echo "${b}${red}Failed to enable/disable tailscaled.${n}"
-        echo "tailscaled service status: $TAILSCALE_STATUS"
+        echo "${b}${red}Unable to enable or disable Tailscale.${n}"
+        echo "tailscaled service status: $TAILSCALED_STATUS"
+    fi
+
+    TAILSCALE_QS="$(gnome-extensions list | grep -q "tailscale"; echo $?)"
+    if [ "$TAILSCALE_QS" == 0 ]; then
+      TAILSCALE_QS="Installed"
+    else
+      echo "The Tailscale QS extension for Gnome is not installed. Please install it and then use this command again."
+    fi
+
+    if [ "$TAILSCALE_QS" == "Installed" ] && [ "$TAILSCALED" == "Installed" ]; then
+      echo "Enable or disable Tailscale?"
+      TS_OPTION=$(gum choose Enable Disable)
+
+      if [ "$TS_OPTION" = "Enable" ]; then
+        systemctl enable --now tailscaled
+        TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
+        if [ "$TAILSCALED_STATUS" == "enabled" ]; then
+          gnome-extensions enable tailscale@joaophi.github.com
+          echo "${b}${green}Enabled Tailscale.${n}"
+          echo "If this is your first time using Tailscale, setup is necessary."
+          echo "Refer to Tailscale's documentation at https://tailscale.com/kb/1346/start."
+        fi
+      elif [ "$TS_OPTION" = "Disable" ]; then
+        systemctl disable --now tailscaled
+        TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
+        if [ "$TAILSCALED_STATUS" == "disabled" ]; then
+          gnome-extensions disable tailscale@joaophi.github.com
+          echo "${b}${red}Disabled tailscaled.${n}"
+        fi
+      fi
     fi
