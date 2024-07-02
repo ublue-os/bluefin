@@ -367,19 +367,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Sign container
-      - name: Sign Container Image
-        uses: Wandalen/wretry.action@v3.5.0
-        if: github.event_name != 'pull_request'
+      - name: Sign kernel
+        uses: ublue-os/kernel-signer@v0.2.3
         with:
-          action: EyeCantCU/cosign-action/sign@v0.2.2
-          attempt_limit: 3
-          attempt_delay: 15000
-          with: |
-            containers: ${{ env.IMAGE_NAME }}
-            registry: ${{ env.IMAGE_REGISTRY }}
-            registry-token: ${{ secrets.GITHUB_TOKEN }}
-            signing-secret: ${{ secrets.SIGNING_SECRET }}
-            tags: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
+          image: ${{ steps.build_image.outputs.image }}
+          default-tag: ${{ env.DEFAULT_TAG }}
+          privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
+          pubkey: /etc/pki/akmods/certs/akmods-ublue.der
+          tags: ${{ steps.build_image.outputs.tags }}
 
       - name: Generate file containing outputs
         if: github.event_name != 'pull_request'
