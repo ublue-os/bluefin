@@ -284,13 +284,15 @@ update-ng:
 # Toggle tailscale
 toggle-tailscale:
     #!/bin/bash
+    set -euo pipefail
     source /usr/lib/ujust/ujust.sh
 
-    TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
+    TAILSCALED_STATUS="$(systemctl is-enabled tailscaled || true )"
 
     if [ "$TAILSCALED_STATUS" == "enabled" ] || [ "$TAILSCALED_STATUS" == "disabled" ]; then
         TAILSCALED="Installed"
     else 
+        TAILSCALED="Not Found"
         echo "${b}${red}Unable to enable or disable Tailscale.${n}"
         echo "tailscaled service status: $TAILSCALED_STATUS"
     fi
@@ -308,7 +310,7 @@ toggle-tailscale:
 
       if [ "$TS_OPTION" = "Enable" ]; then
         systemctl enable --now tailscaled
-        TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
+        TAILSCALED_STATUS="$(systemctl is-enabled tailscaled || true )"
         if [ "$TAILSCALED_STATUS" == "enabled" ]; then
           gnome-extensions enable tailscale@joaophi.github.com
           echo "${b}${green}Tailscale is enabled.${n}"
@@ -317,7 +319,7 @@ toggle-tailscale:
         fi
       elif [ "$TS_OPTION" = "Disable" ]; then
         systemctl disable --now tailscaled
-        TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
+        TAILSCALED_STATUS="$(systemctl is-enabled tailscaled || true )"
         if [ "$TAILSCALED_STATUS" == "disabled" ]; then
           gnome-extensions disable tailscale@joaophi.github.com
           echo "${b}${red}Tailscale is disabled.${n}"
