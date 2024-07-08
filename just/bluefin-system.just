@@ -288,9 +288,7 @@ toggle-tailscale:
 
     TAILSCALED_STATUS="$(systemctl is-enabled tailscaled)"
 
-    if [ "$TAILSCALED_STATUS" == "enabled" ]; then
-        TAILSCALED="Installed"
-    elif [ "$TAILSCALED_STATUS" == "disabled" ]; then
+    if [ "$TAILSCALED_STATUS" == "enabled" ] || [ "$TAILSCALED_STATUS" == "disabled" ]; then
         TAILSCALED="Installed"
     else 
         echo "${b}${red}Unable to enable or disable Tailscale.${n}"
