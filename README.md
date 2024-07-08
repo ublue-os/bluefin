@@ -2,6 +2,11 @@
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2503a44c1105456483517f793af75ee7)](https://app.codacy.com/gh/ublue-os/bluefin/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) 
 
+[![Aurora Stable](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-aurora.yml) [![Aurora Latest](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-aurora.yml) 
+
+[![Bluefin GTS](https://github.com/ublue-os/bluefin/actions/workflows/build-gts-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-gts-bluefin.yml) [![Bluefin Stable](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-bluefin.yml) [![Bluefin Latest](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-bluefin.yml) 
+
+
 ## Bluefin - [projectbluefin.io](https://projectbluefin.io)
 
 [![bluefin 39](https://github.com/ublue-os/bluefin/actions/workflows/build-39-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-39-bluefin.yml) [![bluefin 40](https://github.com/ublue-os/bluefin/actions/workflows/build-40-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-40-bluefin.yml)
