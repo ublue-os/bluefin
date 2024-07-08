@@ -294,6 +294,7 @@ toggle-tailscale:
     else 
         TAILSCALED="Not Found"
         echo "${b}${red}Unable to enable or disable Tailscale.${n}"
+        echo "The tailscaled service must be present and either enabled or disabled to run this script."
         echo "tailscaled service status: $TAILSCALED_STATUS"
     fi
 
@@ -301,7 +302,7 @@ toggle-tailscale:
     if [ "$TAILSCALE_QS" == 0 ]; then
       TAILSCALE_QS="Installed"
     else
-      echo "The Tailscale QS extension for Gnome is not installed. Please install it and then use this command again."
+      echo "The Tailscale QS extension for Gnome is not installed. Please install it and then run this script again."
     fi
 
     if [ "$TAILSCALE_QS" == "Installed" ] && [ "$TAILSCALED" == "Installed" ]; then
