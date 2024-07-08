@@ -11,10 +11,9 @@ ARG UBLUE_IMAGE_TAG="${UBLUE_IMAGE_TAG:-latest}"
 
 # FROM's for copying
 ARG KMOD_SOURCE_COMMON="ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
-ARG COREOS_KMODS="ghcr.io/ublue-os/ucore-kmods:stable"
-ARG COREOS_NVIDIA="ghcr.io/ublue-os/akmods-nvidia:coreos-${FEDORA_MAJOR_VERSION}"
+ARG KMOD_SOURCE_NVIDIA="ghcr.io/ublue-os/akmods-nvidia:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
 FROM ${KMOD_SOURCE_COMMON} AS akmods
-FROM ${COREOS_NVIDIA} AS coreos_nvidia
+FROM ${KMOD_SOURCE_NVIDIA} AS akmods_nvidia
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
@@ -37,9 +36,9 @@ COPY packages.json /tmp/packages.json
 
 # Copy ublue-update.toml to tmp first, to avoid being overwritten.
 COPY /system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
-# COPY ublue kmods, add needed negativo17 repo and then immediately disable due to incompatibility with RPMFusion
+# Copy ublue kmods
 COPY --from=akmods /rpms /tmp/akmods-rpms
-COPY --from=coreos_nvidia /rpms /tmp/akmods-rpms
+COPY --from=akmods_nvidia /rpms /tmp/akmods-rpms
 
 # Build, cleanup, commit.
 RUN rpm-ostree cliwrap install-to-root / && \
