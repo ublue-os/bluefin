@@ -306,7 +306,7 @@ toggle-tailscale:
 
     if [ "$TAILSCALE_QS" == "Installed" ] && [ "$TAILSCALED" == "Installed" ]; then
       echo "Enable or disable Tailscale?"
-      TS_OPTION=$(gum choose Enable Disable)
+      TS_OPTION=$(ugum choose Enable Disable)
 
       if [ "$TS_OPTION" = "Enable" ]; then
         systemctl enable --now tailscaled
