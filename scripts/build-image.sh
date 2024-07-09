@@ -18,15 +18,15 @@ version=$3
 
 # Get Fedora Version and Kernel Info
 if [[ "${version}" == "stable" ]]; then
-    KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+    KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]' | tr -d '"')
     fedora_version=$(echo "$KERNEL_RELEASE" | grep -oP 'fc\K[0-9]+')
 elif [[ ${version} == "gts" ]]; then
-    coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+    coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]' | tr -d '"')
     major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
     coreos_fedora_version=$(echo "$coreos_kernel_release" | grep -oP 'fc\K[0-9]+')
     KERNEL_RELEASE="${major_minor_patch}-200.fc$(("$coreos_fedora_version" - 1))"
 else
-    KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/fsync:latest | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+    KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/fsync:latest | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]' | tr -d '"')
 fi
 
 fedora_version=$(echo "$KERNEL_RELEASE" | grep -oP 'fc\K[0-9]+')
