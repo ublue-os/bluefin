@@ -21,5 +21,6 @@ elif [[ "${AKMODS_FLAVOR}" == "fsync" ]]; then
         "/tmp/fsync-rpms/kernel-headers-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm" \
         "/tmp/fsync-rpms/kernel-modules-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm" \
         "/tmp/fsync-rpms/kernel-modules-core-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm" \
-        "/tmp/fsync-rpms/kernel-modules-extra-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm"
+        "/tmp/fsync-rpms/kernel-modules-extra-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm" \
+        "/tmp/fsync-rpms/kernel-uki-virt-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm"
 fi
