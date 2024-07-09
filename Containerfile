@@ -5,15 +5,19 @@ ARG SOURCE_IMAGE="${SOURCE_IMAGE:-${BASE_IMAGE_NAME}-${IMAGE_FLAVOR}}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-40}"
 ARG TARGET_BASE="${TARGET_BASE:-bluefin}"
-ARG COREOS_TYPE="${COREOS_TYPE:-}"
 ARG KERNEL="${KERNEL:-}"
 ARG UBLUE_IMAGE_TAG="${UBLUE_IMAGE_TAG:-latest}"
 
-# FROM's for copying
+# Sources for akmods
 ARG KMOD_SOURCE_COMMON="ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
 ARG KMOD_SOURCE_NVIDIA="ghcr.io/ublue-os/akmods-nvidia:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}"
+
+# Fetch akmods
 FROM ${KMOD_SOURCE_COMMON} AS akmods
 FROM ${KMOD_SOURCE_NVIDIA} AS akmods_nvidia
+
+# Fetch fsync kernel
+FROM ghcr.io/ublue-os/fsync:latest AS fsync
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
@@ -24,7 +28,6 @@ ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG COREOS_TYPE="${COREOS_TYPE:-}"
 ARG KERNEL="${KERNEL:-}"
 ARG UBLUE_IMAGE_TAG="${UBLUE_IMAGE_TAG:-latest}"
 
@@ -36,9 +39,13 @@ COPY packages.json /tmp/packages.json
 
 # Copy ublue-update.toml to tmp first, to avoid being overwritten.
 COPY /system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
+
 # Copy ublue kmods
 COPY --from=akmods /rpms /tmp/akmods-rpms
 COPY --from=akmods_nvidia /rpms /tmp/akmods-rpms
+
+# Copy fsync kernel
+COPY --from=fsync /tmp/rpms /tmp/fsync-rpms
 
 # Build, cleanup, commit.
 RUN rpm-ostree cliwrap install-to-root / && \
@@ -60,7 +67,6 @@ ARG BASE_IMAGE_NAME="${BASE_IMAGE_NAME}"
 ARG IMAGE_FLAVOR="${IMAGE_FLAVOR}"
 ARG AKMODS_FLAVOR="${AKMODS_FLAVOR}"
 ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
-ARG COREOS_TYPE="${COREOS_TYPE:-}"
 ARG KERNEL="${KERNEL:-}"
 ARG UBLUE_IMAGE_TAG="${UBLUE_IMAGE_TAG:-latest}"
 

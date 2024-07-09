@@ -4,7 +4,7 @@
 set -ouex pipefail
 
 . /tmp/build/firmware.sh
-. /tmp/build/coreos_kernel.sh
+. /tmp/build/install-kernel.sh
 . /tmp/build/copr-repos.sh
 . /tmp/build/install-akmods.sh
 . /tmp/build/packages.sh
