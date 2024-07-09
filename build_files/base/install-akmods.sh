@@ -7,7 +7,7 @@ if [[ "${AKMODS_FLAVOR}" == "coreos" ]]; then
         https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
 fi
 
-# Nvidia for gts/stable - nvidia
+# Nvidia
 if [[ "${AKMODS_FLAVOR}" == "nvidia" ]]; then
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
