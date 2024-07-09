@@ -26,7 +26,10 @@ elif [[ ${version} == "gts" ]]; then
     coreos_fedora_version=$(echo "$coreos_kernel_release" | grep -oP 'fc\K[0-9]+')
     KERNEL_RELEASE="${major_minor_patch}-200.fc$(("$coreos_fedora_version" - 1))"
 else
-    KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/fsync:latest | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]' | tr -d '"')
+    fsync_kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/fsync:latest | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]' | tr -d '"')
+    fsync_kernel_version=$(echo "${fsync_kernel_release//.fc*}")
+    fsync_fedora_version=$(echo "${fsync_kernel_release//*.fc}")
+    KERNEL_RELEASE="${fsync_kernel_version}.fsync.fc${fsync_fedora_version}"
 fi
 
 fedora_version=$(echo "$KERNEL_RELEASE" | grep -oP 'fc\K[0-9]+')
