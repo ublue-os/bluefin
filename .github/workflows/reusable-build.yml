@@ -146,13 +146,13 @@ jobs:
           echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
         with:
           containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
 
       - name: Verify Chainguard images
         if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
-        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
         with:
           containers: dive, flux, helm, ko, minio, kubectl
           cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
