@@ -12,4 +12,4 @@ jobs:
     secrets: inherit
     with:
       brand_name: bluefin
-      fedora_version: 40
+      fedora_version: latest
