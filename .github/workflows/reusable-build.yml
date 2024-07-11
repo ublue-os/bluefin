@@ -306,7 +306,7 @@ jobs:
             --target=${{ env.TARGET_NAME }}
 
       - name: Sign kernel
-        uses: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
+        uses: ublue-os/kernel-signer@d7bee36277c13bd4072f452766392a3420d2bbdf # v0.2.4
         if: github.event_name != 'pull_request'
         with:
           image: ${{ steps.build_image.outputs.image }}
