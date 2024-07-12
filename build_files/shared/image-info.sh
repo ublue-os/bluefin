@@ -5,17 +5,10 @@ set -ouex pipefail
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 
-#shellcheck disable=SC2153
-image_flavor="${IMAGE_FLAVOR}"
-
-if [[ "${COREOS_TYPE}" == "nvidia" ]]; then
-  image_flavor="nvidia"
-fi
-
 cat > $IMAGE_INFO <<EOF
 {
   "image-name": "$IMAGE_NAME",
-  "image-flavor": "$image_flavor",
+  "image-flavor": "$IMAGE_FLAVOR",
   "image-vendor": "$IMAGE_VENDOR",
   "image-ref": "$IMAGE_REF",
   "image-tag":"$UBLUE_IMAGE_TAG",

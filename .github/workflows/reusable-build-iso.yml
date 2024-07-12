@@ -28,28 +28,11 @@ jobs:
         image_flavor:
           - main
           - nvidia
-          - asus
-          - asus-nvidia
-          - surface
-          - surface-nvidia
         base_name:
           - ${{ inputs.brand_name }}
           - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
-        exclude:
-          - fedora_version: gts
-            image_flavor: asus
-          - fedora_version: gts
-            image_flavor: asus-nvidia
-          - fedora_version: stable
-            image_flavor: asus
-          - fedora_version: stable
-            image_flavor: asus-nvidia
-          - fedora_version: stable
-            image_flavor: surface
-          - fedora_version: stable
-            image_flavor: surface-nvidia
 
     steps:
       - name: Free Disk Space (Ubuntu)
