@@ -131,7 +131,7 @@ jobs:
           set -eo pipefail
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
             KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
-          elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
+          elif [[ ${{ matrix.fedora_version }} == "gts" && ${{ env.AKMODS_FLAVOR }} != "surface" ]]; then
             coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
             major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
             coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
@@ -341,18 +341,6 @@ jobs:
           #   --target=${{ matrix.target_name || matrix.base_name }}
           extra-args: |
             --target=${{ env.TARGET_NAME }}
-
-      - name: Sign kernel
-        uses: ublue-os/kernel-signer@d7bee36277c13bd4072f452766392a3420d2bbdf # v0.2.4
-        if: github.event_name != 'pull_request'
-        with:
-          image: ${{ steps.build_image.outputs.image }}
-          default-tag: ${{ env.DEFAULT_TAG }}
-          privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
-          pubkey: /etc/pki/akmods/certs/akmods-ublue.der
-          tags: ${{ steps.build_image.outputs.tags }}
-          kernel_suffix: ${{ env.KERNEL_SUFFIX }}
-          strip: false
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
