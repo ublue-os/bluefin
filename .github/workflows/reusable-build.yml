@@ -100,7 +100,7 @@ jobs:
               echo "KERNEL_SUFFIX=surface" >> $GITHUB_ENV
           elif [[ "${{ matrix.fedora_version }}" == "stable" || \
                   "${{ matrix.fedora_version }}" == "gts" ]]; then
-              echo "AKMODS_FLAVOR=coreos" >> $GITHUB_ENV
+              echo "AKMODS_FLAVOR=coreos-stable" >> $GITHUB_ENV
           elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
               echo "AKMODS_FLAVOR=fsync" >> $GITHUB_ENV
           else
@@ -137,7 +137,9 @@ jobs:
             coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
             KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1)).$(uname -m)"
           else
-            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"]')
+            base_kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"]')
+            base_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
+            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.AKMODS_FLAVOR }}-kernel:${base_fedora_version} | jq -r '.Labels["ostree.linux"]')
           fi
           fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
           echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
