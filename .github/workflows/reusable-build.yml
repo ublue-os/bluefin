@@ -139,34 +139,34 @@ jobs:
               KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.AKMODS_FLAVOR }}-kernel:${base_fedora_version} | jq -r '.Labels["ostree.linux"]')
             fi
             fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
-            echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
-            echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
+            echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_ENV
+            echo "fedora_version=$fedora_version" >> $GITHUB_ENV
             ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
             if [ -z "$ver" ] || [ "null" = "$ver" ]; then
               echo "inspected image version must not be empty or null"
               exit 1
             fi
-            echo "VERSION=$ver" >> $GITHUB_OUTPUT
+            echo "VERSION=$ver" >> $GITHUB_ENV
 
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
         with:
-          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
+          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ env.fedora_version }}
 
       - name: Verify Akmods
         uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: akmods:${{ env.AKMODS_FLAVOR}}-${{ steps.labels.outputs.fedora_version }}
+          containers: akmods:${{ env.AKMODS_FLAVOR}}-${{ env.fedora_version }}
 
       - name: Verify Nvidia
         uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: akmods-nvidia:${{ env.AKMODS_FLAVOR}}-${{ steps.labels.outputs.fedora_version }}
+          containers: akmods-nvidia:${{ env.AKMODS_FLAVOR}}-${{ env.fedora_version }}
 
       - name: Verify Kernel Cache
         uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ steps.labels.outputs.KERNEL_RELEASE }}
+          containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.KERNEL_RELEASE }}
 
       - name: Verify Kernel Verion Matches
         uses: Wandalen/wretry.action@v3.5.0
@@ -175,8 +175,8 @@ jobs:
           attempt_delay: 15000
           command: |
             set -x
-            akmods_version=$(skopeo inspect docker://ghcr.io/ublue-os/akmods:${{ env.AKMODS_FLAVOR }}-${{ steps.labels.outputs.fedora_version }} | jq -r '.Labels["ostree.linux"]')
-            if [[ "${akmods_version}" == "${{ steps.labels.outputs.KERNEL_RELEASE }}" ]]; then
+            akmods_version=$(skopeo inspect docker://ghcr.io/ublue-os/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }} | jq -r '.Labels["ostree.linux"]')
+            if [[ "${akmods_version}" == "${{ env.KERNEL_RELEASE }}" ]]; then
               echo "Kernel Versions Match"
             else
               echo "Kernel Version do Not Match"
@@ -236,14 +236,14 @@ jobs:
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
             BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
           else
-            BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}" "${{ steps.labels.outputs.fedora_version }}-${TIMESTAMP}")
+            BUILD_TAGS=("${{ env.fedora_version }}" "${{ env.fedora_version }}-${TIMESTAMP}")
           fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
             if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
               BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
             else
-              BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}-testing" "${{ steps.labels.outputs.fedora_version }}-testing-${TIMESTAMP}")
+              BUILD_TAGS=("${{ env.fedora_version }}-testing" "${{ env.fedora_version }}-testing-${TIMESTAMP}")
             fi
             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
@@ -293,9 +293,9 @@ jobs:
             ${{ env.IMAGE_NAME }}
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
-            org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
+            org.opencontainers.image.version=${{ env.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
-            ostree.linux=${{ steps.labels.outputs.kernel_release }}.x86_64
+            ostree.linux=${{ env.kernel_release }}.x86_64
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
@@ -308,10 +308,10 @@ jobs:
           command: |
             # pull the base image used for FROM in containerfile so
             # we can retry on that unfortunately common failure case
-            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ steps.labels.outputs.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ steps.labels.outputs.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ steps.labels.outputs.KERNEL_RELEASE }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.KERNEL_RELEASE }}
 
       # Build image using Buildah action
       - name: Build Image
@@ -329,11 +329,11 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ env.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ steps.labels.outputs.fedora_version }}
+            FEDORA_MAJOR_VERSION=${{ env.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
             NVIDIA_TYPE=${{ env.nvidia_type }}
-            KERNEL=${{ steps.labels.outputs.kernel_release }}
+            KERNEL=${{ env.kernel_release }}
             UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
