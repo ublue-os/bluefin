@@ -166,7 +166,7 @@ jobs:
       - name: Verify Kernel Cache
         uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.KERNEL_RELEASE }}
+          containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
       - name: Verify Kernel Verion Matches
         uses: Wandalen/wretry.action@v3.5.0
@@ -295,7 +295,7 @@ jobs:
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
             org.opencontainers.image.version=${{ env.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
-            ostree.linux=${{ env.kernel_release }}.x86_64
+            ostree.linux=${{ env.kernel_release }}
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
