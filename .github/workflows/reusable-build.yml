@@ -150,7 +150,7 @@ jobs:
           echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
         with:
           containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
 
@@ -335,7 +335,7 @@ jobs:
             --target=${{ env.TARGET_NAME }}
 
       - name: Sign kernel
-        uses: ublue-os/kernel-signer@ba1d52542bbfd0db42a528f52a114e12667169e5 # v0.2.3
+        uses: ublue-os/kernel-signer@d7bee36277c13bd4072f452766392a3420d2bbdf # v0.2.4
         if: github.event_name != 'pull_request'
         with:
           image: ${{ steps.build_image.outputs.image }}
