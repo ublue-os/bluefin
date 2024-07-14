@@ -310,7 +310,7 @@ jobs:
             podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
             podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ steps.labels.outputs.fedora_version }}
             podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ steps.labels.outputs.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.KERNEL_RELEASE }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ steps.labels.outputs.KERNEL_RELEASE }}
 
       # Build image using Buildah action
       - name: Build Image
