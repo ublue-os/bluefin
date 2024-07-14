@@ -344,7 +344,7 @@ jobs:
             --target=${{ env.TARGET_NAME }}
 
       - name: Check Secureboot
-        id: secureboot
+        if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         shell: bash
         run: |
           set -x
