@@ -125,7 +125,7 @@ jobs:
           attempt_limit: 3
           attempt_delay: 15000
           command: |
-            set -eo pipefail
+            set -eox pipefail
             if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
               KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
             elif [[ ${{ matrix.fedora_version }} == "gts" && ${{ env.AKMODS_FLAVOR }} != "surface" ]]; then
