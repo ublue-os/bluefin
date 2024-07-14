@@ -73,11 +73,6 @@ binding='<Control><Shift>Escape'
 command="flatpak run io.missioncenter.MissionCenter"
 name='mission-center'
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
-binding='<Control><Alt>Return'
-command='/usr/libexec/distrobox-quadlet-ptyxis.sh bluefin-cli'
-name='Bluefin Ptyxis'
-
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]
 binding='<Control><Alt>f'
 command='/usr/libexec/distrobox-quadlet-ptyxis.sh fedora-toolbox'
