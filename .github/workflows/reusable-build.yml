@@ -176,7 +176,7 @@ jobs:
           command: |
             set -x
             akmods_version=$(skopeo inspect docker://ghcr.io/ublue-os/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }} | jq -r '.Labels["ostree.linux"]')
-            if [[ "${akmods_version}" == "${{ env.KERNEL_RELEASE }}" ]]; then
+            if [[ "${akmods_version}" == "${{ env.kernel_release }}" ]]; then
               echo "Kernel Versions Match"
             else
               echo "Kernel Version do Not Match"
@@ -311,7 +311,7 @@ jobs:
             podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ env.fedora_version }}
             podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
             podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.KERNEL_RELEASE }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
       # Build image using Buildah action
       - name: Build Image
