@@ -101,6 +101,8 @@ jobs:
           elif [[ "${{ matrix.fedora_version }}" == "stable" || \
                   "${{ matrix.fedora_version }}" == "gts" ]]; then
               echo "AKMODS_FLAVOR=coreos" >> $GITHUB_ENV
+          elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
+              echo "AKMODS_FLAVOR=fsync" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
           fi
@@ -108,14 +110,16 @@ jobs:
           # Env for matrix.image_flavor
           if [[ "${{ matrix.image_flavor }}" == "nvidia" ]] && \
              [[ "${{ matrix.fedora_version }}" == "stable" || \
-                "${{ matrix.fedora_version }}" == "gts" ]]; then
+                "${{ matrix.fedora_version }}" == "gts" || \
+                "${{ matrix.fedora_version }}" == "latest" ]]; then
                 echo "image_flavor=main" >> $GITHUB_ENV
-                echo "coreos_type=nvidia" >> $GITHUB_ENV
+                echo "nvidia_type=nvidia" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" == "main" ]] && \
              [[ "${{ matrix.fedora_version }}" == "stable" || \
-                "${{ matrix.fedora_version }}" == "gts" ]]; then
+                "${{ matrix.fedora_version }}" == "gts" || \
+                "${{ matrix.fedora_version }}" == "latest" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
-               echo "coreos_type=main" >> $GITHUB_ENV
+               echo "nvidia_type=main" >> $GITHUB_ENV
           else
              echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
           fi
@@ -126,14 +130,14 @@ jobs:
         run: |
           set -eo pipefail
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-            KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"])
           elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
-            coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"])
             major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
             coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
-            KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1))"
+            KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1)).$(uname -m)"
           else
-            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"])
           fi
           fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
           echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
@@ -150,14 +154,27 @@ jobs:
         with:
           containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
 
-      - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
+      - name: Verify Akmods
         uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: dive, flux, helm, ko, minio, kubectl
-          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
-          oidc-issuer: https://token.actions.githubusercontent.com
-          registry: cgr.dev/chainguard
+          containers: akmods:${{ env.AKMODS_FLAVOR}}-${{ steps.labels.outputs.fedora_version }}
+
+      - name: Verify Kernel Cache
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        with:
+          containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ steps.labels.outputs.KERNEL_RELEASE }}
+
+      - name: Verify Kernel Verion Matches
+        shell: bash
+        run: |
+          set -x
+          akmods_version=$(skopeo inspect docker://ghcr.io/ublue-os/akmods:${{ env.AKMODS_FLAVOR }}-${{ steps.labels.outputs.fedora_version }} | jq -r '.Labels["ostree.linux"]')
+          if [[ "${akmods_version}" == "${{ steps.labels.outputs.KERNEL_RELEASE }}" ]]; then
+            echo "Kernel Versions Match"
+          else
+            echo "Kernel Version do Not Match"
+            exit 1
+          fi
 
       - name: Maximize build space
         if: contains(matrix.base_name, '-dx') && (github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request')
@@ -275,6 +292,18 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
+      - name: Pull  images
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            # pull the base image used for FROM in containerfile so
+            # we can retry on that unfortunately common failure case
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ steps.labels.outputs.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.KERNEL_VERSION }}
+
       # Build image using Buildah action
       - name: Build Image
         id: build_image
@@ -294,7 +323,7 @@ jobs:
             FEDORA_MAJOR_VERSION=${{ steps.labels.outputs.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
-            COREOS_TYPE=${{ env.coreos_type }}
+            NVIDIA_TYPE=${{ env.nvidia_type }}
             KERNEL=${{ steps.labels.outputs.kernel_release }}
             UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}
           labels: ${{ steps.meta.outputs.labels }}

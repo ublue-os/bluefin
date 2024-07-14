@@ -39,7 +39,7 @@ tag=$(just _tag "${image}" "${target}")
 akmods_flavor=main
 if [[ "${version}" == "gts" || \
     "${version}" == "stable" ]]; then
-    coreos_type="main"
+    nvidia_type="main"
     akmods_flavor=coreos
 fi
 
@@ -55,7 +55,7 @@ command+=( --build-arg="IMAGE_FLAVOR=main" )
 command+=( --build-arg="IMAGE_VENDOR=localhost" )
 command+=( --build-arg="FEDORA_MAJOR_VERSION=${fedora_version}" )
 command+=( --build-arg="AKMODS_FLAVOR=${akmods_flavor}" )
-command+=( --build-arg="COREOS_TYPE=${coreos_type:-}" )
+command+=( --build-arg="NVIDIA_TYPE=${nvidia_type:-}" )
 command+=( --build-arg="KERNEL=${KERNEL_RELEASE:-}" )
 command+=( --build-arg="UBLUE_IMAGE_TAG=${version}" )
 command+=( --build-arg="SOURCE_IMAGE=${base_image}-main" )
