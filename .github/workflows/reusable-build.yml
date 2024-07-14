@@ -138,7 +138,7 @@ jobs:
             KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1)).$(uname -m)"
           else
             base_kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"]')
-            base_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
+            base_fedora_version=$(echo $base_kernel_release | grep -oP 'fc\K[0-9]+')
             KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.AKMODS_FLAVOR }}-kernel:${base_fedora_version} | jq -r '.Labels["ostree.linux"]')
           fi
           fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
