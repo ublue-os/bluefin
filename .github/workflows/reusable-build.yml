@@ -360,8 +360,8 @@ jobs:
           curl -Lo akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
           openssl x509 -in kernel-sign.der -out kernel-sign.crt
           openssl x509 -in akmods.der -out akmods.crt
-          sbverify --cert kernel-sign.crt vmlinuz
-          sbverify --cert akmods.crt vmlinuz
+          sbverify --cert kernel-sign.crt vmlinuz || exit 1
+          sbverify --cert akmods.crt vmlinuz || exit 1
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
