@@ -36,7 +36,7 @@ fi
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
 # ZFS for gts/stable
-if [[ ${AKMODS_FLAVOR} == "coreos" ]]; then
+if [[ ${AKMODS_FLAVOR} =~ "coreos" ]]; then
     rpm-ostree install /tmp/akmods-rpms/kmods/zfs/*.rpm \
                        pv
     depmod -a -v "${KERNEL}"
