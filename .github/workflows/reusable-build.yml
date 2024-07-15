@@ -120,7 +120,7 @@ jobs:
 
       - name: Get Current Fedora Version
         id: labels
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -169,7 +169,7 @@ jobs:
           containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
       - name: Verify Kernel Verion Matches
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -301,7 +301,7 @@ jobs:
 
       - name: Pull  images
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
-        uses: Wandalen/wretry.action@v3.5.0
+        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
