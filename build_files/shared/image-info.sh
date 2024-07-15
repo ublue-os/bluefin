@@ -8,7 +8,7 @@ IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 #shellcheck disable=SC2153
 image_flavor="${IMAGE_FLAVOR}"
 
-if [[ "${COREOS_TYPE}" == "nvidia" ]]; then
+if [[ "${NVIDIA_TYPE}" == "nvidia" ]]; then
   image_flavor="nvidia"
 fi
 

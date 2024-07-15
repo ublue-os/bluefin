@@ -97,67 +97,91 @@ jobs:
               echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
-              echo "KERNEL_SUFFIX=surface" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" == "stable" || \
-                  "${{ matrix.fedora_version }}" == "gts" ]]; then
-              echo "AKMODS_FLAVOR=coreos" >> $GITHUB_ENV
+          elif [[ "${{ matrix.fedora_version }}" =~ stable|gts ]]; then
+              echo "AKMODS_FLAVOR=coreos-stable" >> $GITHUB_ENV
+          elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
+              echo "AKMODS_FLAVOR=fsync" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
           fi
 
           # Env for matrix.image_flavor
-          if [[ "${{ matrix.image_flavor }}" == "nvidia" ]] && \
-             [[ "${{ matrix.fedora_version }}" == "stable" || \
-                "${{ matrix.fedora_version }}" == "gts" ]]; then
-                echo "image_flavor=main" >> $GITHUB_ENV
-                echo "coreos_type=nvidia" >> $GITHUB_ENV
-          elif [[ "${{ matrix.image_flavor }}" == "main" ]] && \
-             [[ "${{ matrix.fedora_version }}" == "stable" || \
-                "${{ matrix.fedora_version }}" == "gts" ]]; then
+          if [[ "${{ matrix.image_flavor }}" == "nvidia" && \
+                "${{ matrix.fedora_version }}" != "beta" ]]; then
+                  echo "image_flavor=main" >> $GITHUB_ENV
+                  echo "nvidia_type=nvidia" >> $GITHUB_ENV
+          elif [[ "${{ matrix.image_flavor }}" == "main" && \
+                  "${{ matrix.fedora_version }}" != "beta" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
-               echo "coreos_type=main" >> $GITHUB_ENV
+               echo "nvidia_type=main" >> $GITHUB_ENV
           else
              echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
           fi
 
       - name: Get Current Fedora Version
         id: labels
-        shell: bash
-        run: |
-          set -eo pipefail
-          if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-            KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-          elif [[ ${{ matrix.fedora_version }} == "gts" ]]; then
-            coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-            major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
-            coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
-            KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1))"
-          else
-            KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-          fi
-          fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
-          echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_OUTPUT
-          echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
-          ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
-          if [ -z "$ver" ] || [ "null" = "$ver" ]; then
-            echo "inspected image version must not be empty or null"
-            exit 1
-          fi
-          echo "VERSION=$ver" >> $GITHUB_OUTPUT
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            set -eox pipefail
+            if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
+              KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
+            elif [[ ${{ matrix.fedora_version }} == "gts" && ${{ env.AKMODS_FLAVOR }} != "surface" ]]; then
+              coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
+              major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
+              coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
+              KERNEL_RELEASE="${major_minor_patch}-200.fc$(($coreos_fedora_version - 1)).$(uname -m)"
+            else
+              base_kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"]')
+              base_fedora_version=$(echo $base_kernel_release | grep -oP 'fc\K[0-9]+')
+              KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.AKMODS_FLAVOR }}-kernel:${base_fedora_version} | jq -r '.Labels["ostree.linux"]')
+            fi
+            fedora_version=$(echo $KERNEL_RELEASE | grep -oP 'fc\K[0-9]+')
+            echo "kernel_release=$KERNEL_RELEASE" >> $GITHUB_ENV
+            echo "fedora_version=$fedora_version" >> $GITHUB_ENV
+            ver=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:$fedora_version | jq -r '.Labels["org.opencontainers.image.version"]')
+            if [ -z "$ver" ] || [ "null" = "$ver" ]; then
+              echo "inspected image version must not be empty or null"
+              exit 1
+            fi
+            echo "VERSION=$ver" >> $GITHUB_ENV
 
       - name: Verify base image
         uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
         with:
-          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ steps.labels.outputs.fedora_version }}
+          containers: ${{ env.BASE_IMAGE_NAME}}-${{ env.image_flavor }}:${{ env.fedora_version }}
 
-      - name: Verify Chainguard images
-        if: matrix.base_name != 'bluefin' && matrix.base_name != 'aurora'
-        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
+      - name: Verify Akmods
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
         with:
-          containers: dive, flux, helm, ko, minio, kubectl
-          cert-identity: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
-          oidc-issuer: https://token.actions.githubusercontent.com
-          registry: cgr.dev/chainguard
+          containers: akmods:${{ env.AKMODS_FLAVOR}}-${{ env.fedora_version }}
+
+      - name: Verify Nvidia
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        with:
+          containers: akmods-nvidia:${{ env.AKMODS_FLAVOR}}-${{ env.fedora_version }}
+
+      - name: Verify Kernel Cache
+        uses: EyeCantCU/cosign-action/verify@11f8c114a5e67c7a663c9dfcaf76d85429d254bc # v0.2.2
+        with:
+          containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
+
+      - name: Verify Kernel Verion Matches
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            set -x
+            akmods_version=$(skopeo inspect docker://ghcr.io/ublue-os/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }} | jq -r '.Labels["ostree.linux"]')
+            if [[ "${akmods_version}" == "${{ env.kernel_release }}" ]]; then
+              echo "Kernel Versions Match"
+            else
+              echo "Kernel Version do Not Match"
+              exit 1
+            fi
 
       - name: Maximize build space
         if: contains(matrix.base_name, '-dx') && (github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request')
@@ -212,14 +236,14 @@ jobs:
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
             BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
           else
-            BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}" "${{ steps.labels.outputs.fedora_version }}-${TIMESTAMP}")
+            BUILD_TAGS=("${{ env.fedora_version }}" "${{ env.fedora_version }}-${TIMESTAMP}")
           fi
 
           if [[ ${{ github.ref_name }} == "testing" ]]; then
             if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
               BUILD_TAGS=("${FEDORA_VERSION}-testing" "${FEDORA_VERSION}-testing-${TIMESTAMP}")
             else
-              BUILD_TAGS=("${{ steps.labels.outputs.fedora_version }}-testing" "${{ steps.labels.outputs.fedora_version }}-testing-${TIMESTAMP}")
+              BUILD_TAGS=("${{ env.fedora_version }}-testing" "${{ env.fedora_version }}-testing-${TIMESTAMP}")
             fi
             if [[ "$IS_LATEST_VERSION" == "true" ]] && \
                 [[ "$IS_STABLE_VERSION" == "true" ]]; then
@@ -269,11 +293,25 @@ jobs:
             ${{ env.IMAGE_NAME }}
           labels: |
             org.opencontainers.image.title=${{ env.IMAGE_NAME }}
-            org.opencontainers.image.version=${{ steps.labels.outputs.VERSION }}
+            org.opencontainers.image.version=${{ env.VERSION }}
             org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
-            ostree.linux=${{ steps.labels.outputs.kernel_release }}.x86_64
+            ostree.linux=${{ env.kernel_release }}
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
+
+      - name: Pull  images
+        if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
+        uses: Wandalen/wretry.action@v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            # pull the base image used for FROM in containerfile so
+            # we can retry on that unfortunately common failure case
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
       # Build image using Buildah action
       - name: Build Image
@@ -291,11 +329,11 @@ jobs:
             IMAGE_NAME=${{ env.IMAGE_NAME }}
             IMAGE_FLAVOR=${{ env.image_flavor }}
             IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ steps.labels.outputs.fedora_version }}
+            FEDORA_MAJOR_VERSION=${{ env.fedora_version }}
             TARGET_BASE=${{ matrix.target_base }}
             AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
-            COREOS_TYPE=${{ env.coreos_type }}
-            KERNEL=${{ steps.labels.outputs.kernel_release }}
+            NVIDIA_TYPE=${{ env.nvidia_type }}
+            KERNEL=${{ env.kernel_release }}
             UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
@@ -305,17 +343,25 @@ jobs:
           extra-args: |
             --target=${{ env.TARGET_NAME }}
 
-      - name: Sign kernel
-        uses: ublue-os/kernel-signer@d7bee36277c13bd4072f452766392a3420d2bbdf # v0.2.4
-        if: github.event_name != 'pull_request'
-        with:
-          image: ${{ steps.build_image.outputs.image }}
-          default-tag: ${{ env.DEFAULT_TAG }}
-          privkey: ${{ secrets.AKMOD_PRIVKEY_20230518 }}
-          pubkey: /etc/pki/akmods/certs/akmods-ublue.der
-          tags: ${{ steps.build_image.outputs.tags }}
-          kernel_suffix: ${{ env.KERNEL_SUFFIX }}
-          strip: false
+      - name: Check Secureboot
+        if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -x
+          if [[ ! $(command -v sbverify) || ! $(command -v curl) || ! $(command -v openssl) ]]; then
+            sudo apt update
+            sudo apt install sbsigntool curl openssl
+          fi
+          podman run -d --rm --name ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) "${{ env.IMAGE_NAME }}":$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) sleep 1000
+          podman cp ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1):/usr/lib/modules/${{ env.kernel_release }}/vmlinuz .
+          podman rm -f ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1)
+          sbverify --list vmlinuz
+          curl --retry 3 -Lo kernel-sign.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key.der
+          curl --retry 3 -Lo akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
+          openssl x509 -in kernel-sign.der -out kernel-sign.crt
+          openssl x509 -in akmods.der -out akmods.crt
+          sbverify --cert kernel-sign.crt vmlinuz || exit 1
+          sbverify --cert akmods.crt vmlinuz || exit 1
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
