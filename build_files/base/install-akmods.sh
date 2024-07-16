@@ -37,8 +37,11 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.r
 
 # ZFS for gts/stable
 if [[ ${AKMODS_FLAVOR} =~ "coreos" ]]; then
-    rpm-ostree install /tmp/akmods-rpms/kmods/zfs/*.rpm \
-                       pv
+    podman create --name akmods-zfs ghcr.io/ublue-os/akmods-zfs:coreos-stable-${FEDORA_VERSION}
+    podman export akmods-zfs > /tmp/akmods-zfs.tar
+    tar -xvf /tmp/akmods-zfs.tar -C /tmp
+    podman rm -f akmods-zfs
+    rpm-ostree install pv /tmp/akmods-zfs/zfs/*.rpm
     depmod -a -v "${KERNEL}"
     echo "zfs" > /usr/lib/modules-load.d/zfs.conf
 fi
