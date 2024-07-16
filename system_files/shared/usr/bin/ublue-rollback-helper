@@ -14,11 +14,13 @@ function list_tags(){
 function rebase_helper(){
     base_image="ghcr.io/ublue-os/${IMAGE_NAME}"
     echo "Which Tag would you like to rebase to?"
+    echo "The default selection is gts, stable is for enthusiasts, and latest is for testers"
     choose_target=$(Choose date latest gts stable cancel)
     if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
         rebase_target="${base_image}:${choose_target}"
     elif [[ "$choose_target" == "date" ]]; then
         # shellcheck disable=SC2207
+        echo "Warning: This will pin you to a specific version, do not forget to rebase back to a channel to resume receiving updates."
         valid_tags=( $(list_tags | sed 's/\"//g' | sed 's/,//g'))
         target_tag=$(Choose cancel "${valid_tags[@]}")
         if  grep -Eq "$FEDORA_VERSION-([0-9]+)" <<< "${target_tag}"; then
