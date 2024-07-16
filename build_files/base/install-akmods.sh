@@ -37,7 +37,7 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.r
 
 # ZFS for gts/stable
 if [[ ${AKMODS_FLAVOR} =~ "coreos" ]]; then
-    podman create --name akmods-zfs ghcr.io/ublue-os/akmods-zfs:coreos-stable-${FEDORA_MAJOR_VERSION}
+    podman create --name akmods-zfs ghcr.io/ublue-os/akmods-zfs:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}
     podman export akmods-zfs > /tmp/akmods-zfs.tar
     tar -xvf /tmp/akmods-zfs.tar -C /tmp
     podman rm -f akmods-zfs
