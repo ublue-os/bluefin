@@ -20,28 +20,24 @@ sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 
 # Everyone
 rpm-ostree install \
-    /tmp/akmods-rpms/kmods/*xpadneo*.rpm \
-    /tmp/akmods-rpms/kmods/*xone*.rpm \
-    /tmp/akmods-rpms/kmods/*openrazer*.rpm \
-    /tmp/akmods-rpms/kmods/*wl*.rpm \
-    /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm
+    /tmp/akmods/kmods/*xpadneo*.rpm \
+    /tmp/akmods/kmods/*xone*.rpm \
+    /tmp/akmods/kmods/*openrazer*.rpm \
+    /tmp/akmods/kmods/*wl*.rpm \
+    /tmp/akmods/kmods/*v4l2loopback*.rpm
     # /tmp/akmods-rpms/kmods/*framework-laptop*.rpm
 
 # All but Asus
 if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then
     rpm-ostree install \
-        /tmp/akmods-rpms/kmods/*evdi*.rpm
+        /tmp/akmods/kmods/*evdi*.rpm
 fi
 
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
 # ZFS for gts/stable
 if [[ ${AKMODS_FLAVOR} =~ "coreos" ]]; then
-    podman create --name akmods-zfs ghcr.io/ublue-os/akmods-zfs:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION}
-    podman export akmods-zfs > /tmp/akmods-zfs.tar
-    tar -xvf /tmp/akmods-zfs.tar -C /tmp
-    podman rm -f akmods-zfs
-    rpm-ostree install pv /tmp/akmods-zfs/zfs/*.rpm
+    rpm-ostree install pv /tmp/akmods-zfs/kmods/zfs/*.rpm
     depmod -a -v "${KERNEL}"
     echo "zfs" > /usr/lib/modules-load.d/zfs.conf
 fi
