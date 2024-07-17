@@ -46,10 +46,10 @@ COPY /system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-upda
 # COPY --from=kernel_cache /tmp/rpms /tmp/kernel-rpms
 
 # Build, cleanup, commit.
-RUN --mount=type=bind,from=akmods,source=/rpms,target=/tmp/akmods,rw \
-    --mount=type=bind,from=nvidia_cache,source=/rpms,target=/tmp/akmods-rpms,rw \
-    --mount=type=bind,from=kernel_cache,source=/tmp/rpms,target=/tmp/kernel-rpms,rw \
-    --mount=type=bind,from=zfs_cache,source=/rpms,target=/tmp/akmods-zfs,rw \
+RUN --mount=type=bind,from=akmods,source=/rpms,target=/tmp/akmods \
+    --mount=type=bind,from=nvidia_cache,source=/rpms,target=/tmp/akmods-rpms \
+    --mount=type=bind,from=kernel_cache,source=/tmp/rpms,target=/tmp/kernel-rpms \
+    --mount=type=bind,from=zfs_cache,source=/rpms,target=/tmp/akmods-zfs \
     rpm-ostree cliwrap install-to-root / && \
     mkdir -p /var/lib/alternatives && \
     bash -c ". /tmp/build/build-base.sh"  && \
@@ -83,7 +83,7 @@ COPY packages.json /tmp/packages.json
 # COPY --from=akmods /rpms /tmp/akmods-rpms
 
 # Build, Clean-up, Commit
-RUN --mount=type=bind,from=akmods,source=/rpms,target=/tmp/akmods,rw \
+RUN --mount=type=bind,from=akmods,source=/rpms,target=/tmp/akmods \
     mkdir -p /var/lib/alternatives && \
     bash -c ". /tmp/build/build-dx.sh"  && \
     fc-cache --system-only --really-force --verbose && \
