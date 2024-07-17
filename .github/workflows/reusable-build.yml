@@ -24,7 +24,7 @@ concurrency:
 jobs:
   build_container:
     name: image
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     continue-on-error: false
     outputs:
       image_full: ${{ steps.generate-outputs.outputs.image }}
@@ -318,6 +318,37 @@ jobs:
             podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
             podman pull ${{ env.IMAGE_REGISTRY }}/akmods-zfs:coreos-stable-${{ env.fedora_version }}
             podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
+
+      # buildah on ubuntu-22.04 builder is pretty dated and the version on
+      # ubuntu-24.04 misbehaves when using heredocs in Containerfiles
+      # (as of 2024-07-12)
+      # this wrapper script mimics toolbx/distrobox behaviour for buildah which
+      # is invoked by redhat-actions/buildah-build@v2
+      - name: Install wrapper script for containerized buildah
+        id: fix-gh-buildah
+        shell: bash
+        run: |
+          cat > /usr/local/bin/buildah <<'EOF'
+            #!/bin/sh
+            set -eux
+            # get local graphroot at runtime
+            GRAPH_ROOT="$(/usr/bin/buildah info | jq -r '.store.GraphRoot')"
+            exec podman run --rm \
+              --privileged \
+              --net=host \
+              --cgroups=disabled \
+              --runtime=crun \
+              --runtime-flag=cgroup-manager=disabled \
+              --security-opt=label=disable \
+              --security-opt=seccomp=unconfined \
+              --device=/dev/fuse:rw \
+              -v /home/runner:/home/runner \
+              -v "$GRAPH_ROOT":/var/lib/containers/storage \
+              -v "$(pwd):"/builder \
+              -w /builder \
+              quay.io/buildah/stable:v1 buildah "$@"
+          EOF
+          chmod +x /usr/local/bin/buildah
 
       # Build image using Buildah action
       - name: Build Image
