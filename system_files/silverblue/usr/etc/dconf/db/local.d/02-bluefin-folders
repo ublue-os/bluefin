@@ -7,13 +7,13 @@ name='Gaming Utilities'
 translate=false
 
 [org/gnome/desktop/app-folders/folders/Utilities]
-apps=['com.github.tchx84.Flatseal.desktop', 'io.github.flattool.Warehouse.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'org.gnome.tweaks.desktop', 'firewall-config.desktop', 'ca.desrt.dconf-editor.desktop']
+apps=['com.github.tchx84.Flatseal.desktop', 'io.github.flattool.Warehouse.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'org.gnome.tweaks.desktop', 'firewall-config.desktop', 'ca.desrt.dconf-editor.desktop', 'org.gnome.World.PikaBackup', 'input-leap.desktop', 'solaar.desktop', 'org.fedoraproject.MediaWriter.desktop']
 categories=['X-GNOME-Utilities']
 name='X-GNOME-Utilities.directory'
 translate=true
 
 [org/gnome/desktop/app-folders/folders/Games]
-excluded-apps=['steam.desktop', 'net.lutris.Lutris.desktop', 'io.github.benjamimgois.goverlay.desktop', 'com.vysp3r.ProtonPlus.desktop', 'io.github.fastrizwaan.WineZGUI.desktop']
+excluded-apps=['steam.desktop', 'net.lutris.Lutris.desktop', 'io.github.benjamimgois.goverlay.desktop', 'com.vysp3r.ProtonPlus.desktop', 'io.github.fastrizwaan.WineZGUI.desktop' ]
 categories=['Game']
 name='Games'
 translate=false
