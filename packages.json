@@ -169,15 +169,15 @@
 		},
 		"exclude": {
 			"all": [],
-			"silverblue": [
-				
-			],
+			"silverblue": [],
 			"dx": []
 		}
 	},
 	"40": {
 		"include": {
-			"all": [],
+			"all": [
+				"ptyxis"
+			],
 			"silverblue": [],
 			"dx": []
 		},
