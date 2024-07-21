@@ -175,10 +175,10 @@
 	},
 	"40": {
 		"include": {
-			"all": [],
-			"silverblue": [
+			"all": [
 				"ptyxis"
 			],
+			"silverblue": [],
 			"dx": []
 		},
 		"exclude": {
