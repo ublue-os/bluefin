@@ -3,7 +3,7 @@
 
 set -ouex pipefail
 
-cp /ctx/just /tmp/just
+cp -r /ctx/just /tmp/just
 cp /ctx/packages.json /tmp/packages.json
 cp /ctx/system_files/shared/usr/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 
