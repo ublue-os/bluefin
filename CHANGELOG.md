@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.1.0](https://github.com/ublue-os/bluefin/compare/v3.0.0...v3.1.0) (2024-07-21)
+
+
+### Features
+
+* add opendyslexic font ([#1516](https://github.com/ublue-os/bluefin/issues/1516)) ([d340915](https://github.com/ublue-os/bluefin/commit/d34091529608693eb8cc1d2addc7e4621b724d76))
+* add umoci for incus container support ([#1512](https://github.com/ublue-os/bluefin/issues/1512)) ([08106c1](https://github.com/ublue-os/bluefin/commit/08106c155a3b20e46e00a965566b12e6048b44f7))
+* **dx:** add monaspace font ([#1475](https://github.com/ublue-os/bluefin/issues/1475)) ([de9e5e3](https://github.com/ublue-os/bluefin/commit/de9e5e3faa10a42ae56052ff6fb230161cf49d24))
+* **just:** Add descriptions to rebase-helper ([#1514](https://github.com/ublue-os/bluefin/issues/1514)) ([c8c2d15](https://github.com/ublue-os/bluefin/commit/c8c2d15f8582a0a3fd2d15906603c882a0e44bf4))
+* move utilities into the utility folder ([#1518](https://github.com/ublue-os/bluefin/issues/1518)) ([01c3cbd](https://github.com/ublue-os/bluefin/commit/01c3cbdf3129659d2b085f6825a058bc9a2511db))
+* remove bluefin-cli shortcut ([#1503](https://github.com/ublue-os/bluefin/issues/1503)) ([059a167](https://github.com/ublue-os/bluefin/commit/059a167e576589c097c9ea4d62327435378cbbda))
+* switch to distro ptyxis for F40 ([#1523](https://github.com/ublue-os/bluefin/issues/1523)) ([65b15d2](https://github.com/ublue-os/bluefin/commit/65b15d20b513b72932d9c213dca9b6709c81fdb5))
+* ujust command to toggle Tailscale ([#1477](https://github.com/ublue-os/bluefin/issues/1477)) ([9f914cf](https://github.com/ublue-os/bluefin/commit/9f914cfd28036e2cc45031c9f270a991a3b0db82))
+* Use Cached Kernel, fsync for latest ([#1502](https://github.com/ublue-os/bluefin/issues/1502)) ([6cd71c1](https://github.com/ublue-os/bluefin/commit/6cd71c12f173bfa8bbd552def259c587a4df8d40))
+
+
+### Bug Fixes
+
+* add skopeo to devcontainer's features ([#1519](https://github.com/ublue-os/bluefin/issues/1519)) ([98539b8](https://github.com/ublue-os/bluefin/commit/98539b8c063da910eb26018b527fae90a0afd051))
+* correct zfs install ([#1507](https://github.com/ublue-os/bluefin/issues/1507)) ([e35a354](https://github.com/ublue-os/bluefin/commit/e35a354c64ca346739d9543634e6d9206237b4da))
+* update gnome-vrr copr ([#1492](https://github.com/ublue-os/bluefin/issues/1492)) ([94a38ed](https://github.com/ublue-os/bluefin/commit/94a38ed060fd4776447c8b7aa193eb7fca167cf9))
+
 ## [3.0.0](https://github.com/ublue-os/bluefin/compare/v2.10.0...v3.0.0) (2024-07-01)
 
 
