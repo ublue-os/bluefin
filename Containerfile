@@ -68,6 +68,7 @@ ARG UBLUE_IMAGE_TAG="${UBLUE_IMAGE_TAG:-latest}"
 
 # Build, Clean-up, Commit
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+    --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=bind,from=akmods,source=/rpms,target=/tmp/akmods \
     mkdir -p /var/lib/alternatives && \
     /ctx/build_files/build-dx.sh  && \
