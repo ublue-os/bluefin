@@ -23,11 +23,6 @@ if [ "${FEDORA_MAJOR_VERSION}" -eq "39" ]; then
     rpm-ostree install ptyxis
 fi
 
-# 40 Ptyxis
-if [ "${FEDORA_MAJOR_VERSION}" -eq "40" ]; then
-    rpm-ostree install ptyxis
-fi
-
 # Patched switcheroo
 # Add repo
 curl -Lo /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo https://copr.fedorainfracloud.org/coprs/sentry/switcheroo-control_discrete/repo/fedora-"${FEDORA_MAJOR_VERSION}"/sentry-switcheroo-control_discrete-fedora-"${FEDORA_MAJOR_VERSION}".repo
