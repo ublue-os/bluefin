@@ -37,8 +37,8 @@ devmode:
     then
         echo ""
         echo "Before we can switch to the Bluefin Developer Experience"
-        echo "the current system needs an update. Please run 'just update'"
-        echo "and reboot your system when the update is finished."
+        echo "the current system needs an update. Please run 'ujust update'"
+        echo "and reboot your system when the update is finished"
         exit
     fi
     if grep -q "dx" <<< $CURRENT_IMAGE
@@ -63,6 +63,8 @@ devmode:
               NEW_IMAGE=$(echo $CURRENT_IMAGE | sed "s/aurora/aurora-dx/")
             fi
             rpm-ostree rebase $NEW_IMAGE
+            echo ""
+            echo "Use `ujust dx-group` to add your user to the correct groups and complete the installation"
         fi
     elif [ "$OPTION" = "Disable" ]
     then
