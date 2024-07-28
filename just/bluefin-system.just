@@ -276,6 +276,7 @@ rebase-helper:
     @/usr/bin/ublue-rollback-helper
 
 alias rollback-helper := rebase-helper
+alias switch-channel := rebase-helper
 
 update-ng:
     echo "Note: This command doesn't work if you have locally layered packages" 
