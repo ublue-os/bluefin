@@ -157,7 +157,7 @@ jobs:
           version: ${{ steps.labels.outputs.fedora_version }}
           image_tag: ${{ steps.generate-tag.outputs.tag }}
           secure_boot_key_url: "https://github.com/ublue-os/akmods/raw/main/certs/public_key.der"
-          enrollment_password: "ublue-os"
+          enrollment_password: "universalblue"
           iso_name: ${{ env.IMAGE_NAME }}-${{ steps.generate-tag.outputs.tag }}.iso
           enable_cache_dnf: "false"
           enable_cache_skopeo: "false"
