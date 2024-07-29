@@ -130,6 +130,7 @@
 				"qemu",
 				"rocm-hip",
 				"rocm-opencl",
+				"rocm-smi",
 				"ubuntu-family-fonts",
 				"udica",
 				"umoci",
