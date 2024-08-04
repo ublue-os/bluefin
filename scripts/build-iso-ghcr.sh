@@ -18,7 +18,7 @@ ${container_mgr} run --rm --privileged \
     ENABLE_CACHE_DNF="false" \
     ENABLE_CACHE_SKOPEO="false" \
     ENABLE_FLATPAK_DEPENDENCIES="false" \
-    ENROLLMENT_PASSWORD="ublue-os" \
+    ENROLLMENT_PASSWORD="universalblue" \
     FLATPAK_REMOTE_REFS_DIR="${flatpak_dir_shortname}" \
     IMAGE_NAME="${ghcr_tag}" \
     IMAGE_REPO="ghcr.io/ublue-os" \
