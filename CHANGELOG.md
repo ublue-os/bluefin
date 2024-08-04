@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.2.0](https://github.com/ublue-os/bluefin/compare/v3.1.0...v3.2.0) (2024-08-04)
+
+
+### Features
+
+* add bpftop ([#1530](https://github.com/ublue-os/bluefin/issues/1530)) ([78bd85c](https://github.com/ublue-os/bluefin/commit/78bd85c7627c18a4205f9717b74971ee5b15b322))
+* add rocm-smi ([#1544](https://github.com/ublue-os/bluefin/issues/1544)) ([d4c6688](https://github.com/ublue-os/bluefin/commit/d4c6688d379c0559bb690e68e782adf128051fc0))
+* **just:** add switch-channel shortcut ([#1540](https://github.com/ublue-os/bluefin/issues/1540)) ([b419241](https://github.com/ublue-os/bluefin/commit/b419241c647a003544791369944043b2a6cfbb3a))
+* set gnome animation speed to .9 ([#1553](https://github.com/ublue-os/bluefin/issues/1553)) ([696529a](https://github.com/ublue-os/bluefin/commit/696529aad5fde23a61a499bb66fe997bd9d757b9))
+
+
+### Bug Fixes
+
+* clear flatpak's font cache ([#1560](https://github.com/ublue-os/bluefin/issues/1560)) ([2efba95](https://github.com/ublue-os/bluefin/commit/2efba9542506c4a4d3c8d19725102057601fe006))
+* **just:** remind user to run dx-group ([#1524](https://github.com/ublue-os/bluefin/issues/1524)) ([c2bf774](https://github.com/ublue-os/bluefin/commit/c2bf774593016e6387b0525de16d7689a4ff133b))
+* update project documentation link ([#1533](https://github.com/ublue-os/bluefin/issues/1533)) ([faf7303](https://github.com/ublue-os/bluefin/commit/faf7303afa6f8d6e747940c1d1ba63c6d2d43c80))
+* update secureboot password ([#1539](https://github.com/ublue-os/bluefin/issues/1539)) ([bd55cb7](https://github.com/ublue-os/bluefin/commit/bd55cb7021b81a32ed0d0b4c3e549437307ff6f2))
+
 ## [3.1.0](https://github.com/ublue-os/bluefin/compare/v3.0.0...v3.1.0) (2024-07-21)
 
 
