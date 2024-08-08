@@ -8,7 +8,7 @@ ConditionPathExists=!/etc/.%N.stamp
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/bash -c "for i in /usr/etc/*; do cp -r -n $i /etc; done"
+ExecStart=/usr/bin/bash -c "for i in /etc/*; do cp -r -n $i /etc; done"
 ExecStart=/usr/bin/systemctl restart dconf-update.service
 ExecStart=/usr/bin/touch /etc/.%N.stamp
 
