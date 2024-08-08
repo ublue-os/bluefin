@@ -163,6 +163,7 @@ jobs:
           enable_cache_skopeo: "false"
           flatpak_remote_refs_dir: ${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
           enable_flatpak_dependencies: "false"
+          web_ui: "true"
 
       - name: Move ISOs to Upload Directory
         id: upload-directory
@@ -175,7 +176,7 @@ jobs:
           echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
 
       - name: Upload ISOs and Checksum to Job Artifacts
-        if: github.ref_name == 'testing'
+        #if: github.ref_name == 'testing'
         #if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4
         with:
