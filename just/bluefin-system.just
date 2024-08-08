@@ -135,7 +135,7 @@ toggle-gnome-vrr:
     echo "To apply the changes make sure you logout and restart your session"
 
 # Ptyxis terminal transparency
-ptyxis-transparency opacity="0.95":
+ptyxis-transparency "0.95":
     #!/usr/bin/env bash
     set -euxo pipefail
     if [[ -n "$(echo "{{ opacity }}" | grep -v '^[.0-9]*$')" ]]; then
