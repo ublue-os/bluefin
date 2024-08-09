@@ -1,7 +1,6 @@
 [Unit]
 Description=Setup Guest User dotfiles
 After=local-fs.target
-After=ublue-etc-merge.service
 ConditionHost=ContainerTestUblueOS
 ConditionVirtualization=yes
 ConditionPathExists=/var/home/ublue-os

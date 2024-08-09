@@ -17,7 +17,7 @@ if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
     sed -i 's@Bluefin@Aurora@g' /usr/share/applications/system-update.desktop
     sed -i 's@Bluefin@Aurora@g' /usr/share/ublue-os/motd/tips/10-tips.md
     sed -i 's@Bluefin@Aurora@g' /usr/libexec/ublue-flatpak-manager
-    rm -f /usr/etc/profile.d/gnome-ssh-askpass.{csh,sh} # This shouldn't be pulled in
+    rm -f /etc/profile.d/gnome-ssh-askpass.{csh,sh} # This shouldn't be pulled in
     rm -f /usr/share/kglobalaccel/org.kde.konsole.desktop
     systemctl enable kde-sysmonitor-workaround.service
 fi

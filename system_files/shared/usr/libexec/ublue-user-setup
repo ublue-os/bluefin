@@ -35,7 +35,7 @@ fi
 # IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 
 # Ensure custom ptyxis theme is present
-PTYXIS_THEME_DIR="/usr/etc/skel/.local/share/org.gnome.Ptyxis/palettes"
+PTYXIS_THEME_DIR="/etc/skel/.local/share/org.gnome.Ptyxis/palettes"
 PTYXIS_DIR="$HOME/.local/share/org.gnome.Ptyxis/palettes"
 mkdir -p "$PTYXIS_DIR"
 if [[ ! -f "$PTYXIS_DIR/catppuccin-dynamic.palette" ]]; then

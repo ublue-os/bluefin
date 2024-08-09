@@ -8,7 +8,6 @@ systemctl enable dconf-update.service
 systemctl --global enable ublue-flatpak-manager.service
 systemctl enable ublue-update.timer
 systemctl enable ublue-system-setup.service
-systemctl enable ublue-etc-merge.service
 systemctl enable ublue-guest-user.service
 systemctl enable brew-setup.service
 systemctl enable brew-upgrade.timer
