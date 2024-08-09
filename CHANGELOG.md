@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.3.0](https://github.com/ublue-os/bluefin/compare/v3.2.0...v3.3.0) (2024-08-09)
+
+
+### Features
+
+* add kwin rules for google chrome stable/unstable and flathub steam ([#1579](https://github.com/ublue-os/bluefin/issues/1579)) ([786a1ec](https://github.com/ublue-os/bluefin/commit/786a1eceb75f51ed4a6b97ff8d04dc2601bcb819))
+* **bluefin-cli:** add tealdeer as tldr ([#1564](https://github.com/ublue-os/bluefin/issues/1564)) ([c694b40](https://github.com/ublue-os/bluefin/commit/c694b40096c2bf9457df244728b735c2a969bcb5))
+
+
+### Bug Fixes
+
+* Disable pipewire camera handling temporarily ([#1578](https://github.com/ublue-os/bluefin/issues/1578)) ([32ff1c4](https://github.com/ublue-os/bluefin/commit/32ff1c483e3bc8396586f180886a3197f02b9bef))
+* **nvidia:** pin Nvidia drivers to 555 ([#1573](https://github.com/ublue-os/bluefin/issues/1573)) ([c26a37d](https://github.com/ublue-os/bluefin/commit/c26a37d2e36e2962af7ee2fd0e814e2f405d3565))
+
 ## [3.2.0](https://github.com/ublue-os/bluefin/compare/v3.1.0...v3.2.0) (2024-08-04)
 
 
