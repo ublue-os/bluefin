@@ -1,6 +1,7 @@
 brew "atuin"
 brew "bat"
 brew "direnv"
+brew "dysk"
 brew "eza"
 brew "fd"
 brew "gh"
