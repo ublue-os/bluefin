@@ -5,8 +5,8 @@ After=local-fs.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/restorecon -R /var/log/libvirt/
-ExecStart=/usr/sbin/restorecon -R /var/lib/libvirt/
+ExecStart=-/usr/sbin/restorecon -R /var/log/libvirt/
+ExecStart=-/usr/sbin/restorecon -R /var/lib/libvirt/
 RemainAfterExit=yes
 
 [Install]
