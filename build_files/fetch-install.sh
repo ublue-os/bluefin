@@ -23,4 +23,4 @@ rpm-ostree install ublue-update
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
 
 # Copy over ublue-update config
-cp /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml
+cp /tmp/ublue-update.toml /etc/ublue-update/ublue-update.toml
