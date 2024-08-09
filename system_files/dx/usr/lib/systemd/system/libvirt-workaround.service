@@ -10,4 +10,4 @@ Exec=/usr/sbin/restorecon -R /var/lib/libvirt/
 RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target default.target
+WantedBy=multi-user.target
