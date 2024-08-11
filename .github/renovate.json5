@@ -16,6 +16,13 @@
       "automerge": true,
       "matchManagers": ["dockerfile"],
       "matchUpdateTypes": ["digest"]
+    },
+    {
+      // Do not pin digest for jasonn3/build-container-installer GitHub Action since Docker
+      // images are not tagged with the commit sha
+      "matchUpdateTypes": ["pin", "digest", "pinDigest"],
+      "matchPackageNames": ["jasonn3/build-container-installer"],
+      "enabled": false
     }
   ]
 }
