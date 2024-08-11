@@ -193,6 +193,7 @@ ollama ACTION="":
         systemctl --user daemon-reload
         echo "open-webui Quadlet removed"
     fi
+
 invokeai:
     #!/usr/bin/env bash
     echo 'Detecting Hardware...'
