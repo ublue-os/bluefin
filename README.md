@@ -53,7 +53,7 @@ If you'd like to enroll this key prior to installation or rebase, download the k
 
 ```bash
 sudo mokutil --timeout -1
-sudo mokutil --import secure_boot.der
+sudo mokutil --import public_key.der
 ```
 
 #### Note
