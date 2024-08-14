@@ -93,6 +93,7 @@ sort-directories-first=true
 
 [org/gnome/mutter]
 experimental-features=['scale-monitor-framebuffer']
+check-alive-timeout=uint32 20000
 
 [org/gnome/software]
 allow-updates=false
