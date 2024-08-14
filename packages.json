@@ -69,6 +69,7 @@
 				"zenity"
 			],
 			"kinoite": [
+				"breeze-gtk",
 				"skanpage",
 				"libadwaita-qt5",
 				"libadwaita-qt6",
