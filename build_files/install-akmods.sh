@@ -27,12 +27,6 @@ rpm-ostree install \
     /tmp/akmods/kmods/*v4l2loopback*.rpm
     # /tmp/akmods-rpms/kmods/*framework-laptop*.rpm
 
-# All but Asus
-if grep -qv "asus" <<< "${AKMODS_FLAVOR}"; then
-    rpm-ostree install \
-        /tmp/akmods/kmods/*evdi*.rpm
-fi
-
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
 # ZFS for gts/stable
