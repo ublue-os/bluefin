@@ -26,8 +26,23 @@ tensorflow:
     podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
 # Setup a local Ollama instance in a container. Detect hardware, offer a choice if needed.
-ollama:
+ollama ACTION="":
     #!/usr/bin/env bash
+    OPTION={{ ACTION }}
+    if [ "$OPTION" == "help" ]; then
+      echo "Usage: ujust ollama <option>"
+      echo "  <option>: Specify the quick option to skip the prompt"
+      echo "  Use 'install' to Install ollama container"
+      echo "  Use 'install-open-webui' to Install open-webui container"
+      echo "  Use 'remove' to remove the ollama container"
+      echo "  Use 'remove-open-webui' to remove the open-webui container and persistent volume"
+      exit 0
+    #elif [ "$OPTION" == "" ]; then
+    #  echo "${bold}ollama setup and configuration${normal}"
+    #  #OPTION=$(Choose "install" "install-open-webui" "remove" "remove-open-webui")
+    fi
+    if [ "${OPTION}" == "install" ]; then
+        #!/usr/bin/env bash
     echo 'Detecting Hardware...'
     echo
     GPU_CHOICES=("Nvidia (CUDA)" "AMD (ROCm)" "CPU (slow)")
@@ -103,7 +118,7 @@ ollama:
         mkdir -p ~/.config/containers/systemd
         echo "${QUADLET}" > ~/.config/containers/systemd/ollama.container
     else
-        echo "Ollama container already exists, skipping..."
+        echo "ollama container already exists, skipping..."
     fi
 
     read -r -d '' QUADLET_NETWORK <<-EOF
@@ -114,15 +129,15 @@ ollama:
         mkdir -p ~/.config/containers/systemd
         echo "${QUADLET_NETWORK}" > ~/.config/containers/systemd/ollama.network
     else
-        echo "Ollama network already exists, skipping..."
+        echo "ollama network already exists, skipping..."
     fi
 
     systemctl --user daemon-reload
-    systemctl --user start ollama.service || echo "Error starting Ollama Quadlet."
+    systemctl --user start ollama.service || echo "Error starting ollama Quadlet."
     echo "Please install the ollama cli via \`brew install ollama\`"
-
-# Setup a local Ollama WebUI in a container
-ollama-web: ollama
+        exit 0
+    fi
+    if [[ "${OPTION,,}" == "install-open-webui" ]]; then
     #!/usr/bin/env bash
 
     read -r -d '' QUADLET <<-EOF
@@ -155,13 +170,30 @@ ollama-web: ollama
         mkdir -p ~/.config/containers/systemd
         echo "${QUADLET}" > ~/.config/containers/systemd/ollama-web.container
     else
-        echo "Ollama WebUI container already exists, skipping..."
+        echo "open-webui container already exists, skipping..."
     fi
     systemctl --user daemon-reload
     systemctl --user start ollama-web.service
     echo "Ollama Web UI container started. You can access it at http://localhost:8080"
+    elif [[ "${OPTION,,}" == "remove" ]]; then
+        echo "Removing ollama container"
+        echo "stopping ollama Quadlet"
+        systemctl --user stop ollama.service || echo "Error stopping ollama Quadlet."
+        rm ~/.config/containers/systemd/ollama.container || echo "Error removing ollama container"
+        rm ~/.config/containers/systemd/ollama.network || echo "Error removing ollama network"
+        systemctl --user daemon-reload
+        echo "ollama Quadlet removed"
+    elif [[ "${OPTION,,}" == "remove-open-webui" ]]; then
+        echo "Removing open-webui container"
+        echo "stopping open-webui Quadlet"
+        systemctl --user stop ollama-web.service || echo "Error stopping open-webui Quadlet."
+        rm ~/.config/containers/systemd/ollama-web.container
+        echo "removing open-webui persistent volume"
+        podman volume rm open-webui > /dev/null
+        systemctl --user daemon-reload
+        echo "open-webui Quadlet removed"
+    fi
 
-# Setup InvokeAI in a container
 invokeai:
     #!/usr/bin/env bash
     echo 'Detecting Hardware...'
