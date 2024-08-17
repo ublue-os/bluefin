@@ -111,6 +111,7 @@
 				"jetbrains-mono-fonts-all",
 				"kcli",
 				"libvirt",
+				"libvirt-nss",
 				"lxc",
 				"lxd-agent",
 				"lxd",
