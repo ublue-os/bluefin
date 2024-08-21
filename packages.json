@@ -47,7 +47,8 @@
 				"wireguard-tools",
 				"xprop",
 				"wl-clipboard",
-				"zsh"
+				"zsh",
+				"libinput"
 			],
 			"silverblue": [
 				"simple-scan",
