@@ -289,6 +289,7 @@ toggle-tailscale:
     #!/bin/bash
     set -euo pipefail
     source /usr/lib/ujust/ujust.sh
+    source /usr/lib/os-release
 
     TAILSCALED_STATUS="$(systemctl is-enabled tailscaled || true )"
 
@@ -301,22 +302,31 @@ toggle-tailscale:
         echo "tailscaled service status: $TAILSCALED_STATUS"
     fi
 
-    TAILSCALE_QS="$(gnome-extensions list | grep -q "tailscale@joaophi.github.com"; echo $?)"
-    if [ "$TAILSCALE_QS" == 0 ]; then
-      TAILSCALE_QS="Installed"
-    else
-      echo "The Tailscale QS extension for Gnome is not installed. Please install it and then run this script again."
-    fi
 
-    if [ "$TAILSCALE_QS" == "Installed" ] && [ "$TAILSCALED" == "Installed" ]; then
+    if [ "$TAILSCALED" == "Installed" ]; then
       echo "Enable or disable Tailscale?"
       TS_OPTION=$(ugum choose Enable Disable)
+
+      # gnome-extensions is only available on Bluefin (Gnome)
+      if [ "$VARIANT" == "silverblue" ]; then
+        TAILSCALE_QS="$(gnome-extensions list | grep -q "tailscale@joaophi.github.com"; echo $?)"
+        if [ "$TAILSCALE_QS" == 0 ]; then
+          TAILSCALE_QS="Installed"
+        else
+          echo "The Tailscale QS extension for Gnome is not installed. Please install it and then run this script again."
+        fi
+
+        if [ "$TS_OPTION" = "Enable" ]; then
+          gnome-extensions enable tailscale@joaophi.github.com
+        elif [ "$TS_OPTION" = "Disable" ]; then
+          gnome-extensions disable tailscale@joaophi.github.com
+        fi
+      fi
 
       if [ "$TS_OPTION" = "Enable" ]; then
         systemctl enable --now tailscaled
         TAILSCALED_STATUS="$(systemctl is-enabled tailscaled || true )"
         if [ "$TAILSCALED_STATUS" == "enabled" ]; then
-          gnome-extensions enable tailscale@joaophi.github.com
           echo "${b}${green}Tailscale is enabled.${n}"
           echo "If this is your first time using Tailscale, setup is necessary."
           echo "Refer to Tailscale's documentation at https://tailscale.com/kb/1346/start."
@@ -325,7 +335,6 @@ toggle-tailscale:
         systemctl disable --now tailscaled
         TAILSCALED_STATUS="$(systemctl is-enabled tailscaled || true )"
         if [ "$TAILSCALED_STATUS" == "disabled" ]; then
-          gnome-extensions disable tailscale@joaophi.github.com
           echo "${b}${red}Tailscale is disabled.${n}"
         fi
       fi
