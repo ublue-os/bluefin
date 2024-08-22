@@ -26,7 +26,7 @@ tensorflow:
     podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
 # Setup a local Ollama instance in a container. Detect hardware, offer a choice if needed.
-ollama ACTION="":
+ollama ACTION="help":
     #!/usr/bin/env bash
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
