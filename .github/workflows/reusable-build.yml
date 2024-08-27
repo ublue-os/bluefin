@@ -97,9 +97,9 @@ jobs:
               echo "AKMODS_FLAVOR=asus" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" =~ "surface" ]]; then
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" =~ stable|gts ]]; then
+          elif [[ "${{ matrix.fedora_version }}" =~ gts ]]; then
               echo "AKMODS_FLAVOR=coreos-stable" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
+          elif [[ "${{ matrix.fedora_version }}" == "stable|latest" ]]; then
               echo "AKMODS_FLAVOR=fsync" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
