@@ -1,0 +1,15 @@
+name: Check for Spammy Issue Comments
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  comment-filter:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Comment filter
+      uses: DecimalTurn/Comment-Filter@4452281cf08791c34589448af6bc1e971dcac889 # v0.1.1
