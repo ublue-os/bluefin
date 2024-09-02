@@ -11,11 +11,11 @@ BUG_SUPPORT_URL="https://github.com/ublue-os/bluefin/issues/"
 
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
-IMAGE_BRANCH_NORMALIZED=$IMAGE_BRANCH
+# IMAGE_BRANCH_NORMALIZED=$IMAGE_BRANCH
 
-if [[ $IMAGE_BRANCH_NORMALIZED == "main" ]]; then
-  IMAGE_BRANCH_NORMALIZED="stable"
-fi
+# if [[ $IMAGE_BRANCH_NORMALIZED == "main" ]]; then
+#   IMAGE_BRANCH_NORMALIZED="stable"
+# fi
 
 case "$FEDORA_MAJOR_VERSION" in
   39|40)
