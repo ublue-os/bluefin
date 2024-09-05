@@ -102,6 +102,7 @@
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
+				"git-credential-libsecret",
 				"google-droid-sans-mono-fonts",
 				"google-go-mono-fonts",
 				"ibm-plex-mono-fonts",
