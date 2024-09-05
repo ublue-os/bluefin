@@ -1,5 +1,35 @@
 # Changelog
 
+## [3.3.0](https://github.com/ublue-os/bluefin/compare/v3.2.0...v3.3.0) (2024-08-23)
+
+
+### Features
+
+* add DNS resolution for libvirt guests ([#1609](https://github.com/ublue-os/bluefin/issues/1609)) ([0edf84e](https://github.com/ublue-os/bluefin/commit/0edf84e0cef67fa8384964687c7e660808cc8ec5))
+* add fuse-encfs ([#1566](https://github.com/ublue-os/bluefin/issues/1566)) ([826c3ef](https://github.com/ublue-os/bluefin/commit/826c3ef58e529f43bb2f9c6733c7ba3be04533af))
+* add kwin rules for google chrome stable/unstable and flathub steam ([#1579](https://github.com/ublue-os/bluefin/issues/1579)) ([786a1ec](https://github.com/ublue-os/bluefin/commit/786a1eceb75f51ed4a6b97ff8d04dc2601bcb819))
+* **bluefin-cli:** add dysk ([#1584](https://github.com/ublue-os/bluefin/issues/1584)) ([fd54148](https://github.com/ublue-os/bluefin/commit/fd5414814c3aacb29b3cdaa250ba68ceedde1702))
+* **bluefin-cli:** add tealdeer as tldr ([#1564](https://github.com/ublue-os/bluefin/issues/1564)) ([c694b40](https://github.com/ublue-os/bluefin/commit/c694b40096c2bf9457df244728b735c2a969bcb5))
+* container indicator for fish shell ([#1569](https://github.com/ublue-os/bluefin/issues/1569)) ([c65a29c](https://github.com/ublue-os/bluefin/commit/c65a29c76f80611875035ee6d628fa244c0ae6cf))
+* **gnome:** increase check-alive-timeout ([#1599](https://github.com/ublue-os/bluefin/issues/1599)) ([ccbcaf1](https://github.com/ublue-os/bluefin/commit/ccbcaf117241f6a35d898f6c0069d21782f5bf87))
+* ollama ujust script, some additions for removal verbs for the ollama and open-webui containers. ([#1588](https://github.com/ublue-os/bluefin/issues/1588)) ([d774ad7](https://github.com/ublue-os/bluefin/commit/d774ad7f0a6aa3afade89b116d81f2ef9c876c7e))
+
+
+### Bug Fixes
+
+* Correct placement of ublue-update.toml until path changed ([#1601](https://github.com/ublue-os/bluefin/issues/1601)) ([e587293](https://github.com/ublue-os/bluefin/commit/e587293392ad1d19fb093d25ee469619b8e176e2))
+* disable evdi ([#1605](https://github.com/ublue-os/bluefin/issues/1605)) ([1e47fda](https://github.com/ublue-os/bluefin/commit/1e47fda91bf540efa0c311f4d78a3f9f9db08045))
+* Disable pipewire camera handling temporarily ([#1578](https://github.com/ublue-os/bluefin/issues/1578)) ([32ff1c4](https://github.com/ublue-os/bluefin/commit/32ff1c483e3bc8396586f180886a3197f02b9bef))
+* **dx:** adds a systemd unit workaround service to relabel libvirt files ([#1586](https://github.com/ublue-os/bluefin/issues/1586)) ([e023b60](https://github.com/ublue-os/bluefin/commit/e023b609255cf1f97fd04c1631a093dc76ae2d26))
+* fix toggle-tailscale just command on aurora ([#1621](https://github.com/ublue-os/bluefin/issues/1621)) ([f6393be](https://github.com/ublue-os/bluefin/commit/f6393be85775e5ca45c7cbf3d6455ed05d59871b))
+* Move files in /usr/etc to /etc ([#1580](https://github.com/ublue-os/bluefin/issues/1580)) ([e1c6ffc](https://github.com/ublue-os/bluefin/commit/e1c6ffc30cbd97e2650db384d06e3f2b7c543783))
+* **nvidia:** pin Nvidia drivers to 555 ([#1573](https://github.com/ublue-os/bluefin/issues/1573)) ([c26a37d](https://github.com/ublue-os/bluefin/commit/c26a37d2e36e2962af7ee2fd0e814e2f405d3565))
+
+
+### Reverts
+
+* "Added new dinosaur logos for fastfetch" ([#1613](https://github.com/ublue-os/bluefin/issues/1613)) ([839af6c](https://github.com/ublue-os/bluefin/commit/839af6cb9166f8117a1e70fd0a9674cf83722fef))
+
 ## [3.2.0](https://github.com/ublue-os/bluefin/compare/v3.1.0...v3.2.0) (2024-08-04)
 
 

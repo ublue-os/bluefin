@@ -26,7 +26,7 @@ tensorflow:
     podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
 # Setup a local Ollama instance in a container. Detect hardware, offer a choice if needed.
-ollama ACTION="":
+ollama ACTION="help":
     #!/usr/bin/env bash
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
@@ -152,11 +152,8 @@ ollama ACTION="":
     ContainerName=ollama-web
     Environment=OLLAMA_BASE_URL=http://ollama:11434
     Environment=WEBUI_SECRET_KEY=abc123
-    Environment=DEFAULT_USER_ROLE=admin
+    Environment=WEBUI_AUTH=false
     Volume=open-webui:/app/backend/data
-    # Open WebUI does not allow access without a user account, nor does it allow
-    # account creation via environment variables.
-    Environment=ENABLE_SIGNUP=true
     PublishPort=8080:8080
     Network=ollama.network
 
