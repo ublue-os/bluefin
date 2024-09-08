@@ -23,6 +23,18 @@ if [[ -f "$TIP_FILE" ]]; then
 	fi
 
 	TIP_ESCAPED=$(escape "$TIP")
-
-	sed -e "s/%IMAGE_NAME%/$IMAGE_NAME_ESCAPED/g" -e "s/%IMAGE_TAG%/$IMAGE_TAG_ESCAPED/g" -e "s/%TIP%/$TIP_ESCAPED/g" /usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s auto -w 78 -
 fi
+
+# check for secure boot key
+KEY_WARN=""
+FINGERPRINT="2B:E9:91:E3:B1:B5:40:70:F4:3D:80:BB:13:EB:C6:57:E5:A3:78:0D"
+mokutil --list-enrolled | grep -q $FINGERPRINT
+ENROLLED=$?
+mokutil --sb-state | grep -q enabled
+SB_ENABLED=$?
+
+if [[ $ENROLLED -eq 1 ]] && [[ $SB_ENABLED -eq 0 ]]; then
+	KEY_WARN="**WARNING**: This machine has secure boot turned on, but you haven't enrolled Universal Blue's keys. Failing to enroll these before rebooting **may cause your system to fail to boot**. Follow this [link](https://docs.projectbluefin.io/introduction#secure-boot) ~for instructions on how to enroll the keys."
+fi
+
+sed -e "s/%IMAGE_NAME%/$IMAGE_NAME_ESCAPED/g" -e "s/%IMAGE_TAG%/$IMAGE_TAG_ESCAPED/g" -e "s/%TIP%/$TIP_ESCAPED/g" -e "s|%KEY_WARN%|$KEY_WARN|g" /usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s auto -w 78 -
