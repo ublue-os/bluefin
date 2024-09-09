@@ -133,7 +133,6 @@ ollama ACTION="help":
     fi
 
     systemctl --user daemon-reload
-    systemctl --user start ollama.service || echo "Error starting ollama Quadlet."
     echo "Please install the ollama cli via \`brew install ollama\`"
         exit 0
     fi
@@ -170,7 +169,6 @@ ollama ACTION="help":
         echo "open-webui container already exists, skipping..."
     fi
     systemctl --user daemon-reload
-    systemctl --user start ollama-web.service
     echo "Ollama Web UI container started. You can access it at http://localhost:8080"
     elif [[ "${OPTION,,}" == "remove" ]]; then
         echo "Removing ollama container"
