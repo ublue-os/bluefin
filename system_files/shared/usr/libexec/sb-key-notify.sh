@@ -26,5 +26,5 @@ if [ $? -ne 1 ]; then
 
     echo "WARNING: $WARNING_MSG" > $TIP_PATH
 else
-    rm $TIP_PATH
+    [ -e $TIP_PATH ] && rm $TIP_PATH
 fi
