@@ -14,7 +14,8 @@ if [ $? -ne 1 ]; then
     USER_ID="$(/usr/bin/loginctl list-users --output=json | jq -r '.[] | .user')"
     XDG_DIR="$(/usr/bin/loginctl show-user $USER_ID | grep RuntimePath | cut -c 13-)"
     /usr/bin/sudo -u \
-        "$USER_ID DISPLAY=:0" \
+        "$USER_ID" \
+        "DISPLAY=:0" \
         DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_DIR/bus \
         notify-send "WARNING" \
         "$(echo "$WARNING_MSG" | tr -d '*')" \
