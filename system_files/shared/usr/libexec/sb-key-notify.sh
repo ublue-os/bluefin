@@ -18,7 +18,7 @@ if [ $? -ne 1 ]; then
         "DISPLAY=:0" \
         DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_DIR/bus \
         notify-send "WARNING" \
-        "$(echo "$WARNING_MSG" | tr -d '*')" \
+        "$(echo "$WARNING_MSG" | tr -d '*~')" \
         -i dialog-warning \
         -u critical \
         -a mokutil \
