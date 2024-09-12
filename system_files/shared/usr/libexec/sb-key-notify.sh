@@ -27,7 +27,7 @@ if [ $? -ne 1 ] && [ $SB_ENABLED -eq 0 ]; then
         -a mokutil \
         --wait
 
-    echo "WARNING: $WARNING_MSG" > $KEY_WARN_FILE
+    echo "**WARNING**: $WARNING_MSG" > $KEY_WARN_FILE
 else
     [ -e $KEY_WARN_FILE ] && rm $KEY_WARN_FILE
 fi
