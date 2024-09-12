@@ -13,12 +13,11 @@ SB_ENABLED=$?
 
 mokutil --test-key /etc/pki/akmods/certs/akmods-ublue.der
 
-if [ $? -ne 1 ] && [ $SB_ENABLED -eq 0 ]; then
-    loginctl --help | grep -q "json=MODE"
-    if [ $? -eq 0 ]; then
+if [ $? -ne 1 ] && [ $SB_ENABLED -eq 0 ]; then 
+    if loginctl --help | grep -q "json=MODE"; then
         JSON_ARG="--json=short"
     fi
-    USER_ID=$(loginctl list-users --output=json $JSON_ARG | jq -r '.[] | .user')
+    USER_ID=$(loginctl list-users --output=json "$JSON_ARG" | jq -r '.[] | .user')
     XDG_DIR=$(loginctl show-user "$USER_ID" | grep RuntimePath | cut -c 13-)
     sudo -u "$USER_ID" \
         "DISPLAY=:0" \
