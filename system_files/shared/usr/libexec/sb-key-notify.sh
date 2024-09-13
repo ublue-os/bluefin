@@ -7,13 +7,9 @@ fi
 
 WARNING_MSG="This machine has secure boot turned on, but you haven't enrolled Universal Blue's keys. Failing to enroll these before rebooting **may cause your system to fail to boot**. Follow this link https://docs.projectbluefin.io/introduction#secure-boot ~for instructions on how to enroll the keys."
 KEY_WARN_FILE="/usr/share/ublue-os/motd/key-warning.md"
+KEY_DER_FILE="/etc/pki/akmods/certs/akmods-ublue.der"
 
-mokutil --sb-state | grep -q enabled
-SB_ENABLED=$?
-
-mokutil --test-key /etc/pki/akmods/certs/akmods-ublue.der
-
-if [ $? -ne 1 ] && [ $SB_ENABLED -eq 0 ]; then 
+if mokutil --test-key "$KEY_DER_FILE" && mokutil --sb-state | grep -q enabled; then 
     if loginctl --help | grep -q "json=MODE"; then
         JSON_ARG="--json=short"
     fi
