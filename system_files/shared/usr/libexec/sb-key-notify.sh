@@ -9,7 +9,15 @@ WARNING_MSG="This machine has secure boot turned on, but you haven't enrolled Un
 KEY_WARN_FILE="/run/user-motd-sbkey-warn.md"
 KEY_DER_FILE="/etc/pki/akmods/certs/akmods-ublue.der"
 
-if mokutil --test-key "$KEY_DER_FILE" && mokutil --sb-state | grep -q enabled; then 
+mokutil --sb-state | grep -q enabled
+SB_ENABLED=$?
+
+if [ $SB_ENABLED -ne 0 ]; then
+    echo "Secure Boot disabled. Skipping..."
+    exit 0
+fi
+
+if mokutil --test-key "$KEY_DER_FILE"; then 
     if loginctl --help | grep -q "json=MODE"; then
         JSON_ARG="--json=short"
     fi
