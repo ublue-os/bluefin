@@ -26,7 +26,7 @@ if [[ -f "$TIP_FILE" ]]; then
 
 fi
 
-KEY_WARN_FILE="/usr/share/ublue-os/motd/key-warning.md"
+KEY_WARN_FILE="/run/user-motd-sbkey-warn.md"
 [ -e $KEY_WARN_FILE ] && KEY_WARN="$(cat $KEY_WARN_FILE)"
 KEY_WARN_ESCAPED=$(escape "$KEY_WARN")
 
