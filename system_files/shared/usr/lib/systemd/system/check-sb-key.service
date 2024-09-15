@@ -2,11 +2,7 @@
 Description=Service to check for secure boot key enrollment and send notifications
 
 [Service]
-ExecStart=/usr/libexec/sb-key-notify.sh
+ExecStart=/usr/libexec/check-sb-key.sh
 
 [Install]
 WantedBy=multi-user.target
-
-[Timer]
-OnBootSec=1min
-OnUnitActiveSec=3h

@@ -18,22 +18,6 @@ if [ $SB_ENABLED -ne 0 ]; then
 fi
 
 if mokutil --test-key "$KEY_DER_FILE"; then 
-    if loginctl --help | grep -q "json=MODE"; then
-        JSON_ARG="--json=short"
-    fi
-    USER_ID=$(loginctl list-users --output=json ${JSON_ARG:+$JSON_ARG} | jq -r '.[] | .user')
-    XDG_DIR=$(loginctl show-user "$USER_ID" | grep RuntimePath | cut -c 13-)
-    sudo -u "$USER_ID" \
-        "DISPLAY=:0" \
-        "DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_DIR/bus" \
-        notify-send \
-        "WARNING" \
-        "$(echo "$WARNING_MSG" | tr -d '*~')" \
-        -i dialog-warning \
-        -u critical \
-        -a mokutil \
-        --wait
-
     echo "**WARNING**: $WARNING_MSG" > $KEY_WARN_FILE
 else
     [ -e $KEY_WARN_FILE ] && rm $KEY_WARN_FILE
