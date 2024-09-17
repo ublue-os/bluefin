@@ -199,7 +199,8 @@
 	"40": {
 		"include": {
 			"all": [
-				"ptyxis"
+				"ptyxis",
+				"scx-scheds"
 			],
 			"silverblue": [],
 			"dx": []
