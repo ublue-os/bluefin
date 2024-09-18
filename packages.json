@@ -26,7 +26,6 @@
 				"libimobiledevice",
 				"libxcrypt-compat",
 				"libsss_autofs",
-				"libssd_sudo", 
 				"lm_sensors",
 				"make",
 				"mesa-libGLU",
