@@ -374,12 +374,21 @@ jobs:
           podman image ls
 
       - name: Rechunk Image
+        id: rechunk
         uses: hhd-dev/rechunk@master
         with:
-          ref: ${{ steps.build_image.outputs.image }}@${{ env.DEFAULT_TAG }}
+          ref: ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
           skip_compression: 'true'
 
-      - name: Check Post Rechunk
+      - name: Switch Rechunked Image Name
+        run: |
+          IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
+          sudo rm -rf ${{ steps.rechunk.outputs.output }}
+          for tag in ${{ steps.build_image.outputs.tags }}; do
+            podman tag $IMAGE ${{ env.IMAGE_NAME }}:${tag}
+          done
+
+      - name: Check Pre Rechunk
         run:
           podman image ls
 
