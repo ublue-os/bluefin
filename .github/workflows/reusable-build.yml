@@ -376,7 +376,7 @@ jobs:
       - name: Rechunk Image
         uses: hhd-dev/rechunk@master
         with:
-          ref: ${{ steps.build_image.outputs.image }}@${{ steps.generate-tags.outputs.DEFAULT_TAG }}
+          ref: ${{ steps.build_image.outputs.image }}@${{ env.DEFAULT_TAG }}
           skip_compression: 'true'
 
       - name: Check Post Rechunk
