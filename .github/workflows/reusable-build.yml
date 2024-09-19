@@ -34,13 +34,13 @@ jobs:
         image_flavor:
           - main
           - nvidia
-          - asus
-          - asus-nvidia
-          - surface
-          - surface-nvidia
+          # - asus
+          # - asus-nvidia
+          # - surface
+          # - surface-nvidia
         base_name:
           - ${{ inputs.brand_name }}
-          - ${{ inputs.brand_name }}-dx
+          # - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
@@ -292,6 +292,20 @@ jobs:
           tags: ${{ steps.build_image.outputs.tags }}
           kernel_suffix: ${{ env.KERNEL_SUFFIX }}
           strip: false
+
+      - name: Check Pre Rechunk
+        run:
+          podman image ls
+
+      - name: Rechunk Image
+        uses: hhd-dev/rechunk@main
+        with:
+          ref: ${{ steps.build_image.outputs.image }}@{{ steps.generate-tags.outputs.DEFAULT_TAG }}
+          skip_compression: 'true'
+
+      - name: Check Post Rechunk
+        run:
+          podman image ls
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
