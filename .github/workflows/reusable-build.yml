@@ -374,7 +374,7 @@ jobs:
           podman image ls
 
       - name: Rechunk Image
-        uses: hhd-dev/rechunk@main
+        uses: hhd-dev/rechunk@master
         with:
           ref: ${{ steps.build_image.outputs.image }}@{{ steps.generate-tags.outputs.DEFAULT_TAG }}
           skip_compression: 'true'
