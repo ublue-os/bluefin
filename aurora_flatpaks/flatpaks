@@ -6,6 +6,7 @@ app/org.kde.kontact/x86_64/stable
 app/org.kde.okular/x86_64/stable
 app/org.kde.kweather/x86_64/stable
 app/org.kde.kclock/x86_64/stable
+app/org.fkoehler.KTailctl/x86_64/stable
 app/org.kde.haruna/x86_64/stable
 app/org.kde.filelight/x86_64/stable
 app/com.github.tchx84.Flatseal/x86_64/stable

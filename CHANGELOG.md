@@ -1,5 +1,96 @@
 # Changelog
 
+## [3.3.0](https://github.com/ublue-os/bluefin/compare/v3.2.0...v3.3.0) (2024-08-23)
+
+
+### Features
+
+* add DNS resolution for libvirt guests ([#1609](https://github.com/ublue-os/bluefin/issues/1609)) ([0edf84e](https://github.com/ublue-os/bluefin/commit/0edf84e0cef67fa8384964687c7e660808cc8ec5))
+* add fuse-encfs ([#1566](https://github.com/ublue-os/bluefin/issues/1566)) ([826c3ef](https://github.com/ublue-os/bluefin/commit/826c3ef58e529f43bb2f9c6733c7ba3be04533af))
+* add kwin rules for google chrome stable/unstable and flathub steam ([#1579](https://github.com/ublue-os/bluefin/issues/1579)) ([786a1ec](https://github.com/ublue-os/bluefin/commit/786a1eceb75f51ed4a6b97ff8d04dc2601bcb819))
+* **bluefin-cli:** add dysk ([#1584](https://github.com/ublue-os/bluefin/issues/1584)) ([fd54148](https://github.com/ublue-os/bluefin/commit/fd5414814c3aacb29b3cdaa250ba68ceedde1702))
+* **bluefin-cli:** add tealdeer as tldr ([#1564](https://github.com/ublue-os/bluefin/issues/1564)) ([c694b40](https://github.com/ublue-os/bluefin/commit/c694b40096c2bf9457df244728b735c2a969bcb5))
+* container indicator for fish shell ([#1569](https://github.com/ublue-os/bluefin/issues/1569)) ([c65a29c](https://github.com/ublue-os/bluefin/commit/c65a29c76f80611875035ee6d628fa244c0ae6cf))
+* **gnome:** increase check-alive-timeout ([#1599](https://github.com/ublue-os/bluefin/issues/1599)) ([ccbcaf1](https://github.com/ublue-os/bluefin/commit/ccbcaf117241f6a35d898f6c0069d21782f5bf87))
+* ollama ujust script, some additions for removal verbs for the ollama and open-webui containers. ([#1588](https://github.com/ublue-os/bluefin/issues/1588)) ([d774ad7](https://github.com/ublue-os/bluefin/commit/d774ad7f0a6aa3afade89b116d81f2ef9c876c7e))
+
+
+### Bug Fixes
+
+* Correct placement of ublue-update.toml until path changed ([#1601](https://github.com/ublue-os/bluefin/issues/1601)) ([e587293](https://github.com/ublue-os/bluefin/commit/e587293392ad1d19fb093d25ee469619b8e176e2))
+* disable evdi ([#1605](https://github.com/ublue-os/bluefin/issues/1605)) ([1e47fda](https://github.com/ublue-os/bluefin/commit/1e47fda91bf540efa0c311f4d78a3f9f9db08045))
+* Disable pipewire camera handling temporarily ([#1578](https://github.com/ublue-os/bluefin/issues/1578)) ([32ff1c4](https://github.com/ublue-os/bluefin/commit/32ff1c483e3bc8396586f180886a3197f02b9bef))
+* **dx:** adds a systemd unit workaround service to relabel libvirt files ([#1586](https://github.com/ublue-os/bluefin/issues/1586)) ([e023b60](https://github.com/ublue-os/bluefin/commit/e023b609255cf1f97fd04c1631a093dc76ae2d26))
+* fix toggle-tailscale just command on aurora ([#1621](https://github.com/ublue-os/bluefin/issues/1621)) ([f6393be](https://github.com/ublue-os/bluefin/commit/f6393be85775e5ca45c7cbf3d6455ed05d59871b))
+* Move files in /usr/etc to /etc ([#1580](https://github.com/ublue-os/bluefin/issues/1580)) ([e1c6ffc](https://github.com/ublue-os/bluefin/commit/e1c6ffc30cbd97e2650db384d06e3f2b7c543783))
+* **nvidia:** pin Nvidia drivers to 555 ([#1573](https://github.com/ublue-os/bluefin/issues/1573)) ([c26a37d](https://github.com/ublue-os/bluefin/commit/c26a37d2e36e2962af7ee2fd0e814e2f405d3565))
+
+
+### Reverts
+
+* "Added new dinosaur logos for fastfetch" ([#1613](https://github.com/ublue-os/bluefin/issues/1613)) ([839af6c](https://github.com/ublue-os/bluefin/commit/839af6cb9166f8117a1e70fd0a9674cf83722fef))
+
+## [3.2.0](https://github.com/ublue-os/bluefin/compare/v3.1.0...v3.2.0) (2024-08-04)
+
+
+### Features
+
+* add bpftop ([#1530](https://github.com/ublue-os/bluefin/issues/1530)) ([78bd85c](https://github.com/ublue-os/bluefin/commit/78bd85c7627c18a4205f9717b74971ee5b15b322))
+* add rocm-smi ([#1544](https://github.com/ublue-os/bluefin/issues/1544)) ([d4c6688](https://github.com/ublue-os/bluefin/commit/d4c6688d379c0559bb690e68e782adf128051fc0))
+* **just:** add switch-channel shortcut ([#1540](https://github.com/ublue-os/bluefin/issues/1540)) ([b419241](https://github.com/ublue-os/bluefin/commit/b419241c647a003544791369944043b2a6cfbb3a))
+* set gnome animation speed to .9 ([#1553](https://github.com/ublue-os/bluefin/issues/1553)) ([696529a](https://github.com/ublue-os/bluefin/commit/696529aad5fde23a61a499bb66fe997bd9d757b9))
+
+
+### Bug Fixes
+
+* clear flatpak's font cache ([#1560](https://github.com/ublue-os/bluefin/issues/1560)) ([2efba95](https://github.com/ublue-os/bluefin/commit/2efba9542506c4a4d3c8d19725102057601fe006))
+* **just:** remind user to run dx-group ([#1524](https://github.com/ublue-os/bluefin/issues/1524)) ([c2bf774](https://github.com/ublue-os/bluefin/commit/c2bf774593016e6387b0525de16d7689a4ff133b))
+* update project documentation link ([#1533](https://github.com/ublue-os/bluefin/issues/1533)) ([faf7303](https://github.com/ublue-os/bluefin/commit/faf7303afa6f8d6e747940c1d1ba63c6d2d43c80))
+* update secureboot password ([#1539](https://github.com/ublue-os/bluefin/issues/1539)) ([bd55cb7](https://github.com/ublue-os/bluefin/commit/bd55cb7021b81a32ed0d0b4c3e549437307ff6f2))
+
+## [3.1.0](https://github.com/ublue-os/bluefin/compare/v3.0.0...v3.1.0) (2024-07-21)
+
+
+### Features
+
+* add opendyslexic font ([#1516](https://github.com/ublue-os/bluefin/issues/1516)) ([d340915](https://github.com/ublue-os/bluefin/commit/d34091529608693eb8cc1d2addc7e4621b724d76))
+* add umoci for incus container support ([#1512](https://github.com/ublue-os/bluefin/issues/1512)) ([08106c1](https://github.com/ublue-os/bluefin/commit/08106c155a3b20e46e00a965566b12e6048b44f7))
+* **dx:** add monaspace font ([#1475](https://github.com/ublue-os/bluefin/issues/1475)) ([de9e5e3](https://github.com/ublue-os/bluefin/commit/de9e5e3faa10a42ae56052ff6fb230161cf49d24))
+* **just:** Add descriptions to rebase-helper ([#1514](https://github.com/ublue-os/bluefin/issues/1514)) ([c8c2d15](https://github.com/ublue-os/bluefin/commit/c8c2d15f8582a0a3fd2d15906603c882a0e44bf4))
+* move utilities into the utility folder ([#1518](https://github.com/ublue-os/bluefin/issues/1518)) ([01c3cbd](https://github.com/ublue-os/bluefin/commit/01c3cbdf3129659d2b085f6825a058bc9a2511db))
+* remove bluefin-cli shortcut ([#1503](https://github.com/ublue-os/bluefin/issues/1503)) ([059a167](https://github.com/ublue-os/bluefin/commit/059a167e576589c097c9ea4d62327435378cbbda))
+* switch to distro ptyxis for F40 ([#1523](https://github.com/ublue-os/bluefin/issues/1523)) ([65b15d2](https://github.com/ublue-os/bluefin/commit/65b15d20b513b72932d9c213dca9b6709c81fdb5))
+* ujust command to toggle Tailscale ([#1477](https://github.com/ublue-os/bluefin/issues/1477)) ([9f914cf](https://github.com/ublue-os/bluefin/commit/9f914cfd28036e2cc45031c9f270a991a3b0db82))
+* Use Cached Kernel, fsync for latest ([#1502](https://github.com/ublue-os/bluefin/issues/1502)) ([6cd71c1](https://github.com/ublue-os/bluefin/commit/6cd71c12f173bfa8bbd552def259c587a4df8d40))
+
+
+### Bug Fixes
+
+* add skopeo to devcontainer's features ([#1519](https://github.com/ublue-os/bluefin/issues/1519)) ([98539b8](https://github.com/ublue-os/bluefin/commit/98539b8c063da910eb26018b527fae90a0afd051))
+* correct zfs install ([#1507](https://github.com/ublue-os/bluefin/issues/1507)) ([e35a354](https://github.com/ublue-os/bluefin/commit/e35a354c64ca346739d9543634e6d9206237b4da))
+* update gnome-vrr copr ([#1492](https://github.com/ublue-os/bluefin/issues/1492)) ([94a38ed](https://github.com/ublue-os/bluefin/commit/94a38ed060fd4776447c8b7aa193eb7fca167cf9))
+
+## [3.0.0](https://github.com/ublue-os/bluefin/compare/v2.10.0...v3.0.0) (2024-07-01)
+
+
+### Features
+
+* GTS use coreos matched kernel ([#1456](https://github.com/ublue-os/bluefin/issues/1456)) ([080802f](https://github.com/ublue-os/bluefin/commit/080802f14baf9f5c6100cfc092e32b77214beaf1))
+* seasonal variation in sunrise/sunset times for seasonal Bluefin backgrounds ([#1466](https://github.com/ublue-os/bluefin/issues/1466)) ([24ddce9](https://github.com/ublue-os/bluefin/commit/24ddce9c379fb835c65a40caa6092a6b9754d3a9))
+* Use CoreOS Kernel ([#1429](https://github.com/ublue-os/bluefin/issues/1429)) ([cc22113](https://github.com/ublue-os/bluefin/commit/cc22113a9d88295cba514fbbb434530265baf41c))
+
+
+### Bug Fixes
+
+* **motd:** clarify banner toggle wording ([#1462](https://github.com/ublue-os/bluefin/issues/1462)) ([5937fd0](https://github.com/ublue-os/bluefin/commit/5937fd03bcecc93ee1bb5cc99118f0254b708067))
+* remove conflicting nvidia initramfs files ([#1458](https://github.com/ublue-os/bluefin/issues/1458)) ([97c56f2](https://github.com/ublue-os/bluefin/commit/97c56f257d344cff6051008ed367d66704cf62cc))
+* reorder nvidia install for coreos ([#1459](https://github.com/ublue-os/bluefin/issues/1459)) ([3158ba2](https://github.com/ublue-os/bluefin/commit/3158ba2c3764779feb46ab6d95ad667d6dd1ab92))
+
+
+### Miscellaneous Chores
+
+* release 3.0.0 ([4d21c40](https://github.com/ublue-os/bluefin/commit/4d21c4096ecf8270e77e97d7cbb472587f19e440))
+
 ## [2.10.0](https://github.com/ublue-os/bluefin/compare/v2.9.0...v2.10.0) (2024-06-25)
 
 

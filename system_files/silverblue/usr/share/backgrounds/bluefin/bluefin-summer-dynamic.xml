@@ -3,14 +3,14 @@
                 <year>2018</year>
                 <month>1</month>
                 <day>1</day>
-                <hour>6</hour>
-                <minute>0</minute>
+                <hour>5</hour>
+                <minute>45</minute>
                 <second>0</second>
         </starttime>
 
         <static>
                 <file>/usr/share/backgrounds/bluefin/WallPaper_SummerDay_Post.webp</file>
-                <duration>36000.0</duration>
+                <duration>41400.0</duration>
         </static>
 
         <transition type="overlay">
@@ -21,7 +21,7 @@
 
         <static>
                 <file>/usr/share/backgrounds/bluefin/WallPaper_SummerNight_Post.webp</file>
-                <duration>36000.0</duration>
+                <duration>30600.0</duration>
         </static>
 
         <transition type="overlay">

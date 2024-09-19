@@ -96,12 +96,12 @@
             "description": "Choose which container to build",
             "default": "bluefin",
             "options": [
-                "bluefin",
-                "bluefin-dx",
-                "bluefin latest",
-                "bluefin-dx latest",
-                "aurora",
-                "aurora-dx"
+                "bluefin gts",
+                "bluefin-dx gts",
+                "bluefin stable",
+                "bluefin-dx stable",
+                "aurora stable",
+                "aurora-dx stable"
             ]
         }
     ]

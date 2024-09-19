@@ -2,6 +2,7 @@
 	"all": {
 		"include": {
 			"all": [
+				"adcli",
 				"bash-color-prompt",
 				"bcache-tools",
 				"bootc",
@@ -12,6 +13,8 @@
 				"fish",
 				"firewall-config",
 				"foo2zjs",
+				"freeipa-client",
+				"fuse-encfs",
 				"gcc",
 				"glow",
 				"gum",
@@ -22,10 +25,13 @@
 				"input-remapper",
 				"libimobiledevice",
 				"libxcrypt-compat",
+				"libsss_autofs",
 				"lm_sensors",
 				"make",
 				"mesa-libGLU",
 				"nerd-fonts",
+				"oddjob-mkhomedir",
+				"opendyslexic-fonts",
 				"playerctl",
 				"printer-driver-brlaser",
 				"pulseaudio-utils",
@@ -38,6 +44,10 @@
 				"samba-winbind-modules",
 				"samba",
 				"solaar",
+				"sssd-ad",
+				"sssd-ipa",
+				"sssd-krb5",
+				"sssd-nfs-idmap",
 				"stress-ng",
 				"tailscale",
 				"tmux",
@@ -63,7 +73,8 @@
 				"nautilus-gsconnect",
 				"nautilus-open-any-terminal",
 				"openssh-askpass",
-				"yaru-theme"
+				"yaru-theme",
+				"zenity"
 			],
 			"kinoite": [
 				"skanpage",
@@ -72,11 +83,15 @@
 				"kde-runtime-docs",
 				"kdenetwork-filesharing",
 				"kdeplasma-addons",
+				"kdialog",
 				"plasma-wallpapers-dynamic"
 			],
 			"dx": [
 				"adobe-source-code-pro-fonts",
 				"android-tools",
+				"bcc",
+				"bpftop",
+				"bpftrace",
 				"cascadia-code-fonts",
 				"cockpit-machines",
 				"cockpit-networkmanager",
@@ -97,6 +112,7 @@
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
+				"git-credential-libsecret",
 				"google-droid-sans-mono-fonts",
 				"google-go-mono-fonts",
 				"ibm-plex-mono-fonts",
@@ -106,10 +122,13 @@
 				"jetbrains-mono-fonts-all",
 				"kcli",
 				"libvirt",
+				"libvirt-nss",
 				"lxc",
 				"lxd-agent",
 				"lxd",
 				"mozilla-fira-mono-fonts",
+				"nicstat",
+				"numactl",
 				"p7zip-plugins",
 				"p7zip",
 				"podman-compose",
@@ -128,8 +147,13 @@
 				"qemu",
 				"rocm-hip",
 				"rocm-opencl",
+				"rocm-smi",
+				"sysprof",
+				"tiptop",
+				"trace-cmd",
 				"ubuntu-family-fonts",
 				"udica",
+				"umoci",
 				"virt-manager",
 				"virt-viewer",
 				"ydotool"
@@ -167,15 +191,16 @@
 		},
 		"exclude": {
 			"all": [],
-			"silverblue": [
-				
-			],
+			"silverblue": [],
 			"dx": []
 		}
 	},
 	"40": {
 		"include": {
-			"all": [],
+			"all": [
+				"ptyxis",
+				"scx-scheds"
+			],
 			"silverblue": [],
 			"dx": []
 		},
