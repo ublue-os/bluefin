@@ -58,6 +58,7 @@ sudo systemctl enable --now incus-workaround.service
 sudo systemctl enable --now lxcfs
 sudo systemctl enable --now incus.socket
 sudo systemctl start incus.service
+sudo systemctl enable incus-startup
 
 # run incus admin init
 echo ""
