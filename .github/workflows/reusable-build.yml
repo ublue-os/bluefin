@@ -370,7 +370,7 @@ jobs:
           sbverify --cert akmods.crt vmlinuz || exit 1
 
       - name: Check Pre Rechunk
-        run:
+        run: |
           podman image ls
           podman image tag ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} raw-img
 
