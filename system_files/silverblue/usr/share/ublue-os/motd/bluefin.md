@@ -15,3 +15,5 @@
 - 󰈙 [Documentation](http://docs.projectbluefin.io/)
 - 󰊌 [Discuss](https://community.projectbluefin.io/)
 - 󰊌 [Leave Feedback](https://feedback.projectbluefin.io)
+
+%KEY_WARN%
