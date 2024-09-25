@@ -380,7 +380,7 @@ jobs:
         uses: hhd-dev/rechunk@v0.8.1
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.1
-          ref: localhost/raw-img
+          ref: raw-img
           skip_compression: 'true'
 
       # Overwrite the image with the chuncked image
