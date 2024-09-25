@@ -2,6 +2,7 @@
 	"all": {
 		"include": {
 			"all": [
+				"adcli",
 				"bash-color-prompt",
 				"bcache-tools",
 				"bootc",
@@ -12,6 +13,7 @@
 				"fish",
 				"firewall-config",
 				"foo2zjs",
+				"freeipa-client",
 				"fuse-encfs",
 				"gcc",
 				"glow",
@@ -23,10 +25,12 @@
 				"input-remapper",
 				"libimobiledevice",
 				"libxcrypt-compat",
+				"libsss_autofs",
 				"lm_sensors",
 				"make",
 				"mesa-libGLU",
 				"nerd-fonts",
+				"oddjob-mkhomedir",
 				"opendyslexic-fonts",
 				"playerctl",
 				"printer-driver-brlaser",
@@ -40,6 +44,10 @@
 				"samba-winbind-modules",
 				"samba",
 				"solaar",
+				"sssd-ad",
+				"sssd-ipa",
+				"sssd-krb5",
+				"sssd-nfs-idmap",
 				"stress-ng",
 				"tailscale",
 				"tmux",
@@ -190,7 +198,8 @@
 	"40": {
 		"include": {
 			"all": [
-				"ptyxis"
+				"ptyxis",
+				"scx-scheds"
 			],
 			"silverblue": [],
 			"dx": []
