@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+NoDisplay=false
+Terminal=false
+Exec=xdg-open https://universal-blue.discourse.group/c/bluefin/
+Icon=/usr/share/ublue-os/bluefin/discourse.svg
+Name=Discourse
+Comment=Universal Blue Forums
+Categories=Utility;

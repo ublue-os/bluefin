@@ -10,3 +10,6 @@ Use `Ctrl`-`Alt`-`T` to quickly open a terminal
 Tailscale is included, check out [their docs](https://tailscale.com/kb/1017/install)
 Bluefin is your gateway to AI and LLMs | `ujust ollama` to [get started](https://ollama.com/)
 `ujust --choose` will show you each shortcut and the script it's running
+`tldr rpm-ostree` will give you the rundown on basic commands
+`ujust rebase-helper` can help you roll back to a specific image, or to a different channel entirely, check the docs for more info
+`ujust changelogs` shows a summary of the package changes since the last update
