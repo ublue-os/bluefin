@@ -371,16 +371,17 @@ jobs:
 
       - name: Check Pre Rechunk
         run: |
-          podman image ls
-          podman image tag ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} raw-img
-          podman image ls
+          sudo podman image ls
+          sudo podman image scp $(whoami)@localhost:${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} root@localhost::
+          sudo podman image ls
+          podman image rm ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
 
       - name: Rechunk Image
         id: rechunk
         uses: hhd-dev/rechunk@v0.8.1
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.1
-          ref: localhost/raw-img
+          ref: ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
           skip_compression: 'true'
 
       # Overwrite the image with the chuncked image
