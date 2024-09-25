@@ -377,8 +377,9 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk
-        uses: hhd-dev/rechunk@master
+        uses: hhd-dev/rechunk@v0.8.1
         with:
+          rechunk: ghcr.io/hhd-dev/rechunk:v0.8.1
           ref: localhost/raw-img
           skip_compression: 'true'
 
