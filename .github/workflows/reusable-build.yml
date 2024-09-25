@@ -373,7 +373,7 @@ jobs:
         run: |
           sudo apt update && sudo apt install systemd-container
           sudo podman image ls
-          sudo podman image scp $(whoami)@localhost:${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} root@localhost::
+          sudo podman image scp $(whoami)@localhost::${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} root@localhost::
           sudo podman image ls
           podman image rm ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
 
