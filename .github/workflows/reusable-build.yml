@@ -373,12 +373,13 @@ jobs:
         run: |
           podman image ls
           podman image tag ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} raw-img
+          podman image ls
 
       - name: Rechunk Image
         id: rechunk
         uses: hhd-dev/rechunk@master
         with:
-          ref: raw-img
+          ref: localhost/raw-img
           skip_compression: 'true'
 
       # Overwrite the image with the chuncked image
