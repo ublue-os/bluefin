@@ -178,7 +178,7 @@ jobs:
         with:
           containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
-      - name: Verify Kernel Verion Matches
+      - name: Verify Kernel Version Matches
         uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
         with:
           attempt_limit: 3
@@ -393,9 +393,9 @@ jobs:
       - name: Rechunk Image
         id: rechunk
         if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
-        uses: hhd-dev/rechunk@v0.8.1
+        uses: hhd-dev/rechunk@v0.8.6
         with:
-          rechunk: ghcr.io/hhd-dev/rechunk:v0.8.1
+          rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
           ref: ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
           skip_compression: 'true'
           labels: ${{ steps.meta.outputs.labels }}
