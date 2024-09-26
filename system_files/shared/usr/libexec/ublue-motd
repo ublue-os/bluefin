@@ -27,7 +27,7 @@ if [[ -f "$TIP_FILE" ]]; then
 fi
 
 KEY_WARN_FILE="/run/user-motd-sbkey-warn.md"
-[ -e $KEY_WARN_FILE ] && KEY_WARN="$(cat $KEY_WARN_FILE)"
+[ -e $KEY_WARN_FILE ] && KEY_WARN="**WARNING**: $(cat $KEY_WARN_FILE)"
 KEY_WARN_ESCAPED=$(escape "$KEY_WARN")
 
 sed -e "s/%IMAGE_NAME%/$IMAGE_NAME_ESCAPED/g" \
