@@ -329,6 +329,8 @@ jobs:
         id: build_image
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         run: |
+          set -euox pipefail
+
           BUILD_ARGS=()
           BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}")
           BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${{ env.IMAGE_NAME }}")
@@ -353,13 +355,13 @@ jobs:
             LABEL_ARGS+=("--label" "${label}")
           done
 
-          podman build --format docker --target ${{ env.TARGET_NAME }} \
+          sudo podman build --format docker --target ${{ env.TARGET_NAME }} \
             "${BUILD_ARGS[@]}" \
             "${TAG_ARGS[@]}" \
             "${LABEL_ARGS[@]}" \
             .
 
-          podman image ls
+          sudo podman image ls
 
           echo "image=${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
           echo "tags=${{ steps.generate-tags.outputs.alias_tags }}" >> $GITHUB_OUTPUT
@@ -374,9 +376,9 @@ jobs:
             sudo apt update
             sudo apt install sbsigntool curl openssl
           fi
-          podman run -d --rm --name ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) "${{ env.IMAGE_NAME }}":$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) sleep 1000
-          podman cp ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1):/usr/lib/modules/${{ env.kernel_release }}/vmlinuz .
-          podman rm -f ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1)
+          sudo podman run -d --rm --name ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) "${{ env.IMAGE_NAME }}":$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) sleep 1000
+          sudo podman cp ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1):/usr/lib/modules/${{ env.kernel_release }}/vmlinuz .
+          sudo podman rm -f ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1)
           sbverify --list vmlinuz
           curl --retry 3 -Lo kernel-sign.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key.der
           curl --retry 3 -Lo akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
@@ -427,6 +429,8 @@ jobs:
         id: push
         if: github.event_name != 'pull_request'
         run: |
+          set -euox pipefail
+
           for tag in ${{ steps.build_image.outputs.tags }}; do
             podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
           done
