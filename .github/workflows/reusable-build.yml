@@ -38,14 +38,14 @@ jobs:
       matrix:
         image_flavor:
           - main
-          - nvidia
-          - asus
-          - asus-nvidia
-          - surface
-          - surface-nvidia
+          # - nvidia
+          # - asus
+          # - asus-nvidia
+          # - surface
+          # - surface-nvidia
         base_name:
           - ${{ inputs.brand_name }}
-          - ${{ inputs.brand_name }}-dx
+          # - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
@@ -342,12 +342,14 @@ jobs:
           BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}")
 
           TAG_ARGS=()
-          for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
+          IFS=' ' read -r -a tags_array <<< "${{ steps.generate-tags.outputs.alias_tags }}"
+          for tag in "${tags_array[@]}"; do
             TAG_ARGS+=("--tag" "${{ env.IMAGE_NAME }}:${tag}")
           done
 
           LABEL_ARGS=()
-          for label in ${{ steps.meta.outputs.labels }}; do
+          IFS=' ' read -r -a labels_array <<< "${{ steps.meta.outputs.labels }}"
+          for label in "${labels_array[@]}"; do
             LABEL_ARGS+=("--label" "${label}")
           done
 
