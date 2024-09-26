@@ -26,4 +26,3 @@ jobs:
     with:
       brand_name: aurora
       fedora_version: latest
-      rechunk: true
