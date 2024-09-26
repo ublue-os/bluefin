@@ -384,7 +384,7 @@ jobs:
           string: ${{ env.IMAGE_REGISTRY }}
 
       - name: Prepare Rechunk
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         run: |
           sudo apt update && sudo apt install systemd-container
           sudo podman image scp $(whoami)@localhost::${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} root@localhost::
@@ -392,7 +392,7 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         uses: hhd-dev/rechunk@v0.8.6
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
@@ -403,7 +403,7 @@ jobs:
 
       # Overwrite the image with the chuncked image
       - name: Load Rechunked Image
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         run: |
           sudo podman rmi $(sudo podman image ls -qa) --force
           IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
