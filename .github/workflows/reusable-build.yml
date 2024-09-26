@@ -38,14 +38,14 @@ jobs:
       matrix:
         image_flavor:
           - main
-          - nvidia
-          - asus
-          - asus-nvidia
-          - surface
-          - surface-nvidia
+          # - nvidia
+          # - asus
+          # - asus-nvidia
+          # - surface
+          # - surface-nvidia
         base_name:
           - ${{ inputs.brand_name }}
-          - ${{ inputs.brand_name }}-dx
+          # - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
@@ -73,6 +73,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
+      - name: Debug inputs
+        run: |
+          echo "Event: ${{ github.event_name }}"
+          echo "Rechunk: ${{ inputs.rechunk }}"
 
       - name: Matrix Variables
         run: |
