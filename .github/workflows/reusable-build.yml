@@ -75,6 +75,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Debug inputs
+        if: github.event_name == 'pull_request' && inputs.rechunk == 'true'
         run: |
           echo "Event: ${{ github.event_name }}"
           echo "Rechunk: ${{ inputs.rechunk }}"
