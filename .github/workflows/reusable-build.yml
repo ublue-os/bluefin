@@ -310,7 +310,7 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
-      - name: Pull  images
+      - name: Pull images
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
         with:
@@ -325,7 +325,7 @@ jobs:
             sudo podman pull ${{ env.IMAGE_REGISTRY }}/akmods-zfs:coreos-stable-${{ env.fedora_version }}
             sudo podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
-      - nane: Build Image
+      - name: Build Image
         id: build_image
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         run: |
