@@ -370,11 +370,18 @@ jobs:
           sbverify --cert kernel-sign.crt vmlinuz || exit 1
           sbverify --cert akmods.crt vmlinuz || exit 1
 
-      - name: Check Pre Rechunk
+      # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
+      # https://github.com/macbre/push-to-ghcr/issues/12
+      - name: Lowercase Registry
+        id: registry_case
+        uses: ASzc/change-string-case-action@d0603cd0a7dd490be678164909f65c7737470a7f # v6
+        with:
+          string: ${{ env.IMAGE_REGISTRY }}
+
+      - name: Prepare Rechunk
         run: |
           sudo apt update && sudo apt install systemd-container
           sudo podman image scp $(whoami)@localhost::${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} root@localhost::
-          sudo podman image ls
           podman rmi $(podman image ls -qa) --force
 
       - name: Rechunk Image
@@ -384,9 +391,11 @@ jobs:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.1
           ref: ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
           skip_compression: 'true'
+          labels: ${{ steps.meta.outputs.labels }}
+          prev-ref: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
 
       # Overwrite the image with the chuncked image
-      - name: Switch Rechunked Image Name
+      - name: Load Rechunked Image
         run: |
           sudo podman rmi $(sudo podman image ls -qa) --force
           IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
@@ -394,18 +403,6 @@ jobs:
           for tag in ${{ steps.build_image.outputs.tags }}; do
             podman tag $IMAGE ${{ env.IMAGE_NAME }}:${tag}
           done
-
-      - name: Check Pre Rechunk
-        run:
-          podman image ls
-
-      # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
-      # https://github.com/macbre/push-to-ghcr/issues/12
-      - name: Lowercase Registry
-        id: registry_case
-        uses: ASzc/change-string-case-action@d0603cd0a7dd490be678164909f65c7737470a7f # v6
-        with:
-          string: ${{ env.IMAGE_REGISTRY }}
 
       # Push the image to GHCR (Image Registry)
       - name: Push To GHCR
