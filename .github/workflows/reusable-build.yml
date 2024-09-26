@@ -38,14 +38,14 @@ jobs:
       matrix:
         image_flavor:
           - main
-          # - nvidia
-          # - asus
-          # - asus-nvidia
-          # - surface
-          # - surface-nvidia
+          - nvidia
+          - asus
+          - asus-nvidia
+          - surface
+          - surface-nvidia
         base_name:
           - ${{ inputs.brand_name }}
-          # - ${{ inputs.brand_name }}-dx
+          - ${{ inputs.brand_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
@@ -73,12 +73,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-
-      - name: Debug inputs
-        if: inputs.rechunk == true
-        run: |
-          echo "Event: ${{ github.event_name }}"
-          echo "Rechunk: ${{ inputs.rechunk }}"
 
       - name: Matrix Variables
         run: |
@@ -390,7 +384,7 @@ jobs:
           string: ${{ env.IMAGE_REGISTRY }}
 
       - name: Prepare Rechunk
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         run: |
           sudo apt update && sudo apt install systemd-container
           sudo podman image scp $(whoami)@localhost::${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} root@localhost::
@@ -398,7 +392,7 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         uses: hhd-dev/rechunk@v0.8.6
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
@@ -409,7 +403,7 @@ jobs:
 
       # Overwrite the image with the chuncked image
       - name: Load Rechunked Image
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         run: |
           sudo podman rmi $(sudo podman image ls -qa) --force
           IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
