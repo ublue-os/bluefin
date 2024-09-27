@@ -310,7 +310,7 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
-      - name: Pull  images
+      - name: Pull images
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
         with:
@@ -319,41 +319,53 @@ jobs:
           command: |
             # pull the base image used for FROM in containerfile so
             # we can retry on that unfortunately common failure case
-            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ env.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/akmods-zfs:coreos-stable-${{ env.fedora_version }}
-            podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
+            sudo podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ env.fedora_version }}
+            sudo podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+            sudo podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
+            sudo podman pull ${{ env.IMAGE_REGISTRY }}/akmods-zfs:coreos-stable-${{ env.fedora_version }}
+            sudo podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
-      # Build image using Buildah action
       - name: Build Image
         id: build_image
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
-        uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
-        with:
-          containerfiles: |
-            ./Containerfile
-          image: ${{ env.IMAGE_NAME }}
-          tags: |
-            ${{ steps.generate-tags.outputs.alias_tags }}
-          build-args: |
-            BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}
-            IMAGE_NAME=${{ env.IMAGE_NAME }}
-            IMAGE_FLAVOR=${{ env.image_flavor }}
-            IMAGE_VENDOR=${{ github.repository_owner }}
-            FEDORA_MAJOR_VERSION=${{ env.fedora_version }}
-            TARGET_BASE=${{ matrix.target_base }}
-            AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}
-            NVIDIA_TYPE=${{ env.nvidia_type }}
-            KERNEL=${{ env.kernel_release }}
-            UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}
-          labels: ${{ steps.meta.outputs.labels }}
-          oci: false
-          # TODO(GH-280)
-          # extra-args: |
-          #   --target=${{ matrix.target_name || matrix.base_name }}
-          extra-args: |
-            --target=${{ env.TARGET_NAME }}
+        run: |
+          set -euox pipefail
+
+          BUILD_ARGS=()
+          BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}")
+          BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${{ env.IMAGE_NAME }}")
+          BUILD_ARGS+=("--build-arg" "IMAGE_FLAVOR=${{ env.image_flavor }}")
+          BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR=${{ github.repository_owner }}")
+          BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${{ env.fedora_version }}")
+          BUILD_ARGS+=("--build-arg" "TARGET_BASE=${{ env.TARGET_BASE }}")
+          BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}")
+          BUILD_ARGS+=("--build-arg" "NVIDIA_TYPE=${{ env.nvidia_type }}")
+          BUILD_ARGS+=("--build-arg" "KERNEL=${{ env.kernel_release }}")
+          BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}")
+
+          TAG_ARGS=()
+          IFS=' ' read -r -a tags_array <<< "${{ steps.generate-tags.outputs.alias_tags }}"
+          for tag in "${tags_array[@]}"; do
+            TAG_ARGS+=("--tag" "${{ env.IMAGE_NAME }}:${tag}")
+          done
+
+          LABEL_ARGS=()
+          IFS=' ' read -r -a labels_array <<< "${{ steps.meta.outputs.labels }}"
+          for label in "${labels_array[@]}"; do
+            LABEL_ARGS+=("--label" "${label}")
+          done
+
+          sudo podman build --format docker --target ${{ env.TARGET_NAME }} \
+            "${BUILD_ARGS[@]}" \
+            "${TAG_ARGS[@]}" \
+            "${LABEL_ARGS[@]}" \
+            .
+
+          sudo podman image ls
+
+          echo "image=${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
+          echo "tags=${{ steps.generate-tags.outputs.alias_tags }}" >> $GITHUB_OUTPUT
+
 
       - name: Check Secureboot
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
@@ -364,9 +376,10 @@ jobs:
             sudo apt update
             sudo apt install sbsigntool curl openssl
           fi
-          podman run -d --rm --name ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) "${{ env.IMAGE_NAME }}":$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) sleep 1000
-          podman cp ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1):/usr/lib/modules/${{ env.kernel_release }}/vmlinuz .
-          podman rm -f ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1)
+          sudo podman run -d --rm --name ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) "${{ env.IMAGE_NAME }}":$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) sleep 1000
+          sudo podman cp ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1):/usr/lib/modules/${{ env.kernel_release }}/vmlinuz .
+          sudo podman rm -f ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1) || true
+          sudo kill -9 $(sudo podman inspect --format '{{.State.Pid}}' ${{env.IMAGE_NAME}}-$(echo "${{ steps.generate-tags.outputs.alias_tags }}" | cut -d " " -f 1)) || true
           sbverify --list vmlinuz
           curl --retry 3 -Lo kernel-sign.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key.der
           curl --retry 3 -Lo akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
@@ -383,16 +396,9 @@ jobs:
         with:
           string: ${{ env.IMAGE_REGISTRY }}
 
-      - name: Prepare Rechunk
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
-        run: |
-          sudo apt update && sudo apt install systemd-container
-          sudo podman image scp $(whoami)@localhost::${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }} root@localhost::
-          podman rmi $(podman image ls -qa) --force
-
       - name: Rechunk Image
         id: rechunk
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         uses: hhd-dev/rechunk@v0.8.6
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
@@ -403,37 +409,32 @@ jobs:
 
       # Overwrite the image with the chuncked image
       - name: Load Rechunked Image
-        if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && github.event_name != 'pull_request'
         run: |
           sudo podman rmi $(sudo podman image ls -qa) --force
-          IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
+          IMAGE=$(sudo podman pull ${{ steps.rechunk.outputs.ref }})
           sudo rm -rf ${{ steps.rechunk.outputs.output }}
           for tag in ${{ steps.build_image.outputs.tags }}; do
-            podman tag $IMAGE ${{ env.IMAGE_NAME }}:${tag}
+            sudo podman tag $IMAGE ${{ env.IMAGE_NAME }}:${tag}
           done
 
-      # Push the image to GHCR (Image Registry)
-      - name: Push To GHCR
-        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push to GHCR
         id: push
         if: github.event_name != 'pull_request'
-        env:
-          REGISTRY_USER: ${{ github.actor }}
-          REGISTRY_PASSWORD: ${{ github.token }}
-        with:
-          image: ${{ steps.build_image.outputs.image }}
-          tags: ${{ steps.build_image.outputs.tags }}
-          registry: ${{ steps.registry_case.outputs.lowercase }}
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+        run: |
+          set -euox pipefail
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
-        if: github.event_name != 'pull_request'
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          for tag in ${{ steps.build_image.outputs.tags }}; do
+            sudo podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+          done
+          digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
+          echo "digest=${digest}" >> $GITHUB_OUTPUT
 
       # Sign container
       - uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382 # v3.6.0
