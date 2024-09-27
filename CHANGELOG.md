@@ -1,5 +1,35 @@
 # Changelog
 
+## [3.4.0](https://github.com/ublue-os/bluefin/compare/v3.3.0...v3.4.0) (2024-09-27)
+
+
+### Features
+
+* add active directory support ([#1674](https://github.com/ublue-os/bluefin/issues/1674)) ([0e1ccd4](https://github.com/ublue-os/bluefin/commit/0e1ccd47e5e1bcc7c7c67228a63f4325d3453f94))
+* add Discourse desktop shortcut ([#1693](https://github.com/ublue-os/bluefin/issues/1693)) ([6915ede](https://github.com/ublue-os/bluefin/commit/6915ede68a9dd166d69048a2aa4e142b1b05df8b))
+* add git-credential-libsecret to DX ([#1649](https://github.com/ublue-os/bluefin/issues/1649)) ([8c9b724](https://github.com/ublue-os/bluefin/commit/8c9b724965ef7743a4e4f641fa22fe34a2df6784))
+* Add notification for secure boot key check ([#1661](https://github.com/ublue-os/bluefin/issues/1661)) ([2d9f673](https://github.com/ublue-os/bluefin/commit/2d9f673095e4ea70be628bd35899c149dfaca8e0))
+* add performance tools ([#1667](https://github.com/ublue-os/bluefin/issues/1667)) ([c7f436c](https://github.com/ublue-os/bluefin/commit/c7f436cbf18c58c1a7ba73d03e1445ca570dabd4))
+* add scx-scheds ([#1681](https://github.com/ublue-os/bluefin/issues/1681)) ([1eb075d](https://github.com/ublue-os/bluefin/commit/1eb075d0e9bbb90377f08e5f74815c4a1a1a08a3))
+* disable ollama-web quadlet auth ([#1625](https://github.com/ublue-os/bluefin/issues/1625)) ([8391f69](https://github.com/ublue-os/bluefin/commit/8391f69899a5856018d7894317fb5dc1bec3a1ca))
+* **gnome:** Set animation speed to .8 ([#1673](https://github.com/ublue-os/bluefin/issues/1673)) ([b658b32](https://github.com/ublue-os/bluefin/commit/b658b32e9f764c6a5a93e51ec6a1af299a5984ef))
+* rechunk images into smaller parts ([#1687](https://github.com/ublue-os/bluefin/issues/1687)) ([a63c028](https://github.com/ublue-os/bluefin/commit/a63c02892746f31c4f9d56243c73984238a418ff))
+* switch to autumn wallpapers ([#1631](https://github.com/ublue-os/bluefin/issues/1631)) ([3865644](https://github.com/ublue-os/bluefin/commit/3865644ffa824551845255302bd5d29c1de2ef38))
+
+
+### Bug Fixes
+
+* **aurora:** update KDE settings homepage link ([#1654](https://github.com/ublue-os/bluefin/issues/1654)) ([b31172b](https://github.com/ublue-os/bluefin/commit/b31172b0f35a3e2b989c4d9bb25dde1ea4f1a480))
+* **bluefin-tools:** Don't explicitly start ollama after creating service ([#1659](https://github.com/ublue-os/bluefin/issues/1659)) ([0b49d5c](https://github.com/ublue-os/bluefin/commit/0b49d5c2db927c58e7b9828dc287c511b2540e40))
+* **ci:** switch to rootful podman build ([#1698](https://github.com/ublue-os/bluefin/issues/1698)) ([febf8a7](https://github.com/ublue-os/bluefin/commit/febf8a7fe00842ccbed01165b7638fd597e016e4))
+* enable incus-startup service ([#1688](https://github.com/ublue-os/bluefin/issues/1688)) ([3974ca9](https://github.com/ublue-os/bluefin/commit/3974ca9adfd507bc73386d66c6e9ca13a8d74658))
+* **just:** fix rebase-helper aliases ([#1695](https://github.com/ublue-os/bluefin/issues/1695)) ([d26f1f7](https://github.com/ublue-os/bluefin/commit/d26f1f71e283e3ee4de0b4460887b198ff8f60c8))
+* **just:** remove configure-shell ([#1671](https://github.com/ublue-os/bluefin/issues/1671)) ([3d773c5](https://github.com/ublue-os/bluefin/commit/3d773c5312f0697b4168818a97b60b9b56117bd0))
+* limited linesize to 78 characters to accomodate 80x24 terminal  ([#1640](https://github.com/ublue-os/bluefin/issues/1640)) ([961a86b](https://github.com/ublue-os/bluefin/commit/961a86b566192dd505cf80c38d79e043576a277f))
+* remove nonexistant libsssd_sudo package ([#1682](https://github.com/ublue-os/bluefin/issues/1682)) ([d02a945](https://github.com/ublue-os/bluefin/commit/d02a9454ffb2e5bc2336b275da02230d77f1deda))
+* remove xpadneo ([#1635](https://github.com/ublue-os/bluefin/issues/1635)) ([8c62122](https://github.com/ublue-os/bluefin/commit/8c62122149bd6ddbe2ccf44a53cd1b8689342756))
+* update warning formatting ([#1699](https://github.com/ublue-os/bluefin/issues/1699)) ([68cabb2](https://github.com/ublue-os/bluefin/commit/68cabb2b39baa8130bd0a1a5c4d388ba6362985c))
+
 ## [3.3.0](https://github.com/ublue-os/bluefin/compare/v3.2.0...v3.3.0) (2024-08-23)
 
 
