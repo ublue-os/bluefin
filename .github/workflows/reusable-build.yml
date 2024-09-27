@@ -39,10 +39,13 @@ jobs:
         image_flavor:
           - main
           - nvidia
+          - nvidia-open
           - asus
           - asus-nvidia
+          - asus-nvidia-open
           - surface
           - surface-nvidia
+          - surface-nvidia-open
         base_name:
           - ${{ inputs.brand_name }}
           - ${{ inputs.brand_name }}-dx
@@ -53,22 +56,32 @@ jobs:
             image_flavor: asus
           - fedora_version: gts
             image_flavor: asus-nvidia
+          - fedora_version: gts
+            image_flavor: asus-nvidia-open
           - fedora_version: stable
             image_flavor: asus
           - fedora_version: stable
             image_flavor: asus-nvidia
           - fedora_version: stable
+            image_flavor: asus-nvidia-open
+          - fedora_version: stable
             image_flavor: surface
           - fedora_version: stable
             image_flavor: surface-nvidia
+          - fedora_version: stable
+            image_flavor: surface-nvidia-open
           - fedora_version: beta
             image_flavor: asus
           - fedora_version: beta
             image_flavor: asus-nvidia
           - fedora_version: beta
+            image_flavor: asus-nvidia-open
+          - fedora_version: beta
             image_flavor: surface
           - fedora_version: beta
             image_flavor: surface-nvidia
+          - fedora_version: beta
+            image_flavor: surface-nvidia-open
 
     steps:
       - name: Checkout
@@ -116,7 +129,7 @@ jobs:
                   echo "image_flavor=main" >> $GITHUB_ENV
                   echo "nvidia_type=nvidia" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" == "main" && \
-                  "${{ matrix.fedora_version }}" != "beta" ]]; then
+                "${{ matrix.fedora_version }}" != "beta" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
                echo "nvidia_type=main" >> $GITHUB_ENV
           else
