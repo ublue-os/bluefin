@@ -393,7 +393,7 @@ jobs:
       - name: Rechunk Image
         id: rechunk
         if: inputs.rechunk == 'true' && github.event_name != 'pull_request'
-        uses: hhd-dev/rechunk@v0.8.6
+        uses: hhd-dev/rechunk@e46fb40a61366795e65a1ac7411799515294c98a # v0.8.6
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
           ref: ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
