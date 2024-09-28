@@ -32,6 +32,8 @@ translate=false
 
 [org/gnome/desktop/app-folders/folders/Development]
 apps=['dev-pod.desktop', 'code.desktop']
+excluded-apps=['org.gnome.Sysprof.desktop']
+categories=['Development', 'IDE']
 name='Development'
 translate=false
 
