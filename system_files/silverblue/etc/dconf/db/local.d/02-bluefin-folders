@@ -1,5 +1,5 @@
 [org/gnome/desktop/app-folders]
-folder-children=['Games', 'GamingUtilities', 'Utilities', 'Virtualization', 'Wine', 'YaST', 'Pardus', 'Development', 'Productivity']
+folder-children=['Games', 'GamingUtilities', 'Utilities', 'Containers', 'Wine', 'YaST', 'Pardus', 'Development', 'Productivity']
 
 [org/gnome/desktop/app-folders/folders/GamingUtilities]
 apps=['protontricks.desktop', 'discover_overlay_configure.desktop', 'com.vysp3r.ProtonPlus.desktop', 'io.github.benjamimgois.goverlay.desktop', 'com.gerbilsoft.rom-properties.rp-config.desktop', 'steamos-nested-desktop.desktop']
@@ -18,10 +18,10 @@ categories=['Game']
 name='Games'
 translate=false
 
-[org/gnome/desktop/app-folders/folders/Virtualization]
-apps=['io.github.dvlv.boxbuddyrs.desktop', 'io.podman_desktop.PodmanDesktop.desktop', 'com.github.marhkb.Pods.desktop', 'virt-manager.desktop']
+[org/gnome/desktop/app-folders/folders/Containers]
+apps=['io.github.dvlv.boxbuddyrs.desktop', 'com.github.marhkb.Pods.desktop']
 categories=['Distrobox']
-name='Virtualization'
+name='Containers'
 translate=false
 
 [org/gnome/desktop/app-folders/folders/Wine]
@@ -31,7 +31,7 @@ name='Wine'
 translate=false
 
 [org/gnome/desktop/app-folders/folders/Development]
-apps=['dev-pod.desktop', 'code.desktop']
+apps=['dev-pod.desktop', 'code.desktop', 'virt-manager.desktop', 'io.podman_desktop.PodmanDesktop.desktop']
 excluded-apps=['org.gnome.Sysprof.desktop']
 categories=['Development', 'IDE']
 name='Development'
