@@ -51,6 +51,7 @@
 				"stress-ng",
 				"tailscale",
 				"tmux",
+				"topgrade",
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
