@@ -56,8 +56,5 @@ if [[ -n "${SHA_HEAD_SHORT:-}" ]]; then
   echo "BUILD_ID=\"$SHA_HEAD_SHORT\"" >> /usr/lib/os-release
 fi
 
-# FIXME: Pretty name needs to have deck/KDE/GNOME/etc
-echo "BOOTLOADER_NAME=\"$IMAGE_PRETTY_NAME $VERSION_PRETTY\"" >> /usr/lib/os-release
-
 # Fix issues caused by ID no longer being fedora
 sed -i "s/^EFIDIR=.*/EFIDIR=\"fedora\"/" /usr/sbin/grub2-switch-to-blscfg

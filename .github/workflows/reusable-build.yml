@@ -310,6 +310,10 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
             io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
 
+      - name: Define env.SHA_HEAD_SHORT
+        run: |
+            echo "SHA_HEAD_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
       - name: Pull images
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
@@ -342,6 +346,7 @@ jobs:
           BUILD_ARGS+=("--build-arg" "NVIDIA_TYPE=${{ env.nvidia_type }}")
           BUILD_ARGS+=("--build-arg" "KERNEL=${{ env.kernel_release }}")
           BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}")
+          BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=${{ env.SHA_HEAD_SHORT }}")
 
           TAG_ARGS=()
           IFS=' ' read -r -a tags_array <<< "${{ steps.generate-tags.outputs.alias_tags }}"
