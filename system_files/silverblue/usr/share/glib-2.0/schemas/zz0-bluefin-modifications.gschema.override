@@ -109,7 +109,7 @@ background-color=(0.0, 0.0, 0.0, 0.8)
 
 # Folder names & .desktop shortcut content is recognized as a relocatable schema
 [org.gnome.desktop.app-folders]
-folder-children=['Games', 'GamingUtilities', 'Utilities', 'Containers', 'Wine', 'YaST', 'Pardus']
+folder-children=['Games', 'GamingUtilities', 'Utilities', 'Containers', 'Wine', 'YaST', 'Pardus', 'Development', 'Productivity']
 
 # Modifying shortcut actions for custom0, custom1, custom2, etc. are recognized as relocatable schemas
 [org.gnome.settings-daemon.plugins.media-keys]
