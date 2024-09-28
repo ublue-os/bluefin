@@ -32,6 +32,7 @@ Both Aurora and Bluefin strive to offer a curated out of the box experience for 
 
 1. [Discussions and Announcements](https://universal-blue.discourse.group/c/bluefin/6) - strongly recommended!
 2. [Documentation](https://docs.projectbluefin.io/)
+3. [Contributing Guide](https://docs.projectbluefin.io/contributing)
 
 ### Secure Boot
 
