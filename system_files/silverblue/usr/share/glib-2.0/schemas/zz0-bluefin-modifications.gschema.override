@@ -60,10 +60,10 @@ running-indicator-style='DOTS'
 [org.gnome.settings-daemon.plugins.power]
 power-button-action='interactive'
 
-[org.gtk.gtk4.settings.file-chooser]
+[org.gtk.Settings.FileChooser]
 sort-directories-first=true
 
-[org.gtk.settings.file-chooser]
+[org.gtk.gtk4.Settings.FileChooser]
 sort-directories-first=true
 
 [org.gnome.mutter]
