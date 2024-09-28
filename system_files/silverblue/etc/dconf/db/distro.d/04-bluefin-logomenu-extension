@@ -1,3 +1,6 @@
+# Relocatable schemas are located here in dconf
+# Some Gnome extensions don't ship gschema XML, so their settings also need to go in dconf
+
 [org/gnome/shell/extensions/Logo-menu]
 symbolic-icon=true
 menu-button-icon-image=30
