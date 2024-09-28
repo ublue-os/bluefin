@@ -67,6 +67,17 @@ if [[ "${BASE_IMAGE_NAME}" = "silverblue" && "${FEDORA_MAJOR_VERSION}" -gt "39" 
         mutter-common
 fi
 
+# Fix for ID in fwupd
+if [[ "${FEDORA_MAJOR_VERSION}" -gt "39" ]]; then
+    rpm-ostree override replace \
+        --experimental \
+        --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+            fwupd \
+            fwupd-plugin-flashrom \
+            fwupd-plugin-modem-manager \
+            fwupd-plugin-uefi-capsule-data
+fi
+
 # Switcheroo patch
 rpm-ostree override replace \
     --experimental \
