@@ -66,7 +66,6 @@ ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION}"
 ARG NVIDIA_TYPE="${NVIDIA_TYPE:-}"
 ARG KERNEL="${KERNEL:-6.9.7-200.fc40.x86_64}"
 ARG UBLUE_IMAGE_TAG="${UBLUE_IMAGE_TAG:-latest}"
-ARG SHA_HEAD_SHORT="${SHA_HEAD_SHORT}"
 
 # Build, Clean-up, Commit
 RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
