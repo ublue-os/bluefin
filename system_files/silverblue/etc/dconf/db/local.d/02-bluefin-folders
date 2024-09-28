@@ -1,13 +1,13 @@
 [org/gnome/desktop/app-folders]
-folder-children=['Games', 'GamingUtilities', 'Utilities', 'Containers', 'Wine', 'YaST', 'Pardus']
+folder-children=['Games', 'GamingUtilities', 'Utilities', 'Virtualization', 'Wine', 'YaST', 'Pardus', 'Development', 'Productivity']
 
 [org/gnome/desktop/app-folders/folders/GamingUtilities]
-apps=['protontricks.desktop', 'discover_overlay_configure.desktop', 'com.vysp3r.ProtonPlus.desktop', 'io.github.benjamimgois.goverlay.desktop', 'com.gerbilsoft.rom-properties.rp-config.desktop', 'input-remapper-gtk.desktop', 'steamos-nested-desktop.desktop']
+apps=['protontricks.desktop', 'discover_overlay_configure.desktop', 'com.vysp3r.ProtonPlus.desktop', 'io.github.benjamimgois.goverlay.desktop', 'com.gerbilsoft.rom-properties.rp-config.desktop', 'steamos-nested-desktop.desktop']
 name='Gaming Utilities'
 translate=false
 
 [org/gnome/desktop/app-folders/folders/Utilities]
-apps=['com.github.tchx84.Flatseal.desktop', 'io.github.flattool.Warehouse.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'org.gnome.tweaks.desktop', 'firewall-config.desktop', 'ca.desrt.dconf-editor.desktop', 'org.gnome.World.PikaBackup', 'input-leap.desktop', 'solaar.desktop', 'org.fedoraproject.MediaWriter.desktop']
+apps=['com.github.tchx84.Flatseal.desktop', 'io.github.flattool.Warehouse.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'org.gnome.tweaks.desktop', 'firewall-config.desktop', 'ca.desrt.dconf-editor.desktop', 'org.gnome.World.PikaBackup.desktop', 'input-leap.desktop', 'solaar.desktop', 'org.fedoraproject.MediaWriter.desktop', 'input-remapper-gtk.desktop', 'org.gnome.Sysprof.desktop', 'remote-viewer.desktop']
 categories=['X-GNOME-Utilities']
 name='X-GNOME-Utilities.directory'
 translate=true
@@ -18,14 +18,24 @@ categories=['Game']
 name='Games'
 translate=false
 
-[org/gnome/desktop/app-folders/folders/Containers]
-apps=['io.github.dvlv.boxbuddyrs.desktop', 'io.podman_desktop.PodmanDesktop.desktop', 'com.github.marhkb.Pods.desktop']
+[org/gnome/desktop/app-folders/folders/Virtualization]
+apps=['io.github.dvlv.boxbuddyrs.desktop', 'io.podman_desktop.PodmanDesktop.desktop', 'com.github.marhkb.Pods.desktop', 'virt-manager.desktop']
 categories=['Distrobox']
-name='Containers'
+name='Virtualization'
 translate=false
 
 [org/gnome/desktop/app-folders/folders/Wine]
 apps=['winetricks.desktop']
 categories=['X-Wine', 'wine-wine']
 name='Wine'
+translate=false
+
+[org/gnome/desktop/app-folders/folders/Development]
+apps=['dev-pod.desktop', 'code.desktop']
+name='Development'
+translate=false
+
+[org/gnome/desktop/app-folders/folders/Productivity]
+apps=['simple-scan.desktop', 'org.gnome.Papers.desktop', 'org.gnome.Connections.desktop']
+name='Productivity'
 translate=false
