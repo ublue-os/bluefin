@@ -1,0 +1,13 @@
+[org/gnome/shell/extensions/Logo-menu]
+symbolic-icon=true
+menu-button-icon-image=30
+menu-button-terminal='xdg-terminal-exec'
+menu-button-system-monitor='flatpak run io.missioncenter.MissionCenter'
+menu-button-extensions-app='com.mattjakeman.ExtensionManager.desktop'
+menu-button-software-center='gnome-software'
+show-activities-button=true
+show-lockscreen=false
+show-power-option=false
+show-gamemode=false
+hide-forcequit=true
+show-boxbuddy=true
