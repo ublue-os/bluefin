@@ -16,7 +16,7 @@ EXCLUDED_PACKAGES=($(jq -r "[(.all.exclude | (select(.all != null).all)[]), \
                     (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".exclude | (select(.\"$BASE_IMAGE_NAME\" != null).\"$BASE_IMAGE_NAME\")[])] \
                     | sort | unique[]" /tmp/packages.json))
 
-# store a list of RPMs installed on the image 
+# store a list of RPMs installed on the image
 INSTALLED_EXCLUDED_PACKAGES=()
 
 # ensure exclusion list only contains packages already present on image
@@ -25,7 +25,7 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
 fi
 
 # simple case to install where no packages need excluding
-if [[ "${#INCLUDED_PACKAGES[@]}" -gt 0 && "${#EXCLUDED_PACKAGES[@]}" -eq 0 ]]; then
+if [[ "${#INCLUDED_PACKAGES[@]}" -gt 0 && "${#INSTALLED_EXCLUDED_PACKAGES[@]}" -eq 0 ]]; then
     rpm-ostree install \
         ${INCLUDED_PACKAGES[@]}
 
