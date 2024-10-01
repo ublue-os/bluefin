@@ -1,0 +1,27 @@
+# Relocatable schemas are located here in dconf
+# Some Gnome extensions don't ship gschema XML, so their settings also need to go in dconf
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Control><Alt>t'
+command='/usr/libexec/distrobox-quadlet-ptyxis.sh Host'
+name='Host Ptyxis'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Control><Alt>Return'
+command='/usr/libexec/distrobox-quadlet-ptyxis.sh Host'
+name='Host Ptyxis Alt'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Control><Alt>u'
+command='/usr/libexec/distrobox-quadlet-ptyxis.sh ubuntu-toolbox'
+name='Ubuntu Ptyxis'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
+binding='<Control><Shift>Escape'
+command="flatpak run io.missioncenter.MissionCenter"
+name='mission-center'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4]
+binding='<Control><Alt>f'
+command='/usr/libexec/distrobox-quadlet-ptyxis.sh fedora-toolbox'
+name='Fedora Ptyxis'
