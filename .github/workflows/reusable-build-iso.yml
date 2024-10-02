@@ -150,6 +150,17 @@ jobs:
             ${image} /temp_flatpak_install_dir/script.sh
           docker rmi ${image}
 
+      - name: Setup Branding Repo
+        id: setup-branding-repo
+        shell: bash
+        run: |
+          if [[ ${{ inputs.brand_name }} = "bluefin" ]]; then
+            BRAND_NAME="bluefin"
+          elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
+            BRAND_NAME="aurora"
+          fi
+          curl -Lo ${{ github.workspace }}/brand.repo https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${{ inputs.fedora_version }}/ublue-os-${BRAND_NAME}-fedora-${{ inputs.fedora_version }}.repo
+
       - name: Build ISOs
         uses: jasonn3/build-container-installer@v1.2.2
         id: build
@@ -167,6 +178,7 @@ jobs:
           enable_cache_skopeo: "false"
           flatpak_remote_refs_dir: ${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
           enable_flatpak_dependencies: "false"
+          repos: "/github/workspace/brand.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
 
       - name: Move ISOs to Upload Directory
         id: upload-directory
