@@ -127,7 +127,7 @@ jobs:
           FLATPAK_REFS_DIR=${{ github.workspace }}/${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
           FLATPAK_REFS_DIR_LIST=$(cat ${FLATPAK_REFS_DIR}/* | tr '\n' ' ' )
           DX_FLATPAK_REFS_DIR_LIST="$(cat dx_flatpaks/* | tr '\n' ' ' )"
-          if [[ env.IMAGE_NAME == *-dx ]]; then
+          if [[ env.IMAGE_NAME == *"-dx"* ]]; then
             FLATPAK_REFS_DIR_LIST="${FLATPAK_REFS_DIR_LIST} ${DX_FLATPAK_REFS_DIR_LIST}"
           fi
           # Generate install script
