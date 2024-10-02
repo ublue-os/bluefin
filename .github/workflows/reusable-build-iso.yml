@@ -159,7 +159,7 @@ jobs:
           elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
             BRAND_NAME="aurora"
           fi
-          curl -Lo ${{ github.workspace }}/brand.repo https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${{ inputs.fedora_version }}/ublue-os-${BRAND_NAME}-fedora-${{ inputs.fedora_version }}.repo
+          curl -Lo ${{ github.workspace }}/brand.repo https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${{ inputs.fedora_version }}/ublue-os-"${BRAND_NAME}"-fedora-${{ inputs.fedora_version }}.repo
 
       - name: Build ISOs
         uses: jasonn3/build-container-installer@v1.2.2
