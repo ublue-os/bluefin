@@ -155,11 +155,11 @@ jobs:
         shell: bash
         run: |
           if [[ ${{ inputs.brand_name }} = "bluefin" ]]; then
-            BRAND_NAME="bluefin"
+            echo "BRAND_NAME=bluefin" >> $GITHUB_ENV
           elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
-            BRAND_NAME="aurora"
+            echo "BRAND_NAME=aurora" >> $GITHUB_ENV
           fi
-          curl -Lo ${{ github.workspace }}/brand.repo https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${{ inputs.fedora_version }}/ublue-os-"${BRAND_NAME}"-fedora-${{ inputs.fedora_version }}.repo
+          curl -Lo ${{ github.workspace }}/brand.repo https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${{ inputs.fedora_version }}/ublue-os-${{ env.BRAND_NAME }}-fedora-${{ inputs.fedora_version }}.repo
 
       - name: Build ISOs
         uses: jasonn3/build-container-installer@v1.2.2
