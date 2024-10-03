@@ -19,3 +19,5 @@ jobs:
     with:
       brand_name: bluefin
       fedora_version: gts
+      rechunk: true
+

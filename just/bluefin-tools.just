@@ -189,6 +189,7 @@ ollama ACTION="help":
         echo "open-webui Quadlet removed"
     fi
 
+# Set up InvokeAI, a stable diffusion engine used for visual media, in a local container
 invokeai:
     #!/usr/bin/env bash
     echo 'Detecting Hardware...'
