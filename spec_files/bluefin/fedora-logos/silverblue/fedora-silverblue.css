@@ -1,0 +1,63 @@
+@define-color fedora #2f4265;
+
+/* logo and sidebar classes for Fedora */
+
+/* The sidebar consists of three parts: a background, a logo, and a product logo,
+ * rendered in that order. The product logo is empty by default and is intended
+ * to be overridden by a stylesheet in product.img.
+ */
+.logo-sidebar {
+    background-image: url('/usr/share/anaconda/pixmaps/silverblue/sidebar-bg.png');
+    background-color: @fedora;
+    background-repeat: no-repeat;
+}
+
+/* Add a logo to the sidebar */
+.logo {
+    background-image: url('/usr/share/anaconda/pixmaps/silverblue/sidebar-logo.png');
+    background-position: 50% 20px;
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+
+/* This is a placeholder to be filled by a product-specific logo. */
+.product-logo {
+    background-image: none;
+    background-color: transparent;
+}
+
+AnacondaSpokeWindow #nav-box {
+    background-color: @fedora;
+    background-image: url('/usr/share/anaconda/pixmaps/silverblue/topbar-bg.png');
+    background-repeat: no-repeat;
+    color: white;
+}
+
+/* Remove the box-shadow from buttons in the nav-box because it adds a white stripe
+ * below the buttons and makes them look dumb */
+AnacondaSpokeWindow #nav-box GtkButton {
+    box-shadow: none;
+}
+
+
+/* Change the sidebar background color */
+.logo-sidebar {
+  background-color: #006eb4;
+}
+
+AnacondaSpokeWindow #nav-box {
+  background-color: #006eb4;
+}
+
+/* Move the Fedora logo to the bottom */
+.logo {
+    background-position: 50% 90%;
+}
+
+/* Add the product logo at the top */
+.product-logo {
+    background-image: url('/usr/share/anaconda/pixmaps/silverblue/sidebar-logo_flavor.png');
+    background-position: 12px 10.5em;
+    background-repeat: no-repeat;
+}
+

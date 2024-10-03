@@ -9,6 +9,10 @@ Source2:  sidebar-logo.png
 Source3:  topbar-bg.png
 Source4:  anaconda_header.png
 Source5:  fedora.css
+Source6:  silverblue/fedora-silverblue.css
+Source7:  silverblue/sidebar-bg.png
+Source8:  silverblue/sidebar-logo.png
+Source9:  silverblue/topbar-bg.png
 License:	LicenseRef-Fedora-Logos
 Provides:	redhat-logos = %{version}-%{release}
 Provides:	gnome-logos = %{version}-%{release}
@@ -228,6 +232,12 @@ for i in atomic cloud server silverblue workstation ; do
   cp -a $i $RPM_BUILD_ROOT%{_datadir}/anaconda/pixmaps/
 done
 popd
+
+# Bluefin Logos for Anaconda
+install -p -m 644 %{SOURCE6} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/
+install -p -m 644 %{SOURCE7} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/
+install -p -m 644 %{SOURCE8} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/
+install -p -m 644 %{SOURCE9} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/
 
 %if ! 0%{?eln}
 # KDE Theme logos
