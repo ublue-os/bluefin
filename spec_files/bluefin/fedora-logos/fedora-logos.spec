@@ -9,10 +9,10 @@ Source2:  sidebar-logo.png
 Source3:  topbar-bg.png
 Source4:  anaconda_header.png
 Source5:  fedora.css
-Source6:  silverblue/fedora-silverblue.css
-Source7:  silverblue/sidebar-bg.png
-Source8:  silverblue/sidebar-logo.png
-Source9:  silverblue/topbar-bg.png
+Source6:  ./silverblue/fedora-silverblue.css
+Source7:  ./silverblue/sidebar-bg.png
+Source8:  ./silverblue/sidebar-logo.png
+Source9:  ./silverblue/topbar-bg.png
 License:	LicenseRef-Fedora-Logos
 Provides:	redhat-logos = %{version}-%{release}
 Provides:	gnome-logos = %{version}-%{release}
