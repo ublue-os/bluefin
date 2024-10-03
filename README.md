@@ -18,8 +18,6 @@ Bluefin strives to cover these two use cases. For end users it provides a system
 
 ## Aurora - [getaurora.dev](https://getaurora.dev)
 
-[![aurora 39](https://github.com/ublue-os/bluefin/actions/workflows/build-39-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-39-aurora.yml) [![aurora 40](https://github.com/ublue-os/bluefin/actions/workflows/build-40-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-40-aurora.yml)
-
 ![Screenshot_20240423_211805](https://github.com/ublue-os/bluefin/assets/40402114/1bea1ed8-d97a-402a-957b-e0f338d38230)
 
 Aurora is a delightful KDE desktop experience for end-users that are looking for reliability and developers for the most-hassle free setup. Zero maintenance included.
@@ -34,6 +32,7 @@ Both Aurora and Bluefin strive to offer a curated out of the box experience for 
 
 1. [Discussions and Announcements](https://universal-blue.discourse.group/c/bluefin/6) - strongly recommended!
 2. [Documentation](https://docs.projectbluefin.io/)
+3. [Contributing Guide](https://docs.projectbluefin.io/contributing)
 
 ### Secure Boot
 

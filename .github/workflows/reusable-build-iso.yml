@@ -56,7 +56,7 @@ jobs:
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
       - name: Checkout Repo
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4
 
       - name: Matrix Variables
         run: |
@@ -126,6 +126,10 @@ jobs:
           # Get list of refs from directory
           FLATPAK_REFS_DIR=${{ github.workspace }}/${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
           FLATPAK_REFS_DIR_LIST=$(cat ${FLATPAK_REFS_DIR}/* | tr '\n' ' ' )
+          DX_FLATPAK_REFS_DIR_LIST="$(cat dx_flatpaks/* | tr '\n' ' ' )"
+          if [[ ${{ env.IMAGE_NAME }} == *"-dx"* ]]; then
+            FLATPAK_REFS_DIR_LIST="${FLATPAK_REFS_DIR_LIST} ${DX_FLATPAK_REFS_DIR_LIST}"
+          fi
           # Generate install script
           cat << EOF > ${TEMP_FLATPAK_INSTALL_DIR}/script.sh
           cat /temp_flatpak_install_dir/script.sh

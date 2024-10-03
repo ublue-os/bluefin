@@ -24,5 +24,14 @@ if [[ -f "$TIP_FILE" ]]; then
 
 	TIP_ESCAPED=$(escape "$TIP")
 
-	sed -e "s/%IMAGE_NAME%/$IMAGE_NAME_ESCAPED/g" -e "s/%IMAGE_TAG%/$IMAGE_TAG_ESCAPED/g" -e "s/%TIP%/$TIP_ESCAPED/g" /usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s auto -w 78 -
 fi
+
+KEY_WARN_FILE="/run/user-motd-sbkey-warn.md"
+[ -e $KEY_WARN_FILE ] && KEY_WARN="**WARNING**: $(cat $KEY_WARN_FILE)"
+KEY_WARN_ESCAPED=$(escape "$KEY_WARN")
+
+sed -e "s/%IMAGE_NAME%/$IMAGE_NAME_ESCAPED/g" \
+	-e "s/%IMAGE_TAG%/$IMAGE_TAG_ESCAPED/g" \
+	-e "s/%TIP%/$TIP_ESCAPED/g" \
+	-e "s/%KEY_WARN%/$KEY_WARN_ESCAPED/g" \
+	/usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s auto -w 78 -
