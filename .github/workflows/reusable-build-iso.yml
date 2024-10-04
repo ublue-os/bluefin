@@ -157,7 +157,7 @@ jobs:
           curl -Lo "${{ github.workspace }}/brand.repo" "https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${{ steps.labels.outputs.fedora_version }}/ublue-os-${{ inputs.brand_name }}-fedora-${{ steps.labels.outputs.fedora_version }}.repo"
 
       - name: Build ISOs
-        uses: jasonn3/build-container-installer@v1.2.2
+        uses: jasonn3/build-container-installer@config_files
         id: build
         with:
           arch: x86_64
@@ -173,8 +173,8 @@ jobs:
           enable_cache_skopeo: "false"
           flatpak_remote_refs_dir: ${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
           enable_flatpak_dependencies: "false"
-          #additional_templates: "/github/workspace/lorax_templates/bluefin_branding.tmpl"
-          repos: "/github/workspace/brand.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
+          additional_templates: "/github/workspace/lorax_templates/bluefin_branding.tmpl"
+          #repos: "/github/workspace/brand.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo"
 
       - name: Move ISOs to Upload Directory
         id: upload-directory
