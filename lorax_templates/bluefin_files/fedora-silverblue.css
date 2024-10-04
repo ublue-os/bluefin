@@ -7,14 +7,14 @@
  * to be overridden by a stylesheet in product.img.
  */
 .logo-sidebar {
-    background-image: url('/usr/share/anaconda/pixmaps/silverblue/sidebar-bg.png');
-    background-color: @fedora;
+    background-image: url("/usr/share/anaconda/pixmaps/silverblue/sidebar-bg.png");
+    background-color: transparent;
     background-repeat: no-repeat;
 }
 
 /* Add a logo to the sidebar */
 .logo {
-    background-image: url('/usr/share/anaconda/pixmaps/silverblue/sidebar-logo.png');
+    background-image: url("/usr/share/anaconda/pixmaps/silverblue/sidebar-logo.png");
     background-position: 50% 20px;
     background-repeat: no-repeat;
     background-color: transparent;
@@ -28,7 +28,7 @@
 
 AnacondaSpokeWindow #nav-box {
     background-color: @fedora;
-    background-image: url('/usr/share/anaconda/pixmaps/silverblue/topbar-bg.png');
+    background-image: url("/usr/share/anaconda/pixmaps/silverblue/topbar-bg.png");
     background-repeat: no-repeat;
     color: white;
 }
@@ -39,14 +39,13 @@ AnacondaSpokeWindow #nav-box GtkButton {
     box-shadow: none;
 }
 
-
 /* Change the sidebar background color */
 .logo-sidebar {
-  background-color: #006eb4;
+    background-color: #006eb4;
 }
 
 AnacondaSpokeWindow #nav-box {
-  background-color: #006eb4;
+    background-color: #006eb4;
 }
 
 /* Move the Fedora logo to the bottom */
@@ -56,8 +55,7 @@ AnacondaSpokeWindow #nav-box {
 
 /* Add the product logo at the top */
 .product-logo {
-    background-image: url('/usr/share/anaconda/pixmaps/silverblue/sidebar-logo_flavor.png');
+    background-image: url("/usr/share/anaconda/pixmaps/silverblue/sidebar-logo_flavor.png");
     background-position: 12px 10.5em;
     background-repeat: no-repeat;
 }
-
