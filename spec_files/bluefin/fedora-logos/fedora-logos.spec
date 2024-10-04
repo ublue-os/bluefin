@@ -1,7 +1,7 @@
 Name:		fedora-logos
 Summary:	Fedora-related icons and pictures
 Version:	38.1.0
-Release:	102%{?dist}.bluefin
+Release:	103%{?dist}.bluefin
 URL:		https://pagure.io/fedora-logos
 Source0:	https://pagure.io/fedora-logos/archive/%{version}/fedora-logos-%{version}.tar.gz
 Source1:  sidebar-bg.png
