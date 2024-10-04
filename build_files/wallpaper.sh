@@ -21,6 +21,7 @@ if test "$BASE_IMAGE_NAME" = "silverblue"; then
             ;;
     esac
 
-    sed -i "s|picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-.*-dynamic.xml'|picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-${SEASON}-dynamic.xml'|g" /etc/dconf/db/local.d/00-background
-    sed -i "s|picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-.*-dynamic.xml'|picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-${SEASON}-dynamic.xml'|g" /etc/dconf/db/local.d/00-background
+    WALLPAPER_GSCHEMA_OVERRIDE_FILE="/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
+    sed -i "s|picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-.*-dynamic.xml'|picture-uri='file:///usr/share/backgrounds/bluefin/bluefin-${SEASON}-dynamic.xml'|g" "${WALLPAPER_GSCHEMA_OVERRIDE_FILE}"
+    sed -i "s|picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-.*-dynamic.xml'|picture-uri-dark='file:///usr/share/backgrounds/bluefin/bluefin-${SEASON}-dynamic.xml'|g" "${WALLPAPER_GSCHEMA_OVERRIDE_FILE}"
 fi
