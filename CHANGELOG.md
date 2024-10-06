@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.5.0](https://github.com/ublue-os/bluefin/compare/v3.4.0...v3.5.0) (2024-10-04)
+
+
+### Features
+
+* Add os-release changes from Bazzite ([#1708](https://github.com/ublue-os/bluefin/issues/1708)) ([78671f2](https://github.com/ublue-os/bluefin/commit/78671f218b60e52e4240b480f1319e19d6f1cfbb))
+* add setools-console ([#1738](https://github.com/ublue-os/bluefin/issues/1738)) ([a6996d2](https://github.com/ublue-os/bluefin/commit/a6996d21776ce492f5480b5c40102d3a37ede74b))
+* add specific flatpaks to dx images ([#1732](https://github.com/ublue-os/bluefin/issues/1732)) ([85714c3](https://github.com/ublue-os/bluefin/commit/85714c3943b2649b3d2cba729b48a4b80c1f8d8d))
+* **bluefin-cli:** add trash-cli ([#1720](https://github.com/ublue-os/bluefin/issues/1720)) ([4f15f91](https://github.com/ublue-os/bluefin/commit/4f15f9157cbd2e525229b0782cfae54602b75bf3))
+* **dx:** add virt-v2v ([#1733](https://github.com/ublue-os/bluefin/issues/1733)) ([a7bf567](https://github.com/ublue-os/bluefin/commit/a7bf567538713b084222908f7980c0805fc08677))
+* fix weird titlebar on chromium ([#1709](https://github.com/ublue-os/bluefin/issues/1709)) ([9fe6e1c](https://github.com/ublue-os/bluefin/commit/9fe6e1c5dd0a1778e92458efed896ee7254c42e1))
+* **framework:** add color profile for the new fw13 screen ([#1705](https://github.com/ublue-os/bluefin/issues/1705)) ([09f8bae](https://github.com/ublue-os/bluefin/commit/09f8baeeef0fd6a529983cbd1f64377dab8b6e0b))
+
+
+### Bug Fixes
+
+* Correct doubled build ID in DX images ([#1714](https://github.com/ublue-os/bluefin/issues/1714)) ([afee492](https://github.com/ublue-os/bluefin/commit/afee4926b1ee2f1417703c2d3dc4e9ef073491e9))
+* don't update if on a metered connection ([#1658](https://github.com/ublue-os/bluefin/issues/1658)) ([76fb411](https://github.com/ublue-os/bluefin/commit/76fb4117c1a5c68805ab3801ad680dbc90d45a5f))
+* ensure gnome-extensions-app is removed ([#1724](https://github.com/ublue-os/bluefin/issues/1724)) ([a2c65af](https://github.com/ublue-os/bluefin/commit/a2c65af00821491c7aa28527276fc4e90c27c6a1))
+* remove scx-scheds ([#1723](https://github.com/ublue-os/bluefin/issues/1723)) ([cce3a1c](https://github.com/ublue-os/bluefin/commit/cce3a1cf24bcdf2563c11560280ef28cc4b63824))
+* rename discourse shortcut to community ([#1710](https://github.com/ublue-os/bluefin/issues/1710)) ([7b8091e](https://github.com/ublue-os/bluefin/commit/7b8091e7e882f21f8d1a9ad2847c5633a696cf48))
+
 ## [3.4.0](https://github.com/ublue-os/bluefin/compare/v3.3.0...v3.4.0) (2024-09-27)
 
 

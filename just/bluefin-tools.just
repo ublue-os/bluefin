@@ -169,7 +169,7 @@ ollama ACTION="help":
         echo "open-webui container already exists, skipping..."
     fi
     systemctl --user daemon-reload
-    echo "Ollama Web UI container started. You can access it at http://localhost:8080"
+    echo "Ollama Open WebUI service installed."
     elif [[ "${OPTION,,}" == "remove" ]]; then
         echo "Removing ollama container"
         echo "stopping ollama Quadlet"
