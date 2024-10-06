@@ -401,7 +401,7 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk
-        if: inputs.rechunk == true && github.event_name != 'pull_request'
+        if: inputs.rechunk == true
         uses: hhd-dev/rechunk@v0.8.6
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
