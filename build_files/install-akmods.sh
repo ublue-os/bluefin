@@ -24,11 +24,13 @@ rpm-ostree install \
     # /tmp/akmods-rpms/kmods/*framework-laptop*.rpm
 
 # rpmfusion dependent kmods
-rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+rpm-ostree install \
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 rpm-ostree install \
     broadcom-wl /tmp/akmods/kmods/*wl*.rpm \
     v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-rpm-ostree uninstall rpmfusion-free-release
+rpm-ostree uninstall rpmfusion-free-release rpmfusion-nonfree-release
 
 # ZFS for gts/stable
 if [[ ${AKMODS_FLAVOR} =~ "coreos" ]]; then
