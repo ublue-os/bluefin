@@ -25,6 +25,7 @@
     {
       "type": "os",
       "key": "󰣛"
+      "format": "{pretty-name}"
     },
     {
       "type": "kernel",
