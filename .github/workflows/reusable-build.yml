@@ -116,7 +116,6 @@ jobs:
           elif [[ "${{ matrix.image_flavor }}" == "main" && \
                   "${{ matrix.fedora_version }}" != "beta" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
-               echo "nvidia_type=main" >> $GITHUB_ENV
           else
              echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
           fi
