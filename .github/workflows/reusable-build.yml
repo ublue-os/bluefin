@@ -401,7 +401,7 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk
-        if: inputs.rechunk == true
+        if: inputs.rechunk == true && ( github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request' )
         uses: hhd-dev/rechunk@v0.8.6
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
