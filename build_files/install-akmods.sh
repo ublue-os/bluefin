@@ -2,11 +2,6 @@
 
 set -ouex pipefail
 
-# if [[ -n "${NVIDIA_TYPE:-}" ]]; then
-#     curl -L -o /etc/yum.repos.d/fedora-coreos-pool.repo \
-#         https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
-# fi
-
 # Nvidia for gts/stable - nvidia
 if [[ "${NVIDIA_TYPE}" == "nvidia" ]]; then
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
