@@ -126,6 +126,7 @@ ptyxis-transparency opacity="0.95":
 
 # Configure docker,incus-admin,lxd,libvirt container manager permissions
 dx-group:
+    cat /usr/lib/group | grep 'docker:\|incus-admin:\|lxd:\|libvirt:' | sudo tee -a /etc/group >/dev/null
     sudo usermod -aG docker $USER
     sudo usermod -aG incus-admin $USER
     sudo usermod -aG lxd $USER
