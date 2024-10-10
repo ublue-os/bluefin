@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.5.1](https://github.com/ublue-os/bluefin/compare/v3.5.0...v3.5.1) (2024-10-10)
+
+
+### Bug Fixes
+
+* Don't show version, Use only Pretty Name ([#1758](https://github.com/ublue-os/bluefin/issues/1758)) ([44208ff](https://github.com/ublue-os/bluefin/commit/44208ffd888730bdda4b4ae374aabff27cb7a187))
+* fix os-release naming ([#1757](https://github.com/ublue-os/bluefin/issues/1757)) ([938e81a](https://github.com/ublue-os/bluefin/commit/938e81a96589ebd37564cf2ad4c28750cb032e30))
+* Ollama WebUI isn't started by the ujust command ([#1745](https://github.com/ublue-os/bluefin/issues/1745)) ([c60cafa](https://github.com/ublue-os/bluefin/commit/c60cafa9365e05b8eb22a2acae0f951cb94ea7c2))
+* switch latest images to use ungated upstream kernel ([#1722](https://github.com/ublue-os/bluefin/issues/1722)) ([bab923c](https://github.com/ublue-os/bluefin/commit/bab923c17a4b574606259a51a6d2adf09095f806))
+
 ## [3.5.0](https://github.com/ublue-os/bluefin/compare/v3.4.0...v3.5.0) (2024-10-04)
 
 
