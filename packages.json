@@ -60,7 +60,7 @@
 				"zsh"
 			],
 			"silverblue": [
-				"simple-scan",
+				"cryfs",
 				"gnome-shell-extension-appindicator",
 				"gnome-shell-extension-blur-my-shell",
 				"gnome-shell-extension-caffeine",
@@ -69,24 +69,25 @@
 				"gnome-shell-extension-logo-menu",
 				"gnome-shell-extension-search-light",
 				"gnome-shell-extension-tailscale-gnome-qs",
-				"libgda-sqlite",
 				"libgda",
+				"libgda-sqlite",
 				"libratbag-ratbagd",
 				"nautilus-gsconnect",
 				"nautilus-open-any-terminal",
 				"openssh-askpass",
+				"simple-scan",
 				"yaru-theme",
 				"zenity"
 			],
 			"kinoite": [
-				"skanpage",
-				"libadwaita-qt5",
-				"libadwaita-qt6",
 				"kde-runtime-docs",
 				"kdenetwork-filesharing",
 				"kdeplasma-addons",
 				"kdialog",
-				"plasma-wallpapers-dynamic"
+				"libadwaita-qt5",
+				"libadwaita-qt6",
+				"plasma-wallpapers-dynamic",
+				"skanpage"
 			],
 			"dx": [
 				"adobe-source-code-pro-fonts",
