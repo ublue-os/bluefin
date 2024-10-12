@@ -72,7 +72,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Matrix Variables
         run: |
@@ -104,8 +104,6 @@ jobs:
               echo "AKMODS_FLAVOR=surface" >> $GITHUB_ENV
           elif [[ "${{ matrix.fedora_version }}" =~ stable|gts ]]; then
               echo "AKMODS_FLAVOR=coreos-stable" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
-              echo "AKMODS_FLAVOR=fsync" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
           fi
@@ -118,7 +116,6 @@ jobs:
           elif [[ "${{ matrix.image_flavor }}" == "main" && \
                   "${{ matrix.fedora_version }}" != "beta" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
-               echo "nvidia_type=main" >> $GITHUB_ENV
           else
              echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
           fi
@@ -192,11 +189,6 @@ jobs:
               echo "Kernel Version do Not Match"
               exit 1
             fi
-
-      - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
-        with:
-          remove-codeql: true
 
       - name: Check just syntax
         uses: ublue-os/just-action@bda593098a84a84973b002b4377709166a68be52 # v2
@@ -314,6 +306,12 @@ jobs:
         run: |
             echo "SHA_HEAD_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
+      - name: Maximize build space
+        if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
+        uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
+        with:
+          remove-codeql: true
+
       - name: Pull images
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
         uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
@@ -403,7 +401,7 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk
-        if: inputs.rechunk == true && github.event_name != 'pull_request'
+        if: inputs.rechunk == true && ( github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request' )
         uses: hhd-dev/rechunk@v0.8.6
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
@@ -432,14 +430,18 @@ jobs:
       - name: Push to GHCR
         id: push
         if: github.event_name != 'pull_request'
-        run: |
-          set -euox pipefail
+        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        with:
+          attempt_limit: 3
+          attempt_delay: 15000
+          command: |
+            set -euox pipefail
 
-          for tag in ${{ steps.build_image.outputs.tags }}; do
-            sudo podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
-          done
-          digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
-          echo "digest=${digest}" >> $GITHUB_OUTPUT
+            for tag in ${{ steps.build_image.outputs.tags }}; do
+              sudo podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+            done
+            digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
+            echo "digest=${digest}" >> $GITHUB_OUTPUT
 
       # Sign container
       - uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
@@ -450,14 +452,14 @@ jobs:
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
         env:
-          TAGS: ${{ steps.push.outputs.digest }}
+          TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
       - name: Generate file containing outputs
         if: github.event_name != 'pull_request'
         env:
-          DIGEST: ${{ steps.push.outputs.digest }}
+          DIGEST: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_FLAVOR: ${{ env.image_flavor }}
@@ -466,7 +468,7 @@ jobs:
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
-        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: image-${{ env.IMAGE_NAME }}-${{ env.image_flavor }}-${{ matrix.fedora_version }}
           retention-days: 1

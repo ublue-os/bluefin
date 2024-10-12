@@ -56,7 +56,7 @@ jobs:
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
       - name: Checkout Repo
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Matrix Variables
         run: |
@@ -181,7 +181,7 @@ jobs:
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.ref_name == 'testing'
         #if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: ${{ steps.build.outputs.iso_name }}
           path: ${{ steps.upload-directory.outputs.iso-upload-dir }}

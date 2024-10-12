@@ -30,7 +30,7 @@ jobs:
         image: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
@@ -57,7 +57,7 @@ jobs:
 
       - name: Scan SBOM
         id: scan
-        uses: anchore/scan-action@64a33b277ea7a1215a3c142735a1091341939ff5 # v4
+        uses: anchore/scan-action@4e08a16a68fb1b35d2fca00f0607db0b5b5120a7 # v5
         with:
           sbom: sbom.json
           output-format: json
@@ -71,7 +71,7 @@ jobs:
           echo "name=$(echo ${IMAGE} | awk -F'/' '{print $NF}' | sed 's/:/-/g')" >> $GITHUB_OUTPUT
 
       - name: Upload scan results
-        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: security-${{ steps.artifact-name.outputs.name }}
           if-no-files-found: error
