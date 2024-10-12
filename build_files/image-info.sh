@@ -22,8 +22,8 @@ if [[ "${BASE_IMAGE_NAME}" == "kinoite" ]]; then
   HOME_URL="https://getaurora.dev/"
 fi
 
-if [[ "${NVIDIA_TYPE}" == "nvidia" ]]; then
-  image_flavor="nvidia"
+if [[ "${NVIDIA_FLAVOR}" =~ "nvidia" ]]; then
+  image_flavor="${NVIDIA_FLAVOR}"
 fi
 
 cat > $IMAGE_INFO <<EOF

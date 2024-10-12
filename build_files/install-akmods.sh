@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 # Nvidia for gts/stable - nvidia
-if [[ "${NVIDIA_TYPE}" == "nvidia" ]]; then
+if [[ "${NVIDIA_FLAVOR}" =~ "nvidia" ]]; then
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh && \
     chmod +x /tmp/nvidia-install.sh && \
     IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh

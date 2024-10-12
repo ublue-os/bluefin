@@ -109,10 +109,10 @@ jobs:
           fi
 
           # Env for matrix.image_flavor
-          if [[ "${{ matrix.image_flavor }}" == "nvidia" && \
+          if [[ "${{ matrix.image_flavor }}" =~ "nvidia" && \
                 "${{ matrix.fedora_version }}" != "beta" ]]; then
                   echo "image_flavor=main" >> $GITHUB_ENV
-                  echo "nvidia_type=nvidia" >> $GITHUB_ENV
+                  echo "nvidia_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
           elif [[ "${{ matrix.image_flavor }}" == "main" && \
                   "${{ matrix.fedora_version }}" != "beta" ]]; then
                echo "image_flavor=${{ matrix.image_flavor }}" >> $GITHUB_ENV
@@ -341,7 +341,7 @@ jobs:
           BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${{ env.fedora_version }}")
           BUILD_ARGS+=("--build-arg" "TARGET_BASE=${{ env.TARGET_BASE }}")
           BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}")
-          BUILD_ARGS+=("--build-arg" "NVIDIA_TYPE=${{ env.nvidia_type }}")
+          BUILD_ARGS+=("--build-arg" "NVIDIA_FLAVOR=${{ env.nvidia_flavor}}")
           BUILD_ARGS+=("--build-arg" "KERNEL=${{ env.kernel_release }}")
           BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}")
           BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=${{ env.SHA_HEAD_SHORT }}")
