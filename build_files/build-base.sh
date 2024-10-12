@@ -17,7 +17,6 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 /ctx/build_files/packages.sh
 /ctx/build_files/nvidia.sh
 /ctx/build_files/image-info.sh
-/ctx/build_files/wallpaper.sh
 /ctx/build_files/fetch-install.sh
 /ctx/build_files/brew.sh
 /ctx/build_files/fetch-quadlets.sh
