@@ -76,7 +76,8 @@
 				"nautilus-open-any-terminal",
 				"openssh-askpass",
 				"yaru-theme",
-				"zenity"
+				"zenity",
+				"cryfs"
 			],
 			"kinoite": [
 				"skanpage",
