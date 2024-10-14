@@ -1,0 +1,16 @@
+name: Aurora Stable Daily
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      brand_name: aurora
+      fedora_version: stable
+      rechunk: true
+      build_stable_daily: true
+      build_stable_weekly: false
+
