@@ -1,5 +1,29 @@
 # Changelog
 
+## [3.6.0](https://github.com/ublue-os/bluefin/compare/v3.5.0...v3.6.0) (2024-10-14)
+
+
+### Features
+
+* Add Borgbackup on the image for both Aurora and Bluefin ([#1780](https://github.com/ublue-os/bluefin/issues/1780)) ([e1a0ec9](https://github.com/ublue-os/bluefin/commit/e1a0ec9d7b742bd311850b1c5d16f42b7f13bd15))
+* add cryfs to bluefin ([#1771](https://github.com/ublue-os/bluefin/issues/1771)) ([9b78993](https://github.com/ublue-os/bluefin/commit/9b78993b311d6ccd8ff80df475577707569eac09))
+* add random dinos to fish fastfetch ([#1769](https://github.com/ublue-os/bluefin/issues/1769)) ([a291470](https://github.com/ublue-os/bluefin/commit/a29147006bb15c07e91c3d997a0781076bda8514))
+* enable stable-daily channel ([#1779](https://github.com/ublue-os/bluefin/issues/1779)) ([3201dd3](https://github.com/ublue-os/bluefin/commit/3201dd34ed983517c0d36ec53d59ab18b151972b))
+
+
+### Bug Fixes
+
+* Don't show version, Use only Pretty Name ([#1758](https://github.com/ublue-os/bluefin/issues/1758)) ([44208ff](https://github.com/ublue-os/bluefin/commit/44208ffd888730bdda4b4ae374aabff27cb7a187))
+* fix os-release naming ([#1757](https://github.com/ublue-os/bluefin/issues/1757)) ([938e81a](https://github.com/ublue-os/bluefin/commit/938e81a96589ebd37564cf2ad4c28750cb032e30))
+* just dx-group append group entry from /usr/lib/group ([#1767](https://github.com/ublue-os/bluefin/issues/1767)) ([4729268](https://github.com/ublue-os/bluefin/commit/47292684ec00fbf2c448be95b4eb008f0f714535))
+* Ollama WebUI isn't started by the ujust command ([#1745](https://github.com/ublue-os/bluefin/issues/1745)) ([c60cafa](https://github.com/ublue-os/bluefin/commit/c60cafa9365e05b8eb22a2acae0f951cb94ea7c2))
+* switch latest images to use ungated upstream kernel ([#1722](https://github.com/ublue-os/bluefin/issues/1722)) ([bab923c](https://github.com/ublue-os/bluefin/commit/bab923c17a4b574606259a51a6d2adf09095f806))
+
+
+### Reverts
+
+* "chore: dynamically set the wallpaper based on season" ([#1776](https://github.com/ublue-os/bluefin/issues/1776)) ([45d9641](https://github.com/ublue-os/bluefin/commit/45d96418f5602c31babdef79c190807b9e11f912))
+
 ## [3.5.0](https://github.com/ublue-os/bluefin/compare/v3.4.0...v3.5.0) (2024-10-04)
 
 
