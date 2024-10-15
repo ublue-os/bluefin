@@ -9,24 +9,24 @@
         </starttime>
 
         <static>
-                <file>/usr/share/backgrounds/bluefin/WallPaper_SummerDay_Post.webp</file>
+                <file>/usr/share/backgrounds/bluefin/WallPaper_JulyDay_Post.webp</file>
                 <duration>41400.0</duration>
         </static>
 
         <transition type="overlay">
                 <duration>7200.0</duration>
-                <from>/usr/share/backgrounds/bluefin/WallPaper_SummerDay_Post.webp</from>
-                <to>/usr/share/backgrounds/bluefin/WallPaper_SummerNight_Post.webp</to>
+                <from>/usr/share/backgrounds/bluefin/WallPaper_JulyDay_Post.webp</from>
+                <to>/usr/share/backgrounds/bluefin/WallPaper_JulyNight_Post.webp</to>
         </transition>
 
         <static>
-                <file>/usr/share/backgrounds/bluefin/WallPaper_SummerNight_Post.webp</file>
+                <file>/usr/share/backgrounds/bluefin/WallPaper_JulyNight_Post.webp</file>
                 <duration>30600.0</duration>
         </static>
 
         <transition type="overlay">
                 <duration>7200.0</duration>
-                <from>/usr/share/backgrounds/bluefin/WallPaper_SummerNight_Post.webp</from>
-                <to>/usr/share/backgrounds/bluefin/WallPaper_SummerDay_Post.webp</to>
+                <from>/usr/share/backgrounds/bluefin/WallPaper_JulyNight_Post.webp</from>
+                <to>/usr/share/backgrounds/bluefin/WallPaper_JulyDay_Post.webp</to>
         </transition>
 </background>

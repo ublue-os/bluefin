@@ -2,13 +2,11 @@
 <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
 <wallpapers>
   <wallpaper deleted="false">
-    <name>Bluefin - Autumn Dynamic</name>
-    <filename>/usr/share/backgrounds/bluefin/bluefin-autumn-dynamic.xml</filename>
+    <name>Bluefin - April Dynamic</name>
+    <filename>/usr/share/backgrounds/bluefin/bluefin-april-dynamic.xml</filename>
     <options>zoom</options>
     <shade_type>solid</shade_type>
-    <pcolor>#2A1413</pcolor>
+    <pcolor>#3A663F</pcolor>
     <scolor>#000000</scolor>
   </wallpaper>
 </wallpapers>
-
-

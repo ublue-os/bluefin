@@ -8,25 +8,26 @@
                 <second>0</second>
         </starttime>
 
+        <!-- TODO: Change these URIs to March's images -->
         <static>
-                <file>/usr/share/backgrounds/bluefin/WallPaper_WinterDay_Post.webp</file>
+                <file>/usr/share/backgrounds/bluefin/WallPaper_JanuaryDay_Post.webp</file>
                 <duration>36000.0</duration>
         </static>
 
         <transition type="overlay">
                 <duration>1800.0</duration>
-                <from>/usr/share/backgrounds/bluefin/WallPaper_WinterDay_Post.webp</from>
-                <to>/usr/share/backgrounds/bluefin/WallPaper_WinterNight_Post.webp</to>
+                <from>/usr/share/backgrounds/bluefin/WallPaper_JanuaryDay_Post.webp</from>
+                <to>/usr/share/backgrounds/bluefin/WallPaper_JanuaryNight_Post.webp</to>
         </transition>
 
         <static>
-                <file>/usr/share/backgrounds/bluefin/WallPaper_WinterNight_Post.webp</file>
+                <file>/usr/share/backgrounds/bluefin/WallPaper_JanuaryNight_Post.webp</file>
                 <duration>46800.0</duration>
         </static>
 
         <transition type="overlay">
                 <duration>1800.0</duration>
-                <from>/usr/share/backgrounds/bluefin/WallPaper_WinterNight_Post.webp</from>
-                <to>/usr/share/backgrounds/bluefin/WallPaper_WinterDay_Post.webp</to>
+                <from>/usr/share/backgrounds/bluefin/WallPaper_JanuaryNight_Post.webp</from>
+                <to>/usr/share/backgrounds/bluefin/WallPaper_JanuaryDay_Post.webp</to>
         </transition>
 </background>

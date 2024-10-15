@@ -2,13 +2,11 @@
 <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
 <wallpapers>
   <wallpaper deleted="false">
-    <name>Bluefin - Summer Dynamic</name>
-    <filename>/usr/share/backgrounds/bluefin/bluefin-winter-dynamic.xml</filename>
+    <name>Bluefin - July Dynamic</name>
+    <filename>/usr/share/backgrounds/bluefin/bluefin-july-dynamic.xml</filename>
     <options>zoom</options>
     <shade_type>solid</shade_type>
-    <pcolor>#8198A7</pcolor>
+    <pcolor>#F99F53</pcolor>
     <scolor>#000000</scolor>
   </wallpaper>
 </wallpapers>
-
-
