@@ -2,7 +2,7 @@
 Type=Application
 NoDisplay=false
 Terminal=false
-Exec=xdg-open https://docs.projectbluefin.io/
+Exec=xdg-open https://universal-blue.discourse.group/t/documentation/3147
 Icon=/usr/share/ublue-os/bluefin/docs.svg
 Name=Documentation
 Comment=Bluefin and Aurora documentation
