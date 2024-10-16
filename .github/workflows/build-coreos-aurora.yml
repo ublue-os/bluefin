@@ -8,7 +8,7 @@ on:
       - '**.md'
       - 'system_files/silverblue/**'
   schedule:
-    - cron: '41 5 * * 2'  # 5:41 UTC every Tuesday
+    - cron: '41 5 * * *'  # 5:41 UTC everyday
   workflow_dispatch:
 
 jobs:
@@ -20,4 +20,5 @@ jobs:
       brand_name: aurora
       fedora_version: stable
       rechunk: true
+      weekly_tag_day: Tuesday
 

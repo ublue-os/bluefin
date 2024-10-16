@@ -7,6 +7,9 @@ sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applica
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/htop.desktop
 sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvtop.desktop
 
+#Disable autostart behaviour
+rm -f /etc/xdg/autostart/solaar.desktop
+
 # Disable all COPRs and RPM Fusion Repos
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo

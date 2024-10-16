@@ -5,5 +5,5 @@ Terminal=false
 Exec=xdg-open https://docs.projectbluefin.io/
 Icon=/usr/share/ublue-os/bluefin/docs.svg
 Name=Documentation
-Comment=Bluefin and Aurora documentation
+Comment=Bluefin documentation
 Categories=Utility;

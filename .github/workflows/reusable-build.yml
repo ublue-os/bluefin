@@ -15,6 +15,11 @@ on:
         required: false
         type: boolean
         default: false
+      weekly_tag_day:
+        description: "Tag stable weekly on for example 'Tuesday'"
+        required: false
+        type: string
+        default: Tuesday
     outputs:
       images:
         description: "An array of images built and pushed to the registry"
@@ -237,7 +242,15 @@ jobs:
           fi
 
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-            BUILD_TAGS=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+            BUILD_TAGS=("${FEDORA_VERSION}-daily" "${FEDORA_VERSION}-daily-${TIMESTAMP}")
+            if [[ ${{ github.event_name }} == "schedule" ]]; then
+              TODAY="$(date +%A)"
+              if [[ "${TODAY}" == "${{ inputs.weekly_tag_day }}" ]]; then
+                BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+              fi
+            else
+              BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+            fi
           else
             BUILD_TAGS=("${{ env.fedora_version }}" "${{ env.fedora_version }}-${TIMESTAMP}")
           fi
@@ -267,7 +280,7 @@ jobs:
                   BUILD_TAGS+=("gts")
                   echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
             elif [[ "$IS_COREOS" == "true" ]]; then
-                  echo "DEFAULT_TAG=stable" >> $GITHUB_ENV
+                  echo "DEFAULT_TAG=stable-daily" >> $GITHUB_ENV
             fi
           fi
 
