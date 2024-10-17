@@ -15,7 +15,7 @@ function rebase_helper(){
     base_image="ghcr.io/ublue-os/${IMAGE_NAME}"
     echo "Which Tag would you like to rebase to?"
     echo "The default selection is gts, stable is for enthusiasts, and latest is for testers"
-    choose_target=$(Choose date latest gts stable cancel)
+    choose_target=$(Choose date latest gts stable stable-daily cancel)
     if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
         rebase_target="${base_image}:${choose_target}"
     elif [[ "$choose_target" == "date" ]]; then
