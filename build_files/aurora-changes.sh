@@ -4,8 +4,8 @@ set -ouex pipefail
 
 if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
     ln -sf ../places/distributor-logo.svg /usr/share/icons/hicolor/scalable/apps/start-here.svg
-    ln -sf jonatan-pie-aurora.png /usr/share/backgrounds/default.png
-    ln -sf greg-rakozy-aurora.png /usr/share/backgrounds/default-dark.png
+    ln -sf /usr/share/wallpapers/jonatan-pie-aurora/contents/images/3944x2770.jxl /usr/share/backgrounds/default.png
+    ln -sf /usr/share/wallpapers/greg-rakozy-aurora/contents/images/5616x3744.jxl /usr/share/backgrounds/default-dark.png
     ln -sf aurora.xml /usr/share/backgrounds/default.xml
     sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:org.gnome.Ptyxis.desktop,applications:org.kde.discover.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml
     sed -i '/<entry name="favorites" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,systemsettings.desktop,org.kde.dolphin.desktop,org.kde.kate.desktop,org.gnome.Ptyxis.desktop,org.kde.discover.desktop<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml

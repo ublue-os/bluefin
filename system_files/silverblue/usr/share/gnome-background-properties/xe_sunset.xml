@@ -3,7 +3,7 @@
 <wallpapers>
     <wallpaper>
         <name>Sunset</name>
-        <filename>/usr/share/backgrounds/xe_sunset.jpeg</filename>
+        <filename>/usr/share/backgrounds/xe_sunset.jxl</filename>
         <options>zoom</options>
         <shade_type>solid</shade_type>
         <pcolor>#000000</pcolor>
