@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.7.0](https://github.com/ublue-os/bluefin/compare/v3.6.0...v3.7.0) (2024-10-17)
+
+
+### Features
+
+* new autumn wallpaper ([#1794](https://github.com/ublue-os/bluefin/issues/1794)) ([ff123d2](https://github.com/ublue-os/bluefin/commit/ff123d2d4ae2a919c7646cb101c91dd09b72b32d))
+* ublue-rollback-helper - add stable-daily to targets ([#1797](https://github.com/ublue-os/bluefin/issues/1797)) ([01e25a8](https://github.com/ublue-os/bluefin/commit/01e25a8e9a14e52d43757008afc175ad5b77db31))
+
+
+### Bug Fixes
+
+* fix cryfs error on bluefin-gts ([#1799](https://github.com/ublue-os/bluefin/issues/1799)) ([71a9232](https://github.com/ublue-os/bluefin/commit/71a923264e334612d3d90dff3e2b196f560eacbc))
+
 ## [3.6.0](https://github.com/ublue-os/bluefin/compare/v3.5.0...v3.6.0) (2024-10-14)
 
 
