@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.7.0](https://github.com/ublue-os/bluefin/compare/v3.6.0...v3.7.0) (2024-10-18)
+
+
+### Features
+
+* **ci:** Build stable weekly on the same day as gts ([#1803](https://github.com/ublue-os/bluefin/issues/1803)) ([4b199ab](https://github.com/ublue-os/bluefin/commit/4b199abcfb3ddc1d0909c8e6232204e7dbaab40c))
+* new autumn wallpaper ([#1794](https://github.com/ublue-os/bluefin/issues/1794)) ([ff123d2](https://github.com/ublue-os/bluefin/commit/ff123d2d4ae2a919c7646cb101c91dd09b72b32d))
+* ublue-rollback-helper - add stable-daily to targets ([#1797](https://github.com/ublue-os/bluefin/issues/1797)) ([01e25a8](https://github.com/ublue-os/bluefin/commit/01e25a8e9a14e52d43757008afc175ad5b77db31))
+
+
+### Bug Fixes
+
+* don't attempt to pull zfs on beta ([#1802](https://github.com/ublue-os/bluefin/issues/1802)) ([e4d9322](https://github.com/ublue-os/bluefin/commit/e4d9322e5da91e4a3545105be1da259379a18787))
+* fix cryfs error on bluefin-gts ([#1799](https://github.com/ublue-os/bluefin/issues/1799)) ([71a9232](https://github.com/ublue-os/bluefin/commit/71a923264e334612d3d90dff3e2b196f560eacbc))
+
 ## [3.6.0](https://github.com/ublue-os/bluefin/compare/v3.5.0...v3.6.0) (2024-10-14)
 
 
