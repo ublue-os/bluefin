@@ -172,6 +172,7 @@ jobs:
 
       - name: Verify ZFS
         uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
+        if: inputs.fedora_version != 'beta'
         with:
           containers: akmods-zfs:coreos-stable-${{ env.fedora_version }}
 
@@ -337,7 +338,6 @@ jobs:
             sudo podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ env.image_flavor }}:${{ env.fedora_version }}
             sudo podman pull ${{ env.IMAGE_REGISTRY }}/akmods:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
             sudo podman pull ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ env.AKMODS_FLAVOR }}-${{ env.fedora_version }}
-            sudo podman pull ${{ env.IMAGE_REGISTRY }}/akmods-zfs:coreos-stable-${{ env.fedora_version }}
             sudo podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
       - name: Build Image
