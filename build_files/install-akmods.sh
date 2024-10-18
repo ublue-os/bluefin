@@ -29,7 +29,21 @@ rpm-ostree uninstall rpmfusion-free-release rpmfusion-nonfree-release
 
 # ZFS for gts/stable
 if [[ ${AKMODS_FLAVOR} =~ "coreos" ]]; then
-    rpm-ostree install pv /tmp/akmods-zfs/kmods/zfs/*.rpm
+    skopeo copy docker://ghcr.io/ublue-os/akmods-zfs:coreos-stable-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-zfs
+    ZFS_TARGZ=$(jq -r '.layers[].digest' < /tmp/akmods-zfs/manifest.json | cut -d : -f 2)
+    tar -xvzf /tmp/akmods-zfs/"$ZFS_TARGZ" -C /tmp/
+    mv /tmp/rpms/* /tmp/akmods-zfs/
+    ZFS_RPMS=(
+        /tmp/akmods-zfs/kmods/zfs/kmod-zfs-"${KERNEL}"-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libnvpair3-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libuutil3-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libzfs5-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libzpool5-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/python3-pyzfs-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/zfs-*.rpm
+        pv
+    )
+    rpm-ostree install "${ZFS_RPMS[@]}"
     depmod -a -v "${KERNEL}"
     echo "zfs" > /usr/lib/modules-load.d/zfs.conf
 fi
