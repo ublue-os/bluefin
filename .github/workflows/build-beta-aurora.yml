@@ -1,21 +1,21 @@
 name: Aurora Beta
 on:
-  # merge_group:
-  # pull_request:
-  #   branches:
-  #     - main
-  #     - testing
-  #   paths-ignore:
-  #     - "**.md"
-  #     - "system_files/silverblue/**"
-  # push:
-  #   branches:
-  #     - main
-  #   paths-ignore:
-  #     - "**.md"
-  #     - "system_files/silverblue/**"
-  # schedule:
-  #   - cron: "40 4 * * *" # 4:40 UTC everyday
+  merge_group:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - "**.md"
+      - "system_files/silverblue/**"
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - "system_files/silverblue/**"
+  schedule:
+    - cron: "40 4 * * *" # 4:40 UTC everyday
   workflow_dispatch:
 
 jobs:
