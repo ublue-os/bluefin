@@ -205,6 +205,9 @@
 			"all": [
 				"ptyxis"
 			],
+			"kinoite": [
+				"ptyxis"
+			],
 			"silverblue": [],
 			"dx": []
 		},
@@ -214,6 +217,21 @@
 			"kinoite": [
 				"plasma-welcome"
 			],
+			"dx": []
+		}
+	},
+	"41": {
+		"include": {
+			"all": [],
+			"kinoite": [
+				"ptyxis"
+			],
+			"silverblue": []
+		},
+		"exclude": {
+			"all":	[],
+			"silverblue": [],
+			"kinoite": [],
 			"dx": []
 		}
 	}
