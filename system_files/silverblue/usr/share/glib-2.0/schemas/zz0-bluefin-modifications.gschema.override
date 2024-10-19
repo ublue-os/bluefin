@@ -112,6 +112,9 @@ border-radius=1.65
 border-color=(0.23, 0.23, 0.23, 1.0)
 background-color=(0.0, 0.0, 0.0, 0.8)
 
+[org.gnome.shell.extensions.blur-my-shell.dash-to-dock]
+blur=true
+
 #-------------- REMAINING SCHEMAS IN THIS SETTING SECTION ARE LOCATED IN DCONF --------------#
 # Settings bellow are supported with gschema override, but other settings, which are relocatable schemas, are not. Edit dconfs if you need to modify relocatable schemas.
 
