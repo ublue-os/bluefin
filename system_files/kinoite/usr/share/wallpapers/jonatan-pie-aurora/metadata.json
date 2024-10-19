@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "",
+                "Name": "Jonatan Pie"
+            }
+        ],
+        "Id": "JonatanPieAurora",
+        "License": "Unsplash",
+        "Name": "Aurora"
+    }
+}
