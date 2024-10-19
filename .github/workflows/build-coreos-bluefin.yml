@@ -8,7 +8,7 @@ on:
       - '**.md'
       - 'system_files/kinoite/**'
   schedule:
-    - cron: '41 5 * * *'  # 5:41 UTC everyday
+    - cron: '45 5 * * *'  # 5:41 UTC everyday
   workflow_dispatch:
 
 jobs:
@@ -20,5 +20,5 @@ jobs:
       brand_name: bluefin
       fedora_version: stable
       rechunk: true
-      weekly_tag_day: Tuesday
+      weekly_tag_day: Sunday
 
