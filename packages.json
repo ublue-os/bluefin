@@ -77,7 +77,6 @@
 				"nautilus-open-any-terminal",
 				"openssh-askpass",
 				"simple-scan",
-				"yaru-theme",
 				"zenity"
 			],
 			"kinoite": [
@@ -210,10 +209,9 @@
 			"dx": []
 		},
 		"exclude": {
-			"all":	[],
+			"all": [],
 			"silverblue": [],
 			"dx": []
 		}
 	}
-
 }
