@@ -126,6 +126,7 @@
 				"kcli",
 				"libvirt",
 				"libvirt-nss",
+				"lxc",
 				"mozilla-fira-mono-fonts",
 				"nicstat",
 				"numactl",
