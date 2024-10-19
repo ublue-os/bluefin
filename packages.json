@@ -176,7 +176,8 @@
 			],
 			"kinoite": [
 				"krfb",
-				"krfb-libs"
+				"krfb-libs",
+				"plasma-welcome"
 			],
 			"dx": []
 		}
@@ -197,9 +198,7 @@
 		"exclude": {
 			"all": [],
 			"silverblue": [],
-			"kinoite": [
-				"plasma-welcome"
-			],
+			"kinoite": [],
 			"dx": []
 		}
 	},
@@ -217,9 +216,7 @@
 		"exclude": {
 			"all":	[],
 			"silverblue": [],
-			"kinoite": [
-				"plasma-welcome"
-			],
+			"kinoite": [],
 			"dx": []
 		}
 	},
@@ -234,7 +231,10 @@
 		"exclude": {
 			"all":	[],
 			"silverblue": [],
-			"kinoite": [],
+			"kinoite": [
+				"plasma-welcome",
+				"plasma-welcome-fedora"
+			],
 			"dx": []
 		}
 	}
