@@ -26,4 +26,5 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 /ctx/build_files/aurora-changes.sh
 /ctx/build_files/branding.sh
 /ctx/build_files/initramfs.sh
+/ctx/build_files/bootc.sh
 /ctx/build_files/cleanup.sh
