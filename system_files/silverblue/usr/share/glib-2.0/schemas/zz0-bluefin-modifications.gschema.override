@@ -25,9 +25,9 @@ secondary-color='FFFFFF'
 enable-hot-corners=false
 clock-show-weekday=true
 font-antialiasing="rgba"
-font-name="Ubuntu 12"
-document-font-name="Ubuntu 12"
-monospace-font-name="Ubuntu Mono 18"
+font-name="Inter 12"
+document-font-name="Inter 12"
+monospace-font-name="JetBrains Mono 18"
 accent-color="slate"
 
 [org.gnome.desktop.sound]
@@ -37,7 +37,7 @@ theme-name="freedesktop"
 [org.gnome.desktop.wm.preferences]
 button-layout=":minimize,maximize,close"
 num-workspaces=4
-titlebar-font="Ubuntu Bold 12"
+titlebar-font="Inter Bold 12"
 
 [org.gnome.desktop.wm.keybindings]
 switch-applications=['<Super>Tab']
