@@ -178,8 +178,7 @@
 			],
 			"kinoite": [
 				"krfb",
-				"krfb-libs",
-				"plasma-welcome"
+				"krfb-libs"
 			],
 			"dx": []
 		}
@@ -198,6 +197,9 @@
 		"exclude": {
 			"all": [],
 			"silverblue": [],
+			"kinoite": [
+				"plasma-welcome"
+			],
 			"dx": []
 		}
 	},
@@ -212,8 +214,10 @@
 		"exclude": {
 			"all":	[],
 			"silverblue": [],
+			"kinoite": [
+				"plasma-welcome"
+			],
 			"dx": []
 		}
 	}
-
 }
