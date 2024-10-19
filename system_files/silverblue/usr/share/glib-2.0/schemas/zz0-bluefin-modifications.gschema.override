@@ -28,6 +28,7 @@ font-antialiasing="rgba"
 font-name="Ubuntu 12"
 document-font-name="Ubuntu 12"
 monospace-font-name="Ubuntu Mono 18"
+accent-color="slate"
 
 [org.gnome.desktop.sound]
 allow-volume-above-100-percent=true
