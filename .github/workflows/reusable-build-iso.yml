@@ -154,7 +154,7 @@ jobs:
         id: setup-branding-repo
         shell: bash
         run: |
-          curl -Lo "${{ github.workspace }}/brand.repo" "https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${{ steps.labels.outputs.fedora_version }}/ublue-os-${{ inputs.brand_name }}-fedora-${{ steps.labels.outputs.fedora_version }}.repo"
+          curl -Lo "${{ github.workspace }}/brand.repo" "https://copr.fedorainfracloud.org/coprs/ublue-os/${{ inputs.brand_name }}/repo/fedora-${{ steps.labels.outputs.fedora_version }}/ublue-os-${{ inputs.brand_name }}-fedora-${{ steps.labels.outputs.fedora_version }}.repo"
 
       - name: Build ISOs
         uses: jasonn3/build-container-installer@v1.2.2
