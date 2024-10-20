@@ -4,9 +4,7 @@ Version:	38.1.0
 Release:	104%{?dist}.bluefin
 URL:		https://pagure.io/fedora-logos
 Source0:	https://pagure.io/fedora-logos/archive/%{version}/fedora-logos-%{version}.tar.gz
-Source1:  sidebar-bg.png
-Source2:  topbar-bg.png
-Source3:  fedora-silverblue.css
+Source1:  fedora-silverblue.css
 License:	LicenseRef-Fedora-Logos
 Provides:	redhat-logos = %{version}-%{release}
 Provides:	gnome-logos = %{version}-%{release}
@@ -222,10 +220,8 @@ for i in atomic cloud server silverblue workstation ; do
 done
 popd
 
-# Bluefin Logos for Anaconda
-install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/
-install -p -m 644 %{SOURCE2} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/
-install -p -m 644 %{SOURCE3} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/
+# Custom CSS for Bluefin
+install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/anaconda/silverblue/fedora-silverblue.css
 
 %if ! 0%{?eln}
 # KDE Theme logos
