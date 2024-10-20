@@ -10,7 +10,11 @@ if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
     if [[ -f /usr/share/applications/org.gnome.SystemMonitor.desktop ]]; then
         sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/org.gnome.SystemMonitor.desktop
     fi
-    sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.Terminal.desktop\
+
+    # GNOME Terminal is replaced with Ptyxis in F41+
+    if [[ "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then
+        sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.Terminal.desktop
+    fi
     
     # Create symlinks from old to new wallpaper names for backwards compatibility
     ln -s "/usr/share/backgrounds/bluefin/01-bluefin.xml" "/usr/share/backgrounds/bluefin/bluefin-winter-dynamic.xml"
