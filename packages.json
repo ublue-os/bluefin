@@ -25,6 +25,7 @@
 				"ifuse",
 				"input-leap",
 				"input-remapper",
+				"jetbrains-mono-fonts-all",
 				"libimobiledevice",
 				"libxcrypt-compat",
 				"libsss_autofs",
@@ -122,7 +123,6 @@
 				"incus",
 				"incus-agent",
 				"iotop",
-				"jetbrains-mono-fonts-all",
 				"kcli",
 				"libvirt",
 				"libvirt-nss",
@@ -210,10 +210,9 @@
 			"dx": []
 		},
 		"exclude": {
-			"all":	[],
+			"all": [],
 			"silverblue": [],
 			"dx": []
 		}
 	}
-
 }
