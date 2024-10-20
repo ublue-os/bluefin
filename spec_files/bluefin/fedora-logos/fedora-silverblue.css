@@ -1,6 +1,6 @@
-@define-color fedora #2f4265;
+@define-color bluefin #3b8737;
 
-/* logo and sidebar classes for Fedora */
+/* logo and sidebar classes for Bluefin */
 
 /* The sidebar consists of three parts: a background, a logo, and a product logo,
 
@@ -11,9 +11,9 @@
  */
 
 .logo-sidebar {
-    background-image: url("/usr/share/anaconda/pixmaps/silverblue/sidebar-bg.png");
+    background-image: ("/usr/share/anaconda/pixmaps/silverblue/sidebar-bg.png");
 
-    background-color: @fedora;
+    background-color: @bluefin;
 
     background-repeat: no-repeat;
 }
@@ -21,13 +21,7 @@
 /* Add a logo to the sidebar */
 
 .logo {
-    background-image: url("/usr/share/anaconda/pixmaps/silverblue/sidebar-logo.png");
-
-    background-position: 50% 20px;
-
-    background-repeat: no-repeat;
-
-    background-color: transparent;
+    background-image: none;
 }
 
 /* This is a placeholder to be filled by a product-specific logo. */
@@ -39,7 +33,7 @@
 }
 
 AnacondaSpokeWindow #nav-box {
-    background-color: @fedora;
+    background-color: @bluefin;
 
     background-image: url("/usr/share/anaconda/pixmaps/silverblue/topbar-bg.png");
 
@@ -54,22 +48,6 @@ AnacondaSpokeWindow #nav-box {
 
 AnacondaSpokeWindow #nav-box GtkButton {
     box-shadow: none;
-}
-
-/* Change the sidebar background color */
-
-.logo-sidebar {
-    background-color: #006eb4;
-}
-
-AnacondaSpokeWindow #nav-box {
-    background-color: #006eb4;
-}
-
-/* Move the Fedora logo to the bottom */
-
-.logo {
-    background-position: 50% 90%;
 }
 
 /* Add the product logo at the top */
