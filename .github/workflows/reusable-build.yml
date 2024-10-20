@@ -246,15 +246,14 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
+          TODAY="$(date +%A)"
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-            BUILD_TAGS=("${FEDORA_VERSION}-daily" "${FEDORA_VERSION}-daily-${TIMESTAMP}")
-            if [[ ${{ github.event_name }} == "schedule" ]]; then
-              TODAY="$(date +%A)"
-              if [[ "${TODAY}" == "${{ inputs.weekly_tag_day }}" ]]; then
-                BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
-              fi
+            if [[ ${{ github.event_name }} == "schedule" ]] && \
+               [[ "${{ inputs.weekly_tag_day }}" != "${TODAY}" ]]; then
+              BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
             else
-              BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+              BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+              BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
             fi
           else
             BUILD_TAGS=("${{ env.fedora_version }}" "${{ env.fedora_version }}-${TIMESTAMP}")
