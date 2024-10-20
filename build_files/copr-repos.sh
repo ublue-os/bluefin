@@ -59,7 +59,7 @@ elif [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
 fi
 
 # GNOME Triple Buffering
-if [[ "${BASE_IMAGE_NAME}" = "silverblue" && "${FEDORA_MAJOR_VERSION}" -gt "39" ]]; then
+if [[ "${BASE_IMAGE_NAME}" = "silverblue" && "${FEDORA_MAJOR_VERSION}" -gt "39" && "${FEDORA_MAJOR_VERSION}" -ne "41" ]]; then
     rpm-ostree override replace \
     --experimental \
     --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \

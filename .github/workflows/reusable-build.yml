@@ -211,21 +211,25 @@ jobs:
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
+            IS_BETA_VERSION=false
             IS_COREOS=true
           elif [[ "${{ matrix.fedora_version }}" == "gts" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=true
+            IS_BETA_VERSION=false
             IS_COREOS=false
           elif [[ "${{ matrix.fedora_version }}" == "latest" ]]; then
             IS_LATEST_VERSION=true
             IS_STABLE_VERSION=true
             IS_GTS_VERSION=false
+            IS_BETA_VERSION=false
             IS_COREOS=false
           elif [[ "${{ matrix.fedora_version }}" == "beta" ]]; then
             IS_LATEST_VERSION=false
             IS_STABLE_VERSION=false
             IS_GTS_VERSION=false
+            IS_BETA_VERSION=true
             IS_COREOS=false
           fi
 
@@ -269,6 +273,9 @@ jobs:
             elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                 BUILD_TAGS+=("gts-testing")
                 echo "DEFAULT_TAG=gts-testing" >> $GITHUB_ENV
+            elif [[ "$IS_BETA_VERSION" == "true" ]]; then
+                BUILD_TAGS+=("beta-testing")
+                echo "DEFAULT_TAG=beta-testing" >> $GITHUB_ENV
             elif [[ "$IS_COREOS" == "true" ]]; then
                 echo "DEFAULT_TAG=stable-testing" >> $GITHUB_ENV
             fi
@@ -280,6 +287,9 @@ jobs:
             elif [[ "$IS_GTS_VERSION" == "true" ]]; then
                   BUILD_TAGS+=("gts")
                   echo "DEFAULT_TAG=gts" >> $GITHUB_ENV
+            elif [[ "$IS_BETA_VERSION" == "true" ]]; then
+                  BUILD_TAGS+=("beta")
+                  echo "DEFAULT_TAG=beta" >> $GITHUB_ENV
             elif [[ "$IS_COREOS" == "true" ]]; then
                   echo "DEFAULT_TAG=stable-daily" >> $GITHUB_ENV
             fi
