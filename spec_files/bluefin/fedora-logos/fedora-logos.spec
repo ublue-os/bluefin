@@ -221,7 +221,7 @@ done
 popd
 
 # Custom CSS for Bluefin
-install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/anaconda/silverblue/fedora-silverblue.css
+install -p -m 644 %{SOURCE1} %{buildroot}%{_datadir}/anaconda/pixmaps/silverblue/fedora-silverblue.css
 
 %if ! 0%{?eln}
 # KDE Theme logos
