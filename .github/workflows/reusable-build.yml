@@ -20,6 +20,16 @@ on:
         required: false
         type: string
         default: Tuesday
+      build_stable_daily:
+        description: "Build with 'stable-daily' tag"
+        required: false
+        type: boolean
+        default: true
+      build_stable_weekly:
+        description: "Build with 'stable' tag"
+        required: false
+        type: boolean
+        default: true
     outputs:
       images:
         description: "An array of images built and pushed to the registry"
@@ -246,15 +256,18 @@ jobs:
               COMMIT_TAGS+=("${SHA_SHORT}")
           fi
 
+          TODAY="$(date +%A)"
           if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
-            BUILD_TAGS=("${FEDORA_VERSION}-daily" "${FEDORA_VERSION}-daily-${TIMESTAMP}")
-            if [[ ${{ github.event_name }} == "schedule" ]]; then
-              TODAY="$(date +%A)"
-              if [[ "${TODAY}" == "${{ inputs.weekly_tag_day }}" ]]; then
-                BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
-              fi
+            if [[ ${{ github.event_name }} == "schedule" ]] && \
+               [[ "${{ inputs.weekly_tag_day }}" != "${TODAY}" ]]; then
+              BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
+            elif [[ ${{ inputs.build_stable_daily }} == "false" ]]; then
+              BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+            elif [[ ${{ inputs.build_stable_weekly }} == "false" ]]; then
+              BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
             else
-              BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+              BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+              BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
             fi
           else
             BUILD_TAGS=("${{ env.fedora_version }}" "${{ env.fedora_version }}-${TIMESTAMP}")
@@ -291,7 +304,11 @@ jobs:
                   BUILD_TAGS+=("beta")
                   echo "DEFAULT_TAG=beta" >> $GITHUB_ENV
             elif [[ "$IS_COREOS" == "true" ]]; then
-                  echo "DEFAULT_TAG=stable-daily" >> $GITHUB_ENV
+                  if [[ ${{ inputs.build_stable_daily }} == "true" ]]; then
+                    echo "DEFAULT_TAG=stable-daily" >> $GITHUB_ENV
+                  else
+                    echo "DEFAULT_TAG=stable" >> $GITHUB_ENV
+                  fi
             fi
           fi
 
