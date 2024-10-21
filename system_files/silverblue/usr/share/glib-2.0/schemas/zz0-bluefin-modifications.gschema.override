@@ -10,7 +10,7 @@ tap-to-click=true
 [org.gnome.desktop.peripherals.touchpad]
 tap-to-click=true
 
-[org.gnome.shell] 
+[org.gnome.shell]
 favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Rhythmbox3.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'code.desktop', 'ubuntu.desktop', 'yelp.desktop']
 enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'dash-to-dock@micxgx.gmail.com', 'blur-my-shell@aunetx', 'gsconnect@andyholmes.github.io', 'logomenu@aryan_k', 'tailscale@joaophi.github.com', 'search-light@icedman.github.com']
 
@@ -24,13 +24,11 @@ secondary-color='FFFFFF'
 [org.gnome.desktop.interface]
 enable-hot-corners=false
 clock-show-weekday=true
-cursor-theme="Yaru"
-icon-theme="Yaru-blue"
-gtk-theme="Yaru-blue"
 font-antialiasing="rgba"
-font-name="Ubuntu 12"
-document-font-name="Ubuntu 12"
-monospace-font-name="Ubuntu Mono 18"
+font-name="Inter 12"
+document-font-name="Inter 12"
+monospace-font-name="JetBrains Mono 18"
+accent-color="slate"
 
 [org.gnome.desktop.sound]
 allow-volume-above-100-percent=true
@@ -39,7 +37,7 @@ theme-name="freedesktop"
 [org.gnome.desktop.wm.preferences]
 button-layout=":minimize,maximize,close"
 num-workspaces=4
-titlebar-font="Ubuntu Bold 12"
+titlebar-font="Inter Bold 12"
 
 [org.gnome.desktop.wm.keybindings]
 switch-applications=['<Super>Tab']
@@ -77,7 +75,7 @@ sort-directories-first=true
 sort-directories-first=true
 
 [org.gnome.mutter]
-experimental-features=['scale-monitor-framebuffer']
+experimental-features=['scale-monitor-framebuffer', 'xwayland-native-scaling']
 check-alive-timeout=uint32 20000
 
 [org.gnome.software]
@@ -113,6 +111,9 @@ border-thickness=1
 border-radius=1.65
 border-color=(0.23, 0.23, 0.23, 1.0)
 background-color=(0.0, 0.0, 0.0, 0.8)
+
+[org.gnome.shell.extensions.blur-my-shell.dash-to-dock]
+blur=true
 
 #-------------- REMAINING SCHEMAS IN THIS SETTING SECTION ARE LOCATED IN DCONF --------------#
 # Settings bellow are supported with gschema override, but other settings, which are relocatable schemas, are not. Edit dconfs if you need to modify relocatable schemas.
