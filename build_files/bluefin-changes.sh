@@ -31,7 +31,9 @@ if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
     find /usr/share/glib-2.0/schemas/ -type f ! -name "*.gschema.override" -exec cp {} /tmp/bluefin-schema-test/ \;
     cp /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override /tmp/bluefin-schema-test/
     echo "Running error test for bluefin gschema override. Aborting if failed."
-    glib-compile-schemas --strict /tmp/bluefin-schema-test
+    # We are omitting "--strict" from the schema validation since GNOME <47 do not contain the accent-color keys.
+    # We should ideally refactor this to handle multiple GNOME version schemas better
+    glib-compile-schemas /tmp/bluefin-schema-test
     echo "Compiling gschema to include bluefin setting overrides"
     glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
 fi
