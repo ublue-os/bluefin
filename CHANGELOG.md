@@ -1,5 +1,33 @@
 # Changelog
 
+## [3.7.0](https://github.com/ublue-os/bluefin/compare/v3.6.0...v3.7.0) (2024-10-24)
+
+
+### Features
+
+* apply theming updates & enable xwayland scaling ([#1813](https://github.com/ublue-os/bluefin/issues/1813)) ([87d8c97](https://github.com/ublue-os/bluefin/commit/87d8c977608d29695776970e67f6b6a8ec130fcc))
+* **ci:** Build stable weekly on the same day as gts ([#1803](https://github.com/ublue-os/bluefin/issues/1803)) ([4b199ab](https://github.com/ublue-os/bluefin/commit/4b199abcfb3ddc1d0909c8e6232204e7dbaab40c))
+* **ci:** turn on F41 builds ([#1801](https://github.com/ublue-os/bluefin/issues/1801)) ([7b049bd](https://github.com/ublue-os/bluefin/commit/7b049bd2f804599ce943c88809bd24eac78f3cc6))
+* made Documentation, Community and System Update icons themeable ([#1819](https://github.com/ublue-os/bluefin/issues/1819)) ([342d01c](https://github.com/ublue-os/bluefin/commit/342d01c19e983f1cbd132eabdc61708013a1399e))
+* move fish fastfetch config for user customizability ([#1820](https://github.com/ublue-os/bluefin/issues/1820)) ([21514e7](https://github.com/ublue-os/bluefin/commit/21514e766b38cac12f0fc8a2fc50c050d74935a5))
+* new autumn wallpaper ([#1794](https://github.com/ublue-os/bluefin/issues/1794)) ([ff123d2](https://github.com/ublue-os/bluefin/commit/ff123d2d4ae2a919c7646cb101c91dd09b72b32d))
+* reduce install size by compressing images ([#1806](https://github.com/ublue-os/bluefin/issues/1806)) ([3f7e580](https://github.com/ublue-os/bluefin/commit/3f7e5809eea2d5b4fea49ed732b9f80071d3c20e))
+* ublue-rollback-helper - add stable-daily to targets ([#1797](https://github.com/ublue-os/bluefin/issues/1797)) ([01e25a8](https://github.com/ublue-os/bluefin/commit/01e25a8e9a14e52d43757008afc175ad5b77db31))
+
+
+### Bug Fixes
+
+* background looks washed out during fade ([#1818](https://github.com/ublue-os/bluefin/issues/1818)) ([e9d5272](https://github.com/ublue-os/bluefin/commit/e9d5272a30810909820430c84dbc73c4a7f8fa4c))
+* don't attempt to pull zfs on beta ([#1802](https://github.com/ublue-os/bluefin/issues/1802)) ([e4d9322](https://github.com/ublue-os/bluefin/commit/e4d9322e5da91e4a3545105be1da259379a18787))
+* **dx:** cockpit-bridge replaces cockpit-pcp ([#1828](https://github.com/ublue-os/bluefin/issues/1828)) ([b1fbcaa](https://github.com/ublue-os/bluefin/commit/b1fbcaa039f94d0a2ec36cd5c0d25ad6355818c3))
+* fix cryfs error on bluefin-gts ([#1799](https://github.com/ublue-os/bluefin/issues/1799)) ([71a9232](https://github.com/ublue-os/bluefin/commit/71a923264e334612d3d90dff3e2b196f560eacbc))
+* restore missing wallpapers in aurora ([#1807](https://github.com/ublue-os/bluefin/issues/1807)) ([49c8291](https://github.com/ublue-os/bluefin/commit/49c829102865648809231c16c9fe3fb501ce3977))
+
+
+### Reverts
+
+* reduce install size by compressing images ([#1816](https://github.com/ublue-os/bluefin/issues/1816)) ([4e5573f](https://github.com/ublue-os/bluefin/commit/4e5573f4ab61042bc15ba3a6eda150e834af3946))
+
 ## [3.6.0](https://github.com/ublue-os/bluefin/compare/v3.5.0...v3.6.0) (2024-10-14)
 
 
