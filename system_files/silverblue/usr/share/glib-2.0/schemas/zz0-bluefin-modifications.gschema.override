@@ -40,6 +40,7 @@ num-workspaces=4
 titlebar-font="Inter Bold 12"
 
 [org.gnome.desktop.wm.keybindings]
+show-desktop=['<Super>d']
 switch-applications=['<Super>Tab']
 switch-applications-backward=['<Shift><Super>Tab']
 switch-windows=['<Alt>Tab']
