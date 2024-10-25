@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.8.0](https://github.com/ublue-os/bluefin/compare/v3.7.0...v3.8.0) (2024-10-25)
+
+
+### Features
+
+* hide all windows (show desktop) via Super+D ([#1831](https://github.com/ublue-os/bluefin/issues/1831)) ([3c60627](https://github.com/ublue-os/bluefin/commit/3c60627bef946a6089fd15dd7a0fd4cc600bcc02))
+
 ## [3.7.0](https://github.com/ublue-os/bluefin/compare/v3.6.0...v3.7.0) (2024-10-24)
 
 
