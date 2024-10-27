@@ -8,7 +8,7 @@ IMAGE_TAG=$(jq -r '."image-tag"' < $IMAGE_INFO)
 FEDORA_VERSION=$(jq -r '."fedora-version"' < $IMAGE_INFO)
 
 function list_tags(){
-    skopeo list-tags docker://ghcr.io/ublue-os/"${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV
+    skopeo list-tags docker://ghcr.io/ublue-os/"${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV | head -n 31
 }
 
 function rebase_helper(){
