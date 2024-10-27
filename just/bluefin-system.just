@@ -144,7 +144,7 @@ dx-group:
     sudo usermod -aG incus-admin $USER
     sudo usermod -aG lxd $USER
     sudo usermod -aG libvirt $USER
-    echo "Logout to use docker, incus-admin, lxd, libvirt"
+    echo "Reboot system and log back in to use docker, incus-admin, lxd, libvirt."
 
 # Configure system to use vfio and kvmfr
 configure-vfio ACTION="":
