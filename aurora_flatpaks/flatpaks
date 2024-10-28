@@ -16,3 +16,5 @@ app/org.fedoraproject.MediaWriter/x86_64/stable
 app/io.missioncenter.MissionCenter/x86_64/stable
 app/org.gnome.DejaDup/x86_64/stable
 app/org.gnome.World.PikaBackup/x86_64/stable
+runtime/org.gtk.Gtk3theme.adw-gtk3/x86_64/3.22
+runtime/org.gtk.Gtk3theme.adw-gtk3-dark/x86_64/3.22
