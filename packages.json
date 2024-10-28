@@ -3,6 +3,7 @@
 		"include": {
 			"all": [
 				"adcli",
+				"adw-gtk3-theme",
 				"bash-color-prompt",
 				"bcache-tools",
 				"borgbackup",
