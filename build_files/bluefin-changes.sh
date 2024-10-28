@@ -11,9 +11,14 @@ if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
         sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/org.gnome.SystemMonitor.desktop
     fi
 
-    # GNOME Terminal is replaced with Ptyxis in F41+
+    # Workarounds for versions pre F41
     if [[ "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then
+        # GNOME Terminal is replaced with Ptyxis in F41+
         sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.Terminal.desktop
+
+        # Remove incompatible schema modifications
+        sed -i 's@accent-color="slate"@@g' /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
+        sed -i 's@'", "\''xwayland-native-scaling'\''@@g' /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
     fi
     
     # Create symlinks from old to new wallpaper names for backwards compatibility
@@ -33,7 +38,7 @@ if [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
     echo "Running error test for bluefin gschema override. Aborting if failed."
     # We are omitting "--strict" from the schema validation since GNOME <47 do not contain the accent-color keys.
     # We should ideally refactor this to handle multiple GNOME version schemas better
-    glib-compile-schemas /tmp/bluefin-schema-test
+    glib-compile-schemas --strict /tmp/bluefin-schema-test
     echo "Compiling gschema to include bluefin setting overrides"
     glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
 fi
