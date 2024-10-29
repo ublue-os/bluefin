@@ -10,6 +10,7 @@ cp /ctx/system_files/shared/etc/ublue-update/ublue-update.toml /tmp/ublue-update
 rsync -rvK /ctx/system_files/shared/ /
 rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 
+/ctx/build_files/build-fix.sh
 /ctx/build_files/firmware.sh
 /ctx/build_files/cache_kernel.sh
 /ctx/build_files/copr-repos.sh
