@@ -146,9 +146,12 @@ jobs:
             if [[ ${{ matrix.fedora_version }} == "stable" ]]; then
               KERNEL_RELEASE=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
             elif [[ ${{ matrix.fedora_version }} == "gts" && ${{ env.AKMODS_FLAVOR }} != "surface" ]]; then
+              # always get base kernel release because we use it to get Fedora release not from CoreOS
+              base_kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"]')
               coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
               coreos_fedora_version=$(echo $coreos_kernel_release | grep -oP 'fc\K[0-9]+')
-              fedora_version=$(($coreos_fedora_version - 1))
+              # this allows GTS to be same as CoreOS or earlier, depending on release cycle timing
+              fedora_version=$(echo $base_kernel_release | grep -oP 'fc\K[0-9]+')
               KERNEL_RELEASE=$(skopeo inspect docker://ghcr.io/ublue-os/coreos-stable-kernel:${fedora_version} | jq -r '.Labels["ostree.linux"]')
             else
               base_kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/silverblue-${{ env.image_flavor }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"]')
