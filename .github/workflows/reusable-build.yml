@@ -185,7 +185,7 @@ jobs:
 
       - name: Verify ZFS
         uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        if: inputs.fedora_version != 'beta'
+        if: inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest'
         with:
           containers: akmods-zfs:coreos-stable-${{ env.fedora_version }}
 
