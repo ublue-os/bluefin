@@ -89,6 +89,7 @@
 				"kdialog",
 				"libadwaita-qt5",
 				"libadwaita-qt6",
+				"kf6-kimageformats",
 				"plasma-wallpapers-dynamic",
 				"skanpage"
 			],
