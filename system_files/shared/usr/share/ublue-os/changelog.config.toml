@@ -1,0 +1,8 @@
+nerd_fonts = true
+list_format = "extended"
+
+[[feeds]]
+name = "Bluefin and Aurora Updates"
+url = "https://github.com/ublue-os/bluefin/releases.atom"
+enabled = true
+

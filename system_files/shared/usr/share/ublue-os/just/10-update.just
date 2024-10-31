@@ -39,4 +39,4 @@ alias changelog := changelogs
 
 # Show the changelog
 changelogs:
-    rpm-ostree db diff --changelogs
+    /usr/bin/juicerss --config=/usr/share/ublue-os/changelog.config.toml
