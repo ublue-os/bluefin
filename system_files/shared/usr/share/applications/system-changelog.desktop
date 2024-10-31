@@ -5,4 +5,4 @@ Comment=See the operating system version changelog
 Icon=ublue-changelog
 Categories=ConsoleOnly;System;
 Terminal=true
-Exec=/usr/bin/ujust changelog
+Exec=/usr/bin/ujust release-notes
