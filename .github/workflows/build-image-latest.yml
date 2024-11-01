@@ -22,5 +22,9 @@ jobs:
     name: Build Latest Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
+    strategy:
+      matrix:
+        image_flavor: [main, nvidia, hwe, hwe-nvidia]
+        base_name: [bluefin, bluefin-dx, aurora, aurora-dx]
     with:
       fedora_version: latest
