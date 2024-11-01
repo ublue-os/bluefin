@@ -24,38 +24,38 @@ jobs:
     continue-on-error: false
     outputs:
       image_full: ${{ steps.generate-outputs.outputs.image }}
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     image_flavor:
-    #       - main
-    #       - nvidia
-    #       - hwe
-    #       - hwe-nvidia
-    #     base_name:
-    #       - bluefin
-    #       - bluefin-dx
-    #       - aurora
-    #       - aurora-dx
-    #     fedora_version:
-    #       - ${{ inputs.fedora_version }}
-    #     exclude:
-    #       - fedora_version: gts
-    #         base_name: aurora
-    #       - fedora_version: gts
-    #         base_name: aurora-dx
-    #       - fedora_version: gts
-    #         image_flavor: hwe
-    #       - fedora_version: gts
-    #         image_flavor: hwe-nvidia
-    #       - fedora_version: stable
-    #         image_flavor: hwe
-    #       - fedora_version: stable
-    #         image_flavor: hwe-nvidia
-    #       - fedora_version: beta
-    #         image_flavor: hwe
-    #       - fedora_version: beta
-    #         image_flavor: hwe-nvidia
+    strategy:
+      fail-fast: false
+      matrix:
+        image_flavor:
+          - main
+          - nvidia
+          - hwe
+          - hwe-nvidia
+        base_name:
+          - bluefin
+          - bluefin-dx
+          - aurora
+          - aurora-dx
+        fedora_version:
+          - ${{ inputs.fedora_version }}
+        exclude:
+          - fedora_version: gts
+            base_name: aurora
+          - fedora_version: gts
+            base_name: aurora-dx
+          - fedora_version: gts
+            image_flavor: hwe
+          - fedora_version: gts
+            image_flavor: hwe-nvidia
+          - fedora_version: stable
+            image_flavor: hwe
+          - fedora_version: stable
+            image_flavor: hwe-nvidia
+          - fedora_version: beta
+            image_flavor: hwe
+          - fedora_version: beta
+            image_flavor: hwe-nvidia
 
     steps:
       - name: Checkout

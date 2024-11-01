@@ -24,7 +24,4 @@ jobs:
     secrets: inherit
     with:
       fedora_version: beta
-    strategy:
-      matrix:
-        image_flavor: [main, nvidia]
 

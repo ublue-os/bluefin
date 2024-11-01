@@ -24,6 +24,3 @@ jobs:
     secrets: inherit
     with:
       fedora_version: latest
-    strategy:
-      matrix:
-        image_flavor: [main, nvidia, hwe, hwe-nvidia]

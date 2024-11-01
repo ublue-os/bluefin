@@ -18,7 +18,4 @@ jobs:
     secrets: inherit
     with:
       fedora_version: gts
-    strategy:
-      matrix:
-        image_flavor: [main, nvidia]
 
