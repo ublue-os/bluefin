@@ -306,10 +306,10 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk
-        uses: hhd-dev/rechunk@v0.8.6
+        uses: hhd-dev/rechunk@v1.0.1
         with:
-          rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
-          ref: ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
+          rechunk: ghcr.io/hhd-dev/rechunk:v1.0.1
+          ref: "raw-img"
           skip_compression: 'true'
           labels: ${{ steps.meta.outputs.labels }}
           prev-ref: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
