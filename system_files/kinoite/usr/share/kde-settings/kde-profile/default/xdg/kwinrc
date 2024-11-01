@@ -2,14 +2,7 @@
 InputMethod[$e]=/usr/share/applications/com.github.maliit.keyboard.desktop
 VirtualKeyboardEnabled=true
 
-[Effect-wobblywindows]
-AdvancedMode=false
-Drag=80
-MoveFactor=10
-Stiffness=15
-WobblynessLevel=0
-
 [Plugins]
 blurEnabled=true
-wobblywindowsEnabled=true
+
 
