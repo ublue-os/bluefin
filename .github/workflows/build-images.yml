@@ -11,12 +11,24 @@ jobs:
     build-image-gts:
         uses: ./.github/workflows/build-image-gts.yml
         secrets: inherit
+        strategy:
+            matrix:
+                base_name: [bluefin, bluefin-dx]
     build-image-stable:
         uses: ./.github/workflows/build-image-stable.yml
         secrets: inherit
+        strategy:
+            matrix:
+                base_name: [bluefin, bluefin-dx, aurora, aurora-dx]
     build-image-latest:
         uses: ./.github/workflows/build-image-latest.yml
         secrets: inherit
+        strategy:
+            matrix:
+                base_name: [bluefin, bluefin-dx, aurora, aurora-dx]
     build-image-beta:
         uses: ./.github/workflows/build-image-beta.yml
         secrets: inherit
+        strategy:
+            matrix:
+                base_name: [bluefin, bluefin-dx, aurora, aurora-dx]
