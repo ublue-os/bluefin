@@ -3,4 +3,6 @@
 flatpaks_with_deps
 flatpak.*
 
-scripts/files/home/ublue-os/*
+*_build
+*_build.*
+previous.manifest.json

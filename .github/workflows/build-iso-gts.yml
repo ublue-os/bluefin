@@ -1,0 +1,14 @@
+name: GTS ISO
+on:
+  workflow_dispatch:
+  workflow_call:
+  # schedule:
+  #   - cron: '0 2 * * sun'  # 02:00 Sunday
+
+jobs:
+  build-iso-gts:
+    name: Build GTS ISO
+    uses: ./.github/workflows/reusable-build-iso.yml
+    secrets: inherit
+    with:
+      fedora_version: gts

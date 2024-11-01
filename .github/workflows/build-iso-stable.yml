@@ -1,0 +1,14 @@
+name: Stable ISO
+on:
+  workflow_dispatch:
+  workflow_call:
+  # schedule:
+  #   - cron: '41 6 * * 2'  # 6:41 UTC every Tuesday
+
+jobs:
+  build-iso-stable:
+    name: Build Stable ISO
+    uses: ./.github/workflows/reusable-build-iso.yml
+    secrets: inherit
+    with:
+      fedora_version: stable

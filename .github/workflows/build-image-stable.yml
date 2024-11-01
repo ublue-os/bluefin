@@ -1,0 +1,21 @@
+name: Stable Images
+on:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  schedule:
+    - cron: '45 5 * * *'  # 5:41 UTC everyday
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build-image-stable:
+    name: Build Stable Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      fedora_version: stable
+

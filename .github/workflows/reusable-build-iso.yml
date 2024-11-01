@@ -2,12 +2,8 @@ name: Reusable ISO
 on:
   workflow_call:
     inputs:
-      brand_name:
-        description: "'aurora' or 'bluefin'"
-        required: true
-        type: string
       fedora_version:
-        description: "The Fedora release version: 38, 39, 40, etc"
+        description: "The Convenience Tag gts, stable, latest, beta"
         required: true
         type: string
 
@@ -33,23 +29,29 @@ jobs:
           - surface
           - surface-nvidia
         base_name:
-          - ${{ inputs.brand_name }}
-          - ${{ inputs.brand_name }}-dx
+          - bluefin
+          - bluefin-dx
+          - aurora
+          - aurora-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
           - fedora_version: gts
-            image_flavor: asus
+            base_name: aurora
           - fedora_version: gts
-            image_flavor: asus-nvidia
+            base_name: aurora-dx
+          - fedora_version: gts
+            image_flavor: hwe
+          - fedora_version: gts
+            image_flavor: hwe-nvidia
           - fedora_version: stable
-            image_flavor: asus
+            image_flavor: hwe
           - fedora_version: stable
-            image_flavor: asus-nvidia
-          - fedora_version: stable
-            image_flavor: surface
-          - fedora_version: stable
-            image_flavor: surface-nvidia
+            image_flavor: hwe-nvidia
+          - fedora_version: beta
+            image_flavor: hwe
+          - fedora_version: beta
+            image_flavor: hwe-nvidia
 
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -88,13 +90,7 @@ jobs:
           TAG="${{ inputs.fedora_version }}"
 
           if [[ "${{ github.ref_name }}" == "testing" ]]; then
-            if [[ "${{ inputs.fedora_version }}" == "true" ]]; then
-              TAG="gts-testing"
-            elif [[ "${{ inputs.fedora_version }}" == "true" ]]; then
-              TAG="stable-testing"
-            elif [[ "${{ inputs.fedora_version }}" == "true" ]]; then
-              TAG="testing"
-            fi
+            TAG="testing-${TAG}"
           fi
 
           # Would like to implement in the future. This will allow us to support image tags from a PR.
@@ -108,9 +104,9 @@ jobs:
         id: generate-flatpak-dir-shortname
         shell: bash
         run: |
-          if [[ ${{ inputs.brand_name }} = "bluefin" ]]; then
+          if [[ "${{ matrix.brand_name }}" =~ bluefin ]]; then
             FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
-          elif [[ ${{ inputs.brand_name }} = "aurora" ]]; then
+          elif [[ "${{ matrix.brand_name }}" =~ aurora ]]; then
             FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
           fi
           echo "flatpak-dir-shortname=${FLATPAK_DIR_SHORTNAME}" >> $GITHUB_OUTPUT
@@ -191,7 +187,7 @@ jobs:
           overwrite: true
 
       - name: Upload ISOs and Checksum to R2 to Bluefin Bucket
-        if: github.ref_name == 'main' && inputs.brand_name == 'bluefin'
+        if: github.ref_name == 'main' && contains(matrix.brand_name,'bluefin')
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
@@ -207,7 +203,7 @@ jobs:
           rclone copy $SOURCE_DIR R2:bluefin
 
       - name: Upload ISOs and Checksum to R2 to Aurora Bucket
-        if: github.ref_name == 'main' && inputs.brand_name == 'aurora'
+        if: github.ref_name == 'main' && contains(matrix.brand_name,'aurora')
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3

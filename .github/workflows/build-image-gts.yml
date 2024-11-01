@@ -1,0 +1,21 @@
+name: GTS Images
+on:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - '**.md'
+  schedule:
+    - cron: '41 5 * * 0'  # 5:41 UTC Weekly on Sundays
+  workflow_dispatch:
+  workflow_call: 
+
+jobs:
+  build-image-gts:
+    name: Build GTS Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    with:
+      fedora_version: gts
+

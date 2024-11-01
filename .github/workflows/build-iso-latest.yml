@@ -1,0 +1,14 @@
+name: Latest ISO
+on:
+  workflow_dispatch:
+  workflow_call:
+  # schedule:
+  #   - cron: '0 4 * * sun'  # 04:00 Sunday
+
+jobs:
+  build-iso-latest:
+    name: Build Latest ISO
+    uses: ./.github/workflows/reusable-build-iso.yml
+    secrets: inherit
+    with:
+      fedora_version: latest
