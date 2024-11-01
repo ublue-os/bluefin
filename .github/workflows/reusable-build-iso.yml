@@ -18,40 +18,40 @@ jobs:
       contents: read
       packages: write
       id-token: write
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     image_flavor:
-    #       - main
-    #       - nvidia
-    #       - asus
-    #       - asus-nvidia
-    #       - surface
-    #       - surface-nvidia
-    #     base_name:
-    #       - bluefin
-    #       - bluefin-dx
-    #       - aurora
-    #       - aurora-dx
-    #     fedora_version:
-    #       - ${{ inputs.fedora_version }}
-    #     exclude:
-    #       - fedora_version: gts
-    #         base_name: aurora
-    #       - fedora_version: gts
-    #         base_name: aurora-dx
-    #       - fedora_version: gts
-    #         image_flavor: hwe
-    #       - fedora_version: gts
-    #         image_flavor: hwe-nvidia
-    #       - fedora_version: stable
-    #         image_flavor: hwe
-    #       - fedora_version: stable
-    #         image_flavor: hwe-nvidia
-    #       - fedora_version: beta
-    #         image_flavor: hwe
-    #       - fedora_version: beta
-    #         image_flavor: hwe-nvidia
+    strategy:
+      fail-fast: false
+      matrix:
+        image_flavor:
+          - main
+          - nvidia
+          - asus
+          - asus-nvidia
+          - surface
+          - surface-nvidia
+        base_name:
+          - bluefin
+          - bluefin-dx
+          - aurora
+          - aurora-dx
+        fedora_version:
+          - ${{ inputs.fedora_version }}
+        exclude:
+          - fedora_version: gts
+            base_name: aurora
+          - fedora_version: gts
+            base_name: aurora-dx
+          - fedora_version: gts
+            image_flavor: hwe
+          - fedora_version: gts
+            image_flavor: hwe-nvidia
+          - fedora_version: stable
+            image_flavor: hwe
+          - fedora_version: stable
+            image_flavor: hwe-nvidia
+          - fedora_version: beta
+            image_flavor: hwe
+          - fedora_version: beta
+            image_flavor: hwe-nvidia
 
     steps:
       - name: Free Disk Space (Ubuntu)

@@ -16,10 +16,6 @@ jobs:
     name: Build GTS Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
-    strategy:
-      matrix:
-        image_flavor: [main, nvidia]
-        base_name: [bluefin, bluefin-dx]
     with:
       fedora_version: gts
 
