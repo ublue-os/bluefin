@@ -151,7 +151,7 @@ jobs:
 
       - name: Verify ZFS
         uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        if: inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest' && ! contains( matrix.base_name, 'hwe')
+        if: inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest' && ! contains(matrix.image_flavor, 'hwe')
         with:
           containers: akmods-zfs:${{ env.AKMODS_FLAVOR }}-${{ env.FEDORA_VERSION }}-${{ env.KERNEL_RELEASE }}
 
@@ -325,6 +325,20 @@ jobs:
             podman tag $IMAGE ${{ env.IMAGE_NAME }}:${tag}
           done
           podman tag $IMAGE rechunked-img
+      
+      # HWE use legacy names
+      - name: Legacy HWE names
+        if: contains(matrix.image_flavor, 'hwe') 
+        shell: bash
+        run: |
+          set -eoux pipefail
+          image_name="${{ env.IMAGE_NAME }}"
+          asus_name="${image_name/hwe/asus}"
+          surface_name="${image_name/hwe/surface}"
+          for tag in ${{ steps.rechunk.outputs.output }}; do
+            podman tag  "${image_name}":"${{ env.DEFAULT_TAG }}" "${asus_name}":${tag}
+            podman tag  "${image_name}":"${{ env.DEFAULT_TAG }}" "${surface_name}":${tag}
+          done
 
       # Check that Kernel is signed with Secureboot Keys
       - name: Check Secureboot
