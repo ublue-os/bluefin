@@ -2,6 +2,14 @@ name: Reusable Build and Push
 on:
   workflow_call:
     inputs:
+      image_flavor:
+        description: "The Flavor of the image: main, nvidia, hwe, hwe-nvidia"
+        required: true
+        type: string
+      base_name:
+        description: "The image name: bluefin, bluefin-dx, aurora, aurora-dx"
+        required: true
+        type: string
       fedora_version:
         description: "The Fedora Version: gts, stable, or latest"
         required: true
@@ -24,74 +32,42 @@ jobs:
     continue-on-error: false
     outputs:
       image_full: ${{ steps.generate-outputs.outputs.image }}
-    strategy:
-      fail-fast: false
-      matrix:
-        image_flavor:
-          - main
-          - nvidia
-          - hwe
-          - hwe-nvidia
-        base_name:
-          - bluefin
-          - bluefin-dx
-          - aurora
-          - aurora-dx
-        fedora_version:
-          - ${{ inputs.fedora_version }}
-        exclude:
-          - fedora_version: gts
-            base_name: aurora
-          - fedora_version: gts
-            base_name: aurora-dx
-          - fedora_version: gts
-            image_flavor: hwe
-          - fedora_version: gts
-            image_flavor: hwe-nvidia
-          - fedora_version: stable
-            image_flavor: hwe
-          - fedora_version: stable
-            image_flavor: hwe-nvidia
-          - fedora_version: beta
-            image_flavor: hwe
-          - fedora_version: beta
-            image_flavor: hwe-nvidia
 
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Matrix Variables
+      - name: inputs Variables
         shell: bash
         run: |
           set -eoux pipefail
           # IMAGE_NAME
-          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
-              echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
+          if [[ "${{ inputs.image_flavor }}" == "main" ]]; then
+              echo "IMAGE_NAME=${{ inputs.base_name }}" >> $GITHUB_ENV
           else
-              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
+              echo "IMAGE_NAME=${{ format('{0}-{1}', inputs.base_name, inputs.image_flavor) }}" >> $GITHUB_ENV
           fi
 
           # BASE_IMAGE_NAME
-          if [[ "${{ matrix.base_name }}" =~ "bluefin" ]]; then
+          if [[ "${{ inputs.base_name }}" =~ "bluefin" ]]; then
               echo "BASE_IMAGE_NAME"="silverblue" >> $GITHUB_ENV
-          elif [[ "${{ matrix.base_name }}" =~ "aurora" ]]; then
+          elif [[ "${{ inputs.base_name }}" =~ "aurora" ]]; then
               echo "BASE_IMAGE_NAME"="kinoite" >> $GITHUB_ENV
           fi
 
           # TARGET_NAME
-          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
+          if [[ "${{ inputs.base_name }}" =~ "dx" ]]; then
               echo "TARGET_NAME"="dx" >> $GITHUB_ENV
           else
               echo "TARGET_NAME"="base" >> $GITHUB_ENV
           fi
 
           # AKMODS_FLAVOR
-          if [[ "${{ matrix.image_flavor }}" =~ "hwe" ]]; then
+          if [[ "${{ inputs.image_flavor }}" =~ "hwe" ]]; then
               echo "AKMODS_FLAVOR=bazzite" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" =~ stable|gts ]]; then
+          elif [[ "${{ inputs.fedora_version }}" =~ stable|gts ]]; then
               echo "AKMODS_FLAVOR=coreos-stable" >> $GITHUB_ENV
-          elif [[ "${{ matrix.fedora_version }}" =~ beta ]]; then
+          elif [[ "${{ inputs.fedora_version }}" =~ beta ]]; then
               echo "AKMODS_FLAVOR=coreos-testing" >> $GITHUB_ENV
           else
               echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
@@ -107,16 +83,16 @@ jobs:
             set -eoux pipefail
 
             # Fedora Version
-            if [[ "${{ matrix.fedora_version }}" =~ stable ]]; then
+            if [[ "${{ inputs.fedora_version }}" =~ stable ]]; then
               fedora_version=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
             else
-              fedora_version=$(skopeo inspect docker://ghcr.io/ublue-os/base-main:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+              fedora_version=$(skopeo inspect docker://ghcr.io/ublue-os/base-main:${{ inputs.fedora_version }} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
             fi
 
             # Kernel Release for ostree.linux label
-            if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
+            if [[ "${{ inputs.image_flavor }}" =~ hwe ]]; then
               kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/bazzite-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
-            elif [[ "${{ matrix.fedora_version }}" =~ latest|beta ]]; then
+            elif [[ "${{ inputs.fedora_version }}" =~ latest|beta ]]; then
               kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/main-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
             else
               kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/coreos-stable-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
@@ -151,7 +127,7 @@ jobs:
 
       - name: Verify ZFS
         uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        if: inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest' && ! contains(matrix.image_flavor, 'hwe')
+        if: inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest' && ! contains(inputs.image_flavor, 'hwe')
         with:
           containers: akmods-zfs:${{ env.AKMODS_FLAVOR }}-${{ env.FEDORA_VERSION }}-${{ env.KERNEL_RELEASE }}
 
@@ -178,22 +154,22 @@ jobs:
 
           # Have tags for tracking builds during pull request
           SHA_SHORT="${GITHUB_SHA::7}"
-          COMMIT_TAGS+=("pr-${{ github.event.number }}-${{ matrix.fedora_version }}")
-          COMMIT_TAGS+=("${SHA_SHORT}-${{ matrix.fedora_version }}")
+          COMMIT_TAGS+=("pr-${{ github.event.number }}-${{ inputs.fedora_version }}")
+          COMMIT_TAGS+=("${SHA_SHORT}-${{ inputs.fedora_version }}")
 
           # Convenience Tags
-          if [[ "${{ matrix.fedora_version }}" =~ stable ]]; then
+          if [[ "${{ inputs.fedora_version }}" =~ stable ]]; then
             BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
           else
-            BUILD_TAGS+=("${{ matrix.fedora_version }}" "${{ matrix.fedora_version }}-${TIMESTAMP}")
+            BUILD_TAGS+=("${{ inputs.fedora_version }}" "${{ inputs.fedora_version }}-${TIMESTAMP}")
           fi
 
           # Weekly Stable / Rebuild Stable on workflow_dispatch
-          if [[ "${{ matrix.fedora_version }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${{ github.event_name }}" =~ scheduled ]]; then
+          if [[ "${{ inputs.fedora_version }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${{ github.event_name }}" =~ scheduled ]]; then
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
-          elif [[ "${{ matrix.fedora_version }}" =~ "stable" && "${{ github.event_name }}" =~ workflow_dispatch ]]; then
+          elif [[ "${{ inputs.fedora_version }}" =~ "stable" && "${{ github.event_name }}" =~ workflow_dispatch ]]; then
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
-          elif [[ ! "${{ matrix.fedora_version}}" =~ "stable" ]]; then
+          elif [[ ! "${{ inputs.fedora_version}}" =~ "stable" ]]; then
             BUILD_TAGS=("${{ env.FEDORA_VERSION }}" "${{ env.FEDORA_VERSION }}-${TIMESTAMP}")
           fi
 
@@ -221,7 +197,7 @@ jobs:
               alias_tags=("${BUILD_TAGS[@]}")
           fi
 
-          echo "DEFAULT_TAG=${{ matrix.fedora_version }}" >> $GITHUB_ENV
+          echo "DEFAULT_TAG=${{ inputs.fedora_version }}" >> $GITHUB_ENV
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
 
       # Build metadata
@@ -271,7 +247,7 @@ jobs:
           BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR=${{ github.repository_owner }}")
           BUILD_ARGS+=("--build-arg" "KERNEL=${{ env.KERNEL_RELEASE }}")
           BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=${{ env.SHA_HEAD_SHORT }}")
-          BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${{ matrix.fedora_version }}")
+          BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${{ inputs.fedora_version }}")
 
           TAG_ARGS=()
           IFS=' ' read -r -a tags_array <<< "${{ steps.generate-tags.outputs.alias_tags }}"
@@ -328,14 +304,14 @@ jobs:
       
       # HWE use legacy names
       - name: Legacy HWE names
-        if: contains(matrix.image_flavor, 'hwe') 
+        if: contains(inputs.image_flavor, 'hwe') 
         shell: bash
         run: |
           set -eoux pipefail
           image_name="${{ env.IMAGE_NAME }}"
           asus_name="${image_name/hwe/asus}"
           surface_name="${image_name/hwe/surface}"
-          for tag in ${{ steps.rechunk.outputs.output }}; do
+          for tag in ${{ steps.build_image.outputs.tags }}; do
             podman tag  "${image_name}":"${{ env.DEFAULT_TAG }}" "${asus_name}":${tag}
             podman tag  "${image_name}":"${{ env.DEFAULT_TAG }}" "${surface_name}":${tag}
           done
@@ -402,18 +378,18 @@ jobs:
           DIGEST: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          FEDORA_VERSION: ${{ matrix.fedora_version }}
+          FEDORA_VERSION: ${{ inputs.fedora_version }}
         run: echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${FEDORA_VERSION}.txt"
 
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
-          name: image-${{ env.IMAGE_NAME }}-${{ matrix.fedora_version }}
+          name: image-${{ env.IMAGE_NAME }}-${{ inputs.fedora_version }}
           retention-days: 1
           if-no-files-found: error
           path: |
-            ${{ env.IMAGE_NAME }}-${{ matrix.fedora_version }}.txt
+            ${{ env.IMAGE_NAME }}-${{ inputs.fedora_version }}.txt
 
   check:
     name: Check all ${{ inputs.fedora_version }} builds successful

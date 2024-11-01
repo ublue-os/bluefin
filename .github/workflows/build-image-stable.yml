@@ -16,6 +16,11 @@ jobs:
     name: Build Stable Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
+    strategy:
+      matrix:
+        image_flavor: [main, nvidia]
+        base_name: [bluefin, bluefin-dx, aurora, aurora-dx]
     with:
+      image_flavor: ${{ matrix.image_flavor }}
+      base_name: ${{ matrix.base_name }}
       fedora_version: stable
-
