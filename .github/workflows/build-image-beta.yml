@@ -22,6 +22,10 @@ jobs:
     name: Build Beta Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
+    strategy:
+      matrix:
+        base_name: [bluefin, aurora]
     with:
+      base_name: ${{ matrix.base_name }}
       fedora_version: beta
 

@@ -2,6 +2,10 @@ name: Reusable Build and Push
 on:
   workflow_call:
     inputs:
+      base_name:
+        description: "The Brand Name: bluefin or aurora"
+        required: true
+        type: string
       fedora_version:
         description: "The Fedora Version: gts, stable, or latest"
         required: true
@@ -14,7 +18,7 @@ env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.fedora_version }}
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.base_name}}-${{ inputs.fedora_version }}
   cancel-in-progress: true
 
 jobs:
@@ -33,10 +37,8 @@ jobs:
           - hwe
           - hwe-nvidia
         base_name:
-          - bluefin
-          - bluefin-dx
-          - aurora
-          - aurora-dx
+          - ${{ inputs.base_name }}
+          - ${{ inputs.base_name }}-dx
         fedora_version:
           - ${{ inputs.fedora_version }}
         exclude:
