@@ -316,8 +316,8 @@ jobs:
             surface_name="${image_name/hwe/surface}"
 
             for tag in ${{ steps.build_image.outputs.tags }}; do
-              podman tag  "${IMAGE}":"${{ env.DEFAULT_TAG }}" "${asus_name}":${tag}
-              podman tag  "${IMAGE}":"${{ env.DEFAULT_TAG }}" "${surface_name}":${tag}
+              podman tag  "${IMAGE}" "${asus_name}":${tag}
+              podman tag  "${IMAGE}" "${surface_name}":${tag}
             done
           fi
           podman tag $IMAGE rechunked-img
