@@ -445,9 +445,9 @@ jobs:
       - name: Rechunk Image
         id: rechunk
         if: inputs.rechunk == true && ( github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request' )
-        uses: hhd-dev/rechunk@v0.8.6
+        uses: hhd-dev/rechunk@602e6d62558ab23e15e8764ce06e26c0f328da71 # v1.0.1
         with:
-          rechunk: ghcr.io/hhd-dev/rechunk:v0.8.6
+          rechunk: ghcr.io/hhd-dev/rechunk:v1.0.1
           ref: ${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
           skip_compression: 'true'
           labels: ${{ steps.meta.outputs.labels }}
