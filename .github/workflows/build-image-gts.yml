@@ -18,8 +18,8 @@ jobs:
     secrets: inherit
     strategy:
       matrix:
-        base_name: [bluefin]
+        brand_name: [bluefin]
     with:
-      base_name: ${{ matrix.base_name }}
+      brand_name: ${{ matrix.brand_name }}
       fedora_version: gts
 

@@ -11,7 +11,7 @@ on:
   workflow_call:
   workflow_dispatch:
     inputs:
-      base_name:
+      brand_name:
         description: 'Image Brand to Build'
         default: '["bluefin"]'
         type: choice
@@ -27,7 +27,7 @@ jobs:
     secrets: inherit
     strategy:
       matrix:
-        base_name: ${{ fromJson(inputs.base_name || '["bluefin", "aurora"]') }}
+        brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
     with:
-      base_name: ${{ matrix.base_name }}
+      brand_name: ${{ matrix.brand_name }}
       fedora_version: stable
