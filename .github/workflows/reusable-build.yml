@@ -133,7 +133,7 @@ jobs:
 
       - name: Verify ZFS
         uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        if: inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest' && ! contains(matrix.image_flavor, 'hwe')
+        if: contains(env.AKMODS_FLAVOR, 'coreos')
         with:
           containers: akmods-zfs:${{ env.AKMODS_FLAVOR }}-${{ env.FEDORA_VERSION }}-${{ env.KERNEL_RELEASE }}
 
@@ -195,7 +195,7 @@ jobs:
                   echo "${TAG}"
               done
               alias_tags=("${COMMIT_TAGS[@]}")
-          else 
+          else
               echo "Generated the following build tags: "
               for TAG in "${BUILD_TAGS[@]}"; do
                   echo "${TAG}"
@@ -223,7 +223,7 @@ jobs:
 
       - name: Define env.SHA_HEAD_SHORT
         run: |
-            echo "SHA_HEAD_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "SHA_HEAD_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
@@ -292,7 +292,7 @@ jobs:
         with:
           rechunk: ghcr.io/hhd-dev/rechunk:v1.0.1
           ref: "raw-img"
-          skip_compression: 'true'
+          skip_compression: "true"
           labels: ${{ steps.meta.outputs.labels }}
           prev-ref: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
 
@@ -342,7 +342,6 @@ jobs:
           openssl x509 -in akmods.der -out akmods.crt
           sbverify --cert kernel-sign.crt vmlinuz || exit 1
           sbverify --cert akmods.crt vmlinuz || exit 1
-
 
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
