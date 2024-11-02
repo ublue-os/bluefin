@@ -88,3 +88,6 @@ rm /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo
 
 # Add Nerd Fonts
 curl -Lo /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"${FEDORA_MAJOR_VERSION}"/che-nerd-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
+
+# RSS changelog viewer
+curl -Lo /etc/yum.repos.d/_copr_tulilirockz-juicerss-"${FEDORA_MAJOR_VERSION}".repo https://copr.fedorainfracloud.org/coprs/tulilirockz/juicerss/repo/fedora-"${FEDORA_MAJOR_VERSION}"/tulilirockz-juicerss-fedora-"${FEDORA_MAJOR_VERSION}".repo
