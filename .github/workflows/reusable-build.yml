@@ -37,7 +37,7 @@ jobs:
       matrix:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
         base_name: ["${{ inputs.base_name }}", "${{ inputs.base_name }}-dx"]
-        fedora_version: "${{ inputs.fedora_version }}"
+        fedora_version: ${{ inputs.fedora_version }}
 
     steps:
       - name: Checkout
