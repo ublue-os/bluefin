@@ -308,7 +308,7 @@ jobs:
           done
 
           # HWE Tagging
-          if [[ "${{ matrix.image_flavor }}" =~ hwe]]; then
+          if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
             image_name="${{ env.IMAGE_NAME }}"
             asus_name="${image_name/hwe/asus}"
             surface_name="${image_name/hwe/surface}"
@@ -361,7 +361,7 @@ jobs:
               podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
             done
 
-            if [[ "${{ matrix.image_flavor }}" =~ hwe]]; then
+            if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
               image_name="${{ env.IMAGE_NAME }}"
               asus_name="${image_name/hwe/asus}"
               surface_name="${image_name/hwe/surface}"
