@@ -8,11 +8,19 @@ on:
       - '**.md'
   schedule:
     - cron: '45 5 * * *'  # 5:41 UTC everyday
-  workflow_dispatch:
   workflow_call:
+  workflow_dispatch:
+    inputs:
+      base_name:
+        default: 'bluefin'
+        type: choice
+        options:
+          - bluefin
+          - aurora
 
 jobs:
   build-image-stable:
+    if: github.event_name != 'workflow_dispatch'
     name: Build Stable Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
@@ -22,4 +30,16 @@ jobs:
     with:
       base_name: ${{ matrix.base_name }}
       fedora_version: stable
+
+  build-image-stable-call:
+    if: github.event_name == 'workflow_dispatch'
+    name: Build Latest Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      matrix:
+        base_name: [bluefin, aurora]
+    with:
+      base_name: ${{ inputs.base_name }}
+      fedora_version: latest
 

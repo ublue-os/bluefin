@@ -14,11 +14,19 @@ on:
       - '**.md'
   schedule:
     - cron: '40 4 * * *'  # 4:40 UTC everyday
-  workflow_dispatch:
   workflow_call:
+  workflow_dispatch:
+    inputs:
+      base_name:
+        default: 'bluefin'
+        type: choice
+        options:
+          - bluefin
+          - aurora
 
 jobs:
   build-image-latest:
+    if: github.event_name != 'workflow_dispatch'
     name: Build Latest Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
@@ -28,4 +36,17 @@ jobs:
     with:
       image_flavors: "['main', 'nvidia', 'hwe', 'hwe-nvidia']"
       base_name: ${{ matrix.base_name }}
+      fedora_version: latest
+
+  build-image-latest-call:
+    if: github.event_name == 'workflow_dispatch'
+    name: Build Latest Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      matrix:
+        base_name: [bluefin, aurora]
+    with:
+      image_flavors: "['main', 'nvidia', 'hwe', 'hwe-nvidia']"
+      base_name: ${{ inputs.base_name }}
       fedora_version: latest
