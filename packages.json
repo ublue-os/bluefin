@@ -134,6 +134,7 @@
 				"p7zip-plugins",
 				"p7zip",
 				"podman-compose",
+				"podman-machine",
 				"podman-tui",
 				"podmansh",
 				"powerline-fonts",
