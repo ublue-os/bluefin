@@ -176,7 +176,7 @@ jobs:
           elif [[ "${{ matrix.fedora_version }}" =~ "stable" && "${{ github.event_name }}" =~ workflow_dispatch ]]; then
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
           elif [[ ! "${{ matrix.fedora_version}}" =~ "stable" ]]; then
-            BUILD_TAGS=("${{ env.FEDORA_VERSION }}" "${{ env.FEDORA_VERSION }}-${TIMESTAMP}")
+            BUILD_TAGS+=("${{ env.FEDORA_VERSION }}" "${{ env.FEDORA_VERSION }}-${TIMESTAMP}")
           fi
 
           # Prepend testing if built on testing branch
@@ -460,14 +460,9 @@ jobs:
             fi
           done
 
-  # build_iso:
-  #   name: iso
+  # generate_release:
+  #   name: Generate Release
   #   needs: [check]
-  #   if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && (github.ref_name == 'main' || github.ref_name == 'testing') && inputs.fedora_version != 'beta' && inputs.fedora_version != 'latest'
-  #   # Eventually would be nice for building images in PRs
-  #   #if: ${{ endsWith(github.event.pull_request.title, '[ISO]') }}
-  #   uses: ./.github/workflows/reusable-build-iso.yml
+  #   if: github.event_name != 'pull_request'
   #   secrets: inherit
-  #   with:
-  #     brand_name: ${{ inputs.brand_name }}
-  #     fedora_version: ${{ inputs.fedora_version }}
+  #   uses: ./.github/workflows/generate_release.yml
