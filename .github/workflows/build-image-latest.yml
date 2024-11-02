@@ -35,5 +35,6 @@ jobs:
       matrix:
         base_name: ${{ fromJson(inputs.base_name || '["bluefin", "aurora"]') }}
     with:
+      image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia”]'
       base_name: ${{ matrix.base_name }}
       fedora_version: latest
