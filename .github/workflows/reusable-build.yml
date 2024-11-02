@@ -2,6 +2,10 @@ name: Reusable Build and Push
 on:
   workflow_call:
     inputs:
+      image_flavors:
+        description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
+        default: '["main", "nvidia"]'
+        type: string
       base_name:
         description: "The Brand Name: bluefin or aurora"
         required: true
@@ -31,19 +35,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor:
-          - main
-          - nvidia
-        base_name:
-          - ${{ inputs.base_name }}
-          - ${{ inputs.base_name }}-dx
-        fedora_version:
-          - ${{ inputs.fedora_version }}
-        include:
-          - fedora_version: latest
-            image_flavor: hwe
-          - fedora_version: latest
-            image_flavor: hwe-nvidia
+        image_flavor: ${{ toJson(inputs.image_flavors) }}
+        base_name: ["${{ inputs.base_name }}", "${{ inputs.base_name }}-dx"]
+        fedora_version: "${{ inputs.fedora_version }}"
 
     steps:
       - name: Checkout
