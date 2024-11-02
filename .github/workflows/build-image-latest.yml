@@ -33,7 +33,7 @@ jobs:
     secrets: inherit
     strategy:
       matrix:
-        base_name: ${{ fromJson(inputs.base_name) || fromJson('["bluefin", "aurora"]') }}
+        base_name: ${{ fromJson(inputs.base_name || '["bluefin", "aurora"]') }}
     with:
       base_name: ${{ matrix.base_name }}
       fedora_version: latest
