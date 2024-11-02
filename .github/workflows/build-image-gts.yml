@@ -5,11 +5,11 @@ on:
       - main
       - testing
     paths-ignore:
-      - '**.md'
+      - "**.md"
   schedule:
-    - cron: '41 5 * * 0'  # 5:41 UTC Weekly on Sundays
+    - cron: "41 5 * * 0" # 5:41 UTC Weekly on Sundays
   workflow_dispatch:
-  workflow_call: 
+  workflow_call:
 
 jobs:
   build-image-gts:
@@ -17,9 +17,9 @@ jobs:
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     strategy:
+      fail-fast: false
       matrix:
         brand_name: [bluefin]
     with:
       brand_name: ${{ matrix.brand_name }}
       fedora_version: gts
-

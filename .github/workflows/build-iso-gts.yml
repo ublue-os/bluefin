@@ -3,7 +3,7 @@ on:
   # schedule:
   #   - cron: '0 2 * * sun'  # 02:00 Sunday
   workflow_dispatch:
-  workflow_call: 
+  workflow_call:
 
 jobs:
   build-iso-gts:
@@ -11,9 +11,9 @@ jobs:
     uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
     strategy:
+      fail-fast: false
       matrix:
         brand_name: [bluefin]
     with:
       brand_name: ${{ matrix.brand_name }}
       fedora_version: gts
-

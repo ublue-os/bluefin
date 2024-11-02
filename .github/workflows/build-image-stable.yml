@@ -5,14 +5,14 @@ on:
       - main
       - testing
     paths-ignore:
-      - '**.md'
+      - "**.md"
   schedule:
-    - cron: '45 5 * * *'  # 5:41 UTC everyday
+    - cron: "45 5 * * *" # 5:41 UTC everyday
   workflow_call:
   workflow_dispatch:
     inputs:
       brand_name:
-        description: 'Image Brand to Build'
+        description: "Image Brand to Build"
         default: '["bluefin"]'
         type: choice
         options:
@@ -26,6 +26,7 @@ jobs:
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     strategy:
+      fail-fast: false
       matrix:
         brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
     with:
