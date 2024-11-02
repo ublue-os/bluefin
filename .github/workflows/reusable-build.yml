@@ -460,9 +460,9 @@ jobs:
             fi
           done
 
-  # generate_release:
-  #   name: Generate Release
-  #   needs: [check]
-  #   if: github.event_name != 'pull_request'
-  #   secrets: inherit
-  #   uses: ./.github/workflows/generate_release.yml
+  generate_release:
+    name: Generate Release
+    needs: [check]
+    if: github.event_name != 'pull_request'
+    secrets: inherit
+    uses: ./.github/workflows/generate_release.yml
