@@ -17,7 +17,7 @@ for repo in "${repos[@]}"; do
     fi
 done
 
-if grep -q "kinoite" <<<"${IMAGE_NAME}"; then
+if grep -q "kinoite" <<<"${BASE_IMAGE_NAME}"; then
     rpm-ostree override replace \
         --experimental \
         --from repo=updates \
