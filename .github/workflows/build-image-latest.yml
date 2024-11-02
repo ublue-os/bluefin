@@ -18,35 +18,22 @@ on:
   workflow_dispatch:
     inputs:
       base_name:
-        default: 'bluefin'
+        description: 'Image Brand to Build'
+        default: '["bluefin"]'
         type: choice
         options:
-          - bluefin
-          - aurora
+          - '["bluefin"]'
+          - '["aurora"]'
+          - '["bluefin", "aurora"]'
 
 jobs:
   build-image-latest:
-    if: github.event_name != 'workflow_dispatch'
     name: Build Latest Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     strategy:
       matrix:
-        base_name: [bluefin, aurora]
+        base_name: ${{ fromJson(inputs.base_name) || fromJson('["bluefin", "aurora"]') }}
     with:
-      image_flavors: "['main', 'nvidia', 'hwe', 'hwe-nvidia']"
       base_name: ${{ matrix.base_name }}
-      fedora_version: latest
-
-  build-image-latest-call:
-    if: github.event_name == 'workflow_dispatch'
-    name: Build Latest Images
-    uses: ./.github/workflows/reusable-build.yml
-    secrets: inherit
-    strategy:
-      matrix:
-        base_name: [bluefin, aurora]
-    with:
-      image_flavors: "['main', 'nvidia', 'hwe', 'hwe-nvidia']"
-      base_name: ${{ inputs.base_name }}
       fedora_version: latest
