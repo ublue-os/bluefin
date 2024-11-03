@@ -1,7 +1,7 @@
 name: Build All ISOs
 on:
     workflow_dispatch:
-    
+
 permissions:
     contents: read
     packages: write

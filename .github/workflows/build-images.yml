@@ -1,7 +1,7 @@
 name: Build All Images
 on:
     workflow_dispatch:
-    
+
 permissions:
     contents: read
     packages: write

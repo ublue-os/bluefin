@@ -42,7 +42,7 @@ jobs:
     uses: ./.github/workflows/generate-release.yml
     with:
       fedora_version: '["stable"]'
-   
+
   build-iso-stable:
     name: Build Stable ISOs
     needs: [build-image-stable]

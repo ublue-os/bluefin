@@ -1,10 +1,10 @@
 # bluefin and aurora
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2503a44c1105456483517f793af75ee7)](https://app.codacy.com/gh/ublue-os/bluefin/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2503a44c1105456483517f793af75ee7)](https://app.codacy.com/gh/ublue-os/bluefin/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-[![Aurora Stable](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-aurora.yml) [![Aurora Latest](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-aurora.yml) 
+[![Aurora Stable](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-aurora.yml) [![Aurora Latest](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-aurora.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-aurora.yml)
 
-[![Bluefin GTS](https://github.com/ublue-os/bluefin/actions/workflows/build-gts-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-gts-bluefin.yml) [![Bluefin Stable](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-bluefin.yml) [![Bluefin Latest](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-bluefin.yml) 
+[![Bluefin GTS](https://github.com/ublue-os/bluefin/actions/workflows/build-gts-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-gts-bluefin.yml) [![Bluefin Stable](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-coreos-bluefin.yml) [![Bluefin Latest](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-bluefin.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-latest-bluefin.yml)
 
 ## Bluefin - [projectbluefin.io](https://projectbluefin.io)
 
@@ -12,7 +12,7 @@
 
 > "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
 
-Bluefin strives to cover these two use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of homebrew, flathub, and a container runtime to give you access to all the best software Open Source has to offer. Check [Introduction to Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41) for a feature walkthrough. 
+Bluefin strives to cover these two use cases. For end users it provides a system as reliable as a Chromebook with near-zero maintainance, with the power of homebrew, flathub, and a container runtime to give you access to all the best software Open Source has to offer. Check [Introduction to Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41) for a feature walkthrough.
 
 - [Download Bluefin](https://projectbluefin.io/#scene-picker)
 
@@ -26,7 +26,7 @@ Aurora is a delightful KDE desktop experience for end-users that are looking for
 
 ### What's the relationship between Aurora and Bluefin?
 
-Both Aurora and Bluefin strive to offer a curated out of the box experience for users, they only differ in the default desktop and recommended applications: Bluefin uses GNOME, Aurora uses KDE. They are both maintained and built in this repository.  
+Both Aurora and Bluefin strive to offer a curated out of the box experience for users, they only differ in the default desktop and recommended applications: Bluefin uses GNOME, Aurora uses KDE. They are both maintained and built in this repository.
 
 ## Documentation
 
@@ -38,7 +38,7 @@ Both Aurora and Bluefin strive to offer a curated out of the box experience for 
 
 Secure Boot is supported by default on our systems, providing an additional layer of security. After the first installation, you will be prompted to enroll the secure boot key in the BIOS.
 
-Enter the password `universalblue` 
+Enter the password `universalblue`
 when prompted to enroll our key.
 
 If this step is not completed during the initial setup, you can manually enroll the key by running the following command in the terminal:
@@ -68,4 +68,3 @@ sudo mokutil --import public_key.der
     <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date" />
   </picture>
 </a>
-

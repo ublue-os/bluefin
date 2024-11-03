@@ -50,7 +50,7 @@ if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
     echo "Running error test for aurora gschema override. Aborting if failed."
     glib-compile-schemas --strict /tmp/aurora-schema-test
     echo "Compiling gschema to include aurora setting overrides"
-    glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null    
+    glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
 
 elif [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
 
@@ -68,7 +68,7 @@ elif [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
         sed -i 's@accent-color="slate"@@g' /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
         sed -i 's@'", "\''xwayland-native-scaling'\''@@g' /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
     fi
-    
+
     # Create symlinks from old to new wallpaper names for backwards compatibility
     ln -s "/usr/share/backgrounds/bluefin/01-bluefin.xml" "/usr/share/backgrounds/bluefin/bluefin-winter-dynamic.xml"
     ln -s "/usr/share/backgrounds/bluefin/04-bluefin.xml" "/usr/share/backgrounds/bluefin/bluefin-spring-dynamic.xml"
@@ -93,4 +93,3 @@ fi
 
 # Watermark for Plymouth
 cp /usr/share/plymouth/themes/spinner/{"$BASE_IMAGE_NAME"-,}watermark.png
-

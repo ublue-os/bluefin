@@ -27,7 +27,7 @@ check:
     #!/usr/bin/bash
     find . -type f -name "*.just" | while read -r file; do
     	echo "Checking syntax: $file"
-    	just --unstable --fmt --check -f $file 
+    	just --unstable --fmt --check -f $file
     done
     echo "Checking syntax: Justfile"
     just --unstable --fmt --check -f Justfile
@@ -176,7 +176,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0":
     BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${image_name}")
     BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR={{ repo_organization }}")
     BUILD_ARGS+=("--build-arg" "KERNEL=${kernel_release}")
-    if ! git diff-index --quiet HEAD -- ; then 
+    if ! git diff-index --quiet HEAD -- ; then
         BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=$(git rev-parse --short HEAD)")
     fi
     BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${tag}")

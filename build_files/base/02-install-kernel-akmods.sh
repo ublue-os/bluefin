@@ -69,7 +69,7 @@ if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     tar -xvzf /tmp/akmods-zfs/"$ZFS_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-zfs/
 
-    # Declare ZFS RPMs 
+    # Declare ZFS RPMs
     ZFS_RPMS=(
         /tmp/akmods-zfs/kmods/zfs/kmod-zfs-"${KERNEL}"-*.rpm
         /tmp/akmods-zfs/kmods/zfs/libnvpair3-*.rpm

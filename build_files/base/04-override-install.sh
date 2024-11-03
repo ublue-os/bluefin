@@ -70,7 +70,7 @@ find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/sh
 mv -f /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml
 
 # Register Fonts
-fc-cache -f /usr/share/fonts/ubuntu 
+fc-cache -f /usr/share/fonts/ubuntu
 fc-cache -f /usr/share/fonts/inter
 
 # Get Quadlets
