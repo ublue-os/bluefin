@@ -14,6 +14,9 @@ on:
         description: "The Fedora Version: gts, stable, or latest"
         required: true
         type: string
+      kernel_pin:
+        description: "The full kernel version to pin"
+        type: string
     outputs:
       images:
         description: "An array of images built and pushed to the registry"
@@ -110,6 +113,19 @@ jobs:
             if [ -z "$ver" ] || [ "null" = "$ver" ]; then
               echo "inspected image version must not be empty or null"
               exit 1
+            fi
+
+            kernel_pin="${{ inputs.kernel_pin }}"
+
+            if [[ -n "${kernel_pin:-}" ]]; then
+              kernel_release="${kernel_pin}"
+              fedora_version="$(grep -oP 'fc\K[0-9]+' <<< ${kernel_pin})"
+
+              # check to make sure pin exists
+              if [[ $(skopeo inspect docker://ghcr.io/ublue-os/"${{ env.AKMODS_FLAVOR }}"-kernel:"${kernel_pin}" | jq -r '.Labels["ostree.linux"]') != "${kernel_pin}" ]]; then
+                echo "Kernel Pin does not exist"
+                exit 1
+              fi
             fi
 
             # Push into GITHUB ENV
