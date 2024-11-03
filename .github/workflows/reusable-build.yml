@@ -482,11 +482,11 @@ jobs:
             fi
           done
 
-  generate_release:
-    name: Generate Release
-    needs: [check]
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (matrix.fedora_version == 'gts' || matrix.fedora_version == 'stable' && jobs.build_container.outputs.stable_release == 'true')
-    secrets: inherit
-    uses: ./.github/workflows/generate_release.yml
-    with:
-      fedora_version=: '[ "${{ matrix.fedora_version }}" ]'
+  # generate_release:
+  #   name: Generate Release
+  #   needs: [check]
+  #   if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (matrix.fedora_version == 'gts' || matrix.fedora_version == 'stable' && jobs.build_container.outputs.stable_release == 'true')
+  #   secrets: inherit
+  #   uses: ./.github/workflows/generate_release.yml
+  #   with:
+  #     fedora_version=: '[ "${{ matrix.fedora_version }}" ]'
