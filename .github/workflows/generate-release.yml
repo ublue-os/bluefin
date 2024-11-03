@@ -1,6 +1,10 @@
 on:
   workflow_call:
     inputs:
+      make_latest:
+        description: "Make latest for Release"
+        type: boolean
+        default: false
       fedora_version:
         description: "Release Tag (e.g. gts, stable)"
         type: string
@@ -12,10 +16,10 @@ on:
       make_latest:
         description: "Make latest for Release"
         type: choice
-        default: "false"
+        default: 'false'
         options:
-          - "false"
-          - "true"
+          - 'false'
+          - 'true'
       fedora_version:
         description: "Release Tag (e.g. gts, stable)"
         required: true
@@ -23,7 +27,10 @@ on:
         options:
           - '["gts"]'
           - '["stable"]'
+          - '["latest"]'
+          - '["beta"]'
           - '["gts", "stable"]'
+          - '["gts", "stable", "latest", "beta"]'
 
 permissions:
   contents: write
@@ -64,5 +71,5 @@ jobs:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
           body_path: ./changelog.md
-          make_latest: ${{ inputs.make_latest == 'true' && matrix.version == 'stable' || false }}
-          prerelease: ${{ inputs.make_latest != 'false'  }}
+          make_latest: ${{ inputs.make_latest == true && matrix.version == 'stable' || false }}
+          prerelease: ${{ inputs.make_latest != false  }}

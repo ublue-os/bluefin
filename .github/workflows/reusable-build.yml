@@ -18,6 +18,9 @@ on:
         description: "The full kernel version to pin"
         type: string
     outputs:
+      stable_release: 
+        description: "If a release should be made for stable images"
+        value: ${{ jobs.build_container.outputs.stable_release }}
       images:
         description: "An array of images built and pushed to the registry"
         value: ${{ jobs.check.outputs.images }}
@@ -480,12 +483,3 @@ jobs:
               exit 1
             fi
           done
-
-  generate_release:
-    name: Generate Release
-    needs: [build_container, check]
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (inputs.fedora_version == 'gts' || inputs.fedora_version == 'stable' && needs.build_container.outputs.stable_release == 'true')
-    secrets: inherit
-    uses: ./.github/workflows/generate_release.yml
-    with:
-      fedora_version: ${{ inputs.fedora_version }}

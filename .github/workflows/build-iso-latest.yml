@@ -1,7 +1,5 @@
 name: Latest ISO
 on:
-  # schedule:
-  #   - cron: '0 4 * * sun'  # 04:00 Sunday
   workflow_call:
   workflow_dispatch:
     inputs:

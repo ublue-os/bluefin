@@ -1,7 +1,5 @@
 name: Stable ISO
 on:
-  # schedule:
-  #   - cron: '41 6 * * 2'  # 6:41 UTC every Tuesday
   workflow_call:
   workflow_dispatch:
     inputs:

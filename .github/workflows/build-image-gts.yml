@@ -23,3 +23,19 @@ jobs:
     with:
       brand_name: ${{ matrix.brand_name }}
       fedora_version: gts
+
+  generate_release:
+    name: Generate Release
+    needs: [build-image-gts]
+    if: github.event_name == 'scheduled' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      fedora_version: gts
+
+  build-iso-gts:
+    name: Build Stable ISOs
+    needs: [build-image-gts]
+    if: github.event_name == 'scheduled'
+    secrets: inherit
+    uses: ./.github/workflows/build-iso-stable.yml

@@ -16,7 +16,7 @@ on:
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-iso
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.fedora_version }}-iso
   cancel-in-progress: true
 
 jobs:

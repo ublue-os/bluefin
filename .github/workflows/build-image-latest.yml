@@ -13,7 +13,8 @@ on:
     paths-ignore:
       - "**.md"
   schedule:
-    - cron: "40 4 * * *" # 4:40 UTC everyday
+    - cron: "40 4 * * 1,2,3,4,5,6" # 4:40 UTC All But Sunday
+    - cron: "40 4 * * 0" # 4:40 UTC Sunday
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -39,3 +40,19 @@ jobs:
       image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
       brand_name: ${{ matrix.brand_name }}
       fedora_version: latest
+
+  generate-release:
+    name: Generate Release
+    needs: [build-image-latest]
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event_name.scheduled == '40 4 * * 0'
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      fedora_version: latest
+
+  build-iso-latest:
+    name: Build Stable ISOs
+    needs: [build-image-latest]
+    if: github.event_name.scheduled == '40 4 * * 0'
+    secrets: inherit
+    uses: ./.github/workflows/build-iso-latest.yml

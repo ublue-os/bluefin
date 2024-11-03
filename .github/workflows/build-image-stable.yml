@@ -7,7 +7,8 @@ on:
     paths-ignore:
       - "**.md"
   schedule:
-    - cron: "45 5 * * *" # 5:41 UTC everyday
+    - cron: "45 5 * * 1,2,3,4,5,6" # 5:41 UTC everyday
+    - cron: "45 5 * * 0" # 5:41 UTC sunday
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -32,3 +33,19 @@ jobs:
     with:
       brand_name: ${{ matrix.brand_name }}
       fedora_version: stable
+
+  generate-release:
+    name: Generate Release
+    needs: [build-image-stable]
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event_name.scheduled == '45 5 * * 0'
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      fedora_version: stable
+   
+  build-iso-stable:
+    name: Build Stable ISOs
+    needs: [build-image-stable]
+    if: github.event_name.scheduled == '45 5 * * 0'
+    secrets: inherit
+    uses: ./.github/workflows/build-iso-stable.yml

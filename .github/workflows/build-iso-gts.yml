@@ -1,7 +1,5 @@
 name: GTS ISO
 on:
-  # schedule:
-  #   - cron: '0 2 * * sun'  # 02:00 Sunday
   workflow_dispatch:
   workflow_call:
 
