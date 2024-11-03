@@ -18,9 +18,6 @@ on:
         description: "The full kernel version to pin"
         type: string
     outputs:
-      stable_release: 
-        description: "If a release should be made for stable images"
-        value: ${{ jobs.build_container.outputs.stable_release }}
       images:
         description: "An array of images built and pushed to the registry"
         value: ${{ jobs.check.outputs.images }}
@@ -37,7 +34,6 @@ jobs:
     runs-on: ubuntu-24.04
     continue-on-error: false
     outputs:
-      stable_release: ${{ steps.generate-tags.outputs.stable_release }}
       image_full: ${{ steps.generate-outputs.outputs.image }}
     strategy:
       fail-fast: false
@@ -193,14 +189,10 @@ jobs:
           # Weekly Stable / Rebuild Stable on workflow_dispatch
           if [[ "${{ matrix.fedora_version }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${{ github.event_name }}" =~ scheduled ]]; then
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
-          elif [[ "${{ matrix.fedora_version }}" =~ "stable" && "${{ github.event_name }}" =~ workflow_dispatch ]]; then
+          elif [[ "${{ matrix.fedora_version }}" =~ "stable" && "${{ github.event_name }}" =~ workflow_dispatch|workflow_call ]]; then
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
           elif [[ ! "${{ matrix.fedora_version}}" =~ "stable" ]]; then
             BUILD_TAGS+=("${{ env.FEDORA_VERSION }}" "${{ env.FEDORA_VERSION }}-${TIMESTAMP}")
-          fi
-
-          if [[ "${BUILD_TAGS[@]}" =~ stable-${TIMESTAMP} ]]; then
-            echo "stable_release=true" >> $GITHUB_OUTPUT
           fi
 
           # Prepend testing if built on testing branch
