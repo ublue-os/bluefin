@@ -17,6 +17,7 @@ on:
       kernel_pin:
         description: "The full kernel version to pin"
         type: string
+        default: ""
     outputs:
       images:
         description: "An array of images built and pushed to the registry"
