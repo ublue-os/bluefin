@@ -57,9 +57,6 @@ if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
   fi
 fi
 
-# Clear flatpak font cache
-flatpak list --app --columns=application,runtime|grep org.gnome.Platform|awk -F '\t' '{print "flatpak run --command=fc-cache " $1 " -f -v"}'|xargs -I % echo "%"|sh
-
 # Handle privileged tasks
 pkexec /usr/libexec/ublue-privileged-user-setup
 
