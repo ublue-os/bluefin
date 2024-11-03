@@ -17,7 +17,6 @@ on:
       kernel_pin:
         description: "The full kernel version to pin"
         type: string
-        default: ""
     outputs:
       images:
         description: "An array of images built and pushed to the registry"
@@ -482,11 +481,11 @@ jobs:
             fi
           done
 
-  # generate_release:
-  #   name: Generate Release
-  #   needs: [check]
-  #   if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (matrix.fedora_version == 'gts' || matrix.fedora_version == 'stable' && jobs.build_container.outputs.stable_release == 'true')
-  #   secrets: inherit
-  #   uses: ./.github/workflows/generate_release.yml
-  #   with:
-  #     fedora_version=: '[ "${{ matrix.fedora_version }}" ]'
+  generate_release:
+    name: Generate Release
+    needs: [check]
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (matrix.fedora_version == 'gts' || inputs.fedora_version == 'stable' && jobs.build_container.outputs.stable_release == 'true')
+    secrets: inherit
+    uses: ./.github/workflows/generate_release.yml
+    with:
+      fedora_version: ${{ inputs.fedora_version }}

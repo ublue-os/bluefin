@@ -1,9 +1,10 @@
 on:
   workflow_call:
-    fedora_version:
-      description: "Release Tag (e.g. gts, stable)"
-      type: string
-      required: true
+    inputs:
+      fedora_version:
+        description: "Release Tag (e.g. gts, stable)"
+        type: string
+        required: true
   workflow_dispatch:
     inputs:
       handwritten:
