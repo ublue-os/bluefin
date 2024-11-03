@@ -47,4 +47,4 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      fedora_version: beta
+      fedora_version: '["beta"]'

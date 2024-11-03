@@ -31,11 +31,11 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      fedora_version: gts
+      fedora_version: '["gts"]'
 
   build-iso-gts:
-    name: Build Stable ISOs
+    name: Build GTS ISOs
     needs: [build-image-gts]
     if: github.event_name == 'scheduled'
     secrets: inherit
-    uses: ./.github/workflows/build-iso-stable.yml
+    uses: ./.github/workflows/build-iso-gts.yml

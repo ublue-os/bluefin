@@ -41,7 +41,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      fedora_version: stable
+      fedora_version: '["stable"]'
    
   build-iso-stable:
     name: Build Stable ISOs
