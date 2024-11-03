@@ -38,7 +38,7 @@ jobs:
         brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
     with:
       brand_name: ${{ matrix.brand_name }}
-      fedora_version: beta
+      stream_name: beta
 
   generate-release:
     name: Generate Release
@@ -47,4 +47,4 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      fedora_version: '["beta"]'
+      stream_name: '["beta"]'

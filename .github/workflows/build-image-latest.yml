@@ -39,7 +39,7 @@ jobs:
     with:
       image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
       brand_name: ${{ matrix.brand_name }}
-      fedora_version: latest
+      stream_name: latest
 
   generate-release:
     name: Generate Release
@@ -48,7 +48,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      fedora_version: '["latest"]'
+      stream_name: '["latest"]'
 
   build-iso-latest:
     name: Build Stable ISOs

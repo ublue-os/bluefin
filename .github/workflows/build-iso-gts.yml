@@ -14,4 +14,4 @@ jobs:
         brand_name: [bluefin]
     with:
       brand_name: ${{ matrix.brand_name }}
-      fedora_version: gts
+      stream_name: gts

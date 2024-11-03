@@ -23,4 +23,4 @@ jobs:
         brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
     with:
       brand_name: ${{ matrix.brand_name }}
-      fedora_version: stable
+      stream_name: stable

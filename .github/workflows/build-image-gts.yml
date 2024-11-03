@@ -22,7 +22,7 @@ jobs:
         brand_name: [bluefin]
     with:
       brand_name: ${{ matrix.brand_name }}
-      fedora_version: gts
+      stream_name: gts
 
   generate_release:
     name: Generate Release
@@ -31,7 +31,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      fedora_version: '["gts"]'
+      stream_name: '["gts"]'
 
   build-iso-gts:
     name: Build GTS ISOs

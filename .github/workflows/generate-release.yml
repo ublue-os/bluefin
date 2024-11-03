@@ -5,7 +5,7 @@ on:
         description: "Make latest for Release"
         type: boolean
         default: false
-      fedora_version:
+      stream_name:
         description: "Release Tag (e.g. gts, stable)"
         type: string
         required: true
@@ -16,11 +16,11 @@ on:
       make_latest:
         description: "Make latest for Release"
         type: choice
-        default: 'false'
+        default: "false"
         options:
-          - 'false'
-          - 'true'
-      fedora_version:
+          - "false"
+          - "true"
+      stream_name:
         description: "Release Tag (e.g. gts, stable)"
         required: true
         type: choice
@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ${{ fromJson( inputs.fedora_version ) }}
+        version: ${{ fromJson( inputs.stream_name ) }}
 
     steps:
       - name: Checkout lass 500 commits (fot <commits> to work)

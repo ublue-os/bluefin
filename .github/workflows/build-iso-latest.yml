@@ -24,4 +24,4 @@ jobs:
     with:
       image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
       brand_name: ${{ matrix.brand_name }}
-      fedora_version: latest
+      stream_name: latest

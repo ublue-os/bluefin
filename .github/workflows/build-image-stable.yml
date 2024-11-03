@@ -32,7 +32,7 @@ jobs:
         brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
     with:
       brand_name: ${{ matrix.brand_name }}
-      fedora_version: stable
+      stream_name: stable
 
   generate-release:
     name: Generate Release
@@ -41,7 +41,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      fedora_version: '["stable"]'
+      stream_name: '["stable"]'
 
   build-iso-stable:
     name: Build Stable ISOs

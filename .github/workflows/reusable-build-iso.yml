@@ -10,13 +10,13 @@ on:
         description: "The Brand Name: bluefin or aurora"
         required: true
         type: string
-      fedora_version:
+      stream_name:
         description: "The Fedora Version: gts, stable, or latest"
         required: true
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.fedora_version }}-iso
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}-iso
   cancel-in-progress: true
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       matrix:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
         base_name: ["${{ inputs.brand_name }}", "${{ inputs.brand_name }}-dx"]
-        fedora_version: ["${{ inputs.fedora_version }}"]
+        stream_name: ["${{ inputs.stream_name }}"]
 
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           set -eo pipefail
-          kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.fedora_version }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+          kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.stream_name }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
           fedora_version=$(echo $kernel_release | grep -oP 'fc\K[0-9]+')
           echo "kernel_release=$kernel_release" >> $GITHUB_OUTPUT
           echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
@@ -67,7 +67,7 @@ jobs:
         id: generate-tag
         shell: bash
         run: |
-          TAG="${{ matrix.fedora_version }}"
+          TAG="${{ matrix.stream_name }}"
 
           if [[ "${{ github.ref_name }}" == "testing" ]]; then
             TAG="testing-${TAG}"
@@ -75,7 +75,7 @@ jobs:
 
           # Would like to implement in the future. This will allow us to support image tags from a PR.
           #if [[ github.event.number ]]; then
-          #  TAG="pr-${{ github.event.number }}-${{ matrix.fedora_version }}"
+          #  TAG="pr-${{ github.event.number }}-${{ matrix.stream_name }}"
           #fi
 
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
@@ -96,7 +96,7 @@ jobs:
         shell: bash
         run: |
           set -ex
-          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.fedora_version }}"
+          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.stream_name }}"
           # Make temp space
           TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
           # Get list of refs from directory
