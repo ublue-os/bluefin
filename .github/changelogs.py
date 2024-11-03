@@ -45,7 +45,7 @@ OTHER_NAMES = {
 }
 
 COMMITS_FORMAT = "### Commits\n| Hash | Subject |\n| --- | --- |{commits}\n\n"
-COMMIT_FORMAT = "\n| **[{short}](https://github.com/ublue-os/bluefin/commit/{hash})** | {subject} |"
+COMMIT_FORMAT = "\n| **[{short}](https://github.com/ublue-os/bluefin/commit/{githash})** | {subject} |"
 
 CHANGELOG_TITLE = "{tag}: {pretty}"
 CHANGELOG_FORMAT = """\
@@ -324,7 +324,7 @@ def get_commits(prev_manifests, manifests, workdir: str):
         for commit in commits.split("\n"):
             if not commit:
                 continue
-            hash, short, subject = commit.split(" ", 2)
+            githash, short, subject = commit.split(" ", 2)
 
             if subject.lower().startswith("merge"):
                 continue
@@ -332,7 +332,7 @@ def get_commits(prev_manifests, manifests, workdir: str):
             out += (
                 COMMIT_FORMAT.replace("{short}", short)
                 .replace("{subject}", subject)
-                .replace("{hash}", hash)
+                .replace("{githash}", githash)
             )
 
         if out:
