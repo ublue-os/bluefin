@@ -197,7 +197,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0":
         --target "${target}" \
         --tag "${image_name}:${tag}" \
         .
-    
+
     # Rechunk
     if [[ "{{ rechunk }}" == "1" ]]; then
         just rechunk "${image}" "${tag}" "${flavor}"
@@ -253,7 +253,7 @@ rechunk image="bluefin" tag="latest" flavor="main":
         --user 0:0 \
         ghcr.io/hhd-dev/rechunk:latest \
         /sources/rechunk/1_prune.sh
-    
+
     # Run Rechunker's Create
     just sudoif podman run --rm \
         --security-opt label=disable \
@@ -265,7 +265,7 @@ rechunk image="bluefin" tag="latest" flavor="main":
         --user 0:0 \
         ghcr.io/hhd-dev/rechunk:latest \
         /sources/rechunk/2_create.sh
-    
+
     # Cleanup Temp Container Reference
     just sudoif podman unmount "$CREF"
     just sudoif podman rm "$CREF"
@@ -504,3 +504,9 @@ run-iso image="bluefin" tag="latest" flavor="main":
     podman run "${run_args[@]}" &
     xdg-open http://localhost:${port}
     fg "%podman"
+
+# Test Changelogs
+changelogs branch="stable":
+    #!/usr/bin/bash
+    set -eoux pipefail
+    python3 ./.github/changelogs.py {{ branch }} ./output.env ./changelog.md --workdir .

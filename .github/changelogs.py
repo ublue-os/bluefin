@@ -73,21 +73,21 @@ From previous `{target}` version `{prev}` there have been the following changes.
 
 ### How to rebase
 For current users, type the following to rebase to this version:
-## For this branch (if latest):
-# Bluefin
+#### For this branch (if latest):
+##### Bluefin
 ```bash
 sudo bootc switch ghcr.io/ublue-os/bluefin:{target} --enforce-container-sigpolicy 
 ```
-# Aurora
+##### Aurora
 ```bash
 sudo bootc switch ghcr.io/ublue-os/aurora:{target} --enforce-container-sigpolicy 
 ```
-## For this specific image:
-# Bluefin
+#### For this specific image:
+##### Bluefin
 ```bash
 sudo bootc switch ghcr.io/ublue-os/bluefin:{curr} --enforce-container-sigpolicy
 ```
-# Aurora
+##### Aurora
 ```bash
 sudo bootc switch ghcr.io/ublue-os/aurora:{curr} --enforce-container-sigpolicy
 ```
