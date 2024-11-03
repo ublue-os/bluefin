@@ -56,10 +56,6 @@ sudo-clean:
     just sudoif "find *_build* -exec rm -rf {} \;"
     just sudoif "rm -f previous.manifest.json"
 
-# Build Container
-build-container:
-    #!/usr/bin/bash
-
 # Check if valid combo
 [private]
 validate image="" tag="" flavor="":
