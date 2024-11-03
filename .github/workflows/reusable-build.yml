@@ -31,6 +31,7 @@ jobs:
     runs-on: ubuntu-24.04
     continue-on-error: false
     outputs:
+      stable_release: ${{ steps.generate-tags.outputs.stable_release }}
       image_full: ${{ steps.generate-outputs.outputs.image }}
     strategy:
       fail-fast: false
@@ -177,6 +178,10 @@ jobs:
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
           elif [[ ! "${{ matrix.fedora_version}}" =~ "stable" ]]; then
             BUILD_TAGS+=("${{ env.FEDORA_VERSION }}" "${{ env.FEDORA_VERSION }}-${TIMESTAMP}")
+          fi
+
+          if [[ "${BUILD_TAGS[@]}" =~ stable-${TIMESTAMP} ]]; then
+            echo "stable_release=true" >> $GITHUB_OUTPUT
           fi
 
           # Prepend testing if built on testing branch
@@ -463,6 +468,8 @@ jobs:
   generate_release:
     name: Generate Release
     needs: [check]
-    if: github.event_name != 'pull_request'
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (matrix.fedora_version == 'gts' || matrix.fedora_version == 'stable' && jobs.build_container.outputs.stable_release == 'true')
     secrets: inherit
     uses: ./.github/workflows/generate_release.yml
+    with:
+      fedora_version=: '[ "${{ matrix.fedora_version }}" ]'

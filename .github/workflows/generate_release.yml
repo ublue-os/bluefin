@@ -1,7 +1,7 @@
 on:
   workflow_call:
     fedora_version:
-      description: "Release Tag (e.g. stable or 41)"
+      description: "Release Tag (e.g. gts, stable)"
       type: string
       required: true
   workflow_dispatch:
@@ -16,16 +16,13 @@ on:
           - "false"
           - "true"
       fedora_version:
-        description: "Release Tag (e.g. stable or 41)"
+        description: "Release Tag (e.g. gts, stable)"
         required: true
         type: choice
         options:
           - '["gts"]'
           - '["stable"]'
-          - '["latest"]'
-          - '["beta"]'
           - '["gts", "stable"]'
-          - '["gts", "stable", "latest", "beta"]'
 
 permissions:
   contents: write
@@ -49,14 +46,8 @@ jobs:
         id: generate-release-text
         shell: bash
         run: |
-          if [[ "${{ matrix.version }}" == "stable" ]]; then
-            version=stable-daily
-          else
-            version=${{ matrix.version }}
-          fi
-
           python3 ./.github/changelog.py \
-          "${version}" \
+          "${{ matrix.version }}" \
           ./output.env \
           ./changelog.md \
           --workdir . \
