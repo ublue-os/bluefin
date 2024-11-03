@@ -484,7 +484,7 @@ jobs:
   generate_release:
     name: Generate Release
     needs: [check]
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (matrix.fedora_version == 'gts' || inputs.fedora_version == 'stable' && jobs.build_container.outputs.stable_release == 'true')
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'scheduled') && (inputs.fedora_version == 'gts' || inputs.fedora_version == 'stable' && jobs.build_container.outputs.stable_release == 'true')
     secrets: inherit
     uses: ./.github/workflows/generate_release.yml
     with:
