@@ -137,7 +137,7 @@ jobs:
 
       - name: Get Current Fedora Version
         id: labels
-        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        uses: Wandalen/wretry.action@e00d406adeaa3db756566e39b53aec8af8c3ee3b # v3.6.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -195,7 +195,7 @@ jobs:
           containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.kernel_release }}
 
       - name: Verify Kernel Version Matches
-        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        uses: Wandalen/wretry.action@e00d406adeaa3db756566e39b53aec8af8c3ee3b # v3.6.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -358,7 +358,7 @@ jobs:
 
       - name: Pull images
         if: github.event_name == 'pull_request' && ( matrix.image_flavor == 'main' || matrix.image_flavor == 'nvidia' ) || github.event_name != 'pull_request'
-        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        uses: Wandalen/wretry.action@e00d406adeaa3db756566e39b53aec8af8c3ee3b # v3.6.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -473,7 +473,7 @@ jobs:
       - name: Push to GHCR
         id: push
         if: github.event_name != 'pull_request'
-        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        uses: Wandalen/wretry.action@e00d406adeaa3db756566e39b53aec8af8c3ee3b # v3.6.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
