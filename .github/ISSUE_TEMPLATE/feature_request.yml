@@ -32,4 +32,3 @@ body:
         - Vauxite
     validations:
       required: true
-      
