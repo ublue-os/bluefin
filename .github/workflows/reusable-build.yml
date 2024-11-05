@@ -84,7 +84,7 @@ jobs:
 
       - name: Get Current Fedora Version
         id: labels
-        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        uses: Wandalen/wretry.action@f8754f79743ba113fedbba4499593f7d73b458eb # v3.7.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -179,11 +179,13 @@ jobs:
           COMMIT_TAGS+=("pr-${{ github.event.number }}-${{ matrix.stream_name }}")
           COMMIT_TAGS+=("${SHA_SHORT}-${{ matrix.stream_name }}")
 
-          # Convenience Tags
+          # Convenience and Default Tags
           if [[ "${{ matrix.stream_name }}" =~ stable ]]; then
             BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
+            echo "DEFAULT_TAG=stable-daily" >> $GITHUB_ENV
           else
             BUILD_TAGS+=("${{ matrix.stream_name }}" "${{ matrix.stream_name }}-${TIMESTAMP}")
+            echo "DEFAULT_TAG=${{ matrix.stream_name }}" >> $GITHUB_ENV
           fi
 
           # Weekly Stable / Rebuild Stable on workflow_dispatch
@@ -219,7 +221,6 @@ jobs:
               alias_tags=("${BUILD_TAGS[@]}")
           fi
 
-          echo "DEFAULT_TAG=${{ matrix.stream_name }}" >> $GITHUB_ENV
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
 
       # Build metadata
@@ -247,7 +248,7 @@ jobs:
           remove-codeql: true
 
       - name: Pull images
-        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        uses: Wandalen/wretry.action@f8754f79743ba113fedbba4499593f7d73b458eb # v3.7.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -368,7 +369,7 @@ jobs:
       - name: Push to GHCR
         id: push
         if: github.event_name != 'pull_request'
-        uses: Wandalen/wretry.action@6feedb7dedadeb826de0f45ff482b53b379a7844 # v3.5.0
+        uses: Wandalen/wretry.action@f8754f79743ba113fedbba4499593f7d73b458eb # v3.7.0
         with:
           attempt_limit: 3
           attempt_delay: 15000
