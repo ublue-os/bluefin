@@ -2,6 +2,13 @@
 
 set -eoux pipefail
 
+if [[ "${IMAGE_NAME}" =~ hwe ]]; then
+    echo "HWE image detected, installing HWE packages"
+else
+    echo "Standard image detected, skipping HWE packages"
+    exit 0
+fi
+
 # Asus/Surface for HWE
 curl --retry 3 -Lo /etc/yum.repos.d/_copr_lukenukem-asus-linux.repo \
     https://copr.fedorainfracloud.org/coprs/lukenukem/asus-linux/repo/fedora-$(rpm -E %fedora)/lukenukem-asus-linux-fedora-$(rpm -E %fedora).repo

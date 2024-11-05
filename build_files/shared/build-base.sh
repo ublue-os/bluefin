@@ -13,48 +13,52 @@ rsync -rvK /ctx/system_files/shared/ /
 rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 
 # Generate image-info.json
-/ctx/build_files/base/image-info.sh
+/ctx/build_files/base/00-image-info.sh
 
 # Build Fix - Fix known skew offenders
-/ctx/build_files/base/00-build-fix.sh
+/ctx/build_files/base/01-build-fix.sh
 
 # Get COPR Repos
-/ctx/build_files/base/01-install-copr-repos.sh
+/ctx/build_files/base/02-install-copr-repos.sh
 
 # Install Kernel and Akmods
-/ctx/build_files/base/02-install-kernel-akmods.sh
+/ctx/build_files/base/03-install-kernel-akmods.sh
 
 # Install Additional Packages
-/ctx/build_files/base/03-packages.sh
+/ctx/build_files/base/04-packages.sh
 
 # Install Overrides and Fetch Install
-/ctx/build_files/base/04-override-install.sh
+/ctx/build_files/base/05-override-install.sh
+
+# Get Quadlets
+/ctx/build_files/base/06-fetch-quadlets.sh
 
 # Base Image Changes
-/ctx/build_files/base/05-base-image-changes.sh
+/ctx/build_files/base/07-base-image-changes.sh
 
 # Get Firmare for Framework
-/ctx/build_files/base/06-firmware.sh
+/ctx/build_files/base/08-firmware.sh
 
 # Make HWE changes
-if [[ "${IMAGE_NAME}" =~ hwe ]]; then
-    /ctx/build_files/base/hwe-additions.sh
-fi
+/ctx/build_files/base/09-hwe-additions.sh
 
-# Get Brew
-/ctx/build_files/base/07-brew.sh
+# Install Brew
+/ctx/build_files/base/10-brew.sh
+
+
+# late stage changes
 
 # Make sure Bootc works
-/ctx/build_files/base/08-bootc.sh
+/ctx/build_files/base/16-bootc.sh
 
 # Systemd and Remove Items
-/ctx/build_files/base/09-cleanup.sh
+/ctx/build_files/base/17-cleanup.sh
 
 # Run workarounds for lf (Likely not needed)
-/ctx/build_files/base/workarounds.sh
+/ctx/build_files/base/18-workarounds.sh
 
 # Regenerate initramfs
-/ctx/build_files/base/initramfs.sh
+/ctx/build_files/base/19-initramfs.sh
 
 # Clean Up
 mv /var/lib/alternatives /staged-alternatives
