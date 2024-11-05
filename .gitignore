@@ -6,3 +6,5 @@ flatpak.*
 *_build
 *_build.*
 previous.manifest.json
+changelog.md
+output.env
