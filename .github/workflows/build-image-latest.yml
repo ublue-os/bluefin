@@ -7,11 +7,6 @@ on:
       - testing
     paths-ignore:
       - "**.md"
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - "**.md"
   schedule:
     - cron: "40 4 * * 1,2,3,4,5,6" # 4:40 UTC All But Sunday
     - cron: "40 4 * * 0" # 4:40 UTC Sunday
