@@ -34,7 +34,7 @@ body:
     attributes:
       label: Output of `groups`
       description: Please run `groups` and paste the output here.
-      render: shell    
+      render: shell
   - type: textarea
     id: extra-context
     attributes:
