@@ -151,8 +151,9 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
 
     # Fedora Version
     if [[ "${tag}" =~ stable ]]; then
+        # CoreOS does not uses cosign
         fedora_version=$(skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-        # Verify Base Image with cosign -- coreos does not use cosign
+        # Verify Base Image with cosign
         just verify-container "${base_image_name}-main:${fedora_version}"
     else
         # Verify Base Image with cosign
@@ -329,7 +330,9 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     just sudoif "rm -rf ${OUTNAME}*"
     just sudoif "rm -f previous.manifest.json"
 
-    just secureboot "${image}" "${tag}" "${flavor}"
+    if [[ {{ ghcr }} == "1" ]]; then
+        just secureboot "${image}" "${tag}" "${flavor}"
+    fi
 
 # Run Container
 run image="bluefin" tag="latest" flavor="main":
@@ -571,6 +574,7 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
     fi
 
 # Secureboot Check
+[private]
 secureboot image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -624,16 +628,14 @@ secureboot image="bluefin" tag="latest" flavor="main":
         CMD="podman exec ${temp_name} /usr/bin/sbverify"
     fi
 
-    # Confirm that Signature are good
+    # Confirm that Signatures Are Good
     $CMD --list /tmp/vmlinuz
+    returncode=0
     if ! $CMD --cert /tmp/kernel-sign.crt /tmp/vmlinuz || ! $CMD --cert /tmp/akmods.crt /tmp/vmlinuz; then
-        if [[ -n "${temp_name:-}" ]]; then
-            podman rm -f "${temp_name}"
-        fi
         echo "Secureboot Signature Failed...."
-        exit 1
-    else
-        if [[ -n "${temp_name:-}" ]]; then
-            podman rm -f "${temp_name}"
-        fi
+        returncode=1
     fi
+    if [[ -n "${temp_name:-}" ]]; then
+        podman rm -f "${temp_name}"
+    fi
+    exit "$returncode"
