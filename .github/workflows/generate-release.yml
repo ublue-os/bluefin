@@ -46,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout lass 500 commits (fot <commits> to work)
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 500
 
@@ -66,7 +66,7 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2
         with:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
