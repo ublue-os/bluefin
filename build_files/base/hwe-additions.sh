@@ -3,10 +3,10 @@
 set -eoux pipefail
 
 # Asus/Surface for HWE
-curl -Lo /etc/yum.repos.d/_copr_lukenukem-asus-linux.repo \
+curl --retry 3 -Lo /etc/yum.repos.d/_copr_lukenukem-asus-linux.repo \
     https://copr.fedorainfracloud.org/coprs/lukenukem/asus-linux/repo/fedora-$(rpm -E %fedora)/lukenukem-asus-linux-fedora-$(rpm -E %fedora).repo
 
-curl -Lo /etc/yum.repos.d/linux-surface.repo \
+curl --retry 3 -Lo /etc/yum.repos.d/linux-surface.repo \
         https://pkg.surfacelinux.com/fedora/linux-surface.repo
 
 # Asus Firmware

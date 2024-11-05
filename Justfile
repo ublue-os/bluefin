@@ -46,15 +46,15 @@ fix:
 clean:
     #!/usr/bin/bash
     set -eoux pipefail
+    touch _build
     find *_build* -exec rm -rf {} \;
     rm -f previous.manifest.json
+    rm -f changelog.md
+    rm -f output.env
 
-# Sudo Clean
+# Sudo Clean Repo
 sudo-clean:
-    #!/usr/bin/bash
-    set -eoux pipefail
-    just sudoif "find *_build* -exec rm -rf {} \;"
-    just sudoif "rm -f previous.manifest.json"
+    just sudoif just clean
 
 # Check if valid combo
 [private]
@@ -107,7 +107,7 @@ sudoif command *args:
     sudoif {{ command }} {{ args }}
 
 # Build Image
-build image="bluefin" tag="latest" flavor="main" rechunk="0":
+build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin="":
     #!/usr/bin/bash
     set -eoux pipefail
     image={{ image }}
@@ -138,13 +138,6 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0":
         target="base"
     fi
 
-    # Fedora Version
-    if [[ "${tag}" =~ stable ]]; then
-        fedora_version=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-    else
-        fedora_version=$(skopeo inspect docker://ghcr.io/ublue-os/base-main:"${tag}" | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-    fi
-
     # AKMODS Flavor and Kernel Version
     if [[ "${flavor}" =~ hwe ]]; then
         akmods_flavor="bazzite"
@@ -155,10 +148,38 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0":
     else
         akmods_flavor="main"
     fi
-    kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${akmods_flavor}-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
+
+    # Fedora Version
+    if [[ "${tag}" =~ stable ]]; then
+        fedora_version=$(skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+        # Verify Base Image with cosign -- coreos does not use cosign
+        just verify-container "${base_image_name}-main:${fedora_version}"
+    else
+        # Verify Base Image with cosign
+        just verify-container "${base_image_name}-main:${tag}"
+        fedora_version=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/"${base_image_name}"-main:"${tag}" | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+    fi
+
+    kernel_pin="{{ kernel_pin }}"
+    if [[ -z "${kernel_pin:-}" ]]; then
+        kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/${akmods_flavor}-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
+    else
+        kernel_release="${kernel_pin}"
+    fi
+
+    # Verify Containers with Cosign
+    just verify-container "${akmods_flavor}-kernel:${kernel_release}"
+    just verify-container "akmods:${akmods_flavor}-${fedora_version}-${kernel_release}"
+    if [[ "${akmods_flavor}" =~ coreos ]]; then
+        just verify-container "akmods-zfs:${akmods_flavor}-${fedora_version}-${kernel_release}"
+    fi
+    if [[ "${flavor}" =~ nvidia ]]; then
+        just verify-container "akmods-nvidia:${akmods_flavor}-${fedora_version}-${kernel_release}"
+    fi
+
 
     # Get Version
-    ver=$(skopeo inspect docker://ghcr.io/ublue-os/"${base_image_name}-main":"${fedora_version}" | jq -r '.Labels["org.opencontainers.image.version"]')
+    ver=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/"${base_image_name}-main":"${fedora_version}" | jq -r '.Labels["org.opencontainers.image.version"]')
     if [ -z "$ver" ] || [ "null" = "$ver" ]; then
         echo "inspected image version must not be empty or null"
         exit 1
@@ -195,17 +216,24 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0":
         .
 
     # Rechunk
-    if [[ "{{ rechunk }}" == "1" ]]; then
+    if [[ "{{ rechunk }}" == "1" && "{{ ghcr }}" == "1" ]]; then
+        just rechunk "${image}" "${tag}" "${flavor}" 1
+    elif [[ "{{ rechunk }}" == "1" ]]; then
         just rechunk "${image}" "${tag}" "${flavor}"
     fi
 
 # Build Image and Rechunk
-build-rechunk image="bluefin" tag="latest" flavor="main":
-    @just build {{ image }} {{ tag }} {{ flavor }} 1
+build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
+    @just build {{ image }} {{ tag }} {{ flavor }} 1 0 {{ kernel_pin }}
+
+# Build Image for Pipeline:
+build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
+    @if [[ "${UID}" > 0 ]]; then echo "Must run with sudo"; exit 1; fi
+    @just build {{ image }} {{ tag }} {{ flavor }} 1 1 {{ kernel_pin }}
 
 # Rechunk Image
 [private]
-rechunk image="bluefin" tag="latest" flavor="main":
+rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     #!/usr/bin/bash
     set -eoux pipefail
 
@@ -237,8 +265,15 @@ rechunk image="bluefin" tag="latest" flavor="main":
 
     # Prep Container
     CREF=$(just sudoif podman create localhost/"${image_name}":"${tag}" bash)
-    MOUNT=$(just sudoif podman mount "${CREF}")
+    if [[ "{{ ghcr }}" == 1 && "${tag}" == "stable" ]]; then
+        old_tag="${tag}"
+        tag="stable-daily"
+    fi
     OUT_NAME="${image_name}_build"
+    MOUNT=$(just sudoif podman mount "${CREF}")
+
+    # Rechunk Container
+    rechunker="ghcr.io/hhd-dev/rechunk:latest"
 
     # Run Rechunker's Prune
     just sudoif podman run --rm \
@@ -247,7 +282,7 @@ rechunk image="bluefin" tag="latest" flavor="main":
         --volume "$MOUNT":/var/tree \
         --env TREE=/var/tree \
         --user 0:0 \
-        ghcr.io/hhd-dev/rechunk:latest \
+        "${rechunker}" \
         /sources/rechunk/1_prune.sh
 
     # Run Rechunker's Create
@@ -259,7 +294,7 @@ rechunk image="bluefin" tag="latest" flavor="main":
         --env REPO=/var/ostree/repo \
         --env RESET_TIMESTAMP=1 \
         --user 0:0 \
-        ghcr.io/hhd-dev/rechunk:latest \
+        "${rechunker}" \
         /sources/rechunk/2_create.sh
 
     # Cleanup Temp Container Reference
@@ -282,21 +317,19 @@ rechunk image="bluefin" tag="latest" flavor="main":
         --env OUT_REF="oci:$OUT_NAME" \
         --env GIT_DIR="/var/git" \
         --user 0:0 \
-        ghcr.io/hhd-dev/rechunk:latest \
+        "${rechunker}" \
         /sources/rechunk/3_chunk.sh
-
-    # Cleanup
-    just sudoif "find ${OUT_NAME} -type d -exec chmod 0755 {} \;" || true
-    just sudoif "find ${OUT_NAME}* -type f -exec chmod 0644 {} \;" || true
-    if [[ "${UID}" -gt 0 ]]; then
-        just sudoif chown ${UID}:${GROUPS} -R "${PWD}"
-    fi
-    just sudoif podman volume rm cache_ostree
-    just sudoif podman rmi localhost/"${image_name}":"${tag}"
 
     # Load Image into Podman Store
     IMAGE=$(podman pull oci:"${PWD}"/"${OUT_NAME}")
     podman tag ${IMAGE} localhost/"${image_name}":"${tag}"
+
+    # Cleanup
+    just sudoif podman volume rm cache_ostree
+    just sudoif "rm -rf ${OUTNAME}*"
+    just sudoif "rm -f previous.manifest.json"
+
+    just secureboot "${image}" "${tag}" "${flavor}"
 
 # Run Container
 run image="bluefin" tag="latest" flavor="main":
@@ -444,7 +477,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     else
         iso_build_args+=(VARIANT="Kinoite")
     fi
-    iso_build_args+=(VERSION="$(skopeo inspect containers-storage:${IMAGE_FULL} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')")
+    iso_build_args+=(VERSION="$(skopeo inspect --retry-times 3 containers-storage:${IMAGE_FULL} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')")
     iso_build_args+=(WEBUI="false")
 
     just sudoif podman run "${iso_build_args[@]}"
@@ -452,7 +485,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
 
 # Build ISO using GHCR Image
 build-iso-ghcr image="bluefin" tag="latest" flavor="main":
-    @just build-iso {{ image }} {{ tag }} {{ flavor }} ghcr
+    @just build-iso {{ image }} {{ tag }} {{ flavor }} 1
 
 # Run ISO
 run-iso image="bluefin" tag="latest" flavor="main":
@@ -506,3 +539,101 @@ changelogs branch="stable":
     #!/usr/bin/bash
     set -eoux pipefail
     python3 ./.github/changelogs.py {{ branch }} ./output.env ./changelog.md --workdir .
+
+# Verify Container with Cosign
+verify-container container="" registry="ghcr.io/ublue-os" key="": 
+    #!/usr/bin/bash
+    set -eoux pipefail
+
+    # Get Cosign if Needed
+    if [[ ! $(command -v cosign) ]]; then
+        CONTAINER_ID=$(just sudoif podman create cgr.dev/chainguard/cosign:latest bash)
+        just sudoif podman cp "${CONTAINER_ID}":/usr/bin/cosign /usr/local/bin/cosign
+        just sudoif podman rm -f "${CONTAINER_ID}"
+    fi
+
+    # Verify Cosign Image Signatures
+    if ! cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/cosign | jq >/dev/null; then
+          echo "NOTICE: Failed to verify cosign image signatures."
+          exit 1
+    fi
+
+    # Public Key for Container Verification
+    key={{ key }}
+    if [[ -z "${key:-}" ]]; then
+        key="https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub"
+    fi
+    
+    # Verify Container using cosign public key
+    if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" | jq; then
+        echo "NOTICE: Verification failed. Please ensure your public key is correct."
+        exit 1
+    fi
+
+# Secureboot Check
+secureboot image="bluefin" tag="latest" flavor="main":
+    #!/usr/bin/bash
+    set -eoux pipefail
+    image={{ image }}
+    tag={{ tag }}
+    flavor={{ flavor }}
+
+    # Validate (Handle Stable-daily)
+    if [[ "${tag}" == "stable-daily" ]]; then
+        temp_tag="${tag}"
+        tag="stable"
+    fi
+
+    just validate "${image}" "${tag}" "${flavor}"
+
+    if [[ -n "${temp_tag:-}" ]]; then
+        tag="${temp_tag}"
+    fi
+
+    # Image Name
+    if [[ "${flavor}" =~ main ]]; then
+        image_name="${image}"
+    else
+        image_name="${image}-${flavor}"
+    fi
+
+    # Get the vmlinuz to check
+    kernel_release=$(podman inspect "${image_name}":"${tag}" | jq -r '.[].Config.Labels["ostree.linux"]')
+    TMP=$(podman create "${image_name}":"${tag}" bash)
+    podman cp "$TMP":/usr/lib/modules/"${kernel_release}"/vmlinuz /tmp/vmlinuz
+    podman rm "$TMP"
+
+    # Get the Public Certificates
+    curl --retry 3 -Lo /tmp/kernel-sign.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key.der
+    curl --retry 3 -Lo /tmp/akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
+    openssl x509 -in /tmp/kernel-sign.der -out /tmp/kernel-sign.crt
+    openssl x509 -in /tmp/akmods.der -out /tmp/akmods.crt
+
+    # Make sure we have sbverify
+    CMD="$(command -v sbverify)"
+    if [[ -z "${CMD:-}" ]]; then
+        temp_name="sbverify-${RANDOM}"
+        podman run -dt \
+            --entrypoint /bin/sh \
+            --volume /tmp/vmlinuz:/tmp/vmlinuz:z \
+            --volume /tmp/kernel-sign.crt:/tmp/kernel-sign.crt:z \
+            --volume /tmp/akmods.crt:/tmp/akmods.crt:z \
+            --name ${temp_name} \
+            alpine
+        podman exec ${temp_name} apk add sbsigntool
+        CMD="podman exec ${temp_name} /usr/bin/sbverify"
+    fi
+
+    # Confirm that Signature are good
+    $CMD --list /tmp/vmlinuz
+    if ! $CMD --cert /tmp/kernel-sign.crt /tmp/vmlinuz || ! $CMD --cert /tmp/akmods.crt /tmp/vmlinuz; then
+        if [[ -n "${temp_name:-}" ]]; then
+            podman rm -f "${temp_name}"
+        fi
+        echo "Secureboot Signature Failed...."
+        exit 1
+    else
+        if [[ -n "${temp_name:-}" ]]; then
+            podman rm -f "${temp_name}"
+        fi
+    fi
