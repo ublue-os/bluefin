@@ -51,7 +51,7 @@ jobs:
       stream_name: '["latest"]'
 
   build-iso-latest:
-    name: Build Stable ISOs
+    name: Build Latest ISOs
     needs: [build-image-latest]
     if: github.event_name.scheduled == '40 4 * * 0'
     secrets: inherit
