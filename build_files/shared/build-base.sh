@@ -46,7 +46,7 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 /ctx/build_files/base/10-brew.sh
 
 
-# late stage changes
+## late stage changes
 
 # Make sure Bootc works
 /ctx/build_files/base/16-bootc.sh
