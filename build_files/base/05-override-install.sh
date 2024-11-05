@@ -72,6 +72,3 @@ mv -f /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml
 # Register Fonts
 fc-cache -f /usr/share/fonts/ubuntu
 fc-cache -f /usr/share/fonts/inter
-
-# Get Quadlets
-/ctx/build_files/base/fetch-quadlets.sh
