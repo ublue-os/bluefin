@@ -102,3 +102,10 @@ install-incus:
         echo "Run \"just devmode\" to turn on Developer mode."
         exit
     fi
+
+# Installs 1Password gui and cli tool
+install-1password-gui:
+    #!/usr/bin/env bash
+    curl https://downloads.1password.com/linux/keys/1password.asc | sudo tee /etc/pki/rpm-gpg/RPM-GPG-KEY-1password
+    sudo sh -c 'echo -e "[1password]\nname=1Password Stable Channel\nbaseurl=https://downloads.1password.com/linux/rpm/stable/\$basearch\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=0\ngpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-1password" > /etc/yum.repos.d/1password.repo'
+    rpm-ostree install 1password 1password-cli
