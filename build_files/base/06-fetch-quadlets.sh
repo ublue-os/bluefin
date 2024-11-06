@@ -5,14 +5,6 @@ set -ouex pipefail
 # Make Directory
 mkdir -p /etc/containers/systemd/users
 
-# bluefin-cli
-curl -Lo /etc/containers/systemd/users/bluefin-cli.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-cli.container
-sed -i 's/ContainerName=bluefin/ContainerName=bluefin-cli/' /etc/containers/systemd/users/bluefin-cli.container
-
-# bluefin-dx-cli
-curl -Lo /etc/containers/systemd/users/bluefin-dx-cli.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/bluefin-cli/bluefin-dx-cli.container
-sed -i 's/ContainerName=bluefin/ContainerName=bluefin-dx-cli/' /etc/containers/systemd/users/bluefin-dx-cli.container
-
 # fedora-toolbox
 curl -Lo /etc/containers/systemd/users/fedora-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/fedora-toolbox/fedora-distrobox-quadlet.container
 sed -i 's/ContainerName=fedora-distrobox-quadlet/ContainerName=fedora-toolbox/' /etc/containers/systemd/users/fedora-toolbox.container
@@ -36,8 +28,6 @@ printf "\nVolume=/home/linuxbrew:/home/linuxbrew:rslave\nVolume=/etc/profile.d/b
 # Make systemd targets
 mkdir -p /usr/lib/systemd/user
 QUADLET_TARGETS=(
-    "bluefin-cli"
-    "bluefin-dx-cli"
     "fedora-toolbox"
     "ubuntu-toolbox"
     "wolfi-toolbox"
