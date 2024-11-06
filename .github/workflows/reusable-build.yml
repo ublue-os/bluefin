@@ -179,11 +179,13 @@ jobs:
           COMMIT_TAGS+=("pr-${{ github.event.number }}-${{ matrix.stream_name }}")
           COMMIT_TAGS+=("${SHA_SHORT}-${{ matrix.stream_name }}")
 
-          # Convenience Tags
+          # Convenience and Default Tags
           if [[ "${{ matrix.stream_name }}" =~ stable ]]; then
             BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
+            echo "DEFAULT_TAG=stable-daily" >> $GITHUB_ENV
           else
             BUILD_TAGS+=("${{ matrix.stream_name }}" "${{ matrix.stream_name }}-${TIMESTAMP}")
+            echo "DEFAULT_TAG=${{ matrix.stream_name }}" >> $GITHUB_ENV
           fi
 
           # Weekly Stable / Rebuild Stable on workflow_dispatch
@@ -219,7 +221,6 @@ jobs:
               alias_tags=("${BUILD_TAGS[@]}")
           fi
 
-          echo "DEFAULT_TAG=${{ matrix.stream_name }}" >> $GITHUB_ENV
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
 
       # Build metadata
@@ -401,6 +402,20 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
+        env:
+          TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
+          COSIGN_EXPERIMENTAL: false
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+
+      - name: Sign container image
+        if: github.event_name != 'pull_request' && contains(inputs.image_flavors, 'hwe')
+        shell: bash
+        run: |
+          image_name="${{ env.IMAGE_NAME }}"
+          asus_name="${image_name/hwe/asus}"
+          surface_name="${image_name/hwe/surface}"
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${asus_name}@${TAGS}
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${surface_name}@${TAGS}
         env:
           TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           COSIGN_EXPERIMENTAL: false

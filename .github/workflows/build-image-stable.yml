@@ -1,5 +1,6 @@
 name: Stable Images
 on:
+  merge_group: # Make Stable-Daily run on merge groups
   pull_request:
     branches:
       - main

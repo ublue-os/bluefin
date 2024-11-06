@@ -45,7 +45,7 @@ jobs:
         version: ${{ fromJson( inputs.stream_name ) }}
 
     steps:
-      - name: Checkout lass 500 commits (fot <commits> to work)
+      - name: Checkout last 500 commits (fot <commits> to work)
         uses: actions/checkout@v4
         with:
           fetch-depth: 500
@@ -54,7 +54,7 @@ jobs:
         id: generate-release-text
         shell: bash
         run: |
-          python3 ./.github/changelog.py \
+          python3 ./.github/changelogs.py \
           "${{ matrix.version }}" \
           ./output.env \
           ./changelog.md \
