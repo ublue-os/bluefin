@@ -102,3 +102,8 @@ install-incus:
         echo "Run \"just devmode\" to turn on Developer mode."
         exit
     fi
+
+# Install nix using the determinate systems installer
+install-nix:
+    #!/usr/bin/env bash
+    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
