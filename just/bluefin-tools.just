@@ -266,3 +266,9 @@ invokeai:
     systemctl --user daemon-reload
     systemctl --user start invokeai.service
     echo "InvokeAI container started. You can access it at http://localhost:9091"
+
+# Install Kubernetes CLI dev tools
+k8s-dev-tools:
+    #!/usr/bin/bash
+    echo "Adding Kubernetes command line tools..."
+    brew bundle --file /usr/share/ublue-os/homebrew/kubernetes.Brewfile
