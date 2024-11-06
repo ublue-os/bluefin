@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.8.0](https://github.com/ublue-os/bluefin/compare/v3.7.0...v3.8.0) (2024-11-05)
+
+
+### Features
+
+* add adw-gtk3-theme ([#1842](https://github.com/ublue-os/bluefin/issues/1842)) ([27081d6](https://github.com/ublue-os/bluefin/commit/27081d67a039fcfc80e55d1a93a51d0b043271e6))
+* hide all windows (show desktop) via Super+D ([#1831](https://github.com/ublue-os/bluefin/issues/1831)) ([3c60627](https://github.com/ublue-os/bluefin/commit/3c60627bef946a6089fd15dd7a0fd4cc600bcc02))
+* make podman-machine work by default OOB ([#1861](https://github.com/ublue-os/bluefin/issues/1861)) ([daeb35e](https://github.com/ublue-os/bluefin/commit/daeb35e3365c877165238bb768c2a25347ccc2e1))
+
+
+### Bug Fixes
+
+* broken scale-monitor-framebuffer ([#1847](https://github.com/ublue-os/bluefin/issues/1847)) ([699179c](https://github.com/ublue-os/bluefin/commit/699179c2590d4634000e3a1ff7a7119fc9ac1dd4))
+* **framework:** turn the framework akmod back on ([#1857](https://github.com/ublue-os/bluefin/issues/1857)) ([8ebccc5](https://github.com/ublue-os/bluefin/commit/8ebccc5662502e2a1228b155c83407a5ec544add))
+* **just:** change dx-group to a reboot message ([#1838](https://github.com/ublue-os/bluefin/issues/1838)) ([2ee9e22](https://github.com/ublue-os/bluefin/commit/2ee9e2249656cf54f941843864219bcb78696039))
+* limit the number of days in rollback-helper ([#1836](https://github.com/ublue-os/bluefin/issues/1836)) ([fbf2123](https://github.com/ublue-os/bluefin/commit/fbf21234e578c539a6a45c68306b64df5c6e5d8c))
+* match bazzite's vrr/fractional scaling options ([#1846](https://github.com/ublue-os/bluefin/issues/1846)) ([70e0e6c](https://github.com/ublue-os/bluefin/commit/70e0e6ccbd4c5c97d068fd7795493845f1ccec3d))
+
+
+### Reverts
+
+* "fix: match bazzite's vrr/fractional scaling options" ([#1848](https://github.com/ublue-os/bluefin/issues/1848)) ([70b756f](https://github.com/ublue-os/bluefin/commit/70b756fe1edcc186aca37c2655e40b63914fcd21))
+
 ## [3.7.0](https://github.com/ublue-os/bluefin/compare/v3.6.0...v3.7.0) (2024-10-24)
 
 
