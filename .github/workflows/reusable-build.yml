@@ -84,7 +84,7 @@ jobs:
 
       - name: Get Current Fedora Version
         id: labels
-        uses: Wandalen/wretry.action@ce976ac9e7829ca3ea99b08c4511077d2677a653 # v3.7.1
+        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -248,7 +248,7 @@ jobs:
           remove-codeql: true
 
       - name: Pull images
-        uses: Wandalen/wretry.action@ce976ac9e7829ca3ea99b08c4511077d2677a653 # v3.7.1
+        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -369,7 +369,7 @@ jobs:
       - name: Push to GHCR
         id: push
         if: github.event_name != 'pull_request'
-        uses: Wandalen/wretry.action@ce976ac9e7829ca3ea99b08c4511077d2677a653 # v3.7.1
+        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
