@@ -1,0 +1,75 @@
+on:
+  workflow_call:
+    inputs:
+      make_latest:
+        description: "Make latest for Release"
+        type: boolean
+        default: false
+      stream_name:
+        description: "Release Tag (e.g. gts, stable)"
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      handwritten:
+        description: "Small Changelog about changes in this build"
+      make_latest:
+        description: "Make latest for Release"
+        type: choice
+        default: "false"
+        options:
+          - "false"
+          - "true"
+      stream_name:
+        description: "Release Tag (e.g. gts, stable)"
+        required: true
+        type: choice
+        options:
+          - '["gts"]'
+          - '["stable"]'
+          - '["latest"]'
+          - '["beta"]'
+          - '["gts", "stable"]'
+          - '["gts", "stable", "latest", "beta"]'
+
+permissions:
+  contents: write
+
+name: Generate Release
+jobs:
+  generate-release:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJson( inputs.stream_name ) }}
+
+    steps:
+      - name: Checkout last 500 commits (fot <commits> to work)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 500
+
+      - name: Generate Release Text
+        id: generate-release-text
+        shell: bash
+        run: |
+          python3 ./.github/changelogs.py \
+          "${{ matrix.version }}" \
+          ./output.env \
+          ./changelog.md \
+          --workdir . \
+          --handwritten "${{ github.event.inputs.handwritten }}"
+
+          source ./output.env
+          echo "title=${TITLE}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.generate-release-text.outputs.title }}
+          tag_name: ${{ steps.generate-release-text.outputs.tag }}
+          body_path: ./changelog.md
+          make_latest: ${{ inputs.make_latest == true && matrix.version == 'stable' || false }}
+          prerelease: ${{ inputs.make_latest != false  }}

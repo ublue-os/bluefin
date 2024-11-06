@@ -1,7 +1,7 @@
 # Welcome to Aurora
 
 🔭  `%IMAGE_NAME%:%IMAGE_TAG%`
-Let's trace the stars.
+Hello, stargazer.
 
 |  Command | Description |
 | ------- | ----------- |

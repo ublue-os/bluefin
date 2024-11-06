@@ -1,0 +1,52 @@
+name: Stable Images
+on:
+  merge_group: # Make Stable-Daily run on merge groups
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - "**.md"
+  schedule:
+    - cron: "45 5 * * 1,2,3,4,5,6" # 5:41 UTC everyday
+    - cron: "45 5 * * 0" # 5:41 UTC sunday
+  workflow_call:
+  workflow_dispatch:
+    inputs:
+      brand_name:
+        description: "Image Brand to Build"
+        default: '["bluefin"]'
+        type: choice
+        options:
+          - '["bluefin"]'
+          - '["aurora"]'
+          - '["bluefin", "aurora"]'
+
+jobs:
+  build-image-stable:
+    name: Build Stable Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
+    with:
+      brand_name: ${{ matrix.brand_name }}
+      stream_name: stable
+
+  generate-release:
+    name: Generate Release
+    needs: [build-image-stable]
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event_name.scheduled == '45 5 * * 0'
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      stream_name: '["stable"]'
+
+  build-iso-stable:
+    name: Build Stable ISOs
+    needs: [build-image-stable]
+    if: github.event_name.scheduled == '45 5 * * 0'
+    secrets: inherit
+    uses: ./.github/workflows/build-iso-stable.yml

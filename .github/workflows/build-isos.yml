@@ -1,0 +1,19 @@
+name: Build All ISOs
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    packages: write
+    id-token: write
+
+jobs:
+    build-iso-gts:
+        uses: ./.github/workflows/build-iso-gts.yml
+        secrets: inherit
+    build-iso-stable:
+        uses: ./.github/workflows/build-iso-stable.yml
+        secrets: inherit
+    build-iso-latest:
+        uses: ./.github/workflows/build-iso-latest.yml
+        secrets: inherit
