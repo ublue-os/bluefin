@@ -5,4 +5,3 @@ owners: # (optional, used to claim repository ownership)
 #ignore: # (optional, packages that should not be indexed by Artifact Hub)
 #  - name: package1
 #  - name: package2 # Exact match
-    

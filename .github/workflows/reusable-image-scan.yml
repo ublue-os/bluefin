@@ -57,7 +57,7 @@ jobs:
 
       - name: Scan SBOM
         id: scan
-        uses: anchore/scan-action@5ed195cc06065322983cae4bb31e2a751feb86fd # v5
+        uses: anchore/scan-action@f2ba85e044c8f5e5014c9a539328a9c78d3bfa49 # v5
         with:
           sbom: sbom.json
           output-format: json
