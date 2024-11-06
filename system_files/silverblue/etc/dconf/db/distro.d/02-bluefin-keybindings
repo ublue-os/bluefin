@@ -3,12 +3,12 @@
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
 binding='<Control><Alt>t'
-command='/usr/bin/ptyxis'
+command='/usr/bin/ptyxis --tab-with-profile="Host" --new-window'
 name='Ptyxis'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
 binding='<Control><Alt>Return'
-command='/usr/bin/ptyxis'
+command='/usr/bin/ptyxis --tab-with-profile="Host" --new-window'
 name='Ptyxis Alt'
 
 [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
