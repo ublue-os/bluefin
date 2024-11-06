@@ -1,3 +1,3 @@
 applet.currentConfigGroup = ["General"]
-applet.writeConfig("icon", "distributor-logo")
+applet.writeConfig("icon", "distributor-logo-white")
 applet.reloadConfig()
