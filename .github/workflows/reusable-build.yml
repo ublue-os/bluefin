@@ -84,7 +84,7 @@ jobs:
 
       - name: Get Current Fedora Version
         id: labels
-        uses: Wandalen/wretry.action@f8754f79743ba113fedbba4499593f7d73b458eb # v3.7.0
+        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -248,7 +248,7 @@ jobs:
           remove-codeql: true
 
       - name: Pull images
-        uses: Wandalen/wretry.action@f8754f79743ba113fedbba4499593f7d73b458eb # v3.7.0
+        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -369,7 +369,7 @@ jobs:
       - name: Push to GHCR
         id: push
         if: github.event_name != 'pull_request'
-        uses: Wandalen/wretry.action@f8754f79743ba113fedbba4499593f7d73b458eb # v3.7.0
+        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
         with:
           attempt_limit: 3
           attempt_delay: 15000
@@ -402,6 +402,20 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
+        env:
+          TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
+          COSIGN_EXPERIMENTAL: false
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+
+      - name: Sign container image
+        if: github.event_name != 'pull_request' && contains(inputs.image_flavors, 'hwe')
+        shell: bash
+        run: |
+          image_name="${{ env.IMAGE_NAME }}"
+          asus_name="${image_name/hwe/asus}"
+          surface_name="${image_name/hwe/surface}"
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${asus_name}@${TAGS}
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${surface_name}@${TAGS}
         env:
           TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           COSIGN_EXPERIMENTAL: false

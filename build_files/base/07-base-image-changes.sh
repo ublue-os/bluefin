@@ -13,8 +13,8 @@ if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
 
     # Branding for Images
     ln -sf ../places/distributor-logo.svg /usr/share/icons/hicolor/scalable/apps/start-here.svg
-    ln -sf /usr/share/wallpapers/jonatan-pie-aurora/contents/images/3944x2770.jxl /usr/share/backgrounds/default.png
-    ln -sf /usr/share/wallpapers/greg-rakozy-aurora/contents/images/5616x3744.jxl /usr/share/backgrounds/default-dark.png
+    ln -sf /usr/share/wallpapers/aurora-wallpaper-1/contents/images/15392x8616.jpg /usr/share/backgrounds/default.png
+    ln -sf /usr/share/wallpapers/aurora-wallpaper-1/contents/images/15392x8616.jpg /usr/share/backgrounds/default-dark.png
     ln -sf aurora.xml /usr/share/backgrounds/default.xml
 
     # Favorites in Kickoff
