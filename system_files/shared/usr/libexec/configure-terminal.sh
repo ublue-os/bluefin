@@ -6,8 +6,6 @@ source /usr/lib/ujust/ujust.sh
 # List of possible containers
 ###
 targets=(
-    "bluefin-cli"
-    "bluefin-dx-cli"
     "fedora-toolbox"
     "ubuntu-toolbox"
     "wolfi-toolbox"
@@ -20,7 +18,7 @@ targets=(
 # shellcheck disable=SC2154
 function Exiting(){
     echo "${red}Exiting...${normal}"
-    echo "Rerun CLI setup using ${blue}ujust bluefin-cli${normal}..."
+    echo "Rerun setup using ${blue}ujust configure-terminal${normal}..."
     exit 0
 }
 function Good_Exit(){
@@ -211,7 +209,7 @@ function Build_container(){
 
 function main(){
     trap ctrl_c SIGINT
-    printf "Set Up bluefin-cli\n"
+    printf "Set up containers\n"
     Terminal_choice
     Make_container "$TERMINAL_CHOICE" 
     Container_manager
