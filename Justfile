@@ -23,6 +23,7 @@ default:
     @just --list
 
 # Check Just Syntax
+[group('Just')]
 check:
     #!/usr/bin/bash
     find . -type f -name "*.just" | while read -r file; do
@@ -33,6 +34,7 @@ check:
     just --unstable --fmt --check -f Justfile
 
 # Fix Just Syntax
+[group('Just')]
 fix:
     #!/usr/bin/bash
     find . -type f -name "*.just" | while read -r file; do
@@ -43,6 +45,7 @@ fix:
     just --unstable --fmt -f Justfile || { exit 1; }
 
 # Clean Repo
+[group('Utility')]
 clean:
     #!/usr/bin/bash
     set -eoux pipefail
@@ -53,11 +56,13 @@ clean:
     rm -f output.env
 
 # Sudo Clean Repo
+[group('Utility')]
 sudo-clean:
     just sudoif just clean
 
 # Check if valid combo
 [private]
+[group('Utility')]
 validate image="" tag="" flavor="":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -91,6 +96,7 @@ validate image="" tag="" flavor="":
 
 # sudoif bash function
 [private]
+[group('Utility')]
 sudoif command *args:
     #!/usr/bin/bash
     function sudoif(){
@@ -107,6 +113,7 @@ sudoif command *args:
     sudoif {{ command }} {{ args }}
 
 # Build Image
+[group('Image')]
 build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin="":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -224,16 +231,19 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
     fi
 
 # Build Image and Rechunk
+[group('Image')]
 build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
     @just build {{ image }} {{ tag }} {{ flavor }} 1 0 {{ kernel_pin }}
 
 # Build Image for Pipeline:
+[group('Production')]
 build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
     @if [[ "${UID}" > 0 ]]; then echo "Must run with sudo"; exit 1; fi
     @just build {{ image }} {{ tag }} {{ flavor }} 1 1 {{ kernel_pin }}
 
 # Rechunk Image
 [private]
+[group('Image')]
 rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -335,6 +345,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     fi
 
 # Run Container
+[group('Image')]
 run image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -362,6 +373,7 @@ run image="bluefin" tag="latest" flavor="main":
     podman run -it --rm localhost/"${image_name}":"${tag}" bash
 
 # Build ISO
+[group('ISO')]
 build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -484,13 +496,18 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     iso_build_args+=(WEBUI="false")
 
     just sudoif podman run "${iso_build_args[@]}"
-    just sudoif chown "${UID}:${GROUPS}" -R "${PWD}"
+
+    if [[ "${UID}" -gt "0" ]]; then
+        just sudoif chown "${UID}:${GROUPS}" -R "${PWD}"
+    fi
 
 # Build ISO using GHCR Image
+[group('Production')]
 build-iso-ghcr image="bluefin" tag="latest" flavor="main":
     @just build-iso {{ image }} {{ tag }} {{ flavor }} 1
 
 # Run ISO
+[group('ISO')]
 run-iso image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -538,27 +555,31 @@ run-iso image="bluefin" tag="latest" flavor="main":
     fg "%podman"
 
 # Test Changelogs
+[group('Changelogs')]
 changelogs branch="stable":
     #!/usr/bin/bash
-    set -eoux pipefail
+    set -eou pipefail
     python3 ./.github/changelogs.py {{ branch }} ./output.env ./changelog.md --workdir .
 
 # Verify Container with Cosign
+[group('Utility')]
 verify-container container="" registry="ghcr.io/ublue-os" key="": 
     #!/usr/bin/bash
     set -eoux pipefail
 
     # Get Cosign if Needed
     if [[ ! $(command -v cosign) ]]; then
-        CONTAINER_ID=$(just sudoif podman create cgr.dev/chainguard/cosign:latest bash)
-        just sudoif podman cp "${CONTAINER_ID}":/usr/bin/cosign /usr/local/bin/cosign
-        just sudoif podman rm -f "${CONTAINER_ID}"
+        COSIGN_CONTAINER_ID=$(just sudoif podman create cgr.dev/chainguard/cosign:latest bash)
+        just sudoif podman cp "${COSIGN_CONTAINER_ID}":/usr/bin/cosign /usr/local/bin/cosign
+        just sudoif podman rm -f "${COSIGN_CONTAINER_ID}"
     fi
 
-    # Verify Cosign Image Signatures
-    if ! cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/cosign | jq >/dev/null; then
-          echo "NOTICE: Failed to verify cosign image signatures."
-          exit 1
+    # Verify Cosign Image Signatures if needed
+    if [[ -n "${COSIGN_CONTAINER_ID:-}" ]]; then
+        if ! cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/cosign >/dev/null; then
+            echo "NOTICE: Failed to verify cosign image signatures."
+            exit 1
+        fi
     fi
 
     # Public Key for Container Verification
@@ -568,13 +589,13 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
     fi
     
     # Verify Container using cosign public key
-    if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" | jq; then
+    if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" >/dev/null; then
         echo "NOTICE: Verification failed. Please ensure your public key is correct."
         exit 1
     fi
 
 # Secureboot Check
-[private]
+[group('Utility')]
 secureboot image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eoux pipefail
