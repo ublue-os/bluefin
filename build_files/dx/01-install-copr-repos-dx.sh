@@ -3,7 +3,7 @@
 set -eoux pipefail
 
 #incus, lxc, lxd
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
     curl -Lo /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo \
         https://copr.fedorainfracloud.org/coprs/ganto/lxc4/repo/fedora-"${FEDORA_MAJOR_VERSION}"/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
 fi
