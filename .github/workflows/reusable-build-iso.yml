@@ -84,9 +84,9 @@ jobs:
         id: generate-flatpak-dir-shortname
         shell: bash
         run: |
-          if [[ "${{ matrix.brand_name }}" =~ bluefin ]]; then
+          if [[ "${{ env.IMAGE_NAME }}" =~ bluefin ]]; then
             FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
-          elif [[ "${{ matrix.brand_name }}" =~ aurora ]]; then
+          elif [[ "${{ env.IMAGE_NAME }}" =~ aurora ]]; then
             FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
           fi
           echo "flatpak-dir-shortname=${FLATPAK_DIR_SHORTNAME}" >> $GITHUB_OUTPUT
