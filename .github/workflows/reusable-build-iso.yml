@@ -40,12 +40,13 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Instal Just
-        uses: extractions/setup-just@v2
+      - name: Check just syntax
+        uses: ublue-os/just-action@bda593098a84a84973b002b4377709166a68be52 # v2
 
       - name: Build ISO
         shell: bash
         run: |
+          sudo cp $(which just) /usr/local/bin/just
           sudo just build-iso-ghcr "${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }}"
           image_name="$(just image_name ${{ matrix.base_name }} ${{ matrix.image_flavor }})"
           echo "IMAGE_NAME=${image_name}" >> $GITHUB_ENV
