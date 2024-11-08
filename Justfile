@@ -240,7 +240,6 @@ build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
 # Build Image for Pipeline:
 [group('Production')]
 build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
-    @if [[ "${UID}" > 0 ]]; then echo "Must run with sudo"; exit 1; fi
     @just build {{ image }} {{ tag }} {{ flavor }} 1 1 {{ kernel_pin }}
 
 # Rechunk Image
