@@ -50,10 +50,11 @@ jobs:
         shell: bash
         run: |
           set -eoux pipefail
-          JUST_IMAGE=$(sudo podman run --entrypoint /bin/sh -dt alpine:edge)
-          sudo podman exec "${JUST_IMAGE}" apk add just
-          sudo podman cp "${JUST_IMAGE}":/usr/bin/just /usr/local/bin/just
-          sudo podman rm -f "${JUST_IMAGE}"
+          curl -sSLO \
+            https://github.com/casey/just/releases/download/1.36.0/just-1.36.0-x86_64-unknown-linux-musl.tar.gz
+          tar -zxvf just-1.36.0-x86_64-unknown-linux-musl.tar.gz just
+          sudo mv just /usr/local/bin/just
+          rm -f just-1.36.0-x86_64-unknown-linux-musl.tar.gz
         
       - name: Check Just Syntax
         shell: bash
