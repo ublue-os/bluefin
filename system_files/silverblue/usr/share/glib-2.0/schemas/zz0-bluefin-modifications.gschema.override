@@ -1,14 +1,4 @@
-#-------------- LOGIN SCREEN MODIFICATIONS --------------#
-
-### TODO: Remove this setting below when F40 gets deployed for GTS, as it's turned on by default since Gnome 46
-[org.gnome.desktop.peripherals.touchpad:GNOME-Greeter]
-tap-to-click=true
-
 #-------------- DESKTOP MODIFICATIONS --------------#
-
-### TODO: Remove this setting below when F40 gets deployed for GTS, as it's turned on by default since Gnome 46
-[org.gnome.desktop.peripherals.touchpad]
-tap-to-click=true
 
 [org.gnome.shell]
 favorite-apps = ['org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Rhythmbox3.desktop', 'org.libreoffice.LibreOffice.writer.desktop', 'org.gnome.Software.desktop', 'code.desktop', 'ubuntu.desktop', 'yelp.desktop']
