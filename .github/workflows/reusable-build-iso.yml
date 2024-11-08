@@ -46,9 +46,8 @@ jobs:
       - name: Build ISO
         shell: bash
         run: |
-          sudo cp $(which just) /usr/local/bin/just
-          sudo just build-iso-ghcr "${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }}"
           image_name="$(just image_name ${{ matrix.base_name }} ${{ matrix.image_flavor }})"
+          sudo $(which just) build-iso-ghcr "${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }}"
           echo "IMAGE_NAME=${image_name}" >> $GITHUB_ENV
           echo "ISO_BUILD_DIR=${{ github.workspace }}/${image_name}_build" >> $GITHUB_ENV
           echo "ISO_NAME=${image_name}.iso" >> $GITHUB_ENV
