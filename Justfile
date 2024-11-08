@@ -647,7 +647,7 @@ secureboot image="bluefin" tag="latest" flavor="main":
             --volume /tmp/kernel-sign.crt:/tmp/kernel-sign.crt:z \
             --volume /tmp/akmods.crt:/tmp/akmods.crt:z \
             --name ${temp_name} \
-            alpine
+            alpine:edge
         podman exec ${temp_name} apk add sbsigntool
         CMD="podman exec ${temp_name} /usr/bin/sbverify"
     fi

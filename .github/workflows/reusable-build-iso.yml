@@ -44,7 +44,10 @@ jobs:
         shell: bash
         run: |
           set -eoux pipefail
-          sudo apt update && sudo apt install -y just
+          JUST_IMAGE=$(sudo podman run --entrypoint /bin/sh -dt alpine:edge)
+          sudo podman exec "${JUST_IMAGE}" apk add just
+          sudo podman cp "${JUST_IMAGE}":/usr/bin/just /usr/local/bin/just
+          sudo podman rm -f "${JUST_IMAGE}"
         
       - name: Check Just Syntax
         shell: bash
