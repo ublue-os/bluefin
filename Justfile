@@ -476,7 +476,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     # Build ISO
     iso_build_args=()
     iso_build_args+=("--rm" "--privileged" "--pull=newer")
-    iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage:ro")
+    iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage")
     iso_build_args+=(--volume "${PWD}:/github/workspace/")
     iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="x86_64")
