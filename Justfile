@@ -445,7 +445,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
         iso_build_args+=(VARIANT="Kinoite")
     fi
     iso_build_args+=(VERSION="$(skopeo inspect containers-storage:${IMAGE_FULL} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')")
-    iso_build_args+=(WEBUI="false")
+    iso_build_args+=(WEB_UI="false")
 
     just sudoif podman run "${iso_build_args[@]}"
     just sudoif chown "${UID}:${GROUPS}" -R "${PWD}"
