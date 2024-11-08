@@ -1,4 +1,6 @@
 repo_organization := "ublue-os"
+rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.0.1"
+iso_builder_image := "ghcr.io/jasonn3/build-container-installer:v1.2.3"
 images := '(
     [aurora]=aurora
     [aurora-dx]=aurora-dx
@@ -61,11 +63,11 @@ sudo-clean:
     just sudoif just clean
 
 # Check if valid combo
-[private]
 [group('Utility')]
+[private]
 validate image="" tag="" flavor="":
     #!/usr/bin/bash
-    set -eoux pipefail
+    set -eou pipefail
     declare -A images={{ images }}
     declare -A tags={{ tags }}
     declare -A flavors={{ flavors }}
@@ -95,8 +97,8 @@ validate image="" tag="" flavor="":
     fi
 
 # sudoif bash function
-[private]
 [group('Utility')]
+[private]
 sudoif command *args:
     #!/usr/bin/bash
     function sudoif(){
@@ -242,8 +244,8 @@ build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
     @just build {{ image }} {{ tag }} {{ flavor }} 1 1 {{ kernel_pin }}
 
 # Rechunk Image
-[private]
 [group('Image')]
+[private]
 rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     #!/usr/bin/bash
     set -eoux pipefail
@@ -284,7 +286,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     MOUNT=$(just sudoif podman mount "${CREF}")
 
     # Rechunk Container
-    rechunker="ghcr.io/hhd-dev/rechunk:latest"
+    rechunker="{{ rechunker_image }}"
 
     # Run Rechunker's Prune
     just sudoif podman run --rm \
@@ -476,7 +478,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     iso_build_args+=("--rm" "--privileged" "--pull=newer")
     iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage:ro")
     iso_build_args+=(--volume "${PWD}:/github/workspace/")
-    iso_build_args+=(ghcr.io/jasonn3/build-container-installer:latest)
+    iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="x86_64")
     iso_build_args+=(ENROLLMENT_PASSWORD="universalblue")
     iso_build_args+=(FLATPAK_REMOTE_REFS_DIR="/github/workspace/${build_dir}")
@@ -563,7 +565,7 @@ changelogs branch="stable":
 
 # Verify Container with Cosign
 [group('Utility')]
-verify-container container="" registry="ghcr.io/ublue-os" key="": 
+verify-container container="" registry="ghcr.io/ublue-os" key="":
     #!/usr/bin/bash
     set -eoux pipefail
 
@@ -587,7 +589,7 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
     if [[ -z "${key:-}" ]]; then
         key="https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub"
     fi
-    
+
     # Verify Container using cosign public key
     if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" >/dev/null; then
         echo "NOTICE: Verification failed. Please ensure your public key is correct."
@@ -616,11 +618,7 @@ secureboot image="bluefin" tag="latest" flavor="main":
     fi
 
     # Image Name
-    if [[ "${flavor}" =~ main ]]; then
-        image_name="${image}"
-    else
-        image_name="${image}-${flavor}"
-    fi
+    image_name=$(just image_name {{ image }} {{ flavor }})
 
     # Get the vmlinuz to check
     kernel_release=$(podman inspect "${image_name}":"${tag}" | jq -r '.[].Config.Labels["ostree.linux"]')
@@ -660,3 +658,34 @@ secureboot image="bluefin" tag="latest" flavor="main":
         podman rm -f "${temp_name}"
     fi
     exit "$returncode"
+
+# Get Fedora Version of an image
+[group('Utility')]
+fedora_version image="bluefin" tag="latest" flavor="main" ghcr="0" repo="localhost":
+    #!/usr/bin/bash
+    set -eou pipefail
+    just validate {{ image }} {{ tag }} {{ flavor }}
+    image_name=$(just image_name {{ image }} {{ flavor }})
+
+    tag="{{ tag }}"
+    if [[ "${tag}" =~ stable && "{{ ghcr }}" == "1" ]]; then
+        tag="${tag}-daily"
+    fi
+    if [[ "{{ repo }}" == "localhost" ]]; then
+        IMAGE_FULL="containers-storage:{{ repo }}/${image_name}:${tag}"
+    else
+        IMAGE_FULL="docker://{{ repo }}/${image_name}:${tag}"
+    fi
+
+    echo $(skopeo inspect --retry-times 3 ${IMAGE_FULL} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+
+# Image Name
+[group('Utility')]
+image_name image="bluefin" flavor="main":
+    #!/usr/bin/bash
+    if [[ "{{ flavor }}" =~ main ]]; then
+        image_name={{ image }}
+    else
+        image_name="{{ image }}-{{ flavor }}"
+    fi
+    echo "${image_name}"
