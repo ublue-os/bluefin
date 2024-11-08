@@ -43,12 +43,11 @@ jobs:
       - name: Install Just
         shell: bash
         run: |
-          set -eoux pipefail
-          curl -sSLO \
-            https://github.com/casey/just/releases/download/1.36.0/just-1.36.0-x86_64-unknown-linux-musl.tar.gz
-          tar -zxvf just-1.36.0-x86_64-unknown-linux-musl.tar.gz just
-          sudo mv just /usr/local/bin/just
-          rm -f just-1.36.0-x86_64-unknown-linux-musl.tar.gz
+          set -x
+          curl -sSLo https://github.com/casey/just/releases/download/1.36.0/just-1.36.0-x86_64-unknown-linux-musl.tar.gz /tmp/just.tar.gz
+          tar -zxvf /tmp/just.tar.gz -C /tmp just
+          sudo mv /tmp/just /usr/local/bin/just
+          rm -f /tmp/just.tar.gz
         
       - name: Check Just Syntax
         shell: bash
