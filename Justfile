@@ -240,7 +240,12 @@ build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
 # Build Image for Pipeline:
 [group('Production')]
 build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
-    @just build {{ image }} {{ tag }} {{ flavor }} 1 1 {{ kernel_pin }}
+    #!/usr/bin/bash
+    if [[ "${UID}" -gt "0" ]]; then
+        echo "Must Run with sudo or as root..."
+        exit 1
+    fi
+    just build {{ image }} {{ tag }} {{ flavor }} 1 1 {{ kernel_pin }}
 
 # Rechunk Image
 [group('Image')]
@@ -338,9 +343,10 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
 
     # Cleanup
     just sudoif podman volume rm cache_ostree
-    just sudoif "rm -rf ${OUTNAME}*"
+    just sudoif "rm -rf ${OUT_NAME}*"
     just sudoif "rm -f previous.manifest.json"
 
+    # Secureboot Check
     if [[ {{ ghcr }} == "1" ]]; then
         just secureboot "${image}" "${tag}" "${flavor}"
     fi

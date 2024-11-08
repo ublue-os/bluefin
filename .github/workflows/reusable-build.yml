@@ -54,7 +54,7 @@ jobs:
         with:
           remove-codeql: true
 
-      - name: Build Image
+      - name: Build and Rechunk Image
         id: build-image
         shell: bash
         run: |
@@ -135,7 +135,7 @@ jobs:
           string: ${{ env.IMAGE_REGISTRY }}
 
       # Tag Images
-      - name: Load Rechunked Image
+      - name: Tag Images
         shell: bash
         run: |
           set -eoux pipefail
