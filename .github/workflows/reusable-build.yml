@@ -46,8 +46,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       
-      - name: Check just syntax
-        uses: ublue-os/just-action@bda593098a84a84973b002b4377709166a68be52 # v2
+      - name: Install Just
+        shell: bash
+        run: |
+          set -eoux pipefail
+          sudo apt update && sudo apt install -y just
+        
+      - name: Check Just Syntax
+        shell: bash
+        run: |
+          just check
       
       - name: Image Name
         shell: bash
@@ -64,7 +72,7 @@ jobs:
         id: build-image
         shell: bash
         run: |
-          sudo $(which just) build-pipeline "${{ matrix.base_name }}" "${{ matrix.stream_name }}" "${{ matrix.image_flavor }}" "${{ inputs.kernel_pin }}"
+          sudo just build-pipeline "${{ matrix.base_name }}" "${{ matrix.stream_name }}" "${{ matrix.image_flavor }}" "${{ inputs.kernel_pin }}"
 
       - name: Generate tags
         id: generate-tags

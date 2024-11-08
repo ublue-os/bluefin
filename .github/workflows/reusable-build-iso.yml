@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   build-iso:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
@@ -40,8 +40,16 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Check just syntax
-        uses: ublue-os/just-action@bda593098a84a84973b002b4377709166a68be52 # v2
+      - name: Install Just
+        shell: bash
+        run: |
+          set -eoux pipefail
+          sudo apt update && sudo apt install -y just
+        
+      - name: Check Just Syntax
+        shell: bash
+        run: |
+          just check
 
       - name: Build ISO
         shell: bash
