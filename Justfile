@@ -677,12 +677,10 @@ fedora_version image="bluefin" tag="latest" flavor="main" ghcr="0" repo="localho
         tag="${tag}-daily"
     fi
     if [[ "{{ repo }}" == "localhost" ]]; then
-        IMAGE_FULL="containers-storage:{{ repo }}/${image_name}:${tag}"
+        echo $(skopeo inspect containers-storage:{{ repo }}/${image_name}:${tag} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
     else
-        IMAGE_FULL="docker://{{ repo }}/${image_name}:${tag}"
+        echo $(skopeo inspect --retry-times 3 docker://{{ repo }}/${image_name}:${tag} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
     fi
-
-    echo $(skopeo inspect --retry-times 3 ${IMAGE_FULL} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
 
 # Image Name
 [group('Utility')]
