@@ -127,11 +127,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    if [[ "${flavor}" =~ main ]]; then
-        image_name="${image}"
-    else
-        image_name="${image}-${flavor}"
-    fi
+    image_name=$(just image_name {{ image }} {{ flavor }})
 
     # Base Image
     if [[ "${image}" =~ bluefin ]]; then
@@ -262,11 +258,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    if [[ "${flavor}" =~ main ]]; then
-        image_name="${image}"
-    else
-        image_name="${image}-${flavor}"
-    fi
+    image_name=$(just image_name {{ image }} {{ flavor }})
 
     # Check if image is already built
     ID=$(podman images --filter reference=localhost/"${image_name}":"${tag}" --format "'{{ '{{.ID}}' }}'")
@@ -294,7 +286,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
             base_image_name=kinoite-main
         fi
         fedora_version=$(just fedora_version {{ image }} {{ tag }} {{ flavor }})
-        ID=$(just sudoif podman images --filter --reference=ghcr.io/ublue-os/"${base_image_name}":${fedora_version} "'{{ '{{.ID}}' }}'")
+        ID=$(just sudoif podman images --filter reference=ghcr.io/ublue-os/"${base_image_name}":${fedora_version} --format "'{{ '{{.ID}}' }}'")
         if [[ -n "$ID" ]]; then
             podman rmi "$ID"
         fi
@@ -380,11 +372,7 @@ run image="bluefin" tag="latest" flavor="main":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    if [[ "${flavor}" =~ main ]]; then
-        image_name="${image}"
-    else
-        image_name="${image}-${flavor}"
-    fi
+    image_name=$(just image_name {{ image }} {{ flavor }})
 
     # Check if image exists
     ID=$(podman images --filter reference=localhost/"${image_name}":"${tag}" --format "'{{ '{{.ID}}' }}'")
@@ -408,11 +396,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    if [[ "${flavor}" =~ main ]]; then
-        image_name="${image}"
-    else
-        image_name="${image}-${flavor}"
-    fi
+    image_name=$(just image_name {{ image }} {{ flavor }})
 
     build_dir="${image_name}_build"
     mkdir -p "$build_dir"
@@ -542,11 +526,7 @@ run-iso image="bluefin" tag="latest" flavor="main":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    if [[ "${flavor}" =~ main ]]; then
-        image_name="${image}"
-    else
-        image_name="${image}-${flavor}"
-    fi
+    image_name=$(just image_name {{ image }} {{ flavor }})
 
     # Check if ISO Exists
     if [[ ! -f "${image_name}_build/${image_name}.iso" ]]; then
@@ -579,10 +559,10 @@ run-iso image="bluefin" tag="latest" flavor="main":
 
 # Test Changelogs
 [group('Changelogs')]
-changelogs branch="stable":
+changelogs branch="stable" handwritten="":
     #!/usr/bin/bash
     set -eou pipefail
-    python3 ./.github/changelogs.py {{ branch }} ./output.env ./changelog.md --workdir .
+    python3 ./.github/changelogs.py "{{ branch }}" ./output.env ./changelog.md --workdir . --handwritten "{{ handwritten }}"
 
 # Verify Container with Cosign
 [group('Utility')]
