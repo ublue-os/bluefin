@@ -71,7 +71,7 @@ jobs:
         id: generate-tags
         shell: bash
         run: |
-          set -eoux pipefail
+          set -eou pipefail
           # Generate a timestamp for creating an image version history
           TIMESTAMP="$(date +%Y%m%d)"
           TODAY="$(date +%A)"
@@ -114,18 +114,20 @@ jobs:
             BUILD_TAGS=(${temp[@]})
           fi
 
+          echo "Generated the following commit tags: "
+          for TAG in "${COMMIT_TAGS[@]}"; do
+              echo "${TAG}"
+          done
+          echo "Generated the following build tags: "
+          for TAG in "${BUILD_TAGS[@]}"; do
+              echo "${TAG}"
+          done
           # Use Commit Tags if PR / Use Build Tags if Not
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-              echo "Generated the following commit tags: "
-              for TAG in "${COMMIT_TAGS[@]}"; do
-                  echo "${TAG}"
-              done
+              echo "Using commit tags..."
               alias_tags=("${COMMIT_TAGS[@]}")
           else
-              echo "Generated the following build tags: "
-              for TAG in "${BUILD_TAGS[@]}"; do
-                  echo "${TAG}"
-              done
+              echo "Using build tags..."
               alias_tags=("${BUILD_TAGS[@]}")
           fi
 
