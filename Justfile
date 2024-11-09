@@ -127,7 +127,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    image_name=$(just image_name {{ image }} {{ flavor }})
+    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Base Image
     if [[ "${image}" =~ bluefin ]]; then
@@ -155,17 +155,15 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
     fi
 
     # Fedora Version
-    if [[ "${tag}" =~ stable ]]; then
-        # CoreOS does not uses cosign
-        fedora_version=$(skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-        # Verify Base Image with cosign
-        just verify-container "${base_image_name}-main:${fedora_version}"
-    else
-        # Verify Base Image with cosign
-        just verify-container "${base_image_name}-main:${tag}"
-        fedora_version=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/"${base_image_name}"-main:"${tag}" | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+    if [[ {{ ghcr }} == "0" ]]; then
+        rm -f /tmp/manifest.json
     fi
+    fedora_version=$(just fedora_veresion {{ image }} {{ tag }} {{ flavor }})
 
+    # Verify Base Image with cosign
+    just verify-container "${base_image_name}-main:${fedora_version}"
+
+    # Kernel Release/Pin
     kernel_pin="{{ kernel_pin }}"
     if [[ -z "${kernel_pin:-}" ]]; then
         kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/${akmods_flavor}-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
@@ -258,7 +256,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    image_name=$(just image_name {{ image }} {{ flavor }})
+    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Check if image is already built
     ID=$(podman images --filter reference=localhost/"${image_name}":"${tag}" --format "'{{ '{{.ID}}' }}'")
@@ -372,7 +370,7 @@ run image="bluefin" tag="latest" flavor="main":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    image_name=$(just image_name {{ image }} {{ flavor }})
+    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Check if image exists
     ID=$(podman images --filter reference=localhost/"${image_name}":"${tag}" --format "'{{ '{{.ID}}' }}'")
@@ -396,7 +394,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    image_name=$(just image_name {{ image }} {{ flavor }})
+    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     build_dir="${image_name}_build"
     mkdir -p "$build_dir"
@@ -526,7 +524,7 @@ run-iso image="bluefin" tag="latest" flavor="main":
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
-    image_name=$(just image_name {{ image }} {{ flavor }})
+    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Check if ISO Exists
     if [[ ! -f "${image_name}_build/${image_name}.iso" ]]; then
@@ -619,7 +617,7 @@ secureboot image="bluefin" tag="latest" flavor="main":
     fi
 
     # Image Name
-    image_name=$(just image_name {{ image }} {{ flavor }})
+    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Get the vmlinuz to check
     kernel_release=$(podman inspect "${image_name}":"${tag}" | jq -r '.[].Config.Labels["ostree.linux"]')
@@ -662,29 +660,63 @@ secureboot image="bluefin" tag="latest" flavor="main":
 
 # Get Fedora Version of an image
 [group('Utility')]
-fedora_version image="bluefin" tag="latest" flavor="main" ghcr="0" repo="localhost":
+fedora_version image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eou pipefail
     just validate {{ image }} {{ tag }} {{ flavor }}
-    image_name=$(just image_name {{ image }} {{ flavor }})
-
-    tag="{{ tag }}"
-    if [[ "${tag}" =~ stable && "{{ ghcr }}" == "1" ]]; then
-        tag="${tag}-daily"
+    if [[ ! -f /tmp/manifest.json ]]; then
+        if [[ "{{ tag }}" =~ stable ]]; then
+            # CoreOS does not uses cosign
+            skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable > /tmp/manifest.json
+        else
+            skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
+        fi
     fi
-    if [[ "{{ repo }}" == "localhost" ]]; then
-        echo $(skopeo inspect containers-storage:{{ repo }}/${image_name}:${tag} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-    else
-        echo $(skopeo inspect --retry-times 3 docker://{{ repo }}/${image_name}:${tag} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-    fi
+    fedora_version=$(jq -r '.Labels["ostree.linux"]' < /tmp/manifest.json | grep -oP 'fc\K[0-9]+')
+    echo "${fedora_version}"
 
 # Image Name
 [group('Utility')]
-image_name image="bluefin" flavor="main":
+image_name image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
+    set -eou pipefail
+    just validate {{ image }} {{ tag }} {{ flavor }}
     if [[ "{{ flavor }}" =~ main ]]; then
         image_name={{ image }}
     else
         image_name="{{ image }}-{{ flavor }}"
     fi
     echo "${image_name}"
+
+# Generate Tags Locally
+[group('Utility')]
+generate-tags image="bluefin" tag="latest" flavor="main" ghcr="0":
+    #!/usr/bin/bash
+    set -eou pipefail
+    # Generate a timestamp for creating an image version history
+    TIMESTAMP="$(date +%Y%m%d)"
+    TODAY="$(date +%A)"
+    WEEKLY="Sunday"
+    if [[ {{ ghcr }} == "0" ]]; then
+        rm -f /tmp/manifest.json
+    fi
+    FEDORA_VERSION="$(just fedora_version {{ image }} {{ tag }} {{ flavor }})"
+
+    # Arrays for Tags
+    BUILD_TAGS=()
+
+    # Convenience and Default Tags
+    if [[ "{{ tag }}" =~ stable ]]; then
+        BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
+    else
+        BUILD_TAGS+=("{{ tag }}" "{{ tag }}-${TIMESTAMP}")
+    fi
+
+    # Weekly Stable / Rebuild Stable on workflow_dispatch
+    if [[ "{{ tag }}" =~ "stable" ]]; then
+        BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+    elif [[ ! "{{ tag }}" =~ "stable" ]]; then
+        BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+    fi
+
+    echo "${BUILD_TAGS[@]}"
