@@ -31,6 +31,7 @@ sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 rpm-ostree install \
     /tmp/akmods/kmods/*xone*.rpm \
     /tmp/akmods/kmods/*xpadneo*.rpm \
+    /tmp/akmods/kmods/*openrazer*.rpm \
     /tmp/akmods/kmods/*framework-laptop*.rpm
 
 # RPMFUSION Dependent AKMODS
