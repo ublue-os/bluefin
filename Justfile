@@ -158,7 +158,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
     if [[ {{ ghcr }} == "0" ]]; then
         rm -f /tmp/manifest.json
     fi
-    fedora_version=$(just fedora_veresion {{ image }} {{ tag }} {{ flavor }})
+    fedora_version=$(just fedora_version {{ image }} {{ tag }} {{ flavor }})
 
     # Verify Base Image with cosign
     just verify-container "${base_image_name}-main:${fedora_version}"
