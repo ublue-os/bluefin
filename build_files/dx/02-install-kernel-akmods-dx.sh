@@ -10,7 +10,9 @@ KERNEL_TARGZ=$(jq -r '.layers[].digest' < /tmp/kernel-rpms/manifest.json | cut -
 tar -xvzf /tmp/kernel-rpms/"$KERNEL_TARGZ" -C /
 mv /tmp/rpms/* /tmp/kernel-rpms/
 
-rpm-ostree install /tmp/kernel-rpms/kernel-devel-*.rpm
+if grep -qv kernel-devel <<< $(rpm -qa); then
+    rpm-ostree install /tmp/kernel-rpms/kernel-devel-*.rpm
+fi
 
 # Fetch AKMODS RPMS
 skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods
