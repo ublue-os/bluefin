@@ -286,6 +286,21 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
         old_tag="${tag}"
         tag="stable-daily"
     fi
+
+    if [[ "{{ ghcr }}" == "1" ]]; then
+        if [[ "${image_name}" =~ bluefin ]]; then
+            base_image_name=silverblue-main
+        elif [[ "${image_name}" =~ aurora ]]; then
+            base_image_name=kinoite-main
+        fi
+        fedora_version=$(just fedora_version {{ image }} {{ tag }} {{ flavor }})
+        ID=$(just sudoif podman images --filter --reference=ghcr.io/ublue-os/"${base_image_name}":${fedora_version} "'{{ '{{.ID}}' }}'")
+        if [[ -n "$ID" ]]; then
+            podman rmi "$ID"
+        fi
+        OLD_IMAGE=$(podman inspect $CREF | jq -r '.[].Image')
+    fi
+
     OUT_NAME="${image_name}_build"
     MOUNT=$(just sudoif podman mount "${CREF}")
 
@@ -346,8 +361,9 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     just sudoif "rm -rf ${OUT_NAME}*"
     just sudoif "rm -f previous.manifest.json"
 
-    # Secureboot Check
+    # Pipeline Checks
     if [[ {{ ghcr }} == "1" ]]; then
+        just sudoif podman rmi "$OLD_IMAGE"
         just secureboot "${image}" "${tag}" "${flavor}"
     fi
 
