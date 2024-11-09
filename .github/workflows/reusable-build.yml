@@ -64,7 +64,7 @@ jobs:
       - name: Image Name
         shell: bash
         run: |
-          IMAGE_NAME="$(just image_name ${{ matrix.base_name }} ${{ matrix.image_flavor }})"
+          IMAGE_NAME="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
           echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
 
       - name: Generate tags
