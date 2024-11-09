@@ -345,6 +345,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
         /sources/rechunk/3_chunk.sh
 
     # Load Image into Podman Store
+    just sudoif podman rmi "$OLD_IMAGE"
     IMAGE=$(podman pull oci:"${PWD}"/"${OUT_NAME}")
     podman tag ${IMAGE} localhost/"${image_name}":"${tag}"
 
@@ -355,7 +356,6 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
 
     # Pipeline Checks
     if [[ {{ ghcr }} == "1" ]]; then
-        just sudoif podman rmi "$OLD_IMAGE"
         just secureboot "${image}" "${tag}" "${flavor}"
     fi
 
