@@ -82,6 +82,7 @@ jobs:
         id: generate-tags
         shell: bash
         run: |
+          set -eoux pipefail
           # Generate a timestamp for creating an image version history
           TIMESTAMP="$(date +%Y%m%d)"
           TODAY="$(date +%A)"
