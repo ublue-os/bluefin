@@ -740,7 +740,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_n
 
     # Weekly Stable / Rebuild Stable on workflow_dispatch
     github_event="{{ github_event }}"
-    if [[ "{{ tag }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${github_event}" =~ scheduled ]]; then
+    if [[ "{{ tag }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${github_event}" =~ schedule ]]; then
         BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
     elif [[ "{{ tag }}" =~ "stable" && "${github_event}" =~ workflow_dispatch|workflow_call ]]; then
         BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
