@@ -744,7 +744,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_n
         BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
         BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
-    elif [[ ! "{{ tag }}" =~ "stable" ]]; then
+    elif [[ ! "{{ tag }}" =~ stable|beta ]]; then
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
     fi
 

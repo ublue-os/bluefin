@@ -76,6 +76,7 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || github.event_name.scheduled == '40 4 * * 0' || github.event_name.scheduled == '45 5 * * 0'
         with:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
