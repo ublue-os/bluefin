@@ -71,11 +71,11 @@ jobs:
         id: generate-tags
         shell: bash
         run: |
-          DEFAULT_TAG=$(just generate-default-tag \
+          DEFAULT_TAG="$(just generate-default-tag \
                       ${{ matrix.stream_name }} \
-                      "1")
+                      "1")"
 
-          alias_tags=$(just generate-build-tags \
+          alias_tags="$(just generate-build-tags \
                      ${{ matrix.base_name }} \
                      ${{ matrix.stream_name }} \
                      ${{ matrix.image_flavor }} \
