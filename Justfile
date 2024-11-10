@@ -116,7 +116,7 @@ sudoif command *args:
 
 # Build Image
 [group('Image')]
-build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin="":
+build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="0" kernel_pin="":
     #!/usr/bin/bash
     set -eoux pipefail
     image={{ image }}
@@ -220,7 +220,9 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
         .
 
     # Rechunk
-    if [[ "{{ rechunk }}" == "1" && "{{ ghcr }}" == "1" ]]; then
+    if [[ "{{ rechunk }}" == "1" && "{{ ghcr }}" == "1" && "{{ pipeline }}" == "1" ]]; then
+        just rechunk "${image}" "${tag}" "${flavor}" 1 1
+    elif [[ "{{ rechunk }}" == "1" && "{{ ghcr }}" == "1" ]]; then
         just rechunk "${image}" "${tag}" "${flavor}" 1
     elif [[ "{{ rechunk }}" == "1" ]]; then
         just rechunk "${image}" "${tag}" "${flavor}"
@@ -229,7 +231,17 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" kernel_pin
 # Build Image and Rechunk
 [group('Image')]
 build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
-    @just build {{ image }} {{ tag }} {{ flavor }} 1 0 {{ kernel_pin }}
+    @just build {{ image }} {{ tag }} {{ flavor }} 1 0 0 {{ kernel_pin }}
+
+# Build Image with GHCR Flag
+[group('Production')]
+build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="":
+    #!/usr/bin/bash
+    if [[ "${UID}" -gt "0" ]]; then
+        echo "Must Run with sudo or as root..."
+        exit 1
+    fi
+    just build {{ image }} {{ tag }} {{ flavor }} 0 1 0 {{ kernel_pin }}
 
 # Build Image for Pipeline:
 [group('Production')]
@@ -239,12 +251,12 @@ build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
         echo "Must Run with sudo or as root..."
         exit 1
     fi
-    just build {{ image }} {{ tag }} {{ flavor }} 1 1 {{ kernel_pin }}
+    just build {{ image }} {{ tag }} {{ flavor }} 1 1 1 {{ kernel_pin }}
 
 # Rechunk Image
 [group('Image')]
 [private]
-rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
+rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     #!/usr/bin/bash
     set -eoux pipefail
 
@@ -277,13 +289,15 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
         tag="stable-daily"
     fi
 
+    # Fedora Version
+    fedora_version=$(just sudoif podman inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]')
+
     if [[ "{{ ghcr }}" == "1" ]]; then
         if [[ "${image_name}" =~ bluefin ]]; then
             base_image_name=silverblue-main
         elif [[ "${image_name}" =~ aurora ]]; then
             base_image_name=kinoite-main
         fi
-        fedora_version=$(just fedora_version {{ image }} {{ tag }} {{ flavor }})
         ID=$(just sudoif podman images --filter reference=ghcr.io/ublue-os/"${base_image_name}":${fedora_version} --format "'{{ '{{.ID}}' }}'")
         if [[ -n "$ID" ]]; then
             podman rmi "$ID"
@@ -333,7 +347,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
         --env REPO=/var/ostree/repo \
         --env PREV_REF=ghcr.io/ublue-os/"${image_name}":"${tag}" \
         --env OUT_NAME="$OUT_NAME" \
-        --env LABELS="org.opencontainers.image.title=${image_name}$'\n'org.opencontainers.image.version=localbuild-$(date +%Y%m%d-%H:%M:%S)$'\n''io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md'$'\n''io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4'$'\n'" \
+        --env LABELS="org.opencontainers.image.title=${image_name}$'\n'org.opencontainers.image.version=${fedora_version}.$(date +%Y%m%d)$'\n''io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md'$'\n''io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4'$'\n'" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
         --env VERSION_FN=/workspace/version.txt \
         --env OUT_REF="oci:$OUT_NAME" \
@@ -353,7 +367,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0":
     just sudoif "rm -f previous.manifest.json"
 
     # Pipeline Checks
-    if [[ {{ ghcr }} == "1" ]]; then
+    if [[ {{ pipeline }} == "1" ]]; then
         just secureboot "${image}" "${tag}" "${flavor}"
     fi
 
