@@ -290,7 +290,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     fi
 
     # Fedora Version
-    fedora_version=$(just sudoif podman inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]')
+    fedora_version=$(just sudoif podman inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
 
     if [[ "{{ ghcr }}" == "1" ]]; then
         if [[ "${image_name}" =~ bluefin ]]; then
