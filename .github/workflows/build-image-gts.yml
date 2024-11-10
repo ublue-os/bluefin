@@ -27,7 +27,7 @@ jobs:
   generate_release:
     name: Generate Release
     needs: [build-image-gts]
-    if: github.event_name == 'scheduled' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
@@ -36,6 +36,6 @@ jobs:
   build-iso-gts:
     name: Build GTS ISOs
     needs: [build-image-gts]
-    if: github.event_name == 'scheduled'
+    if: github.event_name == 'schedule'
     secrets: inherit
     uses: ./.github/workflows/build-iso-gts.yml
