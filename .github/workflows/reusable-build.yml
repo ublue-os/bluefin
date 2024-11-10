@@ -170,7 +170,7 @@ jobs:
               done
             fi
 
-            digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
+            digest=$(sudo skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
 
             echo "digest=${digest}" >> $GITHUB_OUTPUT
 
