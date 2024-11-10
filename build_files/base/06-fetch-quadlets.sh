@@ -6,19 +6,19 @@ set -ouex pipefail
 mkdir -p /etc/containers/systemd/users
 
 # fedora-toolbox
-curl -Lo /etc/containers/systemd/users/fedora-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/fedora-toolbox/fedora-distrobox-quadlet.container
+curl --retry 3 -Lo /etc/containers/systemd/users/fedora-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/fedora-toolbox/fedora-distrobox-quadlet.container
 sed -i 's/ContainerName=fedora-distrobox-quadlet/ContainerName=fedora-toolbox/' /etc/containers/systemd/users/fedora-toolbox.container
 
 # ubuntu-toolbox
-curl -Lo /etc/containers/systemd/users/ubuntu-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/ubuntu-toolbox/ubuntu-distrobox-quadlet.container
+curl --retry 3 -Lo /etc/containers/systemd/users/ubuntu-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/ubuntu-toolbox/ubuntu-distrobox-quadlet.container
 sed -i 's/ContainerName=ubuntu-distrobox-quadlet/ContainerName=ubuntu-toolbox/' /etc/containers/systemd/users/ubuntu-toolbox.container
 
 # wolfi-toolbox
-curl -Lo /etc/containers/systemd/users/wolfi-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-distrobox-quadlet.container
+curl --retry 3 -Lo /etc/containers/systemd/users/wolfi-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-distrobox-quadlet.container
 sed -i 's/ContainerName=wolfi-quadlet/ContainerName=wolfi-toolbox/' /etc/containers/systemd/users/wolfi-toolbox.container
 
 # wolfi-dx-toolbox
-curl -Lo /etc/containers/systemd/users/wolfi-dx-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-dx-distrobox-quadlet.container
+curl --retry 3 -Lo /etc/containers/systemd/users/wolfi-dx-toolbox.container https://raw.githubusercontent.com/ublue-os/toolboxes/main/quadlets/wolfi-toolbox/wolfi-dx-distrobox-quadlet.container
 sed -i 's/ContainerName=wolfi-quadlet/ContainerName=wolfi-dx-toolbox/' /etc/containers/systemd/users/wolfi-dx-toolbox.container
 
 # Brew Integration for Fedora and Ubuntu Toolboxes

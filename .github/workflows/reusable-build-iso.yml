@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   build-iso:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
@@ -34,115 +34,35 @@ jobs:
         stream_name: ["${{ inputs.stream_name }}"]
 
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Matrix Variables
-        run: |
-          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
-            echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
-          else
-            echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
-          fi
-          if [[ ${{ matrix.base_name }} =~ bluefin ]]; then
-            echo "VARIANT=Silverblue" >> $GITHUB_ENV
-          elif [[ ${{ matrix.base_name }} =~ aurora ]]; then
-            echo "VARIANT=Kinoite" >> $GITHUB_ENV
-          fi
-
-      - name: Get Current Fedora Version
-        id: labels
+      - name: Install Just
         shell: bash
         run: |
-          set -eo pipefail
-          kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.stream_name }} | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-          fedora_version=$(echo $kernel_release | grep -oP 'fc\K[0-9]+')
-          echo "kernel_release=$kernel_release" >> $GITHUB_OUTPUT
-          echo "fedora_version=$fedora_version" >> $GITHUB_OUTPUT
-
-      - name: Set Image Tag
-        id: generate-tag
+          set -eoux pipefail
+          JUST_VERSION=$(curl -L https://api.github.com/repos/casey/just/releases/latest | jq -r '.tag_name')
+          curl -sSLO https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
+          tar -zxvf just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz -C /tmp just
+          sudo mv /tmp/just /usr/local/bin/just
+          rm -f just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
+        
+      - name: Check Just Syntax
         shell: bash
         run: |
-          TAG="${{ matrix.stream_name }}"
+          just check
 
-          if [[ "${{ github.ref_name }}" == "testing" ]]; then
-            TAG="testing-${TAG}"
-          fi
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
-          # Would like to implement in the future. This will allow us to support image tags from a PR.
-          #if [[ github.event.number ]]; then
-          #  TAG="pr-${{ github.event.number }}-${{ matrix.stream_name }}"
-          #fi
-
-          echo "tag=${TAG}" >> $GITHUB_OUTPUT
-
-      - name: Set Flatpaks Directory Shortname
-        id: generate-flatpak-dir-shortname
+      - name: Build ISO
         shell: bash
         run: |
-          if [[ "${{ env.IMAGE_NAME }}" =~ bluefin ]]; then
-            FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
-          elif [[ "${{ env.IMAGE_NAME }}" =~ aurora ]]; then
-            FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
-          fi
-          echo "flatpak-dir-shortname=${FLATPAK_DIR_SHORTNAME}" >> $GITHUB_OUTPUT
-
-      - name: Determine Flatpak Dependencies
-        id: flatpak_dependencies
-        shell: bash
-        run: |
-          set -ex
-          image="ghcr.io/ublue-os/${{ env.IMAGE_NAME }}:${{ matrix.stream_name }}"
-          # Make temp space
-          TEMP_FLATPAK_INSTALL_DIR=$(mktemp -d -p ${{ github.workspace }} flatpak.XXX)
-          # Get list of refs from directory
-          FLATPAK_REFS_DIR=${{ github.workspace }}/${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
-          FLATPAK_REFS_DIR_LIST=$(cat ${FLATPAK_REFS_DIR}/* | tr '\n' ' ' )
-          DX_FLATPAK_REFS_DIR_LIST="$(cat dx_flatpaks/* | tr '\n' ' ' )"
-          if [[ ${{ env.IMAGE_NAME }} == *"-dx"* ]]; then
-            FLATPAK_REFS_DIR_LIST="${FLATPAK_REFS_DIR_LIST} ${DX_FLATPAK_REFS_DIR_LIST}"
-          fi
-          # Generate install script
-          cat << EOF > ${TEMP_FLATPAK_INSTALL_DIR}/script.sh
-          cat /temp_flatpak_install_dir/script.sh
-          mkdir -p /flatpak/flatpak /flatpak/triggers
-          mkdir /var/tmp || true
-          chmod -R 1777 /var/tmp
-          flatpak config --system --set languages "*"
-          flatpak remote-add --system flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install --system -y ${FLATPAK_REFS_DIR_LIST}
-          ostree refs --repo=\${FLATPAK_SYSTEM_DIR}/repo | grep '^deploy/' | grep -v 'org\.freedesktop\.Platform\.openh264' | sed 's/^deploy\///g' > /output/flatpaks_with_deps
-          EOF
-          docker run --rm --privileged \
-            --entrypoint bash \
-            -e FLATPAK_SYSTEM_DIR=/flatpak/flatpak \
-            -e FLATPAK_TRIGGERSDIR=/flatpak/triggers \
-            --volume ${FLATPAK_REFS_DIR}:/output \
-            --volume ${TEMP_FLATPAK_INSTALL_DIR}:/temp_flatpak_install_dir \
-            ${image} /temp_flatpak_install_dir/script.sh
-          docker rmi ${image}
-
-      - name: Build ISOs
-        uses: jasonn3/build-container-installer@a1ce6da2d6c1af0561bec053366d0f3aa7e38743 # v1.2.3
-        id: build
-        with:
-          arch: x86_64
-          image_name: ${{ env.IMAGE_NAME }}
-          image_repo: ghcr.io/ublue-os
-          variant: ${{ env.VARIANT }}
-          version: ${{ steps.labels.outputs.fedora_version }}
-          image_tag: ${{ steps.generate-tag.outputs.tag }}
-          secure_boot_key_url: "https://github.com/ublue-os/akmods/raw/main/certs/public_key.der"
-          enrollment_password: "universalblue"
-          iso_name: ${{ env.IMAGE_NAME }}-${{ steps.generate-tag.outputs.tag }}.iso
-          enable_cache_dnf: "false"
-          enable_cache_skopeo: "false"
-          flatpak_remote_refs_dir: ${{ steps.generate-flatpak-dir-shortname.outputs.flatpak-dir-shortname }}
-          enable_flatpak_dependencies: "false"
+          image_name="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
+          sudo just build-iso-ghcr "${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }}"
+          echo "IMAGE_NAME=${image_name}" >> $GITHUB_ENV
+          echo "ISO_BUILD_DIR=${{ github.workspace }}/${image_name}_build" >> $GITHUB_ENV
+          echo "ISO_NAME=${image_name}.iso" >> $GITHUB_ENV
 
       - name: Move ISOs to Upload Directory
         id: upload-directory
@@ -150,16 +70,15 @@ jobs:
         run: |
           ISO_UPLOAD_DIR=${{ github.workspace }}/upload
           mkdir ${ISO_UPLOAD_DIR}
-          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }} ${ISO_UPLOAD_DIR}
-          mv ${{ steps.build.outputs.iso_path }}/${{ steps.build.outputs.iso_name }}-CHECKSUM ${ISO_UPLOAD_DIR}
+          mv ${{ env.ISO_BUILD_DIR }}/${{ env.ISO_NAME }} ${ISO_UPLOAD_DIR}
+          mv ${{ env.ISO_BUILD_DIR }}/${{ env.ISO_NAME }}-CHECKSUM ${ISO_UPLOAD_DIR}
           echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
 
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.ref_name == 'testing'
-        #if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
-          name: ${{ steps.build.outputs.iso_name }}
+          name: ${{ env.ISO_NAME }}
           path: ${{ steps.upload-directory.outputs.iso-upload-dir }}
           if-no-files-found: error
           retention-days: 0

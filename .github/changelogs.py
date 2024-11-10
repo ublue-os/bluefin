@@ -368,15 +368,24 @@ def generate_changelog(
         except Exception as e:
             print(f"Failed to get finish hash:\n{e}")
             finish = ""
+        try:
+            linux: str = next(iter(manifests.values()))["Labels"][
+                "ostree.linux"
+            ]
+            start=linux.find(".fc") + 3
+            fedora_version=linux[start:start+2]
+        except Exception as e:
+            print(f"Failed to get linux version:\n{e}")
+            fedora_version = ""
 
         # Remove .0 from curr
         curr_pretty = re.sub(r"\.\d{1,2}$", "", curr)
         # Remove target- from curr
-        curr_pretty = re.sub(rf"^[a-z]+-", "", curr_pretty)
-        pretty = target.capitalize() + " (F" + curr_pretty
-        if finish and target != "stable":
-            pretty += ", #" + finish[:7]
-        pretty += ")"
+        curr_pretty = re.sub(rf"^[a-z]+-|^[0-9]+-", "", curr_pretty)
+        pretty = target.capitalize()
+        pretty += " (F" + fedora_version
+        pretty += "." + curr_pretty
+        pretty += ", #" + finish[:7] + ")"
 
     title = CHANGELOG_TITLE.format_map(defaultdict(str, tag=curr, pretty=pretty))
 

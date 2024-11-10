@@ -45,249 +45,90 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Matrix Variables
+      
+      - name: Install Just
         shell: bash
         run: |
           set -eoux pipefail
-          # IMAGE_NAME
-          if [[ "${{ matrix.image_flavor }}" == "main" ]]; then
-              echo "IMAGE_NAME=${{ matrix.base_name }}" >> $GITHUB_ENV
-          else
-              echo "IMAGE_NAME=${{ format('{0}-{1}', matrix.base_name, matrix.image_flavor) }}" >> $GITHUB_ENV
-          fi
-
-          # BASE_IMAGE_NAME
-          if [[ "${{ matrix.base_name }}" =~ "bluefin" ]]; then
-              echo "BASE_IMAGE_NAME"="silverblue" >> $GITHUB_ENV
-          elif [[ "${{ matrix.base_name }}" =~ "aurora" ]]; then
-              echo "BASE_IMAGE_NAME"="kinoite" >> $GITHUB_ENV
-          fi
-
-          # TARGET_NAME
-          if [[ "${{ matrix.base_name }}" =~ "dx" ]]; then
-              echo "TARGET_NAME"="dx" >> $GITHUB_ENV
-          else
-              echo "TARGET_NAME"="base" >> $GITHUB_ENV
-          fi
-
-          # AKMODS_FLAVOR
-          if [[ "${{ matrix.image_flavor }}" =~ "hwe" ]]; then
-              echo "AKMODS_FLAVOR=bazzite" >> $GITHUB_ENV
-          elif [[ "${{ matrix.stream_name }}" =~ stable|gts ]]; then
-              echo "AKMODS_FLAVOR=coreos-stable" >> $GITHUB_ENV
-          elif [[ "${{ matrix.stream_name }}" =~ beta ]]; then
-              echo "AKMODS_FLAVOR=coreos-testing" >> $GITHUB_ENV
-          else
-              echo "AKMODS_FLAVOR=main" >> $GITHUB_ENV
-          fi
-
-      - name: Get Current Fedora Version
-        id: labels
-        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
-        with:
-          attempt_limit: 3
-          attempt_delay: 15000
-          command: |
-            set -eoux pipefail
-
-            # Fedora Version
-            if [[ "${{ matrix.stream_name }}" =~ stable ]]; then
-              fedora_version=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-            else
-              fedora_version=$(skopeo inspect docker://ghcr.io/ublue-os/base-main:${{ matrix.stream_name }} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
-            fi
-
-            # Kernel Release for ostree.linux label
-            kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.AKMODS_FLAVOR }}-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
-            
-            # Get Version
-            ver=$(skopeo inspect docker://ghcr.io/ublue-os/"${{ env.BASE_IMAGE_NAME }}"-main:"${fedora_version}" | jq -r '.Labels["org.opencontainers.image.version"]')
-            if [ -z "$ver" ] || [ "null" = "$ver" ]; then
-              echo "inspected image version must not be empty or null"
-              exit 1
-            fi
-
-            kernel_pin="${{ inputs.kernel_pin }}"
-
-            if [[ -n "${kernel_pin:-}" ]]; then
-              kernel_release="${kernel_pin}"
-              fedora_version="$(grep -oP 'fc\K[0-9]+' <<< ${kernel_pin})"
-
-              # check to make sure pin exists
-              if [[ $(skopeo inspect docker://ghcr.io/ublue-os/"${{ env.AKMODS_FLAVOR }}"-kernel:"${kernel_pin}" | jq -r '.Labels["ostree.linux"]') != "${kernel_pin}" ]]; then
-                echo "Kernel Pin does not exist"
-                exit 1
-              fi
-            fi
-
-            # Push into GITHUB ENV
-            echo "KERNEL_RELEASE=$kernel_release" >> $GITHUB_ENV
-            echo "FEDORA_VERSION=$fedora_version" >> $GITHUB_ENV
-            echo "VERSION=$ver" >> $GITHUB_ENV
-
-      - name: Verify base image
-        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        with:
-          containers: ${{ env.BASE_IMAGE_NAME}}-main:${{ env.FEDORA_VERSION }}
-
-      - name: Verify Akmods
-        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        with:
-          containers: akmods:${{ env.AKMODS_FLAVOR}}-${{ env.FEDORA_VERSION }}-${{ env.KERNEL_RELEASE }}
-
-      - name: Verify Nvidia
-        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        with:
-          containers: akmods-nvidia:${{ env.AKMODS_FLAVOR}}-${{ env.FEDORA_VERSION }}-${{ env.KERNEL_RELEASE }}
-
-      - name: Verify ZFS
-        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        if: contains(env.AKMODS_FLAVOR, 'coreos')
-        with:
-          containers: akmods-zfs:${{ env.AKMODS_FLAVOR }}-${{ env.FEDORA_VERSION }}-${{ env.KERNEL_RELEASE }}
-
-      - name: Verify Kernel Cache
-        uses: EyeCantCU/cosign-action/verify@58722a084c82190b57863002d494c91eabbe9e79 # v0.3.0
-        with:
-          containers: ${{ env.AKMODS_FLAVOR }}-kernel:${{ env.KERNEL_RELEASE }}
-
-      - name: Check just syntax
-        uses: ublue-os/just-action@bda593098a84a84973b002b4377709166a68be52 # v2
+          JUST_VERSION=$(curl -L https://api.github.com/repos/casey/just/releases/latest | jq -r '.tag_name')
+          curl -sSLO https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
+          tar -zxvf just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz -C /tmp just
+          sudo mv /tmp/just /usr/local/bin/just
+          rm -f just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
+        
+      - name: Check Just Syntax
+        shell: bash
+        run: |
+          just check
+      
+      - name: Image Name
+        shell: bash
+        run: |
+          IMAGE_NAME="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
 
       - name: Generate tags
         id: generate-tags
         shell: bash
         run: |
-          # Generate a timestamp for creating an image version history
-          TIMESTAMP="$(date +%Y%m%d)"
-          TODAY="$(date +%A)"
-          WEEKLY="Sunday"
+          DEFAULT_TAG="$(just generate-default-tag \
+                      ${{ matrix.stream_name }} \
+                      "1")"
 
-          # Arrays for Tags
-          COMMIT_TAGS=()
-          BUILD_TAGS=()
+          alias_tags="$(just generate-build-tags \
+                     ${{ matrix.base_name }} \
+                     ${{ matrix.stream_name }} \
+                     ${{ matrix.image_flavor }} \
+                     "1" \
+                     ${{ github.event.number }} \
+                     ${{ github.event_name }})"
 
-          # Have tags for tracking builds during pull request
-          SHA_SHORT="${GITHUB_SHA::7}"
-          COMMIT_TAGS+=("pr-${{ github.event.number }}-${{ matrix.stream_name }}")
-          COMMIT_TAGS+=("${SHA_SHORT}-${{ matrix.stream_name }}")
+          echo "Default Tag: ${DEFAULT_TAG}"
+          echo "Tags for this Action..."
+          echo "$alias_tags"
 
-          # Convenience and Default Tags
-          if [[ "${{ matrix.stream_name }}" =~ stable ]]; then
-            BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
-            echo "DEFAULT_TAG=stable-daily" >> $GITHUB_ENV
-          else
-            BUILD_TAGS+=("${{ matrix.stream_name }}" "${{ matrix.stream_name }}-${TIMESTAMP}")
-            echo "DEFAULT_TAG=${{ matrix.stream_name }}" >> $GITHUB_ENV
-          fi
-
-          # Weekly Stable / Rebuild Stable on workflow_dispatch
-          if [[ "${{ matrix.stream_name }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${{ github.event_name }}" =~ schedule ]]; then
-              BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
-          elif [[ "${{ matrix.stream_name }}" =~ "stable" && "${{ github.event_name }}" =~ workflow_dispatch|workflow_call ]]; then
-              BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
-          elif [[ ! "${{ matrix.stream_name}}" =~ "stable" ]]; then
-            BUILD_TAGS+=("${{ env.FEDORA_VERSION }}" "${{ env.FEDORA_VERSION }}-${TIMESTAMP}")
-          fi
-
-          # Prepend testing if built on testing branch
-          if [[ "${{ github.ref_name }}" == "testing" ]]; then
-            temp=()
-            for TAG in "${BUILD_TAGS[@]}"; do
-              temp+=(testing-"$TAG")
-            done
-            BUILD_TAGS=(${temp[@]})
-          fi
-
-          # Use Commit Tags if PR / Use Build Tags if Not
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-              echo "Generated the following commit tags: "
-              for TAG in "${COMMIT_TAGS[@]}"; do
-                  echo "${TAG}"
-              done
-              alias_tags=("${COMMIT_TAGS[@]}")
-          else
-              echo "Generated the following build tags: "
-              for TAG in "${BUILD_TAGS[@]}"; do
-                  echo "${TAG}"
-              done
-              alias_tags=("${BUILD_TAGS[@]}")
-          fi
-
-          echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
-
-      # Build metadata
-      - name: Image Metadata
-        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
-        id: meta
-        with:
-          images: |
-            ${{ env.IMAGE_NAME }}
-          labels: |
-            org.opencontainers.image.title=${{ env.IMAGE_NAME }}
-            org.opencontainers.image.version=${{ env.VERSION }}
-            org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology
-            ostree.linux=${{ env.KERNEL_RELEASE }}
-            io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/bluefin/README.md
-            io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
-
-      - name: Define env.SHA_HEAD_SHORT
-        run: |
-          echo "SHA_HEAD_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
-
+          echo "DEFAULT_TAG=${DEFAULT_TAG}" >> $GITHUB_ENV
+          echo "alias_tags=${alias_tags}" >> $GITHUB_OUTPUT
+        
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
         with:
           remove-codeql: true
 
-      - name: Pull images
-        uses: Wandalen/wretry.action@8ceaefd717b7cdae4f2637f9a433242ade421a0a # v3.7.2
-        with:
-          attempt_limit: 3
-          attempt_delay: 15000
-          command: |
-            # pull the base image used for FROM in containerfile so
-            # we can retry on that unfortunately common failure case
-            sudo podman pull ${{ env.IMAGE_REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-main:${{ env.FEDORA_VERSION }}
-
       - name: Build Image
-        id: build_image
+        id: build-image
+        shell: bash
         run: |
-          set -euox pipefail
+          sudo just build-ghcr "${{ matrix.base_name }}" \
+                               "${{ matrix.stream_name }}" \
+                               "${{ matrix.image_flavor }}" \
+                               "${{ inputs.kernel_pin }}"
 
-          BUILD_ARGS=()
-          BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${{ env.AKMODS_FLAVOR }}")
-          BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${{ env.BASE_IMAGE_NAME }}")
-          BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${{ env.FEDORA_VERSION }}")
-          BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${{ env.IMAGE_NAME }}")
-          BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR=${{ github.repository_owner }}")
-          BUILD_ARGS+=("--build-arg" "KERNEL=${{ env.KERNEL_RELEASE }}")
-          BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=${{ env.SHA_HEAD_SHORT }}")
-          BUILD_ARGS+=("--build-arg" "UBLUE_IMAGE_TAG=${{ matrix.stream_name }}")
+      - name: Rechunk Image
+        id: rechunk-image
+        shell: bash
+        run: |
+          sudo just rechunk "${{ matrix.base_name }}" \
+                            "${{ matrix.stream_name }}" \
+                            "${{ matrix.image_flavor }}" \
+                            "1"
 
-          TAG_ARGS=()
-          IFS=' ' read -r -a tags_array <<< "${{ steps.generate-tags.outputs.alias_tags }}"
-          for tag in "${tags_array[@]}"; do
-            TAG_ARGS+=("--tag" "${{ env.IMAGE_NAME }}:${tag}")
-          done
+      - name: Secureboot Check
+        id: secureboot
+        shell: bash
+        run: |
+          sudo just secureboot "${{ matrix.base_name }}" \
+                               "${{ env.DEFAULT_TAG }}" \
+                               "${{ matrix.image_flavor }}"
 
-          LABEL_ARGS=()
-          IFS=' ' read -r -a labels_array <<< "${{ steps.meta.outputs.labels }}"
-          for label in "${labels_array[@]}"; do
-            LABEL_ARGS+=("--label" "${label}")
-          done
-
-          sudo podman build --format docker --target ${{ env.TARGET_NAME }} \
-            "${BUILD_ARGS[@]}" \
-            "${LABEL_ARGS[@]}" \
-            --tag raw-img \
-            .
-
-          sudo podman image ls
-
-          echo "image=${{ env.IMAGE_NAME }}" >> $GITHUB_OUTPUT
-          echo "tags=${{ steps.generate-tags.outputs.alias_tags }}" >> $GITHUB_OUTPUT
+      # Tag Images
+      - name: Tag Images
+        shell: bash
+        run: |
+          set -eoux pipefail
+          sudo just tag-images "${{ env.IMAGE_NAME }}" \
+                               "${{ env.DEFAULT_TAG }}" \
+                               "${{ steps.generate-tags.outputs.alias_tags }}"
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
@@ -297,67 +138,10 @@ jobs:
         with:
           string: ${{ env.IMAGE_REGISTRY }}
 
-      - name: Rechunk Image
-        id: rechunk
-        uses: hhd-dev/rechunk@v1.0.1
-        with:
-          rechunk: ghcr.io/hhd-dev/rechunk:v1.0.1
-          ref: "raw-img"
-          skip_compression: "true"
-          labels: ${{ steps.meta.outputs.labels }}
-          prev-ref: ${{ steps.registry_case.outputs.lowercase }}/${{ steps.build_image.outputs.image }}:${{ env.DEFAULT_TAG }}
-
-      # Load Rechunked image and Tag them
-      - name: Load Rechunked Image
-        shell: bash
-        run: |
-          set -eoux pipefail
-          IMAGE=$(podman pull ${{ steps.rechunk.outputs.ref }})
-          sudo rm -rf ${{ steps.rechunk.outputs.output }}
-
-          for tag in ${{ steps.build_image.outputs.tags }}; do
-            podman tag $IMAGE ${{ env.IMAGE_NAME }}:${tag}
-          done
-
-          # HWE Tagging
-          if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
-
-            image_name="${{ env.IMAGE_NAME }}"
-            asus_name="${image_name/hwe/asus}"
-            surface_name="${image_name/hwe/surface}"
-
-            for tag in ${{ steps.build_image.outputs.tags }}; do
-              podman tag  "${IMAGE}" "${asus_name}":${tag}
-              podman tag  "${IMAGE}" "${surface_name}":${tag}
-            done
-          fi
-          podman tag $IMAGE rechunked-img
-          podman images
-
-      # Check that Kernel is signed with Secureboot Keys
-      - name: Check Secureboot
-        shell: bash
-        run: |
-          set -x
-          if [[ ! $(command -v sbverify) || ! $(command -v curl) || ! $(command -v openssl) ]]; then
-            sudo apt update
-            sudo apt install sbsigntool curl openssl
-          fi
-          TMP=$(podman create rechunked-img bash)
-          podman cp $TMP:/usr/lib/modules/${{ env.KERNEL_RELEASE }}/vmlinuz .
-          podman rm $TMP
-          sbverify --list vmlinuz
-          curl --retry 3 -Lo kernel-sign.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key.der
-          curl --retry 3 -Lo akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
-          openssl x509 -in kernel-sign.der -out kernel-sign.crt
-          openssl x509 -in akmods.der -out akmods.crt
-          sbverify --cert kernel-sign.crt vmlinuz || exit 1
-          sbverify --cert akmods.crt vmlinuz || exit 1
-
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push to GHCR
@@ -370,8 +154,8 @@ jobs:
           command: |
             set -euox pipefail
 
-            for tag in ${{ steps.build_image.outputs.tags }}; do
-              podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+            for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
+              sudo podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
             done
 
             if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
@@ -380,17 +164,15 @@ jobs:
               asus_name="${image_name/hwe/asus}"
               surface_name="${image_name/hwe/surface}"
 
-              for tag in ${{ steps.build_image.outputs.tags }}; do
-                podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
-                podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
+              for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
+                sudo podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
+                sudo podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
               done
             fi
-            digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
-            echo "digest=${digest}" >> $GITHUB_OUTPUT
 
-      # Sign container
-      - uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
-        if: github.event_name != 'pull_request'
+            digest=$(sudo skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
+
+            echo "digest=${digest}" >> $GITHUB_OUTPUT
 
       - name: Sign container image
         if: github.event_name != 'pull_request'
@@ -435,7 +217,7 @@ jobs:
             ${{ env.IMAGE_NAME }}-${{ matrix.stream_name }}.txt
 
   check:
-    name: Check all ${{ inputs.stream_name }} builds successful
+    name: Check all ${{ matrix.stream_name }} builds successful
     if: always()
     runs-on: ubuntu-latest
     needs: [build_container]

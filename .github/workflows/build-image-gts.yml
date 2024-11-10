@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - "**.md"
   schedule:
-    - cron: "41 5 * * 0" # 5:41 UTC Weekly on Sundays
+    - cron: "45 5 * * 0" # 5:45 UTC Weekly on Sundays
   workflow_dispatch:
   workflow_call:
 
@@ -27,7 +27,6 @@ jobs:
   generate_release:
     name: Generate Release
     needs: [build-image-gts]
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
