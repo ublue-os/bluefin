@@ -38,3 +38,30 @@ SURFACE_PACKAGES=(
 rpm-ostree install \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
+
+tee /usr/lib/modules-load.d/ublue-surface.conf << EOF
+# Add modules necessary for Disk Encryption via keyboard
+surface_aggregator
+surface_aggregator_registry
+surface_aggregator_hub
+surface_hid_core
+8250_dw
+
+# Surface Laptop 3/Surface Book 3 and later
+surface_hid
+surface_kbd
+
+# Only on AMD models
+pinctrl_amd
+
+# Only on Intel models
+intel_lpss
+intel_lpss_pci
+
+# For Surface Laptop 3/Surface Book 3
+pinctrl_icelake
+
+# For Surface Laptop 4/Surface Laptop Studio
+pinctrl_tigerlake
+EOF
+
