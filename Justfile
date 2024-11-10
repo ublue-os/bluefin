@@ -747,19 +747,10 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_n
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
     fi
 
-    # Prepend testing if built on testing branch
-    if [[ "$(git rev-parse --abrev-ref HEAD)" == "testing" ]]; then
-        temp=()
-        for TAG in "${BUILD_TAGS[@]}"; do
-            temp+=(testing-"$TAG")
-        done
-        BUILD_TAGS=(${temp[@]})
-    fi
-
     if [[ "${github_event}" == "pull_request" ]]; then
         alias_tags=("${COMMIT_TAGS[@]}")
     else
-        alias_tags=("${BUILD_TAGS[@]} ${COMMIT_TAGS[@]}")
+        alias_tags=("${BUILD_TAGS[@]}")
     fi
 
     echo "${alias_tags[*]}"

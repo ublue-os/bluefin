@@ -34,9 +34,6 @@ jobs:
         stream_name: ["${{ inputs.stream_name }}"]
 
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
-
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
@@ -55,10 +52,13 @@ jobs:
         run: |
           just check
 
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+
       - name: Build ISO
         shell: bash
         run: |
-          image_name="$(just image_name ${{ matrix.base_name }} ${{ matrix.image_flavor }})"
+          image_name="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
           sudo just build-iso-ghcr "${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }}"
           echo "IMAGE_NAME=${image_name}" >> $GITHUB_ENV
           echo "ISO_BUILD_DIR=${{ github.workspace }}/${image_name}_build" >> $GITHUB_ENV
