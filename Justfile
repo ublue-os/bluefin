@@ -753,15 +753,11 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_n
 
 # Generate Default Tag
 [group('Utility')]
-generate-default-tag image="bluefin" tag="latest" flavor="main" ghcr="0":
+generate-default-tag tag="latest" ghcr="0":
     #!/usr/bin/bash
     set -eou pipefail
-    if [[ {{ ghcr }} == "0" ]]; then
-        rm -f /tmp/manifest.json
-    fi
-    FEDORA_VERSION="$(just fedora_version {{ image }} {{ tag }} {{ flavor }})"
 
-    # Convenience and Default Tags
+    # Default Tag
     if [[ "{{ tag }}" =~ stable && "{{ ghcr }}" == "1" ]]; then
         DEFAULT_TAG="stable-daily"
     elif [[ "{{ tag }}" =~ stable && "{{ ghcr }}" == "0" ]]; then
@@ -774,7 +770,7 @@ generate-default-tag image="bluefin" tag="latest" flavor="main" ghcr="0":
 
 # Tag Images
 [group('Utility')]
-tag-images image_name="" default_tag="" tags=""
+tag-images image_name="" default_tag="" tags="":
     #!/usr/bin/bash
     set -eou pipefail
 
