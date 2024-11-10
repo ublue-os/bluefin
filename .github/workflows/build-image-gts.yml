@@ -35,6 +35,6 @@ jobs:
   build-iso-gts:
     name: Build GTS ISOs
     needs: [build-image-gts]
-    if: github.event_name == 'scheduled'
+    if: github.event_name == 'schedule'
     secrets: inherit
     uses: ./.github/workflows/build-iso-gts.yml

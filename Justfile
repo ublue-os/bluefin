@@ -284,29 +284,28 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
 
     # Prep Container
     CREF=$(just sudoif podman create localhost/"${image_name}":"${tag}" bash)
-    if [[ "{{ ghcr }}" == 1 && "${tag}" == "stable" ]]; then
-        old_tag="${tag}"
-        tag="stable-daily"
-    fi
+    OLD_IMAGE=$(just sudoif podman inspect $CREF | jq -r '.[].Image')
+    OUT_NAME="${image_name}_build"
+    MOUNT=$(just sudoif podman mount "${CREF}")
 
     # Fedora Version
     fedora_version=$(just sudoif podman inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
 
+    # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
         if [[ "${image_name}" =~ bluefin ]]; then
             base_image_name=silverblue-main
         elif [[ "${image_name}" =~ aurora ]]; then
             base_image_name=kinoite-main
         fi
+        if [[ "${tag}" =~ stable ]]; then
+            tag="stable-daily"
+        fi
         ID=$(just sudoif podman images --filter reference=ghcr.io/ublue-os/"${base_image_name}":${fedora_version} --format "'{{ '{{.ID}}' }}'")
         if [[ -n "$ID" ]]; then
             podman rmi "$ID"
         fi
-        OLD_IMAGE=$(podman inspect $CREF | jq -r '.[].Image')
     fi
-
-    OUT_NAME="${image_name}_build"
-    MOUNT=$(just sudoif podman mount "${CREF}")
 
     # Rechunk Container
     rechunker="{{ rechunker_image }}"

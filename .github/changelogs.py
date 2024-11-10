@@ -368,7 +368,6 @@ def generate_changelog(
         except Exception as e:
             print(f"Failed to get finish hash:\n{e}")
             finish = ""
-        
         try:
             linux: str = next(iter(manifests.values()))["Labels"][
                 "ostree.linux"
