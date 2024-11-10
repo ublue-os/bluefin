@@ -71,21 +71,24 @@ jobs:
         id: generate-tags
         shell: bash
         run: |
-          echo "DEFAULT_TAG=$(just generate-default-tag \
-                            ${{ matrix.stream_name }} \
-                            "1")" >> $GITHUB_ENV
+          DEFAULT_TAG=$(just generate-default-tag \
+                      ${{ matrix.stream_name }} \
+                      "1")
 
-          echo "alias_tags=$(just generate-build-tags \
-                           ${{ matrix.base_name }} \
-                           ${{ matrix.stream_name }} \
-                           ${{ matrix.image_flavor }} \
-                           "1" \
-                           ${{ github.event.number }} \
-                           ${{ github.event_name }})" >> $GITHUB_OUTPUT
+          alias_tags=$(just generate-build-tags \
+                     ${{ matrix.base_name }} \
+                     ${{ matrix.stream_name }} \
+                     ${{ matrix.image_flavor }} \
+                     "1" \
+                     ${{ github.event.number }} \
+                     ${{ github.event_name }})"
 
           echo "Default Tag: ${DEFAULT_TAG}"
           echo "Tags for this Action..."
           echo "$alias_tags"
+
+          echo "DEFAULT_TAG=${DEFAULT_TAG}" >> $GITHUB_ENV
+          echo "alias_tags=${alias_tags}" >> $GITHUB_OUTPUT
         
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
