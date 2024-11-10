@@ -99,14 +99,8 @@ jobs:
             fi
 
             # Kernel Release for ostree.linux label
-            if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
-              kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/bazzite-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
-            elif [[ "${{ matrix.stream_name }}" =~ latest|beta ]]; then
-              kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/main-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
-            else
-              kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/coreos-stable-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
-            fi
-
+            kernel_release=$(skopeo inspect docker://ghcr.io/ublue-os/${{ env.AKMODS_FLAVOR }}-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
+            
             # Get Version
             ver=$(skopeo inspect docker://ghcr.io/ublue-os/"${{ env.BASE_IMAGE_NAME }}"-main:"${fedora_version}" | jq -r '.Labels["org.opencontainers.image.version"]')
             if [ -z "$ver" ] || [ "null" = "$ver" ]; then
