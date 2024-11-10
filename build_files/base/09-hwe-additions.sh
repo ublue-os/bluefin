@@ -39,7 +39,7 @@ rpm-ostree install \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
 
-tee /etc/modules-load.d/ublue-surface.conf << EOF
+tee /usr/lib/modules-load.d/ublue-surface.conf << EOF
 # Add modules necessary for Disk Encryption via keyboard
 surface_aggregator
 surface_aggregator_registry
