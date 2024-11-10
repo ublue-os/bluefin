@@ -45,6 +45,11 @@ jobs:
         version: ${{ fromJson( inputs.stream_name ) }}
 
     steps:
+      - name: Checkout last 500 commits (for <commits> to work)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 500
+
       - name: Install Just
         shell: bash
         run: |
@@ -59,11 +64,6 @@ jobs:
         shell: bash
         run: |
           just check
-
-      - name: Checkout last 500 commits (fot <commits> to work)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 500
 
       - name: Generate Release Text
         id: generate-release-text
