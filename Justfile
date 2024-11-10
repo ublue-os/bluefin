@@ -612,12 +612,13 @@ secureboot image="bluefin" tag="latest" flavor="main":
 
     just validate "${image}" "${tag}" "${flavor}"
 
+    # Image Name
+    image_name=$(just image_name ${image} ${tag} ${flavor})
+
     if [[ -n "${temp_tag:-}" ]]; then
         tag="${temp_tag}"
     fi
 
-    # Image Name
-    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Get the vmlinuz to check
     kernel_release=$(podman inspect "${image_name}":"${tag}" | jq -r '.[].Config.Labels["ostree.linux"]')
@@ -688,9 +689,9 @@ image_name image="bluefin" tag="latest" flavor="main":
     fi
     echo "${image_name}"
 
-# Generate Tags Locally
+# Generate Tags
 [group('Utility')]
-generate-tags image="bluefin" tag="latest" flavor="main" ghcr="0":
+generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_number="" github_event="":
     #!/usr/bin/bash
     set -eou pipefail
     # Generate a timestamp for creating an image version history
@@ -704,8 +705,17 @@ generate-tags image="bluefin" tag="latest" flavor="main" ghcr="0":
 
     # Arrays for Tags
     BUILD_TAGS=()
+    COMMIT_TAGS=()
 
-    # Convenience and Default Tags
+    # Commit Tags
+    github_number="{{ github_number }}"
+    SHA_SHORT="$(git rev-parse --short HEAD)"
+    if [[ "{{ ghcr }}" == "1" ]]; then
+        COMMIT_TAGS+=(pr-${github_number:-}-{{ tag }})
+        COMMIT_TAGS+=(${SHA_SHORT}-{{ tag }})
+    fi
+
+    # Convenience Tags
     if [[ "{{ tag }}" =~ stable ]]; then
         BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
     else
@@ -713,10 +723,82 @@ generate-tags image="bluefin" tag="latest" flavor="main" ghcr="0":
     fi
 
     # Weekly Stable / Rebuild Stable on workflow_dispatch
-    if [[ "{{ tag }}" =~ "stable" ]]; then
+    github_event="{{ github_event }}"
+    if [[ "{{ tag }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${github_event}" =~ scheduled ]]; then
+        BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+    elif [[ "{{ tag }}" =~ "stable" && "${github_event}" =~ workflow_dispatch|workflow_call ]]; then
+        BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+    elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
         BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
     elif [[ ! "{{ tag }}" =~ "stable" ]]; then
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
     fi
 
-    echo "${BUILD_TAGS[@]}"
+    # Prepend testing if built on testing branch
+    if [[ "$(git rev-parse --abrev-ref HEAD)" == "testing" ]]; then
+        temp=()
+        for TAG in "${BUILD_TAGS[@]}"; do
+            temp+=(testing-"$TAG")
+        done
+        BUILD_TAGS=(${temp[@]})
+    fi
+
+    if [[ "${github_event}" == "pull_request" ]]; then
+        alias_tags=("${COMMIT_TAGS[@]}")
+    else
+        alias_tags=("${BUILD_TAGS[@]} ${COMMIT_TAGS[@]}")
+    fi
+
+    echo "${alias_tags[*]}"
+
+# Generate Default Tag
+[group('Utility')]
+generate-default-tag image="bluefin" tag="latest" flavor="main" ghcr="0":
+    #!/usr/bin/bash
+    set -eou pipefail
+    if [[ {{ ghcr }} == "0" ]]; then
+        rm -f /tmp/manifest.json
+    fi
+    FEDORA_VERSION="$(just fedora_version {{ image }} {{ tag }} {{ flavor }})"
+
+    # Convenience and Default Tags
+    if [[ "{{ tag }}" =~ stable && "{{ ghcr }}" == "1" ]]; then
+        DEFAULT_TAG="stable-daily"
+    elif [[ "{{ tag }}" =~ stable && "{{ ghcr }}" == "0" ]]; then
+        DEFAULT_TAG="stable"
+    else
+        DEFAULT_TAG="{{ tag }}"
+    fi
+
+    echo "${DEFAULT_TAG}"
+
+# Tag Images
+[group('Utility')]
+tag-images image_name="" default_tag="" tags=""
+    #!/usr/bin/bash
+    set -eou pipefail
+
+    # Get Image, and untag
+    IMAGE=$(podman inspect localhost/{{ image_name }}:{{ default_tag }} | jq -r .[].Id)
+    podman untag localhost/{{ image_name }}:{{ default_tag }}
+
+    # Tag Image
+    for tag in {{ tags }}; do
+        podman tag $IMAGE {{ image_name }}:${tag}
+    done
+
+    # HWE Tagging
+    if [[ "{{ image_name }}" =~ hwe ]]; then
+
+        image_name="{{ image_name }}"
+        asus_name="${image_name/hwe/asus}"
+        surface_name="${image_name/hwe/surface}"
+
+        for tag in {{ tags }}; do
+            podman tag "${IMAGE}" "${asus_name}":${tag}
+            podman tag "${IMAGE}" "${surface_name}":${tag}
+        done
+    fi
+
+    # Show Images
+    podman images
