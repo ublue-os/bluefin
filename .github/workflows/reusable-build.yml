@@ -189,7 +189,7 @@ jobs:
           fi
 
           # Weekly Stable / Rebuild Stable on workflow_dispatch
-          if [[ "${{ matrix.stream_name }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${{ github.event_name }}" =~ scheduled ]]; then
+          if [[ "${{ matrix.stream_name }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${{ github.event_name }}" =~ schedule ]]; then
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
           elif [[ "${{ matrix.stream_name }}" =~ "stable" && "${{ github.event_name }}" =~ workflow_dispatch|workflow_call ]]; then
               BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
