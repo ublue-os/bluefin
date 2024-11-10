@@ -335,6 +335,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     # Cleanup Temp Container Reference
     just sudoif podman unmount "$CREF"
     just sudoif podman rm "$CREF"
+    just sudoif podman rmi "$OLD_IMAGE"
 
     # Run Rechunker
     just sudoif podman run --rm \
@@ -356,7 +357,9 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         /sources/rechunk/3_chunk.sh
 
     # Load Image into Podman Store
-    just sudoif podman rmi "$OLD_IMAGE"
+    if [[ "${UID}" -gt "0" ]]; then
+        just sudoif chown "${UID}:${GROUPS}" -R "${PWD}"
+    fi
     IMAGE=$(podman pull oci:"${PWD}"/"${OUT_NAME}")
     podman tag ${IMAGE} localhost/"${image_name}":"${tag}"
 
