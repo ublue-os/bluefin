@@ -10,7 +10,8 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-alias cockpit := setup-cockpit
+cockpit:
+    @ujust setup-cockpit
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
 setup-cockpit ACTION="":
@@ -66,7 +67,8 @@ setup-cockpit ACTION="":
       echo "Cockpit has been ${b}${red}disabled${n}"
     fi
 
-alias jetbrains-toolbox := install-jetbrains-toolbox
+jetbrains-toolbox:
+    @ujust install-jetbrains-toolbox
 
 # Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
 install-jetbrains-toolbox:
@@ -86,7 +88,8 @@ install-jetbrains-toolbox:
     echo "Launching JetBrains Toolbox"
     ./jetbrains-toolbox-"${BUILD_VERSION}"/jetbrains-toolbox
 
-alias incus := install-incus
+incus:
+    @ujust install-incus
 
 # Install and configure Incus
 install-incus:

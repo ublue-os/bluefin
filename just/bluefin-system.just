@@ -77,7 +77,8 @@ devmode:
         fi
     fi
 
-alias gnome-vrr := toggle-gnome-vrr
+gnome-vrr:
+    @ujust toggle-gnome-vrr
 
 # Enable or Disable Gnome-VRR
 toggle-gnome-vrr:
@@ -253,8 +254,14 @@ install-system-flatpaks:
 configure-grub:
     @/usr/libexec/configure-grub.sh
 
-alias rollback-helper := rebase-helper
-alias switch-channel := rebase-helper
+switch-stream:
+    @ujust rebase-helper
+
+switch-streams:
+    @ujust rebase-helper
+
+rollback-helper:
+    @ujust rebase-helper
 
 # Rebase assistant
 rebase-helper:
