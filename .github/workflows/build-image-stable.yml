@@ -41,7 +41,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
-      stream_name: '["stable"]'
+      stream_name: '["stable", "stable-daily"]'
 
   build-iso-stable:
     name: Build Stable ISOs

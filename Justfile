@@ -407,8 +407,8 @@ load-rechunk image="bluefin" tag="latest" flavor="main":
     podman tag ${IMAGE} localhost/"${image_name}":{{ tag }}
 
     # Cleanup
-    rm -rf ${OUT_NAME}*
-    rm -f previous.manifest.json
+    just sudoif "rm -rf ${OUT_NAME}*"
+    just sudoif "rm -f previous.manifest.json"
 
 # Run Container
 [group('Image')]
@@ -753,6 +753,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_n
     if [[ -z "${BUILD_VERSION:-}" ]]; then
         BUILD_VERSION="${FEDORA_VERSION}.$(date +%Y%m%d)"
     fi
+    BUILD_VERSION="${BUILD_VERSION:3}"
 
     # Arrays for Tags
     BUILD_TAGS=()

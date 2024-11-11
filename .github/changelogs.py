@@ -373,12 +373,13 @@ def generate_changelog(
         curr_pretty = re.sub(r"\.\d{1,2}$", "", curr)
         # Remove target- from curr
         curr_pretty = re.sub(rf"^[a-z]+-|^[0-9]+-", "", curr_pretty)
-        if fedora_version + "." in curr_pretty:
-            curr_pretty=curr_pretty[3:]
+        if not fedora_version + "." in curr_pretty:
+            curr_pretty=fedora_version + "." + curr_pretty
         pretty = target.capitalize()
-        pretty += " (F" + fedora_version
-        pretty += "." + curr_pretty
-        pretty += ", #" + finish[:7] + ")"
+        pretty += " (F" + curr_pretty
+        if finish:
+            pretty += ", #" + finish[:7]
+        pretty += ")"
 
     title = CHANGELOG_TITLE.format_map(defaultdict(str, tag=curr, pretty=pretty))
 
