@@ -73,23 +73,15 @@ From previous `{target}` version `{prev}` there have been the following changes.
 
 ### How to rebase
 For current users, type the following to rebase to this version:
-#### For this branch (if latest):
-##### Bluefin
 ```bash
-sudo bootc switch ghcr.io/ublue-os/bluefin:{target} --enforce-container-sigpolicy
-```
-##### Aurora
-```bash
-sudo bootc switch ghcr.io/ublue-os/aurora:{target} --enforce-container-sigpolicy
-```
-#### For this specific image:
-##### Bluefin
-```bash
-sudo bootc switch ghcr.io/ublue-os/bluefin:{curr} --enforce-container-sigpolicy
-```
-##### Aurora
-```bash
-sudo bootc switch ghcr.io/ublue-os/aurora:{curr} --enforce-container-sigpolicy
+# Get Image Name
+IMAGE_NAME=$(jq -r '.["image-name"]' < /usr/share/ublue-os/image-info.json)
+
+# For this branch (if latest):
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{target}
+
+# For this specific image:
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{curr}
 ```
 
 ### Documentation
@@ -222,7 +214,6 @@ def get_package_groups(target: str, prev: dict[str, Any], manifests: dict[str, A
 
     # Find other packages
     for t, other in others.items():
-        print(t)
         first = True
         for img, experience, de, image_flavor in get_images(target):
             if img not in pkg:
@@ -382,6 +373,8 @@ def generate_changelog(
         curr_pretty = re.sub(r"\.\d{1,2}$", "", curr)
         # Remove target- from curr
         curr_pretty = re.sub(rf"^[a-z]+-|^[0-9]+-", "", curr_pretty)
+        if fedora_version + "." in curr_pretty:
+            curr_pretty=curr_pretty[3:]
         pretty = target.capitalize()
         pretty += " (F" + fedora_version
         pretty += "." + curr_pretty
