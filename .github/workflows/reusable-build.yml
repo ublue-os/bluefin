@@ -67,29 +67,15 @@ jobs:
           IMAGE_NAME="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
           echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
 
-      - name: Generate tags
-        id: generate-tags
+      - name: Default Tag
         shell: bash
         run: |
           DEFAULT_TAG="$(just generate-default-tag \
-                      ${{ matrix.stream_name }} \
-                      "1")"
-
-          alias_tags="$(just generate-build-tags \
-                     ${{ matrix.base_name }} \
-                     ${{ matrix.stream_name }} \
-                     ${{ matrix.image_flavor }} \
-                     "1" \
-                     ${{ github.event.number }} \
-                     ${{ github.event_name }})"
-
+                       ${{ matrix.stream_name }} \
+                       "1")"
           echo "Default Tag: ${DEFAULT_TAG}"
-          echo "Tags for this Action..."
-          echo "$alias_tags"
-
           echo "DEFAULT_TAG=${DEFAULT_TAG}" >> $GITHUB_ENV
-          echo "alias_tags=${alias_tags}" >> $GITHUB_OUTPUT
-        
+
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@517622d6452028f266b7ba4cc9a123b5f58a6b53 # v7
         with:
@@ -113,22 +99,47 @@ jobs:
                             "${{ matrix.image_flavor }}" \
                             "1"
 
+      - name: Load Image into Podman
+        id: load-rechunk
+        shell: bash
+        run: |
+          just load-rechunk "${{ matrix.base_name }}" \
+                            "${{ env.DEFAULT_TAG }}" \
+                            "${{ matrix.image_flavor }}"
+
       - name: Secureboot Check
         id: secureboot
         shell: bash
         run: |
-          sudo just secureboot "${{ matrix.base_name }}" \
-                               "${{ env.DEFAULT_TAG }}" \
-                               "${{ matrix.image_flavor }}"
+          just secureboot "${{ matrix.base_name }}" \
+                          "${{ env.DEFAULT_TAG }}" \
+                          "${{ matrix.image_flavor }}"
 
+      - name: Generate tags
+        id: generate-tags
+        shell: bash
+        run: |
+          alias_tags="$(just generate-build-tags \
+                     "${{ matrix.base_name }}" \
+                     "${{ matrix.stream_name }}" \
+                     "${{ matrix.image_flavor }}" \
+                     "1" \
+                     "$(podman inspect ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')" \
+                     "${{ github.event_name }}" \
+                     "${{ github.event.number }}")"
+
+          echo "Tags for this Action..."
+          echo "$alias_tags"
+          echo "alias_tags=${alias_tags}" >> $GITHUB_OUTPUT
+        
       # Tag Images
       - name: Tag Images
         shell: bash
         run: |
           set -eoux pipefail
-          sudo just tag-images "${{ env.IMAGE_NAME }}" \
-                               "${{ env.DEFAULT_TAG }}" \
-                               "${{ steps.generate-tags.outputs.alias_tags }}"
+          just tag-images "${{ env.IMAGE_NAME }}" \
+                          "${{ env.DEFAULT_TAG }}" \
+                          "${{ steps.generate-tags.outputs.alias_tags }}"
 
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
@@ -141,7 +152,7 @@ jobs:
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | sudo podman login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.actor }} --password-stdin
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push to GHCR
@@ -155,7 +166,7 @@ jobs:
             set -euox pipefail
 
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-              sudo podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+              podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
             done
 
             if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
@@ -165,12 +176,12 @@ jobs:
               surface_name="${image_name/hwe/surface}"
 
               for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-                sudo podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
-                sudo podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
+                podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
+                podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
               done
             fi
 
-            digest=$(sudo skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
+            digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
 
             echo "digest=${digest}" >> $GITHUB_OUTPUT
 
@@ -184,7 +195,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
       - name: Sign container image
-        if: github.event_name != 'pull_request' && contains(inputs.image_flavors, 'hwe')
+        if: github.event_name != 'pull_request' && contains(matrix.image_flavor, 'hwe')
         shell: bash
         run: |
           image_name="${{ env.IMAGE_NAME }}"

@@ -59,6 +59,7 @@ clean:
 
 # Sudo Clean Repo
 [group('Utility')]
+[private]
 sudo-clean:
     just sudoif just clean
 
@@ -71,9 +72,16 @@ validate image="" tag="" flavor="":
     declare -A images={{ images }}
     declare -A tags={{ tags }}
     declare -A flavors={{ flavors }}
+
     image={{ image }}
     tag={{ tag }}
     flavor={{ flavor }}
+
+    # Handle Stable Daily
+    if [[ "${tag}" == "stable-daily" ]]; then
+        tag="stable"
+    fi
+
     checkimage="${images[${image}]-}"
     checktag="${tags[${tag}]-}"
     checkflavor="${flavors[${flavor}]-}"
@@ -85,6 +93,10 @@ validate image="" tag="" flavor="":
     fi
     if [[ -z "$checktag" ]]; then
         echo "Invalid tag..."
+        exit 1
+    fi
+    if [[ -z "$checkflavor" ]]; then
+        echo "Invalid flavor..."
         exit 1
     fi
     if [[ "$checktag" =~ gts && "$checkimage" =~ aurora ]]; then
@@ -183,11 +195,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
 
 
     # Get Version
-    ver=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/"${base_image_name}-main":"${fedora_version}" | jq -r '.Labels["org.opencontainers.image.version"]')
-    if [ -z "$ver" ] || [ "null" = "$ver" ]; then
-        echo "inspected image version must not be empty or null"
-        exit 1
-    fi
+    ver="${fedora_version}.$(date +%Y%m%d)"
 
     # Build Arguments
     BUILD_ARGS=()
@@ -234,7 +242,7 @@ build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
     @just build {{ image }} {{ tag }} {{ flavor }} 1 0 0 {{ kernel_pin }}
 
 # Build Image with GHCR Flag
-[group('Production')]
+[group('Image')]
 build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="":
     #!/usr/bin/bash
     if [[ "${UID}" -gt "0" ]]; then
@@ -244,7 +252,7 @@ build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="":
     just build {{ image }} {{ tag }} {{ flavor }} 0 1 0 {{ kernel_pin }}
 
 # Build Image for Pipeline:
-[group('Production')]
+[group('Image')]
 build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
     #!/usr/bin/bash
     if [[ "${UID}" -gt "0" ]]; then
@@ -337,6 +345,10 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     just sudoif podman rm "$CREF"
     just sudoif podman rmi "$OLD_IMAGE"
 
+    SHA="dedbeef"
+    if [[ -z "$(git status -s)" ]]; then
+        SHA=$(git rev-parse HEAD)
+    fi
     # Run Rechunker
     just sudoif podman run --rm \
         --pull=newer \
@@ -347,31 +359,56 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         --env REPO=/var/ostree/repo \
         --env PREV_REF=ghcr.io/ublue-os/"${image_name}":"${tag}" \
         --env OUT_NAME="$OUT_NAME" \
-        --env LABELS="org.opencontainers.image.title=${image_name}$'\n'org.opencontainers.image.version=${fedora_version}.$(date +%Y%m%d)$'\n''io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md'$'\n''io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4'$'\n'" \
+        --env LABELS="org.opencontainers.image.title=${image_name}$'\n''io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md'$'\n''io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4'$'\n'" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
+        --env "VERSION=${fedora_version}.$(date +%Y%m%d)" \
         --env VERSION_FN=/workspace/version.txt \
         --env OUT_REF="oci:$OUT_NAME" \
         --env GIT_DIR="/var/git" \
+        --env REVISION="$SHA" \
         --user 0:0 \
         "${rechunker}" \
         /sources/rechunk/3_chunk.sh
 
-    # Load Image into Podman Store
+    # Fix Permissions of OCI
     if [[ "${UID}" -gt "0" ]]; then
         just sudoif chown "${UID}:${GROUPS}" -R "${PWD}"
+    elif [[ -n "${SUDO_UID:-}" ]]; then
+        chown "${SUDO_UID}":"${SUDO_GID}" -R "${PWD}"
     fi
-    IMAGE=$(podman pull oci:"${PWD}"/"${OUT_NAME}")
-    podman tag ${IMAGE} localhost/"${image_name}":"${tag}"
 
-    # Cleanup
+    # Remove cache_ostree
     just sudoif podman volume rm cache_ostree
-    just sudoif "rm -rf ${OUT_NAME}*"
-    just sudoif "rm -f previous.manifest.json"
+
+    # Show OCI Labels
+    just sudoif skopeo inspect oci:"${PWD}"/"${OUT_NAME}" | jq -r '.Labels'
 
     # Pipeline Checks
-    if [[ {{ pipeline }} == "1" ]]; then
-        just secureboot "${image}" "${tag}" "${flavor}"
+    if [[ {{ pipeline }} == "1" && -n "${SUDO_USER:-}" ]]; then
+        sudo -u "${SUDO_USER}" just load-rechunk "${image}" "${tag}" "${flavor}"
+        sudo -u "${SUDO_USER}" just secureboot "${image}" "${tag}" "${flavor}"
     fi
+
+# Load OCI into Podman Store
+[group('Image')]
+load-rechunk image="bluefin" tag="latest" flavor="main":
+    #!/usr/bin/bash
+    set -eou pipefail
+
+    # Validate
+    just validate {{ image }} {{ tag }} {{ flavor }}
+
+    # Image Name
+    image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
+
+    # Load Image
+    OUT_NAME="${image_name}_build"
+    IMAGE=$(podman pull oci:"${PWD}"/"${OUT_NAME}")
+    podman tag ${IMAGE} localhost/"${image_name}":{{ tag }}
+
+    # Cleanup
+    just sudoif "rm -rf ${OUT_NAME}*"
+    just sudoif "rm -f previous.manifest.json"
 
 # Run Container
 [group('Image')]
@@ -523,7 +560,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     fi
 
 # Build ISO using GHCR Image
-[group('Production')]
+[group('ISO')]
 build-iso-ghcr image="bluefin" tag="latest" flavor="main":
     @just build-iso {{ image }} {{ tag }} {{ flavor }} 1
 
@@ -620,21 +657,11 @@ secureboot image="bluefin" tag="latest" flavor="main":
     tag={{ tag }}
     flavor={{ flavor }}
 
-    # Validate (Handle Stable-daily)
-    if [[ "${tag}" == "stable-daily" ]]; then
-        temp_tag="${tag}"
-        tag="stable"
-    fi
-
+    # Validate
     just validate "${image}" "${tag}" "${flavor}"
 
     # Image Name
     image_name=$(just image_name ${image} ${tag} ${flavor})
-
-    if [[ -n "${temp_tag:-}" ]]; then
-        tag="${temp_tag}"
-    fi
-
 
     # Get the vmlinuz to check
     kernel_release=$(podman inspect "${image_name}":"${tag}" | jq -r '.[].Config.Labels["ostree.linux"]')
@@ -677,6 +704,7 @@ secureboot image="bluefin" tag="latest" flavor="main":
 
 # Get Fedora Version of an image
 [group('Utility')]
+[private]
 fedora_version image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eou pipefail
@@ -694,6 +722,7 @@ fedora_version image="bluefin" tag="latest" flavor="main":
 
 # Image Name
 [group('Utility')]
+[private]
 image_name image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
     set -eou pipefail
@@ -707,17 +736,24 @@ image_name image="bluefin" tag="latest" flavor="main":
 
 # Generate Tags
 [group('Utility')]
-generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_number="" github_event="":
+generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" version="" github_event="" github_number="":
     #!/usr/bin/bash
     set -eou pipefail
-    # Generate a timestamp for creating an image version history
-    TIMESTAMP="$(date +%Y%m%d)"
+
     TODAY="$(date +%A)"
     WEEKLY="Sunday"
     if [[ {{ ghcr }} == "0" ]]; then
         rm -f /tmp/manifest.json
     fi
     FEDORA_VERSION="$(just fedora_version {{ image }} {{ tag }} {{ flavor }})"
+    DEFAULT_TAG=$(just generate-default-tag {{ tag }} {{ ghcr }})
+    IMAGE_NAME=$(just image_name {{ image }} {{ tag }} {{ flavor }})
+    # Use Build Version from Rechunk
+    BUILD_VERSION={{ version }}
+    if [[ -z "${BUILD_VERSION:-}" ]]; then
+        BUILD_VERSION="${FEDORA_VERSION}.$(date +%Y%m%d)"
+    fi
+    BUILD_VERSION="${BUILD_VERSION:3}"
 
     # Arrays for Tags
     BUILD_TAGS=()
@@ -733,21 +769,21 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_n
 
     # Convenience Tags
     if [[ "{{ tag }}" =~ stable ]]; then
-        BUILD_TAGS+=("stable-daily" "stable-daily-${TIMESTAMP}")
+        BUILD_TAGS+=("stable-daily" "stable-daily-${BUILD_VERSION}")
     else
-        BUILD_TAGS+=("{{ tag }}" "{{ tag }}-${TIMESTAMP}")
+        BUILD_TAGS+=("{{ tag }}" "{{ tag }}-${BUILD_VERSION}")
     fi
 
     # Weekly Stable / Rebuild Stable on workflow_dispatch
     github_event="{{ github_event }}"
     if [[ "{{ tag }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${github_event}" =~ schedule ]]; then
-        BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+        BUILD_TAGS+=("stable" "stable-${BUILD_VERSION}")
     elif [[ "{{ tag }}" =~ "stable" && "${github_event}" =~ workflow_dispatch|workflow_call ]]; then
-        BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+        BUILD_TAGS+=("stable" "stable-${BUILD_VERSION}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
-        BUILD_TAGS+=("stable" "stable-${TIMESTAMP}")
+        BUILD_TAGS+=("stable" "stable-${BUILD_VERSION}")
     elif [[ ! "{{ tag }}" =~ stable|beta ]]; then
-        BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${TIMESTAMP}")
+        BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${BUILD_VERSION}")
     fi
 
     if [[ "${github_event}" == "pull_request" ]]; then
