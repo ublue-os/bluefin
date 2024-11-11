@@ -119,6 +119,8 @@ jobs:
         id: generate-tags
         shell: bash
         run: |
+          version=$(podman inspect ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')
+          echo "$version"
           alias_tags="$(just generate-build-tags \
                      ${{ matrix.base_name }} \
                      ${{ matrix.stream_name }} \
@@ -126,7 +128,7 @@ jobs:
                      "1" \
                      ${{ github.event.number }} \
                      ${{ github.event_name }})" \
-                     "$(skopeo inspect containers-storage:localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | jq -r '.Labels["org.opencontainers.image.version"]')"
+                     $version
 
           echo "Tags for this Action..."
           echo "$alias_tags"
