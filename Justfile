@@ -365,7 +365,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         --env VERSION_FN=/workspace/version.txt \
         --env OUT_REF="oci:$OUT_NAME" \
         --env GIT_DIR="/var/git" \
-        --env REVISION="$SHA_SHORT" \
+        --env REVISION="$SHA" \
         --user 0:0 \
         "${rechunker}" \
         /sources/rechunk/3_chunk.sh
