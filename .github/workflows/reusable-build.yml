@@ -119,16 +119,14 @@ jobs:
         id: generate-tags
         shell: bash
         run: |
-          version=$(podman inspect ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')
-          echo "$version"
           alias_tags="$(just generate-build-tags \
                      ${{ matrix.base_name }} \
                      ${{ matrix.stream_name }} \
                      ${{ matrix.image_flavor }} \
                      "1" \
                      ${{ github.event.number }} \
-                     ${{ github.event_name }})" \
-                     $version
+                     ${{ github.event_name }} \
+                     $(podman inspect ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]'))"
 
           echo "Tags for this Action..."
           echo "$alias_tags"
