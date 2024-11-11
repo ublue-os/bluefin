@@ -77,10 +77,10 @@ For current users, type the following to rebase to this version:
 # Get Image Name
 IMAGE_NAME=$(jq -r '.["image-name"]' < /usr/share/ublue-os/image-info.json)
 
-# For this branch (if latest):
+# For this Stream
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{target}
 
-# For this specific image:
+# For this Specific Image:
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{curr}
 ```
 
