@@ -738,7 +738,7 @@ image_name image="bluefin" tag="latest" flavor="main":
 [group('Utility')]
 generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" github_number="" github_event="" version="":
     #!/usr/bin/bash
-    set -eoux pipefail
+    set -eou pipefail
 
     TODAY="$(date +%A)"
     WEEKLY="Sunday"

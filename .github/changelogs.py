@@ -321,6 +321,8 @@ def get_commits(prev_manifests, manifests, workdir: str):
 
             if subject.lower().startswith("merge"):
                 continue
+            if subject.lower().startswith("chore"):
+                continue
 
             out += (
                 COMMIT_FORMAT.replace("{short}", short)
