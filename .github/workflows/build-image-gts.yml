@@ -21,6 +21,7 @@ jobs:
       matrix:
         brand_name: [bluefin]
     with:
+      kernel_pin: 6.11.3-200.fc40.x86_64
       brand_name: ${{ matrix.brand_name }}
       stream_name: gts
 

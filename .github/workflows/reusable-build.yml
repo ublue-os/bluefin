@@ -123,6 +123,7 @@ jobs:
                      "${{ matrix.base_name }}" \
                      "${{ matrix.stream_name }}" \
                      "${{ matrix.image_flavor }}" \
+                     "${{ inputs.kernel_pin }}" \
                      "1" \
                      "$(podman inspect ${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')" \
                      "${{ github.event_name }}" \

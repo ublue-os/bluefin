@@ -170,7 +170,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
     if [[ {{ ghcr }} == "0" ]]; then
         rm -f /tmp/manifest.json
     fi
-    fedora_version=$(just fedora_version {{ image }} {{ tag }} {{ flavor }})
+    fedora_version=$(just fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}' '{{ kernel_pin }}')
 
     # Verify Base Image with cosign
     just verify-container "${base_image_name}-main:${fedora_version}"
@@ -705,7 +705,7 @@ secureboot image="bluefin" tag="latest" flavor="main":
 # Get Fedora Version of an image
 [group('Utility')]
 [private]
-fedora_version image="bluefin" tag="latest" flavor="main":
+fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
     #!/usr/bin/bash
     set -eou pipefail
     just validate {{ image }} {{ tag }} {{ flavor }}
@@ -718,6 +718,9 @@ fedora_version image="bluefin" tag="latest" flavor="main":
         fi
     fi
     fedora_version=$(jq -r '.Labels["ostree.linux"]' < /tmp/manifest.json | grep -oP 'fc\K[0-9]+')
+    if [[ -n "${kernel_pin:-}" ]]; then
+        fedora_version=$(echo "${kernel_pin}" | grep -oP 'fc\K[0-9]+')
+    fi
     echo "${fedora_version}"
 
 # Image Name
@@ -736,7 +739,7 @@ image_name image="bluefin" tag="latest" flavor="main":
 
 # Generate Tags
 [group('Utility')]
-generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" version="" github_event="" github_number="":
+generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghcr="0" version="" github_event="" github_number="":
     #!/usr/bin/bash
     set -eou pipefail
 
@@ -745,7 +748,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" ghcr="0" version=
     if [[ {{ ghcr }} == "0" ]]; then
         rm -f /tmp/manifest.json
     fi
-    FEDORA_VERSION="$(just fedora_version {{ image }} {{ tag }} {{ flavor }})"
+    FEDORA_VERSION="$(just fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}' '{{ kernel_pin }}')"
     DEFAULT_TAG=$(just generate-default-tag {{ tag }} {{ ghcr }})
     IMAGE_NAME=$(just image_name {{ image }} {{ tag }} {{ flavor }})
     # Use Build Version from Rechunk
