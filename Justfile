@@ -707,7 +707,7 @@ secureboot image="bluefin" tag="latest" flavor="main":
 [private]
 fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
     #!/usr/bin/bash
-    set -eoux pipefail
+    set -eou pipefail
     just validate {{ image }} {{ tag }} {{ flavor }}
     if [[ ! -f /tmp/manifest.json ]]; then
         if [[ "{{ tag }}" =~ stable ]]; then
