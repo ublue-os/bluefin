@@ -13,13 +13,14 @@
 # /org/gnome/Ptyxis/Profiles/d092b3519698570a3252762c658f7629/use-custom-command
 #   true
 
+# shellcheck disable=SC1091
+. /usr/share/ublue-os/bluefin-cli/known-ptyxis-profiles
+
 # if dconf doesn't exist, just return
 if ! command -v dconf >/dev/null; then
     exit 0
 fi
 
-# shellcheck disable=SC1091
-. /usr/share/ublue-os/bluefin-cli/known-containers
 
 # shellcheck disable=SC2001
 gen_uuid() {
@@ -32,9 +33,9 @@ default="$2"
 palette="$3"
 
 # shellcheck disable=2154
-for check in "${!known_container[@]}"; do
+for check in "${!known_profile[@]}"; do
 	if test "$check" = "$name"; then
-		guid=${known_container[$check]}
+		guid=${known_profile[$check]}
 	fi
 done
 
@@ -66,11 +67,6 @@ opacity=$(dconf read /org/gnome/Ptyxis/Profiles/"${default_guid}"/opacity)
 
 if test "$name" = "Host"; then
 	dconf write "${profile}label" "'${name}'"
-else
-	dconf write "${profile}custom-command" "'sh -c \"[ ! -e /run/.containerenv ] && exec distrobox enter ${name} || ${SHELL}\"'"
-	dconf write "${profile}label" "'${name}'"
-	dconf write "${profile}use-custom-command" "true"
-	dconf write "${profile}ublue-os" "true"
 fi
 
 if test -n "$opacity"; then
@@ -79,10 +75,6 @@ fi
 
 if test -n "$palette"; then
 	dconf write "${profile}palette" "'${palette}'"
-elif test "$name" = "fedora-toolbox"; then
-	dconf write "${profile}palette" "'Elio'"
-elif test "$name" = "ubuntu-toolbox"; then
-	dconf write "${profile}palette" "'Clone Of Ubuntu'"
 fi
 
 /usr/libexec/ptyxis-add-profile.sh "$guid"
