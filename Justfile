@@ -739,7 +739,7 @@ image_name image="bluefin" tag="latest" flavor="main":
 
 # Generate Tags
 [group('Utility')]
-generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghcr="0" github_number="" github_event="" version="":
+generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghcr="0" version="" github_number="" github_event="":
     #!/usr/bin/bash
     set -eou pipefail
 
