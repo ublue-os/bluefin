@@ -193,9 +193,12 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
         just verify-container "akmods-nvidia:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
 
-
     # Get Version
-    ver="${fedora_version}.$(date +%Y%m%d)"
+    if [[ "${tag}" =~ stable ]]; then
+        ver="${fedora_version}.$(date +%Y%m%d)"
+    else
+        ver="${tag}-${fedora_version}.$(date +%Y%m%d)"
+    fi
 
     # Build Arguments
     BUILD_ARGS=()
@@ -299,6 +302,13 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     # Fedora Version
     fedora_version=$(just sudoif podman inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
 
+    # Label Version
+    if [[ "{{ tag }}" =~ stable ]]; then
+        VERSION="${fedora_version}.$(date +%Y%m%d)"
+    else
+        VERSION="${tag}-${fedora_version}.$(date +%Y%m%d)"
+    fi
+
     # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
         if [[ "${image_name}" =~ bluefin ]]; then
@@ -361,7 +371,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         --env OUT_NAME="$OUT_NAME" \
         --env LABELS="org.opencontainers.image.title=${image_name}$'\n''io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md'$'\n''io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4'$'\n'" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
-        --env "VERSION=${fedora_version}.$(date +%Y%m%d)" \
+        --env "VERSION=${VERSION}" \
         --env VERSION_FN=/workspace/version.txt \
         --env OUT_REF="oci:$OUT_NAME" \
         --env GIT_DIR="/var/git" \
@@ -436,7 +446,7 @@ run image="bluefin" tag="latest" flavor="main":
 
 # Build ISO
 [group('ISO')]
-build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
+build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     #!/usr/bin/bash
     set -eoux pipefail
     image={{ image }}
@@ -471,8 +481,11 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
         fi
     fi
 
+    # Fedora Version
+    FEDORA_VERSION=$(podman inspect ${IMAGE_FULL} | jq -r '.[]["Config"]["Labels"]["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+
     # Load Image into rootful podman
-    if [[ "${UID}" -gt 0 ]]; then
+    if [[ "${UID}" -gt 0 && {{ ghcr }} == "0" ]]; then
         just sudoif podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
     fi
 
@@ -526,13 +539,19 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
         echo "WARNING - Reusing previous determined flatpaks-with-deps"
     fi
 
+    if [[ "{{ pipeline }}" == "1" ]]; then
+    	podman rmi ${IMAGE_FULL}
+    fi
+
     # List Flatpaks with Dependencies
     cat "${build_dir}/flatpaks-with-deps"
 
     # Build ISO
     iso_build_args=()
     iso_build_args+=("--rm" "--privileged" "--pull=newer")
-    iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage")
+    if [[ "{{ ghcr }}" == "0" ]]; then
+    	iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage")
+    fi
     iso_build_args+=(--volume "${PWD}:/github/workspace/")
     iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="x86_64")
@@ -541,7 +560,9 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     iso_build_args+=(IMAGE_NAME="${image_name}")
     iso_build_args+=(IMAGE_REPO="${IMAGE_REPO}")
     iso_build_args+=(IMAGE_SIGNED="true")
-    iso_build_args+=(IMAGE_SRC="containers-storage:${IMAGE_FULL}")
+    if [[ "{{ ghcr }}" == "0" ]]; then
+    	iso_build_args+=(IMAGE_SRC="containers-storage:${IMAGE_FULL}")
+    fi
     iso_build_args+=(IMAGE_TAG="${tag}")
     iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}.iso")
     iso_build_args+=(SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der")
@@ -550,13 +571,15 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     else
         iso_build_args+=(VARIANT="Kinoite")
     fi
-    iso_build_args+=(VERSION="$(skopeo inspect containers-storage:${IMAGE_FULL} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')")
+    iso_build_args+=(VERSION="${FEDORA_VERSION}")
     iso_build_args+=(WEB_UI="false")
 
     just sudoif podman run "${iso_build_args[@]}"
 
     if [[ "${UID}" -gt "0" ]]; then
         just sudoif chown "${UID}:${GROUPS}" -R "${PWD}"
+    elif [[ -n "${SUDO_UID:-}" ]]; then
+        chown "${SUDO_UID}":"${SUDO_GID}" -R "${PWD}"
     fi
 
 # Build ISO using GHCR Image
@@ -739,7 +762,7 @@ image_name image="bluefin" tag="latest" flavor="main":
 
 # Generate Tags
 [group('Utility')]
-generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghcr="0" version="" github_event="" github_number="":
+generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghcr="0" $version="" github_event="" github_number="":
     #!/usr/bin/bash
     set -eou pipefail
 
@@ -752,11 +775,10 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     DEFAULT_TAG=$(just generate-default-tag {{ tag }} {{ ghcr }})
     IMAGE_NAME=$(just image_name {{ image }} {{ tag }} {{ flavor }})
     # Use Build Version from Rechunk
-    BUILD_VERSION={{ version }}
-    if [[ -z "${BUILD_VERSION:-}" ]]; then
-        BUILD_VERSION="${FEDORA_VERSION}.$(date +%Y%m%d)"
+    if [[ -z "${version:-}" ]]; then
+        version="{{ tag }}-${FEDORA_VERSION}.$(date +%Y%m%d)"
     fi
-    BUILD_VERSION="${BUILD_VERSION:3}"
+    version=${version#{{ tag }}-}
 
     # Arrays for Tags
     BUILD_TAGS=()
@@ -766,27 +788,27 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     github_number="{{ github_number }}"
     SHA_SHORT="$(git rev-parse --short HEAD)"
     if [[ "{{ ghcr }}" == "1" ]]; then
-        COMMIT_TAGS+=(pr-${github_number:-}-{{ tag }})
-        COMMIT_TAGS+=(${SHA_SHORT}-{{ tag }})
+        COMMIT_TAGS+=(pr-${github_number:-}-{{ tag }}-${version})
+        COMMIT_TAGS+=(${SHA_SHORT}-{{ tag }}-${version})
     fi
 
     # Convenience Tags
     if [[ "{{ tag }}" =~ stable ]]; then
-        BUILD_TAGS+=("stable-daily" "stable-daily-${BUILD_VERSION}")
+        BUILD_TAGS+=("stable-daily" "${version}" "stable-daily-${version}" "stable-daily-${version:3}")
     else
-        BUILD_TAGS+=("{{ tag }}" "{{ tag }}-${BUILD_VERSION}")
+        BUILD_TAGS+=("{{ tag }}" "{{ tag }}-${version}" "{{ tag }}-${version:3}")
     fi
 
     # Weekly Stable / Rebuild Stable on workflow_dispatch
     github_event="{{ github_event }}"
     if [[ "{{ tag }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${github_event}" =~ schedule ]]; then
-        BUILD_TAGS+=("stable" "stable-${BUILD_VERSION}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "${github_event}" =~ workflow_dispatch|workflow_call ]]; then
-        BUILD_TAGS+=("stable" "stable-${BUILD_VERSION}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
-        BUILD_TAGS+=("stable" "stable-${BUILD_VERSION}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
     elif [[ ! "{{ tag }}" =~ stable|beta ]]; then
-        BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${BUILD_VERSION}")
+        BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${version}" "${FEDORA_VERSION}-${version:3}")
     fi
 
     if [[ "${github_event}" == "pull_request" ]]; then

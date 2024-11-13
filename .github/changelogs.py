@@ -375,6 +375,8 @@ def generate_changelog(
         curr_pretty = re.sub(r"\.\d{1,2}$", "", curr)
         # Remove target- from curr
         curr_pretty = re.sub(rf"^[a-z]+-|^[0-9]+-", "", curr_pretty)
+        if target == "stable-daily":
+            curr_pretty = re.sub(rf"^[a-z]+-", "", curr_pretty)
         if not fedora_version + "." in curr_pretty:
             curr_pretty=fedora_version + "." + curr_pretty
         pretty = target.capitalize()
