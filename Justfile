@@ -194,7 +194,11 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
     fi
 
     # Get Version
-    ver="${tag}-${fedora_version}.$(date +%Y%m%d)"
+    if [[ "${tag}" =~ stable ]]; then
+        ver="${fedora_version}.$(date +%Y%m%d)"
+    else
+        ver="${tag}-${fedora_version}.$(date +%Y%m%d)"
+    fi
 
     # Build Arguments
     BUILD_ARGS=()
