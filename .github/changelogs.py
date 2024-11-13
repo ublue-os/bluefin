@@ -104,9 +104,9 @@ BLACKLIST_VERSIONS = [
 
 
 def get_images(target: str):
-    if target == "latest":
+    if "latest" in target:
         matrix = IMAGE_MATRIX_LATEST
-    elif target == "gts":
+    elif "gts" in target:
         matrix = IMAGE_MATRIX_GTS
     else:
         matrix = IMAGE_MATRIX
