@@ -299,7 +299,11 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     fedora_version=$(just sudoif podman inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
 
     # Label Version
-    VERSION="${tag}-${fedora_version}.$(date +%Y%m%d)"
+    if [[ "{{ tag }}" =~ stable ]]; then
+        VERSION="${fedora_version}.$(date +%Y%m%d)"
+    else
+        VERSION="${tag}-${fedora_version}.$(date +%Y%m%d)"
+    fi
 
     # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
@@ -768,8 +772,9 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     IMAGE_NAME=$(just image_name {{ image }} {{ tag }} {{ flavor }})
     # Use Build Version from Rechunk
     if [[ -z "${version:-}" ]]; then
-        version="${FEDORA_VERSION}.$(date +%Y%m%d)"
+        version="{{ tag }}-${FEDORA_VERSION}.$(date +%Y%m%d)"
     fi
+    version=${version#{{ tag }}-}
 
     # Arrays for Tags
     BUILD_TAGS=()
@@ -785,7 +790,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
 
     # Convenience Tags
     if [[ "{{ tag }}" =~ stable ]]; then
-        BUILD_TAGS+=("stable-daily" "stable-daily-${version}" "stable-daily-${version:3}")
+        BUILD_TAGS+=("stable-daily" "${version}" "stable-daily-${version}" "stable-daily-${version:3}")
     else
         BUILD_TAGS+=("{{ tag }}" "{{ tag }}-${version}" "{{ tag }}-${version:3}")
     fi
