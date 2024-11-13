@@ -32,25 +32,13 @@ jobs:
       matrix:
         brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
     with:
-      brand_name: ${{ matrix.brand_name }}
-      stream_name: latest
-
-  build-image-hwe:
-    name: Build HWE Images
-    uses: ./.github/workflows/reusable-build.yml
-    secrets: inherit
-    strategy:
-      fail-fast: false
-      matrix:
-        brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
-    with:
-      image_flavors: '["hwe", "hwe-nvidia"]'
+      image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
 
   generate-release:
     name: Generate Release
-    needs: [build-image-latest, build-image-hwe]
+    needs: [build-image-latest]
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
@@ -58,7 +46,7 @@ jobs:
 
   build-iso-latest:
     name: Build Latest ISOs
-    needs: [build-image-latest, build-image-hwe]
+    needs: [build-image-latest]
     if: github.event_name.schedule == '40 4 * * 0'
     secrets: inherit
     uses: ./.github/workflows/build-iso-latest.yml
