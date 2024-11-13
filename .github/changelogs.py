@@ -27,7 +27,7 @@ IMAGE_MATRIX = {
 RETRIES = 3
 RETRY_WAIT = 5
 FEDORA_PATTERN = re.compile(r"\.fc\d\d")
-START_PATTERN = lambda target: re.compile(rf"{target}-[0-9]+")
+START_PATTERN = lambda target: re.compile(rf"{target}-\d\d\d+")
 
 PATTERN_ADD = "\n| ✨ | {name} | | {version} |"
 PATTERN_CHANGE = "\n| 🔄 | {name} | {prev} | {new} |"
