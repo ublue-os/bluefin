@@ -770,7 +770,6 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     if [[ -z "${version:-}" ]]; then
         version="${FEDORA_VERSION}.$(date +%Y%m%d)"
     fi
-    version="${version:3}"
 
     # Arrays for Tags
     BUILD_TAGS=()
