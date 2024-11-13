@@ -557,6 +557,8 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
 
     if [[ "${UID}" -gt "0" ]]; then
         just sudoif chown "${UID}:${GROUPS}" -R "${PWD}"
+    elif [[ -n "${SUDO_UID:-}" ]]; then
+        chown "${SUDO_UID}":"${SUDO_GID}" -R "${PWD}"
     fi
 
 # Build ISO using GHCR Image
@@ -755,6 +757,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     if [[ -z "${version:-}" ]]; then
         version="${FEDORA_VERSION}.$(date +%Y%m%d)"
     fi
+    version="${version:3}"
 
     # Arrays for Tags
     BUILD_TAGS=()
