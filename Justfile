@@ -473,6 +473,9 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         fi
     fi
 
+    # Fedora Version
+    FEDORA_VERSION=$(podman inspect ${IMAGE_FULL} | jq -r '.[]["Config"]["Labels"]["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+
     # Load Image into rootful podman
     if [[ "${UID}" -gt 0 && {{ ghcr }} == "0" ]]; then
         just sudoif podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
@@ -560,7 +563,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     else
         iso_build_args+=(VARIANT="Kinoite")
     fi
-    iso_build_args+=(VERSION="$(skopeo inspect containers-storage:${IMAGE_FULL} | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')")
+    iso_build_args+=(VERSION="${FEDORA_VERSION}")
     iso_build_args+=(WEB_UI="false")
 
     just sudoif podman run "${iso_build_args[@]}"
