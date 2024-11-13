@@ -193,9 +193,8 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
         just verify-container "akmods-nvidia:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
 
-
     # Get Version
-    ver="${fedora_version}.$(date +%Y%m%d)"
+    ver="${tag}-${fedora_version}.$(date +%Y%m%d)"
 
     # Build Arguments
     BUILD_ARGS=()
@@ -299,6 +298,9 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     # Fedora Version
     fedora_version=$(just sudoif podman inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
 
+    # Label Version
+    VERSION="${tag}-${fedora_version}.$(date +%Y%m%d)"
+
     # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
         if [[ "${image_name}" =~ bluefin ]]; then
@@ -361,7 +363,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         --env OUT_NAME="$OUT_NAME" \
         --env LABELS="org.opencontainers.image.title=${image_name}$'\n''io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md'$'\n''io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4'$'\n'" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
-        --env "VERSION=${fedora_version}.$(date +%Y%m%d)" \
+        --env "VERSION=${VERSION}" \
         --env VERSION_FN=/workspace/version.txt \
         --env OUT_REF="oci:$OUT_NAME" \
         --env GIT_DIR="/var/git" \
@@ -436,7 +438,7 @@ run image="bluefin" tag="latest" flavor="main":
 
 # Build ISO
 [group('ISO')]
-build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
+build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     #!/usr/bin/bash
     set -eoux pipefail
     image={{ image }}
@@ -472,7 +474,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     fi
 
     # Load Image into rootful podman
-    if [[ "${UID}" -gt 0 ]]; then
+    if [[ "${UID}" -gt 0 && {{ ghcr }} == "0" ]]; then
         just sudoif podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
     fi
 
@@ -526,13 +528,19 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
         echo "WARNING - Reusing previous determined flatpaks-with-deps"
     fi
 
+    if [[ "{{ pipeline }}" == "1" ]]; then
+    	podman rmi ${IMAGE_FULL}
+    fi
+
     # List Flatpaks with Dependencies
     cat "${build_dir}/flatpaks-with-deps"
 
     # Build ISO
     iso_build_args=()
     iso_build_args+=("--rm" "--privileged" "--pull=newer")
-    iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage")
+    if [[ "{{ ghcr }}" == "0" ]]; then
+    	iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage")
+    fi
     iso_build_args+=(--volume "${PWD}:/github/workspace/")
     iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="x86_64")
@@ -541,7 +549,9 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0":
     iso_build_args+=(IMAGE_NAME="${image_name}")
     iso_build_args+=(IMAGE_REPO="${IMAGE_REPO}")
     iso_build_args+=(IMAGE_SIGNED="true")
-    iso_build_args+=(IMAGE_SRC="containers-storage:${IMAGE_FULL}")
+    if [[ "{{ ghcr }}" == "0" ]]; then
+    	iso_build_args+=(IMAGE_SRC="containers-storage:${IMAGE_FULL}")
+    fi
     iso_build_args+=(IMAGE_TAG="${tag}")
     iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}.iso")
     iso_build_args+=(SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der")
