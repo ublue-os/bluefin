@@ -28,11 +28,11 @@ on:
           - '["gts", "stable"]'
           - '["gts"]'
           - '["stable"]'
-          - '["stable-daily"]'
-          - '["latest"]'
-          - '["beta"]'
-          - '["stable-daily", "latest", "beta"]'
-          - '["gts", "stable", "stable-daily", "latest", "beta"]'
+          # - '["stable-daily"]'
+          # - '["latest"]'
+          # - '["beta"]'
+          # - '["stable-daily", "latest", "beta"]'
+          # - '["gts", "stable", "stable-daily", "latest", "beta"]'
 
 permissions:
   contents: write
@@ -78,7 +78,7 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
-        if: contains(fromJson('["gts", "stable"]'), matrix.version) && github.event_name.schedule == '45 5 * * 0' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name)
+        if: contains(fromJson('["gts", "stable"]'), matrix.version) && (github.event_name.schedule == '45 5 * * 0' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
         with:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
