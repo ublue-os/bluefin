@@ -62,7 +62,7 @@ jobs:
           just build-iso "${{ matrix.base_name }}" "${{ matrix.stream_name }}" "${{ matrix.image_flavor }}" "1" "1"
           echo "IMAGE_NAME=${image_name}" >> $GITHUB_ENV
           echo "ISO_BUILD_DIR=${{ github.workspace }}/${image_name}_build" >> $GITHUB_ENV
-          echo "ISO_NAME=${image_name}.iso" >> $GITHUB_ENV
+          echo "ISO_NAME=${image_name}-${{ matrix.stream_name }}.iso" >> $GITHUB_ENV
 
       - name: Move ISOs to Upload Directory
         id: upload-directory

@@ -12,6 +12,10 @@ flavors := '(
     [nvidia]=nvidia
     [hwe]=hwe
     [hwe-nvidia]=hwe-nvidia
+    [asus]=asus
+    [asus-nvidia]=asus-nvidia
+    [surface]=surface
+    [surface-nvidia]=surface-nvidia
 )'
 tags := '(
     [gts]=gts
@@ -103,7 +107,7 @@ validate image="" tag="" flavor="":
         echo "Aurora Does not build GTS..."
         exit 1
     fi
-    if [[ ! "$checktag" =~ latest && "$checkflavor" =~ hwe ]]; then
+    if [[ ! "$checktag" =~ latest && "$checkflavor" =~ hwe|asus|surface ]]; then
         echo "HWE images are only built on latest..."
         exit 1
     fi
@@ -462,7 +466,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     build_dir="${image_name}_build"
     mkdir -p "$build_dir"
 
-    if [[ -f "${build_dir}/${image_name}.iso" || -f "${build_dir}/${image_name}.iso-CHECKSUM" ]]; then
+    if [[ -f "${build_dir}/${image_name}-${tag}.iso" || -f "${build_dir}/${image_name}-${tag}.iso-CHECKSUM" ]]; then
         echo "ERROR - ISO or Checksum already exist. Please mv or rm to build new ISO"
         exit 1
     fi
@@ -564,7 +568,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     	iso_build_args+=(IMAGE_SRC="containers-storage:${IMAGE_FULL}")
     fi
     iso_build_args+=(IMAGE_TAG="${tag}")
-    iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}.iso")
+    iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}-${tag}.iso")
     iso_build_args+=(SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der")
     if [[ "${image_name}" =~ bluefin ]]; then
         iso_build_args+=(VARIANT="Silverblue")
