@@ -10,6 +10,7 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
+# alias for install-pytorch
 [group('Tools')]
 pytorch:
     @ujust install-pytorch
@@ -23,6 +24,7 @@ install-pytorch:
         --notebook-dir=/opt/notebooks --ip='*' --port=8888 \
         --no-browser --allow-root"
 
+# alias for install-tensorflow
 [group('Tools')]
 tensorflow:
     @ujust install-tensorflow
@@ -34,6 +36,7 @@ install-tensorflow:
     podman pull docker.io/tensorflow/tensorflow:latest
     podman run --pull=newer -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
+# alias for setup-ollama
 [group('Tools')]
 ollama:
     @ujust setup-ollama
@@ -199,6 +202,7 @@ setup-ollama ACTION="help":
         echo "open-webui Quadlet removed"
     fi
 
+# alias for install-invokeai
 [group('Tools')]
 invokeai:
     @ujust install-invokeai

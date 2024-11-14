@@ -10,7 +10,7 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-# Enable Cockpit for web-based system management | https://cockpit-project.org/
+# alias for setup-cockpit
 [group('Apps')]
 cockpit:
     @ujust setup-cockpit
@@ -75,7 +75,7 @@ setup-cockpit ACTION="":
         pkexec systemctl disable cockpit.service && echo "Cockpit has been ${b}${red}disabled${n}"
     fi
 
-# Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
+# alias for install-jetbrains-toolbox
 [group('Apps')]
 jetbrains-toolbox:
     @ujust install-jetbrains-toolbox
@@ -99,7 +99,7 @@ install-jetbrains-toolbox:
     echo "Launching JetBrains Toolbox"
     ./jetbrains-toolbox-"${BUILD_VERSION}"/jetbrains-toolbox
 
-# Install and configure Incus
+# alias for install-incus
 [group('Apps')]
 incus:
     @ujust install-incus

@@ -27,7 +27,7 @@ bluefin-cli:
 configure-terminal:
     @/usr/libexec/configure-terminal.sh
 
-# Toggle between Bluefin and the Developer Experience
+# alias for toggle-devmode
 [group('System')]
 devmode:
     @ujust toggle-devmode
@@ -79,6 +79,7 @@ toggle-devmode:
         rpm-ostree rebase $NEW_IMAGE
     fi
 
+# alias for gnome-vrr
 [group('System')]
 gnome-vrr:
     @ujust toggle-gnome-vrr
@@ -127,11 +128,6 @@ ptyxis-transparency opacity="0.95":
 # Configure docker,incus-admin,lxd,libvirt container manager permissions
 [group('System')]
 dx-group:
-    @ujust install-dx-group
-
-# Configure docker,incus-admin,lxd,libvirt container manager permissions
-[group('System')]
-setup-dx-group:
     #!/usr/bin/env bash
     append_group() {
         local group_name="$1"
@@ -150,7 +146,7 @@ setup-dx-group:
 
     echo "Reboot system and log back in to use docker, incus-admin, lxd, libvirt."
 
-# Configure system to use vfio and kvmfr
+# alias for configure-vfio
 [group('System')]
 setup-vfio:
     @ujust configure-vfio
