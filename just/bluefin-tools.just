@@ -10,41 +10,51 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-# Run pytorch
+[group('Tools')]
 pytorch:
+    @ujust install-pytorch
+
+# Run pytorch
+[group('Tools')]
+install-pytorch:
     echo 'Follow the prompts and check the tutorial: https://docs.anaconda.com/free/anaconda/jupyter-notebooks/'
-    podman pull docker.io/continuumio/miniconda3
-    podman run -i -t -p 8888:8888 docker.io/continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir \
+    podman run --pull=newer -it -p 8888:8888 docker.io/continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir \
     /opt/notebooks && /opt/conda/bin/jupyter notebook \
-    --notebook-dir=/opt/notebooks --ip='*' --port=8888 \
-    --no-browser --allow-root"
+        --notebook-dir=/opt/notebooks --ip='*' --port=8888 \
+        --no-browser --allow-root"
+
+[group('Tools')]
+tensorflow:
+    @ujust install-tensorflow
 
 # Run Tensorflow
-tensorflow:
+[group('Tools')]
+install-tensorflow:
     echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
     podman pull docker.io/tensorflow/tensorflow:latest
-    podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
+    podman run --pull=newer -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
+
+[group('Tools')]
+ollama:
+    @ujust setup-ollama
 
 # Setup a local Ollama instance in a container. Detect hardware, offer a choice if needed.
-ollama ACTION="help":
+[group('Tools')]
+setup-ollama ACTION="help":
     #!/usr/bin/env bash
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
-      echo "Usage: ujust ollama <option>"
-      echo "  <option>: Specify the quick option to skip the prompt"
-      echo "  Use 'install' to Install ollama container"
-      echo "  Use 'install-open-webui' to Install open-webui container"
-      echo "  Use 'remove' to remove the ollama container"
-      echo "  Use 'remove-open-webui' to remove the open-webui container and persistent volume"
+        cat <<EOF
+    Usage: ujust ollama <option>
+      <option>: Specify the quick option to skip the prompt
+      Use 'install' to Install ollama container
+      Use 'install-open-webui' to Install open-webui container
+      Use 'remove' to remove the ollama container
+      Use 'remove-open-webui' to remove the open-webui container and persistent volume
+    EOF
       exit 0
-    #elif [ "$OPTION" == "" ]; then
-    #  echo "${bold}ollama setup and configuration${normal}"
-    #  #OPTION=$(Choose "install" "install-open-webui" "remove" "remove-open-webui")
-    fi
     if [ "${OPTION}" == "install" ]; then
-        #!/usr/bin/env bash
-    echo 'Detecting Hardware...'
-    echo
+    echo -e "Detecting Hardware...\n"
     GPU_CHOICES=("Nvidia (CUDA)" "AMD (ROCm)" "CPU (slow)")
     DETECTED_OPTIONS=()
     # Detect nvidia drivers
@@ -179,8 +189,8 @@ ollama ACTION="help":
         systemctl --user daemon-reload
         echo "ollama Quadlet removed"
     elif [[ "${OPTION,,}" == "remove-open-webui" ]]; then
-        echo "Removing open-webui container"
-        echo "stopping open-webui Quadlet"
+        echo "Removing open-webui Container"
+        echo "Stopping open-webui Quadlet"
         systemctl --user stop ollama-web.service || echo "Error stopping open-webui Quadlet."
         rm ~/.config/containers/systemd/ollama-web.container
         echo "removing open-webui persistent volume"
@@ -189,8 +199,13 @@ ollama ACTION="help":
         echo "open-webui Quadlet removed"
     fi
 
-# Set up InvokeAI, a stable diffusion engine used for visual media, in a local container
+[group('Tools')]
 invokeai:
+    @ujust install-invokeai
+
+# Set up InvokeAI, a stable diffusion engine used for visual media, in a local container
+[group('Tools')]
+install-invokeai:
     #!/usr/bin/env bash
     echo 'Detecting Hardware...'
     echo
@@ -268,7 +283,8 @@ invokeai:
     echo "InvokeAI container started. You can access it at http://localhost:9091"
 
 # Install Kubernetes CLI dev tools
-k8s-dev-tools:
+[group('Tools')]
+install-k8s-dev-tools:
     #!/usr/bin/bash
     echo "Adding Kubernetes command line tools..."
     brew bundle --file /usr/share/ublue-os/homebrew/kubernetes.Brewfile
