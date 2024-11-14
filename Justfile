@@ -568,7 +568,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     	iso_build_args+=(IMAGE_SRC="containers-storage:${IMAGE_FULL}")
     fi
     iso_build_args+=(IMAGE_TAG="${tag}")
-    iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}-${tag}}.iso")
+    iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}-${tag}.iso")
     iso_build_args+=(SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der")
     if [[ "${image_name}" =~ bluefin ]]; then
         iso_build_args+=(VARIANT="Silverblue")
