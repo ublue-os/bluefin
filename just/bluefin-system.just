@@ -97,13 +97,26 @@ toggle-gnome-vrr:
     echo "Gnome-VRR is currently ${CURRENT_STATE}"
     echo "Enable or Disable Gnome-VRR"
     OPTION=$(Choose Enable Disable)
+    CURRENT_SETTINGS=($(gsettings get org.gnome.mutter experimental-features | tr -d "[]'," | xargs -n1))
     if [[ "${OPTION,,}" =~ ^enable ]]; then
         echo "Enabling Gnome-VRR"
-        gsettings set org.gnome.mutter experimental-features "['variable-refresh-rate','scale-monitor-framebuffer']"
+        CURRENT_SETTINGS+=("variable-refresh-rate")
+        FINAL_ARRAY=()
+        for item in "${CURRENT_SETTINGS[@]}"; do
+            FINAL_ARRAY+=("\"$item\"")
+        done
+        FINAL=$(printf "[%s]\n" "$(IFS=,; echo "${FINAL_ARRAY[*]}")")
+        gsettings set org.gnome.mutter experimental-features "${FINAL}"
     fi
     if [[ "${OPTION,,}" =~ ^disable ]]; then
         echo "Disabling Gnome-VRR"
-        gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+        NO_VRR_ARRAY=($(printf "%s\n" "${CURRENT_SETTINGS[@]}" | grep -v "variable-refresh-rate"))
+        FINAL_ARRAY=()
+        for item in "${NO_VRR_ARRAY[@]}"; do
+            FINAL_ARRAY+=("\"$item\"")
+        done
+        FINAL=$(printf "[%s]\n" "$(IFS=,; echo "${FINAL_ARRAY[*]}")")
+        gsettings set org.gnome.mutter experimental-features "${FINAL}"
     fi
     echo "To apply the changes make sure you logout and restart your session"
 
