@@ -44,11 +44,16 @@ function rebase_helper(){
     fi
     echo "Rebase Target is ${rebase_target}"
     echo "Confirm Rebase"
-    if [[ $(Confirm) -eq "0" ]]; then
-        rpm-ostree rebase ostree-image-signed:docker://"${rebase_target}"
-    else
+    if [[ $(Confirm) -ne "0" ]]; then
         return 1
     fi
+
+    if /usr/bin/grep "^LockLayering=true" /etc/rpm-ostreed.conf &> /dev/null; then
+        pkexec bootc switch --enforce-container-sigpolicy "${rebase_target}"
+        return 0
+    fi
+    rpm-ostree rebase ostree-image-signed:docker://"${rebase_target}"
+    return 0
 }
 
 echo "Choose your action."
