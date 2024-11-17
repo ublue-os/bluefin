@@ -166,7 +166,7 @@ def get_tags(target: str, manifests: dict[str, Any]):
                 tags.add(tag)
 
     tags = list(sorted(tags))
-    if not len(tags) > 2:
+    if not len(tags) >= 2:
         print("No current and previous tags found")
         exit(1)
     return tags[-2], tags[-1]
