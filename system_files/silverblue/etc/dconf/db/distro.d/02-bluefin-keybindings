@@ -11,7 +11,7 @@ binding='<Control><Alt>Return'
 command='/usr/bin/ptyxis --tab-with-profile="Host" --new-window'
 name='Ptyxis Alt'
 
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
 binding='<Control><Shift>Escape'
 command="flatpak run io.missioncenter.MissionCenter"
 name='mission-center'
