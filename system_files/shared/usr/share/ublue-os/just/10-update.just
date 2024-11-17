@@ -5,7 +5,9 @@ alias upgrade := update
 # Update system, flatpaks, and containers all at once
 update:
     #!/usr/bin/bash
-    /usr/bin/topgrade --config /usr/share/ublue-os/topgrade.toml --keep
+    TOPGRADE_CONFIG="/usr/share/ublue-os/topgrade"
+    /usr/bin/grep "^LockLayering=true" /etc/rpm-ostreed.conf &>/dev/null && TOPGRADE_CONFIG="${TOPGRADE_CONFIG}-bootc"
+    /usr/bin/topgrade --config "${TOPGRADE_CONFIG}.toml" --keep
 
 alias auto-update := toggle-updates
 
