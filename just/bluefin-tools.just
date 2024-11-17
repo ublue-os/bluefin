@@ -47,17 +47,21 @@ setup-ollama ACTION="help":
     #!/usr/bin/env bash
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
-        cat <<EOF
-    Usage: ujust ollama <option>
-      <option>: Specify the quick option to skip the prompt
-      Use 'install' to Install ollama container
-      Use 'install-open-webui' to Install open-webui container
-      Use 'remove' to remove the ollama container
-      Use 'remove-open-webui' to remove the open-webui container and persistent volume
-    EOF
+      echo "Usage: ujust ollama <option>"
+      echo "  <option>: Specify the quick option to skip the prompt"
+      echo "  Use 'install' to Install ollama container"
+      echo "  Use 'install-open-webui' to Install open-webui container"
+      echo "  Use 'remove' to remove the ollama container"
+      echo "  Use 'remove-open-webui' to remove the open-webui container and persistent volume"
       exit 0
+    #elif [ "$OPTION" == "" ]; then
+    #  echo "${bold}ollama setup and configuration${normal}"
+    #  #OPTION=$(Choose "install" "install-open-webui" "remove" "remove-open-webui")
+    fi
     if [ "${OPTION}" == "install" ]; then
-    echo -e "Detecting Hardware...\n"
+        #!/usr/bin/env bash
+    echo 'Detecting Hardware...'
+    echo
     GPU_CHOICES=("Nvidia (CUDA)" "AMD (ROCm)" "CPU (slow)")
     DETECTED_OPTIONS=()
     # Detect nvidia drivers
@@ -192,8 +196,8 @@ setup-ollama ACTION="help":
         systemctl --user daemon-reload
         echo "ollama Quadlet removed"
     elif [[ "${OPTION,,}" == "remove-open-webui" ]]; then
-        echo "Removing open-webui Container"
-        echo "Stopping open-webui Quadlet"
+        echo "Removing open-webui container"
+        echo "stopping open-webui Quadlet"
         systemctl --user stop ollama-web.service || echo "Error stopping open-webui Quadlet."
         rm ~/.config/containers/systemd/ollama-web.container
         echo "removing open-webui persistent volume"

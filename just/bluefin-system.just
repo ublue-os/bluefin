@@ -316,19 +316,19 @@ toggle-tailscale:
         TS_OPTION=$(Choose Enable Disable)
 
         # gnome-extensions is only available on Bluefin (Gnome)
-        if [ "$VARIANT" == "silverblue" ]; then
-          TAILSCALE_QS="$(gnome-extensions list | grep -q "tailscale@joaophi.github.com"; echo $?)"
-          if [ "$TAILSCALE_QS" == 0 ]; then
-            TAILSCALE_QS="Installed"
-          else
-            echo "The Tailscale QS extension for Gnome is not installed. Please install it and then run this script again."
-          fi
+        if [ "$VARIANT" == "Silverblue" ]; then
+            TAILSCALE_QS="$(gnome-extensions list | grep -q "tailscale@joaophi.github.com"; echo $?)"
+            if [ "$TAILSCALE_QS" == 0 ]; then
+                TAILSCALE_QS="Installed"
+            else
+                echo "The Tailscale QS extension for Gnome is not installed. Please install it and then run this script again."
+            fi
 
-          if [ "$TS_OPTION" = "Enable" ]; then
-            gnome-extensions enable tailscale@joaophi.github.com
-          elif [ "$TS_OPTION" = "Disable" ]; then
-            gnome-extensions disable tailscale@joaophi.github.com
-          fi
+            if [[ "${TS_OPTION,,}" =~ ^enable ]]; then
+                gnome-extensions enable tailscale@joaophi.github.com
+            elif [[ "${TS_OPTION,,}" =~ ^disable ]]; then
+                gnome-extensions disable tailscale@joaophi.github.com
+            fi
         fi
 
         if [ "$TS_OPTION" = "Enable" ]; then
