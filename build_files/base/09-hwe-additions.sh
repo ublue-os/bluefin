@@ -10,10 +10,10 @@ else
 fi
 
 # Asus/Surface for HWE
-curl -Lo /etc/yum.repos.d/_copr_lukenukem-asus-linux.repo \
+curl --retry 3 -Lo /etc/yum.repos.d/_copr_lukenukem-asus-linux.repo \
     https://copr.fedorainfracloud.org/coprs/lukenukem/asus-linux/repo/fedora-$(rpm -E %fedora)/lukenukem-asus-linux-fedora-$(rpm -E %fedora).repo
 
-curl -Lo /etc/yum.repos.d/linux-surface.repo \
+curl --retry 3 -Lo /etc/yum.repos.d/linux-surface.repo \
         https://pkg.surfacelinux.com/fedora/linux-surface.repo
 
 # Asus Firmware
@@ -38,3 +38,30 @@ SURFACE_PACKAGES=(
 rpm-ostree install \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
+
+tee /usr/lib/modules-load.d/ublue-surface.conf << EOF
+# Add modules necessary for Disk Encryption via keyboard
+surface_aggregator
+surface_aggregator_registry
+surface_aggregator_hub
+surface_hid_core
+8250_dw
+
+# Surface Laptop 3/Surface Book 3 and later
+surface_hid
+surface_kbd
+
+# Only on AMD models
+pinctrl_amd
+
+# Only on Intel models
+intel_lpss
+intel_lpss_pci
+
+# For Surface Laptop 3/Surface Book 3
+pinctrl_icelake
+
+# For Surface Laptop 4/Surface Laptop Studio
+pinctrl_tigerlake
+EOF
+

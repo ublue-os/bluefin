@@ -9,7 +9,7 @@ do
 done
 
 # Fetch Kernel
-skopeo copy docker://ghcr.io/ublue-os/"${AKMODS_FLAVOR}"-kernel:"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/kernel-rpms
+skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/"${AKMODS_FLAVOR}"-kernel:"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/kernel-rpms
 KERNEL_TARGZ=$(jq -r '.layers[].digest' < /tmp/kernel-rpms/manifest.json | cut -d : -f 2)
 tar -xvzf /tmp/kernel-rpms/"$KERNEL_TARGZ" -C /
 mv /tmp/rpms/* /tmp/kernel-rpms/
@@ -21,7 +21,7 @@ rpm-ostree install \
     /tmp/kernel-rpms/kernel-modules-*.rpm
 
 # Fetch Common AKMODS
-skopeo copy docker://ghcr.io/ublue-os/akmods:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods
+skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods
 AKMODS_TARGZ=$(jq -r '.layers[].digest' < /tmp/akmods/manifest.json | cut -d : -f 2)
 tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
 mv /tmp/rpms/* /tmp/akmods/
@@ -30,12 +30,9 @@ mv /tmp/rpms/* /tmp/akmods/
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 rpm-ostree install \
     /tmp/akmods/kmods/*xone*.rpm \
-    /tmp/akmods/kmods/*openrazer*.rpm
-
-if [[ -f $(find /tmp/akmods-rpms/kmods/*framework-laptop*.rpm) ]]; then
-    rpm-ostree install \
-        /tmp/akmods-rpms/kmods/*framework-laptop*.rpm
-fi
+    /tmp/akmods/kmods/*xpadneo*.rpm \
+    /tmp/akmods/kmods/*openrazer*.rpm \
+    /tmp/akmods/kmods/*framework-laptop*.rpm
 
 # RPMFUSION Dependent AKMODS
 rpm-ostree install \
@@ -49,7 +46,7 @@ rpm-ostree uninstall rpmfusion-free-release rpmfusion-nonfree-release
 # Nvidia AKMODS
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     # Fetch Nvidia RPMs
-    skopeo copy docker://ghcr.io/ublue-os/akmods-nvidia:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-rpms
+    skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-rpms
     NVIDIA_TARGZ=$(jq -r '.layers[].digest' < /tmp/akmods-rpms/manifest.json | cut -d : -f 2)
     tar -xvzf /tmp/akmods-rpms/"$NVIDIA_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-rpms/
@@ -64,7 +61,7 @@ fi
 # ZFS for gts/stable
 if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     # Fetch ZFS RPMs
-    skopeo copy docker://ghcr.io/ublue-os/akmods-zfs:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-zfs
+    skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-zfs:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-zfs
     ZFS_TARGZ=$(jq -r '.layers[].digest' < /tmp/akmods-zfs/manifest.json | cut -d : -f 2)
     tar -xvzf /tmp/akmods-zfs/"$ZFS_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-zfs/

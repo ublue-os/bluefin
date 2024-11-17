@@ -19,11 +19,6 @@ benchmark:
 bluefin-cli:
     @/usr/libexec/ublue-bling.sh
 
-# Configure Bluefin-CLI Terminal Experience
-[private]
-bluefin-cli-container:
-    @/usr/libexec/enable-bluefin-cli.sh
-
 # Configure Terminal Experience
 [private]
 configure-terminal:

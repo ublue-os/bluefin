@@ -27,7 +27,7 @@ IMAGE_MATRIX = {
 RETRIES = 3
 RETRY_WAIT = 5
 FEDORA_PATTERN = re.compile(r"\.fc\d\d")
-START_PATTERN = lambda target: re.compile(rf"{target}-[0-9]+")
+START_PATTERN = lambda target: re.compile(rf"{target}-\d\d\d+")
 
 PATTERN_ADD = "\n| ✨ | {name} | | {version} |"
 PATTERN_CHANGE = "\n| 🔄 | {name} | {prev} | {new} |"
@@ -73,23 +73,15 @@ From previous `{target}` version `{prev}` there have been the following changes.
 
 ### How to rebase
 For current users, type the following to rebase to this version:
-#### For this branch (if latest):
-##### Bluefin
 ```bash
-sudo bootc switch ghcr.io/ublue-os/bluefin:{target} --enforce-container-sigpolicy
-```
-##### Aurora
-```bash
-sudo bootc switch ghcr.io/ublue-os/aurora:{target} --enforce-container-sigpolicy
-```
-#### For this specific image:
-##### Bluefin
-```bash
-sudo bootc switch ghcr.io/ublue-os/bluefin:{curr} --enforce-container-sigpolicy
-```
-##### Aurora
-```bash
-sudo bootc switch ghcr.io/ublue-os/aurora:{curr} --enforce-container-sigpolicy
+# Get Image Name
+IMAGE_NAME=$(jq -r '.["image-name"]' < /usr/share/ublue-os/image-info.json)
+
+# For this Stream
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{target}
+
+# For this Specific Image:
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{curr}
 ```
 
 ### Documentation
@@ -112,9 +104,9 @@ BLACKLIST_VERSIONS = [
 
 
 def get_images(target: str):
-    if target == "latest":
+    if "latest" in target:
         matrix = IMAGE_MATRIX_LATEST
-    elif target == "gts":
+    elif "gts" in target:
         matrix = IMAGE_MATRIX_GTS
     else:
         matrix = IMAGE_MATRIX
@@ -174,7 +166,7 @@ def get_tags(target: str, manifests: dict[str, Any]):
                 tags.add(tag)
 
     tags = list(sorted(tags))
-    if not len(tags) > 2:
+    if not len(tags) >= 2:
         print("No current and previous tags found")
         exit(1)
     return tags[-2], tags[-1]
@@ -222,7 +214,6 @@ def get_package_groups(target: str, prev: dict[str, Any], manifests: dict[str, A
 
     # Find other packages
     for t, other in others.items():
-        print(t)
         first = True
         for img, experience, de, image_flavor in get_images(target):
             if img not in pkg:
@@ -330,6 +321,8 @@ def get_commits(prev_manifests, manifests, workdir: str):
 
             if subject.lower().startswith("merge"):
                 continue
+            if subject.lower().startswith("chore"):
+                continue
 
             out += (
                 COMMIT_FORMAT.replace("{short}", short)
@@ -368,13 +361,27 @@ def generate_changelog(
         except Exception as e:
             print(f"Failed to get finish hash:\n{e}")
             finish = ""
+        try:
+            linux: str = next(iter(manifests.values()))["Labels"][
+                "ostree.linux"
+            ]
+            start=linux.find(".fc") + 3
+            fedora_version=linux[start:start+2]
+        except Exception as e:
+            print(f"Failed to get linux version:\n{e}")
+            fedora_version = ""
 
         # Remove .0 from curr
         curr_pretty = re.sub(r"\.\d{1,2}$", "", curr)
         # Remove target- from curr
-        curr_pretty = re.sub(rf"^[a-z]+-", "", curr_pretty)
-        pretty = target.capitalize() + " (F" + curr_pretty
-        if finish and target != "stable":
+        curr_pretty = re.sub(rf"^[a-z]+-|^[0-9]+-", "", curr_pretty)
+        if target == "stable-daily":
+            curr_pretty = re.sub(rf"^[a-z]+-", "", curr_pretty)
+        if not fedora_version + "." in curr_pretty:
+            curr_pretty=fedora_version + "." + curr_pretty
+        pretty = target.capitalize()
+        pretty += " (F" + curr_pretty
+        if finish:
             pretty += ", #" + finish[:7]
         pretty += ")"
 
