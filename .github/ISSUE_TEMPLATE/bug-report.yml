@@ -26,8 +26,8 @@ body:
   - type: textarea
     id: version
     attributes:
-      label: Output of `rpm-ostree status`
-      description: Please run `rpm-ostree status` and paste the output here, it is the only way we can verify the exact image you are on for debugging purposes.
+      label: Output of `bootc status`
+      description: Please run `sudo bootc status` and paste the output here, it is the only way we can verify the exact image you are on for debugging purposes.
       render: shell
   - type: textarea
     id: groups
