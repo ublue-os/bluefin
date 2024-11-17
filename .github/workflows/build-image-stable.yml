@@ -47,6 +47,6 @@ jobs:
   build-iso-stable:
     name: Build Stable ISOs
     needs: [build-image-stable]
-    if: github.event_name.schedule == '45 5 * * 0'
+    if: github.event.schedule == '45 5 * * 0'
     secrets: inherit
     uses: ./.github/workflows/build-iso-stable.yml

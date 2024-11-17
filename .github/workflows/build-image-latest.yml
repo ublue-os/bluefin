@@ -47,6 +47,7 @@ jobs:
   build-iso-latest:
     name: Build Latest ISOs
     needs: [build-image-latest]
-    if: github.event_name.schedule == '40 4 * * 0'
+    if: github.event.schedule == '40 4 * * 0'
+    
     secrets: inherit
     uses: ./.github/workflows/build-iso-latest.yml
