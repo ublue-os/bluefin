@@ -2,44 +2,37 @@
 
 # All the pieces needed to enable incus on Developer Experience Hosts
 # This script is meant to be run on a {bluefin,aurora}-dx host
-
-# if current user is root, warn and exit
-
 if [ "$EUID" -eq 0 ]
 then
     echo "This script should not be run as root"
     exit
 fi
 
+source /usr/lib/ujust/ujust.sh
 # add user to incus-admin group
-
-sudo usermod -aG incus-admin $USER
+pkexec usermod -aG incus-admin $USER
 
 # check for, then add necessary entries to /etc/subuid and /etc/subgid
-echo ""
-echo "Checking for necessary entries in /etc/subuid and /etc/subgid"
+echo -e "\nChecking for necessary entries in /etc/subuid and /etc/subgid"
 if grep -q "root:1000000:1000000000" /etc/subuid
 then
-    echo ""
-    echo "  * subuid root range"
+    echo -e "\n  * subuid root range"
 else
-    echo "root:1000000:1000000000" | sudo tee -a /etc/subuid
+    echo "root:1000000:1000000000" | pkexec tee -a /etc/subuid
 fi
 
 if grep -q "root:1000000:1000000000" /etc/subgid
 then
-    echo ""
-    echo "  * subgid root range"
+    echo -e "\n  * subgid root range"
 else
-    echo "root:1000000:1000000000" | sudo tee -a /etc/subgid
+    echo "root:1000000:1000000000" | pkexec tee -a /etc/subgid
 fi
 
 if grep -q "root:$UID:1" /etc/subgid
 then
-    echo ""
-    echo "  * subgid root->user"
+    echo -e "\n  * subgid root->user"
 else
-    echo "root:$UID:1" | sudo tee -a /etc/subgid
+    echo "root:$UID:1" | pkexec tee -a /etc/subgid
 fi
 
 if grep -q "root:$UID:1" /etc/subuid
@@ -50,41 +43,37 @@ else
     echo "root:$UID:1" | sudo tee -a /etc/subuid
 fi
 
-# enable incus services
+echo -e "\nEnabling incus services"
+pkexec /usr/bin/bash <<EOF
+systemctl enable --now incus-workaround.service
+systemctl enable --now lxcfs
+systemctl enable --now incus.socket
+systemctl start incus.service
+systemctl enable incus-startup
+EOF
 
-echo ""
-echo "Enabling incus services"
-sudo systemctl enable --now incus-workaround.service
-sudo systemctl enable --now lxcfs
-sudo systemctl enable --now incus.socket
-sudo systemctl start incus.service
-sudo systemctl enable incus-startup
-
-# run incus admin init
-echo ""
-echo "Initializing Incus"
-echo ""
+echo -e "\nInitializing Incus"
 echo "Choose your Incus installation type:"
-IOPTION=$(gum choose Minimal Custom Cancel)
-if [ "$IOPTION" = "Cancel" ]
-then
-    echo "You have chosen to cancel the Incus installation process"
-    exit
-else
-    if [ "$IOPTION" = "Minimal" ]
-    then
-        sudo incus admin init --minimal
-        echo ""
-        echo "Adding the incus bridge to the trusted firewall zone"
-        sudo firewall-cmd --zone=trusted --change-interface=incusbr0 --permanent
-        sudo firewall-cmd --reload
-    else
-        sudo incus admin init
-        echo ""
-        echo "Add the incus bridge to the trusted firewall zone"
-        echo "  sudo firewall-cmd --zone=trusted --change-interface=your-bridge --permanent"
-        echo "  sudo firewall-cmd --reload"
-    fi
+OPTION=$(Choose Minimal Custom Cancel)
+if [[ "${OPTION,,}" =~ ^minimal ]]; then
+    pkexec incus admin init --minimal
+    echo -e "\nAdding the incus bridge to the trusted firewall zone"
+    pkexec firewall-cmd --zone=trusted --change-interface=incusbr0 --permanent
+    pkexec firewall-cmd --reload
 fi
-echo ""
-echo "Incus has been installed. You can now run 'incus' to manage your containers."
+if [[ "${OPTION,,}" =~ ^custom ]]; then
+    pkexec incus admin init
+    echo ""
+    cat <<EOF
+Add the incus bridge to the trusted firewall zone with
+```bash
+  sudo firewall-cmd --zone=trusted --change-interface=your-bridge --permanent
+  sudo firewall-cmd --reload
+```
+EOF
+fi
+if [[ "${OPTION,,}" =~ ^cancel ]]; then
+    echo "You have chosen to cancel the Incus installation process"
+    exit 0
+fi
+echo -e "\nIncus has been ${green}${b}installed${n}. You can now run 'incus' to manage your containers."

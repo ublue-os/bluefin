@@ -10,65 +10,78 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-alias cockpit := setup-cockpit
+# alias for setup-cockpit
+[group('Apps')]
+cockpit:
+    @ujust setup-cockpit
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
+[group('Apps')]
 setup-cockpit ACTION="":
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
     COCKPIT_SERVICE_STATUS="$(systemctl is-enabled cockpit.service)"
     if [ "$COCKPIT_SERVICE_STATUS" == "enabled" ]; then
-      COCKPIT_SERVICE_STATUS="${green}${b}Enabled${n}"
+        COCKPIT_SERVICE_STATUS="${green}${b}Enabled${n}"
     elif [ "$COCKPIT_SERVICE_STATUS" == "disabled" ]; then
-      COCKPIT_SERVICE_STATUS="${red}${b}Disabled${n}"
+        COCKPIT_SERVICE_STATUS="${red}${b}Disabled${n}"
     else
-      COCKPIT_SERVICE_STATUS="${invert}${b}Not Installed${n}"
+        COCKPIT_SERVICE_STATUS="${invert}${b}Not Installed${n}"
     fi
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
-      echo "Usage: ujust setup-cockpit <option>"
-      echo "  <option>: Specify the quick option to skip the prompt"
-      echo "  Use 'install' to select Install Cockpit"
-      echo "  Use 'enable' to select Enable Cockpit"
-      echo "  Use 'disable' to select Disable Cockpit"
-      exit 0
+        cat <<EOF
+    Usage: ujust setup-cockpit <option>
+      <option>: Specify the quick option to skip the prompt
+      Use 'install' to select Install Cockpit
+      Use 'enable' to select Enable Cockpit
+      Use 'disable' to select Disable Cockpit
+    EOF
+        exit 0
     elif [ "$OPTION" == "" ]; then
-      echo "${bold}Cockpit Setup${normal}"
-      echo "Cockpit service is currently: $COCKPIT_SERVICE_STATUS"
-      if [[ "${COCKPIT_SERVICE_STATUS}" =~ "Not Installed" ]]; then
-        OPTION=$(Choose "Install Cockpit" "Cancel")
-      else
-        OPTION=$(Choose "Enable Cockpit" "Disable Cockpit")
-      fi
+        echo "${bold}Cockpit Setup${normal}"
+        echo "Cockpit service is currently: $COCKPIT_SERVICE_STATUS"
+        if [[ "${COCKPIT_SERVICE_STATUS}" =~ "Not Installed" ]]; then
+            OPTION=$(Choose "Install Cockpit" "Cancel")
+        else
+            OPTION=$(Choose "Enable Cockpit" "Disable Cockpit")
+        fi
     fi
     if [[ "${OPTION,,}" =~ ^install ]]; then
-      echo 'Installing Cockpit'
-      echo 'PasswordAuthentication yes' | sudo tee /etc/ssh/sshd_config.d/02-enable-passwords.conf
-      sudo systemctl try-restart sshd
-      sudo systemctl enable --now sshd
-      sudo podman container runlabel --name cockpit-ws RUN quay.io/cockpit/ws
-      sudo podman container runlabel INSTALL quay.io/cockpit/ws
-      OPTION="Enable Cockpit"
+        echo 'Installing Cockpit'
+        pkexec /bin/bash <<EOF
+    echo 'PasswordAuthentication yes' | tee /etc/ssh/sshd_config.d/02-enable-passwords.conf
+    systemctl try-restart sshd
+    systemctl enable --now sshd
+    podman container runlabel --name cockpit-ws RUN quay.io/cockpit/ws
+    podman runlabel INSTAL quay.io/cockpit/ws"    
+    EOF
+        OPTION="Enable Cockpit"
     fi
     if [[ "${OPTION,,}" =~ ^enable ]]; then
-      echo "${green}${b}Enabling${n} pmlogger"
-      sudo mkdir /var/lib/pcp/tmp
-      sudo mkdir /var/log/pcp/pmlogger
-      sudo chown -R pcp:pcp /var/lib/pcp
-      sudo chown pcp:pcp /var/log/pcp/pmlogger
-      sudo systemctl enable --now pmlogger
-      echo "${green}${b}Enabling${n} Cockpit"
-      sudo systemctl enable cockpit.service
-      echo "$(Urllink "http://localhost:9090" "Open Cockpit${n}") -> http://localhost:9090"
-    elif [[ "${OPTION,,}" =~ ^disable ]]; then
-      echo "${red}${b}Disabling${n} Cockpit"
-      sudo systemctl disable cockpit.service
-      echo "Cockpit has been ${b}${red}disabled${n}"
+        pkexec /bin/bash <<EOF
+    echo "${green}${b}Enabling${n} pmlogger"
+    mkdir -p /var/lib/pcp/tmp /var/log/pcp/pmlogger
+    chown -R pcp:pcp /var/lib/pcp
+    chown pcp:pcp /var/log/pcp/pmlogger
+    systemctl enable --now pmlogger
+    echo "${green}${b}Enabling${n} Cockpit"
+    systemctl enable cockpit.service
+    echo "$(Urllink "http://localhost:9090" "Open Cockpit${n}") -> http://localhost:9090"
+    EOF
+    fi
+    if [[ "${OPTION,,}" =~ ^disable ]]; then
+        echo "${red}${b}Disabling${n} Cockpit"
+        pkexec systemctl disable cockpit.service && echo "Cockpit has been ${b}${red}disabled${n}"
     fi
 
-alias jetbrains-toolbox := install-jetbrains-toolbox
+# alias for install-jetbrains-toolbox
+[group('Apps')]
+jetbrains-toolbox:
+    @ujust install-jetbrains-toolbox
 
 # Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
+[group('Apps')]
 install-jetbrains-toolbox:
     #!/usr/bin/env bash
     pushd "$(mktemp -d)"
@@ -86,19 +99,21 @@ install-jetbrains-toolbox:
     echo "Launching JetBrains Toolbox"
     ./jetbrains-toolbox-"${BUILD_VERSION}"/jetbrains-toolbox
 
-alias incus := install-incus
+# alias for install-incus
+[group('Apps')]
+incus:
+    @ujust install-incus
 
 # Install and configure Incus
+[group('Apps')]
 install-incus:
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-    if grep -Eq "bluefin-dx|aurora-dx" <<< $CURRENT_IMAGE
-    then
-        echo 'Installing and configuring Incus.'
-        /usr/libexec/bluefin-incus
-    else
+    if ! grep -e "-dx:" <<< $CURRENT_IMAGE ; then
         echo "Developer mode is currently ${b}${red}Disabled${n}."
         echo "Run \"just devmode\" to turn on Developer mode."
         exit
     fi
+    echo 'Installing and configuring Incus.'
+    /usr/libexec/bluefin-incus
