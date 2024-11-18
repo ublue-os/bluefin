@@ -14,3 +14,4 @@ Bluefin is your gateway to AI and LLMs | `ujust ollama` to [get started](https:/
 `ujust rebase-helper` can help you roll back to a specific image, or to a different channel entirely, check the docs for more info
 `ujust changelogs` shows a summary of the package changes since the last update
 Don't forget to check the [release notes](https://github.com/ublue-os/bluefin/releases) 
+Help keep Bluefin alive and healthy, consider [donating](https://docs.projectbluefin.io/donations)
