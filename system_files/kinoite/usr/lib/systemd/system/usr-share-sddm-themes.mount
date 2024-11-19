@@ -3,7 +3,6 @@
 [Unit]
 Description=KDE writable sddm workaround
 RequiresMountsFor=/usr/share/sddm/themes
-PartOf=bazzite-kde-themes-workaround.target
 
 [Mount]
 Type=overlay
