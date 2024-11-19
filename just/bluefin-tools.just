@@ -10,23 +10,40 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-# Run pytorch
+# alias for install-pytorch
+[group('Tools')]
 pytorch:
+    @ujust install-pytorch
+
+# Run pytorch
+[group('Tools')]
+install-pytorch:
     echo 'Follow the prompts and check the tutorial: https://docs.anaconda.com/free/anaconda/jupyter-notebooks/'
-    podman pull docker.io/continuumio/miniconda3
-    podman run -i -t -p 8888:8888 docker.io/continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir \
+    podman run --pull=newer -it -p 8888:8888 docker.io/continuumio/miniconda3 /bin/bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir \
     /opt/notebooks && /opt/conda/bin/jupyter notebook \
-    --notebook-dir=/opt/notebooks --ip='*' --port=8888 \
-    --no-browser --allow-root"
+        --notebook-dir=/opt/notebooks --ip='*' --port=8888 \
+        --no-browser --allow-root"
+
+# alias for install-tensorflow
+[group('Tools')]
+tensorflow:
+    @ujust install-tensorflow
 
 # Run Tensorflow
-tensorflow:
+[group('Tools')]
+install-tensorflow:
     echo 'Follow the prompts and check the tutorial: https://www.tensorflow.org/tutorials/quickstart/beginner'
     podman pull docker.io/tensorflow/tensorflow:latest
-    podman run -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
+    podman run --pull=newer -it -p 8888:8888 docker.io/tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
+
+# alias for setup-ollama
+[group('Tools')]
+ollama:
+    @ujust setup-ollama
 
 # Setup a local Ollama instance in a container. Detect hardware, offer a choice if needed.
-ollama ACTION="help":
+[group('Tools')]
+setup-ollama ACTION="help":
     #!/usr/bin/env bash
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
@@ -189,8 +206,14 @@ ollama ACTION="help":
         echo "open-webui Quadlet removed"
     fi
 
-# Set up InvokeAI, a stable diffusion engine used for visual media, in a local container
+# alias for install-invokeai
+[group('Tools')]
 invokeai:
+    @ujust install-invokeai
+
+# Set up InvokeAI, a stable diffusion engine used for visual media, in a local container
+[group('Tools')]
+install-invokeai:
     #!/usr/bin/env bash
     echo 'Detecting Hardware...'
     echo
@@ -268,7 +291,8 @@ invokeai:
     echo "InvokeAI container started. You can access it at http://localhost:9091"
 
 # Install Kubernetes CLI dev tools
-k8s-dev-tools:
+[group('Tools')]
+install-k8s-dev-tools:
     #!/usr/bin/bash
     echo "Adding Kubernetes command line tools..."
     brew bundle --file /usr/share/ublue-os/homebrew/kubernetes.Brewfile
