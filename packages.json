@@ -183,26 +183,6 @@
 			"dx": []
 		}
 	},
-	"39": {
-		"include": {
-			"all": [],
-			"silverblue": [
-				"fmt"
-			],
-			"dx": [
-				"lxd-agent",
-				"lxd",
-				"distrobuilder",
-				"podman-plugins"
-			]
-		},
-		"exclude": {
-			"all": [],
-			"silverblue": [],
-			"kinoite": [],
-			"dx": []
-		}
-	},
 	"40": {
 		"include": {
 			"all": [
