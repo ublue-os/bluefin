@@ -8,7 +8,7 @@ if [[ "${BASE_IMAGE_NAME}" = "kinoite" ]]; then
 
     # Restore x11 for Nvidia Images
     if [[ "${FEDORA_MAJOR_VERSION}" -eq "40" ]]; then
-        rpm-ostree install plasma-workspace-x11
+        dnf5 -y install plasma-workspace-x11
     fi
 
     # Branding for Images

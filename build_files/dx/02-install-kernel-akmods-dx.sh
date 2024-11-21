@@ -2,7 +2,7 @@
 
 set -ouex pipefail
 
-sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
+dnf5 -y -q copr enable ublue-os/akmods
 
 # Fetch Kernel RPMS
 skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/"${AKMODS_FLAVOR}"-kernel:"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/kernel-rpms
@@ -11,7 +11,7 @@ tar -xvzf /tmp/kernel-rpms/"$KERNEL_TARGZ" -C /
 mv /tmp/rpms/* /tmp/kernel-rpms/
 
 if [[ -z "$(grep kernel-devel <<< $(rpm -qa))" ]]; then
-    rpm-ostree install /tmp/kernel-rpms/kernel-devel-*.rpm
+    dnf5 -y install /tmp/kernel-rpms/kernel-devel-*.rpm
 fi
 
 # Fetch AKMODS RPMS
@@ -21,4 +21,4 @@ tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
 mv /tmp/rpms/* /tmp/akmods/
 
 # Install RPMS
-rpm-ostree install /tmp/akmods/kmods/*kvmfr*.rpm
+dnf5 -y install /tmp/akmods/kmods/*kvmfr*.rpm

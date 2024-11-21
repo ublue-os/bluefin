@@ -10,11 +10,9 @@ else
 fi
 
 # Asus/Surface for HWE
-curl --retry 3 -Lo /etc/yum.repos.d/_copr_lukenukem-asus-linux.repo \
-    https://copr.fedorainfracloud.org/coprs/lukenukem/asus-linux/repo/fedora-$(rpm -E %fedora)/lukenukem-asus-linux-fedora-$(rpm -E %fedora).repo
+dnf5 -y -q copr enable lukenukem/asus-linux
 
-curl --retry 3 -Lo /etc/yum.repos.d/linux-surface.repo \
-        https://pkg.surfacelinux.com/fedora/linux-surface.repo
+dnf5 config-manager addrepo --from-repofile=https://pkg.surfacelinux.com/fedora/linux-surface.repo
 
 # Asus Firmware
 git clone https://gitlab.com/asus-linux/firmware.git --depth 1 /tmp/asus-firmware
@@ -35,7 +33,7 @@ SURFACE_PACKAGES=(
     pipewire-plugin-libcamera
 )
 
-rpm-ostree install \
+dnf5 -y install \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
 

@@ -18,9 +18,7 @@ for repo in "${repos[@]}"; do
 done
 
 if grep -q "kinoite" <<<"${BASE_IMAGE_NAME}"; then
-    rpm-ostree override replace \
-        --experimental \
-        --from repo=updates \
+    dnf5 -y upgrade --repo updates \
         qt6-qtbase \
         qt6-qtbase-common \
         qt6-qtbase-mysql \
@@ -28,9 +26,7 @@ if grep -q "kinoite" <<<"${BASE_IMAGE_NAME}"; then
         true
 fi
 
-rpm-ostree override replace \
-    --experimental \
-    --from repo=updates \
+dnf5 -y upgrade --repo updates \
     elfutils-libelf \
     elfutils-libs ||
     true
