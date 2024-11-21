@@ -2,7 +2,7 @@
 
 [Unit]
 Description=KDE writable sddm workaround
-RequiresMountsFor=/usr/share/sddm/themes
+RequiresMountsFor=/usr/share/sddm/themes /var/sddm_themes/themes /var/sddm_themes/themes.work
 
 [Mount]
 Type=overlay
