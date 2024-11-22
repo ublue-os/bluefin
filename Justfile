@@ -607,7 +607,7 @@ run-iso image="bluefin" tag="latest" flavor="main":
     image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Check if ISO Exists
-    if [[ ! -f "${image_name}_build/${image_name}.iso" ]]; then
+    if [[ ! -f "${image_name}_build/${image_name}-${tag}.iso" ]]; then
         just build-iso "$image" "$tag" "$flavor"
     fi
 
@@ -629,7 +629,7 @@ run-iso image="bluefin" tag="latest" flavor="main":
     run_args+=(--env "TPM=Y")
     run_args+=(--env "GPU=Y")
     run_args+=(--device=/dev/kvm)
-    run_args+=(--volume "${PWD}/${image_name}_build/${image_name}.iso":"/boot.iso")
+    run_args+=(--volume "${PWD}/${image_name}_build/${image_name}-${tag}.iso":"/boot.iso")
     run_args+=(docker.io/qemux/qemu-docker)
     podman run "${run_args[@]}" &
     xdg-open http://localhost:${port}
