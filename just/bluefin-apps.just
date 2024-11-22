@@ -117,3 +117,10 @@ install-incus:
     fi
     echo 'Installing and configuring Incus.'
     /usr/libexec/bluefin-incus
+
+# Install Kubernetes CLI dev tools
+[group('Apps')]
+install-k8s-dev-tools:
+    #!/usr/bin/bash
+    echo "Adding Kubernetes command line tools..."
+    brew bundle --file /usr/share/ublue-os/homebrew/kubernetes.Brewfile
