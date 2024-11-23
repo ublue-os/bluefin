@@ -1,0 +1,7 @@
+# shellcheck shell=bash
+declare -Ar known_profile=(
+    ["Host"]="2871e8027773ae74d6c87a5f659bbc74"
+)
+declare -Ar known_guid=(
+    ["2871e8027773ae74d6c87a5f659bbc74"]="Host"
+)
