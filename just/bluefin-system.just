@@ -21,14 +21,7 @@ benchmark:
 bluefin-cli:
     @/usr/libexec/ublue-bling.sh
 
-# Configure Terminal Experience
-[group('System')]
-[private]
-configure-terminal:
-    @/usr/libexec/configure-terminal.sh
-
 # alias for toggle-devmode
-[group('System')]
 devmode:
     @ujust toggle-devmode
 

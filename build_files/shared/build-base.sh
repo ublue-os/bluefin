@@ -30,9 +30,6 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 # Install Overrides and Fetch Install
 /ctx/build_files/base/05-override-install.sh
 
-# Get Quadlets
-/ctx/build_files/base/06-fetch-quadlets.sh
-
 # Base Image Changes
 /ctx/build_files/base/07-base-image-changes.sh
 
