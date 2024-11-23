@@ -493,25 +493,19 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         just sudoif podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
     fi
 
-    # Flatpak list for bluefin/aurora
-    if [[ "${image_name}" =~ bluefin ]]; then
-        FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
-    elif [[ "${image_name}" =~ aurora ]]; then
-        FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
-    fi
-
+    FLATPAK_LIST_SUFFIX=".list.txt"
     # Generate Flatpak List
     TEMP_FLATPAK_INSTALL_DIR="$(mktemp -d -p /tmp flatpak-XXXXX)"
     flatpak_refs=()
     while IFS= read -r line; do
         flatpak_refs+=("$line")
-    done < "${FLATPAK_DIR_SHORTNAME}/flatpaks"
+    done < "flatpaks/${image_name}${FLATPAK_LIST_SUFFIX}"
 
     # Add DX Flatpaks if needed
     if [[ "${image_name}" =~ dx ]]; then
         while IFS= read -r line; do
             flatpak_refs+=("$line")
-        done < "dx_flatpaks/flatpaks"
+        done < "flatpaks/dx${FLATPAK_LIST_SUFFIX}"
     fi
 
     echo "Flatpak refs: ${flatpak_refs[@]}"

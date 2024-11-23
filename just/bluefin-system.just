@@ -263,9 +263,9 @@ install-system-flatpaks:
     IMAGE_INFO="/usr/share/ublue-os/image-info.json"
     BASE_IMAGE_NAME=$(jq -r '."base-image-name"' < $IMAGE_INFO)
     if [[ ${BASE_IMAGE_NAME} == 'silverblue' ]]; then
-        FLATPAKS="bluefin_flatpaks/flatpaks"
+        FLATPAKS="flatpaks/bluefin.list.txt"
     elif [[ ${BASE_IMAGE_NAME} == 'kinoite' ]]; then
-        FLATPAKS="aurora_flatpaks/flatpaks"
+        FLATPAKS="flatpaks/aurora.list.txt"
     fi
     FLATPAK_LIST="$(curl https://raw.githubusercontent.com/ublue-os/bluefin/main/${FLATPAKS} | tr '\n' ' ')"
     flatpak --system -y install --or-update ${FLATPAK_LIST}
