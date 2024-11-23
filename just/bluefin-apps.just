@@ -146,9 +146,9 @@ setup-brew-not-found ACTION="":
     set -euo pipefail
 
     BREW_BINARY=/home/linuxbrew/.linuxbrew/bin/brew
-    BREW_ROOT=${HOMEBREW_REPOSITORY:-$($BREW_BINARY --repository)}
+    HOMEBREW_REPOSITORY=${HOMEBREW_REPOSITORY:-$($BREW_BINARY --repository)}
     if ! $BREW_BINARY -h > /dev/null; then
-      echo "Make sure Homebrew is first. Check journalctl -e -u brew-setup.service"
+      echo "Make sure Homebrew is installed first. Check journalctl -e -u brew-setup.service"
       exit
     fi
 
@@ -157,13 +157,13 @@ setup-brew-not-found ACTION="":
         pkexec tee /etc/profile.d/brew-command-not-found.sh > /dev/null <<EOF
     # Check for interactive bash or zsh and that we haven't already been sourced
     if [[ -d /home/linuxbrew/.linuxbrew && \$- == *i* && BREW_COMMAND_NOT_FOUND != 1 ]] ; then
-      HB_CNF_HANDLER="${BREW_ROOT}/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
+      HB_CNF_HANDLER="${HOMEBREW_REPOSITORY}/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
       [ -f "\$HB_CNF_HANDLER" ] && source "\$HB_CNF_HANDLER"
       export BREW_COMMAND_NOT_FOUND=1
     fi
     EOF
     pkexec tee /etc/fish/conf.d/brew-command-not-found.fish > /dev/null <<EOF
-    set HB_CNF_HANDLER "${BREW_ROOT}/Library/Taps/homebrew/homebrew-command-not-found/handler.fish"
+    set HB_CNF_HANDLER "${HOMEBREW_REPOSITORY}/Library/Taps/homebrew/homebrew-command-not-found/handler.fish"
     if test -f \$HB_CNF_HANDLER
       set BREW_COMMAND_NOT_FOUND=1
       source \$HB_CNF_HANDLER
