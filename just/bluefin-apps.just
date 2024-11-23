@@ -165,7 +165,7 @@ setup-brew-not-found ACTION="":
     pkexec tee /etc/fish/conf.d/brew-command-not-found.fish > /dev/null <<EOF
     set HB_CNF_HANDLER "${HOMEBREW_REPOSITORY}/Library/Taps/homebrew/homebrew-command-not-found/handler.fish"
     if test -f \$HB_CNF_HANDLER
-      set BREW_COMMAND_NOT_FOUND=1
+      set BREW_COMMAND_NOT_FOUND 1
       source \$HB_CNF_HANDLER
     end
     EOF
