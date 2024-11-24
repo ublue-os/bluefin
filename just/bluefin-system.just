@@ -143,11 +143,11 @@ dx-group:
         fi
     }
 
-    GROUPS=("docker" "incus-admin" "lxd" "libvirt")
+    GROUPS_ADD=("docker" "incus-admin" "lxd" "libvirt")
 
-    for GROUP in "${GROUPS[@]}" ; do
-        append_group $GROUP
-        pkexec usermod -aG $GROUP $USER
+    for GROUP_ADD in "${GROUPS_ADD[@]}" ; do
+        append_group $GROUP_ADD
+        pkexec usermod -aG $GROUP_ADD $USER
     done
 
     echo "Reboot system and log back in to use docker, incus-admin, lxd, libvirt."
