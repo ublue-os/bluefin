@@ -162,14 +162,9 @@ setup-brew-not-found ACTION="":
       export BREW_COMMAND_NOT_FOUND=1
     fi
     EOF
-    pkexec tee /etc/fish/conf.d/brew-command-not-found.fish > /dev/null <<EOF
-    set HB_CNF_HANDLER "${HOMEBREW_REPOSITORY}/Library/Taps/homebrew/homebrew-command-not-found/handler.fish"
-    if test -f \$HB_CNF_HANDLER
-      set BREW_COMMAND_NOT_FOUND 1
-      source \$HB_CNF_HANDLER
-    end
-    EOF
-      echo "Brew command-not-found has been ${b}${green}enabled${n}"
+        # Necessary for fish since just having a script sourcing it does not work
+        pkexec ln -sf "${HOMEBREW_REPOSITORY}/Library/Taps/homebrew/homebrew-command-not-found/handler.fish" /etc/fish/conf.d/brew-cnf-handler.fish
+        echo "Brew command-not-found has been ${b}${green}enabled${n}"
     fi
 
     if [[ "${OPTION,,}" =~ ^disable ]]; then
