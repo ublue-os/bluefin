@@ -90,6 +90,11 @@ elif [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
     glib-compile-schemas --strict /tmp/bluefin-schema-test
     echo "Compiling gschema to include bluefin setting overrides"
     glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
+
+    # Install Adwaita-colors
+    git clone https://github.com/dpejoh/Adwaita-colors /tmp/Adwaita-colors
+    cp -r /tmp/Adwaita-colors/Adwaita-* /usr/share/icons
+    . /tmp/Adwaita-colors/MoreWaita.sh
 fi
 
 # Watermark for Plymouth

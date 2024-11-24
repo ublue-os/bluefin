@@ -13,3 +13,6 @@ curl --retry 3 -Lo /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.rep
 
 # Add Nerd Fonts Repo
 curl --retry 3 -Lo /etc/yum.repos.d/_copr_che-nerd-fonts-"$(rpm -E %fedora)".repo https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"$(rpm -E %fedora)"/che-nerd-fonts-fedora-"$(rpm -E %fedora)".repo
+
+# Add MoreWaita Repo
+curl --retry 3 -Lo /etc/yum.repos.d/_copr_dusansimic-themes.repo https://copr.fedorainfracloud.org/coprs/dusansimic/themes/repo/fedora-"$(rpm -E %fedora)"/dusansimic-themes-fedora-"$(rpm -E %fedora)".repo

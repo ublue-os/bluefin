@@ -74,6 +74,7 @@
 				"libgda",
 				"libgda-sqlite",
 				"libratbag-ratbagd",
+				"morewaita-icon-theme",
 				"nautilus-gsconnect",
 				"nautilus-open-any-terminal",
 				"openssh-askpass",

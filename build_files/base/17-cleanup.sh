@@ -31,6 +31,7 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/charm.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_che-nerd-fonts-"${FEDORA_MAJOR_VERSION}".repo
+sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_dusansimic-themes.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
 for i in /etc/yum.repos.d/rpmfusion-*; do
