@@ -17,7 +17,7 @@ jobs:
         uses: dataaxiom/ghcr-cleanup-action@v1.0.13
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          packages: bluefin, bluefin-dx, bluefin-nvidia, bluefin-dx-nvidia
+          packages: aurora,aurora-asus,aurora-asus-nvidia,aurora-dx,aurora-dx-asus,aurora-dx-hwe,aurora-dx-asus-nvidia,aurora-dx-hwe-nvidia,aurora-dx-nvidia,aurora-dx-surface,aurora-dx-surface-nvidia,aurora-hwe,aurora-hwe-nvidia,aurora-surface,aurora-nvidia,aurora-surface,aurora-surface-nvidia,bluefin,bluefin-asus-nvidia,bluefin-dx,bluefin-dx-asus-nvidia,bluefin-dx-hwe,bluefin-dx-hwe-nvidia,bluefin-dx-nvidia,bluefin-hwe,bluefin-nvidia 
           older-than: 90 days
           delete-orphaned-images: true
           keep-n-tagged: 7
