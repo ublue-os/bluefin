@@ -80,10 +80,21 @@ elif [[ "${BASE_IMAGE_NAME}" = "silverblue" ]]; then
     ln -s "/usr/share/backgrounds/xe_space_needle.jxl" "/usr/share/backgrounds/xe_space_needle.jpeg"
     ln -s "/usr/share/backgrounds/xe_sunset.jxl" "/usr/share/backgrounds/xe_sunset.jpeg"
 
+    # Add Mutter experimental-features
+    MUTTER_EXP_FEATS="'scale-monitor-framebuffer', 'xwayland-native-scaling'"
+    if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
+        MUTTER_EXP_FEATS="'kms-modifiers', ${MUTTER_EXP_FEATS}"
+    fi
+    tee /usr/share/glib-2.0/schemas/zz1-bluefin-modifications-mutter-exp-feats.gschema.override << EOF
+[org.gnome.mutter]
+experimental-features=[${MUTTER_EXP_FEATS}]
+EOF
+
     # Test bluefin gschema override for errors. If there are no errors, proceed with compiling bluefin gschema, which includes setting overrides.
     mkdir -p /tmp/bluefin-schema-test
     find /usr/share/glib-2.0/schemas/ -type f ! -name "*.gschema.override" -exec cp {} /tmp/bluefin-schema-test/ \;
     cp /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override /tmp/bluefin-schema-test/
+    cp /usr/share/glib-2.0/schemas/zz1-bluefin-modifications-mutter-exp-feats.gschema.override /tmp/bluefin-schema-test/
     echo "Running error test for bluefin gschema override. Aborting if failed."
     # We are omitting "--strict" from the schema validation since GNOME <47 do not contain the accent-color keys.
     # We should ideally refactor this to handle multiple GNOME version schemas better
