@@ -74,7 +74,7 @@ experimental-features=[${MUTTER_EXP_FEATS}]
 EOF
 
     # GNOME Terminal is replaced with Ptyxis in F41+
-    # Modify schema validation since GNOME <47 do not contain the accent-color key or xwayland-native-scaling mutter feature
+    # Make schema valid on GNOME <47 which do not contain the accent-color key or xwayland-native-scaling mutter feature
     if [[ "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then
         sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.Terminal.desktop
         sed -i 's@accent-color="slate"@@g' /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
