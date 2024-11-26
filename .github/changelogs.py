@@ -61,6 +61,7 @@ From previous `{target}` version `{prev}` there have been the following changes.
 | **KDE** | {pkgrel:plasma-desktop} |
 | **Mesa** | {pkgrel:mesa-filesystem} |
 | **Podman** | {pkgrel:podman} |
+| **Nvidia** | {pkgrel:nvidia-driver} |
 
 ### Major DX packages
 | Name | Version |
@@ -99,7 +100,8 @@ BLACKLIST_VERSIONS = [
     "podman",
     "docker-ce",
     "incus",
-    "devpod"
+    "devpod",
+    "nvidia-driver"
 ]
 
 
