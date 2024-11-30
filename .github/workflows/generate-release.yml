@@ -1,10 +1,6 @@
 on:
   workflow_call:
     inputs:
-      make_latest:
-        description: "Make latest for Release"
-        type: string
-        default: 'False'
       stream_name:
         description: "Release Tag (e.g. gts, stable)"
         type: string
@@ -13,13 +9,6 @@ on:
     inputs:
       handwritten:
         description: "Small Changelog about changes in this build"
-      make_latest:
-        description: "Make latest for Release"
-        type: choice
-        default: 'False'
-        options:
-          - 'False'
-          - 'True'
       stream_name:
         description: "Release Tag (e.g. gts, stable)"
         required: true
@@ -28,11 +17,6 @@ on:
           - '["gts", "stable"]'
           - '["gts"]'
           - '["stable"]'
-          # - '["stable-daily"]'
-          # - '["latest"]'
-          # - '["beta"]'
-          # - '["stable-daily", "latest", "beta"]'
-          # - '["gts", "stable", "stable-daily", "latest", "beta"]'
 
 permissions:
   contents: write
@@ -83,5 +67,5 @@ jobs:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
           body_path: ./changelog.md
-          make_latest: ${{ inputs.make_latest == 'True' && matrix.version == 'stable' || false }}
-          prerelease: ${{ inputs.make_latest != 'True' }}
+          make_latest: ${{ matrix.version == 'stable' }}
+          prerelease: ${{ matrix.version != 'stable' }}

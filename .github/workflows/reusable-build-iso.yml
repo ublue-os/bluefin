@@ -84,6 +84,20 @@ jobs:
           retention-days: 0
           compression-level: 0
           overwrite: true
+        
+      - name: HWE ISO rename
+        if: contains(matrix.image_flavor, 'hwe')
+        shell: bash
+        run: |
+          set -eoux pipefail
+          iso_name="${{ env.ISO_NAME }}"
+          asus_name="${iso_name/hwe/asus}"
+          surface_name="${iso_name/hwe/surface}"
+          mv "${{ env.ISO_UPLOAD_DIR }}/${iso_name}" "${{ env.ISO_UPLOAD_DIR}}/${asus_name}"
+          mv "${{ env.ISO_UPLOAD_DIR }}/${iso_name}-CHECKSUM" "${{ env.ISO_UPLOAD_DIR}}/${asus_name}-CHECKSUM"
+          cp "${{ env.ISO_UPLOAD_DIR }}/${asus_name}" "${{ env.ISO_UPLOAD_DIR}}/${surface_name}"
+          cp "${{ env.ISO_UPLOAD_DIR }}/${asus_name}-CHECKSUM" "${{ env.ISO_UPLOAD_DIR}}/${surface_name}-CHECKSUM"
+          tree "${{ env.ISO_UPLOAD_DIR }}"
 
       - name: Upload ISOs and Checksum to R2 to Bluefin Bucket
         if: github.ref_name == 'main' && contains(matrix.base_name,'bluefin')
