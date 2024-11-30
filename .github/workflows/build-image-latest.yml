@@ -12,15 +12,6 @@ on:
     - cron: "40 4 * * 0" # 4:40 UTC Sunday
   workflow_call:
   workflow_dispatch:
-    inputs:
-      brand_name:
-        description: "Image Brand to Build"
-        default: '["bluefin"]'
-        type: choice
-        options:
-          - '["bluefin"]'
-          - '["aurora"]'
-          - '["bluefin", "aurora"]'
 
 jobs:
   build-image-latest:
@@ -30,11 +21,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
+        brand_name: ["bluefin", "aurora"]
     with:
       image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
+    # This needs splitting, right now a kernel pin will not work due to hwe kernel
 
   generate-release:
     name: Generate Release

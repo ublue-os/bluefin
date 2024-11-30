@@ -12,15 +12,6 @@ on:
     - cron: "40 4 * * 0" # 4:40 UTC Sunday
   workflow_call:
   workflow_dispatch:
-    inputs:
-      brand_name:
-        description: "Image Brand to Build"
-        default: '["bluefin"]'
-        type: choice
-        options:
-          - '["bluefin"]'
-          - '["aurora"]'
-          - '["bluefin", "aurora"]'
 
 jobs:
   build-image-beta:
@@ -30,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
+        brand_name: ["bluefin", "aurora"]
     with:
       brand_name: ${{ matrix.brand_name }}
       stream_name: beta

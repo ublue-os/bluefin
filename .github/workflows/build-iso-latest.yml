@@ -22,6 +22,6 @@ jobs:
       matrix:
         brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
     with:
-      image_flavors: '["main", "nvidia", "asus", "asus-nvidia", "surface", "surface-nvidia"]'
+      image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
