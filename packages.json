@@ -206,7 +206,7 @@
 	"41": {
 		"include": {
 			"all": [
-				"google-noto-fonts-all",
+				"google-noto-fonts-all"
 			],
 			"kinoite": [
 				"ptyxis"
