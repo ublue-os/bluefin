@@ -55,6 +55,7 @@ setup-cockpit ACTION="":
         echo "Cockpit service is currently: $COCKPIT_SERVICE_STATUS"
         echo "The Cockpit container is currently: $COCKPIT_CONTAINER_STATUS_PRETTY"
         if [[ "${COCKPIT_CONTAINER_STATUS}" -eq 0 ]]; then
+            echo "Warning: This will enable ssh password login because Cockpit requires it."
             OPTION=$(Choose "Install Cockpit" "Cancel")
         else
             OPTION=$(Choose "Enable Cockpit" "Disable Cockpit" "Uninstall Cockpit")
