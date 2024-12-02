@@ -66,6 +66,9 @@ setup-cockpit ACTION="":
     [ ! -f /etc/ssh/sshd_config.d/02-enable-passwords.conf ] && echo -e "# File managed by ujust cockpit\nPasswordAuthentication yes" > /etc/ssh/sshd_config.d/02-enable-passwords.conf
     systemctl -q try-restart sshd
     systemctl -q enable --now sshd
+    if ! podman image exists quay.io/cockpit/ws ; then
+        podman pull quay.io/cockpit/ws:latest
+    fi
     podman container runlabel -q --name $MANAGED_COCKPIT_CONTAINER RUN quay.io/cockpit/ws
     podman container runlabel -q INSTALL quay.io/cockpit/ws systemctl enable cockpit.service
     EOF
