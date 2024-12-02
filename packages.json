@@ -173,9 +173,9 @@
 			],
 			"silverblue": [
 				"gnome-extensions-app",
+				"gnome-shell-extension-background-logo",
 				"gnome-software-rpm-ostree",
-				"gnome-terminal-nautilus",
-				"gnome-tour"
+				"gnome-terminal-nautilus"
 			],
 			"kinoite": [
 				"krfb",
