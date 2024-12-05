@@ -95,8 +95,10 @@ jobs:
           surface_name="${iso_name/hwe/surface}"
           mv "${{ steps.upload-directory.outputs.iso-upload-dir }}/${iso_name}" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${asus_name}"
           mv "${{ steps.upload-directory.outputs.iso-upload-dir }}/${iso_name}-CHECKSUM" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${asus_name}-CHECKSUM"
+          sed -i -e 's/-hwe/-asus/' "${{ steps.upload-directory.outputs.iso-upload-dir}}/${asus_name}-CHECKSUM"
           cp "${{ steps.upload-directory.outputs.iso-upload-dir }}/${asus_name}" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${surface_name}"
           cp "${{ steps.upload-directory.outputs.iso-upload-dir }}/${asus_name}-CHECKSUM" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${surface_name}-CHECKSUM"
+          sed -i -e 's/-asus/-surface/' "${{ steps.upload-directory.outputs.iso-upload-dir}}/${surface_name}-CHECKSUM"
           tree "${{ steps.upload-directory.outputs.iso-upload-dir }}"
 
       - name: Upload ISOs and Checksum to R2 to Bluefin Bucket
