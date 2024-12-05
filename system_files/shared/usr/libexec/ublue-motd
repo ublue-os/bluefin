@@ -30,8 +30,11 @@ KEY_WARN_FILE="/run/user-motd-sbkey-warn.md"
 [ -e $KEY_WARN_FILE ] && KEY_WARN="**WARNING**: $(cat $KEY_WARN_FILE)"
 KEY_WARN_ESCAPED=$(escape "$KEY_WARN")
 
+THEME=$(gsettings get org.gnome.desktop.interface accent-color || echo "'slate'")
+THEME=${THEME//\'/}
+
 sed -e "s/%IMAGE_NAME%/$IMAGE_NAME_ESCAPED/g" \
 	-e "s/%IMAGE_TAG%/$IMAGE_TAG_ESCAPED/g" \
 	-e "s/%TIP%/$TIP_ESCAPED/g" \
 	-e "s/%KEY_WARN%/$KEY_WARN_ESCAPED/g" \
-	/usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s auto -w 78 -
+	/usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s /usr/share/ublue-os/motd/themes/$THEME.json -w 78 -
