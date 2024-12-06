@@ -8,6 +8,7 @@
 				"bcache-tools",
 				"borgbackup",
 				"bootc",
+				"ddcutil",
 				"evtest",
 				"epson-inkjet-printer-escpr",
 				"epson-inkjet-printer-escpr2",
@@ -79,8 +80,8 @@
 				"openssh-askpass",
 				"simple-scan",
 				"yaru-theme",
-				"zenity",
-				"ddcutil"
+				"zenity"
+				
 			],
 			"kinoite": [
 				"kde-runtime-docs",
