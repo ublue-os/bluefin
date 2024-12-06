@@ -85,7 +85,8 @@ jobs:
         id: build-image
         shell: bash
         run: |
-          sudo just build-ghcr "${{ matrix.base_name }}" \
+          sudo just repo_organization="${{ github.repository_owner }}" \
+                    build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
                                "${{ inputs.kernel_pin }}"
