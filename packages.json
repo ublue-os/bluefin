@@ -79,7 +79,8 @@
 				"openssh-askpass",
 				"simple-scan",
 				"yaru-theme",
-				"zenity"
+				"zenity",
+				"ddcutil"
 			],
 			"kinoite": [
 				"kde-runtime-docs",
