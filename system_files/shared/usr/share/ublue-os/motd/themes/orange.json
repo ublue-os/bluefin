@@ -43,10 +43,10 @@
     "italic": true
   },
   "strong": {
+    "color": "208",
     "bold": true
   },
   "hr": {
-    "color": "208",
     "format": "\n──────\n"
   },
   "item": {
@@ -60,7 +60,6 @@
     "unticked": "[ ] "
   },
   "link": {
-    "color": "130",
     "underline": true
   },
   "link_text": {
@@ -75,8 +74,7 @@
   "code": {
     "prefix": " ",
     "suffix": " ",
-    "color": "208",
-    "background_color": "254"
+    "background_color": "236"
   },
   "code_block": {},
   "table": {},

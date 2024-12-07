@@ -32,19 +32,10 @@ KEY_WARN_ESCAPED=$(escape "$KEY_WARN")
 
 THEME=$(gsettings get org.gnome.desktop.interface accent-color || echo "'slate'")
 THEME=${THEME//\'/}
-COLOR_SCHEME=$(gsettings get org.gnome.desktop.interface color-scheme || echo "'prefer-dark'")
-COLOR_SCHEME=${COLOR_SCHEME//\'/}
-case $COLOR_SCHEME in
-	"default")
-		COLOR_SCHEME="light"
-		;;
-	*)
-		COLOR_SCHEME="dark"
-		;;
-esac
+THEME=${MOTD_FORCE_THEME:-$THEME}
 
 sed -e "s/%IMAGE_NAME%/$IMAGE_NAME_ESCAPED/g" \
 	-e "s/%IMAGE_TAG%/$IMAGE_TAG_ESCAPED/g" \
 	-e "s/%TIP%/$TIP_ESCAPED/g" \
 	-e "s/%KEY_WARN%/$KEY_WARN_ESCAPED/g" \
-	/usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s /usr/share/ublue-os/motd/themes/$COLOR_SCHEME/$THEME.json -w 78 -
+	/usr/share/ublue-os/motd/bluefin.md | tr '~' '\n' | /usr/bin/glow -s /usr/share/ublue-os/motd/themes/$THEME.json -w 78 -

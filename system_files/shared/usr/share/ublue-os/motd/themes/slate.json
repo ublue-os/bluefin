@@ -12,7 +12,7 @@
   },
   "heading": {
     "block_suffix": "\n",
-    "color": "33",
+    "color": "104",
     "bold": true
   },
   "h1": {
@@ -43,10 +43,10 @@
     "italic": true
   },
   "strong": {
+    "color": "104",
     "bold": true
   },
   "hr": {
-    "color": "33",
     "format": "\n──────\n"
   },
   "item": {
@@ -60,7 +60,6 @@
     "unticked": "[ ] "
   },
   "link": {
-    "color": "69",
     "underline": true
   },
   "link_text": {
@@ -75,7 +74,6 @@
   "code": {
     "prefix": " ",
     "suffix": " ",
-    "color": "33",
     "background_color": "236"
   },
   "code_block": {},
