@@ -11,9 +11,9 @@
 
 %TIP%
 
-- 󰊤 [Issues](https://issues.projectbluefin.io)
-- 󰈙 [Documentation](http://docs.projectbluefin.io/)
-- 󰊌 [Discuss](https://community.projectbluefin.io/)
-- 󰊌 [Leave Feedback](https://feedback.projectbluefin.io)
+- **󰊤** [Issues](https://issues.projectbluefin.io)
+- **󰈙** [Documentation](http://docs.projectbluefin.io/)
+- **󰊌** [Discuss](https://community.projectbluefin.io/)
+- **󰊌** [Leave Feedback](https://feedback.projectbluefin.io)
 
 %KEY_WARN%

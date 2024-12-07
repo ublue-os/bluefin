@@ -12,8 +12,8 @@ Hello, stargazer.
 
 %TIP%
 
-- 󰊤 [Issues](https://issues.projectbluefin.io)
-- 󰈙 [Documentation](http://docs.projectbluefin.io/)
-- 󰊌 [Discuss](https://community.projectbluefin.io/)
+- **󰊤** [Issues](https://issues.projectbluefin.io)
+- **󰈙** [Documentation](http://docs.projectbluefin.io/)
+- **󰊌** [Discuss](https://community.projectbluefin.io/)
 
 %KEY_WARN%
