@@ -8,8 +8,8 @@ on:
     paths-ignore:
       - "**.md"
   schedule:
-    - cron: "40 4 * * 1,2,3,4,5,6" # 4:40 UTC All But Sunday
-    - cron: "40 4 * * 0" # 4:40 UTC Sunday
+    - cron: "50 4 * * 1,2,3,4,5,6" # 4:50 UTC All But Sunday
+    - cron: "50 4 * * 0" # 4:50 UTC Sunday
   workflow_call:
   workflow_dispatch:
 
