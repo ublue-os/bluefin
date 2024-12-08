@@ -146,11 +146,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
     image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Base Image
-    if [[ "${image}" =~ bluefin ]]; then
-        base_image_name="silverblue"
-    elif [[ "${image}" =~ aurora ]]; then
-        base_image_name="kinoite"
-    fi
+    base_image_name="silverblue"
 
     # Target
     if [[ "${image}" =~ dx ]]; then
@@ -315,11 +311,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
 
     # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
-        if [[ "${image_name}" =~ bluefin ]]; then
-            base_image_name=silverblue-main
-        elif [[ "${image_name}" =~ aurora ]]; then
-            base_image_name=kinoite-main
-        fi
+        base_image_name=silverblue-main
         if [[ "${tag}" =~ stable ]]; then
             tag="stable-daily"
         fi
@@ -570,11 +562,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     iso_build_args+=(IMAGE_TAG="${tag}")
     iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}-${tag}.iso")
     iso_build_args+=(SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der")
-    if [[ "${image_name}" =~ bluefin ]]; then
-        iso_build_args+=(VARIANT="Silverblue")
-    else
-        iso_build_args+=(VARIANT="Kinoite")
-    fi
+    iso_build_args+=(VARIANT="Silverblue")
     iso_build_args+=(VERSION="${FEDORA_VERSION}")
     iso_build_args+=(WEB_UI="false")
 

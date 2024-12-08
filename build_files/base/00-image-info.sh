@@ -13,12 +13,6 @@ CODE_NAME="Archaeopteryx"
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 
-# Aurora
-if [[ "${BASE_IMAGE_NAME}" =~ kinoite ]]; then
-  IMAGE_PRETTY_NAME="Aurora"
-  HOME_URL="https://getaurora.dev/"
-fi
-
 # Image Flavor
 image_flavor="main"
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
