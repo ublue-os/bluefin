@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # All the pieces needed to enable incus on Developer Experience Hosts
-# This script is meant to be run on a {bluefin,aurora}-dx host
+# This script is meant to be run on a bluefin-dx host
 if [ "$EUID" -eq 0 ]
 then
     echo "This script should not be run as root"
