@@ -20,13 +20,24 @@ cockpit:
 setup-cockpit ACTION="":
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
+
+    MANAGED_COCKPIT_CONTAINER="cockpit-ws"
+
+    if sudo podman container exists $MANAGED_COCKPIT_CONTAINER ; then
+        COCKPIT_CONTAINER_STATUS_PRETTY="${green}${b}Installed${n}"
+        COCKPIT_CONTAINER_STATUS=1
+    else
+        COCKPIT_CONTAINER_STATUS_PRETTY="${invert}${b}Not installed${n}"
+        COCKPIT_CONTAINER_STATUS=0
+    fi
+
     COCKPIT_SERVICE_STATUS="$(systemctl is-enabled cockpit.service)"
     if [ "$COCKPIT_SERVICE_STATUS" == "enabled" ]; then
         COCKPIT_SERVICE_STATUS="${green}${b}Enabled${n}"
     elif [ "$COCKPIT_SERVICE_STATUS" == "disabled" ]; then
         COCKPIT_SERVICE_STATUS="${red}${b}Disabled${n}"
     else
-        COCKPIT_SERVICE_STATUS="${invert}${b}Not Installed${n}"
+        COCKPIT_SERVICE_STATUS="${invert}${b}Not installed${n}"
     fi
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
@@ -36,43 +47,60 @@ setup-cockpit ACTION="":
       Use 'install' to select Install Cockpit
       Use 'enable' to select Enable Cockpit
       Use 'disable' to select Disable Cockpit
+      Use 'uninstall' to select Uninstall Cockpit
     EOF
         exit 0
     elif [ "$OPTION" == "" ]; then
         echo "${bold}Cockpit Setup${normal}"
         echo "Cockpit service is currently: $COCKPIT_SERVICE_STATUS"
-        if [[ "${COCKPIT_SERVICE_STATUS}" =~ "Not Installed" ]]; then
+        echo "The Cockpit container is currently: $COCKPIT_CONTAINER_STATUS_PRETTY"
+        if [[ "${COCKPIT_CONTAINER_STATUS}" -eq 0 ]]; then
+            echo "Warning: This will enable ssh password login because Cockpit requires it."
             OPTION=$(Choose "Install Cockpit" "Cancel")
         else
-            OPTION=$(Choose "Enable Cockpit" "Disable Cockpit")
+            OPTION=$(Choose "Enable Cockpit" "Disable Cockpit" "Uninstall Cockpit")
         fi
     fi
     if [[ "${OPTION,,}" =~ ^install ]]; then
-        echo 'Installing Cockpit'
-        pkexec /bin/bash <<EOF
-    echo 'PasswordAuthentication yes' | tee /etc/ssh/sshd_config.d/02-enable-passwords.conf
-    systemctl try-restart sshd
-    systemctl enable --now sshd
-    podman container runlabel --name cockpit-ws RUN quay.io/cockpit/ws
-    podman runlabel INSTAL quay.io/cockpit/ws"    
+        echo "${blue}${b}Installing Cockpit${n}"
+        sudo /bin/bash <<EOF
+    [ ! -f /etc/ssh/sshd_config.d/02-enable-passwords.conf ] && echo -e "# File managed by ujust cockpit\nPasswordAuthentication yes" > /etc/ssh/sshd_config.d/02-enable-passwords.conf
+    systemctl -q try-restart sshd
+    systemctl -q enable --now sshd
+    if ! podman image exists quay.io/cockpit/ws ; then
+        podman pull quay.io/cockpit/ws:latest
+    fi
+    podman container runlabel -q --name $MANAGED_COCKPIT_CONTAINER RUN quay.io/cockpit/ws
+    podman container runlabel -q INSTALL quay.io/cockpit/ws systemctl enable cockpit.service
     EOF
         OPTION="Enable Cockpit"
     fi
     if [[ "${OPTION,,}" =~ ^enable ]]; then
-        pkexec /bin/bash <<EOF
-    echo "${green}${b}Enabling${n} pmlogger"
-    mkdir -p /var/lib/pcp/tmp /var/log/pcp/pmlogger
-    chown -R pcp:pcp /var/lib/pcp
-    chown pcp:pcp /var/log/pcp/pmlogger
-    systemctl enable --now pmlogger
+        sudo /bin/bash <<EOF
     echo "${green}${b}Enabling${n} Cockpit"
-    systemctl enable cockpit.service
+    systemctl -q enable --now cockpit.service
+    podman start $MANAGED_COCKPIT_CONTAINER
     echo "$(Urllink "http://localhost:9090" "Open Cockpit${n}") -> http://localhost:9090"
     EOF
     fi
     if [[ "${OPTION,,}" =~ ^disable ]]; then
         echo "${red}${b}Disabling${n} Cockpit"
-        pkexec systemctl disable cockpit.service && echo "Cockpit has been ${b}${red}disabled${n}"
+        sudo /bin/bash <<EOF
+    systemctl -q disable cockpit.service
+    podman stop $MANAGED_COCKPIT_CONTAINER
+    EOF
+        echo "Cockpit has been ${b}${red}disabled${n}"
+    fi
+    if [[ "${OPTION,,}" =~ ^uninstall ]] ; then
+        sudo /bin/bash <<EOF
+    [ -f /etc/ssh/sshd_config.d/02-enable-passwords.conf ] && rm -f /etc/ssh/sshd_config.d/02-enable-passwords.conf
+    systemctl -q try-restart sshd
+    systemctl -q disable --now cockpit.service
+    rm -f /etc/systemd/system/cockpit.service
+    podman stop -i $MANAGED_COCKPIT_CONTAINER
+    podman rm -f $MANAGED_COCKPIT_CONTAINER
+    EOF
+        echo "Cockpit has been ${red}${b}uninstalled${n}"
     fi
 
 # alias for install-jetbrains-toolbox
