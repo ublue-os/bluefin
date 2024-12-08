@@ -3,23 +3,10 @@
 set -eoux pipefail
 
 # Patched shells
-if [[ "${BASE_IMAGE_NAME}" =~ silverblue ]]; then
-    rpm-ostree override replace \
-    --experimental \
-    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        gnome-shell
-elif [[ "${BASE_IMAGE_NAME}" =~ kinoite ]]; then
-    rpm-ostree override replace \
-    --experimental \
-    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        kf6-kio-doc \
-        kf6-kio-widgets-libs \
-        kf6-kio-core-libs \
-        kf6-kio-widgets \
-        kf6-kio-file-widgets \
-        kf6-kio-core \
-        kf6-kio-gui
-fi
+rpm-ostree override replace \
+--experimental \
+--from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+    gnome-shell
 
 # GNOME Triple Buffering
 if [[ "${BASE_IMAGE_NAME}" =~ silverblue && "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then

@@ -17,17 +17,6 @@ for repo in "${repos[@]}"; do
     fi
 done
 
-if grep -q "kinoite" <<<"${BASE_IMAGE_NAME}"; then
-    rpm-ostree override replace \
-        --experimental \
-        --from repo=updates \
-        qt6-qtbase \
-        qt6-qtbase-common \
-        qt6-qtbase-mysql \
-        qt6-qtbase-gui ||
-        true
-fi
-
 rpm-ostree override replace \
     --experimental \
     --from repo=updates \
