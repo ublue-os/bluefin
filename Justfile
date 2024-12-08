@@ -2,8 +2,6 @@ repo_organization := "ublue-os"
 rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.0.1"
 iso_builder_image := "ghcr.io/jasonn3/build-container-installer:v1.2.3"
 images := '(
-    [aurora]=aurora
-    [aurora-dx]=aurora-dx
     [bluefin]=bluefin
     [bluefin-dx]=bluefin-dx
 )'
@@ -101,10 +99,6 @@ validate image="" tag="" flavor="":
     fi
     if [[ -z "$checkflavor" ]]; then
         echo "Invalid flavor..."
-        exit 1
-    fi
-    if [[ "$checktag" =~ gts && "$checkimage" =~ aurora ]]; then
-        echo "Aurora Does not build GTS..."
         exit 1
     fi
     if [[ ! "$checktag" =~ latest && "$checkflavor" =~ hwe|asus|surface ]]; then
@@ -485,12 +479,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         just sudoif podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
     fi
 
-    # Flatpak list for bluefin/aurora
-    if [[ "${image_name}" =~ bluefin ]]; then
-        FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
-    elif [[ "${image_name}" =~ aurora ]]; then
-        FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
-    fi
+    FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
 
     # Generate Flatpak List
     TEMP_FLATPAK_INSTALL_DIR="$(mktemp -d -p /tmp flatpak-XXXXX)"

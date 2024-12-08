@@ -14,14 +14,8 @@ function list_tags(){
 function rebase_helper(){
     base_image="ghcr.io/ublue-os/${IMAGE_NAME}"
     echo "Which Tag would you like to rebase to?"
-    CHANNELS=(latest stable stable-daily)
-    # Aurora currently does not have GTS (02-11-2024)
-    if [[ "${IMAGE_NAME}" =~ "aurora" ]]; then
-        echo "The default selection is stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
-    else
-        CHANNELS+=(gts)
-        echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
-    fi
+    CHANNELS=(latest stable stable-daily gts)
+    echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
     choose_target=$(Choose date "${CHANNELS[@]}" cancel)
     if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
         rebase_target="${base_image}:${choose_target}"

@@ -53,11 +53,7 @@ toggle-devmode:
             exit 0
         fi
         echo "Rebasing to a developer image"
-        if [[ "${CURRENT_IMAGE}" =~ "bluefin" ]]; then
-            NEW_IMAGE=$(sed "s/bluefin/bluefin-dx/" <<< $CURRENT_IMAGE)
-        elif [[ "${CURRENT_IMAGE}" =~ "aurora" ]]; then
-            NEW_IMAGE=$(sed "s/aurora/aurora-dx/" <<< $CURRENT_IMAGE)
-        fi
+        NEW_IMAGE=$(sed "s/bluefin/bluefin-dx/" <<< $CURRENT_IMAGE)
         rpm-ostree rebase $NEW_IMAGE
         echo -e "\nUse `ujust dx-group` to add your user to the correct groups and complete the installation"
     fi
@@ -219,13 +215,7 @@ configure-vfio ACTION="":
 [private]
 install-system-flatpaks:
     #!/usr/bin/bash
-    IMAGE_INFO="/usr/share/ublue-os/image-info.json"
-    BASE_IMAGE_NAME=$(jq -r '."base-image-name"' < $IMAGE_INFO)
-    if [[ ${BASE_IMAGE_NAME} == 'silverblue' ]]; then
-        FLATPAKS="bluefin_flatpaks/flatpaks"
-    elif [[ ${BASE_IMAGE_NAME} == 'kinoite' ]]; then
-        FLATPAKS="aurora_flatpaks/flatpaks"
-    fi
+    FLATPAKS="bluefin_flatpaks/flatpaks"
     FLATPAK_LIST="$(curl https://raw.githubusercontent.com/ublue-os/bluefin/main/${FLATPAKS} | tr '\n' ' ')"
     flatpak --system -y install --or-update ${FLATPAK_LIST}
 
