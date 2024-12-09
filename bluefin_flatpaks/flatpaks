@@ -13,6 +13,7 @@ app/org.gnome.Contacts/x86_64/stable
 app/org.gnome.DejaDup/x86_64/stable
 app/org.gnome.Papers/x86_64/stable
 app/com.mattjakeman.ExtensionManager/x86_64/stable
+app/org.gnome.FileRoller/x86_64/stable
 app/org.gnome.font-viewer/x86_64/stable
 app/org.gnome.Logs/x86_64/stable
 app/org.gnome.Loupe/x86_64/stable
