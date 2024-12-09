@@ -5,14 +5,16 @@ source /usr/lib/ujust/ujust.sh
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 IMAGE_TAG=$(jq -r '."image-tag"' < $IMAGE_INFO)
+IMAGE_VENDOR=$(jq -r '."image-vendor"' < $IMAGE_INFO)
 FEDORA_VERSION=$(jq -r '."fedora-version"' < $IMAGE_INFO)
+IMAGE_REGISTRY="ghcr.io/${IMAGE_VENDOR}"
 
 function list_tags(){
-    skopeo list-tags docker://ghcr.io/ublue-os/"${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV | head -n 31
+    skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV | head -n 31
 }
 
 function rebase_helper(){
-    base_image="ghcr.io/ublue-os/${IMAGE_NAME}"
+    base_image="${IMAGE_REGISTRY}/${IMAGE_NAME}"
     echo "Which Tag would you like to rebase to?"
     CHANNELS=(latest stable stable-daily gts)
     echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
