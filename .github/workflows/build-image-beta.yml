@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        brand_name: ["bluefin", "aurora"]
+        brand_name: ["bluefin"]
     with:
       brand_name: ${{ matrix.brand_name }}
       stream_name: beta

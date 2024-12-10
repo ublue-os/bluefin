@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      
+
       - name: Install Just
         shell: bash
         run: |
@@ -55,12 +55,12 @@ jobs:
           tar -zxvf just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz -C /tmp just
           sudo mv /tmp/just /usr/local/bin/just
           rm -f just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
-        
+
       - name: Check Just Syntax
         shell: bash
         run: |
           just check
-      
+
       - name: Image Name
         shell: bash
         run: |
@@ -85,7 +85,8 @@ jobs:
         id: build-image
         shell: bash
         run: |
-          sudo just build-ghcr "${{ matrix.base_name }}" \
+          sudo just repo_organization="${{ github.repository_owner }}" \
+                    build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
                                "${{ inputs.kernel_pin }}"
@@ -132,7 +133,7 @@ jobs:
           echo "Tags for this Action..."
           echo "$alias_tags"
           echo "alias_tags=${alias_tags}" >> $GITHUB_OUTPUT
-        
+
       # Tag Images
       - name: Tag Images
         shell: bash

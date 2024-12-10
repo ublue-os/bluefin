@@ -9,8 +9,6 @@ on:
         type: choice
         options:
           - '["bluefin"]'
-          - '["aurora"]'
-          - '["bluefin", "aurora"]'
 
 jobs:
   build-iso-stable:

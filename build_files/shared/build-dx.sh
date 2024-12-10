@@ -28,12 +28,7 @@ sysctl -p
 /ctx/build_files/dx/04-override-install-dx.sh
 
 # Branding Changes
-if test "$BASE_IMAGE_NAME" = "silverblue"; then
-    sed -i '/^PRETTY_NAME/s/Bluefin/Bluefin-dx/' /usr/lib/os-release
-elif test "$BASE_IMAGE_NAME" = "kinoite"; then
-    sed -i '/^PRETTY_NAME/s/Aurora/Aurora-dx/' /usr/lib/os-release
-    sed -i 's/Aurora/Aurora-DX/' /usr/share/kde-settings/kde-profile/default/xdg/kcm-about-distrorc
-fi
+sed -i '/^PRETTY_NAME/s/Bluefin/Bluefin-dx/' /usr/lib/os-release
 
 # Systemd and Disable Repos
 /ctx/build_files/dx/09-cleanup-dx.sh

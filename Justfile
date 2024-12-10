@@ -2,8 +2,6 @@ repo_organization := "ublue-os"
 rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.0.1"
 iso_builder_image := "ghcr.io/jasonn3/build-container-installer:v1.2.3"
 images := '(
-    [aurora]=aurora
-    [aurora-dx]=aurora-dx
     [bluefin]=bluefin
     [bluefin-dx]=bluefin-dx
 )'
@@ -103,10 +101,6 @@ validate image="" tag="" flavor="":
         echo "Invalid flavor..."
         exit 1
     fi
-    if [[ "$checktag" =~ gts && "$checkimage" =~ aurora ]]; then
-        echo "Aurora Does not build GTS..."
-        exit 1
-    fi
     if [[ ! "$checktag" =~ latest && "$checkflavor" =~ hwe|asus|surface ]]; then
         echo "HWE images are only built on latest..."
         exit 1
@@ -146,11 +140,7 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
     image_name=$(just image_name {{ image }} {{ tag }} {{ flavor }})
 
     # Base Image
-    if [[ "${image}" =~ bluefin ]]; then
-        base_image_name="silverblue"
-    elif [[ "${image}" =~ aurora ]]; then
-        base_image_name="kinoite"
-    fi
+    base_image_name="silverblue"
 
     # Target
     if [[ "${image}" =~ dx ]]; then
@@ -315,11 +305,7 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
 
     # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
-        if [[ "${image_name}" =~ bluefin ]]; then
-            base_image_name=silverblue-main
-        elif [[ "${image_name}" =~ aurora ]]; then
-            base_image_name=kinoite-main
-        fi
+        base_image_name=silverblue-main
         if [[ "${tag}" =~ stable ]]; then
             tag="stable-daily"
         fi
@@ -493,12 +479,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
         just sudoif podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
     fi
 
-    # Flatpak list for bluefin/aurora
-    if [[ "${image_name}" =~ bluefin ]]; then
-        FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
-    elif [[ "${image_name}" =~ aurora ]]; then
-        FLATPAK_DIR_SHORTNAME="aurora_flatpaks"
-    fi
+    FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
 
     # Generate Flatpak List
     TEMP_FLATPAK_INSTALL_DIR="$(mktemp -d -p /tmp flatpak-XXXXX)"
@@ -570,11 +551,7 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     iso_build_args+=(IMAGE_TAG="${tag}")
     iso_build_args+=(ISO_NAME="/github/workspace/${build_dir}/${image_name}-${tag}.iso")
     iso_build_args+=(SECURE_BOOT_KEY_URL="https://github.com/ublue-os/akmods/raw/main/certs/public_key.der")
-    if [[ "${image_name}" =~ bluefin ]]; then
-        iso_build_args+=(VARIANT="Silverblue")
-    else
-        iso_build_args+=(VARIANT="Kinoite")
-    fi
+    iso_build_args+=(VARIANT="Silverblue")
     iso_build_args+=(VERSION="${FEDORA_VERSION}")
     iso_build_args+=(WEB_UI="false")
 
