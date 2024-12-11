@@ -14,7 +14,7 @@ jobs:
       packages: write
     steps:
       - name: Delete Images Older Than 90 Days
-        uses: dataaxiom/ghcr-cleanup-action@792f00f0ff1466b4ee1eeb46049aeeb6ba7d1c8d # v1.0.14
+        uses: dataaxiom/ghcr-cleanup-action@2d58aab3d24aed94070e032d3091b83d50d93534 # v1.0.15
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           packages: aurora,aurora-asus,aurora-asus-nvidia,aurora-dx,aurora-dx-asus,aurora-dx-hwe,aurora-dx-asus-nvidia,aurora-dx-hwe-nvidia,aurora-dx-nvidia,aurora-dx-surface,aurora-dx-surface-nvidia,aurora-hwe,aurora-hwe-nvidia,aurora-surface,aurora-nvidia,aurora-surface,aurora-surface-nvidia,bluefin,bluefin-asus-nvidia,bluefin-dx,bluefin-dx-asus-nvidia,bluefin-dx-hwe,bluefin-dx-hwe-nvidia,bluefin-dx-nvidia,bluefin-hwe,bluefin-nvidia 
