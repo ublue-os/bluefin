@@ -23,7 +23,7 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
-      kernel_pin: 6.11.3-300.fc41.x86_64
+#     kernel_pin: 6.11.3-300.fc41.x86_64 ## This is where kernels get pinned.
       brand_name: ${{ matrix.brand_name }}
       stream_name: stable
 
