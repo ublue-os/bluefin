@@ -13,11 +13,6 @@ IMAGE_MATRIX_LATEST = {
     "de": ["gnome"],
     "image_flavor": ["main", "nvidia", "hwe", "hwe-nvidia"],
 }
-IMAGE_MATRIX_GTS = {
-    "experience": ["base", "dx"],
-    "de": ["gnome"],
-    "image_flavor": ["main", "nvidia"],
-}
 IMAGE_MATRIX = {
     "experience": ["base", "dx"],
     "de": ["gnome"],
@@ -105,8 +100,6 @@ BLACKLIST_VERSIONS = [
 def get_images(target: str):
     if "latest" in target:
         matrix = IMAGE_MATRIX_LATEST
-    elif "gts" in target:
-        matrix = IMAGE_MATRIX_GTS
     else:
         matrix = IMAGE_MATRIX
 
@@ -114,8 +107,6 @@ def get_images(target: str):
         img = ""
         if de == "gnome":
             img += "bluefin"
-        elif de == "kde":
-            img += "aurora"
 
         if experience == "dx":
             img += "-dx"
