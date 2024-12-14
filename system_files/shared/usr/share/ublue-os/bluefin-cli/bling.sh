@@ -20,7 +20,7 @@ fi
 
 if [ "$(basename "$SHELL")" = "bash" ]; then
     #shellcheck disable=SC1091
-    . /usr/share/bash-prexec
+	[ -f "${HOMEBREW_PREFIX}"/etc/profile.d/bash-preexec.sh ] && . "${HOMEBREW_PREFIX}"/etc/profile.d/bash-preexec.sh
     [ "$(command -v atuin)" ] && eval "$(atuin init bash)"
     [ "$(command -v zoxide)" ] && eval "$(zoxide init bash)"
 elif [ "$(basename "$SHELL")" = "zsh" ]; then
