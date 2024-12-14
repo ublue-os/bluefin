@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        brand_name: ${{ fromJson(inputs.brand_name || '["bluefin", "aurora"]') }}
+        brand_name: ${{ fromJson(inputs.brand_name || '["bluefin"]') }}
     with:
       brand_name: ${{ matrix.brand_name }}
       stream_name: stable
