@@ -10,17 +10,12 @@ REGISTRY = "docker://ghcr.io/ublue-os/"
 
 IMAGE_MATRIX_LATEST = {
     "experience": ["base", "dx"],
-    "de": ["kde", "gnome"],
-    "image_flavor": ["main", "nvidia", "hwe", "hwe-nvidia"],
-}
-IMAGE_MATRIX_GTS = {
-    "experience": ["base", "dx"],
     "de": ["gnome"],
-    "image_flavor": ["main", "nvidia"],
+    "image_flavor": ["main", "nvidia", "hwe", "hwe-nvidia"],
 }
 IMAGE_MATRIX = {
     "experience": ["base", "dx"],
-    "de": ["kde", "gnome"],
+    "de": ["gnome"],
     "image_flavor": ["main", "nvidia"],
 }
 
@@ -38,7 +33,6 @@ COMMON_PAT = "### All Images\n| | Name | Previous | New |\n| --- | --- | --- | -
 OTHER_NAMES = {
     "base": "### Base Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
     "dx": "### [Dev Experience Images](https://docs.projectbluefin.io/bluefin-dx)\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
-    "kde": "### [Aurora Images](https://getaurora.dev/)\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
     "gnome": "### [Bluefin Images](https://projectbluefin.io/)\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
     "nvidia": "### Nvidia Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
     "hwe": "### HWE Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
@@ -58,7 +52,6 @@ From previous `{target}` version `{prev}` there have been the following changes.
 | --- | --- |
 | **Kernel** | {pkgrel:kernel} |
 | **Gnome** | {pkgrel:gnome-control-center-filesystem} |
-| **KDE** | {pkgrel:plasma-desktop} |
 | **Mesa** | {pkgrel:mesa-filesystem} |
 | **Podman** | {pkgrel:podman} |
 | **Nvidia** | {pkgrel:nvidia-driver} |
@@ -95,7 +88,6 @@ This is an automatically generated changelog for release `{curr}`."""
 BLACKLIST_VERSIONS = [
     "kernel",
     "gnome-control-center-filesystem",
-    "plasma-desktop",
     "mesa-filesystem",
     "podman",
     "docker-ce",
@@ -108,8 +100,6 @@ BLACKLIST_VERSIONS = [
 def get_images(target: str):
     if "latest" in target:
         matrix = IMAGE_MATRIX_LATEST
-    elif "gts" in target:
-        matrix = IMAGE_MATRIX_GTS
     else:
         matrix = IMAGE_MATRIX
 
@@ -117,8 +107,6 @@ def get_images(target: str):
         img = ""
         if de == "gnome":
             img += "bluefin"
-        elif de == "kde":
-            img += "aurora"
 
         if experience == "dx":
             img += "-dx"
@@ -229,8 +217,6 @@ def get_package_groups(target: str, prev: dict[str, Any], manifests: dict[str, A
             if t == "hwe" and "hwe" not in image_flavor:
                 continue
             if t == "nvidia" and "nvidia" not in image_flavor:
-                continue
-            if t == "kde" and de != "kde":
                 continue
             if t == "gnome" and de != "gnome":
                 continue
