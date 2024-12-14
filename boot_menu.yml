@@ -13,17 +13,3 @@ ublue_variants:
     flavors:
       - label: bluefin-nvidia
         info: Bluefin
-  - label: ublue-os/aurora
-    ks: /kickstart/ublue-os.ks
-    flavors:
-      - label: aurora
-        info: Aurora
-  - label: ublue-os/aurora-nvidia
-    ks: /kickstart/ublue-os-nvidia.ks
-    subvariants:
-      - label: latest driver
-      - label: 470xx driver
-        suffix: -470
-    flavors:
-      - label: aurora-nvidia
-        info: Aurora
