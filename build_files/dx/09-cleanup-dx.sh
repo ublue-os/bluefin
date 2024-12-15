@@ -29,3 +29,5 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 for i in /etc/yum.repos.d/rpmfusion-*; do
     sed -i 's@enabled=1@enabled=0@g' "$i"
 done
+
+etckeeper commit "initial dx setup"
