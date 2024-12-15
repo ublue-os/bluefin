@@ -8,6 +8,7 @@ if [[ -f /usr/share/applications/gnome-system-monitor.desktop ]]; then
 fi
 if [[ -f /usr/share/applications/org.gnome.SystemMonitor.desktop ]]; then
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/org.gnome.SystemMonitor.desktop
+fi
 
 # Add Mutter experimental-features
 MUTTER_EXP_FEATS="'scale-monitor-framebuffer', 'xwayland-native-scaling'"
@@ -50,3 +51,4 @@ glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
 
 # Watermark for Plymouth
 cp /usr/share/plymouth/themes/spinner/{silverblue-,}watermark.png
+
