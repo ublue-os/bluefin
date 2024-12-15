@@ -18,6 +18,8 @@ if [ "$(command -v ug)" ]; then
     alias xzfgrep='ug -zF'
 fi
 
+HOMEBREW_PREFIX="${HOMEBREW_PREFIX:-/home/linuxbrew/.linuxbrew}"
+
 if [ "$(basename "$SHELL")" = "bash" ]; then
     #shellcheck disable=SC1091
 	[ -f "${HOMEBREW_PREFIX}"/etc/profile.d/bash-preexec.sh ] && . "${HOMEBREW_PREFIX}"/etc/profile.d/bash-preexec.sh
