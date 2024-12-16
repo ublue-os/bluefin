@@ -284,7 +284,9 @@ rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
     # Load into Rootful Podman
     ID=$(just sudoif podman images --filter reference=localhost/"${image_name}":"${tag}" --format "'{{ '{{.ID}}' }}'")
     if [[ -z "$ID" ]]; then
-        just sudoif podman image scp ${UID}@localhost::localhost/"${image_name}":"${tag}" root@localhost::localhost/"${image_name}":"${tag}"
+        COPYTMP=$(mktemp -p "${PWD}" -d -t podman_scp.XXXXXXXXXX)
+        just sudoif TMPDIR=${COPYTMP} podman image scp ${UID}@localhost::localhost/"${image_name}":"${tag}" root@localhost::localhost/"${image_name}":"${tag}"
+        rm -rf "${COPYTMP}"
     fi
 
     # Prep Container
@@ -476,7 +478,9 @@ build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
 
     # Load Image into rootful podman
     if [[ "${UID}" -gt 0 && {{ ghcr }} == "0" ]]; then
-        just sudoif podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
+        COPYTMP=$(mktemp -p "${PWD}" -d -t podman_scp.XXXXXXXXXX)
+        just sudoif TMPDIR=${COPYTMP} podman image scp "${UID}"@localhost::"${IMAGE_FULL}" root@localhost::"${IMAGE_FULL}"
+        rm -rf "${COPYTMP}"
     fi
 
     FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
