@@ -30,7 +30,7 @@ KEY_WARN_FILE="/run/user-motd-sbkey-warn.md"
 [ -e $KEY_WARN_FILE ] && KEY_WARN="**WARNING**: $(cat $KEY_WARN_FILE)"
 KEY_WARN_ESCAPED=$(escape "$KEY_WARN")
 
-THEME=$(gsettings get org.gnome.desktop.interface accent-color || echo "'slate'")
+THEME=$(gsettings get org.gnome.desktop.interface accent-color 2>/dev/null || echo "'slate'")
 THEME=${THEME//\'/}
 THEME=${MOTD_FORCE_THEME:-$THEME}
 
