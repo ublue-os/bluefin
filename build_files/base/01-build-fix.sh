@@ -17,9 +17,8 @@ for repo in "${repos[@]}"; do
     fi
 done
 
-rpm-ostree override replace \
-    --experimental \
-    --from repo=updates \
+dnf5 -y upgrade \
+    --repo=updates \
     elfutils-libelf \
     elfutils-libs ||
     true

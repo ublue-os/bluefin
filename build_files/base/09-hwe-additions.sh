@@ -35,7 +35,7 @@ SURFACE_PACKAGES=(
     pipewire-plugin-libcamera
 )
 
-rpm-ostree install \
+dnf5 -y install \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
 
