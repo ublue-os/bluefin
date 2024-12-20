@@ -105,6 +105,7 @@
 				"docker-buildx-plugin",
 				"docker-compose-plugin",
 				"edk2-ovmf",
+				"emacs",
 				"flatpak-builder",
 				"genisoimage",
 				"google-droid-sans-mono-fonts",
