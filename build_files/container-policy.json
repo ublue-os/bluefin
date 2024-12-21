@@ -9,7 +9,7 @@
             "ghcr.io/ublue-os": [
                 {
                     "type": "sigstoreSigned",
-                    "keyPath": "/etc/pki/containers/ublue-os.pubb",
+                    "keyPath": "/etc/pki/containers/ublue-os.pub",
                     "signedIdentity": {
                         "type": "matchRepository"
                     }
