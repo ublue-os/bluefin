@@ -1,4 +1,5 @@
 brew "atuin"
+brew "bash-preexec"
 brew "bat"
 brew "direnv"
 brew "dysk"
