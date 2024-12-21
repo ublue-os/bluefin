@@ -56,6 +56,7 @@ customize-alphas=true
 max-alpha=0.8
 min-alpha=0.5
 running-indicator-style='DOTS'
+apply-custom-theme=true
 
 [org.gnome.settings-daemon.plugins.power]
 power-button-action='interactive'
