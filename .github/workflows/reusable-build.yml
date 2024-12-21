@@ -64,7 +64,7 @@ jobs:
 
       - name: Add Container Policy
         run: |
-          sudo cp ./build_files/container-policy.json /etc/containers/policy.json
+          sudo cp -r ./build_files/containers /etc/containers
 
       - name: Image Name
         shell: bash
