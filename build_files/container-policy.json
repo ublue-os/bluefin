@@ -1,0 +1,27 @@
+{
+    "default": [
+        {
+            "type": "reject"
+        }
+    ],
+    "transports": {
+        "docker": {
+            "ghcr.io/ublue-os": [
+                {
+                    "type": "sigstoreSigned",
+                    "keyPath": "/etc/pki/containers/ublue-os.pubb",
+                    "signedIdentity": {
+                        "type": "matchRepository"
+                    }
+                }
+            ]
+        },
+        "oci-archive": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        }
+    }
+}

@@ -62,6 +62,10 @@ jobs:
         run: |
           just check
 
+      - name: Add Container Policy
+        run: |
+          sudo cp ./build_files/container-policy.json /etc/containers/policy.json
+
       - name: Image Name
         shell: bash
         run: |
