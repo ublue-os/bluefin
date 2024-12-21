@@ -9,7 +9,7 @@
             "ghcr.io/ublue-os": [
                 {
                     "type": "sigstoreSigned",
-                    "keyPath": "/etc/pki/containers/ublue-os.pub",
+                    "keyPath": "/home/runner/work/bluefin/bluefin/cosign.pub",
                     "signedIdentity": {
                         "type": "matchRepository"
                     }
