@@ -8,7 +8,7 @@
 
 > "Evolution is a process of constant branching and expansion." - Stephen Jay Gould
 
-For end users it provides a system as reliable as a Chromebook with near-zero maintainance. For developers, a powerful cloud native developer workflow. Check [Introduction to Bluefin](https://universal-blue.discourse.group/t/introduction-to-bluefin/41) for a feature walkthrough.
+For end users it provides a system as reliable as a Chromebook with near-zero maintainance. For developers, a powerful cloud native developer workflow. Check [Introduction to Bluefin](https://docs.projectbluefin.io/introduction/) for a feature walkthrough.
 
 - [Download Bluefin](https://projectbluefin.io/#scene-picker)
 
