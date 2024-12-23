@@ -140,7 +140,6 @@
 				"qemu-user-binfmt",
 				"qemu-user-static",
 				"qemu",
-				"rbenv",
 				"rocm-hip",
 				"rocm-opencl",
 				"rocm-smi",
