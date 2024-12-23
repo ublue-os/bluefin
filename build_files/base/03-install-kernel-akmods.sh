@@ -39,7 +39,6 @@ rpm-ostree install \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 rpm-ostree install \
-    broadcom-wl /tmp/akmods/kmods/*wl*.rpm \
     v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
 rpm-ostree uninstall rpmfusion-free-release rpmfusion-nonfree-release
 
