@@ -58,10 +58,19 @@ pinctrl_amd
 intel_lpss
 intel_lpss_pci
 
+# Surface Book 2
+pinctrl_sunrisepoint
+
 # For Surface Laptop 3/Surface Book 3
 pinctrl_icelake
 
 # For Surface Laptop 4/Surface Laptop Studio
 pinctrl_tigerlake
+
+# For Surface Pro 9/Surface Laptop 5
+pinctrl_alderlake
+
+# For Surface Pro 10/Surface Laptop 6
+pinctrl_meteorlake
 EOF
 
