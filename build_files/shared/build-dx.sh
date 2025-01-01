@@ -28,7 +28,7 @@ sysctl -p
 /ctx/build_files/dx/04-override-install-dx.sh
 
 # Branding Changes
-sed -i '/^PRETTY_NAME/s/Bluefin/Bluefin-dx/' /usr/lib/os-release
+sed -i '/^PRETTY_NAME/s/Bluefin/Bluefin DX/' /usr/lib/os-release
 
 # Systemd and Disable Repos
 /ctx/build_files/dx/09-cleanup-dx.sh
