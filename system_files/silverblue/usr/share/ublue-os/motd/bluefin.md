@@ -9,7 +9,8 @@
 | `ujust bluefin-cli` | Enable terminal bling | 
 | `brew help` | Manage command line packages | 
 
-%TIP%
+<!-- %TIP% -->
+There's been an update: please run `ujust bluefin-cli` and disable and reenable bluefin-cli
 
 - **󰊤** [Issues](https://issues.projectbluefin.io)
 - **󰈙** [Documentation](http://docs.projectbluefin.io/)
