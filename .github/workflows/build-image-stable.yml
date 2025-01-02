@@ -23,7 +23,7 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
-#     kernel_pin: 6.11.3-300.fc41.x86_64 ## This is where kernels get pinned.
+      #     kernel_pin: 6.11.3-300.fc41.x86_64 ## This is where kernels get pinned.
       brand_name: ${{ matrix.brand_name }}
       stream_name: stable
 
@@ -35,9 +35,9 @@ jobs:
     with:
       stream_name: '["stable", "stable-daily"]'
 
-  build-iso-stable:
-    name: Build Stable ISOs
-    needs: [build-image-stable]
-    if: github.event.schedule == '50 5 * * 0'
-    secrets: inherit
-    uses: ./.github/workflows/build-iso-stable.yml
+  # build-iso-stable:
+  #   name: Build Stable ISOs
+  #   needs: [build-image-stable]
+  #   if: github.event.schedule == '50 5 * * 0'
+  #   secrets: inherit
+  #   uses: ./.github/workflows/build-iso-stable.yml
