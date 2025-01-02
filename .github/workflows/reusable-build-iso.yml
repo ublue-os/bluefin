@@ -4,7 +4,7 @@ on:
     inputs:
       image_flavors:
         description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
-        default: "['main', 'nvidia']"
+        default: "['main', 'nvidia', 'nvidia-open']"
         type: string
       brand_name:
         description: "The Brand Name: bluefin"
