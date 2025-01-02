@@ -10,7 +10,7 @@
 | `brew help` | Manage command line packages | 
 
 <!-- %TIP% -->
-There's been an update: please run `ujust bluefin-cli` and disable and reenable bluefin-cli
+If you use `bluefin-cli` there's been an update. Run `ujust bluefin-cli` and disable and reenable to update.
 
 - **󰊤** [Issues](https://issues.projectbluefin.io)
 - **󰈙** [Documentation](http://docs.projectbluefin.io/)
