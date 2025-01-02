@@ -8,12 +8,16 @@ images := '(
 flavors := '(
     [main]=main
     [nvidia]=nvidia
+    [nvidia-open]=nvidia-open
     [hwe]=hwe
     [hwe-nvidia]=hwe-nvidia
+    [hwe-nvidia-open]=hwe-nvidia-open
     [asus]=asus
     [asus-nvidia]=asus-nvidia
+    [asus-nvidia-open]=asus-nvidia-open
     [surface]=surface
     [surface-nvidia]=surface-nvidia
+    [surface-nvidia-open]=surface-nvidia-open
 )'
 tags := '(
     [gts]=gts
@@ -68,16 +72,12 @@ sudo-clean:
 # Check if valid combo
 [group('Utility')]
 [private]
-validate image="" tag="" flavor="":
+validate $image $tag $flavor:
     #!/usr/bin/bash
     set -eou pipefail
     declare -A images={{ images }}
     declare -A tags={{ tags }}
     declare -A flavors={{ flavors }}
-
-    image={{ image }}
-    tag={{ tag }}
-    flavor={{ flavor }}
 
     # Handle Stable Daily
     if [[ "${tag}" == "stable-daily" ]]; then
@@ -126,12 +126,9 @@ sudoif command *args:
 
 # Build Image
 [group('Image')]
-build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="0" kernel_pin="":
+build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="":
     #!/usr/bin/bash
     set -eoux pipefail
-    image={{ image }}
-    tag={{ tag }}
-    flavor={{ flavor }}
 
     # Validate
     just validate "${image}" "${tag}" "${flavor}"
@@ -170,7 +167,6 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
     just verify-container "${base_image_name}-main:${fedora_version}"
 
     # Kernel Release/Pin
-    kernel_pin="{{ kernel_pin }}"
     if [[ -z "${kernel_pin:-}" ]]; then
         kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/${akmods_flavor}-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
     else
@@ -183,7 +179,9 @@ build image="bluefin" tag="latest" flavor="main" rechunk="0" ghcr="0" pipeline="
     if [[ "${akmods_flavor}" =~ coreos ]]; then
         just verify-container "akmods-zfs:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
-    if [[ "${flavor}" =~ nvidia ]]; then
+    if [[ "${flavor}" =~ nvidia-open ]]; then
+        just verify-container "akmods-nvidia-open:${akmods_flavor}-${fedora_version}-${kernel_release}"
+    elif [[ "${flavor}" =~ nvidia ]]; then
         just verify-container "akmods-nvidia:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
 
@@ -261,13 +259,9 @@ build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
 # Rechunk Image
 [group('Image')]
 [private]
-rechunk image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
+rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     #!/usr/bin/bash
     set -eoux pipefail
-
-    image={{ image }}
-    tag={{ tag }}
-    flavor={{ flavor }}
 
     # Validate
     just validate "${image}" "${tag}" "${flavor}"
@@ -414,12 +408,9 @@ load-rechunk image="bluefin" tag="latest" flavor="main":
 
 # Run Container
 [group('Image')]
-run image="bluefin" tag="latest" flavor="main":
+run $image="bluefin" $tag="latest" $flavor="main":
     #!/usr/bin/bash
     set -eoux pipefail
-    image={{ image }}
-    tag={{ tag }}
-    flavor={{ flavor }}
 
     # Validate
     just validate "${image}" "${tag}" "${flavor}"
@@ -438,12 +429,9 @@ run image="bluefin" tag="latest" flavor="main":
 
 # Build ISO
 [group('ISO')]
-build-iso image="bluefin" tag="latest" flavor="main" ghcr="0" pipeline="0":
+build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     #!/usr/bin/bash
     set -eoux pipefail
-    image={{ image }}
-    tag={{ tag }}
-    flavor={{ flavor }}
 
     # Validate
     just validate "${image}" "${tag}" "${flavor}"
@@ -574,12 +562,9 @@ build-iso-ghcr image="bluefin" tag="latest" flavor="main":
 
 # Run ISO
 [group('ISO')]
-run-iso image="bluefin" tag="latest" flavor="main":
+run-iso $image="bluefin" $tag="latest" $flavor="main":
     #!/usr/bin/bash
     set -eoux pipefail
-    image={{ image }}
-    tag={{ tag }}
-    flavor={{ flavor }}
 
     # Validate
     just validate "${image}" "${tag}" "${flavor}"
@@ -658,12 +643,9 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
 
 # Secureboot Check
 [group('Utility')]
-secureboot image="bluefin" tag="latest" flavor="main":
+secureboot $image="bluefin" $tag="latest" $flavor="main":
     #!/usr/bin/bash
     set -eoux pipefail
-    image={{ image }}
-    tag={{ tag }}
-    flavor={{ flavor }}
 
     # Validate
     just validate "${image}" "${tag}" "${flavor}"

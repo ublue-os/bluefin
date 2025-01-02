@@ -23,7 +23,7 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
-      image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
+      image_flavors: '["main", "nvidia", "nvidia-open", "hwe", "hwe-nvidia", "hwe-nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
     # This needs splitting, right now a kernel pin will not work due to hwe kernel
