@@ -6,11 +6,13 @@ set -eoux pipefail
 mkdir -p /var/lib/alternatives
 
 # Copy Files to Container
+echo "::group:: Copy Files"
 cp -r /ctx/just /tmp/just
 cp /ctx/packages.json /tmp/packages.json
 cp /ctx/system_files/shared/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 rsync -rvK /ctx/system_files/shared/ /
 rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
+echo "::endgroup::"
 
 # Generate image-info.json
 /ctx/build_files/base/00-image-info.sh
@@ -42,7 +44,6 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 # Install Brew
 /ctx/build_files/base/10-brew.sh
 
-
 ## late stage changes
 
 # Make sure Bootc works
@@ -58,9 +59,11 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 /ctx/build_files/base/19-initramfs.sh
 
 # Clean Up
+echo "::group:: Cleanup"
 mv /var/lib/alternatives /staged-alternatives
 /ctx/build_files/shared/clean-stage.sh
-mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives && \
-mkdir -p /var/tmp && \
-chmod -R 1777 /var/tmp
+mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives &&
+    mkdir -p /var/tmp &&
+    chmod -R 1777 /var/tmp
+echo "::endgroup::"
 ostree container commit
