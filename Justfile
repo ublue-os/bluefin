@@ -345,6 +345,34 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     if [[ -z "$(git status -s)" ]]; then
         SHA=$(git rev-parse HEAD)
     fi
+
+    # Should generate a timestamp like what is defined on the ArtifactHub documentation
+    # E.G: 2022-02-08T15:38:15Z'
+    # https://artifacthub.io/docs/topics/repositories/container-images/
+    # https://linux.die.net/man/1/date
+    CREATED_DATE="$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)"
+    
+    LABELS=()
+    LABELS+=("org.opencontainers.image.created=$CREATED_DATE")
+    LABELS+=("org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology")
+    LABELS+=("org.opencontainers.image.documentation=https://docs.projectbluefin.io")
+    LABELS+=("org.opencontainers.image.source=https://github.com/ublue-os/bluefin/blob/main/Containerfile")
+    LABELS+=("org.opencontainers.image.title=bluefin")
+    LABELS+=("org.opencontainers.image.url=https://projectbluefin.io")
+    LABELS+=("org.opencontainers.image.vendor=ublue-os")
+    LABELS+=("org.opencontainers.image.version=$fedora_version")
+    LABELS+=("io.artifacthub.package.deprecated=false")
+    LABELS+=("io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue")
+    LABELS+=("io.artifacthub.package.license=Apache-2.0")
+    LABELS+=("io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4")
+    LABELS+=("containers.bootc=1")
+
+    FINAL_LABELS="io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md"
+    # Escape labels in a way that sudoif works with it
+    for label in "${LABELS[@]}"; do
+        FINAL_LABELS+="$'\n'$label"
+    done
+
     # Run Rechunker
     just sudoif podman run --rm \
         --pull=newer \
@@ -355,7 +383,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         --env REPO=/var/ostree/repo \
         --env PREV_REF=ghcr.io/ublue-os/"${image_name}":"${tag}" \
         --env OUT_NAME="$OUT_NAME" \
-        --env LABELS="org.opencontainers.image.title=${image_name}$'\n''io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md'$'\n''io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4'$'\n'" \
+        --env LABELS=$FINAL_LABELS \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
         --env "VERSION=${VERSION}" \
         --env VERSION_FN=/workspace/version.txt \
