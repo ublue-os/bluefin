@@ -383,7 +383,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         --env REPO=/var/ostree/repo \
         --env PREV_REF=ghcr.io/ublue-os/"${image_name}":"${tag}" \
         --env OUT_NAME="$OUT_NAME" \
-        --env LABELS=$FINAL_LABELS \
+        --env LABELS="$FINAL_LABELS" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
         --env "VERSION=${VERSION}" \
         --env VERSION_FN=/workspace/version.txt \
