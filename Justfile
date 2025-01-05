@@ -72,7 +72,6 @@ clean:
 validate $image $tag $flavor:
     #!/usr/bin/bash
     set -eou pipefail
-    echo "::group:: Validate"
     declare -A images={{ images }}
     declare -A tags={{ tags }}
     declare -A flavors={{ flavors }}
@@ -87,25 +86,22 @@ validate $image $tag $flavor:
     checkflavor="${flavors[${flavor}]-}"
 
     # Validity Checks
-    returncode=0
     if [[ -z "$checkimage" ]]; then
         echo "Invalid Image..."
-        returncode=1
+        exit 1
     fi
     if [[ -z "$checktag" ]]; then
         echo "Invalid tag..."
-        returncode=1
+        exit 1
     fi
     if [[ -z "$checkflavor" ]]; then
         echo "Invalid flavor..."
-        returncode=1
+        exit 1
     fi
     if [[ ! "$checktag" =~ latest && "$checkflavor" =~ hwe|asus|surface ]]; then
         echo "HWE images are only built on latest..."
-        returncode=1
+        exit 1
     fi
-    echo "::endgroup::"
-    exit "$returncode"
 
 # Build Image
 [group('Image')]
@@ -626,9 +622,7 @@ changelogs branch="stable" handwritten="":
 [group('Utility')]
 verify-container container="" registry="ghcr.io/ublue-os" key="":
     #!/usr/bin/bash
-    set -eoux pipefail
-
-    echo "::group:: Verify Container {{ container }}"
+    set -eou pipefail
 
     # Get Cosign if Needed
     if [[ ! $(command -v cosign) ]]; then
@@ -637,12 +631,11 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
         ${SUDOIF} ${PODMAN} rm -f "${COSIGN_CONTAINER_ID}"
     fi
 
-    returncode=0
     # Verify Cosign Image Signatures if needed
     if [[ -n "${COSIGN_CONTAINER_ID:-}" ]]; then
         if ! cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/cosign >/dev/null; then
             echo "NOTICE: Failed to verify cosign image signatures."
-            returncode=1
+            exit 1
         fi
     fi
 
@@ -655,19 +648,14 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
     # Verify Container using cosign public key
     if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" >/dev/null; then
         echo "NOTICE: Verification failed. Please ensure your public key is correct."
-        returncode=1
+        exit 1
     fi
-
-    echo "::endgroup::"
-    exit "$returncode"
 
 # Secureboot Check
 [group('Utility')]
 secureboot $image="bluefin" $tag="latest" $flavor="main":
     #!/usr/bin/bash
-    set -eoux pipefail
-
-    echo "::group:: Secureboot Check"
+    set -eou pipefail
 
     # Validate
     just validate "${image}" "${tag}" "${flavor}"
@@ -712,7 +700,6 @@ secureboot $image="bluefin" $tag="latest" $flavor="main":
     if [[ -n "${temp_name:-}" ]]; then
         ${PODMAN} rm -f "${temp_name}"
     fi
-    echo "::endgroup::"
     exit "$returncode"
 
 # Get Fedora Version of an image
