@@ -2,6 +2,8 @@
 
 set -eoux pipefail
 
+echo "::group:: $(basename "$0")"
+
 # Patched shells
 rpm-ostree override replace \
 --experimental \
@@ -56,3 +58,5 @@ mv -f /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml
 # Register Fonts
 fc-cache -f /usr/share/fonts/ubuntu
 fc-cache -f /usr/share/fonts/inter
+
+echo "::endgroup::"

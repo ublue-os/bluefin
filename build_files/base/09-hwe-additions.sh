@@ -2,6 +2,8 @@
 
 set -eoux pipefail
 
+echo "::group:: $(basename "$0")"
+
 if [[ "${IMAGE_NAME}" =~ hwe ]]; then
     echo "HWE image detected, installing HWE packages"
 else
@@ -74,3 +76,4 @@ pinctrl_alderlake
 pinctrl_meteorlake
 EOF
 
+echo "::endgroup::"

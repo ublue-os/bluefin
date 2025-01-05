@@ -2,6 +2,8 @@
 
 set -eoux pipefail
 
+echo "::group:: $(basename "$0")"
+
 # Setup Systemd
 systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
@@ -40,3 +42,5 @@ done
 if [ -f /etc/yum.repos.d/fedora-coreos-pool.repo ]; then
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-coreos-pool.repo
 fi
+
+echo "::endgroup::"

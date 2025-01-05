@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+echo "::group:: $(basename "$0")"
+
 # build list of all packages requested for inclusion
 INCLUDED_PACKAGES=($(jq -r "[(.all.include | (select(.all != null).all)[]), \
                     (.all.include | (select(.\"$BASE_IMAGE_NAME\" != null).\"$BASE_IMAGE_NAME\")[]), \
@@ -53,3 +55,5 @@ if [[ "${#INSTALLED_EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     rpm-ostree override remove \
         ${INSTALLED_EXCLUDED_PACKAGES[@]}
 fi
+
+echo "::endgroup::"

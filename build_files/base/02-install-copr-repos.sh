@@ -1,7 +1,8 @@
-
 #!/usr/bin/bash
 
 set -eoux pipefail
+
+echo "::group:: $(basename "$0")"
 
 # Add Staging repo
 curl --retry 3 -Lo /etc/yum.repos.d/ublue-os-staging-fedora-"$(rpm -E %fedora)".repo \
@@ -13,3 +14,5 @@ curl --retry 3 -Lo /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.rep
 
 # Add Nerd Fonts Repo
 curl --retry 3 -Lo /etc/yum.repos.d/_copr_che-nerd-fonts-"$(rpm -E %fedora)".repo https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"$(rpm -E %fedora)"/che-nerd-fonts-fedora-"$(rpm -E %fedora)".repo
+
+echo "::endgroup::"

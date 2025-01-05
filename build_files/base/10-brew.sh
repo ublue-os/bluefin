@@ -2,6 +2,8 @@
 
 set -xeou pipefail
 
+echo "::group:: $(basename "$0")"
+
 # Convince the installer we are in CI
 touch /.dockerenv
 
@@ -14,3 +16,5 @@ curl --retry 3 -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/
 chmod +x /tmp/brew-install
 /tmp/brew-install
 tar --zstd -cvf /usr/share/homebrew.tar.zst /home/linuxbrew/.linuxbrew
+
+echo "::endgroup::"

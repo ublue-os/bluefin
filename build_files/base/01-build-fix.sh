@@ -2,6 +2,8 @@
 
 set -eoux pipefail
 
+echo "::group:: $(basename "$0")"
+
 # This script provides fixes to packages known to have caused build skew.
 # It works by force replacing packages on the FROM image with current
 # packages from fedora update repos.
@@ -50,3 +52,5 @@ rpm-ostree override replace \
 rpm-ostree override remove \
     glibc32 \
     || true
+
+echo "::endgroup::"

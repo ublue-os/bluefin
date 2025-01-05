@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+echo "::group:: $(basename "$0")"
+
 # Remove desktop entries
 if [[ -f /usr/share/applications/gnome-system-monitor.desktop ]]; then
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/gnome-system-monitor.desktop
@@ -51,3 +53,5 @@ glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
 
 # Watermark for Plymouth
 cp /usr/share/plymouth/themes/spinner/{silverblue-,}watermark.png
+
+echo "::endgroup::"

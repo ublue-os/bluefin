@@ -2,6 +2,8 @@
 
 set -eoux pipefail
 
+echo "::group:: $(basename "$0")"
+
 # Remove Existing Kernel
 for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra
 do
@@ -89,3 +91,5 @@ if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     depmod -a -v "${KERNEL}"
     echo "zfs" > /usr/lib/modules-load.d/zfs.conf
 fi
+
+echo "::endgroup::"

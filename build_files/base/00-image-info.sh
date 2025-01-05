@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+echo "::group:: $(basename "$0")"
+
 IMAGE_PRETTY_NAME="Bluefin"
 IMAGE_LIKE="fedora"
 HOME_URL="https://projectbluefin.io"
@@ -51,3 +53,5 @@ fi
 
 # Fix issues caused by ID no longer being fedora
 sed -i "s/^EFIDIR=.*/EFIDIR=\"fedora\"/" /usr/sbin/grub2-switch-to-blscfg
+
+echo "::endgroup::"
