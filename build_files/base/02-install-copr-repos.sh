@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -eoux pipefail
 
 # Add Staging repo
 curl --retry 3 -Lo /etc/yum.repos.d/ublue-os-staging-fedora-"$(rpm -E %fedora)".repo \

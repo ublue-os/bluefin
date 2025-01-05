@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -oue pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -oue pipefail
 
 if [[ "${AKMODS_FLAVOR}" == "surface" ]]; then
     KERNEL_SUFFIX="surface"

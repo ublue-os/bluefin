@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -eoux pipefail
 
 if [[ "${IMAGE_NAME}" =~ hwe ]]; then
     echo "HWE image detected, installing HWE packages"

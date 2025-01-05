@@ -1,12 +1,12 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+set -eou pipefail
 
+echo "::group:: Copy Files"
 # Make Alternatives Directory
 mkdir -p /var/lib/alternatives
 
 # Copy Files to Image
-echo "::group:: Copy Files"
 cp /ctx/packages.json /tmp/packages.json
 rsync -rvK /ctx/system_files/dx/ /
 echo "::endgroup::"

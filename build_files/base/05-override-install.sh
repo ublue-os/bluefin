@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -eoux pipefail
 
 # Patched shells
 rpm-ostree override replace \

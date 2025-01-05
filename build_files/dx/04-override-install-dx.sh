@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -eoux pipefail
 
 curl --retry 3 -Lo /tmp/kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64"
 chmod +x /tmp/kind

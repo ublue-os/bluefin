@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -ouex pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -ouex pipefail
 
 # Remove desktop entries
 if [[ -f /usr/share/applications/gnome-system-monitor.desktop ]]; then

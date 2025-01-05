@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -xeou pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -xeou pipefail
 
 # Convince the installer we are in CI
 touch /.dockerenv

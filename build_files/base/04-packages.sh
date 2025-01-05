@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -ouex pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -ouex pipefail
 
 # build list of all packages requested for inclusion
 INCLUDED_PACKAGES=($(jq -r "[(.all.include | (select(.all != null).all)[]), \

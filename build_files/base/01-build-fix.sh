@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -eoux pipefail
 
 # This script provides fixes to packages known to have caused build skew.
 # It works by force replacing packages on the FROM image with current

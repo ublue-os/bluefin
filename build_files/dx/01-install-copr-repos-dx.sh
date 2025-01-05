@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -eoux pipefail
 
 #incus, lxc, lxd
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then

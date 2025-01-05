@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -ouex pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -ouex pipefail
 
 IMAGE_PRETTY_NAME="Bluefin"
 IMAGE_LIKE="fedora"

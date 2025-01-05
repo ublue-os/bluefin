@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+echo "::group:: ===$(basename "$0")==="
 
-echo "::group:: $(basename "$0")"
+set -eoux pipefail
 
 # alternatives cannot create symlinks on its own during a container build
 if [[ -f "/usr/bin/ld.bfd" ]]; then

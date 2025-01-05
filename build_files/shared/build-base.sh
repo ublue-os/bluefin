@@ -1,12 +1,12 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+set -eou pipefail
 
+echo "::group:: Copy Files"
 # Make Alternatives Directory
 mkdir -p /var/lib/alternatives
 
 # Copy Files to Container
-echo "::group:: Copy Files"
 cp -r /ctx/just /tmp/just
 cp /ctx/packages.json /tmp/packages.json
 cp /ctx/system_files/shared/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
@@ -65,5 +65,5 @@ mv /var/lib/alternatives /staged-alternatives
 mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives &&
     mkdir -p /var/tmp &&
     chmod -R 1777 /var/tmp
-echo "::endgroup::"
 ostree container commit
+echo "::endgroup::"
