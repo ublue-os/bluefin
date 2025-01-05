@@ -351,7 +351,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     # https://artifacthub.io/docs/topics/repositories/container-images/
     # https://linux.die.net/man/1/date
     CREATED_DATE="$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)"
-    
+
     LABELS=()
     LABELS+=("org.opencontainers.image.created=$CREATED_DATE")
     LABELS+=("org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology")
