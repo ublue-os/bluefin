@@ -107,6 +107,8 @@ validate $image $tag $flavor:
 [group('Image')]
 build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="":
     #!/usr/bin/bash
+
+    echo "::group:: Build Prep"
     set -eoux pipefail
 
     # Validate
@@ -207,14 +209,17 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     LABELS+=("--label" "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4")
     LABELS+=("--label" "org.opencontainers.image.description=An interpretation of the Ubuntu spirit built on Fedora technology")
     LABELS+=("--label" "containers.bootc=1")
-    LABELS+=("--label" "org.opencontainers.image.created=$(date +'%Y-%m-%d')")
+    LABELS+=("--label" "org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)")
     LABELS+=("--label" "org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile")
     LABELS+=("--label" "org.opencontainers.image.url=https://projectbluefin.io")
     LABELS+=("--label" "org.opencontainers.image.vendor={{ repo_organization }}")
     LABELS+=("--label" "io.artifacthub.package.category=bootc-images")
     LABELS+=("--label" "io.artifacthub.package.deprecated=false")
     LABELS+=("--label" "io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue")
-    LABELS+=("--label" "io.artifacthub.package.maintainers=[{"name":"castrojo", "email": "jorge.castro@gmail.com"}]")
+    LABELS+=("--label" "io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]")
+
+    echo "::endgroup::"
+    echo "::group:: Build Container"
 
     # Build Image
     ${PODMAN} build \
@@ -224,6 +229,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         --tag "${image_name}:${tag}" \
         --file Containerfile \
         .
+    echo "::endgroup::"
 
     # Rechunk
     if [[ "{{ rechunk }}" == "1" && "{{ ghcr }}" == "1" && "{{ pipeline }}" == "1" ]]; then
@@ -260,6 +266,8 @@ build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
 [private]
 rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     #!/usr/bin/bash
+
+    echo "::group:: Rechunk Prep"
     set -eoux pipefail
 
     # Validate
@@ -301,20 +309,22 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     fi
 
     # Rest of Labels
-    LABELS="
-        io.artifacthub.package.category=bootc-images
-        io.artifacthub.package.deprecated=false
-        io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue
-        io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
-        io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]
-        io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md
-        org.opencontainers.image.created=$(date +'%Y-%m-%d')
-        org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile
-        org.opencontainers.image.title=${image_name}
-        org.opencontainers.image.url=https://projectbluefin.io
-        org.opencontainers.image.vendor={{ repo_organization }}
-        ostree.linux=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]')
-    "
+    LABELS=(
+        "io.artifacthub.package.category=bootc-images"
+        "io.artifacthub.package.deprecated=false"
+        "io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue"
+        "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4"
+        "io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]"
+        "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md"
+        "org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)"
+        "org.opencontainers.image.license=Apache-2.0"
+        "org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile"
+        "org.opencontainers.image.title=${image_name}"
+        "org.opencontainers.image.url=https://projectbluefin.io"
+        "org.opencontainers.image.vendor={{ repo_organization }}"
+        "ostree.linux=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]')"
+        "containers.bootc=1"
+    )
 
     # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
@@ -331,6 +341,9 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     # Rechunk Container
     rechunker="{{ rechunker_image }}"
 
+    echo "::endgroup::"
+    echo "::group:: Prune"
+
     # Run Rechunker's Prune
     ${SUDOIF} ${PODMAN} run --rm \
         --pull=newer \
@@ -340,6 +353,9 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         --user 0:0 \
         "${rechunker}" \
         /sources/rechunk/1_prune.sh
+
+    echo "::endgroup::"
+    echo "::group:: Create ostree tree"
 
     # Run Rechunker's Create
     ${SUDOIF} ${PODMAN} run --rm \
@@ -358,8 +374,11 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     ${SUDOIF} ${PODMAN} rm "$CREF"
     ${SUDOIF} ${PODMAN} rmi "$OLD_IMAGE"
 
+    echo "::endgroup::"
+    echo "::group:: Rechunker"
+
     # Run Rechunker
-    ${SUDOIF} ${PODMAN} run --rm \
+    IFS=$'\n'${SUDOIF} ${PODMAN} run --rm \
         --pull=newer \
         --security-opt label=disable \
         --volume "$PWD:/workspace" \
@@ -370,7 +389,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         --env OUT_NAME="$OUT_NAME" \
         --env LABELS="${LABELS}" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
-        --env "VERSION=${VERSION}" \
+        --env "VERSION=${VERSION[*]}" \
         --env VERSION_FN=/workspace/version.txt \
         --env OUT_REF="oci:$OUT_NAME" \
         --env GIT_DIR="/var/git" \
@@ -391,6 +410,8 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
 
     # Remove cache_ostree
     ${SUDOIF} ${PODMAN} volume rm cache_ostree
+
+    echo "::endgroup::"
 
     # Pipeline Checks
     if [[ {{ pipeline }} == "1" && -n "${SUDO_USER:-}" ]]; then
