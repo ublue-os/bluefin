@@ -38,6 +38,7 @@
 				"opendyslexic-fonts",
 				"printer-driver-brlaser",
 				"pulseaudio-utils",
+				"powertop",
 				"python3-pip",
 				"rclone",
 				"restic",
