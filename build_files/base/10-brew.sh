@@ -17,5 +17,4 @@ chmod +x /tmp/brew-install
 /tmp/brew-install
 tar --zstd -cvf /usr/share/homebrew.tar.zst /home/linuxbrew/.linuxbrew
 
-set +x
 echo "::endgroup::"

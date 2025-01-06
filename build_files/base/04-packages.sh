@@ -52,5 +52,4 @@ if [[ "${#INSTALLED_EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
         ${INSTALLED_EXCLUDED_PACKAGES[@]}
 fi
 
-set +x
 echo "::endgroup::"

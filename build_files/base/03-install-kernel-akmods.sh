@@ -92,5 +92,4 @@ if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     echo "zfs" > /usr/lib/modules-load.d/zfs.conf
 fi
 
-set +x
 echo "::endgroup::"

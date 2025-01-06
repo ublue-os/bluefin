@@ -59,5 +59,4 @@ mv -f /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml
 fc-cache -f /usr/share/fonts/ubuntu
 fc-cache -f /usr/share/fonts/inter
 
-set +x
 echo "::endgroup::"

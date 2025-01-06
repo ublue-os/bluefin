@@ -10,5 +10,4 @@ rm -rf /tmp/* || true
 rm -rf /var/!(cache)
 rm -rf /var/cache/!(rpm-ostree)
 
-set +x
 echo "::endgroup::"

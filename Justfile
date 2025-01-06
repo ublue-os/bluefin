@@ -378,7 +378,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     echo "::group:: Rechunker"
 
     # Run Rechunker
-    IFS=$'\n'${SUDOIF} ${PODMAN} run --rm \
+    IFS=$'\n' ${SUDOIF} ${PODMAN} run --rm \
         --pull=newer \
         --security-opt label=disable \
         --volume "$PWD:/workspace" \
@@ -387,9 +387,9 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         --env REPO=/var/ostree/repo \
         --env PREV_REF=ghcr.io/ublue-os/"${image_name}":"${tag}" \
         --env OUT_NAME="$OUT_NAME" \
-        --env LABELS="${LABELS}" \
+        --env LABELS="${LABELS[*]}" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
-        --env "VERSION=${VERSION[*]}" \
+        --env "VERSION=${VERSION}" \
         --env VERSION_FN=/workspace/version.txt \
         --env OUT_REF="oci:$OUT_NAME" \
         --env GIT_DIR="/var/git" \

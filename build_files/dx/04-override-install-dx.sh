@@ -20,5 +20,4 @@ rm -rf /tmp/monaspace-font*
 fc-cache -f /usr/share/fonts/monaspace
 fc-cache --system-only --really-force --verbose
 
-set +x
 echo "::endgroup::"

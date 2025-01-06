@@ -76,5 +76,4 @@ pinctrl_alderlake
 pinctrl_meteorlake
 EOF
 
-set +x
 echo "::endgroup::"

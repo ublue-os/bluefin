@@ -25,5 +25,4 @@ mv /tmp/rpms/* /tmp/akmods/
 # Install RPMS
 rpm-ostree install /tmp/akmods/kmods/*kvmfr*.rpm
 
-set +x
 echo "::endgroup::"

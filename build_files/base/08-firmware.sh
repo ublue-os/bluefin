@@ -12,5 +12,4 @@ xz --check=crc32 /tmp/mediatek-firmware/WIFI_RAM_CODE_MT7922_1.bin
 mv -vf /tmp/mediatek-firmware/* /usr/lib/firmware/mediatek/
 rm -rf /tmp/mediatek-firmware
 
-set +x
 echo "::endgroup::"

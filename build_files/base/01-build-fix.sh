@@ -53,5 +53,4 @@ rpm-ostree override remove \
     glibc32 \
     || true
 
-set +x
 echo "::endgroup::"
