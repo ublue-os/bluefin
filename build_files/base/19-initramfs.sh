@@ -14,4 +14,5 @@ QUALIFIED_KERNEL="$(rpm -qa | grep -P 'kernel-(|'"$KERNEL_SUFFIX"'-)(\d+\.\d+\.\
 /usr/libexec/rpm-ostree/wrapped/dracut --no-hostonly --kver "$QUALIFIED_KERNEL" --reproducible -v --add ostree -f "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
 chmod 0600 "/lib/modules/$QUALIFIED_KERNEL/initramfs.img"
 
+set +x
 echo "::endgroup::"

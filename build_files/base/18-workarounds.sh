@@ -19,4 +19,5 @@ fi
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
 
+set +x
 echo "::endgroup::"

@@ -380,6 +380,9 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         /sources/rechunk/3_chunk.sh
 
     # Fix Permissions of OCI
+    ${SUDOIF} find ${OUT_NAME} -type d -exec chmod 0755 {} \; || true
+    ${SUDOIF} find ${OUT_NAME}* -type f -exec chmod 0644 {} \; || true
+
     if [[ "${UID}" -gt "0" ]]; then
         ${SUDOIF} chown "${UID}:${GROUPS}" -R "${PWD}"
     elif [[ -n "${SUDO_UID:-}" ]]; then
