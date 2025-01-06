@@ -309,22 +309,22 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     fi
 
     # Rest of Labels
-    LABELS=(
-        "io.artifacthub.package.category=bootc-images"
-        "io.artifacthub.package.deprecated=false"
-        "io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue"
-        "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4"
-        "io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]"
-        "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md"
-        "org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)"
-        "org.opencontainers.image.license=Apache-2.0"
-        "org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile"
-        "org.opencontainers.image.title=${image_name}"
-        "org.opencontainers.image.url=https://projectbluefin.io"
-        "org.opencontainers.image.vendor={{ repo_organization }}"
-        "ostree.linux=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]')"
-        "containers.bootc=1"
-    )
+    LABELS="
+        io.artifacthub.package.category=bootc-images
+        io.artifacthub.package.deprecated=false
+        io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue
+        io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
+        io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]
+        io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md
+        org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)
+        org.opencontainers.image.license=Apache-2.0
+        org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile
+        org.opencontainers.image.title=${image_name}
+        org.opencontainers.image.url=https://projectbluefin.io
+        org.opencontainers.image.vendor={{ repo_organization }}
+        ostree.linux=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]')
+        containers.bootc=1
+    "
 
     # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
@@ -378,7 +378,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     echo "::group:: Rechunker"
 
     # Run Rechunker
-    IFS=$'\n' ${SUDOIF} ${PODMAN} run --rm \
+    ${SUDOIF} ${PODMAN} run --rm \
         --pull=newer \
         --security-opt label=disable \
         --volume "$PWD:/workspace" \
@@ -387,7 +387,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         --env REPO=/var/ostree/repo \
         --env PREV_REF=ghcr.io/ublue-os/"${image_name}":"${tag}" \
         --env OUT_NAME="$OUT_NAME" \
-        --env LABELS="${LABELS[*]}" \
+        --env LABELS="${LABELS}" \
         --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
         --env "VERSION=${VERSION}" \
         --env VERSION_FN=/workspace/version.txt \
