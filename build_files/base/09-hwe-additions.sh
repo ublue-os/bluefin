@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 if [[ "${IMAGE_NAME}" =~ hwe ]]; then
@@ -74,3 +76,4 @@ pinctrl_alderlake
 pinctrl_meteorlake
 EOF
 
+echo "::endgroup::"

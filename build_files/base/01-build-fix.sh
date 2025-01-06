@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 # This script provides fixes to packages known to have caused build skew.
@@ -50,3 +52,5 @@ rpm-ostree override replace \
 rpm-ostree override remove \
     glibc32 \
     || true
+
+echo "::endgroup::"
