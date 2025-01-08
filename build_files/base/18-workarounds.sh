@@ -19,4 +19,11 @@ fi
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
 
+# Ping sssd version
+# See Issue: https://github.com/ublue-os/bluefin/issues/2118
+if [ "$FEDORA_MAJOR_VERSION" -eq "41" ]; then
+      rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-bfd5344277
+fi
+
+
 echo "::endgroup::"
