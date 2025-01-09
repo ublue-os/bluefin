@@ -31,7 +31,6 @@ cat >$IMAGE_INFO <<EOF
   "image-tag":"$UBLUE_IMAGE_TAG",
   "base-image-name": "$BASE_IMAGE_NAME",
   "fedora-version": "$FEDORA_MAJOR_VERSION"
-  "version": "$VERSION"
 }
 EOF
 
