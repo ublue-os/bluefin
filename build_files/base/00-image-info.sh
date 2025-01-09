@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -ouex pipefail
 
 IMAGE_PRETTY_NAME="Bluefin"

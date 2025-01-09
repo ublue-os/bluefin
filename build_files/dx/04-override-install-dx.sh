@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 curl --retry 3 -Lo /tmp/kind "https://github.com/kubernetes-sigs/kind/releases/latest/download/kind-$(uname)-amd64"
@@ -17,3 +19,5 @@ rm -rf /tmp/monaspace-font*
 
 fc-cache -f /usr/share/fonts/monaspace
 fc-cache --system-only --really-force --verbose
+
+echo "::endgroup::"

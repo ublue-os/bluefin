@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 if [[ "${IMAGE_NAME}" =~ hwe ]]; then
@@ -40,23 +42,8 @@ rpm-ostree install \
     "${SURFACE_PACKAGES[@]}"
 
 tee /usr/lib/modules-load.d/ublue-surface.conf << EOF
-# Add modules necessary for Disk Encryption via keyboard
-surface_aggregator
-surface_aggregator_registry
-surface_aggregator_hub
-surface_hid_core
-8250_dw
-
-# Surface Laptop 3/Surface Book 3 and later
-surface_hid
-surface_kbd
-
 # Only on AMD models
 pinctrl_amd
-
-# Only on Intel models
-intel_lpss
-intel_lpss_pci
 
 # Surface Book 2
 pinctrl_sunrisepoint
@@ -72,5 +59,21 @@ pinctrl_alderlake
 
 # For Surface Pro 10/Surface Laptop 6
 pinctrl_meteorlake
+
+# Only on Intel models
+intel_lpss
+intel_lpss_pci
+
+# Add modules necessary for Disk Encryption via keyboard
+surface_aggregator
+surface_aggregator_registry
+surface_aggregator_hub
+surface_hid_core
+8250_dw
+
+# Surface Laptop 3/Surface Book 3 and later
+surface_hid
+surface_kbd
 EOF
 
+echo "::endgroup::"

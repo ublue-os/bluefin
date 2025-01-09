@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -xeou pipefail
 
 # Convince the installer we are in CI
@@ -14,3 +16,5 @@ curl --retry 3 -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/
 chmod +x /tmp/brew-install
 /tmp/brew-install
 tar --zstd -cvf /usr/share/homebrew.tar.zst /home/linuxbrew/.linuxbrew
+
+echo "::endgroup::"
