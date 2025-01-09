@@ -226,7 +226,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         "${BUILD_ARGS[@]}" \
         "${LABELS[@]}" \
         --target "${target}" \
-        --tag "${image_name}:${tag}" \
+        --tag localhost/"${image_name}:${tag}" \
         --file Containerfile \
         .
     echo "::endgroup::"
