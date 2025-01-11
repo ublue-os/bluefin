@@ -55,6 +55,7 @@
 				"stress-ng",
 				"tailscale",
 				"tmux",
+				"ublue-motd",
 				"usbmuxd",
 				"wireguard-tools",
 				"xprop",
