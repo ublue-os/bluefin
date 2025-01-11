@@ -11,19 +11,20 @@ systemctl enable libvirt-workaround.service
 systemctl enable bluefin-dx-groups.service
 systemctl enable --global bluefin-dx-user-vscode.service
 
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ublue-os-staging-fedora-"${FEDORA_MAJOR_VERSION}".repo
-if [[ -f /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo ]]; then
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ganto-lxc4-fedora-"${FEDORA_MAJOR_VERSION}".repo
+dnf5 -y copr disable ublue-os/staging
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
+    dnf5 -y copr disable ganto/lxc4
 fi
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/ganto-umoci-fedora-"${FEDORA_MAJOR_VERSION}".repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/karmab-kcli-fedora-"${FEDORA_MAJOR_VERSION}".repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/atim-ubuntu-fonts-fedora-"${FEDORA_MAJOR_VERSION}".repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/hikariknight-looking-glass-kvmfr-fedora-"${FEDORA_MAJOR_VERSION}".repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/gmaglione-podman-bootc-fedora-"${FEDORA_MAJOR_VERSION}".repo
+dnf5 -y copr disable ganto/umoci
+dnf5 -y copr disable karmab/kcli
+dnf5 -y copr disable atim/ubuntu-fonts
+dnf5 -y copr disable hikariknight/looking-glass-kvmfr
+dnf5 -y copr disable gmaglione/podman-bootc
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/vscode.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/docker-ce.repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:phracek:PyCharm.repo
+dnf5 -y copr disable phracek/PyCharm
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
+# NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 
 for i in /etc/yum.repos.d/rpmfusion-*; do
