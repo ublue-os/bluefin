@@ -49,6 +49,13 @@ pip install --prefix=/usr topgrade
 # Install ublue-update -- breaks with packages.json due to missing topgrade
 rpm-ostree install ublue-update
 
+# Required for bluefin faces to work without conflicting with a ton of packages
+rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
+mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
+rm -rf /usr/share/pixmaps/faces/bluefin
+
+rpm-ostree override remove fedora-logos --install=bluefin-logos
+
 # Consolidate Just Files
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
 
