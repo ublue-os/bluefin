@@ -22,7 +22,7 @@ benchmark:
 # Configure Bluefin-CLI Terminal Experience with Brew
 [group('System')]
 bluefin-cli:
-    @/usr/libexec/ublue-bling.sh
+    @/usr/libexec/ublue-bling
 
 # alias for toggle-devmode
 devmode:
