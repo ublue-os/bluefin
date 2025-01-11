@@ -46,14 +46,8 @@ echo 'eval "$(starship init bash)"' >> /etc/bashrc
 # Topgrade Install
 pip install --prefix=/usr topgrade
 
-# Install ublue-update -- breaks with packages.json due to missing topgrade
-rpm-ostree install ublue-update
-
 # Consolidate Just Files
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
-
-# Move over ublue-update config
-mv -f /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml
 
 # Register Fonts
 fc-cache -f /usr/share/fonts/ubuntu
