@@ -4,7 +4,7 @@ on:
     inputs:
       image_flavors:
         description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
-        default: "['main', 'nvidia']"
+        default: "['main', 'nvidia', 'nvidia-open']"
         type: string
       brand_name:
         description: "The Brand Name: bluefin"
@@ -40,13 +40,7 @@ jobs:
 
       - name: Install Just
         shell: bash
-        run: |
-          set -eoux pipefail
-          JUST_VERSION=$(curl -L https://api.github.com/repos/casey/just/releases/latest | jq -r '.tag_name')
-          curl -sSLO https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
-          tar -zxvf just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz -C /tmp just
-          sudo mv /tmp/just /usr/local/bin/just
-          rm -f just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
+        run: bash .github/workflows/shared/install-just.sh
 
       - name: Check Just Syntax
         shell: bash
@@ -77,7 +71,7 @@ jobs:
 
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.ref_name == 'testing'
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         with:
           name: ${{ env.ISO_NAME }}
           path: ${{ steps.upload-directory.outputs.iso-upload-dir }}

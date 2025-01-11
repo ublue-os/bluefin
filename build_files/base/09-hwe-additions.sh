@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 if [[ "${IMAGE_NAME}" =~ hwe ]]; then
@@ -40,6 +42,28 @@ dnf5 -y install \
     "${SURFACE_PACKAGES[@]}"
 
 tee /usr/lib/modules-load.d/ublue-surface.conf << EOF
+# Only on AMD models
+pinctrl_amd
+
+# Surface Book 2
+pinctrl_sunrisepoint
+
+# For Surface Laptop 3/Surface Book 3
+pinctrl_icelake
+
+# For Surface Laptop 4/Surface Laptop Studio
+pinctrl_tigerlake
+
+# For Surface Pro 9/Surface Laptop 5
+pinctrl_alderlake
+
+# For Surface Pro 10/Surface Laptop 6
+pinctrl_meteorlake
+
+# Only on Intel models
+intel_lpss
+intel_lpss_pci
+
 # Add modules necessary for Disk Encryption via keyboard
 surface_aggregator
 surface_aggregator_registry
@@ -50,18 +74,6 @@ surface_hid_core
 # Surface Laptop 3/Surface Book 3 and later
 surface_hid
 surface_kbd
-
-# Only on AMD models
-pinctrl_amd
-
-# Only on Intel models
-intel_lpss
-intel_lpss_pci
-
-# For Surface Laptop 3/Surface Book 3
-pinctrl_icelake
-
-# For Surface Laptop 4/Surface Laptop Studio
-pinctrl_tigerlake
 EOF
 
+echo "::endgroup::"

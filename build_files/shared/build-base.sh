@@ -2,6 +2,8 @@
 
 set -eoux pipefail
 
+echo "::group:: ===Remove CLI Wrap==="
+
 # there is no 'rpm-ostree cliwrap uninstall-from-root', but this is close enough. See:
 # https://github.com/coreos/rpm-ostree/blob/6d2548ddb2bfa8f4e9bafe5c6e717cf9531d8001/rust/src/cliwrap.rs#L25-L32
 if [ -d /usr/libexec/rpm-ostree/wrapped ]; then
@@ -18,6 +20,9 @@ fi
 if [ ${FEDORA_MAJOR_VERSION} -lt 41 ]; then
     rpm-ostree install --idempotent dnf5 dnf5-plugins
 fi
+echo "::endgroup::"
+
+echo "::group:: Copy Files"
 
 # Make Alternatives Directory
 mkdir -p /var/lib/alternatives
@@ -28,6 +33,7 @@ cp /ctx/packages.json /tmp/packages.json
 cp /ctx/system_files/shared/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 rsync -rvK /ctx/system_files/shared/ /
 rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
+echo "::endgroup::"
 
 # Generate image-info.json
 /ctx/build_files/base/00-image-info.sh
@@ -59,7 +65,6 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 # Install Brew
 /ctx/build_files/base/10-brew.sh
 
-
 ## late stage changes
 
 # Make sure Bootc works
@@ -75,9 +80,11 @@ rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
 /ctx/build_files/base/19-initramfs.sh
 
 # Clean Up
+echo "::group:: Cleanup"
 mv /var/lib/alternatives /staged-alternatives
 /ctx/build_files/shared/clean-stage.sh
-mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives && \
-mkdir -p /var/tmp && \
-chmod -R 1777 /var/tmp
+mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives &&
+    mkdir -p /var/tmp &&
+    chmod -R 1777 /var/tmp
 ostree container commit
+echo "::endgroup::"

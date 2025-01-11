@@ -1,3 +1,4 @@
+#!/bin/bash
 KEY_WARN_FILE="/run/user-motd-sbkey-warn.md"
 
 if [ -e $KEY_WARN_FILE ]; then

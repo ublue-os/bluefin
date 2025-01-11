@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 #incus, lxc, lxd
@@ -25,3 +27,5 @@ dnf5 -y copr enable hikariknight/looking-glass-kvmfr
 
 # Podman-bootc
 dnf5 -y copr enable gmaglione/podman-bootc
+
+echo "::endgroup::"

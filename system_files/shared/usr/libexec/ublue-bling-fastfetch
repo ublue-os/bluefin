@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-THEME=$(gsettings get org.gnome.desktop.interface accent-color || echo "'slate'")
+THEME=$(gsettings get org.gnome.desktop.interface accent-color 2>/dev/null || echo "'slate'")
 THEME=${THEME//\'/}
 
 FASTFETCH_COLOR_SET="38;2;53;132;228"

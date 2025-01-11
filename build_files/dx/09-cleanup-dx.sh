@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 systemctl enable docker.socket
@@ -8,8 +10,6 @@ systemctl enable swtpm-workaround.service
 systemctl enable libvirt-workaround.service
 systemctl enable bluefin-dx-groups.service
 systemctl enable --global bluefin-dx-user-vscode.service
-systemctl disable pmie.service
-systemctl disable pmlogger.service
 
 dnf5 -y copr disable ublue-os/staging
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
@@ -30,3 +30,5 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 for i in /etc/yum.repos.d/rpmfusion-*; do
     sed -i 's@enabled=1@enabled=0@g' "$i"
 done
+
+echo "::endgroup::"

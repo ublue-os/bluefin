@@ -1,13 +1,15 @@
 #!/usr/bin/bash
 
-set -eoux pipefail
+set -eou pipefail
 
+echo "::group:: Copy Files"
 # Make Alternatives Directory
 mkdir -p /var/lib/alternatives
 
 # Copy Files to Image
 cp /ctx/packages.json /tmp/packages.json
 rsync -rvK /ctx/system_files/dx/ /
+echo "::endgroup::"
 
 # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
 sysctl -p
@@ -27,16 +29,15 @@ sysctl -p
 # Fetch Install
 /ctx/build_files/dx/04-override-install-dx.sh
 
-# Branding Changes
-sed -i '/^PRETTY_NAME/s/Bluefin/Bluefin-dx/' /usr/lib/os-release
-
 # Systemd and Disable Repos
 /ctx/build_files/dx/09-cleanup-dx.sh
 
 # Clean Up
+echo "::group:: Cleanup"
 mv /var/lib/alternatives /staged-alternatives
 /ctx/build_files/shared/clean-stage.sh
 mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives && \
 mkdir -p /var/tmp && \
 chmod -R 1777 /var/tmp
 ostree container commit
+echo "::endgroup::"

@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 # This script provides fixes to packages known to have caused build skew.
@@ -20,5 +22,11 @@ done
 dnf5 -y upgrade \
     --repo=updates \
     elfutils-libelf \
-    elfutils-libs ||
-    true
+    elfutils-libs \
+    || true
+
+rpm-ostree override remove \
+    glibc32 \
+    || true
+
+echo "::endgroup::"

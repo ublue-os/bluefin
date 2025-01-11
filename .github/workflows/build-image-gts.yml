@@ -21,7 +21,7 @@ jobs:
       matrix:
         brand_name: [bluefin]
     with:
-#     kernel_pin: 6.11.3-200.fc40.x86_64     ## This is where kernels get pinned.
+      kernel_pin: 6.11.11-200.fc40.x86_64     ## This is where kernels get pinned.
       brand_name: ${{ matrix.brand_name }}
       stream_name: gts
 
@@ -33,9 +33,9 @@ jobs:
     with:
       stream_name: '["gts"]'
 
-  build-iso-gts:
-    name: Build GTS ISOs
-    needs: [build-image-gts]
-    if: github.event_name == 'schedule'
-    secrets: inherit
-    uses: ./.github/workflows/build-iso-gts.yml
+  # build-iso-gts:
+  #   name: Build GTS ISOs
+  #   needs: [build-image-gts]
+  #   if: github.event_name == 'schedule'
+  #   secrets: inherit
+  #   uses: ./.github/workflows/build-iso-gts.yml

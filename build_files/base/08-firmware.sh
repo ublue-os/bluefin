@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+echo "::group:: ===$(basename "$0")==="
+
 set -eoux pipefail
 
 mkdir -p /tmp/mediatek-firmware
@@ -9,3 +11,5 @@ xz --check=crc32 /tmp/mediatek-firmware/WIFI_MT7922_patch_mcu_1_1_hdr.bin
 xz --check=crc32 /tmp/mediatek-firmware/WIFI_RAM_CODE_MT7922_1.bin
 mv -vf /tmp/mediatek-firmware/* /usr/lib/firmware/mediatek/
 rm -rf /tmp/mediatek-firmware
+
+echo "::endgroup::"

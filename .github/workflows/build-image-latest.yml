@@ -23,7 +23,7 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
-      image_flavors: '["main", "nvidia", "hwe", "hwe-nvidia"]'
+      image_flavors: '["main", "nvidia", "nvidia-open", "hwe", "hwe-nvidia", "hwe-nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
     # This needs splitting, right now a kernel pin will not work due to hwe kernel
@@ -36,10 +36,9 @@ jobs:
     with:
       stream_name: '["latest"]'
 
-  build-iso-latest:
-    name: Build Latest ISOs
-    needs: [build-image-latest]
-    if: github.event.schedule == '50 4 * * 0'
-    
-    secrets: inherit
-    uses: ./.github/workflows/build-iso-latest.yml
+  # build-iso-latest:
+  #   name: Build Latest ISOs
+  #   needs: [build-image-latest]
+  #   if: github.event.schedule == '50 4 * * 0'
+  #   secrets: inherit
+  #   uses: ./.github/workflows/build-iso-latest.yml

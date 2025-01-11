@@ -38,14 +38,8 @@ jobs:
 
       - name: Install Just
         shell: bash
-        run: |
-          set -eoux pipefail
-          JUST_VERSION=$(curl -L https://api.github.com/repos/casey/just/releases/latest | jq -r '.tag_name')
-          curl -sSLO https://github.com/casey/just/releases/download/${JUST_VERSION}/just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
-          tar -zxvf just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz -C /tmp just
-          sudo mv /tmp/just /usr/local/bin/just
-          rm -f just-${JUST_VERSION}-x86_64-unknown-linux-musl.tar.gz
-        
+        run: bash .github/workflows/shared/install-just.sh
+
       - name: Check Just Syntax
         shell: bash
         run: |
@@ -61,7 +55,7 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2
         if: contains(fromJson('["gts", "stable"]'), matrix.version) && (github.event.schedule == '50 5 * * 0' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
         with:
           name: ${{ steps.generate-release-text.outputs.title }}
