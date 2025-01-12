@@ -4,7 +4,6 @@ echo "::group:: ===$(basename "$0")==="
 
 set -ouex pipefail
 
-# NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 
 # Fetch Kernel RPMS
@@ -14,7 +13,7 @@ tar -xvzf /tmp/kernel-rpms/"$KERNEL_TARGZ" -C /
 mv /tmp/rpms/* /tmp/kernel-rpms/
 
 if [[ -z "$(grep kernel-devel <<<$(rpm -qa))" ]]; then
-    dnf5 -y install /tmp/kernel-rpms/kernel-devel-*.rpm
+    rpm-ostree install /tmp/kernel-rpms/kernel-devel-*.rpm
 fi
 
 # Fetch AKMODS RPMS
@@ -24,6 +23,6 @@ tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
 mv /tmp/rpms/* /tmp/akmods/
 
 # Install RPMS
-dnf5 -y install /tmp/akmods/kmods/*kvmfr*.rpm
+rpm-ostree install /tmp/akmods/kmods/*kvmfr*.rpm
 
 echo "::endgroup::"
