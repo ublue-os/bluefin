@@ -22,7 +22,7 @@ benchmark:
 # Configure Bluefin-CLI Terminal Experience with Brew
 [group('System')]
 bluefin-cli:
-    @/usr/libexec/ublue-bling.sh
+    @/usr/libexec/ublue-bling
 
 # alias for toggle-devmode
 devmode:
@@ -146,8 +146,8 @@ configure-vfio ACTION="":
     This is only used for GPU passthrough of a secondary dGPU.
     It will enable vfio and configure kvmfr for use with $(Urllink "https://looking-glass.io" "Looking Glass")
     If you do not plan to use any of this then press ESC.
-    EOF
     ${bold}NOTE:${normal} Since this is a niche use case, support will be ${b}very limited${n}
+    EOF
         OPTION=$(Choose \
           "Enable VFIO drivers" \
           "Disable VFIO drivers" \
@@ -156,32 +156,31 @@ configure-vfio ACTION="":
     fi
     if [[ "${OPTION,,}" =~ (^enable[[:space:]]vfio|vfio-on) ]]; then
         echo "Enabling VFIO..."
-        VIRT_TEST=$(rpm-ostree kargs)
         CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
         VENDOR_KARG="unset"
-        if [[ ${VIRT_TEST} == *kvm.report_ignored_msrs* ]]; then
-            echo 'add_drivers+=" vfio vfio_iommu_type1 vfio-pci "' | sudo tee /etc/dracut.conf.d/vfio.conf
-            rpm-ostree initramfs --enable
-            if [[ ${CPU_VENDOR} == "AuthenticAMD" ]]; then
-                VENDOR_KARG="amd_iommu=on"
-            elif [[ ${CPU_VENDOR} == "GenuineIntel" ]]; then
-                VENDOR_KARG="intel_iommu=on"
-            fi
-            if [[ ${VENDOR_KARG} == "unset" ]]; then
-                echo "Failed to get CPU vendor, exiting..."
-                exit 1
-            else
-                rpm-ostree kargs \
-                  --append-if-missing="${VENDOR_KARG}" \
-                  --append-if-missing="iommu=pt" \
-                  --append-if-missing="rd.driver.pre=vfio_pci" \
-                  --append-if-missing="vfio_pci.disable_vga=1"
-                echo "VFIO will be enabled on next boot, make sure you enable IOMMU, VT-d or AMD-v in your BIOS!"
-                echo "Please understand that since this is such a niche use case, support will be very limited!"
-                echo "To add your unused/second GPU device ids to the vfio driver by running"
-                echo 'rpm-ostree kargs --append-if-missing="vfio-pci.ids=xxxx:yyyy,xxxx:yyzz"'
-                echo "NOTE: Your second GPU will not be usable by the host after you do this!"
-            fi
+        echo 'add_drivers+=" vfio vfio_iommu_type1 vfio-pci "' | sudo tee /etc/dracut.conf.d/vfio.conf
+        rpm-ostree initramfs --enable
+        if [[ ${CPU_VENDOR} == "AuthenticAMD" ]]; then
+            VENDOR_KARG="amd_iommu=on"
+        elif [[ ${CPU_VENDOR} == "GenuineIntel" ]]; then
+            VENDOR_KARG="intel_iommu=on"
+        fi
+        if [[ ${VENDOR_KARG} == "unset" ]]; then
+            echo "Failed to get CPU vendor, exiting..."
+            exit 1
+        else
+            rpm-ostree kargs \
+                --append-if-missing="${VENDOR_KARG}" \
+                --append-if-missing="iommu=pt" \
+                --append-if-missing="rd.driver.pre=vfio_pci" \
+                --append-if-missing="vfio_pci.disable_vga=1" \
+                --append-if-missing="kvm.ignore_msrs=1" \
+                --append-if-missing="kvm.report_ignored_msrs=0"
+            echo "VFIO will be enabled on next boot, make sure you enable IOMMU, VT-d or AMD-v in your BIOS!"
+            echo "Please understand that since this is such a niche use case, support will be very limited!"
+            echo "To add your unused/second GPU device ids to the vfio driver by running"
+            echo 'rpm-ostree kargs --append-if-missing="vfio-pci.ids=xxxx:yyyy,xxxx:yyzz"'
+            echo "NOTE: Your second GPU will not be usable by the host after you do this!"
         fi
     elif [[ "${OPTION,,}" =~ (^disable[[:space:]]vfio|vfio-off) ]]; then
         echo ""
