@@ -1,3 +1,0 @@
-[Context]
-sockets=wayland;
-filesystems=xdg-run/podman;
