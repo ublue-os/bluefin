@@ -5,28 +5,36 @@ echo "::group:: ===$(basename "$0")==="
 set -eoux pipefail
 
 # Patched shells
-dnf5 -y swap \
---repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-    gnome-shell gnome-shell
+rpm-ostree override replace \
+--experimental \
+--from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+    gnome-shell
 
 # GNOME Triple Buffering
 if [[ "${BASE_IMAGE_NAME}" =~ silverblue && "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then
-    dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        mutter mutter
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        mutter \
+        mutter-common
 fi
 
 # Fix for ID in fwupd
-dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        fwupd fwupd
+rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        fwupd \
+        fwupd-plugin-flashrom \
+        fwupd-plugin-modem-manager \
+        fwupd-plugin-uefi-capsule-data
 
 # Switcheroo patch
-dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
-        switcheroo-control switcheroo-control
+rpm-ostree override replace \
+    --experimental \
+    --from repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
+        switcheroo-control
 
-dnf5 -y copr remove sentry/switcheroo-control_discrete
+rm /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo
 
 # Starship Shell Prompt
 curl --retry 3 -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
@@ -39,7 +47,7 @@ echo 'eval "$(starship init bash)"' >> /etc/bashrc
 pip install --prefix=/usr topgrade
 
 # Install ublue-update -- breaks with packages.json due to missing topgrade
-dnf5 -y install ublue-update
+rpm-ostree install ublue-update
 
 # Required for bluefin faces to work without conflicting with a ton of packages
 rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
