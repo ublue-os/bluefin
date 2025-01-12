@@ -39,13 +39,9 @@
 				"make",
 				"mesa-libGLU",
 				"nerd-fonts",
-<<<<<<< HEAD
-				"openrazer-daemon",
-				"playerctl",
-=======
 				"oddjob-mkhomedir",
 				"opendyslexic-fonts",
->>>>>>> b4bb0071e72483a33d95e93034fb324717b8a85c
+				"openrazer-daemon",
 				"printer-driver-brlaser",
 				"pulseaudio-utils",
 				"powertop",
