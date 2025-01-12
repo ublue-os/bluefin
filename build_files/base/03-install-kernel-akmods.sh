@@ -17,7 +17,7 @@ tar -xvzf /tmp/kernel-rpms/"$KERNEL_TARGZ" -C /
 mv /tmp/rpms/* /tmp/kernel-rpms/
 
 # Install Kernel
-rpm-ostree install \
+dnf5 -y install \
     /tmp/kernel-rpms/kernel-[0-9]*.rpm \
     /tmp/kernel-rpms/kernel-core-*.rpm \
     /tmp/kernel-rpms/kernel-modules-*.rpm
@@ -29,20 +29,21 @@ tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
 mv /tmp/rpms/* /tmp/akmods/
 
 # Everyone
+# NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
-rpm-ostree install \
+dnf5 -y install \
     /tmp/akmods/kmods/*xone*.rpm \
     /tmp/akmods/kmods/*xpadneo*.rpm \
     /tmp/akmods/kmods/*openrazer*.rpm \
     /tmp/akmods/kmods/*framework-laptop*.rpm
 
 # RPMFUSION Dependent AKMODS
-rpm-ostree install \
+dnf5 -y install \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
-rpm-ostree install \
+dnf5 -y install \
     v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-rpm-ostree uninstall rpmfusion-free-release rpmfusion-nonfree-release
+dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
 
 # Nvidia AKMODS
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
@@ -85,7 +86,7 @@ if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     )
 
     # Install
-    rpm-ostree install "${ZFS_RPMS[@]}"
+    dnf5 -y install "${ZFS_RPMS[@]}"
 
     # Depmod and autoload
     depmod -a -v "${KERNEL}"
