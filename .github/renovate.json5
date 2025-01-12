@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+  ],
+
+  // Do not rebase when the default branch is updated
+  "rebaseWhen": "never",
+
+  "packageRules": [
+    {
+      "automerge": true,
+      "matchUpdateTypes": ["pin", "pinDigest"]
+    },
+    {
+      "automerge": true,
+      "matchManagers": ["dockerfile"],
+      "matchUpdateTypes": ["digest"]
+    },
+    {
+      // Do not pin digest for jasonn3/build-container-installer GitHub Action since Docker
+      // images are not tagged with the commit sha
+      "matchUpdateTypes": ["pin", "digest", "pinDigest"],
+      "matchPackageNames": ["jasonn3/build-container-installer"],
+      "enabled": false
+    }
+  ]
+}

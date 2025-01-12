@@ -1,0 +1,35 @@
+name: Beta Images
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - "**.md"
+  schedule:
+    - cron: "50 4 * * 1,2,3,4,5,6" # 4:50 UTC All But Sunday
+    - cron: "50 4 * * 0" # 4:50 UTC Sunday
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build-image-beta:
+    name: Build Beta Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        brand_name: ["bluefin"]
+    with:
+      brand_name: ${{ matrix.brand_name }}
+      stream_name: beta
+
+  generate-release:
+    name: Generate Release
+    needs: [build-image-beta]
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      stream_name: '["beta"]'

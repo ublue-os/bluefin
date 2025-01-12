@@ -5,19 +5,25 @@ source /usr/lib/ujust/ujust.sh
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
 IMAGE_TAG=$(jq -r '."image-tag"' < $IMAGE_INFO)
+IMAGE_VENDOR=$(jq -r '."image-vendor"' < $IMAGE_INFO)
 FEDORA_VERSION=$(jq -r '."fedora-version"' < $IMAGE_INFO)
+IMAGE_REGISTRY="ghcr.io/${IMAGE_VENDOR}"
 
 function list_tags(){
-    skopeo list-tags docker://ghcr.io/ublue-os/${IMAGE_NAME} | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV
+    skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV | head -n 31
 }
 
 function rebase_helper(){
-    base_image="ghcr.io/ublue-os/${IMAGE_NAME}"
+    base_image="${IMAGE_REGISTRY}/${IMAGE_NAME}"
     echo "Which Tag would you like to rebase to?"
-    choose_target=$(Choose date latest gts cancel)
-    if [[ "$choose_target" == "latest" || "$choose_target" == "gts" ]]; then
-        rebase_target="${base_image}:$choose_target"
+    CHANNELS=(latest stable stable-daily gts)
+    echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+    choose_target=$(Choose date "${CHANNELS[@]}" cancel)
+    if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
+        rebase_target="${base_image}:${choose_target}"
     elif [[ "$choose_target" == "date" ]]; then
+        # shellcheck disable=SC2207
+        echo "Warning: This will pin you to a specific version, do not forget to rebase back to a channel to resume receiving updates."
         valid_tags=( $(list_tags | sed 's/\"//g' | sed 's/,//g'))
         target_tag=$(Choose cancel "${valid_tags[@]}")
         if  grep -Eq "$FEDORA_VERSION-([0-9]+)" <<< "${target_tag}"; then
@@ -29,22 +35,28 @@ function rebase_helper(){
     else
         return 1
     fi
-    if  [[ "$choose_target" == "gts" && "$IMAGE_TAG" != "gts" ]]; then 
+    if  [[ "$choose_target" =~ "gts" && "$IMAGE_TAG" != "$choose_target" ]]; then
         echo "Warning rolling back Major Fedora Versions may not work"
     fi
     echo "Rebase Target is ${rebase_target}"
     echo "Confirm Rebase"
-    if [[ $(Confirm) -eq "0" ]]; then
-        rpm-ostree rebase ostree-image-signed:docker://"${rebase_target}"
-    else
+    if [[ $(Confirm) -ne "0" ]]; then
         return 1
     fi
+
+    if /usr/bin/grep "^LockLayering=true" /etc/rpm-ostreed.conf &> /dev/null; then
+        pkexec bootc switch --enforce-container-sigpolicy "${rebase_target}"
+        return 0
+    fi
+    rpm-ostree rebase ostree-image-signed:docker://"${rebase_target}"
+    return 0
 }
 
+echo "Choose your action."
 option=$(Choose rebase cancel)
 
 if [[ "$option" == "rebase" ]]; then
     rebase_helper || /usr/bin/ublue-rollback-helper
 else
     exit 0
-fi 
+fi

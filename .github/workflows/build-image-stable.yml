@@ -1,0 +1,43 @@
+name: Stable Images
+on:
+  merge_group: # Make Stable-Daily run on merge groups
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - "**.md"
+  schedule:
+    - cron: "50 5 * * 1,2,3,4,5,6" # 5:50 UTC everyday
+    - cron: "50 5 * * 0" # 5:50 UTC sunday
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build-image-stable:
+    name: Build Stable Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        brand_name: ["bluefin"]
+    with:
+      kernel_pin: 6.11.11-300.fc41.x86_64 ## This is where kernels get pinned.
+      brand_name: ${{ matrix.brand_name }}
+      stream_name: stable
+
+  generate-release:
+    name: Generate Release
+    needs: [build-image-stable]
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      stream_name: '["stable", "stable-daily"]'
+
+  # build-iso-stable:
+  #   name: Build Stable ISOs
+  #   needs: [build-image-stable]
+  #   if: github.event.schedule == '50 5 * * 0'
+  #   secrets: inherit
+  #   uses: ./.github/workflows/build-iso-stable.yml

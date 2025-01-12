@@ -1,8 +1,0 @@
-[Desktop Entry]
-Exec=/usr/libexec/distrobox-quadlet-ptyxis.sh fedora-toolbox
-Name=Fedora-Toolbox
-NoDisplay=true
-StartupNotification=false
-Type=Application
-X-KDE-GlobalAccel-CommandShortcut=true
-X-KDE-Shortcuts=Ctrl+Alt+F
