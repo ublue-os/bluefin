@@ -59,6 +59,7 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
 
     # Install Nvidia RPMs
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh
+    sed -i "s/rpm-ostree install/dnf install -y/" /tmp/nvidia-install.sh
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
