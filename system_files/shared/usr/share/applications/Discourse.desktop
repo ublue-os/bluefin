@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-NoDisplay=false
-Terminal=false
-Exec=xdg-open https://universal-blue.discourse.group/c/bluefin/
-Icon=ublue-discourse
-Name=Community
-Comment=Universal Blue Forums
-Categories=Utility;
