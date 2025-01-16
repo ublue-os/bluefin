@@ -71,8 +71,8 @@ if [[ ":Framework:" =~ ":$VEN_ID:" ]]; then
     if [[ "AuthenticAMD" == "$CPU_VENDOR" ]]; then
       if [[ ! -f /etc/modprobe.d/alsa.conf ]]; then
         echo 'Fixing 3.5mm jack'
-        sudo tee /etc/modprobe.d/alsa.conf <<< "options snd-hda-intel index=1,0 model=auto,dell-headset-multi"
-        echo 0 | sudo tee /sys/module/snd_hda_intel/parameters/power_save
+        tee /etc/modprobe.d/alsa.conf <<< "options snd-hda-intel index=1,0 model=auto,dell-headset-multi"
+        echo 0 | tee /sys/module/snd_hda_intel/parameters/power_save
       fi
       if [[ ! -f /etc/udev/rules.d/20-suspend-fixes.rules ]]; then
         echo 'Fixing suspend issue'
