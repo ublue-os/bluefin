@@ -35,11 +35,11 @@ toggle-devmode:
     source /usr/lib/ujust/ujust.sh
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
     if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE ; then
-        cat <<EOF
+        bash -c "cat <<EOF
     Before we can switch to the Bluefin Developer Experience
     the current system needs an update. Please run 'ujust update'
     and reboot your system when the update is finished
-    EOF
+    EOF"
         exit
     fi
     if /bin/grep -q "\-dx" <<< $CURRENT_IMAGE ; then
@@ -132,22 +132,22 @@ configure-vfio ACTION="":
     fi
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
-        cat <<EOF
+        bash -c "cat <<EOF
     Usage: ujust configure-vfio <option>
       <option>: Specify the quick option to skip the prompt
       Use 'vfio-on' to select Enable VFIO drivers
       Use 'vfio-off' to select Disable VFIO drivers
-      Use 'kvmfr' to select Autocreate Looking-Glass shm
-    EOF
+      Use 'kvmfr' to enable kvmfr module for looking-glass
+    EOF"
         exit 0
     elif [ "$OPTION" == "" ]; then
-        cat <<EOF
+        bash -c "cat <<EOF
     ${bold}VFIO and kvmfr Configuration${normal}
     This is only used for GPU passthrough of a secondary dGPU.
     It will enable vfio and configure kvmfr for use with $(Urllink "https://looking-glass.io" "Looking Glass")
     If you do not plan to use any of this then press ESC.
     ${bold}NOTE:${normal} Since this is a niche use case, support will be ${b}very limited${n}
-    EOF
+    EOF"
         OPTION=$(Choose \
           "Enable VFIO drivers" \
           "Disable VFIO drivers" \
@@ -158,8 +158,6 @@ configure-vfio ACTION="":
         echo "Enabling VFIO..."
         CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
         VENDOR_KARG="unset"
-        echo 'add_drivers+=" vfio vfio_iommu_type1 vfio-pci "' | sudo tee /etc/dracut.conf.d/vfio.conf
-        rpm-ostree initramfs --enable
         if [[ ${CPU_VENDOR} == "AuthenticAMD" ]]; then
             VENDOR_KARG="amd_iommu=on"
         elif [[ ${CPU_VENDOR} == "GenuineIntel" ]]; then
@@ -195,9 +193,6 @@ configure-vfio ACTION="":
               echo "$VFIO_IDS"
               VFIO_IDS_KARG="--delete-if-present=\"$VFIO_IDS\""
             fi
-            echo "Removing dracut modules"
-            sudo rm /etc/dracut.conf.d/vfio.conf
-            rpm-ostree initramfs --enable
             rpm-ostree kargs \
                 --delete-if-present="iommu=pt" \
                 --delete-if-present="iommu=on" \
