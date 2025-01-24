@@ -18,10 +18,10 @@ curl --retry 3 -Lo /etc/yum.repos.d/_copr_lukenukem-asus-linux.repo \
 curl --retry 3 -Lo /etc/yum.repos.d/linux-surface.repo \
         https://pkg.surfacelinux.com/fedora/linux-surface.repo
 
-# Asus Firmware
-git clone https://gitlab.com/asus-linux/firmware.git --depth 1 /tmp/asus-firmware
-cp -rf /tmp/asus-firmware/* /usr/lib/firmware/
-rm -rf /tmp/asus-firmware
+# Asus Firmware -- Investigate if everything has been upstreamed
+# git clone https://gitlab.com/asus-linux/firmware.git --depth 1 /tmp/asus-firmware
+# cp -rf /tmp/asus-firmware/* /usr/lib/firmware/
+# rm -rf /tmp/asus-firmware
 
 ASUS_PACKAGES=(
     asusctl
@@ -40,6 +40,12 @@ SURFACE_PACKAGES=(
 rpm-ostree install \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
+
+rpm-ostree override remove \
+    libwacom \
+    libwacom-data \
+    --install libwacom-surface \
+    --install libwacom-surface-data
 
 tee /usr/lib/modules-load.d/ublue-surface.conf << EOF
 # Only on AMD models
