@@ -9,7 +9,7 @@ VEN_ID="$(cat /sys/devices/virtual/dmi/id/chassis_vendor)"
 CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 
 # SCRIPT VERSION
-HWS_VER=4
+HWS_VER=5
 HWS_VER_FILE="/etc/ublue/hws_version"
 [[ -f "$HWS_VER_FILE" ]] && HWS_VER_RAN=$(cat $HWS_VER_FILE)
 
@@ -35,6 +35,13 @@ KARGS=$(rpm-ostree kargs)
 NEEDED_KARGS=()
 echo "Current kargs: $KARGS"
 mkdir -p /etc/ublue
+
+# Composefs hasn't been enabled upstream yet
+# See: https://github.com/ublue-os/main/issues/712
+if [[ ! $KARGS =~ "composefs" ]]; then
+  echo "Disabling composefs"
+  NEEDED_KARGS+=("--append-if-missing=ostree.prepare-root.composefs=0")
+fi
 
 if [[ "$IMAGE_FLAVOR" =~ "nvidia" && ! "$KARGS" =~ "initcall_blacklist=simpledrm_platform_driver_init" ]]; then
   NEEDED_KARGS+=("--append-if-missing=initcall_blacklist=simpledrm_platform_driver_init")
