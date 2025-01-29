@@ -174,6 +174,16 @@ configure-vfio ACTION="":
                 --append-if-missing="vfio_pci.disable_vga=1" \
                 --append-if-missing="kvm.ignore_msrs=1" \
                 --append-if-missing="kvm.report_ignored_msrs=0"
+            if sudo test ! -f "/etc/libvirt/hooks/qemu"; then
+                echo "Adding libvirt qemu hooks"
+                sudo wget 'https://raw.githubusercontent.com/PassthroughPOST/VFIO-Tools/master/libvirt_hooks/qemu' -O /etc/libvirt/hooks/qemu
+                sudo chmod +x /etc/libvirt/hooks/qemu
+                sudo grep -A1 -B1 "# Add" /etc/libvirt/hooks/qemu | sed 's/^# //g'
+                echo ""
+                if sudo test ! -d "/etc/libvirt/hooks/qemu/qemu.d"; then
+                    sudo mkdir /etc/libvirt/hooks/qemu/qemu.d
+                fi
+            fi
             echo "VFIO will be enabled on next boot, make sure you enable IOMMU, VT-d or AMD-v in your BIOS!"
             echo "Please understand that since this is such a niche use case, support will be very limited!"
             echo "To add your unused/second GPU device ids to the vfio driver by running"
@@ -191,9 +201,9 @@ configure-vfio ACTION="":
             VFIO_IDS="$(rpm-ostree kargs | sed -E 's/.+(vfio_pci.ids=.+\s)/\1/' | awk '{ print $1 }' | grep vfio_pci.ids)"
             VFIO_IDS_KARG=""
             if [ -n "$VFIO_IDS" ]; then
-              echo "Found VFIO ids in kargs, adding the below line to removal list"
-              echo "$VFIO_IDS"
-              VFIO_IDS_KARG="--delete-if-present=\"$VFIO_IDS\""
+                echo "Found VFIO ids in kargs, adding the below line to removal list"
+                echo "$VFIO_IDS"
+                VFIO_IDS_KARG="--delete-if-present=\"$VFIO_IDS\""
             fi
             rpm-ostree kargs \
                 --delete-if-present="iommu=pt" \
