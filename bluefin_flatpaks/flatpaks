@@ -24,6 +24,7 @@ app/org.gnome.World.PikaBackup/x86_64/stable
 app/org.gnome.TextEditor/x86_64/stable
 app/org.gnome.Weather/x86_64/stable
 app/io.missioncenter.MissionCenter/x86_64/stable
+app/io.github.pwr_solaar.solaar/x86_64/stable
 app/org.mozilla.firefox/x86_64/stable
 app/org.mozilla.Thunderbird/x86_64/stable
 runtime/org.gtk.Gtk3theme.adw-gtk3/x86_64/3.22
