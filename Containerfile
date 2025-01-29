@@ -17,6 +17,7 @@ ARG IMAGE_VENDOR="ublue-os"
 ARG KERNEL="6.10.10-200.fc40.x86_64"
 ARG SHA_HEAD_SHORT="dedbeef"
 ARG UBLUE_IMAGE_TAG="stable"
+ARG VERSION=""
 
 # Build, cleanup, commit.
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
@@ -35,6 +36,7 @@ ARG IMAGE_VENDOR="ublue-os"
 ARG KERNEL="6.10.10-200.fc40.x86_64"
 ARG SHA_HEAD_SHORT="dedbeef"
 ARG UBLUE_IMAGE_TAG="stable"
+ARG VERSION=""
 
 # Build, Clean-up, Commit
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \
