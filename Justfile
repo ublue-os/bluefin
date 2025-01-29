@@ -131,11 +131,8 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     # AKMODS Flavor and Kernel Version
     if [[ "${flavor}" =~ hwe ]]; then
         akmods_flavor="bazzite"
-    elif [[ "${tag}" =~ gts ]]; then
+    elif [[ "${tag}" =~ gts|stable ]]; then
         akmods_flavor="coreos-stable"
-    elif [[ "${tag}" =~ stable ]]; then
-        # TODO: revert this to "coreos-stable" once 6.12.9 kernel is released for coreos-stable images
-        akmods_flavor="coreos-testing"
     elif [[ "${tag}" =~ beta ]]; then
         akmods_flavor="coreos-testing"
     else
