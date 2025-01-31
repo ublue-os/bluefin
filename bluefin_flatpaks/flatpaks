@@ -26,5 +26,6 @@ app/org.gnome.Weather/x86_64/stable
 app/io.missioncenter.MissionCenter/x86_64/stable
 app/org.mozilla.firefox/x86_64/stable
 app/org.mozilla.Thunderbird/x86_64/stable
+app/org.gustavoperedo.FontDownloader/x86_64/stable
 runtime/org.gtk.Gtk3theme.adw-gtk3/x86_64/3.22
 runtime/org.gtk.Gtk3theme.adw-gtk3-dark/x86_64/3.22
