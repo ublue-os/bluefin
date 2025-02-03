@@ -37,15 +37,15 @@ SURFACE_PACKAGES=(
     pipewire-plugin-libcamera
 )
 
-rpm-ostree install \
+dnf5 -y install \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
 
-rpm-ostree override remove \
-    libwacom \
-    libwacom-data \
-    --install libwacom-surface \
-    --install libwacom-surface-data
+dnf5 -y swap \
+    libwacom-data libwacom-surface-data
+
+dnf5 -y swap \
+    libwacom libwacom-surface
 
 tee /usr/lib/modules-load.d/ublue-surface.conf << EOF
 # Only on AMD models
