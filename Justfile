@@ -26,8 +26,9 @@ tags := '(
     [beta]=beta
 )'
 export SUDO_DISPLAY := if `if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then echo true; fi` == "true" { "true" } else { "false" }
-export SUDOIF := if `id -u` == "0" { "" } else { if SUDO_DISPLAY == "true" { "sudo --askpass" } else { "sudo" } }
-export PODMAN := if path_exists("/usr/bin/podman") == "true" { env("PODMAN", "/usr/bin/podman") } else { if path_exists("/usr/bin/docker") == "true" { env("PODMAN", "docker") } else { env("PODMAN", "exit 1 ; ") } }
+export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY == "true" { "sudo --askpass" } else { "sudo" }
+export PODMAN := if path_exists("/usr/bin/podman") == "true" { env("PODMAN", "/usr/bin/podman") } else if path_exists("/usr/bin/docker") == "true" { env("PODMAN", "docker") } else { env("PODMAN", "exit 1 ; ") }
+export PULL_POLICY := if PODMAN =~ "docker" { "missing" } else { "newer" }
 
 [private]
 default:
@@ -130,8 +131,11 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     # AKMODS Flavor and Kernel Version
     if [[ "${flavor}" =~ hwe ]]; then
         akmods_flavor="bazzite"
-    elif [[ "${tag}" =~ stable|gts ]]; then
+    elif [[ "${tag}" =~ gts ]]; then
         akmods_flavor="coreos-stable"
+    elif [[ "${tag}" =~ stable ]]; then
+        # TODO: revert this to "coreos-stable" once 6.12.9 kernel is released for coreos-stable images
+        akmods_flavor="coreos-testing"
     elif [[ "${tag}" =~ beta ]]; then
         akmods_flavor="coreos-testing"
     else
@@ -192,6 +196,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${image_name}")
     BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR={{ repo_organization }}")
     BUILD_ARGS+=("--build-arg" "KERNEL=${kernel_release}")
+    BUILD_ARGS+=("--build-arg" "VERSION=${ver}")
     if [[ -z "$(git status -s)" ]]; then
         BUILD_ARGS+=("--build-arg" "SHA_HEAD_SHORT=$(git rev-parse --short HEAD)")
     fi
@@ -213,7 +218,6 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     LABELS+=("--label" "org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile")
     LABELS+=("--label" "org.opencontainers.image.url=https://projectbluefin.io")
     LABELS+=("--label" "org.opencontainers.image.vendor={{ repo_organization }}")
-    LABELS+=("--label" "io.artifacthub.package.category=bootc-images")
     LABELS+=("--label" "io.artifacthub.package.deprecated=false")
     LABELS+=("--label" "io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue")
     LABELS+=("--label" "io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]")
@@ -226,7 +230,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         "${BUILD_ARGS[@]}" \
         "${LABELS[@]}" \
         --target "${target}" \
-        --tag "${image_name}:${tag}" \
+        --tag localhost/"${image_name}:${tag}" \
         --file Containerfile \
         .
     echo "::endgroup::"
@@ -310,7 +314,6 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
 
     # Rest of Labels
     LABELS="
-        io.artifacthub.package.category=bootc-images
         io.artifacthub.package.deprecated=false
         io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue
         io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
@@ -346,7 +349,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
 
     # Run Rechunker's Prune
     ${SUDOIF} ${PODMAN} run --rm \
-        --pull=newer \
+        --pull=${PULL_POLICY} \
         --security-opt label=disable \
         --volume "$MOUNT":/var/tree \
         --env TREE=/var/tree \
@@ -379,7 +382,7 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
 
     # Run Rechunker
     ${SUDOIF} ${PODMAN} run --rm \
-        --pull=newer \
+        --pull=${PULL_POLICY} \
         --security-opt label=disable \
         --volume "$PWD:/workspace" \
         --volume "$PWD:/var/git" \
@@ -559,7 +562,7 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
 
     # Build ISO
     iso_build_args=()
-    iso_build_args+=("--rm" "--privileged" "--pull=newer")
+    iso_build_args+=("--rm" "--privileged" "--pull=${PULL_POLICY}")
     if [[ "{{ ghcr }}" == "0" ]]; then
     	iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage")
     fi
@@ -620,7 +623,7 @@ run-iso $image="bluefin" $tag="latest" $flavor="main":
     echo "Connect to http://localhost:${port}"
     run_args=()
     run_args+=(--rm --privileged)
-    run_args+=(--pull=newer)
+    run_args+=(--pull=${PULL_POLICY})
     run_args+=(--publish "127.0.0.1:${port}:8006")
     run_args+=(--env "CPU_CORES=4")
     run_args+=(--env "RAM_SIZE=8G")
