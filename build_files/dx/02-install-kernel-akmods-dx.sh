@@ -13,13 +13,14 @@ KERNEL_TARGZ=$(jq -r '.layers[].digest' </tmp/kernel-rpms/manifest.json | cut -d
 tar -xvzf /tmp/kernel-rpms/"$KERNEL_TARGZ" -C /
 mv /tmp/rpms/* /tmp/kernel-rpms/
 
-dnf5 versionlock clear
-
-if [[ -z "$(grep kernel-devel <<<$(rpm -qa))" ]]; then
-    dnf5 -y install /tmp/kernel-rpms/kernel-devel-*.rpm
-fi
-
-dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-headers kernel-modules kernel-modules-core kernel-modules-extra
+# TODO: Figure out why some akmods require kernel-devel
+# dnf5 versionlock clear
+#
+# if [[ -z "$(grep kernel-devel <<<$(rpm -qa))" ]]; then
+#     dnf5 -y install /tmp/kernel-rpms/kernel-devel-*.rpm
+# fi
+#
+# dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-headers kernel-modules kernel-modules-core kernel-modules-extra
 
 # Fetch AKMODS RPMS
 skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods
