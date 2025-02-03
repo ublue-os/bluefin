@@ -17,7 +17,7 @@ if [ -d /usr/libexec/rpm-ostree/wrapped ]; then
     rm -fr /usr/libexec/rpm-ostree
 fi
 
-if [ ${FEDORA_MAJOR_VERSION} -lt 41 ]; then
+if [ "${FEDORA_MAJOR_VERSION}" -lt 41 ]; then
     rpm-ostree install --idempotent dnf5 dnf5-plugins
 fi
 echo "::endgroup::"
