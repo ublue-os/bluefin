@@ -1,0 +1,41 @@
+name: GTS Images
+on:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - "**.md"
+  # schedule:
+  #   - cron: "50 5 * * 0" # 5:50 UTC Weekly on Sundays
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build-image-gts:
+    name: Build GTS Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        brand_name: [bluefin]
+    with:
+      kernel_pin: 6.11.8-200.fc40.x86_64     ## This is where kernels get pinned.
+      brand_name: ${{ matrix.brand_name }}
+      stream_name: gts
+
+  generate_release:
+    name: Generate Release
+    needs: [build-image-gts]
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      stream_name: '["gts"]'
+
+  # build-iso-gts:
+  #   name: Build GTS ISOs
+  #   needs: [build-image-gts]
+  #   if: github.event_name == 'schedule'
+  #   secrets: inherit
+  #   uses: ./.github/workflows/build-iso-gts.yml

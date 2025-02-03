@@ -10,65 +10,106 @@
 # fix-       = apply fix/patch/workaround for something
 # foo        = no verb is used for shortcuts or something deemed important enough to use a super memorable name
 
-alias cockpit := setup-cockpit
+# alias for setup-cockpit
+[group('Apps')]
+cockpit:
+    @ujust setup-cockpit
 
 # Enable Cockpit for web-based system management | https://cockpit-project.org/
+[group('Apps')]
 setup-cockpit ACTION="":
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
+
+    MANAGED_COCKPIT_CONTAINER="cockpit-ws"
+
+    if sudo podman container exists $MANAGED_COCKPIT_CONTAINER ; then
+        COCKPIT_CONTAINER_STATUS_PRETTY="${green}${b}Installed${n}"
+        COCKPIT_CONTAINER_STATUS=1
+    else
+        COCKPIT_CONTAINER_STATUS_PRETTY="${invert}${b}Not installed${n}"
+        COCKPIT_CONTAINER_STATUS=0
+    fi
+
     COCKPIT_SERVICE_STATUS="$(systemctl is-enabled cockpit.service)"
     if [ "$COCKPIT_SERVICE_STATUS" == "enabled" ]; then
-      COCKPIT_SERVICE_STATUS="${green}${b}Enabled${n}"
+        COCKPIT_SERVICE_STATUS="${green}${b}Enabled${n}"
     elif [ "$COCKPIT_SERVICE_STATUS" == "disabled" ]; then
-      COCKPIT_SERVICE_STATUS="${red}${b}Disabled${n}"
+        COCKPIT_SERVICE_STATUS="${red}${b}Disabled${n}"
     else
-      COCKPIT_SERVICE_STATUS="${invert}${b}Not Installed${n}"
+        COCKPIT_SERVICE_STATUS="${invert}${b}Not installed${n}"
     fi
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
-      echo "Usage: ujust setup-cockpit <option>"
-      echo "  <option>: Specify the quick option to skip the prompt"
-      echo "  Use 'install' to select Install Cockpit"
-      echo "  Use 'enable' to select Enable Cockpit"
-      echo "  Use 'disable' to select Disable Cockpit"
-      exit 0
+        cat <<EOF
+    Usage: ujust setup-cockpit <option>
+      <option>: Specify the quick option to skip the prompt
+      Use 'install' to select Install Cockpit
+      Use 'enable' to select Enable Cockpit
+      Use 'disable' to select Disable Cockpit
+      Use 'uninstall' to select Uninstall Cockpit
+    EOF
+        exit 0
     elif [ "$OPTION" == "" ]; then
-      echo "${bold}Cockpit Setup${normal}"
-      echo "Cockpit service is currently: $COCKPIT_SERVICE_STATUS"
-      if [[ "${COCKPIT_SERVICE_STATUS}" =~ "Not Installed" ]]; then
-        OPTION=$(Choose "Install Cockpit" "Cancel")
-      else
-        OPTION=$(Choose "Enable Cockpit" "Disable Cockpit")
-      fi
+        echo "${bold}Cockpit Setup${normal}"
+        echo "Cockpit service is currently: $COCKPIT_SERVICE_STATUS"
+        echo "The Cockpit container is currently: $COCKPIT_CONTAINER_STATUS_PRETTY"
+        if [[ "${COCKPIT_CONTAINER_STATUS}" -eq 0 ]]; then
+            echo "Warning: This will enable ssh password login because Cockpit requires it."
+            OPTION=$(Choose "Install Cockpit" "Cancel")
+        else
+            OPTION=$(Choose "Enable Cockpit" "Disable Cockpit" "Uninstall Cockpit")
+        fi
     fi
     if [[ "${OPTION,,}" =~ ^install ]]; then
-      echo 'Installing Cockpit'
-      echo 'PasswordAuthentication yes' | sudo tee /etc/ssh/sshd_config.d/02-enable-passwords.conf
-      sudo systemctl try-restart sshd
-      sudo systemctl enable --now sshd
-      sudo podman container runlabel --name cockpit-ws RUN quay.io/cockpit/ws
-      sudo podman container runlabel INSTALL quay.io/cockpit/ws
-      OPTION="Enable Cockpit"
+        echo "${blue}${b}Installing Cockpit${n}"
+        sudo /bin/bash <<EOF
+    [ ! -f /etc/ssh/sshd_config.d/02-enable-passwords.conf ] && echo -e "# File managed by ujust cockpit\nPasswordAuthentication yes" > /etc/ssh/sshd_config.d/02-enable-passwords.conf
+    systemctl -q try-restart sshd
+    systemctl -q enable --now sshd
+    if ! podman image exists quay.io/cockpit/ws ; then
+        podman pull quay.io/cockpit/ws:latest
+    fi
+    podman container runlabel -q --name $MANAGED_COCKPIT_CONTAINER RUN quay.io/cockpit/ws
+    podman container runlabel -q INSTALL quay.io/cockpit/ws systemctl enable cockpit.service
+    EOF
+        OPTION="Enable Cockpit"
     fi
     if [[ "${OPTION,,}" =~ ^enable ]]; then
-      echo "${green}${b}Enabling${n} pmlogger"
-      sudo mkdir /var/lib/pcp/tmp
-      sudo mkdir /var/log/pcp/pmlogger
-      sudo chown -R pcp:pcp /var/lib/pcp
-      sudo chown pcp:pcp /var/log/pcp/pmlogger
-      sudo systemctl enable --now pmlogger
-      echo "${green}${b}Enabling${n} Cockpit"
-      sudo systemctl enable cockpit.service
-      echo "$(Urllink "http://localhost:9090" "Open Cockpit${n}") -> http://localhost:9090"
-    elif [[ "${OPTION,,}" =~ ^disable ]]; then
-      echo "${red}${b}Disabling${n} Cockpit"
-      sudo systemctl disable cockpit.service
-      echo "Cockpit has been ${b}${red}disabled${n}"
+        sudo /bin/bash <<EOF
+    echo "${green}${b}Enabling${n} Cockpit"
+    systemctl -q enable --now cockpit.service
+    podman start $MANAGED_COCKPIT_CONTAINER
+    echo "$(Urllink "http://localhost:9090" "Open Cockpit${n}") -> http://localhost:9090"
+    EOF
+    fi
+    if [[ "${OPTION,,}" =~ ^disable ]]; then
+        echo "${red}${b}Disabling${n} Cockpit"
+        sudo /bin/bash <<EOF
+    systemctl -q disable cockpit.service
+    podman stop $MANAGED_COCKPIT_CONTAINER
+    EOF
+        echo "Cockpit has been ${b}${red}disabled${n}"
+    fi
+    if [[ "${OPTION,,}" =~ ^uninstall ]] ; then
+        sudo /bin/bash <<EOF
+    [ -f /etc/ssh/sshd_config.d/02-enable-passwords.conf ] && rm -f /etc/ssh/sshd_config.d/02-enable-passwords.conf
+    systemctl -q try-restart sshd
+    systemctl -q disable --now cockpit.service
+    rm -f /etc/systemd/system/cockpit.service
+    podman stop -i $MANAGED_COCKPIT_CONTAINER
+    podman rm -f $MANAGED_COCKPIT_CONTAINER
+    EOF
+        echo "Cockpit has been ${red}${b}uninstalled${n}"
     fi
 
-alias jetbrains-toolbox := install-jetbrains-toolbox
+# alias for install-jetbrains-toolbox
+[group('Apps')]
+jetbrains-toolbox:
+    @ujust install-jetbrains-toolbox
 
 # Install JetBrains Toolbox | https://www.jetbrains.com/toolbox-app/
+[group('Apps')]
 install-jetbrains-toolbox:
     #!/usr/bin/env bash
     pushd "$(mktemp -d)"
@@ -86,19 +127,79 @@ install-jetbrains-toolbox:
     echo "Launching JetBrains Toolbox"
     ./jetbrains-toolbox-"${BUILD_VERSION}"/jetbrains-toolbox
 
-alias incus := install-incus
+# alias for install-incus
+[group('Apps')]
+incus:
+    @ujust install-incus
 
 # Install and configure Incus
+[group('Apps')]
 install-incus:
     #!/usr/bin/env bash
     source /usr/lib/ujust/ujust.sh
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-    if grep -Eq "bluefin-dx|aurora-dx" <<< $CURRENT_IMAGE
-    then
-        echo 'Installing and configuring Incus.'
-        /usr/libexec/bluefin-incus
-    else
+    if ! grep -e "-dx" <<< $CURRENT_IMAGE ; then
         echo "Developer mode is currently ${b}${red}Disabled${n}."
         echo "Run \"just devmode\" to turn on Developer mode."
         exit
+    fi
+    echo 'Installing and configuring Incus.'
+    /usr/libexec/bluefin-incus
+
+# Install Kubernetes CLI dev tools
+[group('Apps')]
+install-k8s-dev-tools:
+    #!/usr/bin/bash
+    echo "Adding Kubernetes command line tools..."
+    brew bundle --file /usr/share/ublue-os/homebrew/kubernetes.Brewfile
+
+# Set up command-not-found for Homebrew
+[group('Apps')]
+setup-brew-not-found ACTION="":
+    #!/usr/bin/env bash
+    source /usr/lib/ujust/ujust.sh
+
+    OPTION={{ ACTION }}
+    if [ "$OPTION" == "help" ]; then
+        echo "Usage: ujust setup-brew-not-found <option>"
+        echo "  <option>: Specify the quick option to skip the prompt"
+        echo "  Use 'enable' to select Enable Brew Not Found"
+        echo "  Use 'disable' to select Disable Brew Not Found"
+        exit 0
+    elif [ "$OPTION" == "" ]; then
+        echo "${bold}Brew command-not-found Setup${normal}"
+        OPTION=$(Choose "Enable Brew command-not-found" "Disable Brew command-not-found")
+    fi
+
+    set -euo pipefail
+
+    BREW_BINARY=/home/linuxbrew/.linuxbrew/bin/brew
+    HOMEBREW_REPOSITORY=${HOMEBREW_REPOSITORY:-$($BREW_BINARY --repository)}
+    if ! $BREW_BINARY -h > /dev/null; then
+      echo "Make sure Homebrew is installed first. Check journalctl -e -u brew-setup.service"
+      exit
+    fi
+
+    if [[ "${OPTION,,}" =~ ^enable ]]; then
+        $BREW_BINARY tap homebrew/command-not-found
+        pkexec tee /etc/profile.d/brew-command-not-found.sh > /dev/null <<EOF
+    # Check for interactive bash or zsh and that we haven't already been sourced
+    if [[ -d /home/linuxbrew/.linuxbrew && \$- == *i* && BREW_COMMAND_NOT_FOUND != 1 ]] ; then
+      HB_CNF_HANDLER="${HOMEBREW_REPOSITORY}/Library/Taps/homebrew/homebrew-command-not-found/handler.sh"
+      [ -f "\$HB_CNF_HANDLER" ] && source "\$HB_CNF_HANDLER"
+      export BREW_COMMAND_NOT_FOUND=1
+    fi
+    EOF
+        # Necessary for fish since just having a script sourcing it does not work
+        pkexec ln -sf "${HOMEBREW_REPOSITORY}/Library/Taps/homebrew/homebrew-command-not-found/handler.fish" /etc/fish/conf.d/brew-cnf-handler.fish
+        echo "Brew command-not-found has been ${b}${green}enabled${n}"
+    fi
+
+    if [[ "${OPTION,,}" =~ ^disable ]]; then
+        $BREW_BINARY untap homebrew/command-not-found
+        FILES_TO_BE_REMOVED=()
+        [ -f /etc/profile.d/brew-command-not-found.sh ] && FILES_TO_BE_REMOVED+=("/etc/profile.d/brew-command-not-found.sh")
+        [ -f /etc/fish/conf.d/brew-command-not-found.fish ] && FILES_TO_BE_REMOVED+=("/etc/fish/conf.d/brew-command-not-found.fish")
+        pkexec rm -f "${FILES_TO_BE_REMOVED[@]}"
+      echo "Brew command-not-found has been ${b}${red}disabled${n}"
     fi

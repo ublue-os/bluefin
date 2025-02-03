@@ -1,0 +1,25 @@
+name: Pin Request
+description: Ask to pin a package to a specific version in order to avoid regressions
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this bug report! (She bites sometimes). We can pin packages to older, known working versions if there's an issue with an update in Fedora.
+  - type: textarea
+    id: package
+    attributes:
+      label: Describe the Package
+      description: Describe the package you want pinned and why
+      placeholder: Pin foobar to version 1.2
+      value: "Package foobar version 1.2 blew up, we need to revert to 1.1"
+    validations:
+      required: true
+  - type: textarea
+    id: bodhi
+    attributes:
+      label: Bodhi Link (Optional)  
+      description: Add the bodhi link to the working version, this is very useful in order to pin a package quickly
+      placeholder: Bodhi link
+      value: "Pin to this version please: https://bodhi.fedoraproject.org/updates/FEDORA-2024-45d587348e"
+    validations:
+      required: false

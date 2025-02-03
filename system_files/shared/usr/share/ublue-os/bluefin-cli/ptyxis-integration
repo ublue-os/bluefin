@@ -1,6 +1,0 @@
-
-
-[Service]
-ExecStartPre=-/usr/libexec/ptyxis-remove-profile.sh %N
-ExecStartPost=-/usr/libexec/ptyxis-create-profile.sh %N
-ExecStop=-/usr/libexec/ptyxis-remove-profile.sh %N
