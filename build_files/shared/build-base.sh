@@ -1,8 +1,29 @@
 #!/usr/bin/bash
 
-set -eou pipefail
+set -eoux pipefail
+
+echo "::group:: ===Remove CLI Wrap==="
+
+# there is no 'rpm-ostree cliwrap uninstall-from-root', but this is close enough. See:
+# https://github.com/coreos/rpm-ostree/blob/6d2548ddb2bfa8f4e9bafe5c6e717cf9531d8001/rust/src/cliwrap.rs#L25-L32
+if [ -d /usr/libexec/rpm-ostree/wrapped ]; then
+    # binaries which could be created if they did not exist thus may not be in wrapped dir
+    rm -f \
+        /usr/bin/yum \
+        /usr/bin/dnf \
+        /usr/bin/kernel-install
+    # binaries which were wrapped
+    mv -f /usr/libexec/rpm-ostree/wrapped/* /usr/bin
+    rm -fr /usr/libexec/rpm-ostree
+fi
+
+if [ "${FEDORA_MAJOR_VERSION}" -lt 41 ]; then
+    rpm-ostree install --idempotent dnf5 dnf5-plugins
+fi
+echo "::endgroup::"
 
 echo "::group:: Copy Files"
+
 # Make Alternatives Directory
 mkdir -p /var/lib/alternatives
 
@@ -16,9 +37,6 @@ echo "::endgroup::"
 
 # Generate image-info.json
 /ctx/build_files/base/00-image-info.sh
-
-# Build Fix - Fix known skew offenders
-/ctx/build_files/base/01-build-fix.sh
 
 # Get COPR Repos
 /ctx/build_files/base/02-install-copr-repos.sh

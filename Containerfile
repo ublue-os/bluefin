@@ -20,7 +20,8 @@ ARG UBLUE_IMAGE_TAG="stable"
 ARG VERSION=""
 
 # Build, cleanup, commit.
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build_files/shared/build-base.sh
 
@@ -38,6 +39,7 @@ ARG UBLUE_IMAGE_TAG="stable"
 ARG VERSION=""
 
 # Build, Clean-up, Commit
-RUN --mount=type=cache,dst=/var/cache/rpm-ostree \
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build_files/shared/build-dx.sh
