@@ -1,3 +1,6 @@
+[include]
+paths = ["/etc/ublue-os/topgrade.toml"]
+
 [misc]
 no_self_update = true
 only = ["system", "flatpak", "distrobox", "firmware"]
