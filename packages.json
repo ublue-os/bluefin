@@ -169,7 +169,6 @@
 				"firefox-langpacks",
 				"firefox",
 				"podman-docker",
-				"ublue-os-update-services"
 			],
 			"silverblue": [
 				"gnome-extensions-app",
