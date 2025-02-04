@@ -168,7 +168,7 @@
 			"all": [
 				"firefox-langpacks",
 				"firefox",
-				"podman-docker",
+				"podman-docker"
 			],
 			"silverblue": [
 				"gnome-extensions-app",
