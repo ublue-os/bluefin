@@ -7,4 +7,5 @@ assume_yes = true
 no_retry = false
 
 [linux]
+bootc = false
 rpm_ostree = true
