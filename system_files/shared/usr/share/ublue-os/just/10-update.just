@@ -5,9 +5,7 @@ alias upgrade := update
 # Update system, flatpaks, and containers all at once
 update:
     #!/usr/bin/bash
-    TOPGRADE_CONFIG="/usr/share/ublue-os/topgrade"
-    /usr/bin/grep "^LockLayering=true" /etc/rpm-ostreed.conf &>/dev/null && TOPGRADE_CONFIG="${TOPGRADE_CONFIG}-bootc"
-    /usr/bin/topgrade --config "${TOPGRADE_CONFIG}.toml" --keep
+    pkexec uupd --log-level debug
 
 alias auto-update := toggle-updates
 
@@ -16,7 +14,7 @@ toggle-updates ACTION="prompt":
     #!/usr/bin/bash
     source /usr/lib/ujust/ujust.sh
     CURRENT_STATE="Disabled"
-    if systemctl is-enabled ublue-update.timer | grep -q enabled; then
+    if systemctl is-enabled uupd.timer | grep -q enabled; then
         CURRENT_STATE="Enabled"
     fi
     OPTION={{ ACTION }}
@@ -32,9 +30,9 @@ toggle-updates ACTION="prompt":
         exit 0
     fi
     if [ "${OPTION,,}" == "enable" ]; then
-        sudo systemctl enable ublue-update.timer
+        sudo systemctl enable uupd.timer
     elif [ "${OPTION,,}" == "disable" ]; then
-        sudo systemctl disable ublue-update.timer
+        sudo systemctl disable uupd.timer
     fi
 
 alias changelog := changelogs

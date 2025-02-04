@@ -63,6 +63,7 @@
 				"ublue-fastfetch",
 				"ublue-motd",
 				"usbmuxd",
+				"uupd",
 				"ublue-brew",
 				"ublue-bling",
 				"wireguard-tools",
