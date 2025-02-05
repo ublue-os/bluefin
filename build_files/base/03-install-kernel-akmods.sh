@@ -17,7 +17,6 @@ tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
 mv /tmp/rpms/* /tmp/akmods/
 # NOTE: kernel-rpms should auto-extract into correct location
 
-
 # Install Kernel
 dnf5 -y install \
     /tmp/kernel-rpms/kernel-[0-9]*.rpm \
