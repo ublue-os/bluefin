@@ -150,13 +150,12 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
 
     # Kernel Release/Pin
     if [[ -z "${kernel_pin:-}" ]]; then
-        kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/${akmods_flavor}-kernel:"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
+        kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${akmods_flavor}"-"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
     else
         kernel_release="${kernel_pin}"
     fi
 
     # Verify Containers with Cosign
-    just verify-container "${akmods_flavor}-kernel:${kernel_release}"
     just verify-container "akmods:${akmods_flavor}-${fedora_version}-${kernel_release}"
     if [[ "${akmods_flavor}" =~ coreos ]]; then
         just verify-container "akmods-zfs:${akmods_flavor}-${fedora_version}-${kernel_release}"
@@ -694,8 +693,8 @@ secureboot $image="bluefin" $tag="latest" $flavor="main":
     ${PODMAN} rm "$TMP"
 
     # Get the Public Certificates
-    curl --retry 3 -Lo /tmp/kernel-sign.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key.der
-    curl --retry 3 -Lo /tmp/akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
+    curl --retry 3 -Lo /tmp/kernel-sign.der https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
+    curl --retry 3 -Lo /tmp/akmods.der https://github.com/ublue-os/akmods/raw/main/certs/public_key_2.der
     openssl x509 -in /tmp/kernel-sign.der -out /tmp/kernel-sign.crt
     openssl x509 -in /tmp/akmods.der -out /tmp/akmods.crt
 
