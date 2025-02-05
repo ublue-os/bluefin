@@ -154,7 +154,6 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     else
         kernel_release="${kernel_pin}"
     fi
-    echo "ATTENTION: kernel_release==${kernel_release}"
 
     # Verify Containers with Cosign
     just verify-container "akmods:${akmods_flavor}-${fedora_version}-${kernel_release}"
