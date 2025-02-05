@@ -35,9 +35,6 @@ install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
-# Install ublue-update -- breaks with packages.json due to missing topgrade
-dnf5 -y install ublue-update
-
 # Required for bluefin faces to work without conflicting with a ton of packages
 rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
 mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
@@ -52,9 +49,6 @@ dnf5 -y swap fedora-logos bluefin-logos
 
 # Consolidate Just Files
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >> /usr/share/ublue-os/just/60-custom.just
-
-# Move over ublue-update config
-mv -f /tmp/ublue-update.toml /usr/etc/ublue-update/ublue-update.toml
 
 # Register Fonts
 fc-cache -f /usr/share/fonts/ubuntu
