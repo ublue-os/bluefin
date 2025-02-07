@@ -8,7 +8,7 @@ echo "$(Urllink "https://looking-glass.io/docs/rc/ivshmem_kvmfr/#libvirt" "This 
 echo "The ublue team packages the kvmfr module only because it has to be supplied with the system image while using an atomic desktop."
 echo "If you do plan to use Looking Glass, please $(Urllink "https://docs.bazzite.gg/Advanced/looking-glass/#compiling-looking-glass-client" "follow the guide here") on how to compile it for your system."
 echo "To use the kvmfr module after enabling it, just add and edit the xml for libvirt from the documentation in the first link."
-echo "Since we package the kvmfr module please open kvmfr related issues you have on ${IMAGE_NAME^} and tag me"
+echo "Since we package the kvmfr module please open kvmfr related issues you have on ${IMAGE_NAME^} and tag @HikariKnight"
 echo "in the $(Urllink "https://discord.gg/WEu6BdFEtp" "Universal Blue Discord") or the $(Urllink "https://github.com/ublue-os/${IMAGE_NAME,,}/issues" "${IMAGE_NAME^} Github issue tracker")."
 echo "~ @HikariKnight"
 
