@@ -144,7 +144,7 @@ configure-vfio ACTION="":
         bash -c "cat <<EOF
     ${bold}VFIO and kvmfr Configuration${normal}
     This is only used for GPU passthrough of a secondary dGPU.
-    It will enable vfio and configure kvmfr for use with $(Urllink "https://looking-glass.io" "Looking Glass")
+    It will enable vfio and configure kvmfr for use with $(Urllink "https://looking-glass.io" "Looking Glass").
     If you do not plan to use any of this then press ESC.
     ${bold}NOTE:${normal} Since this is a niche use case, support will be ${b}very limited${n}
     EOF"
