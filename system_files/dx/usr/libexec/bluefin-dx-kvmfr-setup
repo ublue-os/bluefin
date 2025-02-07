@@ -89,6 +89,9 @@ echo "This is the type enforcement we wrote for SELinux and you can find it in $
 echo "#======= start of kvmfr.te ======="
 cat "$HOME/.config/selinux_te/kvmfr.te"
 echo "#======== end of kvmfr.te ========"
+CONFIRM=$(Choose OK)
+
+# Convert .te a .pp file for semodule
 checkmodule -M -m -o "$HOME/.config/selinux_te/mod/kvmfr.mod" "$HOME/.config/selinux_te/kvmfr.te"
 semodule_package -o "$HOME/.config/selinux_te/pp/kvmfr.pp" -m "$HOME/.config/selinux_te/mod/kvmfr.mod"
 sudo semodule -i "$HOME/.config/selinux_te/pp/kvmfr.pp"
