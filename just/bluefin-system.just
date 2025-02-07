@@ -180,8 +180,8 @@ configure-vfio ACTION="":
                 sudo chmod +x /etc/libvirt/hooks/qemu
                 sudo grep -A1 -B1 "# Add" /etc/libvirt/hooks/qemu | sed 's/^# //g'
                 echo ""
-                if sudo test ! -d "/etc/libvirt/hooks/qemu/qemu.d"; then
-                    sudo mkdir /etc/libvirt/hooks/qemu/qemu.d
+                if sudo test ! -d "/etc/libvirt/hooks/qemu.d"; then
+                    sudo mkdir /etc/libvirt/hooks/qemu.d
                 fi
             fi
             echo "VFIO will be enabled on next boot, make sure you enable IOMMU, VT-d or AMD-v in your BIOS!"
