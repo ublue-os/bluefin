@@ -99,7 +99,6 @@ sudo semodule -i "$HOME/.config/selinux_te/pp/kvmfr.pp"
 # Load kvmfr module into currently booted system
 echo "Loading kvmfr module so you do not have to reboot to use it the first time"
 sudo modprobe kvmfr static_size_mb=128
-sudo chown $USER:qemu /dev/kvmfr0
 
 # Final message and regenerate initramfs so kvmfr loads next boot
 echo ""
@@ -112,6 +111,11 @@ echo "If you need to change it to a different value"
 echo "you can do that in /etc/modprobe.d/kvmfr.conf"
 echo "$(Urllink "https://looking-glass.io/docs/rc/ivshmem_kvmfr/#libvirt" "Please read official documentation for kvmfr for how to use it")"
 echo ""
-echo "${b}NOTE: You can start using kvmfr right now without rebooting.${n}"
+if [ -f "/dev/kvmfr0" ]; then
+    sudo chown $USER:qemu /dev/kvmfr0
+    echo "${b}NOTE: You can start using kvmfr right now without rebooting${n}"
+else
+    echo "Please reboot in order to fully load the kvmfr module."
+fi
 
 CONFIRM=$(Choose OK)
