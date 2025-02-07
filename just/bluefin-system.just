@@ -190,7 +190,7 @@ configure-vfio ACTION="":
             echo 'rpm-ostree kargs --append-if-missing="vfio-pci.ids=xxxx:yyyy,xxxx:yyzz"'
             echo 'you can find these using "ls-iommu -gr" or "ls-iommu -grr"'
             echo 'for a dedicated gpu there will be at least 1 vga device and 1 audio device.'
-            echo "NOTE: Your second GPU will not be usable by the host after you do this!"
+            echo "NOTE: The GPU you bound to vfio-pci will not be usable by the host after you do this!"
         fi
     elif [[ "${OPTION,,}" =~ (^disable[[:space:]]vfio|vfio-off) ]]; then
         echo ""
