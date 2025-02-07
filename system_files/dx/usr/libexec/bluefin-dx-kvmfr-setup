@@ -111,7 +111,7 @@ echo "If you need to change it to a different value"
 echo "you can do that in /etc/modprobe.d/kvmfr.conf"
 echo "$(Urllink "https://looking-glass.io/docs/rc/ivshmem_kvmfr/#libvirt" "Please read official documentation for kvmfr for how to use it")"
 echo ""
-if [ -f "/dev/kvmfr0" ]; then
+if [ -e "/dev/kvmfr0" ]; then
     sudo chown $USER:qemu /dev/kvmfr0
     echo "${b}NOTE: You can start using kvmfr right now without rebooting${n}"
 else
