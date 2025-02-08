@@ -1,4 +1,5 @@
 {
     "window.titleBarStyle": "custom",
-    "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace"
+    "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace",
+    "update.mode": "none"
 }
