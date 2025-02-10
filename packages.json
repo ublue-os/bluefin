@@ -46,6 +46,7 @@
 				"python3-pip",
 				"rclone",
 				"restic",
+				"rsms-inter-fonts",
 				"samba-dcerpc",
 				"samba-ldb-ldap-modules",
 				"samba-winbind-clients",
