@@ -107,7 +107,7 @@ jobs:
         id: sbom-image
         with:
           upload-artifact: true
-          image: localhost/${{ matrix.base_name }}:${{ matrix.stream_name }}
+          image: postgres:localhost/${{ matrix.base_name }}:${{ matrix.stream_name }}
 
       - name: Load Image into Podman
         id: load-rechunk
