@@ -80,7 +80,7 @@ jobs:
         id: build-image
         shell: bash
         run: |
-          sudo just repo_organization="${{ github.repository_owner }}" \
+          just repo_organization="${{ github.repository_owner }}" \
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
@@ -88,6 +88,7 @@ jobs:
 
       - name: Rechunk Image
         id: rechunk-image
+        if: false
         shell: bash
         run: |
           sudo just rechunk "${{ matrix.base_name }}" \
@@ -95,8 +96,22 @@ jobs:
                             "${{ matrix.image_flavor }}" \
                             "1"
 
+      - name: Configure Syft
+        id: config-syft
+        shell: bash
+        run: |
+          SYFT_PARALLELISM=$(($(nproc)*2))
+
+      - name: Build SBOM
+        uses: anchore/sbom-action@v0
+        id: sbom-image
+        with:
+          upload-artifact: true
+          image: localhost/${{ matrix.base_name }}:${{ matrix.stream_name }}
+
       - name: Load Image into Podman
         id: load-rechunk
+        if: false
         shell: bash
         run: |
           just load-rechunk "${{ matrix.base_name }}" \
@@ -105,6 +120,7 @@ jobs:
 
       - name: Secureboot Check
         id: secureboot
+        if: false
         shell: bash
         run: |
           just secureboot "${{ matrix.base_name }}" \
@@ -113,6 +129,7 @@ jobs:
 
       - name: Generate tags
         id: generate-tags
+        if: false
         shell: bash
         run: |
           alias_tags="$(just generate-build-tags \
@@ -131,6 +148,7 @@ jobs:
 
       # Tag Images
       - name: Tag Images
+        if: false
         shell: bash
         run: |
           set -eoux pipefail
@@ -141,20 +159,21 @@ jobs:
       # Workaround bug where capital letters in your GitHub username make it impossible to push to GHCR.
       # https://github.com/macbre/push-to-ghcr/issues/12
       - name: Lowercase Registry
+        if: false
         id: registry_case
         uses: ASzc/change-string-case-action@d0603cd0a7dd490be678164909f65c7737470a7f # v6
         with:
           string: ${{ env.IMAGE_REGISTRY }}
 
       - name: Login to GitHub Container Registry
-        if: github.event_name != 'pull_request'
+        if: false
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.actor }} --password-stdin
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push to GHCR
         id: push
-        if: github.event_name != 'pull_request'
+        if: false
         uses: Wandalen/wretry.action@e68c23e6309f2871ca8ae4763e7629b9c258e1ea # v3.8.0
         with:
           attempt_limit: 3
@@ -183,7 +202,7 @@ jobs:
             echo "digest=${digest}" >> $GITHUB_OUTPUT
 
       - name: Sign container image
-        if: github.event_name != 'pull_request'
+        if: false
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
         env:
@@ -192,7 +211,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
       - name: Sign container image
-        if: github.event_name != 'pull_request' && contains(matrix.image_flavor, 'hwe')
+        if: false
         shell: bash
         run: |
           image_name="${{ env.IMAGE_NAME }}"
@@ -206,7 +225,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
       - name: Generate file containing outputs
-        if: github.event_name != 'pull_request'
+        if: false
         env:
           DIGEST: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
@@ -215,7 +234,7 @@ jobs:
         run: echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${FEDORA_VERSION}.txt"
 
       - name: Upload artifact
-        if: github.event_name != 'pull_request'
+        if: false
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
         with:
           name: image-${{ env.IMAGE_NAME }}-${{ matrix.stream_name }}
