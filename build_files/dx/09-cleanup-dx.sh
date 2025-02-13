@@ -17,7 +17,6 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
 fi
 dnf5 -y copr disable ganto/umoci
 dnf5 -y copr disable karmab/kcli
-dnf5 -y copr disable atim/ubuntu-fonts
 dnf5 -y copr disable hikariknight/looking-glass-kvmfr
 dnf5 -y copr disable gmaglione/podman-bootc
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/vscode.repo
