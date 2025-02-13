@@ -101,6 +101,7 @@ jobs:
         shell: bash
         run: |
           sudo systemctl start podman.socket
+          systemctl start --user podman.socket
           SYFT_PARALLELISM=$(($(nproc)*2))
 
       - name: Build SBOM
