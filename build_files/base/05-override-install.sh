@@ -9,13 +9,6 @@ dnf5 -y swap \
 --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
     gnome-shell gnome-shell
 
-# GNOME Triple Buffering
-if [[ "${BASE_IMAGE_NAME}" =~ silverblue && "${FEDORA_MAJOR_VERSION}" -lt "41" ]]; then
-    dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        mutter mutter
-fi
-
 # Fix for ID in fwupd
 dnf5 -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
