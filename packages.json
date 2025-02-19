@@ -45,6 +45,7 @@
 				"pulseaudio-utils",
 				"powertop",
 				"python3-pip",
+				"python3-pygit2",
 				"rclone",
 				"restic",
 				"samba-dcerpc",
