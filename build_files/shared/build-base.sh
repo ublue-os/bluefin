@@ -24,9 +24,6 @@ echo "::endgroup::"
 
 echo "::group:: Copy Files"
 
-# Make Alternatives Directory
-mkdir -p /var/lib/alternatives
-
 # Copy Files to Container
 cp -r /ctx/just /tmp/just
 cp /ctx/packages.json /tmp/packages.json
@@ -77,10 +74,8 @@ echo "::endgroup::"
 
 # Clean Up
 echo "::group:: Cleanup"
-mv /var/lib/alternatives /staged-alternatives
 /ctx/build_files/shared/clean-stage.sh
-mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives &&
-    mkdir -p /var/tmp &&
+mkdir -p /var/tmp &&
     chmod -R 1777 /var/tmp
 ostree container commit
 echo "::endgroup::"
