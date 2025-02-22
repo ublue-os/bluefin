@@ -249,10 +249,6 @@ build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
 [group('Image')]
 build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="":
     #!/usr/bin/bash
-    if [[ "${UID}" -gt "0" ]]; then
-        echo "Must Run with sudo or as root..."
-        exit 1
-    fi
     just build {{ image }} {{ tag }} {{ flavor }} 0 1 0 {{ kernel_pin }}
 
 # Build Image for Pipeline:
