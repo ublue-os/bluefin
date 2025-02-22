@@ -108,6 +108,7 @@ jobs:
         uses: anchore/sbom-action@v0
         id: sbom-image
         with:
+          syft-version: v1.20.0
           upload-artifact: true
           image: podman:localhost/${{ env.IMAGE_NAME }}:${{ matrix.stream_name }}
 
