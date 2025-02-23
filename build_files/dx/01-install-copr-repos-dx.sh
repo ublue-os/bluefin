@@ -16,6 +16,9 @@ dnf5 -y copr enable ganto/umoci
 #ublue-os staging
 dnf5 -y copr enable ublue-os/staging
 
+#ublue-os packages
+dnf5 -y copr enable ublue-os/packages
+
 #karmab-kcli
 dnf5 -y copr enable karmab/kcli
 
