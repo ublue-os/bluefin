@@ -1,4 +1,4 @@
-name: Latest Images
+name: Latest hwe Images
 on:
   merge_group:
   pull_request:
