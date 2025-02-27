@@ -1,0 +1,44 @@
+name: Latest Images
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - "**.md"
+  schedule:
+    - cron: "50 4 * * 1,2,3,4,5,6" # 4:50 UTC All But Sunday
+    - cron: "50 4 * * 0" # 4:50 UTC Sunday
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build-image-latest:
+    name: Build Latest Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        brand_name: ["bluefin"]
+    with:
+      image_flavors: '["main", "nvidia", "nvidia-open"]'
+      brand_name: ${{ matrix.brand_name }}
+      stream_name: latest
+      kernel_pin: 6.12.15-200.fc41.x86_64
+
+  generate-release:
+    name: Generate Release
+    needs: [build-image-latest]
+    secrets: inherit
+    uses: ./.github/workflows/generate-release.yml
+    with:
+      stream_name: '["latest"]'
+
+  # build-iso-latest:
+  #   name: Build Latest ISOs
+  #   needs: [build-image-latest]
+  #   if: github.event.schedule == '50 4 * * 0'
+  #   secrets: inherit
+  #   uses: ./.github/workflows/build-iso-latest.yml

@@ -1,4 +1,4 @@
-name: Latest Images
+name: Latest Images HWE
 on:
   merge_group:
   pull_request:
@@ -23,10 +23,10 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
-      image_flavors: '["main", "nvidia", "nvidia-open", "hwe", "hwe-nvidia", "hwe-nvidia-open"]'
+      image_flavors: '["hwe", "hwe-nvidia", "hwe-nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
-    # This needs splitting, right now a kernel pin will not work due to hwe kernel
+      kernel_pin: 6.12.12-207.bazzite.fc41.x86_64
 
   generate-release:
     name: Generate Release
