@@ -1,4 +1,4 @@
-name: Latest main Images
+name: Latest Images
 on:
   merge_group:
   pull_request:
