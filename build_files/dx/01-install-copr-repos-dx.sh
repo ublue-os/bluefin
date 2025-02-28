@@ -22,9 +22,6 @@ dnf5 -y copr enable ublue-os/packages
 #karmab-kcli
 dnf5 -y copr enable karmab/kcli
 
-# Fonts
-dnf5 -y copr enable atim/ubuntu-fonts
-
 # Kvmfr module
 dnf5 -y copr enable hikariknight/looking-glass-kvmfr
 
