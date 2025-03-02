@@ -26,7 +26,6 @@ jobs:
       image_flavors: '["main", "nvidia", "nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
-      kernel_pin: 6.12.15-200.fc41.x86_64
 
   generate-release:
     name: Generate Release
