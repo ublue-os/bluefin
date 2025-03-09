@@ -228,7 +228,7 @@ jobs:
         if: github.event_name != 'pull_request'
         env:
           IMAGE: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          DIGEST: ${{ steps.push.outputs.remote_image_digest }}
+          DIGEST: ${{ steps.push.outputs.digest }}
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           SBOM_OUTPUT: ${{ steps.generate-sbom.outputs.OUTPUT_PATH }}
         run: |
