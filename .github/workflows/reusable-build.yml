@@ -95,6 +95,7 @@ jobs:
 
       - name: Generate SBOM
         if: github.event_name != 'pull_request'
+        id: generate-sbom
         env:
           IMAGE: ${{ env.IMAGE_NAME }}
           STREAM_NAME: ${{ matrix.stream_name }}
