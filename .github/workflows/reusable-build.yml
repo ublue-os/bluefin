@@ -105,7 +105,7 @@ jobs:
 
           OUTPUT_PATH="$(mktemp -d)/sbom.json"
           export SYFT_PARALLELISM=$(($(nproc)*2))
-          sudo $SYFT_CMD ${IMAGE}:${STREAM_NAME} -o spdx-json=${OUTPUT_PATH} -dd
+          sudo $SYFT_CMD ${IMAGE}:${STREAM_NAME} -o spdx-json=${OUTPUT_PATH}
           echo "OUTPUT_PATH=${OUTPUT_PATH}" >> $GITHUB_OUTPUT
 
       - name: Rechunk Image
