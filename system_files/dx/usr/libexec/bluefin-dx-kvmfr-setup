@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 source /usr/lib/ujust/ujust.sh
+# Get the image name based on the filename
+IMAGE_NAME=$(basename "$0" | sed -E 's/(-dx|)-kvmfr-setup//')
 
 # Required disclaimer and where to report issues first
 echo "$(Urllink "https://looking-glass.io/docs/rc/ivshmem_kvmfr/#libvirt" "This module") along with $(Urllink "https://looking-glass.io" "Looking Glass") is very experimental and not recommended for production use!"
 echo "The ublue team packages the kvmfr module only because it has to be supplied with the system image while using an atomic desktop."
-echo "If you do plan to use Looking Glass, please $(Urllink "https://universal-blue.discourse.group/docs?topic=956" "follow the guide here") on how to compile it for your system."
+echo "If you do plan to use Looking Glass, please $(Urllink "https://docs.bazzite.gg/Advanced/looking-glass/#compiling-looking-glass-client" "follow the guide here") on how to compile it for your system."
 echo "To use the kvmfr module after enabling it, just add and edit the xml for libvirt from the documentation in the first link."
-echo "Since we package the kvmfr module please open kvmfr related issues you have on Bluefin and tag me"
-echo "in the $(Urllink "https://discord.gg/WEu6BdFEtp" "Universal Blue Discord") or the $(Urllink "https://github.com/ublue-os/bluefin/issues" "Bluefin Github issue tracker")."
+echo "Since we package the kvmfr module please open kvmfr related issues you have on ${IMAGE_NAME^} and tag @HikariKnight"
+echo "in the $(Urllink "https://discord.gg/WEu6BdFEtp" "Universal Blue Discord") or the $(Urllink "https://github.com/ublue-os/${IMAGE_NAME,,}/issues" "${IMAGE_NAME^} Github issue tracker")."
 echo "~ @HikariKnight"
 
 CONFIRM=$(Choose Ok Cancel)
@@ -15,17 +17,22 @@ if [ "$CONFIRM" == "Cancel" ]; then
     exit 0
 fi
 
-# Add kvmfr to dracut so that it's modprobe file can be used
-echo ""
-echo "Setting up kvmfr module so it loads next boot"
-sudo bash -c 'cat << KVMFR_DRACUT > /etc/dracut.conf.d/kvmfr.conf
-install_items+=" /etc/modprobe.d/kvmfr.conf "
-KVMFR_DRACUT'
-
 # Add kvmfr modprobe file following upstream documentation
-sudo bash -c "cat << KVMFR_MODPROBE > /etc/modprobe.d/kvmfr.conf
-options kvmfr static_size_mb=128
-KVMFR_MODPROBE"
+echo "Setting up kvmfr module so it loads next boot"
+if [ -f "/etc/modprobe.d/kvmfr.conf" ]; then
+    echo "Re-creating dummy kvmfr modprobe file"
+    sudo rm /etc/modprobe.d/kvmfr.conf
+fi
+sudo bash -c 'cat << KVMFR_MODPROBE > /etc/modprobe.d/kvmfr.conf
+# This is a dummy file and changing it does nothing
+# If you want to change the kvmfr static_size_mb
+# Run "rpm-ostree kargs --replace=kvmfr.static_size_mb=oldvalue=newvalue"
+# Default value set by us is 128 which is enough for 4k SDR
+# Find the current value by running "rpm-ostree kargs"
+KVMFR_MODPROBE'
+
+# Add kvmfr static size karg
+rpm-ostree kargs --append-if-missing="kvmfr.static_size_mb=128"
 
 # Add upstream udev rule for kvmfr, adjusted for fedora systems
 echo "Adding udev rule for /dev/kvmfr0"
@@ -64,6 +71,10 @@ fi
 if [ ! -d "$HOME/.config/selinux_te/pp" ]; then
     mkdir -p "$HOME/.config/selinux_te/pp"
 fi
+if [ -f "$HOME/.config/selinux_te/kvmfr.te" ]; then
+    echo "Re-creating kvmfr selinux type enforcement rules"
+    rm $HOME/.config/selinux_te/kvmfr.te
+fi
 bash -c "cat << KVMFR_SELINUX > $HOME/.config/selinux_te/kvmfr.te
 module kvmfr 1.0;
 require {
@@ -80,6 +91,9 @@ echo "This is the type enforcement we wrote for SELinux and you can find it in $
 echo "#======= start of kvmfr.te ======="
 cat "$HOME/.config/selinux_te/kvmfr.te"
 echo "#======== end of kvmfr.te ========"
+CONFIRM=$(Choose OK)
+
+# Convert .te a .pp file for semodule
 checkmodule -M -m -o "$HOME/.config/selinux_te/mod/kvmfr.mod" "$HOME/.config/selinux_te/kvmfr.te"
 semodule_package -o "$HOME/.config/selinux_te/pp/kvmfr.pp" -m "$HOME/.config/selinux_te/mod/kvmfr.mod"
 sudo semodule -i "$HOME/.config/selinux_te/pp/kvmfr.pp"
@@ -87,7 +101,6 @@ sudo semodule -i "$HOME/.config/selinux_te/pp/kvmfr.pp"
 # Load kvmfr module into currently booted system
 echo "Loading kvmfr module so you do not have to reboot to use it the first time"
 sudo modprobe kvmfr static_size_mb=128
-sudo chown $USER:qemu /dev/kvmfr0
 
 # Final message and regenerate initramfs so kvmfr loads next boot
 echo ""
@@ -100,9 +113,11 @@ echo "If you need to change it to a different value"
 echo "you can do that in /etc/modprobe.d/kvmfr.conf"
 echo "$(Urllink "https://looking-glass.io/docs/rc/ivshmem_kvmfr/#libvirt" "Please read official documentation for kvmfr for how to use it")"
 echo ""
-echo "Press OK to start the process of regenerating your initramfs, this will take a long time"
-echo "and there is no good way to track progress for it, if anything is wrong it will error out."
-echo "${b}NOTE: You can start using kvmfr right now without rebooting, but you will need to regenerate initramfs for it to auto load next boot.${n}"
+if [ -e "/dev/kvmfr0" ]; then
+    sudo chown $USER:qemu /dev/kvmfr0
+    echo "${b}NOTE: You can start using kvmfr right now without rebooting${n}"
+else
+    echo "Please reboot in order to fully load the kvmfr module."
+fi
 
 CONFIRM=$(Choose OK)
-rpm-ostree initramfs --enable
