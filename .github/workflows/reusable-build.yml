@@ -95,14 +95,14 @@ jobs:
         # if: github.event_name != 'pull_request'
         env:
           IMAGE: ${{ env.IMAGE_NAME }}
-          DEFAULT_TAG: ${{ env.DEFAULT_TAG }}
+          STREAM_NAME: ${{ matrix.stream_name }}
           SYFT_CMD: ${{ steps.setup-syft.outputs.cmd }}
         run: |
           sudo systemctl start podman.socket
 
           OUTPUT_PATH="$(mktemp -d)/sbom.json"
           export SYFT_PARALLELISM=$(($(nproc)*2))
-          sudo $SYFT_CMD ${IMAGE}:${DEFAULT_TAG} -o spdx-json=${OUTPUT_PATH}
+          sudo $SYFT_CMD ${IMAGE}:${STREAM_NAME} -o spdx-json=${OUTPUT_PATH}
           echo "OUTPUT_PATH=${OUTPUT_PATH}" >> $GITHUB_OUTPUT
 
       - name: Rechunk Image
