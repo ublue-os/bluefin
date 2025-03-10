@@ -28,6 +28,15 @@ install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
+# Use old bluefin background package for GTS
+# FIXME: remove this once GTS updates to fc41
+if [ "$(rpm --eval "%{dist}")" == ".fc40" ] ; then
+    dnf install -y bluefin-backgrounds-0.1.6
+else
+    dnf install -y bluefin-backgrounds
+fi 
+
+
 # Required for bluefin faces to work without conflicting with a ton of packages
 rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
 mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
