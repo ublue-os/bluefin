@@ -28,15 +28,24 @@ install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >> /etc/bashrc
 
+# Automatic wallpaper changing by month
+HARDCODED_RPM_MONTH="12"
+# Use old bluefin background package for GTS
+# FIXME: remove this once GTS updates to fc41
+if [ "$(rpm --eval "%{dist}")" == ".fc40" ] ; then
+    dnf5 install -y "bluefin-backgrounds-0.1.7-1$(rpm -E "%{dist}")"
+    # Pin to february wallpaper instead
+    sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/02/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
+else
+    dnf5 install -y bluefin-backgrounds
+    sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
+fi
+glib-compile-schemas /usr/share/glib-2.0/schemas
+
 # Required for bluefin faces to work without conflicting with a ton of packages
 rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
 mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
 rm -rf /usr/share/pixmaps/faces/bluefin
-
-# Automatic wallpaper changing by month
-HARDCODED_RPM_MONTH="12"
-sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
-glib-compile-schemas /usr/share/glib-2.0/schemas
 
 dnf5 -y swap fedora-logos bluefin-logos
 
