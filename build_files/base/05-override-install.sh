@@ -31,7 +31,7 @@ echo 'eval "$(starship init bash)"' >> /etc/bashrc
 # Use old bluefin background package for GTS
 # FIXME: remove this once GTS updates to fc41
 if [ "$(rpm --eval "%{dist}")" == ".fc40" ] ; then
-    dnf5 install -y "bluefin-backgrounds-0.1.6$(rpm -E "%{dist}")"
+    dnf5 install -y "bluefin-backgrounds-0.1.7$(rpm -E "%{dist}")"
 else
     dnf5 install -y bluefin-backgrounds
 fi 
