@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Ask Bluefin
+    url: https://github.com/ublue-os/bluefin/discussions/categories/ask-bluefin
+    about: Ask our trained raptor questions about Bluefin
   - name: Questions and Feedback
     url: https://universal-blue.discourse.group/c/bluefin/6
-    about: Ask a question, share tips, and help others
+    about: Share tips and help others
