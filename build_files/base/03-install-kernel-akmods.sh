@@ -58,6 +58,8 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     tar -xvzf /tmp/akmods-rpms/"$NVIDIA_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-rpms/
 
+    # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
+    dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
     # Install Nvidia RPMs
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
     chmod +x /tmp/nvidia-install.sh
