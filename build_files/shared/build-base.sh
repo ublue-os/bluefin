@@ -7,7 +7,6 @@ if [ "${FEDORA_MAJOR_VERSION}" -lt 41 ]; then
     rpm-ostree install --idempotent dnf5 dnf5-plugins
 fi
 
-dnf5 -y downgrade dnf5
 echo "::endgroup::"
 
 echo "::group:: Copy Files"
