@@ -31,7 +31,7 @@ dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel
 # Everyone
 # NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
-if [[ "${UBLUE_TAG_NAME}" == "beta" ]]; then
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
     dnf5 -y install /tmp/akmods/kmods/*xone*.rpm || true
     dnf5 -y install /tmp/akmods/kmods/*xpadneo*.rpm || true
     dnf5 -y install /tmp/akmods/kmods/*openrazer*.rpm || true
@@ -49,7 +49,7 @@ dnf5 -y install \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 
-if [[ "${UBLUE_TAG_NAME}" == "beta" ]]; then
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
     dnf5 -y install \
         v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm || true
 else
