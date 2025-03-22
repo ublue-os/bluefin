@@ -4,6 +4,11 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
+# Beta Updates Testing Repo...
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+    dnf5 config-manager setopt updates-testing.enabled=1
+fi
+
 # Remove Existing Kernel
 for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra; do
     rpm --erase $pkg --nodeps
@@ -73,8 +78,15 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
 
     # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
     dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
+
     # Install Nvidia RPMs
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
+    if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+        if ! grep -q negativo17 <(rpm -qi mesa-dri-drivers); then
+            dnf5 -y swap --repo=updates-testing \
+                mesa-dri-drivers mesa-dri-drivers
+        fi
+    fi
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
