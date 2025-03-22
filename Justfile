@@ -134,7 +134,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     elif [[ "${tag}" =~ gts|stable ]]; then
         akmods_flavor="coreos-stable"
     elif [[ "${tag}" =~ beta ]]; then
-        akmods_flavor="coreos-testing"
+        akmods_flavor="main"
     else
         akmods_flavor="main"
     fi

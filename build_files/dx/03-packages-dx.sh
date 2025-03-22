@@ -32,15 +32,25 @@ fi
 
 # simple case to install where no packages need excluding
 if [[ "${#INCLUDED_PACKAGES[@]}" -gt 0 && "${#INSTALLED_EXCLUDED_PACKAGES[@]}" -eq 0 ]]; then
-    dnf5 -y install \
-        ${INCLUDED_PACKAGES[@]}
+    if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+        dnf5 -y install --skip-unavailable \
+            ${INCLUDED_PACKAGES[@]}
+    else
+        dnf5 -y install \
+            ${INCLUDED_PACKAGES[@]}
+    fi
 
 # install/excluded packages both at same time
 elif [[ "${#INCLUDED_PACKAGES[@]}" -gt 0 && "${#INSTALLED_EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     dnf5 -y remove \
-        ${INSTALLED_EXCLUDED_PACKAGES[@]} && \
-    dnf5 -y install \
-        ${INCLUDED_PACKAGES[@]}
+        ${INSTALLED_EXCLUDED_PACKAGES[@]}
+    if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+        dnf5 -y install --skip-unavailable \
+            ${INCLUDED_PACKAGES[@]}
+    else
+        dnf5 -y install \
+            ${INCLUDED_PACKAGES[@]}
+    fi
 else
     echo "No packages to install."
 fi
