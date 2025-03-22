@@ -5,9 +5,10 @@ echo "::group:: ===$(basename "$0")==="
 set -eoux pipefail
 
 # Patched shells
-dnf5 -y swap \
---repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-    gnome-shell gnome-shell
+if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
+    dnf5 -y swap \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        gnome-shell gnome-shell
 
 # Fix for ID in fwupd
 dnf5 -y swap \
@@ -18,7 +19,7 @@ dnf5 -y swap \
 dnf5 -y swap \
     --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
         switcheroo-control switcheroo-control
-
+fi
 dnf5 -y copr remove sentry/switcheroo-control_discrete
 
 # Starship Shell Prompt
