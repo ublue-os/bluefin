@@ -4,7 +4,10 @@ ARG SOURCE_IMAGE="${BASE_IMAGE_NAME}-main"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 
 FROM scratch AS ctx
-COPY / /
+COPY /system_files /system_files
+COPY /build_files /build_files
+COPY /just /just
+COPY packages.json /
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
