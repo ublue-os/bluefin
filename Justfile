@@ -560,9 +560,12 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     iso_build_args=()
     iso_build_args+=("--rm" "--privileged" "--pull=${PULL_POLICY}")
     if [[ "{{ ghcr }}" == "0" ]]; then
-    	iso_build_args+=(--volume "/var/lib/containers/storage:/var/lib/containers/storage")
+    	iso_build_args+=(
+            "--security-opt=label=disable"
+            "--volume=/var/lib/containers/storage:/var/lib/containers/storage"
+        )
     fi
-    iso_build_args+=(--volume "${PWD}:/github/workspace/")
+    iso_build_args+=("--volume=${PWD}:/github/workspace/")
     iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="x86_64")
     iso_build_args+=(ENROLLMENT_PASSWORD="universalblue")
@@ -630,9 +633,8 @@ run-iso $image="bluefin" $tag="latest" $flavor="main":
     run_args+=(--device=/dev/kvm)
     run_args+=(--volume "${PWD}/${image_name}_build/${image_name}-${tag}.iso":"/boot.iso")
     run_args+=(docker.io/qemux/qemu-docker)
-    ${PODMAN} run "${run_args[@]}" &
-    xdg-open http://localhost:${port}
-    fg "%podman" || fg "%docker"
+    xdg-open http://localhost:${port} &
+    ${PODMAN} run "${run_args[@]}"
 
 # Test Changelogs
 [group('Changelogs')]
