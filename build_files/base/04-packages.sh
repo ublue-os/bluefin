@@ -22,7 +22,7 @@ readarray -t EXCLUDED_PACKAGES < <(jq -r "[(.all.exclude | (select(.all != null)
                     | sort | unique[]" /tmp/packages.json)
 
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
-    readarray -t EXCLUDED_PACKAGES < <(rpm -qa --queryformat='%{NAME} ' "${EXCLUDED_PACKAGES[@]}")
+    readarray -t EXCLUDED_PACKAGES < <(rpm -qa --queryformat='%{NAME}\n' "${EXCLUDED_PACKAGES[@]}")
 fi
 
 # remove any excluded packages which are still present on image

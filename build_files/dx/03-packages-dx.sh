@@ -21,10 +21,8 @@ readarray -t EXCLUDED_PACKAGES < <(jq -r "[(.dx.exclude | (select(.dx != null).d
                     (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".exclude | (select(.dx != null).dx)[]), \
                     | sort | unique[]" /tmp/packages.json)
 
-# check if any excluded packages are still present
-# (this can happen if an included package pulls in a dependency)
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
-    readarray -t EXCLUDED_PACKAGES < <(rpm -qa --queryformat='%{NAME} ' "${EXCLUDED_PACKAGES[@]}")
+    readarray -t EXCLUDED_PACKAGES < <(rpm -qa --queryformat='%{NAME}\n' "${EXCLUDED_PACKAGES[@]}")
 fi
 
 # remove any excluded packages which are still present on image
