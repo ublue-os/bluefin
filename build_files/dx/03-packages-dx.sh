@@ -5,8 +5,8 @@ echo "::group:: ===$(basename "$0")==="
 set -ouex pipefail
 
 # build list of all packages requested for inclusion
-readarray -t INCLUDED_PACKAGES < <(jq -r "[(.dx.include | (select(.dx != null).dx)[]), \
-                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".include | (select(.dx != null).dx)[]) \
+readarray -t INCLUDED_PACKAGES < <(jq -r "[(.all.include | (select(.dx != null).dx)[]), \
+                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".include | (select(.dx != null).dx)[])] \
                     | sort | unique[]" /tmp/packages.json)
 
 # Install Packages
@@ -17,8 +17,8 @@ else
 fi
 
 # build list of all packages requested for exclusion
-readarray -t EXCLUDED_PACKAGES < <(jq -r "[(.dx.exclude | (select(.dx != null).dx)[]), \
-                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".exclude | (select(.dx != null).dx)[]) \
+readarray -t EXCLUDED_PACKAGES < <(jq -r "[(.all.exclude | (select(.dx != null).dx)[]), \
+                    (select(.\"$FEDORA_MAJOR_VERSION\" != null).\"$FEDORA_MAJOR_VERSION\".exclude | (select(.dx != null).dx)[])] \
                     | sort | unique[]" /tmp/packages.json)
 
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then

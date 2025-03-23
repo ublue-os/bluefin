@@ -14,8 +14,6 @@
 				"borgbackup",
 				"cryfs",
 				"ddcutil",
-				"epson-inkjet-printer-escpr",
-				"epson-inkjet-printer-escpr2",
 				"evtest",
 				"fastfetch",
 				"firewall-config",
@@ -179,7 +177,11 @@
 	},
 	"40": {
 		"include": {
-			"all": ["ptyxis"],
+			"all": [
+				"epson-inkjet-printer-escpr",
+				"epson-inkjet-printer-escpr2",
+				"ptyxis"
+			],
 			"dx": ["lxd-agent", "lxd"]
 		},
 		"exclude": {
@@ -189,7 +191,11 @@
 	},
 	"41": {
 		"include": {
-			"all": ["google-noto-fonts-all"],
+			"all": [
+				"epson-inkjet-printer-escpr",
+				"epson-inkjet-printer-escpr2",
+				"google-noto-fonts-all"
+			],
 			"dx": []
 		},
 		"exclude": {
