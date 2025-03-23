@@ -105,13 +105,8 @@
 				"cockpit-storaged",
 				"cockpit-system",
 				"code",
-				"containerd.io",
 				"dbus-x11",
 				"devpod",
-				"docker-ce",
-				"docker-ce-cli",
-				"docker-buildx-plugin",
-				"docker-compose-plugin",
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
@@ -182,7 +177,15 @@
 				"epson-inkjet-printer-escpr2",
 				"ptyxis"
 			],
-			"dx": ["lxd-agent", "lxd"]
+			"dx": [
+				"containerd.io",
+				"docker-buildx-plugin",
+				"docker-ce",
+				"docker-ce-cli",
+				"docker-compose-plugin",
+				"lxd-agent",
+				"lxd"
+			]
 		},
 		"exclude": {
 			"all": [],
@@ -196,7 +199,13 @@
 				"epson-inkjet-printer-escpr2",
 				"google-noto-fonts-all"
 			],
-			"dx": []
+			"dx": [
+				"containerd.io",
+				"docker-buildx-plugin",
+				"docker-ce",
+				"docker-ce-cli",
+				"docker-compose-plugin"
+			]
 		},
 		"exclude": {
 			"all": [],
