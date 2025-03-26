@@ -14,8 +14,11 @@ jobs:
     build-image-stable:
         uses: ./.github/workflows/build-image-stable.yml
         secrets: inherit
-    build-image-latest:
-        uses: ./.github/workflows/build-image-latest.yml
+    build-image-latest-main:
+        uses: ./.github/workflows/build-image-latest-main.yml
+        secrets: inherit
+    build-image-latest-hwe:
+        uses: ./.github/workflows/build-image-latest-hwe.yml
         secrets: inherit
     build-image-beta:
         uses: ./.github/workflows/build-image-beta.yml

@@ -6,7 +6,6 @@
 				"adw-gtk3-theme",
 				"bash-color-prompt",
 				"bcache-tools",
-				"bluefin-backgrounds",
 				"bluefin-schemas",
 				"borgbackup",
 				"bootc",
@@ -28,6 +27,7 @@
 				"gum",
 				"hplip",
 				"krb5-workstation",
+				"ibus-mozc",
 				"ifuse",
 				"input-remapper",
 				"jetbrains-mono-fonts-all",
@@ -37,6 +37,7 @@
 				"lm_sensors",
 				"make",
 				"mesa-libGLU",
+				"mozc",
 				"nerd-fonts",
 				"oddjob-mkhomedir",
 				"opendyslexic-fonts",
@@ -44,6 +45,7 @@
 				"pulseaudio-utils",
 				"powertop",
 				"python3-pip",
+				"python3-pygit2",
 				"rclone",
 				"restic",
 				"samba-dcerpc",
@@ -59,6 +61,7 @@
 				"stress-ng",
 				"tailscale",
 				"tmux",
+				"topgrade",
 				"ublue-fastfetch",
 				"ublue-motd",
 				"usbmuxd",
@@ -109,10 +112,6 @@
 				"containerd.io",
 				"dbus-x11",
 				"devpod",
-				"docker-ce",
-				"docker-ce-cli",
-				"docker-buildx-plugin",
-				"docker-compose-plugin",
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
@@ -138,6 +137,7 @@
 				"podman-tui",
 				"podmansh",
 				"powerline-fonts",
+				"python3-ramalama",
 				"qemu-char-spice",
 				"qemu-device-display-virtio-gpu",
 				"qemu-device-display-virtio-vga",
@@ -166,8 +166,7 @@
 			"all": [
 				"firefox-langpacks",
 				"firefox",
-				"podman-docker",
-				"ublue-os-update-services"
+				"podman-docker"
 			],
 			"silverblue": [
 				"gnome-extensions-app",
@@ -186,7 +185,11 @@
 			"silverblue": [],
 			"dx": [
 				"lxd-agent",
-				"lxd"
+				"lxd",
+				"docker-ce",
+				"docker-ce-cli",
+				"docker-buildx-plugin",
+				"docker-compose-plugin"
 			]
 		},
 		"exclude": {
@@ -200,7 +203,25 @@
 			"all": [
 				"google-noto-fonts-all"
 			],
-			"silverblue": []
+			"silverblue": [],
+			"dx": [
+				"docker-ce",
+				"docker-ce-cli",
+				"docker-buildx-plugin",
+				"docker-compose-plugin"
+			]
+		},
+		"exclude": {
+			"all": [],
+			"silverblue": [],
+			"dx": []
+		}
+	},
+	"42": {
+		"include": {
+			"all": [],
+			"silverblue": [],
+			"dx": []
 		},
 		"exclude": {
 			"all": [],

@@ -5,9 +5,21 @@ alias upgrade := update
 # Update system, flatpaks, and containers all at once
 update:
     #!/usr/bin/bash
-    TOPGRADE_CONFIG="/usr/share/ublue-os/topgrade"
-    /usr/bin/grep "^LockLayering=true" /etc/rpm-ostreed.conf &>/dev/null && TOPGRADE_CONFIG="${TOPGRADE_CONFIG}-bootc"
-    /usr/bin/topgrade --config "${TOPGRADE_CONFIG}.toml" --keep
+    # rpm-ostree used due to bootc upgrade not supporting local layered packages
+    rpm-ostree upgrade
+    # Updates system Flatpaks
+    if flatpak remotes | grep -q system; then
+        flatpak update -y
+    fi
+    # Update user Flatpaks
+    if flatpak remotes | grep -q user; then
+        flatpak update --user -y
+    fi
+    # Guard Brew if the user does not own brew/doesn't exist
+    if [[ -O /var/home/linuxbrew/.linuxbrew/bin/brew ]]; then
+        # Upgrade will run brew update if needed
+        /var/home/linuxbrew/.linuxbrew/bin/brew upgrade
+    fi
 
 alias auto-update := toggle-updates
 
@@ -16,7 +28,7 @@ toggle-updates ACTION="prompt":
     #!/usr/bin/bash
     source /usr/lib/ujust/ujust.sh
     CURRENT_STATE="Disabled"
-    if systemctl is-enabled ublue-update.timer | grep -q enabled; then
+    if systemctl is-enabled rpm-ostreed-automatic.timer  | grep -q enabled; then
         CURRENT_STATE="Enabled"
     fi
     OPTION={{ ACTION }}
@@ -32,13 +44,19 @@ toggle-updates ACTION="prompt":
         exit 0
     fi
     if [ "${OPTION,,}" == "enable" ]; then
-        sudo systemctl enable ublue-update.timer
+        sudo systemctl enable rpm-ostreed-automatic.timer
     elif [ "${OPTION,,}" == "disable" ]; then
-        sudo systemctl disable ublue-update.timer
+        sudo systemctl disable rpm-ostreed-automatic.timer
     fi
 
 alias changelog := changelogs
 
 # Show the changelog
+
 changelogs:
+    #!/usr/bin/bash
+    CONTENT=$(curl -s https://api.github.com/repos/ublue-os/bluefin/releases/latest | jq -r '.body')
+    echo "$CONTENT" | glow -
+
+changelogs-fedora:
     rpm-ostree db diff --changelogs
