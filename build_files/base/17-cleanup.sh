@@ -39,6 +39,10 @@ dnf5 -y copr disable ublue-os/staging
 dnf5 -y copr disable ublue-os/packages
 dnf5 -y copr disable che/nerd-fonts
 dnf5 -y copr disable phracek/PyCharm
+
+# Disable terra repos with dnf
+dnf5 -y config-manager setopt "terra*".enabled=false
+
 # NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
