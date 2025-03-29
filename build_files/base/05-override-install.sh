@@ -16,11 +16,10 @@ if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
         fwupd fwupd
 
     # Switcheroo patch
-    dnf5 -y swap \
-        --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
-        switcheroo-control switcheroo-control
+  dnf5 -y swap \
+      --repo=terra-extras \
+          switcheroo-control switcheroo-control
 fi
-dnf5 -y copr remove sentry/switcheroo-control_discrete
 
 # Starship Shell Prompt
 curl --retry 3 -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"

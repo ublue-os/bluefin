@@ -10,8 +10,8 @@ dnf5 -y copr enable ublue-os/staging
 # Add Packages repo
 dnf5 -y copr enable ublue-os/packages
 
-# Add Switcheroo Repo
-dnf5 -y copr enable sentry/switcheroo-control_discrete
+# Enable Terra repo
+dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
 
 # Add Nerd Fonts Repo
 dnf5 -y copr enable che/nerd-fonts
