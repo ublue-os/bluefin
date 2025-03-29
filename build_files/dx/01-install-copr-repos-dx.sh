@@ -31,4 +31,7 @@ dnf5 -y copr enable hikariknight/looking-glass-kvmfr
 # Podman-bootc
 dnf5 -y copr enable gmaglione/podman-bootc
 
+# Enable Terra repo
+dnf5 -y config-manager setopt "terra".enabled=true
+
 echo "::endgroup::"
