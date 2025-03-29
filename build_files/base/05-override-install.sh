@@ -6,9 +6,9 @@ set -eoux pipefail
 
 if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
     # Patched shells
-    dnf5 -y swap \
-        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        gnome-shell gnome-shell
+   dnf5 -y swap \
+        --repo terra-extras \
+            gnome-shell gnome-shell
 
     # Fix for ID in fwupd
     dnf5 -y swap \
