@@ -14,15 +14,14 @@ if [[ "$(rpm -E %fedora)" -eq "40" ]]; then
         switcheroo-control switcheroo-control
 elif [[ "$(rpm -E %fedora)" -eq "41" ]]; then
     # Enable Terra repo (Extras does not exist on F40)
+    # shellcheck disable=SC2016
     dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
     dnf5 config-manager setopt "terra*".enabled=0
     dnf5 -y swap \
         --repo=terra-extras \
-        --enable-repo=terra-extras \
         gnome-shell gnome-shell
     dnf5 -y swap \
         --repo=terra-extras \
-        --enable-repo=terra-extras \
         switcheroo-control switcheroo-control
 fi
 
