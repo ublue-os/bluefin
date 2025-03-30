@@ -4,23 +4,39 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
-    # Patched shells
+# Patched shells and Switcheroo Patch
+if [[ "$(rpm -E %fedora)" -eq "40" ]]; then
+    dnf5 -y copr enable sentry/switcheroo-control_discrete
+    dnf5 -y copr disable sentry/switcheroo-control_discrete
     dnf5 -y swap \
-        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        --repo copr:copr.fedorainfracloud.org:ublue-os:staging \
         gnome-shell gnome-shell
+    dnf5 versionlock add gnome-shell
+    dnf5 -y swap \
+        --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
+        switcheroo-control switcheroo-control
+    dnf5 versionlock add switcheroo-control
+elif [[ "$(rpm -E %fedora)" -eq "41" ]]; then
+    # Enable Terra repo (Extras does not exist on F40)
+    # shellcheck disable=SC2016
+    dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
+    dnf5 config-manager setopt "terra*".enabled=0
+    dnf5 -y swap \
+        --repo=terra-extras \
+        gnome-shell gnome-shell
+    dnf5 versionlock add gnome-shell
+    dnf5 -y swap \
+        --repo=terra-extras \
+        switcheroo-control switcheroo-control
+    dnf5 versionlock add switcheroo-control
+fi
 
+if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
     # Fix for ID in fwupd
     dnf5 -y swap \
         --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
         fwupd fwupd
-
-    # Switcheroo patch
-    dnf5 -y swap \
-        --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
-        switcheroo-control switcheroo-control
 fi
-dnf5 -y copr remove sentry/switcheroo-control_discrete
 
 # Starship Shell Prompt
 curl --retry 3 -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
