@@ -69,13 +69,10 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     mv /tmp/rpms/* /tmp/akmods-rpms/
 
     # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
-    # Exclude for non-beta.... doesn't appear to exist for F42 yet?
-    if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
-        dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
-    fi
+    dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
 
     # Install Nvidia RPMs
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
+    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
