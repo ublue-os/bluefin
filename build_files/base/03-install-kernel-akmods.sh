@@ -36,31 +36,23 @@ dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel
 # Everyone
 # NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 -y install /tmp/akmods/kmods/*xone*.rpm || true
-    dnf5 -y install /tmp/akmods/kmods/*xpadneo*.rpm || true
-    dnf5 -y install /tmp/akmods/kmods/*openrazer*.rpm || true
-    dnf5 -y install /tmp/akmods/kmods/*framework-laptop*.rpm || true
-else
-    dnf5 -y install \
-        /tmp/akmods/kmods/*xone*.rpm \
-        /tmp/akmods/kmods/*xpadneo*.rpm \
-        /tmp/akmods/kmods/*openrazer*.rpm \
-        /tmp/akmods/kmods/*framework-laptop*.rpm
+AKMODS=(
+    /tmp/akmods/kmods/*xone*.rpm
+    /tmp/akmods/kmods/*xpadneo*.rpm
+    /tmp/akmods/kmods/*framework-laptop*.rpm
+)
+if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
+    AKMODS+=(/tmp/akmods/kmods/*openrazer*.rpm)
 fi
+dnf5 -y install "${AKMODS[@]}"
 
 # RPMFUSION Dependent AKMODS
 dnf5 -y install \
     https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm || true
-else
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-fi
+dnf5 -y install \
+    v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
 
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
 
@@ -80,12 +72,6 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     # Exclude for non-beta.... doesn't appear to exist for F42 yet?
     if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
         dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
-    else
-        # Monkey patch right now...
-        if ! grep -q negativo17 <(rpm -qi mesa-dri-drivers); then
-            dnf5 -y swap --repo=updates-testing \
-                mesa-dri-drivers mesa-dri-drivers
-        fi
     fi
 
     # Install Nvidia RPMs
