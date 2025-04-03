@@ -4,7 +4,9 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-systemctl enable docker.socket
+if rpm -q docker-ce >/dev/null; then
+    systemctl enable docker.socket
+fi
 systemctl enable podman.socket
 systemctl enable swtpm-workaround.service
 systemctl enable libvirt-workaround.service
@@ -12,6 +14,7 @@ systemctl enable bluefin-dx-groups.service
 systemctl enable --global bluefin-dx-user-vscode.service
 
 dnf5 -y copr disable ublue-os/staging
+dnf5 -y copr disable ublue-os/packages
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
     dnf5 -y copr disable ganto/lxc4
 fi

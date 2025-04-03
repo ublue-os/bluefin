@@ -5,7 +5,21 @@ alias upgrade := update
 # Update system, flatpaks, and containers all at once
 update:
     #!/usr/bin/bash
-    pkexec uupd --log-level debug
+    # rpm-ostree used due to bootc upgrade not supporting local layered packages
+    rpm-ostree upgrade
+    # Updates system Flatpaks
+    if flatpak remotes | grep -q system; then
+        flatpak update -y
+    fi
+    # Update user Flatpaks
+    if flatpak remotes | grep -q user; then
+        flatpak update --user -y
+    fi
+    # Guard Brew if the user does not own brew/doesn't exist
+    if [[ -O /var/home/linuxbrew/.linuxbrew/bin/brew ]]; then
+        # Upgrade will run brew update if needed
+        /var/home/linuxbrew/.linuxbrew/bin/brew upgrade
+    fi
 
 alias auto-update := toggle-updates
 
@@ -38,5 +52,11 @@ toggle-updates ACTION="prompt":
 alias changelog := changelogs
 
 # Show the changelog
+
 changelogs:
+    #!/usr/bin/bash
+    CONTENT=$(curl -s https://api.github.com/repos/ublue-os/bluefin/releases/latest | jq -r '.body')
+    echo "$CONTENT" | glow -
+
+changelogs-fedora:
     rpm-ostree db diff --changelogs

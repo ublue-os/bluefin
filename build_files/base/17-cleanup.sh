@@ -20,9 +20,11 @@ systemctl --global enable podman-auto-update.timer
 systemctl enable check-sb-key.service
 
 # Hide Desktop Files. Hidden removes mime associations
-sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/fish.desktop
-sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/htop.desktop
-sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/nvtop.desktop
+for file in fish htop nvtop; do
+    if [[ -f "/usr/share/applications/$file.desktop" ]]; then
+        sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/"$file".desktop
+    fi
+done
 
 #Disable autostart behaviour
 rm -f /etc/xdg/autostart/solaar.desktop
@@ -32,6 +34,7 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.r
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/charm.repo
 dnf5 -y copr disable ublue-os/staging
+dnf5 -y copr disable ublue-os/packages
 dnf5 -y copr disable che/nerd-fonts
 dnf5 -y copr disable phracek/PyCharm
 # NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
