@@ -45,6 +45,7 @@ install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >>/etc/bashrc
 
+
 # Automatic wallpaper changing by month
 HARDCODED_RPM_MONTH="12"
 # Use old bluefin background package for GTS
@@ -67,6 +68,7 @@ rm -rf /usr/share/pixmaps/faces/bluefin
 dnf5 -y swap fedora-logos bluefin-logos
 
 # Consolidate Just Files
+
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>/usr/share/ublue-os/just/60-custom.just
 
 # Register Fonts
