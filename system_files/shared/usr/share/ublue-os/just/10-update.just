@@ -28,7 +28,9 @@ toggle-updates ACTION="prompt":
     #!/usr/bin/bash
     source /usr/lib/ujust/ujust.sh
     CURRENT_STATE="Disabled"
-    if systemctl is-enabled uupd.timer | grep -q enabled; then
+    if systemctl is-enabled -q rpm-ostreed-automatic.timer; then
+        CURRENT_STATE="Enabled"
+    elif systemctl is-enabled -q uupd.timer; then
         CURRENT_STATE="Enabled"
     fi
     OPTION={{ ACTION }}
@@ -43,10 +45,15 @@ toggle-updates ACTION="prompt":
         echo "  Use 'disable' to Disable automatic updates."
         exit 0
     fi
+    if systemctl cat -- uupd.timer &> /dev/null; then
+        TIMER="uupd.timer"
+    else
+        TIMER="rpm-ostreed-automatic.timer"
+    fi
     if [ "${OPTION,,}" == "enable" ]; then
-        sudo systemctl enable uupd.timer
+        sudo systemctl enable "$TIMER"
     elif [ "${OPTION,,}" == "disable" ]; then
-        sudo systemctl disable uupd.timer
+        sudo systemctl disable "$TIMER"
     fi
 
 alias changelog := changelogs

@@ -66,7 +66,6 @@
 				"ublue-fastfetch",
 				"ublue-motd",
 				"usbmuxd",
-				"uupd",
 				"ublue-brew",
 				"ublue-bling",
 				"wireguard-tools",
@@ -93,7 +92,6 @@
 				"simple-scan",
 				"yaru-theme",
 				"zenity"
-				
 			],
 			"dx": [
 				"adobe-source-code-pro-fonts",
@@ -165,11 +163,7 @@
 			]
 		},
 		"exclude": {
-			"all": [
-				"firefox-langpacks",
-				"firefox",
-				"podman-docker"
-			],
+			"all": ["firefox-langpacks", "firefox", "podman-docker"],
 			"silverblue": [
 				"gnome-extensions-app",
 				"gnome-shell-extension-background-logo",
@@ -181,9 +175,7 @@
 	},
 	"40": {
 		"include": {
-			"all": [
-				"ptyxis"
-			],
+			"all": ["ptyxis"],
 			"silverblue": [],
 			"dx": [
 				"lxd-agent",
@@ -202,9 +194,7 @@
 	},
 	"41": {
 		"include": {
-			"all": [
-				"google-noto-fonts-all"
-			],
+			"all": ["google-noto-fonts-all"],
 			"silverblue": [],
 			"dx": [
 				"docker-ce",
@@ -221,7 +211,7 @@
 	},
 	"42": {
 		"include": {
-			"all": [],
+			"all": ["uupd"],
 			"silverblue": [],
 			"dx": []
 		},
