@@ -49,14 +49,9 @@ toggle-updates ACTION="prompt":
         sudo systemctl disable rpm-ostreed-automatic.timer
     fi
 
-alias changelog := changelogs
+alias changelog := changelogs-fedora
+alias changelogs := changelogs-fedora
 
 # Show the changelog
-
-changelogs:
-    #!/usr/bin/bash
-    CONTENT=$(curl -s https://api.github.com/repos/ublue-os/bluefin/releases/latest | jq -r '.body')
-    echo "$CONTENT" | glow -
-
 changelogs-fedora:
     rpm-ostree db diff --changelogs
