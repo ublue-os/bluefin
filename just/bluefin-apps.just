@@ -132,7 +132,6 @@ install-jetbrains-toolbox:
 incus:
     @ujust install-incus
 
-
 # Install OpenTabletDriver, an open source, cross-platform, user-mode tablet driver
 [group('Apps')]
 install-opentabletdriver:
@@ -164,7 +163,6 @@ install-opentabletdriver:
     else
         echo "Have a good day :)!"
     fi
-
 
 # Install and configure Incus
 [group('Apps')]
