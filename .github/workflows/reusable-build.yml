@@ -88,7 +88,6 @@ jobs:
           syft-version: v1.21.0
 
       - name: Generate SBOM
-        if: false
         id: generate-sbom
         env:
           IMAGE: ${{ env.IMAGE_NAME }}
