@@ -114,9 +114,8 @@ jobs:
           OUTPUT_PATH="$(mktemp -d)/sbom.json"
           export SYFT_PARALLELISM=$(($(nproc)))
           sudo $SYFT_CMD ${IMAGE}:${STREAM_NAME} -o spdx-json=${OUTPUT_PATH} -o syft-table=sbom.table
+          cat sbom.table
           echo "OUTPUT_PATH=${OUTPUT_PATH}" >> $GITHUB_OUTPUT
-          echo "### SBOM Table" >> "$GITHUB_STEP_SUMMARY"
-          cat ./sbom.table >> "$GITHUB_STEP_SUMMARY"
 
       - name: Rechunk Image
         id: rechunk-image
@@ -242,7 +241,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
       - name: Add SBOM Attestation
-        if: github.event_name != 'pull_request'
+        if: false
         env:
           IMAGE: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           DIGEST: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
