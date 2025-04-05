@@ -40,10 +40,8 @@ AKMODS=(
     /tmp/akmods/kmods/*xone*.rpm
     /tmp/akmods/kmods/*xpadneo*.rpm
     /tmp/akmods/kmods/*framework-laptop*.rpm
+    /tmp/akmods/kmods/*openrazer*.rpm
 )
-if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
-    AKMODS+=(/tmp/akmods/kmods/*openrazer*.rpm)
-fi
 dnf5 -y install "${AKMODS[@]}"
 
 # RPMFUSION Dependent AKMODS
