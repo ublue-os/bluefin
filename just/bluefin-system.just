@@ -221,7 +221,6 @@ configure-vfio ACTION="":
 
 # Install system flatpaks for rebasers
 [group('System')]
-[private]
 install-system-flatpaks:
     #!/usr/bin/bash
     FLATPAKS="bluefin_flatpaks/flatpaks"
