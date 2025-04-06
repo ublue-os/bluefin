@@ -49,14 +49,14 @@ echo 'eval "$(starship init bash)"' >>/etc/bashrc
 HARDCODED_RPM_MONTH="12"
 # Use old bluefin background package for GTS
 # FIXME: remove this once GTS updates to fc41
-if [ "$(rpm --eval "%{dist}")" == ".fc40" ]; then
-    dnf5 install -y "bluefin-backgrounds-0.1.7-1$(rpm -E "%{dist}")"
-    # Pin to february wallpaper instead
-    sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/02/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
-else
+# if [ "$(rpm --eval "%{dist}")" == ".fc40" ]; then
+#     dnf5 install -y "bluefin-backgrounds-0.1.7-1$(rpm -E "%{dist}")"
+#     # Pin to february wallpaper instead
+#     sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/02/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
+# else
     dnf5 install -y bluefin-backgrounds
     sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
-fi
+# fi
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
 # Required for bluefin faces to work without conflicting with a ton of packages
