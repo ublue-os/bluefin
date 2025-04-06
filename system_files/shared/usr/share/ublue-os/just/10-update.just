@@ -49,9 +49,18 @@ toggle-updates ACTION="prompt":
         sudo systemctl disable rpm-ostreed-automatic.timer
     fi
 
-alias changelog := changelogs-fedora
-alias changelogs := changelogs-fedora
+alias changelog := changelogs
 
 # Show the changelog
+changelogs:
+    #!/usr/bin/bash
+    TAG=$(jq -r '.["image-tag"]' < /usr/share/ublue-os/image-info.json)
+    if [[ "$TAG" =~ gts$|stable$ ]]; then
+        DATE="$(rpm-ostree status --json | jq -r '.deployments.[0].version' | grep -oP ".*\d{2}\.\K\d{8}?\.?\d")"
+        curl -Ls https://api.github.com/repos/ublue-os/bluefin/releases | jq -r ".[] | select(.tag_name==\"${TAG}-${DATE}\") | .body" | glow -p
+    else
+        ujust changelogs-fedora
+    fi
+
 changelogs-fedora:
     rpm-ostree db diff --changelogs
