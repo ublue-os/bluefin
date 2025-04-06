@@ -60,7 +60,7 @@ changelogs:
 
     # If stable or gts, get changelogs from Github Releases
     if [[ "$TAG" =~ gts$|stable$ ]]; then
-        DATE="$(grep -oP "OSTREE_VERSION=.*\d{2}\.\K\d{8}(\.\d+|)" /etc/os-release)"
+        DATE="$(grep -oP "OSTREE_VERSION=.*\d{2}\.\K\d{8}[.0-9]*" /etc/os-release)"
         CONTENT=$(curl -Ls https://api.github.com/repos/ublue-os/bluefin/releases | jq -r ".[] | select(.tag_name==\"${TAG}-${DATE}\") | .body")
     fi
 
