@@ -29,7 +29,7 @@ concurrency:
 jobs:
   build_container:
     name: image
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     continue-on-error: false
     strategy:
       fail-fast: false
