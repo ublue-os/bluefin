@@ -5,6 +5,15 @@ alias upgrade := update
 # Update system, flatpaks, and containers all at once
 update:
     #!/usr/bin/bash
+    if systemctl cat -- uupd.timer &> /dev/null; then
+        SERVICE="uupd.service"
+    else
+        SERVICE="rpm-ostreed-automatic.service"
+    fi
+    if systemctl is-active --quiet "$SERVICE"; then
+        echo "automatic updates are currently running, use \`journalctl -fexu $SERVICE\` to see logs"
+        exit 1
+    fi
     # rpm-ostree used due to bootc upgrade not supporting local layered packages
     rpm-ostree upgrade
     # Updates system Flatpaks
