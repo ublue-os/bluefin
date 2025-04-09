@@ -19,7 +19,7 @@ on:
         description: "The full kernel version to pin"
         type: string
       rpmfusion_mirror:
-        description: "Mirror"
+        description: "Mirror to be used for RPMFusion"
         required: false
         # FIXME: This should be `mirrors.rpmfusion.org` when that one is fixed for f42
         default: "https://mirrors.ocf.berkeley.edu/rpmfusion"
