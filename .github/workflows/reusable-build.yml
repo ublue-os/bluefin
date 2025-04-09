@@ -18,6 +18,12 @@ on:
       kernel_pin:
         description: "The full kernel version to pin"
         type: string
+      rpmfusion_mirror:
+        description: "Mirror"
+        required: false
+        # FIXME: This should be `mirrors.rpmfusion.org` when that one is fixed for f42
+        default: "https://mirrors.ocf.berkeley.edu/rpmfusion"
+        type: string
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -79,7 +85,8 @@ jobs:
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
-                               "${{ inputs.kernel_pin }}"
+                               "${{ inputs.kernel_pin }}" \
+                               "${{ inputs.rpmfusion_mirror }}"
 
       - name: Setup Syft
         id: setup-syft

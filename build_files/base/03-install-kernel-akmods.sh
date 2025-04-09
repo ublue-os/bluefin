@@ -49,10 +49,19 @@ else
         /tmp/akmods/kmods/*framework-laptop*.rpm
 fi
 
+RPMFUSION_MIRROR_RPMS="${RPMFUSION_MIRROR:-https://mirrors.rpmfusion.org}"
+
 # RPMFUSION Dependent AKMODS
 dnf5 -y install \
-    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
+    $RPMFUSION_MIRROR_RPMS/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
+    $RPMFUSION_MIRROR_RPMS/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
+
+if [ -n "${RPMFUSION_MIRROR}" ]; then
+    # force use of single rpmfusion mirror
+    echo "Using single rpmfusion mirror: ${RPMFUSION_MIRROR}"
+    sed -i.bak "s%^metalink=%#metalink=%" /etc/yum.repos.d/rpmfusion-*.repo
+    sed -i "s%^#baseurl=http://download1.rpmfusion.org%baseurl=${RPMFUSION_MIRROR}%" /etc/yum.repos.d/rpmfusion-*.repo
+fi
 
 if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
     dnf5 -y install \
@@ -91,7 +100,7 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     # Install Nvidia RPMs
     curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
     chmod +x /tmp/nvidia-install.sh
-    IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
+    IMAGE_NAME="${BASE_IMAGE_NAME}" /tmp/nvidia-install.sh
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
     ln -sf libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
 fi

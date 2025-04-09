@@ -106,7 +106,7 @@ validate $image $tag $flavor:
 
 # Build Image
 [group('Image')]
-build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="":
+build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="" $rpmfusion_mirror="":
     #!/usr/bin/bash
 
     echo "::group:: Build Prep"
@@ -188,6 +188,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     BUILD_ARGS=()
     BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${akmods_flavor}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${base_image_name}")
+    BUILD_ARGS+=("--build-arg" "RPMFUSION_MIRROR=${rpmfusion_mirror}")
     BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${fedora_version}")
     BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${image_name}")
     BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR={{ repo_organization }}")
