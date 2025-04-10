@@ -106,7 +106,7 @@ validate $image $tag $flavor:
 
 # Build Image
 [group('Image')]
-build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="" $rpmfusion_mirror="":
+build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" kernel_pin="" rpmfusion_mirror="":
     #!/usr/bin/bash
 
     echo "::group:: Build Prep"
@@ -244,7 +244,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
 # Build Image and Rechunk
 [group('Image')]
 build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="" rpmfusion_mirror="":
-    @just build {{ image }} {{ tag }} {{ flavor }} 1 0 0 {{ kernel_pin }} {{ rpmfusion_mirror }}
+    @just build '{{ image }}' '{{ tag }}' '{{ flavor }}' 1 0 0 '{{ kernel_pin }}' '{{ rpmfusion_mirror }}'
 
 # Build Image with GHCR Flag
 [group('Image')]
@@ -254,13 +254,13 @@ build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="" rpmfusion_mi
         echo "Must Run with sudo or as root..."
         exit 1
     fi
-    just build {{ image }} {{ tag }} {{ flavor }} 0 1 0 {{ kernel_pin }} {{ rpmfusion_mirror }}
+    just build '{{ image }}' '{{ tag }}' '{{ flavor }}' 0 1 0 '{{ kernel_pin }}' '{{ rpmfusion_mirror }}'
 
 # Build Image for Pipeline:
 [group('Image')]
 build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="" rpmfusion_mirror="":
     #!/usr/bin/bash
-    ${SUDOIF} just build {{ image }} {{ tag }} {{ flavor }} 1 1 1 {{ kernel_pin }} {{ rpmfusion_mirror }}
+    ${SUDOIF} just build '{{ image }}' '{{ tag }}' '{{ flavor }}' 1 1 1 '{{ kernel_pin }}' '{{ rpmfusion_mirror }}'
 
 # Rechunk Image
 [group('Image')]
