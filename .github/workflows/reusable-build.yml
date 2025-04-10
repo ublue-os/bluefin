@@ -18,6 +18,12 @@ on:
       kernel_pin:
         description: "The full kernel version to pin"
         type: string
+      rpmfusion_mirror:
+        description: "Mirror to be used for RPMFusion"
+        required: false
+        # FIXME: This should be `mirrors.rpmfusion.org` when that one is fixed for f42
+        default: "https://ftp.fi.muni.cz/pub/linux/rpmfusion/"
+        type: string
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -75,11 +81,21 @@ jobs:
         id: build-image
         shell: bash
         run: |
-          sudo just repo_organization="${{ github.repository_owner }}" \
+          # Arguments:
+          # image
+          # gts, stable, latest, beta
+          # main, nvidia, hwe, etc...
+          # Rechunk Flag
+          # GHCR Flag
+          # Pipeline Flag
+          # Kernel Pin
+          # RPM Fusion
+          sudo just --set repo_organization "${{ github.repository_owner }}" \
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
-                               "${{ inputs.kernel_pin }}"
+                               "${{ inputs.kernel_pin }}" \
+                               "${{ inputs.rpmfusion_mirror }}"
 
       - name: Setup Syft
         id: setup-syft

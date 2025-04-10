@@ -106,7 +106,7 @@ validate $image $tag $flavor:
 
 # Build Image
 [group('Image')]
-build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="":
+build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="" $rpmfusion_mirror="":
     #!/usr/bin/bash
 
     echo "::group:: Build Prep"
@@ -188,6 +188,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     BUILD_ARGS=()
     BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${akmods_flavor}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${base_image_name}")
+    BUILD_ARGS+=("--build-arg" "RPMFUSION_MIRROR=${rpmfusion_mirror}")
     BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${fedora_version}")
     BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${image_name}")
     BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR={{ repo_organization }}")
@@ -242,24 +243,24 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
 
 # Build Image and Rechunk
 [group('Image')]
-build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="":
-    @just build {{ image }} {{ tag }} {{ flavor }} 1 0 0 {{ kernel_pin }}
+build-rechunk image="bluefin" tag="latest" flavor="main" kernel_pin="" rpmfusion_mirror="":
+    @just build '{{ image }}' '{{ tag }}' '{{ flavor }}' 1 0 0 '{{ kernel_pin }}' '{{ rpmfusion_mirror }}'
 
 # Build Image with GHCR Flag
 [group('Image')]
-build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="":
+build-ghcr image="bluefin" tag="latest" flavor="main" kernel_pin="" rpmfusion_mirror="":
     #!/usr/bin/bash
     if [[ "${UID}" -gt "0" ]]; then
         echo "Must Run with sudo or as root..."
         exit 1
     fi
-    just build {{ image }} {{ tag }} {{ flavor }} 0 1 0 {{ kernel_pin }}
+    just build '{{ image }}' '{{ tag }}' '{{ flavor }}' 0 1 0 '{{ kernel_pin }}' '{{ rpmfusion_mirror }}'
 
 # Build Image for Pipeline:
 [group('Image')]
-build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
+build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="" rpmfusion_mirror="":
     #!/usr/bin/bash
-    ${SUDOIF} just build {{ image }} {{ tag }} {{ flavor }} 1 1 1 {{ kernel_pin }}
+    ${SUDOIF} just build '{{ image }}' '{{ tag }}' '{{ flavor }}' 1 1 1 '{{ kernel_pin }}' '{{ rpmfusion_mirror }}'
 
 # Rechunk Image
 [group('Image')]
