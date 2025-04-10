@@ -4,6 +4,7 @@ app/org.fedoraproject.MediaWriter/x86_64/stable
 app/com.github.tchx84.Flatseal/x86_64/stable
 app/io.github.flattool.Ignition/x86_64/stable
 app/io.github.flattool.Warehouse/x86_64/stable
+app/io.github.input_leap.input-leap/x86_64/stable
 app/org.gnome.baobab/x86_64/stable
 app/org.gnome.Calculator/x86_64/stable
 app/org.gnome.Calendar/x86_64/stable
@@ -21,6 +22,7 @@ app/org.gnome.Loupe/x86_64/stable
 app/org.gnome.Maps/x86_64/stable
 app/org.gnome.NautilusPreviewer/x86_64/stable
 app/org.gnome.World.PikaBackup/x86_64/stable
+app/org.gnome.SimpleScan/x86_64/stable
 app/org.gnome.TextEditor/x86_64/stable
 app/org.gnome.Weather/x86_64/stable
 app/io.missioncenter.MissionCenter/x86_64/stable
