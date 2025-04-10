@@ -50,9 +50,10 @@ else
 fi
 
 # RPMFUSION Dependent AKMODS
+# need to be changed back to mirrors.rpmfusion.org once rpmfusion is fixed
 dnf5 -y install \
-    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
+    https://ftp.fi.muni.cz/pub/linux/rpmfusion/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
+    https://ftp.fi.muni.cz/pub/linux/rpmfusion/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 
 if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
     dnf5 -y install \
