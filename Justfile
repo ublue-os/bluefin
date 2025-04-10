@@ -106,7 +106,7 @@ validate $image $tag $flavor:
 
 # Build Image
 [group('Image')]
-build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" kernel_pin="" rpmfusion_mirror="":
+build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipeline="0" $kernel_pin="" $rpmfusion_mirror="":
     #!/usr/bin/bash
 
     echo "::group:: Build Prep"
