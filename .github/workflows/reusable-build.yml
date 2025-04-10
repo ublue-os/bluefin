@@ -81,13 +81,22 @@ jobs:
         id: build-image
         shell: bash
         run: |
+          # Arguments:
+          # image
+          # gts, stable, latest, beta
+          # main, nvidia, hwe, etc...
+          # Rechunk Flag
+          # GHCR Flag
+          # Pipeline Flag
+          # Kernel Pin
+          # RPM Fusion
           sudo just repo_organization="${{ github.repository_owner }}" \
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
-                               "0" \ # Auto Rechunk
-                               "0" \ # GHCR Pipeline
-                               "0" \ # GHCR Pipeline
+                               "0" \
+                               "0" \
+                               "0" \
                                "${{ inputs.kernel_pin }}" \
                                "${{ inputs.rpmfusion_mirror }}"
 
