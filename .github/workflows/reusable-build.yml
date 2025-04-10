@@ -22,7 +22,7 @@ on:
         description: "Mirror to be used for RPMFusion"
         required: false
         # FIXME: This should be `mirrors.rpmfusion.org` when that one is fixed for f42
-        default: "https://mirrors.ocf.berkeley.edu/rpmfusion"
+        default: "https://ftp.fi.muni.cz/pub/linux/rpmfusion/"
         type: string
 
 env:
