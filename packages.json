@@ -73,7 +73,6 @@
 				"sssd-ad",
 				"sssd-krb5",
 				"sssd-nfs-idmap",
-				"stress-ng",
 				"tailscale",
 				"tmux",
 				"topgrade",
