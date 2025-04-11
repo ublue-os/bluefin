@@ -20,7 +20,6 @@ on:
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
   IMAGE_NAME: "bluefin"
-  DEFAULT_TAG: "41"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -35,6 +34,7 @@ jobs:
       matrix:
         platform: [amd64]
         flavor: [""]
+        image_version: ["41"]
     permissions:
       contents: read
       packages: read
@@ -74,7 +74,7 @@ jobs:
         id: build
         uses: ublue-os/titanoboa@anaconda-webui-format
         with:
-          image-ref: ${{ steps.image_ref.outputs.image_ref }}:lts
+          image-ref: ${{ steps.image_ref.outputs.image_ref }}:${{ matrix.image_tag }}
           flatpaks-list: ${{ github.workspace }}/system_files/etc/ublue-os/system-flatpaks.list
           hook-post-rootfs: ${{ github.workspace }}/iso_files/configure_iso.sh
 
@@ -94,11 +94,11 @@ jobs:
             IMAGE_NAME="${IMAGE_NAME}-${FLAVOR}"
           fi
           if [ $PLATFORM == "amd64" ]; then
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${DEFAULT_TAG}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${DEFAULT_TAG}.iso"
+            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${IMAGE_NAME}.iso-CHECKSUM"
+            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${IMAGE_NAME}.iso"
           else
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${DEFAULT_TAG}-${PLATFORM}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${DEFAULT_TAG}-${PLATFORM}.iso"
+            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${PLATFORM}.iso-CHECKSUM"
+            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${PLATFORM}.iso"
           fi
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
