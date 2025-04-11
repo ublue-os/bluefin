@@ -36,18 +36,13 @@ dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel
 # Everyone
 # NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 -y install /tmp/akmods/kmods/*xone*.rpm || true
-    dnf5 -y install /tmp/akmods/kmods/*xpadneo*.rpm || true
-    dnf5 -y install /tmp/akmods/kmods/*openrazer*.rpm || true
-    dnf5 -y install /tmp/akmods/kmods/*framework-laptop*.rpm || true
-else
-    dnf5 -y install \
-        /tmp/akmods/kmods/*xone*.rpm \
-        /tmp/akmods/kmods/*xpadneo*.rpm \
-        /tmp/akmods/kmods/*openrazer*.rpm \
-        /tmp/akmods/kmods/*framework-laptop*.rpm
-fi
+AKMODS=(
+    /tmp/akmods/kmods/*xone*.rpm
+    /tmp/akmods/kmods/*xpadneo*.rpm
+    /tmp/akmods/kmods/*framework-laptop*.rpm
+    /tmp/akmods/kmods/*openrazer*.rpm
+)
+dnf5 -y install "${AKMODS[@]}"
 
 # RPMFUSION Dependent AKMODS
 if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
@@ -61,13 +56,8 @@ else
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
 fi
 
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm || true
-else
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-fi
+dnf5 -y install \
+    v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
 
 if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
     dnf5 -y remove rpmfusion-free-release || true
@@ -89,19 +79,10 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     mv /tmp/rpms/* /tmp/akmods-rpms/
 
     # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
-    # Exclude for non-beta.... doesn't appear to exist for F42 yet?
-    if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
-        dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
-    else
-        # Monkey patch right now...
-        if ! grep -q negativo17 <(rpm -qi mesa-dri-drivers); then
-            dnf5 -y swap --repo=updates-testing \
-                mesa-dri-drivers mesa-dri-drivers
-        fi
-    fi
+    dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
 
     # Install Nvidia RPMs
-    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
+    curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
