@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-  ],
+  "extends": ["config:best-practices"],
 
   // Do not rebase when the default branch is updated
   "rebaseWhen": "never",
@@ -23,6 +21,15 @@
       "matchUpdateTypes": ["pin", "digest", "pinDigest"],
       "matchPackageNames": ["jasonn3/build-container-installer"],
       "enabled": false
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["Justfile"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s+(?:BUILD)_.+?_VERSION := \"(?<currentValue>.+?)\"\\s"
+      ]
     }
   ]
 }
