@@ -2,7 +2,7 @@
 
 set -x
 
-dnf install --nogpgcheck --repofrompath 'um,https://repos.fyralabs.com/um$releasever' readymade
+dnf --enablerepo="terra" install -y readymade
 
 tee /etc/readymade.toml <<EOF
 
