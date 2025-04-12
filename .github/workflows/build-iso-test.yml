@@ -13,7 +13,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/build-iso.yml'
+      - '.github/workflows/build-iso-test.yml'
       - 'iso_files/*'
       - 'Justfile'
 
@@ -83,7 +83,6 @@ jobs:
           OUTPUT_PATH: ${{ steps.build.outputs.iso-dest }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}-live
           PLATFORM: ${{ matrix.platform }}
-          DEFAULT_TAG: ${{ env.DEFAULT_TAG }}
           FLAVOR: ${{ matrix.flavor }}
         run: |
           set -x
@@ -105,7 +104,7 @@ jobs:
         if: inputs.upload-to-cloudflare == false || github.event_name == 'pull_request'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ${{ env.IMAGE_NAME }}-${{ env.DEFAULT_TAG }}-${{ matrix.platform }}-iso
+          name: ${{ env.IMAGE_NAME }}-${{ matrix.image_version }}-${{ matrix.platform }}-iso
           if-no-files-found: error
           path: ${{ steps.rename.outputs.output_directory }}
 
