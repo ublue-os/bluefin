@@ -84,12 +84,13 @@ jobs:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}-live
           PLATFORM: ${{ matrix.platform }}
           FLAVOR: ${{ matrix.flavor }}
+          TAG: ${{ matrix.image_version }}
         run: |
           set -x
           mkdir -p output
           OUTPUT_DIRECTORY="$(realpath output)"
           if [ "${FLAVOR}" != "" ] ; then
-            IMAGE_NAME="${IMAGE_NAME}-${FLAVOR}"
+            IMAGE_NAME="${IMAGE_NAME}-${FLAVOR}-${TAG}"
           fi
           if [ $PLATFORM == "amd64" ]; then
             sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${IMAGE_NAME}.iso-CHECKSUM"
