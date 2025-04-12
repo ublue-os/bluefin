@@ -49,6 +49,9 @@ else
         /tmp/akmods/kmods/*framework-laptop*.rpm
 fi
 
+# Install v4l2loopback from terra or gracefully fail
+dnf5 -y install --enable-repo="terra*" /tmp/akmods/kmods/*v4l2loopback*.rpm || true
+
 # Nvidia AKMODS
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     # Fetch Nvidia RPMs
