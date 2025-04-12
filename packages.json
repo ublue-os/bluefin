@@ -83,6 +83,7 @@
 				"ublue-motd",
 				"uld",
 				"usbmuxd",
+				"v4l2loopback",
 				"wireguard-tools",
 				"wl-clipboard",
 				"xprop",
