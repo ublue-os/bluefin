@@ -19,14 +19,12 @@ if [[ "$(rpm -E %fedora)" -eq "40" ]]; then
 elif [[ "$(rpm -E %fedora)" -eq "41" ]]; then
     # Enable Terra repo (Extras does not exist on F40)
     # shellcheck disable=SC2016
-    dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
-    dnf5 config-manager setopt "terra*".enabled=0
     dnf5 -y swap \
-        --repo=terra-extras \
+        --repo="terra*" \
         gnome-shell gnome-shell
     dnf5 versionlock add gnome-shell
     dnf5 -y swap \
-        --repo=terra-extras \
+        --repo="terra*" \
         switcheroo-control switcheroo-control
     dnf5 versionlock add switcheroo-control
 fi
@@ -45,7 +43,6 @@ install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
 echo 'eval "$(starship init bash)"' >>/etc/bashrc
 
-
 # Automatic wallpaper changing by month
 HARDCODED_RPM_MONTH="12"
 # Use old bluefin background package for GTS
@@ -55,8 +52,8 @@ HARDCODED_RPM_MONTH="12"
 #     # Pin to february wallpaper instead
 #     sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/02/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
 # else
-    dnf5 install -y bluefin-backgrounds
-    sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
+dnf5 install -y bluefin-backgrounds
+sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
 # fi
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
