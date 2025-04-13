@@ -34,9 +34,6 @@ for file in fish htop nvtop; do
     fi
 done
 
-#Disable autostart behaviour
-rm -f /etc/xdg/autostart/solaar.desktop
-
 # Disable all COPRs and RPM Fusion Repos
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo
