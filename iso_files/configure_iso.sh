@@ -4,22 +4,17 @@ set -x
 
 dnf --enablerepo="terra" install -y readymade
 
-# TODO: Figure out exactly what needs to happen in this file
 tee /etc/readymade.toml <<EOF
 [install]
 allowed_installtypes = ["wholedisk"]
+copy_mode = "bootc"
+bootc_imgref = "containers-storage:ghcr.io/ublue-os/bluefin:41"
 
 [distro]
 name = "Bluefin"
 
 [[postinstall]]
-module = "CleanupBoot"
-
-[[postinstall]]
-module = "InitialSetup"
-
-[[postinstall]]
-module = "Language"
+module = "Script"
 EOF
 
 systemctl disable brew-setup.service
