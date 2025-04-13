@@ -102,7 +102,6 @@
 				"cockpit-system",
 				"code",
 				"dbus-x11",
-				"devpod",
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
