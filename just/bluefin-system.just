@@ -35,11 +35,11 @@ toggle-devmode:
     source /usr/lib/ujust/ujust.sh
     CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
     if grep -q "/var/ublue-os/image" <<< $CURRENT_IMAGE ; then
-        cat <<EOF
+        bash -c "cat <<EOF
     Before we can switch to the Bluefin Developer Experience
     the current system needs an update. Please run 'ujust update'
     and reboot your system when the update is finished
-    EOF
+    EOF"
         exit
     fi
     if /bin/grep -q "\-dx" <<< $CURRENT_IMAGE ; then
@@ -132,22 +132,22 @@ configure-vfio ACTION="":
     fi
     OPTION={{ ACTION }}
     if [ "$OPTION" == "help" ]; then
-        cat <<EOF
+        bash -c "cat <<EOF
     Usage: ujust configure-vfio <option>
       <option>: Specify the quick option to skip the prompt
       Use 'vfio-on' to select Enable VFIO drivers
       Use 'vfio-off' to select Disable VFIO drivers
-      Use 'kvmfr' to select Autocreate Looking-Glass shm
-    EOF
+      Use 'kvmfr' to enable kvmfr module for looking-glass
+    EOF"
         exit 0
     elif [ "$OPTION" == "" ]; then
-        cat <<EOF
+        bash -c "cat <<EOF
     ${bold}VFIO and kvmfr Configuration${normal}
     This is only used for GPU passthrough of a secondary dGPU.
-    It will enable vfio and configure kvmfr for use with $(Urllink "https://looking-glass.io" "Looking Glass")
+    It will enable vfio and configure kvmfr for use with $(Urllink "https://looking-glass.io" "Looking Glass").
     If you do not plan to use any of this then press ESC.
     ${bold}NOTE:${normal} Since this is a niche use case, support will be ${b}very limited${n}
-    EOF
+    EOF"
         OPTION=$(Choose \
           "Enable VFIO drivers" \
           "Disable VFIO drivers" \
@@ -158,8 +158,6 @@ configure-vfio ACTION="":
         echo "Enabling VFIO..."
         CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
         VENDOR_KARG="unset"
-        echo 'add_drivers+=" vfio vfio_iommu_type1 vfio-pci "' | sudo tee /etc/dracut.conf.d/vfio.conf
-        rpm-ostree initramfs --enable
         if [[ ${CPU_VENDOR} == "AuthenticAMD" ]]; then
             VENDOR_KARG="amd_iommu=on"
         elif [[ ${CPU_VENDOR} == "GenuineIntel" ]]; then
@@ -176,11 +174,23 @@ configure-vfio ACTION="":
                 --append-if-missing="vfio_pci.disable_vga=1" \
                 --append-if-missing="kvm.ignore_msrs=1" \
                 --append-if-missing="kvm.report_ignored_msrs=0"
+            if sudo test ! -f "/etc/libvirt/hooks/qemu"; then
+                echo "Adding libvirt qemu hooks"
+                sudo wget 'https://raw.githubusercontent.com/PassthroughPOST/VFIO-Tools/master/libvirt_hooks/qemu' -O /etc/libvirt/hooks/qemu
+                sudo chmod +x /etc/libvirt/hooks/qemu
+                sudo grep -A1 -B1 "# Add" /etc/libvirt/hooks/qemu | sed 's/^# //g'
+                echo ""
+                if sudo test ! -d "/etc/libvirt/hooks/qemu.d"; then
+                    sudo mkdir /etc/libvirt/hooks/qemu.d
+                fi
+            fi
             echo "VFIO will be enabled on next boot, make sure you enable IOMMU, VT-d or AMD-v in your BIOS!"
             echo "Please understand that since this is such a niche use case, support will be very limited!"
             echo "To add your unused/second GPU device ids to the vfio driver by running"
             echo 'rpm-ostree kargs --append-if-missing="vfio-pci.ids=xxxx:yyyy,xxxx:yyzz"'
-            echo "NOTE: Your second GPU will not be usable by the host after you do this!"
+            echo 'you can find these using "ls-iommu -gr" or "ls-iommu -grr"'
+            echo 'for a dedicated gpu there will be at least 1 vga device and 1 audio device.'
+            echo "NOTE: The GPU you bound to vfio-pci will not be usable by the host after you do this!"
         fi
     elif [[ "${OPTION,,}" =~ (^disable[[:space:]]vfio|vfio-off) ]]; then
         echo ""
@@ -191,13 +201,10 @@ configure-vfio ACTION="":
             VFIO_IDS="$(rpm-ostree kargs | sed -E 's/.+(vfio_pci.ids=.+\s)/\1/' | awk '{ print $1 }' | grep vfio_pci.ids)"
             VFIO_IDS_KARG=""
             if [ -n "$VFIO_IDS" ]; then
-              echo "Found VFIO ids in kargs, adding the below line to removal list"
-              echo "$VFIO_IDS"
-              VFIO_IDS_KARG="--delete-if-present=\"$VFIO_IDS\""
+                echo "Found VFIO ids in kargs, adding the below line to removal list"
+                echo "$VFIO_IDS"
+                VFIO_IDS_KARG="--delete-if-present=\"$VFIO_IDS\""
             fi
-            echo "Removing dracut modules"
-            sudo rm /etc/dracut.conf.d/vfio.conf
-            rpm-ostree initramfs --enable
             rpm-ostree kargs \
                 --delete-if-present="iommu=pt" \
                 --delete-if-present="iommu=on" \
@@ -214,7 +221,6 @@ configure-vfio ACTION="":
 
 # Install system flatpaks for rebasers
 [group('System')]
-[private]
 install-system-flatpaks:
     #!/usr/bin/bash
     FLATPAKS="bluefin_flatpaks/flatpaks"
