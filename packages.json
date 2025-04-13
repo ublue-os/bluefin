@@ -68,7 +68,6 @@
 				"samba-winbind-clients",
 				"samba-winbind-modules",
 				"setools-console",
-				"simple-scan",
 				"solaar",
 				"sssd-ad",
 				"sssd-krb5",
