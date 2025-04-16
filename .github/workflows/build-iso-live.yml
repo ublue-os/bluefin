@@ -33,8 +33,8 @@ jobs:
       fail-fast: false
       matrix:
         platform: [amd64]
-        flavor: [""]
-        image_version: ["41"]
+        flavor: ["", "nvidia-open"]
+        image_version: ["stable", "beta"]
     permissions:
       contents: read
       packages: read
@@ -72,6 +72,9 @@ jobs:
       - name: Build ISO
         id: build
         uses: ublue-os/titanoboa@main
+        env:
+          ISO_MATRIX_FLAVOR: ${{ matrix.flavor }}
+          ISO_MATRIX_VERSION: ${{ matrix.image_version }}
         with:
           image-ref: ${{ steps.image_ref.outputs.image_ref }}:${{ matrix.image_version }}
           flatpaks-list: ${{ github.workspace }}/iso_files/system-flatpaks.txt
