@@ -4,11 +4,19 @@ set -x
 
 dnf --enablerepo="terra" install -y readymade
 
+echo $ISO_MATRIX_VERSION
+echo $ISO_MATRIX_FLAVOR
+
+OUTPUT_NAME="ghcr.io/ublue-os/bluefin"
+if [ "${ISO_MATRIX_FLAVOR}" != "" ] ; then
+  OUTPUT_NAME="${OUTPUT_NAME}-${FLAVOR}"
+fi
+
 tee /etc/readymade.toml <<EOF
 [install]
 allowed_installtypes = ["wholedisk"]
 copy_mode = "bootc"
-bootc_imgref = "containers-storage:ghcr.io/ublue-os/bluefin:41"
+bootc_imgref = "containers-storage:$OUTPUT_NAME:$ISO_IMAGE_VERSION"
 
 [distro]
 name = "Bluefin"
