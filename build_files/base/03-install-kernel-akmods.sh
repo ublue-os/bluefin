@@ -49,8 +49,32 @@ else
         /tmp/akmods/kmods/*framework-laptop*.rpm
 fi
 
-# Install v4l2loopback from terra or gracefully fail
-dnf5 -y install --enable-repo="terra*" /tmp/akmods/kmods/*v4l2loopback*.rpm || true
+# RPMFUSION Dependent AKMODS
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+    dnf5 -y install \
+        https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm || true
+    dnf5 -y install \
+        https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm || true
+else
+    dnf5 -y install \
+        https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
+        https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
+fi
+
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+    dnf5 -y install \
+        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm || true
+else
+    dnf5 -y install \
+        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
+fi
+
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+    dnf5 -y remove rpmfusion-free-release || true
+    dnf5 -y remove rpmfusion-nonfree-release || true
+else
+    dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
+fi
 
 # Nvidia AKMODS
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
