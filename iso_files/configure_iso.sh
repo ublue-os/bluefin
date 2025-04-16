@@ -10,7 +10,7 @@ IMAGE_FLAVOR="$(jq -c -r '."image-flavor"' <<< $IMAGE_INFO)"
 
 OUTPUT_NAME="ghcr.io/ublue-os/bluefin"
 if [ "$IMAGE_FLAVOR" != "main" ] ; then
-  OUTPUT_NAME="${OUTPUT_NAME}-${FLAVOR}"
+  OUTPUT_NAME="${OUTPUT_NAME}-${IMAGE_FLAVOR}"
 fi
 
 tee /etc/readymade.toml <<EOF
