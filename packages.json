@@ -103,6 +103,10 @@
 				"code",
 				"containerd.io",
 				"dbus-x11",
+				"docker-buildx-plugin",
+				"docker-ce",
+				"docker-ce-cli",
+				"docker-compose-plugin",
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
@@ -194,12 +198,7 @@
 				"epson-inkjet-printer-escpr2",
 				"google-noto-fonts-all"
 			],
-			"dx": [
-				"docker-buildx-plugin",
-				"docker-ce",
-				"docker-ce-cli",
-				"docker-compose-plugin"
-			]
+			"dx": []
 		},
 		"exclude": {
 			"all": [],
