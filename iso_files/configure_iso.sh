@@ -15,7 +15,7 @@ fi
 
 tee /etc/readymade.toml <<EOF
 [install]
-allowed_installtypes = ["wholedisk"]
+allowed_installtypes = ["wholedisk", "custom"]
 copy_mode = "bootc"
 bootc_imgref = "containers-storage:$OUTPUT_NAME:$IMAGE_TAG"
 
@@ -25,6 +25,15 @@ name = "Bluefin"
 [[postinstall]]
 module = "Script"
 EOF
+
+mkdir -p /usr/share/readymade/postinstall.d
+tee /usr/share/readymade/postinstall.d/10-flatpaks.sh <<EOF
+#!/usr/bin/bash
+set -x
+mkdir -p /ostree/deploy/default/var/lib
+rsync -aWHA /run/host/var/lib/flatpak /ostree/deploy/default/var/lib
+EOF
+chmod +x /usr/share/readymade/postinstall.d/10-flatpaks.sh
 
 systemctl disable brew-setup.service
 systemctl --global disable podman-auto-update.timer
