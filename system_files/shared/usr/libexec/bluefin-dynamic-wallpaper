@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Set the appropriate wallpaper based on month and hemisphere
+# This will be run at login and periodically to update the wallpaper
+
+readonly WALLPAPER_BASE_PATH="/usr/share/backgrounds/bluefin"
+
+# Don't clobber custom wallpaper
+CURRENT_WALLPAPER="$(gsettings get org.gnome.desktop.background picture-uri)"
+CURRENT_WALLPAPER="${CURRENT_WALLPAPER#\'file://}"
+CURRENT_WALLPAPER="${CURRENT_WALLPAPER%\'}"
+
+if [[ "$CURRENT_WALLPAPER" != "${WALLPAPER_BASE_PATH}"/*-bluefin.xml ]]; then
+    echo "User has a personal wallpaper set. Not changing it."
+    exit 0
+fi
+
+
+MONTH="$(date +%m)"
+MONTH_NUM="${MONTH#0}"  # Remove leading zero if present
+
+LATITUDE="$(/usr/libexec/get-geoclue-latitude.py)"
+LOCATION_EXIT=$?
+if [[ $LOCATION_EXIT -eq 2 ]]; then
+    echo "Location services disabled or denied, not touching wallpaper"
+    exit 0
+elif [[ $LOCATION_EXIT -ne 0 ]]; then
+    echo "Error getting location, not touching wallpaper"
+    exit 1
+else
+    if ! [[ "$LATITUDE" =~ ^-?[0-9]+\.?[0-9]*$ ]]; then
+        echo "Invalid latitude format: $LATITUDE" >&2
+        exit 1
+    fi
+
+    # Determine hemisphere
+    if [[ "${LATITUDE:0:1}" == "-" ]]; then
+        HEMISPHERE="south"
+        # Add 6 months and wrap around if needed
+        MONTH_NUM=$(( (MONTH_NUM + 6 - 1) % 12 + 1 ))
+    else
+        HEMISPHERE="north"
+    fi
+fi
+
+# Format month with leading zero if needed
+if [[ $MONTH_NUM -lt 10 ]]; then
+    MONTH_PADDED="0$MONTH_NUM"
+else
+    MONTH_PADDED="$MONTH_NUM"
+fi
+
+WALLPAPER_PATH="${WALLPAPER_BASE_PATH}/${MONTH_PADDED}-bluefin.xml"
+
+if [[ ! -f "$WALLPAPER_PATH" ]]; then
+    echo "Wallpaper file not found: $WALLPAPER_PATH" >&2
+    exit 1
+fi
+
+# Apply the wallpaper
+if gsettings set org.gnome.desktop.background picture-uri "file://$WALLPAPER_PATH" && \
+   gsettings set org.gnome.desktop.background picture-uri-dark "file://$WALLPAPER_PATH"; then
+    echo "Successfully set wallpaper to $WALLPAPER_PATH (adjusted month: $MONTH_NUM, hemisphere: $HEMISPHERE)"
+else
+    echo "Failed to set wallpaper" >&2
+    exit 1
+fi

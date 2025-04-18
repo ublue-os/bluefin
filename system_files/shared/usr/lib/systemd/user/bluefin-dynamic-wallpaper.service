@@ -1,0 +1,11 @@
+[Unit]
+Description=Bluefin Dynamic Wallpaper
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/bluefin-dynamic-wallpaper
+
+[Install]
+WantedBy=graphical-session.target
