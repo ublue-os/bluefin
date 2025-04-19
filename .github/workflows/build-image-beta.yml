@@ -1,15 +1,5 @@
 name: Beta Images
 on:
-  merge_group:
-  pull_request:
-    branches:
-      - main
-      - testing
-    paths-ignore:
-      - "**.md"
-  schedule:
-    - cron: "50 4 * * 1,2,3,4,5,6" # 4:50 UTC All But Sunday
-    - cron: "50 4 * * 0" # 4:50 UTC Sunday
   workflow_call:
   workflow_dispatch:
 
