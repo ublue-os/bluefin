@@ -1,6 +1,19 @@
+# Build Containers
+# renovate: datasource=github-tags packageName=jasonn3/build-container-installer versioning=loose
+
+BUILD_ISO_VERSION := "v1.2.3"
+
+# renovate: datasource=github-releases packageName=hhd-dev/rechunk versioning=loose
+
+BUILD_RECHUNKER_VERSION := "v1.2.1"
+
+# renovate: datasource=github-releases packageName=anchore/syft versioning=loose
+
+BUILD_SYFT_VERSION := "v1.21.0"
+BUILD_COSIGN_VERSION := "latest"
 repo_organization := "ublue-os"
-rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.2.1"
-iso_builder_image := "ghcr.io/jasonn3/build-container-installer:v1.2.3"
+rechunker_image := "ghcr.io/hhd-dev/rechunk:" + BUILD_RECHUNKER_VERSION
+iso_builder_image := "ghcr.io/jasonn3/build-container-installer:" + BUILD_ISO_VERSION
 images := '(
     [bluefin]=bluefin
     [bluefin-dx]=bluefin-dx
@@ -50,10 +63,10 @@ check:
 fix:
     #!/usr/bin/bash
     find . -type f -name "*.just" | while read -r file; do
-    	echo "Checking syntax: $file"
+    	echo "Formatting: $file"
     	just --unstable --fmt -f $file
     done
-    echo "Checking syntax: Justfile"
+    echo "Formatting: Justfile"
     just --unstable --fmt -f Justfile || { exit 1; }
 
 # Clean Repo
