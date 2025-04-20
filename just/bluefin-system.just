@@ -223,7 +223,7 @@ configure-vfio ACTION="":
 [group('System')]
 install-system-flatpaks:
     #!/usr/bin/bash
-    FLATPAKS="bluefin_flatpaks/flatpaks"
+    FLATPAKS="iso_files/system-flatpaks.txt"
     FLATPAK_LIST="$(curl https://raw.githubusercontent.com/ublue-os/bluefin/main/${FLATPAKS} | tr '\n' ' ')"
     flatpak --system -y install --or-update ${FLATPAK_LIST}
 
