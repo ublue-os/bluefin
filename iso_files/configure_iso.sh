@@ -18,6 +18,7 @@ tee /etc/readymade.toml <<EOF
 allowed_installtypes = ["wholedisk", "custom"]
 copy_mode = "bootc"
 bootc_imgref = "containers-storage:$OUTPUT_NAME:$IMAGE_TAG"
+bootc_enforce_sigpolicy = true
 
 [distro]
 name = "Bluefin"
@@ -35,10 +36,17 @@ rsync -aWHA /run/host/var/lib/flatpak /ostree/deploy/default/var/lib
 EOF
 chmod +x /usr/share/readymade/postinstall.d/10-flatpaks.sh
 
+systemctl disable rpm-ostree-countme.service
+systemctl disable tailscaled.service
+systemctl disable dconf-update.service
+systemctl disable brew-upgrade.timer
+systemctl disable brew-update.timer
 systemctl disable brew-setup.service
-systemctl --global disable podman-auto-update.timer
 systemctl disable rpm-ostree.service
 systemctl disable uupd.timer
 systemctl disable ublue-system-setup.service
-systemctl --global disable ublue-user-setup.service
+systemctl disable ublue-guest-user.service
 systemctl disable check-sb-key.service
+systemctl --global disable ublue-flatpak-manager.service
+systemctl --global disable podman-auto-update.timer
+systemctl --global disable ublue-user-setup.service
