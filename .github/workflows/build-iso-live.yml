@@ -12,10 +12,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - '.github/workflows/build-iso-live.yml'
-      - 'iso_files/*'
-      - 'Justfile'
 
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
@@ -90,7 +86,7 @@ jobs:
         id: rename
         env:
           OUTPUT_PATH: ${{ steps.build.outputs.iso-dest }}
-          OUTPUT_NAME: ${{ env.IMAGE_NAME }}-live${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}
+          OUTPUT_NAME: ${{ env.IMAGE_NAME }}${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}
           PLATFORM: ${{ matrix.platform }}
           FLAVOR: ${{ matrix.flavor }}
         run: |
@@ -113,7 +109,7 @@ jobs:
         if: inputs.upload-to-cloudflare == false || github.event_name == 'pull_request'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ${{ env.IMAGE_NAME }}-live${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}-iso
+          name: ${{ env.IMAGE_NAME }}${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}-iso
           if-no-files-found: error
           path: ${{ steps.rename.outputs.output_directory }}
 
