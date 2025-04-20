@@ -2,7 +2,7 @@
 
 set -x
 
-dnf --enablerepo="terra" install -y readymade-nightly
+dnf --enablerepo="terra" install -y readymade
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
 IMAGE_TAG="$(jq -c -r '."image-tag"' <<< $IMAGE_INFO)"
