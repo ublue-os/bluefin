@@ -28,8 +28,8 @@ ASUS_PACKAGES=(
     asusctl-rog-gui
 )
 
-# iptsd is not available on F42
 SURFACE_PACKAGES=(
+    iptsd
     libcamera
     libcamera-tools
     libcamera-gstreamer
@@ -37,7 +37,7 @@ SURFACE_PACKAGES=(
     pipewire-plugin-libcamera
 )
 
-dnf5 -y install \
+dnf5 -y install --skip-unavailable \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
 
