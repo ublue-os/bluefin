@@ -32,6 +32,8 @@ name = "Bluefin"
 module = "Script"
 EOF
 
+rm -f /usr/share/applications/liveinst.desktop
+sed -i '/NoDisplay=.*/d' /usr/share/applications/com.fyralabs.Readymade.desktop
 cp -f /usr/share/applications/com.fyralabs.Readymade.desktop /etc/xdg/autostart
 
 mkdir -p /usr/share/readymade/postinstall.d
