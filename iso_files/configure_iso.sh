@@ -2,7 +2,6 @@
 
 set -x
 
-dnf reinstall -y bluefin-schemas
 dnf --enablerepo="terra" install -y readymade
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
@@ -33,7 +32,7 @@ name = "Bluefin"
 module = "Script"
 EOF
 
-cp /usr/share/applications/com.fyralabs.Readymade.desktop /usr/share/gnome/autostart
+cp -f /usr/share/applications/com.fyralabs.Readymade.desktop /etc/xdg/autostart
 mkdir -p /usr/share/readymade/postinstall.d
 tee /usr/share/readymade/postinstall.d/10-flatpaks.sh <<EOF
 #!/usr/bin/bash
@@ -42,6 +41,13 @@ mkdir -p /ostree/deploy/default/var/lib
 rsync -aWHA /run/host/var/lib/flatpak /ostree/deploy/default/var/lib
 EOF
 chmod +x /usr/share/readymade/postinstall.d/10-flatpaks.sh
+
+# Gets rid of the anaconda branding and still disabled the welcome dialog
+tee /usr/share/glib-2.0/schemas/org.gnome.shell.gschema.override <<EOF
+[org.gnome.shell]
+welcome-dialog-last-shown-version='4294967295'
+EOF
+glib-compile-schemas /usr/share/glib-2.0/schemas
 
 systemctl disable rpm-ostree-countme.service
 systemctl disable tailscaled.service
