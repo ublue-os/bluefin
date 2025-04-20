@@ -2,6 +2,8 @@
 
 set -x
 
+# FIXME: remove this
+dnf update -y bluefin*
 dnf --enablerepo="terra" install -y readymade
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
@@ -44,7 +46,6 @@ chmod +x /usr/share/readymade/postinstall.d/10-flatpaks.sh
 
 systemctl disable rpm-ostree-countme.service
 systemctl disable tailscaled.service
-systemctl disable dconf-update.service
 systemctl disable brew-upgrade.timer
 systemctl disable brew-update.timer
 systemctl disable brew-setup.service
