@@ -65,12 +65,17 @@ jobs:
         run: |
           OUTPUT_NAME="${IMAGE_REGISTRY}/${IMAGE_NAME}"
           ARTIFACT_FORMAT=""
+          KARGS="NONE"
           if [ "$FLAVOR" != "" ] ; then
             OUTPUT_NAME="${OUTPUT_NAME}-${FLAVOR}"
             ARTIFACT_FORMAT="-${FLAVOR}"
+            if [ "$FLAVOR" =~ nvidia ] ; then
+              KARGS="rd.driver.blacklist=nouveau,modprobe.blacklist=nouveau,nvidia-drm.modeset=1"
+            fi
           fi
           echo "image_ref=$OUTPUT_NAME" >> "${GITHUB_OUTPUT}"
           echo "artifact_format=$ARTIFACT_FORMAT" >> "${GITHUB_OUTPUT}"
+          echo "kargs=$KARGS" >> "${GITHUB_OUTPUT}"
           
       - name: Build ISO
         id: build
@@ -79,6 +84,7 @@ jobs:
           image-ref: ${{ steps.image_ref.outputs.image_ref }}:${{ matrix.image_version }}
           flatpaks-list: ${{ github.workspace }}/iso_files/system-flatpaks.txt
           hook-post-rootfs: ${{ github.workspace }}/iso_files/configure_iso.sh
+          kargs: ${{ steps.image_ref.outputs.kargs }}
 
       - name: Rename ISO
         id: rename
