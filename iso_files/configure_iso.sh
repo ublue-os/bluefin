@@ -33,6 +33,7 @@ module = "Script"
 EOF
 
 cp -f /usr/share/applications/com.fyralabs.Readymade.desktop /etc/xdg/autostart
+
 mkdir -p /usr/share/readymade/postinstall.d
 tee /usr/share/readymade/postinstall.d/10-flatpaks.sh <<EOF
 #!/usr/bin/bash
@@ -42,11 +43,45 @@ rsync -aWHA /run/host/var/lib/flatpak /ostree/deploy/default/var/lib
 EOF
 chmod +x /usr/share/readymade/postinstall.d/10-flatpaks.sh
 
-# Gets rid of the anaconda branding and still disabled the welcome dialog
+# Entirely remove everythign from the livesys configuration for GNOME
+# This file isnt necessary for us considering how much setting up for
+# Anaconda this does. Instead just inline whatever we actually need.
+tee /usr/libexec/livesys/sessions.d/livesys-gnome <<"EOF" 
+#!/bin/sh
+
+if [ ! -d /var/lib/gnome-initial-setup ]; then
+  # don't run gnome-initial-setup
+  mkdir ~liveuser/.config
+  : > ~liveuser/.config/gnome-initial-setup-done
+fi
+EOF
+chmod +x /usr/libexec/livesys/sessions.d/livesys-gnome
+
+# These are only here because we removed the handling from livesys-gnome
+
 tee /usr/share/glib-2.0/schemas/org.gnome.shell.gschema.override <<EOF
 [org.gnome.shell]
 welcome-dialog-last-shown-version='4294967295'
+
+[org.gnome.software]
+allow-updates=false
+download-updates=false
 EOF
+
+# don't autostart gnome-software session service
+rm -f /etc/xdg/autostart/org.gnome.Software.desktop
+
+# disable the gnome-software shell search provider
+tee /usr/share/gnome-shell/search-providers/org.gnome.Software-search-provider.ini <<EOF
+DefaultDisabled=true
+EOF
+
+tee /etc/gdm/custom.conf <<"EOF"
+[daemon]
+AutomaticLoginEnable=True
+AutomaticLogin=liveuser
+EOF
+
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
 systemctl disable rpm-ostree-countme.service
