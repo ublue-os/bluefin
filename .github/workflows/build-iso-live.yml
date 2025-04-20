@@ -64,10 +64,13 @@ jobs:
           FLAVOR: ${{ matrix.flavor }}
         run: |
           OUTPUT_NAME="${IMAGE_REGISTRY}/${IMAGE_NAME}"
+          ARTIFACT_FORMAT=""
           if [ "$FLAVOR" != "" ] ; then
             OUTPUT_NAME="${OUTPUT_NAME}-${FLAVOR}"
+            ARTIFACT_FORMAT="-${FLAVOR}"
           fi
           echo "image_ref=$OUTPUT_NAME" >> "${GITHUB_OUTPUT}"
+          echo "artifact_format=$ARTIFACT_FORMAT" >> "${GITHUB_OUTPUT}"
           
       - name: Build ISO
         id: build
@@ -81,7 +84,7 @@ jobs:
         id: rename
         env:
           OUTPUT_PATH: ${{ steps.build.outputs.iso-dest }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}-live-${{ matrix.image_version }}
+          OUTPUT_NAME: ${{ env.IMAGE_NAME }}-live${{ steps.image_ref.outputs.artifact_format }}${{ matrix.image_version }}-${{ matrix.platform }}
           PLATFORM: ${{ matrix.platform }}
           FLAVOR: ${{ matrix.flavor }}
         run: |
@@ -92,11 +95,11 @@ jobs:
             IMAGE_NAME="${IMAGE_NAME}-${FLAVOR}"
           fi
           if [ $PLATFORM == "amd64" ]; then
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${IMAGE_NAME}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${IMAGE_NAME}.iso"
+            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
+            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
           else
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${PLATFORM}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${IMAGE_NAME}-${PLATFORM}.iso"
+            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
+            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
           fi
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
@@ -104,7 +107,7 @@ jobs:
         if: inputs.upload-to-cloudflare == false || github.event_name == 'pull_request'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ${{ env.IMAGE_NAME }}-${{ matrix.image_version }}-${{ matrix.platform }}-iso
+          name: ${{ env.IMAGE_NAME }}-live${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}-iso
           if-no-files-found: error
           path: ${{ steps.rename.outputs.output_directory }}
 
