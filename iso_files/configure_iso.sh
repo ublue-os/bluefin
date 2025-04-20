@@ -12,6 +12,10 @@ OUTPUT_NAME="ghcr.io/ublue-os/bluefin"
 if [ "$IMAGE_FLAVOR" != "main" ] ; then
   OUTPUT_NAME="${OUTPUT_NAME}-${IMAGE_FLAVOR}"
 fi
+KARGS=""
+if [ "$IMAGE_FLAVOR" =~ nvidia ] ; then
+  KARGS='bootc_kargs = ["rd.driver.blacklist=nouveau", "modprobe.blacklist=nouveau", "nvidia-drm.modeset=1"]'
+fi 
 
 tee /etc/readymade.toml <<EOF
 [install]
@@ -19,6 +23,7 @@ allowed_installtypes = ["wholedisk", "custom"]
 copy_mode = "bootc"
 bootc_imgref = "containers-storage:$OUTPUT_NAME:$IMAGE_TAG"
 bootc_enforce_sigpolicy = true
+$KARGS
 
 [distro]
 name = "Bluefin"
@@ -27,6 +32,7 @@ name = "Bluefin"
 module = "Script"
 EOF
 
+cp /usr/share/applications/com.fyralabs.Readymade.desktop /usr/share/gnome/autostart
 mkdir -p /usr/share/readymade/postinstall.d
 tee /usr/share/readymade/postinstall.d/10-flatpaks.sh <<EOF
 #!/usr/bin/bash
