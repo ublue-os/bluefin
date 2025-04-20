@@ -2,8 +2,7 @@
 
 set -x
 
-# FIXME: remove this
-dnf update -y bluefin*
+dnf reinstall -y bluefin-schemas
 dnf --enablerepo="terra" install -y readymade
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
