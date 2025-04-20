@@ -28,8 +28,8 @@ ASUS_PACKAGES=(
     asusctl-rog-gui
 )
 
+# iptsd is not available on F42
 SURFACE_PACKAGES=(
-    iptsd
     libcamera
     libcamera-tools
     libcamera-gstreamer
