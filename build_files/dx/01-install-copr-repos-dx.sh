@@ -5,7 +5,10 @@ echo "::group:: ===$(basename "$0")==="
 set -eoux pipefail
 
 #incus, lxc, lxd
-dnf5 -y copr enable ganto/lxc4
+
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
+    dnf5 -y copr enable ganto/lxc4
+fi
 
 #umoci
 dnf5 -y copr enable ganto/umoci
