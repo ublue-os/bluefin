@@ -92,6 +92,7 @@ chmod +x /usr/libexec/livesys/sessions.d/livesys-gnome
 tee /usr/share/glib-2.0/schemas/org.gnome.shell.gschema.override <<EOF
 [org.gnome.shell]
 welcome-dialog-last-shown-version='4294967295'
+favorite-apps = ['com.fyralabs.Readymade.desktop', 'documentation.desktop', 'discourse.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop']
 
 [org.gnome.software]
 allow-updates=false
