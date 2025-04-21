@@ -15,7 +15,9 @@ systemctl enable --global bluefin-dx-user-vscode.service
 
 dnf5 -y copr disable ublue-os/staging
 dnf5 -y copr disable ublue-os/packages
-dnf5 -y copr disable ganto/lxc4
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
+    dnf5 -y copr disable ganto/lxc4
+fi
 dnf5 -y copr disable ganto/umoci
 dnf5 -y copr disable karmab/kcli
 dnf5 -y copr disable atim/ubuntu-fonts
