@@ -5,6 +5,7 @@ io.gitlab.adhami3310.Impression
 com.github.tchx84.Flatseal
 io.github.flattool.Ignition
 io.github.flattool.Warehouse
+com.github.PintaProject.Pinta
 org.gnome.baobab
 org.gnome.Calculator
 org.gnome.Calendar
@@ -26,4 +27,5 @@ org.gnome.TextEditor
 org.gnome.Weather
 io.missioncenter.MissionCenter
 org.mozilla.firefox
+org.mozilla.Thunderbird
 page.tesk.Refine
