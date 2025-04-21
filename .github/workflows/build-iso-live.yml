@@ -9,13 +9,8 @@ on:
         required: false
         default: false
         type: boolean
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/build-iso-live.yml'
-      - 'iso_files/*'
-      - 'Justfile'
+  schedule:
+    - cron: "0 1 * * *"   
 
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
