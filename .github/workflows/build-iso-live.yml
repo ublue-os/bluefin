@@ -29,7 +29,7 @@ jobs:
       matrix:
         platform: [amd64]
         flavor: ["", "nvidia-open"]
-        image_version: ["gts","stable", "latest"]
+        image_version: ["gts","stable", "stable-daily", "latest"]
     permissions:
       contents: read
       packages: read
