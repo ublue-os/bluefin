@@ -34,6 +34,14 @@ for file in fish htop nvtop; do
     fi
 done
 
+
+#Disable autostart behaviour
+rm -f /etc/xdg/autostart/solaar.desktop
+
+#Add the Flathub Flatpak remote and remove the Fedora Flatpak remote
+flatpak remote-add --system --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+systemctl disable flatpak-add-fedora-repos.service
+
 # Disable all COPRs and RPM Fusion Repos
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo
