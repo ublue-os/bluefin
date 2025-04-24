@@ -37,7 +37,7 @@ SURFACE_PACKAGES=(
     pipewire-plugin-libcamera
 )
 
-dnf5 -y install \
+dnf5 -y install --skip-unavailable \
     "${ASUS_PACKAGES[@]}" \
     "${SURFACE_PACKAGES[@]}"
 

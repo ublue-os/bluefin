@@ -35,7 +35,6 @@
 				"hplip",
 				"ibus-mozc",
 				"ifuse",
-				"input-leap",
 				"input-remapper",
 				"jetbrains-mono-fonts-all",
 				"krb5-workstation",
@@ -68,15 +67,11 @@
 				"samba-winbind-clients",
 				"samba-winbind-modules",
 				"setools-console",
-				"simple-scan",
-				"solaar",
 				"sssd-ad",
 				"sssd-krb5",
 				"sssd-nfs-idmap",
-				"stress-ng",
 				"tailscale",
 				"tmux",
-				"topgrade",
 				"ublue-bling",
 				"ublue-brew",
 				"ublue-fastfetch",
@@ -106,8 +101,12 @@
 				"cockpit-storaged",
 				"cockpit-system",
 				"code",
+				"containerd.io",
 				"dbus-x11",
-				"devpod",
+				"docker-buildx-plugin",
+				"docker-ce",
+				"docker-ce-cli",
+				"docker-compose-plugin",
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
@@ -179,7 +178,6 @@
 				"ptyxis"
 			],
 			"dx": [
-				"containerd.io",
 				"docker-buildx-plugin",
 				"docker-ce",
 				"docker-ce-cli",
@@ -200,13 +198,7 @@
 				"epson-inkjet-printer-escpr2",
 				"google-noto-fonts-all"
 			],
-			"dx": [
-				"containerd.io",
-				"docker-buildx-plugin",
-				"docker-ce",
-				"docker-ce-cli",
-				"docker-compose-plugin"
-			]
+			"dx": []
 		},
 		"exclude": {
 			"all": [],
@@ -215,7 +207,10 @@
 	},
 	"42": {
 		"include": {
-			"all": ["google-noto-fonts-all"],
+			"all": [
+        "google-noto-fonts-all",
+        "uupd"
+      ],
 			"dx": []
 		},
 		"exclude": {

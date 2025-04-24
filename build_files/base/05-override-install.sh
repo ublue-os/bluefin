@@ -16,27 +16,23 @@ if [[ "$(rpm -E %fedora)" -eq "40" ]]; then
         --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
         switcheroo-control switcheroo-control
     dnf5 versionlock add switcheroo-control
-elif [[ "$(rpm -E %fedora)" -eq "41" ]]; then
+elif [[ "$(rpm -E %fedora)" -ge "41" ]]; then
     # Enable Terra repo (Extras does not exist on F40)
     # shellcheck disable=SC2016
-    dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release{,-extras}
-    dnf5 config-manager setopt "terra*".enabled=0
     dnf5 -y swap \
-        --repo=terra-extras \
+        --repo="terra, terra-extras" \
         gnome-shell gnome-shell
     dnf5 versionlock add gnome-shell
     dnf5 -y swap \
-        --repo=terra-extras \
+        --repo="terra, terra-extras" \
         switcheroo-control switcheroo-control
     dnf5 versionlock add switcheroo-control
 fi
 
-if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
-    # Fix for ID in fwupd
-    dnf5 -y swap \
-        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        fwupd fwupd
-fi
+# Fix for ID in fwupd
+dnf5 -y swap \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+    fwupd fwupd
 
 # Starship Shell Prompt
 curl --retry 3 -Lo /tmp/starship.tar.gz "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"
@@ -54,8 +50,8 @@ HARDCODED_RPM_MONTH="12"
 #     # Pin to february wallpaper instead
 #     sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/02/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
 # else
-    dnf5 install -y bluefin-backgrounds
-    sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
+dnf5 install -y bluefin-backgrounds
+sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
 # fi
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
@@ -67,6 +63,7 @@ rm -rf /usr/share/pixmaps/faces/bluefin
 dnf5 -y swap fedora-logos bluefin-logos
 
 # Consolidate Just Files
+
 find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>/usr/share/ublue-os/just/60-custom.just
 
 # Register Fonts
