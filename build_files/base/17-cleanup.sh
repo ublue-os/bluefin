@@ -39,7 +39,6 @@ done
 rm -f /etc/xdg/autostart/solaar.desktop
 
 #Add the Flathub Flatpak remote and remove the Fedora Flatpak remote
-flatpak remote-delete --system fedora
 flatpak remote-add --system --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 systemctl disable flatpak-add-fedora-repos.service
 
