@@ -117,6 +117,7 @@ glib-compile-schemas /usr/share/glib-2.0/schemas
 
 systemctl disable rpm-ostree-countme.service
 systemctl disable tailscaled.service
+systemctl disable bootloader-update.service
 systemctl disable brew-upgrade.timer
 systemctl disable brew-update.timer
 systemctl disable brew-setup.service
