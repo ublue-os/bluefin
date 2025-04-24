@@ -528,7 +528,6 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     mkdir -p /var/tmp
     chmod -R 1777 /var/tmp
     flatpak config --system --set languages "*"
-    flatpak remote-delete --system fedora-testing
     flatpak remote-delete --system fedora
     flatpak remote-add --system --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak install --system -y flathub ${flatpak_refs[@]}
