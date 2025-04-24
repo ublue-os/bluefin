@@ -235,9 +235,8 @@ configure-vfio ACTION="":
 [group('System')]
 install-system-flatpaks:
     #!/usr/bin/bash
-    FLATPAKS="iso_files/system-flatpaks.txt"
-    FLATPAK_LIST="$(curl https://raw.githubusercontent.com/ublue-os/bluefin/main/${FLATPAKS} | tr '\n' ' ')"
-    flatpak --system -y install --or-update ${FLATPAK_LIST}
+    flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
+    xargs flatpak --system -y install --or-update < /etc/ublue-os/system-flatpaks.list
 
 # Configure grub bootmenu visibility
 [group('System')]
