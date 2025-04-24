@@ -237,6 +237,7 @@ setup-brew-not-found ACTION="":
     fi
 
 # Install gaming flatpaks
+
 # 23.08 runtime versions are needed for Heroic/Lutris
 [group('Apps')]
 install-gaming-flatpaks:

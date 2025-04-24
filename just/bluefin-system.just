@@ -19,6 +19,7 @@ benchmark:
         if gum confirm "Stress does not seem to be on your path, do you wish to install it?" ; then
             set -eu
             brew install stress-ng
+            brew link stress-ng
             set +eu
         else
             exit 0
