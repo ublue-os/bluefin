@@ -9,15 +9,30 @@ IMAGE_VENDOR=$(jq -r '."image-vendor"' < $IMAGE_INFO)
 FEDORA_VERSION=$(jq -r '."fedora-version"' < $IMAGE_INFO)
 IMAGE_REGISTRY="ghcr.io/${IMAGE_VENDOR}"
 
+#Check if composefs is enabled
+if findmnt / | grep -q 'composefs' && findmnt / | grep -q 'overlay'; then
+  composefs_enabled=true
+else
+  composefs_enabled=false
+fi
+
 function list_tags(){
     skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV | head -n 31
 }
 
 function rebase_helper(){
     base_image="${IMAGE_REGISTRY}/${IMAGE_NAME}"
-    echo "Which Tag would you like to rebase to?"
-    CHANNELS=(latest stable stable-daily gts)
-    echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+    echo "Which Tag would you like to rebase to?"  
+
+    if [[ "$composefs_enabled" == "true" ]]; then        
+        CHANNELS=(latest stable stable-daily)
+        echo "The default selection is latest, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+        echo "Note: Since you are on Fedora 42+, you will not be able to rollback to the GTS version."
+    elif [[ "$composefs_enabled" == "false" ]]; then
+        CHANNELS=(latest stable stable-daily gts)
+        echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+        fi
+
     choose_target=$(Choose date "${CHANNELS[@]}" cancel)
     if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
         rebase_target="${base_image}:${choose_target}"
@@ -32,12 +47,21 @@ function rebase_helper(){
         else
             return 1
         fi
+
     else
         return 1
     fi
     if  [[ "$choose_target" =~ "gts" && "$IMAGE_TAG" != "$choose_target" ]]; then
         echo "Warning rolling back Major Fedora Versions may not work"
     fi
+    if [[ "$choose_target" != "gts" && "$IMAGE_TAG" = "gts" ]]; then
+        echo "Rebase to a non-GTS version is a one-way operation, you will not be able to rollback to GTS."
+        echo "Is this what you want to do?"
+        if [[ $(Confirm) -ne "0" ]]; then
+            return 1
+        fi
+    fi
+
     echo "Rebase Target is ${rebase_target}"
     echo "Confirm Rebase"
     if [[ $(Confirm) -ne "0" ]]; then
