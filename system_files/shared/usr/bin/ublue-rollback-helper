@@ -54,6 +54,13 @@ function rebase_helper(){
     if  [[ "$choose_target" =~ "gts" && "$IMAGE_TAG" != "$choose_target" ]]; then
         echo "Warning rolling back Major Fedora Versions may not work"
     fi
+    if [[ "$choose_target" != "gts" && "$IMAGE_TAG" = "gts" ]]; then
+        echo "Rebase to a non-GTS version is a one-way operation, you will not be able to rollback to GTS."
+        echo "Is this what you want to do?"
+        if [[ $(Confirm) -ne "0" ]]; then
+            return 1
+        fi
+    fi
 
     echo "Rebase Target is ${rebase_target}"
     echo "Confirm Rebase"
