@@ -1,2 +1,0 @@
-enable brew-update.timer
-enable brew-upgrade.timer

@@ -47,9 +47,6 @@ echo "::endgroup::"
 # Make HWE changes
 /ctx/build_files/base/09-hwe-additions.sh
 
-# Install Brew
-/ctx/build_files/base/10-brew.sh
-
 ## late stage changes
 
 # Make sure Bootc works
