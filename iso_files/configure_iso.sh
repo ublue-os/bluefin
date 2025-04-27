@@ -40,7 +40,7 @@ icon = "chat-symbolic"
 
 [[bento]]
 title = "Read the Documentation"
-desc = "Set yourself up for success by reading the documentation while you wait for the installation to finish"
+desc = "Set yourself up for success by reading the docs"
 link = "https://docs.projectbluefin.io"
 icon = "applications-development-symbolic"
 
