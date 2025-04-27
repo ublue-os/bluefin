@@ -23,6 +23,7 @@ allowed_installtypes = ["wholedisk"]
 copy_mode = "bootc"
 bootc_imgref = "containers-storage:$OUTPUT_NAME:$IMAGE_TAG"
 bootc_enforce_sigpolicy = true
+bootc_args = ["--skip-fetch-check"]
 $KARGS
 
 [distro]
