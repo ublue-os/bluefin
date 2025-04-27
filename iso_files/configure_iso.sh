@@ -39,8 +39,8 @@ link = "https://universal-blue.discourse.group/"
 icon = "chat-symbolic"
 
 [[bento]]
-title = "Read our documentation"
-desc = "Placeholder text, please jorge change this cuz you write better"
+title = "Read the Documentation"
+desc = "Set yourself up for success by reading the documentation while you wait for the installation to finish"
 link = "https://docs.projectbluefin.io"
 icon = "applications-development-symbolic"
 
