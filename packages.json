@@ -71,6 +71,7 @@
 				"sssd-krb5",
 				"sssd-nfs-idmap",
 				"tailscale",
+				"telnet",
 				"tmux",
 				"ublue-bling",
 				"ublue-brew",
