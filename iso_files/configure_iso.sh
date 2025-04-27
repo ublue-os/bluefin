@@ -26,6 +26,24 @@ bootc_enforce_sigpolicy = true
 bootc_args = ["--skip-fetch-check"]
 $KARGS
 
+[[bento]]
+title = "Welcome to Bluefin!"
+desc = "Get to know your new operating system"
+link = "https://projectbluefin.io"
+icon = "explore-symbolic"
+
+[[bento]]
+title = "Need help?"
+desc = "Ask questions on our forums!"
+link = "https://universal-blue.discourse.group/"
+icon = "chat-symbolic"
+
+[[bento]]
+title = "Read the Documentation"
+desc = "Set yourself up for success by reading the documentation while you wait for the installation to finish"
+link = "https://docs.projectbluefin.io"
+icon = "applications-development-symbolic"
+
 [distro]
 name = "Bluefin"
 
