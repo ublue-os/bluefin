@@ -36,13 +36,13 @@ icon = "explore-symbolic"
 title = "Need help?"
 desc = "Ask questions on our forums!"
 link = "https://universal-blue.discourse.group/"
-icon = "explore-symbolic"
+icon = "chat-symbolic"
 
 [[bento]]
 title = "Read our documentation"
 desc = "Placeholder text, please jorge change this cuz you write better"
 link = "https://docs.projectbluefin.io"
-icon = "explore-symbolic"
+icon = "applications-development-symbolic"
 
 [distro]
 name = "Bluefin"
