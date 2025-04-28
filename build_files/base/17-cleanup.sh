@@ -8,6 +8,7 @@ set -eoux pipefail
 systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
 systemctl enable dconf-update.service
+systemctl enable ublue-fix-hostname.service
 systemctl --global enable ublue-flatpak-manager.service
 systemctl enable ublue-system-setup.service
 systemctl enable ublue-guest-user.service
