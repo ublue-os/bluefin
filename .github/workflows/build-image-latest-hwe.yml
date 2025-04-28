@@ -7,7 +7,6 @@ on:
       - testing
     paths-ignore:
       - "**.md"
-  schedule:
   workflow_call:
   workflow_dispatch:
 
