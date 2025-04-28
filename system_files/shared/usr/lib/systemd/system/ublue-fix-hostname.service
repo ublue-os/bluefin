@@ -1,0 +1,11 @@
+[Unit]
+name=Universal Blue Missing /etc/hostname Workaround
+description=Workaround for the missing /etc/hostname file on Universal Blue systems
+after=network.target
+ConditionPathExists=!/etc/hostname
+
+[Service]
+ExecStart=/bin/sh -c 'echo "%H" > /etc/hostname'
+
+[Install]
+WantedBy=default.target
