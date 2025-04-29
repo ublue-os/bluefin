@@ -5,7 +5,7 @@ after=network.target
 ConditionPathExists=!/etc/hostname
 
 [Service]
-ExecStart=/bin/sh -c 'echo "%H" > /etc/hostname'
+ExecStart=/usr/bin/touch /etc/hostname
 
 [Install]
 WantedBy=default.target
