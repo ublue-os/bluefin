@@ -2,6 +2,7 @@
 
 set -x
 
+dnf install -y gparted
 dnf --enablerepo="terra" install -y readymade-nightly
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
