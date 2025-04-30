@@ -23,6 +23,11 @@
       "matchUpdateTypes": ["pin", "digest", "pinDigest"],
       "matchPackageNames": ["jasonn3/build-container-installer"],
       "enabled": false
+    },
+    {
+      "automerge": true,
+      "matchUpdateTypes": ["digest"],
+      "matchDepNames": ["ghcr.io/ublue-os/silverblue-nvidia"],
     }
   ]
 }
