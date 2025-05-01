@@ -121,7 +121,7 @@ dx-group:
 
     for GROUP_ADD in "${GROUPS_ADD[@]}" ; do
         append_group $GROUP_ADD
-        usermod -aG $GROUP_ADD $USER
+        usermod -aG $GROUP_ADD {{ `id -un` }}
     done
 
     echo "Reboot system and log back in to use docker, libvirt and incus."
