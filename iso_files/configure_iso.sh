@@ -3,7 +3,13 @@
 set -x
 
 dnf install -y gparted
-dnf --enablerepo="terra" install -y readymade-nightly bluefin-readymade-config
+dnf --enablerepo="terra" install -y readymade-nightly
+
+# FIXME: move to `dnf install` once (https://github.com/terrapkg/packages/pull/4623) is merged
+pushd $(mktemp -d)
+dnf download bluefin-readymade-config
+rpm -i --force *.rpm
+popd
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
 IMAGE_TAG="$(jq -c -r '."image-tag"' <<< $IMAGE_INFO)"
