@@ -30,6 +30,19 @@ jobs:
         platform: [amd64]
         flavor: ["", "nvidia-open"]
         image_version: ["gts","stable", "stable-daily", "latest"]
+        include:
+          - platform: amd64
+            flavor: ""
+            image_version: lts
+          - platform: arm64
+            flavor: ""
+            image_version: lts
+          - platform: amd64
+            flavor: gdx
+            image_version: lts
+          - platform: arm64
+            flavor: gdx
+            image_version: lts
     permissions:
       contents: read
       packages: read
