@@ -7,6 +7,7 @@ dnf --enablerepo="terra" install -y readymade-nightly
 
 # FIXME: move to `dnf install` once (https://github.com/terrapkg/packages/pull/4623) is merged
 pushd $(mktemp -d)
+dnf copr enable -y ublue-os/packages
 dnf download bluefin-readymade-config
 rpm -i --force *.rpm
 popd
