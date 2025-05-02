@@ -43,7 +43,7 @@ icon = "explore-symbolic"
 [[bento]]
 title = "page-installation-help"
 desc = "page-installation-help-desc"
-link = "https://universal-blue.discourse.group/"
+link = "https://universal-blue.discourse.group/c/bluefin/6"
 icon = "chat-symbolic"
 
 [[bento]]
