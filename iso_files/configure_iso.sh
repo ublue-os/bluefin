@@ -2,9 +2,10 @@
 
 set -x
 
-# no DNF5, most likely c10s
-if [ -x /usr/bin/dnf5 ] ; then
-  sudo dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terrael10' terra-release 
+MAJOR_VERSION_NUMBER="$(sh -c '. /usr/lib/os-release ; echo ${VERSION_ID%.*}')"
+if [ "${MAJOR_VERSION_NUMBER}" -lt 20 ] ; then
+  dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terrael10' terra-release 
+  dnf --enablerepo="terra" install -y readymade-nightly
 else
   dnf install -y gparted
   dnf --enablerepo="terra" install -y readymade-nightly
