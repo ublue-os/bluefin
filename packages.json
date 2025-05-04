@@ -164,6 +164,9 @@
 				"firefox",
 				"gnome-extensions-app",
 				"gnome-shell-extension-background-logo",
+				"fedora-bookmarks",
+				"fedora-chromium-config",
+				"fedora-chromium-config-gnome",
 				"gnome-software-rpm-ostree",
 				"gnome-terminal-nautilus",
 				"podman-docker"
