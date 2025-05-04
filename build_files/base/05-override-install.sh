@@ -4,30 +4,17 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-# Patched shells and Switcheroo Patch
-if [[ "$(rpm -E %fedora)" -eq "40" ]]; then
-    dnf5 -y copr enable sentry/switcheroo-control_discrete
-    dnf5 -y copr disable sentry/switcheroo-control_discrete
-    dnf5 -y swap \
-        --repo copr:copr.fedorainfracloud.org:ublue-os:staging \
-        gnome-shell gnome-shell
-    dnf5 versionlock add gnome-shell
-    dnf5 -y swap \
-        --repo=copr:copr.fedorainfracloud.org:sentry:switcheroo-control_discrete \
-        switcheroo-control switcheroo-control
-    dnf5 versionlock add switcheroo-control
-elif [[ "$(rpm -E %fedora)" -ge "41" ]]; then
-    # Enable Terra repo (Extras does not exist on F40)
-    # shellcheck disable=SC2016
-    dnf5 -y swap \
-        --repo="terra, terra-extras" \
-        gnome-shell gnome-shell
-    dnf5 versionlock add gnome-shell
-    dnf5 -y swap \
-        --repo="terra, terra-extras" \
-        switcheroo-control switcheroo-control
-    dnf5 versionlock add switcheroo-control
-fi
+
+# Enable Terra repo (Extras does not exist on F40)
+# shellcheck disable=SC2016
+dnf5 -y swap \
+    --repo="terra, terra-extras" \
+    gnome-shell gnome-shell
+dnf5 versionlock add gnome-shell
+dnf5 -y swap \
+    --repo="terra, terra-extras" \
+    switcheroo-control switcheroo-control
+dnf5 versionlock add switcheroo-control
 
 # Fix for ID in fwupd
 dnf5 -y swap \
