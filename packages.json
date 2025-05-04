@@ -31,7 +31,7 @@
 				"gnome-shell-extension-logo-menu",
 				"gnome-shell-extension-search-light",
 				"gnome-shell-extension-tailscale-gnome-qs",
-				"gnome-tweaks",
+        "gnome-tweaks",
 				"gum",
 				"hplip",
 				"ibus-mozc",
@@ -77,6 +77,7 @@
 				"ublue-brew",
 				"ublue-fastfetch",
 				"ublue-motd",
+				"ublue-setup-services",
 				"uld",
 				"usbmuxd",
 				"wireguard-tools",
@@ -169,7 +170,8 @@
 				"gnome-shell-extension-background-logo",
 				"gnome-software-rpm-ostree",
 				"gnome-terminal-nautilus",
-				"podman-docker"
+				"podman-docker",
+				"yelp"
 			],
 			"dx": []
 		}
