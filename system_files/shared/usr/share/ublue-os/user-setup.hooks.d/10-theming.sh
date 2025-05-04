@@ -2,7 +2,7 @@
 
 source /usr/lib/ublue/setup-services/libsetup.sh
 
-version-script theming-lts user 1 || exit 0
+version-script theming user 1 || exit 0
 
 set -xeuo pipefail
 
