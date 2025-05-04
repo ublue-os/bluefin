@@ -2,21 +2,11 @@
 
 set -x
 
-MAJOR_VERSION_NUMBER="$(sh -c '. /usr/lib/os-release ; echo ${VERSION_ID%.*}')"
-if [ "${MAJOR_VERSION_NUMBER}" -lt 20 ] ; then
-  dnf install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terrael10' terra-release 
-  dnf --enablerepo="terra" install -y readymade-nightly
-else
-  dnf install -y gparted
-  dnf --enablerepo="terra" install -y readymade-nightly
-fi
+dnf -y --enablerepo copr:copr.fedorainfracloud.org:ublue-os:staging install -y \
+  readymade-nightly
 
-# FIXME: move to `dnf install` once (https://github.com/terrapkg/packages/pull/4623) is merged
-pushd $(mktemp -d)
-dnf copr enable -y ublue-os/packages
-dnf download bluefin-readymade-config
-rpm -i --force *.rpm
-popd
+dnf -y --enablerepo copr:copr.fedorainfracloud.org:ublue-os:packages install -y \
+  bluefin-readymade-config
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
 IMAGE_TAG="$(jq -c -r '."image-tag"' <<< $IMAGE_INFO)"
