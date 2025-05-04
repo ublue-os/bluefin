@@ -173,27 +173,6 @@
 			"dx": []
 		}
 	},
-	"40": {
-		"include": {
-			"all": [
-				"epson-inkjet-printer-escpr",
-				"epson-inkjet-printer-escpr2",
-				"ptyxis"
-			],
-			"dx": [
-				"docker-buildx-plugin",
-				"docker-ce",
-				"docker-ce-cli",
-				"docker-compose-plugin",
-				"lxd-agent",
-				"lxd"
-			]
-		},
-		"exclude": {
-			"all": [],
-			"dx": []
-		}
-	},
 	"41": {
 		"include": {
 			"all": [
