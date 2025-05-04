@@ -42,7 +42,8 @@ rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
 mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
 rm -rf /usr/share/pixmaps/faces/bluefin
 
-dnf5 -y swap fedora-logos bluefin-logos
+dnf -y swap fedora-logos bluefin-logos
+dnf -y install bluefin-plymouth
 
 # Consolidate Just Files
 
