@@ -1,8 +1,0 @@
-[Unit]
-Description=Service to check for secure boot key enrollment
-
-[Service]
-ExecStart=/usr/libexec/check-sb-key.sh
-
-[Install]
-WantedBy=multi-user.target
