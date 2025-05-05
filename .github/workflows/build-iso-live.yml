@@ -29,7 +29,7 @@ jobs:
       matrix:
         platform: [amd64]
         flavor: ["", "nvidia-open"]
-        image_version: ["gts","stable", "stable-daily", "latest"]
+        image_version: ["gts", "stable"]
         include:
           - platform: amd64
             flavor: ""
