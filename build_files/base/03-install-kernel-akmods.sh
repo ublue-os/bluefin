@@ -122,8 +122,8 @@ if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
         /tmp/akmods-zfs/kmods/zfs/kmod-zfs-"${KERNEL}"-*.rpm
         /tmp/akmods-zfs/kmods/zfs/libnvpair3-*.rpm
         /tmp/akmods-zfs/kmods/zfs/libuutil3-*.rpm
-        /tmp/akmods-zfs/kmods/zfs/libzfs5-*.rpm
-        /tmp/akmods-zfs/kmods/zfs/libzpool5-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libzfs6-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libzpool6-*.rpm
         /tmp/akmods-zfs/kmods/zfs/python3-pyzfs-*.rpm
         /tmp/akmods-zfs/kmods/zfs/zfs-*.rpm
         pv
