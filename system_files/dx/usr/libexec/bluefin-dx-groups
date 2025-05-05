@@ -23,7 +23,6 @@ append_group() {
 # Setup Groups
 append_group docker
 append_group incus-admin
-append_group lxd
 append_group libvirt
 
 wheelarray=($(getent group wheel | cut -d ":" -f 4 | tr  ',' '\n'))
@@ -31,7 +30,6 @@ for user in $wheelarray
 do
   usermod -aG docker $user
   usermod -aG incus-admin $user
-  usermod -aG lxd $user
   usermod -aG libvirt $user
 done
 
