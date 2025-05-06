@@ -1,4 +1,4 @@
-name: Reusable ISO
+name: Anaconda ISO
 on:
   workflow_call:
     inputs:
