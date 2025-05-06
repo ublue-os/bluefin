@@ -1,4 +1,4 @@
-name: GTS ISO
+name: Anaconda GTS ISO
 on:
   workflow_dispatch:
   workflow_call:
