@@ -495,7 +495,8 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     fi
 
     # Fedora Version
-    FEDORA_VERSION=$(${PODMAN} inspect ${IMAGE_FULL} | jq -r '.[]["Config"]["Labels"]["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+    # FEDORA_VERSION=$(${PODMAN} inspect ${IMAGE_FULL} | jq -r '.[]["Config"]["Labels"]["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+    FEDORA_VERSION=41
 
     # Load Image into rootful podman
     if [[ "${UID}" -gt 0 && {{ ghcr }} == "0" && ! "${PODMAN}" =~ docker ]]; then
