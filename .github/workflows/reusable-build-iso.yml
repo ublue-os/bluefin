@@ -4,7 +4,7 @@ on:
     inputs:
       image_flavors:
         description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
-        default: "['main', 'nvidia', 'nvidia-open']"
+        default: "['main', 'nvidia-open']"
         type: string
       brand_name:
         description: "The Brand Name: bluefin"
@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   build-iso:
-    runs-on: blacksmith-4vcpu-ubuntu-2204
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
