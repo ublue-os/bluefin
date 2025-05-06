@@ -1,4 +1,4 @@
-name: Stable ISO
+name: Anaconda Stable ISO
 on:
   workflow_call:
   workflow_dispatch:
