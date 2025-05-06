@@ -1,9 +1,8 @@
 repo_organization := "ublue-os"
-rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.2.1"
-iso_builder_image := "ghcr.io/jasonn3/build-container-installer:v1.2.3"
+rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.2.2"
+iso_builder_image := "ghcr.io/jasonn3/@d77e9563739921c2f93de778d4fbad854f52d389" # v1.3.0
 images := '(
     [bluefin]=bluefin
-    [bluefin-dx]=bluefin-dx
 )'
 flavors := '(
     [main]=main
