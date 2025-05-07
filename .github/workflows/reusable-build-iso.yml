@@ -6,11 +6,6 @@ on:
         description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
         default: "['main', 'nvidia-open']"
         type: string
-      brand_name:
-        description: "The Brand Name: bluefin"
-        required: true
-        default: bluefin
-        type: string
       stream_name:
         description: "The Fedora Version: gts, stable, or latest"
         required: true
@@ -31,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
-        base_name: ["${{ inputs.brand_name }}", "${{ inputs.brand_name }}-dx"]
+        base_name: ["bluefin"]
         stream_name: ["${{ inputs.stream_name }}"]
 
     steps:
@@ -54,10 +49,10 @@ jobs:
         shell: bash
         run: |
           image_name="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
-          just build-iso "${{ matrix.base_name }}" "${{ matrix.stream_name }}" "${{ matrix.image_flavor }}" "1" "1"
+          sudo $(command -v just) build-iso "${{ matrix.base_name }}" "${{ matrix.stream_name }}" "${{ matrix.image_flavor }}" "1" "1"
           echo "IMAGE_NAME=${image_name}" >> $GITHUB_ENV
           echo "ISO_BUILD_DIR=${{ github.workspace }}/${image_name}_build" >> $GITHUB_ENV
-          echo "ISO_NAME=${image_name}-${{ matrix.stream_name }}.iso" >> $GITHUB_ENV
+          echo "ISO_NAME=${image_name}-${{ matrix.stream_name }}-$(uname -m).iso" >> $GITHUB_ENV
 
       - name: Move ISOs to Upload Directory
         id: upload-directory
