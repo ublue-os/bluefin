@@ -9,4 +9,5 @@ jobs:
     uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
     with:
+      image_flavors: "['main']"
       stream_name: lts
