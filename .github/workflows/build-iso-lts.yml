@@ -1,0 +1,12 @@
+name: Anaconda LTS ISO
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build-iso-lts:
+    name: Build LTS ISOs
+    uses: ./.github/workflows/reusable-build-iso.yml
+    secrets: inherit
+    with:
+      stream_name: lts
