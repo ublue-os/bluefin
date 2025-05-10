@@ -77,7 +77,7 @@ jobs:
           if [ "$FLAVOR" != "" ] ; then
             OUTPUT_NAME="${OUTPUT_NAME}-${FLAVOR}"
             ARTIFACT_FORMAT="-${FLAVOR}"
-            if [ "$FLAVOR" =~ nvidia ] ; then
+            if [[ "$FLAVOR" =~ nvidia ]] ; then
               KARGS="rd.driver.blacklist=nouveau,modprobe.blacklist=nouveau,nvidia-drm.modeset=1"
             fi
           fi
@@ -98,22 +98,26 @@ jobs:
         id: rename
         env:
           OUTPUT_PATH: ${{ steps.build.outputs.iso-dest }}
-          OUTPUT_NAME: ${{ env.IMAGE_NAME }}-live${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}
-          PLATFORM: ${{ matrix.platform }}
           FLAVOR: ${{ matrix.flavor }}
+          ARTIFACT_FORMAT: ${{ steps.image_ref.outputs.artifact_format }}
+          IMAGE_VERSION: ${{ matrix.image_version }}
         run: |
           set -x
           mkdir -p output
+          OUTPUT_NAME="readymade-${IMAGE_NAME}${ARTIFACT_FORMAT}-${IMAGE_VERSION}"
           OUTPUT_DIRECTORY="$(realpath output)"
+          if [ "${FLAVOR}" == "gdx" ] ; then
+            OUTPUT_NAME="readymade-${IMAGE_NAME}${ARTIFACT_FORMAT}"
+          fi
           if [ "${FLAVOR}" != "" ] ; then
             IMAGE_NAME="${IMAGE_NAME}-${FLAVOR}"
           fi
           if [ $PLATFORM == "amd64" ]; then
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
+            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}-$(uname -m).iso-CHECKSUM"
+            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}-$(uname -m).iso"
           else
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
+            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}-$(uname -m).iso-CHECKSUM"
+            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}-$(uname -m).iso"
           fi
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
