@@ -901,3 +901,15 @@ retag-nvidia-on-ghcr working_tag="" stream="" dry_run="1":
     for image in bluefin-nvidia-open bluefin-nvidia bluefin-dx-nvidia bluefin-dx-nvidia-open; do
       $skopeo copy docker://ghcr.io/ublue-os/${image}:{{ working_tag }} docker://ghcr.io/ublue-os/${image}:{{ stream }}
     done
+
+patch-iso-branding override="0" iso_path="output/bootiso/install.iso":
+    #!/usr/bin/env bash
+    mkdir -p output
+    ${SUDOIF} podman run \
+        --rm \
+        -it \
+        --pull=newer \
+        --privileged \
+        -v ./output:/output \
+        -v ./iso_files:/iso_files \
+        registry.fedoraproject.org/fedora:latest

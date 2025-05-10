@@ -33,36 +33,49 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Install Just
-        shell: bash
-        run: bash .github/workflows/shared/install-just.sh
+      - name: Setup Just
+        uses: extractions/setup-just@dd310ad5a97d8e7b41793f8ef055398d51ad4de6 # v2
 
       - name: Check Just Syntax
         shell: bash
         run: |
           just check
 
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+      - name: Maximize build space
+        uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
+        with:
+          remove-codeql: true
 
       - name: Build ISO
         shell: bash
+        env:
+          BASE_NAME: ${{ matrix.base_name }}
+          STREAM_NAME: ${{ matrix.stream_name }}
+          IMAGE_FLAVOR: ${{ matrix.image_flavor }}
+          GITHUB_WORKSPACE: ${{ github.workspace }}
         run: |
-          image_name="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
-          sudo $(command -v just) build-iso "${{ matrix.base_name }}" "${{ matrix.stream_name }}" "${{ matrix.image_flavor }}" "1" "1"
-          echo "IMAGE_NAME=${image_name}" >> $GITHUB_ENV
-          echo "ISO_BUILD_DIR=${{ github.workspace }}/${image_name}_build" >> $GITHUB_ENV
-          echo "ISO_NAME=${image_name}-${{ matrix.stream_name }}-$(uname -m).iso" >> $GITHUB_ENV
+          IMAGE_NAME="$(just image_name ${BASE_NAME} ${STREAM_NAME} ${IMAGE_FLAVOR})"
+          sudo $(command -v just) build-iso "${BASE_NAME}" "${STREAM_NAME}" "${IMAGE_FLAVOR}" "1" "1"
+          echo "IMAGE_NAME=${image_name}" >> "${GITHUB_ENV}"
+          echo "ISO_BUILD_DIR=${GITHUB_WORKSPACE}/${IMAGE_NAME}_build" >> "${GITHUB_ENV}"
+          echo "ISO_NAME=${IMAGE_NAME}-${STREAM_NAME}-$(uname -m).iso" >> "${GITHUB_ENV}"
+
+      - name: Patch ISO with our branding
+        shell: bash
+        run: |
+          just patch-iso-branding 1 "${ISO_BUILD_DIR}/${ISO_NAME}"
 
       - name: Move ISOs to Upload Directory
         id: upload-directory
         shell: bash
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
         run: |
-          ISO_UPLOAD_DIR=${{ github.workspace }}/upload
-          mkdir ${ISO_UPLOAD_DIR}
-          mv ${{ env.ISO_BUILD_DIR }}/${{ env.ISO_NAME }} ${ISO_UPLOAD_DIR}
-          mv ${{ env.ISO_BUILD_DIR }}/${{ env.ISO_NAME }}-CHECKSUM ${ISO_UPLOAD_DIR}
-          echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> $GITHUB_OUTPUT
+          ISO_UPLOAD_DIR="${GITHUB_WORKSPACE}/upload"
+          mkdir "${ISO_UPLOAD_DIR}"
+          mv "${ISO_BUILD_DIR}/${ISO_NAME}" "${ISO_UPLOAD_DIR}"
+          mv "${ISO_BUILD_DIR}/${ISO_NAME}-CHECKSUM" "${ISO_UPLOAD_DIR}"
+          echo "iso-upload-dir=${ISO_UPLOAD_DIR}" >> "${GITHUB_OUTPUT}"
 
       - name: Upload ISOs and Checksum to Job Artifacts
         if: github.ref_name == 'testing'
@@ -74,22 +87,6 @@ jobs:
           retention-days: 0
           compression-level: 0
           overwrite: true
-
-      - name: HWE ISO rename
-        if: contains(matrix.image_flavor, 'hwe')
-        shell: bash
-        run: |
-          set -eoux pipefail
-          iso_name="${{ env.ISO_NAME }}"
-          asus_name="${iso_name/hwe/asus}"
-          surface_name="${iso_name/hwe/surface}"
-          mv "${{ steps.upload-directory.outputs.iso-upload-dir }}/${iso_name}" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${asus_name}"
-          mv "${{ steps.upload-directory.outputs.iso-upload-dir }}/${iso_name}-CHECKSUM" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${asus_name}-CHECKSUM"
-          sed -i -e 's/-hwe/-asus/' "${{ steps.upload-directory.outputs.iso-upload-dir}}/${asus_name}-CHECKSUM"
-          cp "${{ steps.upload-directory.outputs.iso-upload-dir }}/${asus_name}" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${surface_name}"
-          cp "${{ steps.upload-directory.outputs.iso-upload-dir }}/${asus_name}-CHECKSUM" "${{ steps.upload-directory.outputs.iso-upload-dir}}/${surface_name}-CHECKSUM"
-          sed -i -e 's/-asus/-surface/' "${{ steps.upload-directory.outputs.iso-upload-dir}}/${surface_name}-CHECKSUM"
-          tree "${{ steps.upload-directory.outputs.iso-upload-dir }}"
 
       - name: Upload ISOs and Checksum to R2 to Bluefin Bucket
         if: github.ref_name == 'main' && contains(matrix.base_name,'bluefin')
@@ -105,4 +102,4 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
-          rclone copy $SOURCE_DIR R2:bluefin
+          rclone copy "${SOURCE_DIR}" R2:bluefin
