@@ -573,9 +573,12 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
             "--volume=/var/lib/containers/storage:/var/lib/containers/storage"
         )
     fi
+
+    curl -Lo iso_files/bluefin.repo https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${FEDORA_VERSION}/ublue-os-bluefin-fedora-${FEDORA_VERSION}.repo
     iso_build_args+=("--volume=${PWD}:/github/workspace/")
     iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="$(uname -m)")
+    iso_build_args+=(REPOS="/github/workspace/iso_files/packages.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo")
     iso_build_args+=(ENROLLMENT_PASSWORD="universalblue")
     iso_build_args+=(FLATPAK_REMOTE_REFS_DIR="/github/workspace/${build_dir}")
     iso_build_args+=(IMAGE_NAME="${image_name}")
@@ -901,15 +904,3 @@ retag-nvidia-on-ghcr working_tag="" stream="" dry_run="1":
     for image in bluefin-nvidia-open bluefin-nvidia bluefin-dx-nvidia bluefin-dx-nvidia-open; do
       $skopeo copy docker://ghcr.io/ublue-os/${image}:{{ working_tag }} docker://ghcr.io/ublue-os/${image}:{{ stream }}
     done
-
-patch-iso-branding override="0" iso_path="output/bootiso/install.iso":
-    #!/usr/bin/env bash
-    mkdir -p output
-    ${SUDOIF} podman run \
-        --rm \
-        -it \
-        --pull=newer \
-        --privileged \
-        -v ./output:/output \
-        -v ./iso_files:/iso_files \
-        registry.fedoraproject.org/fedora:latest
