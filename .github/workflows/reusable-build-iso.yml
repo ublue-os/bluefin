@@ -33,8 +33,9 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Setup Just
-        uses: extractions/setup-just@dd310ad5a97d8e7b41793f8ef055398d51ad4de6 # v2
+      - name: Install Just
+        shell: bash
+        run: bash .github/workflows/shared/install-just.sh
 
       - name: Check Just Syntax
         shell: bash
@@ -59,11 +60,6 @@ jobs:
           echo "IMAGE_NAME=${image_name}" >> "${GITHUB_ENV}"
           echo "ISO_BUILD_DIR=${GITHUB_WORKSPACE}/${IMAGE_NAME}_build" >> "${GITHUB_ENV}"
           echo "ISO_NAME=${IMAGE_NAME}-${STREAM_NAME}-$(uname -m).iso" >> "${GITHUB_ENV}"
-
-      - name: Patch ISO with our branding
-        shell: bash
-        run: |
-          just patch-iso-branding 1 "${ISO_BUILD_DIR}/${ISO_NAME}"
 
       - name: Move ISOs to Upload Directory
         id: upload-directory
