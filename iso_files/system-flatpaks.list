@@ -2,6 +2,7 @@ org.gtk.Gtk3theme.adw-gtk3
 org.gtk.Gtk3theme.adw-gtk3-dark
 com.github.rafostar.Clapper
 io.gitlab.adhami3310.Impression
+com.mattjakeman.ExtensionManager
 com.github.tchx84.Flatseal
 io.github.flattool.Ignition
 io.github.flattool.Warehouse
@@ -15,8 +16,8 @@ org.gnome.Connections
 org.gnome.Contacts
 org.gnome.DejaDup
 org.gnome.Papers
-com.mattjakeman.ExtensionManager
 org.gnome.FileRoller
+org.gnome.Firmware
 org.gnome.font-viewer
 org.gnome.Logs
 org.gnome.Loupe
