@@ -578,7 +578,7 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     iso_build_args+=("--volume=${PWD}:/github/workspace/")
     iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="$(uname -m)")
-    iso_build_args+=(REPOS="/github/workspace/iso_files/packages.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo")
+    iso_build_args+=(REPOS="/github/workspace/iso_files/bluefin.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo")
     iso_build_args+=(ENROLLMENT_PASSWORD="universalblue")
     iso_build_args+=(FLATPAK_REMOTE_REFS_DIR="/github/workspace/${build_dir}")
     iso_build_args+=(IMAGE_NAME="${image_name}")
