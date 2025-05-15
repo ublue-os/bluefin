@@ -23,6 +23,7 @@ systemctl enable ublue-system-setup.service
 systemctl --global enable ublue-user-setup.service
 systemctl --global enable podman-auto-update.timer
 systemctl enable check-sb-key.service
+systemctl enable input-remapper.service
 
 # Updater
 if systemctl cat -- uupd.timer &> /dev/null; then
