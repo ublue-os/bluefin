@@ -3,24 +3,27 @@
 set -eoux pipefail
 
 IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
-IMAGE_TAG="$(jq -c -r '."image-tag"' <<< $IMAGE_INFO)"
-IMAGE_FLAVOR="$(jq -c -r '."image-flavor"' <<< $IMAGE_INFO)"
-IMAGE_NAME="$(jq -c -r '."image-name"' <<< $IMAGE_INFO)"
-IMAGE_REF="$(jq -c -r '."image-ref"' <<< $IMAGE_INFO)"
+IMAGE_TAG="$(jq -c -r '."image-tag"' <<<"$IMAGE_INFO")"
+IMAGE_REF="$(jq -c -r '."image-ref"' <<<"$IMAGE_INFO")"
 IMAGE_REF="${IMAGE_REF##*://}"
 sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
 
 # Configure Live Environment
 
+. /etc/os-release
+if [[ "$IMAGE_TAG" =~ gts|lts ]]; then
+    echo "Bluefin ${IMAGE_TAG^^} release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
+else
+    echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
+fi
+
+sed 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=" "' /usr/{,s}bin/liveinst
+
 # Setup dock
-tee /usr/share/glib-2.0/schemas/org.gnome.shell.gschema.override <<EOF
+tee /usr/share/glib-2.0/schemas/zz2-org.gnome.shell.gschema.override <<EOF
 [org.gnome.shell]
 welcome-dialog-last-shown-version='4294967295'
 favorite-apps = ['liveinst.desktop', 'documentation.desktop', 'discourse.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Nautilus.desktop']
-
-[org.gnome.software]
-allow-updates=false
-download-updates=false
 EOF
 
 # don't autostart gnome-software session service
@@ -39,7 +42,7 @@ systemctl disable bootloader-update.service
 systemctl disable brew-upgrade.timer
 systemctl disable brew-update.timer
 systemctl disable brew-setup.service
-systemctl disable rpm-ostree.service
+systemctl disable rpm-ostreed-automatic.timer
 systemctl disable uupd.timer
 systemctl disable ublue-system-setup.service
 systemctl disable ublue-guest-user.service
@@ -60,20 +63,20 @@ fi
 sed -i 's/^ID=.*/ID=fedora/' /usr/lib/os-release
 
 # Install Anaconda, Webui if >= F42
+SPECS=(
+    "libblockdev-btrfs"
+    "libblockdev-lvm"
+    "libblockdev-dm"
+)
 if [[ "$IMAGE_TAG" =~ lts ]]; then
-    dnf install -y anaconda-liveinst
+    SPECS+=("anaconda-liveinst")
 else
-    SPECS=(
-        "anaconda-live"
-        "libblockdev-btrfs"
-        "libblockdev-lvm"
-        "libblockdev-dm"
-    )
+    SPECS+=("anaconda-live")
     if [[ "$(rpm -E %fedora)" -ge 42 ]]; then
         SPECS+=("anaconda-webui")
     fi
-    dnf install -y "${SPECS[@]}"
 fi
+dnf install -y "${SPECS[@]}"
 
 # Get Artwork
 git clone --depth=1 https://github.com/ublue-os/packages.git /root/packages
@@ -115,28 +118,31 @@ rsync -aAXUHKP /var/lib/flatpak "$target"
 %end
 EOF
 
+# Fetch the Secureboot Public Key
+curl --retry 15 -Lo /etc/sb_pubkey.der "$sbkey"
+
 # Enroll Secureboot Key
 tee /usr/share/anaconda/post-scripts/secureboot-enroll-key.ks <<'EOF'
 %post --erroronfail --nochroot
 set -oue pipefail
 
 readonly ENROLLMENT_PASSWORD="universalblue"
-readonly SECUREBOOT_KEY="/run/install/repo/sb_pubkey.der"
+readonly SECUREBOOT_KEY="/etc/sb_pubkey.der"
 
 if [[ ! -d "/sys/firmware/efi" ]]; then
-	echo "EFI mode not detected. Skipping key enrollment."
-	exit 0
+    echo "EFI mode not detected. Skipping key enrollment."
+    exit 0
 fi
 
 if [[ ! -f "$SECUREBOOT_KEY" ]]; then
-	echo "Secure boot key not provided: $SECUREBOOT_KEY"
-	exit 0
+    echo "Secure boot key not provided: $SECUREBOOT_KEY"
+    exit 0
 fi
 
 SYS_ID="$(cat /sys/devices/virtual/dmi/id/product_name)"
 if [[ ":Jupiter:Galileo:" =~ ":$SYS_ID:" ]]; then
-	echo "Steam Deck hardware detected. Skipping key enrollment."
-	exit 0
+    echo "Steam Deck hardware detected. Skipping key enrollment."
+    exit 0
 fi
 
 mokutil --timeout -1 || :
