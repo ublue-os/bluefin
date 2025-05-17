@@ -17,7 +17,7 @@ else
     echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
 fi
 
-sed 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=" "' /usr/{,s}bin/liveinst
+sed 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=" "/' /usr/{,s}bin/liveinst
 
 # Setup dock
 tee /usr/share/glib-2.0/schemas/zz2-org.gnome.shell.gschema.override <<EOF
