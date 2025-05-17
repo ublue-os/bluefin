@@ -10,15 +10,6 @@ sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
 
 # Configure Live Environment
 
-. /etc/os-release
-if [[ "$IMAGE_TAG" =~ gts|lts ]]; then
-    echo "Bluefin ${IMAGE_TAG^^} release $VERSION_ID (${VERSION_CODENAME:='Big Bird'})" >/etc/system-release
-else
-    echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
-fi
-
-sed 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=" "/' /usr/{,s}bin/liveinst
-
 # Setup dock
 tee /usr/share/glib-2.0/schemas/zz2-org.gnome.shell.gschema.override <<EOF
 [org.gnome.shell]
@@ -77,6 +68,15 @@ else
     fi
 fi
 dnf install -y "${SPECS[@]}"
+
+# Configure
+. /etc/os-release
+if [[ "$IMAGE_TAG" =~ gts|lts ]]; then
+    echo "Bluefin ${IMAGE_TAG^^} release $VERSION_ID (${VERSION_CODENAME:='Big Bird'})" >/etc/system-release
+else
+    echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
+fi
+sed 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=" "/' /usr/{,s}bin/liveinst || true
 
 # Get Artwork
 git clone --depth=1 https://github.com/ublue-os/packages.git /root/packages
