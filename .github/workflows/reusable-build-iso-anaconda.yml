@@ -8,6 +8,7 @@ on:
       - main
     paths: 
       - .github/workflows/reusable-build-iso-anaconda.yml
+      - iso_files/configure_iso_anaconda.sh
 
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
