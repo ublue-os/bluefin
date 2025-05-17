@@ -3,6 +3,11 @@ name: Build ISOs (Live Anaconda)
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths: 
+      - .github/workflows/reusable-build-iso-anaconda.yml
 
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
@@ -104,7 +109,7 @@ jobs:
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
       - name: Upload to Job Artifacts
-        if: github.event_name == 'pull_request' || ${{ ! contains(matrix.image_version, 'lts')}}
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ steps.image_ref.outputs.artifact_format }}
@@ -112,7 +117,7 @@ jobs:
           path: ${{ steps.rename.outputs.output_directory }}
 
       - name: Upload to CloudFlare
-        if: contains(matrix.image_version, 'lts') && github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request'
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
@@ -125,4 +130,4 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
-          rclone copy "${SOURCE_DIR}" R2:bluefin
+          rclone copy "${SOURCE_DIR}" R2:testing
