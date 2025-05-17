@@ -12,7 +12,7 @@ sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
 
 . /etc/os-release
 if [[ "$IMAGE_TAG" =~ gts|lts ]]; then
-    echo "Bluefin ${IMAGE_TAG^^} release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
+    echo "Bluefin ${IMAGE_TAG^^} release $VERSION_ID (${VERSION_CODENAME:='Big Bird'})" >/etc/system-release
 else
     echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
 fi
