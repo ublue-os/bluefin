@@ -2,6 +2,10 @@ name: Anaconda ISO
 on:
   workflow_call:
     inputs:
+      platform:
+        description: "The Platform Architecture"
+        default: "['amd64']"
+        type: string
       image_flavors:
         description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
         default: "['main', 'nvidia-open']"
@@ -12,12 +16,12 @@ on:
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}-iso
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.stream_name }}-iso
   cancel-in-progress: true
 
 jobs:
   build-iso:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.platform == 'amd64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm'}}
     permissions:
       contents: read
       packages: write
@@ -25,6 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        platform: ${{ fromJson(inputs.platform) }}
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
         base_name: ["bluefin"]
         stream_name: ["${{ inputs.stream_name }}"]

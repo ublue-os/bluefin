@@ -18,6 +18,9 @@ flavors := '(
     [surface]=surface
     [surface-nvidia]=surface-nvidia
     [surface-nvidia-open]=surface-nvidia-open
+
+    # Temporary for LTS to anaconda build-iso
+    [gdx]=gdx
 )'
 tags := '(
     [gts]=gts
@@ -25,7 +28,7 @@ tags := '(
     [latest]=latest
     [beta]=beta
 
-    # temporary for lts to anaconda build-iso
+    # Temporary for LTS to anaconda build-iso
     [lts]=lts
 )'
 export SUDO_DISPLAY := if `if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then echo true; fi` == "true" { "true" } else { "false" }
