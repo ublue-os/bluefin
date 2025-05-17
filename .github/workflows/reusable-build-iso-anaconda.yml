@@ -3,33 +3,6 @@ name: Build ISOs (Live Anaconda)
 
 on:
   workflow_dispatch:
-    inputs:
-      platform:
-        description: "The Platform Architecture"
-        default: "['amd64']"
-        type: string
-      image_flavors:
-        description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
-        default: "['main', 'nvidia-open']"
-        type: string
-      stream_name:
-        description: "The Fedora Version: gts, stable, or latest"
-        required: true
-        type: string 
-  workflow_call:
-    inputs:
-      platform:
-        description: "The Platform Architecture"
-        default: "['amd64']"
-        type: string
-      image_flavors:
-        description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
-        default: "['main', 'nvidia-open']"
-        type: string
-      stream_name:
-        description: "The Fedora Version: gts, stable, or latest"
-        required: true
-        type: string 
 
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
