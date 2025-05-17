@@ -38,19 +38,26 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Install Just
-        shell: bash
-        run: bash .github/workflows/shared/install-just.sh
-
-      - name: Check Just Syntax
-        shell: bash
+      - name: Install dependencies
+        if: matrix.platform == 'arm64'
         run: |
-          just check
+          set -x
+          sudo apt update -y
+          sudo apt install -y \
+            podman
 
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
         with:
           remove-codeql: true
+
+      - name: Setup Just
+        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+
+      - name: Check Just Syntax
+        shell: bash
+        run: |
+          just check
 
       - name: Build ISO
         shell: bash
