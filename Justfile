@@ -482,7 +482,7 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     build_dir="${image_name}_build"
     mkdir -p "$build_dir"
 
-    if [[ -f "${build_dir}/${image_name}-${tag}.iso" || -f "${build_dir}/${image_name}-${tag}.iso-CHECKSUM" ]]; then
+    if [[ -f "${build_dir}/${image_name}-${tag}-$(uname -m).iso" || -f "${build_dir}/${image_name}-${tag}-$(uname -m).iso-CHECKSUM" ]]; then
         echo "ERROR - ISO or Checksum already exist. Please mv or rm to build new ISO"
         exit 1
     fi
