@@ -129,4 +129,4 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y rclone
-          rclone copy "${SOURCE_DIR}" R2:testing
+          rclone copy "${SOURCE_DIR}" R2:bluefin
