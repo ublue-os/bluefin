@@ -195,7 +195,7 @@
 	"42": {
 		"include": {
 			"all": [
-	"bazaar",			
+	"bazaar",
         "google-noto-fonts-all",
         "uupd"
       ],
