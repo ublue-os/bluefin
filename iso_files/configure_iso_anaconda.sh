@@ -46,15 +46,17 @@ systemctl --global disable ublue-user-setup.service
 
 # Install Anaconda, Webui if >= F42
 SPECS=(
+    "libblockdev-btrfs"
     "libblockdev-lvm"
     "libblockdev-dm"
 )
 if [[ "$IMAGE_TAG" =~ lts ]]; then
     SPECS+=("anaconda-liveinst")
+    dnf install -y centos-release-hyperscale
+    dnf config-manager --set-enabled crb
 else
     SPECS+=(
         "anaconda-live"
-        "libblockdev-btrfs"
     )
     if [[ "$(rpm -E %fedora)" -ge 42 ]]; then
         SPECS+=("anaconda-webui")
@@ -66,7 +68,7 @@ dnf install -y "${SPECS[@]}"
 
 # Bluefin GTS/Stable
 tee /etc/anaconda/profile.d/bluefin.conf <<'EOF'
-# Anaconda configuration file for Bluefin GTS/Stable
+# Anaconda configuration file for Bluefin
 
 [Profile]
 # Define the profile.
@@ -97,38 +99,16 @@ hidden_spokes =
     NetworkSpoke
     PasswordSpoke
     UserSpoke
+hidden_webui_pages =
+    anaconda-screen-accounts
 
 [Localization]
 use_geolocation = False
 EOF
 
-# Bluefin LTS
-tee /etc/anaconda/profile.d/bluefin-lts.conf <<'EOF'
-# Anaconda configuration file for Bluefin LTS
-
-[Profile]
-# Define the profile.
-profile_id = bluefin-lts
-base_profile = bluefin
-
-[Profile Detection]
-# Match os-release values
-os_id = bluefin
-variant_id = bluefin-lts
-
-# TODO: Figure out a better default partitioning scheme
-[Storage]
-file_system_type = xfs
-default_scheme = LVM
-default_partitioning =
-    /     (min 1 GiB, max 50 GiB)
-    /home (min 500 MiB, free 50 GiB)
-    /var  (min 500 MiB, free 50 GiB)
-EOF
-
 if [[ "${IMAGE_TAG}" =~ lts ]]; then
     sed -i 's/^ID=.*/ID=bluefin/' /usr/lib/os-release
-    echo "VARIANT_ID=bluefin-lts" >>/usr/lib/os-release
+    echo "VARIANT_ID=bluefin" >>/usr/lib/os-release
 fi
 
 # Configure
@@ -140,6 +120,8 @@ else
 fi
 sed -i 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=""/' /usr/{,s}bin/liveinst || true
 sed -i 's|^Icon=.*|Icon=/usr/shre/pixmaps/fedora-logo-icon.png|' /usr/share/applications/anaconda.desktop || true
+sed -i 's| Fedora| Bluefin|' /usr/share/anaconda/gnome/fedora-welcome || true
+sed -i 's|Activities|in the dock|' /usr/share/anaconda/gnome/fedora-welcome || true
 
 # Get Artwork
 git clone --depth=1 https://github.com/ublue-os/packages.git /root/packages
