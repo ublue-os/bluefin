@@ -9,8 +9,8 @@ IMAGE_REF="${IMAGE_REF##*://}"
 sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
 
 # Configure Live Environment
-## Remove packages from liveCD to save space
 
+# Remove packages from liveCD to save space
 dnf remove -y google-noto-fonts-all ublue-brew ublue-motd yaru-theme || true
 
 # Setup dock
