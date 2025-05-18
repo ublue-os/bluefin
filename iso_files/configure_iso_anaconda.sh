@@ -49,24 +49,20 @@ SPECS=(
     "libblockdev-btrfs"
     "libblockdev-lvm"
     "libblockdev-dm"
+    "anaconda-live"
 )
 if [[ "$IMAGE_TAG" =~ lts ]]; then
-    SPECS+=("anaconda-liveinst")
-    dnf install -y centos-release-hyperscale
-    dnf config-manager --set-enabled crb
-else
-    SPECS+=(
-        "anaconda-live"
-    )
-    if [[ "$(rpm -E %fedora)" -ge 42 ]]; then
-        SPECS+=("anaconda-webui")
-    fi
+    dnf config-manager --set-enabled centos-hyperscale
+elif [[ "$(rpm -E %fedora)" -ge 42 ]]; then
+    SPECS+=("anaconda-webui")
 fi
 dnf install -y "${SPECS[@]}"
 
+dnf config-manager --set-disabled centos-hyperscale &>/dev/null || true
+
 # Anaconda Profile Detection
 
-# Bluefin GTS/Stable
+# Bluefin
 tee /etc/anaconda/profile.d/bluefin.conf <<'EOF'
 # Anaconda configuration file for Bluefin
 
@@ -94,7 +90,7 @@ default_partitioning =
     /var  (btrfs)
 
 [User Interface]
-custom_styleshee = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css
+custom_stylesheet = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css
 hidden_spokes =
     NetworkSpoke
     PasswordSpoke
@@ -119,7 +115,7 @@ else
     echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
 fi
 sed -i 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=""/' /usr/{,s}bin/liveinst || true
-sed -i 's|^Icon=.*|Icon=/usr/shre/pixmaps/fedora-logo-icon.png|' /usr/share/applications/anaconda.desktop || true
+sed -i 's|^Icon=.*|Icon=/usr/share/pixmaps/fedora-logo-icon.png|' /usr/share/applications/liveinst.desktop || true
 sed -i 's| Fedora| Bluefin|' /usr/share/anaconda/gnome/fedora-welcome || true
 sed -i 's|Activities|in the dock|' /usr/share/anaconda/gnome/fedora-welcome || true
 
