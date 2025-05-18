@@ -14,7 +14,7 @@ sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
 tee /usr/share/glib-2.0/schemas/zz2-org.gnome.shell.gschema.override <<EOF
 [org.gnome.shell]
 welcome-dialog-last-shown-version='4294967295'
-favorite-apps = ['liveinst.desktop', 'documentation.desktop', 'discourse.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Nautilus.desktop']
+favorite-apps = ['anaconda.desktop', 'documentation.desktop', 'discourse.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Nautilus.desktop']
 EOF
 
 # don't autostart gnome-software session service
@@ -139,6 +139,7 @@ else
     echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
 fi
 sed -i 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=""/' /usr/{,s}bin/liveinst || true
+sed -i 's|^Icon=.*|Icon=/usr/shre/pixmaps/fedora-logo-icon.png|' /usr/share/applications/anaconda.desktop || true
 
 # Get Artwork
 git clone --depth=1 https://github.com/ublue-os/packages.git /root/packages
