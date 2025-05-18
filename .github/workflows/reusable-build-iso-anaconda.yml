@@ -4,10 +4,9 @@ name: Build ISOs (Live Anaconda)
 on:
   workflow_dispatch:
   pull_request:
-    branches:
-      - main
-    paths: 
-      - .github/workflows/reusable-build-iso-anaconda.yml
+    paths:
+      - ".github/workflows/reusable-build-iso-anaconda.yml"
+      - "iso_files/configure_iso_anaconda.sh"
 
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
@@ -83,7 +82,7 @@ jobs:
           echo "image_ref=$image_ref" >> "${GITHUB_OUTPUT}"
           echo "artifact_format="$image_name-${{ matrix.image_version }}-$(uname -m)"" >> "${GITHUB_OUTPUT}"
           echo "kargs=$KARGS" >> "${GITHUB_OUTPUT}"
-          
+
       - name: Build ISO
         id: build
         uses: ublue-os/titanoboa@main
