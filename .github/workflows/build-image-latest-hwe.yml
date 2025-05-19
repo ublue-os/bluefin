@@ -7,6 +7,10 @@ on:
       - testing
     paths-ignore:
       - "**.md"
+      - "iso_files/**"
+      - "bluefin_flatpaks/**"
+      - "dx_flatpaks/**"
+      - ".github/workflows/*iso*"
   workflow_call:
   workflow_dispatch:
 

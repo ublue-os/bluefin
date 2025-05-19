@@ -42,9 +42,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Install Just
-        shell: bash
-        run: bash .github/workflows/shared/install-just.sh
+      - name: Maximize build space
+        uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
+        with:
+          remove-codeql: true
+
+      - name: Setup Just
+        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
 
       - name: Check Just Syntax
         shell: bash
@@ -66,16 +70,11 @@ jobs:
           echo "Default Tag: ${DEFAULT_TAG}"
           echo "DEFAULT_TAG=${DEFAULT_TAG}" >> $GITHUB_ENV
 
-      - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
-        with:
-          remove-codeql: true
-
       - name: Build Image
         id: build-image
         shell: bash
         run: |
-          sudo just repo_organization="${{ github.repository_owner }}" \
+          sudo $(command -v just) repo_organization="${{ github.repository_owner }}" \
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
@@ -84,7 +83,7 @@ jobs:
       - name: Setup Syft
         id: setup-syft
         if: false
-        uses: anchore/sbom-action/download-syft@9f7302141466aa6482940f15371237e9d9f4c34a # v0
+        uses: anchore/sbom-action/download-syft@e11c554f704a0b820cbf8c51673f6945e0731532 # v0
         with:
           syft-version: v1.20.0
 
@@ -107,7 +106,7 @@ jobs:
         id: rechunk-image
         shell: bash
         run: |
-          sudo just rechunk "${{ matrix.base_name }}" \
+          sudo $(command -v just) rechunk "${{ matrix.base_name }}" \
                             "${{ matrix.stream_name }}" \
                             "${{ matrix.image_flavor }}" \
                             "1"

@@ -86,7 +86,6 @@ toggle-devmode:
         ujust install-system-flatpaks 1
     fi
 
-
 # Ptyxis terminal transparency
 [group('System')]
 ptyxis-transparency opacity="0.95":
