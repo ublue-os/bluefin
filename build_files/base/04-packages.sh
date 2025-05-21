@@ -33,6 +33,6 @@ else
 fi
 
 # Add workaround for xdg-desktop-portal
-dnf5 upgrade --enablerepo=updates-testing --refresh --advisory=FEDORA-2025-c358833c5d
+dnf5 -y upgrade --enablerepo=updates-testing --refresh --advisory=FEDORA-2025-c358833c5d
 
 echo "::endgroup::"
