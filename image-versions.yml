@@ -2,4 +2,4 @@ images:
   - name: silverblue-nvidia
     image: ghcr.io/ublue-os/silverblue-nvidia
     tag: latest
-    digest: sha256:7cef45df8b396e85aa91492a313476a5049f715b35f897e49d314b861bda42b7
+    digest: sha256:1442121bcf6919ee12519f85c768e663b19af07498314849da727e77cbfeb2d4
