@@ -14,6 +14,11 @@ set -eoux pipefail
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
 
+if [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
+# Workaround atheros-firmware regression, see https://bugzilla.redhat.com/show_bug.cgi?id=2365882
+    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2025-0b94571b06
+fi
+
 # Current bluefin systems have the bling.sh and bling.fish in their default locations
 mkdir -p /usr/share/ublue-os/bluefin-cli
 cp /usr/share/ublue-os/bling/* /usr/share/ublue-os/bluefin-cli
