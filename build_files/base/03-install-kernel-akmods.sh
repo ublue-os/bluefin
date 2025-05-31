@@ -60,14 +60,6 @@ else
 fi
 
 if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm || true
-else
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-fi
-
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
     dnf5 -y remove rpmfusion-free-release || true
     dnf5 -y remove rpmfusion-nonfree-release || true
 else
