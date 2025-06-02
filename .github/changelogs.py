@@ -61,7 +61,6 @@ From previous `{target}` version `{prev}` there have been the following changes.
 | --- | --- |
 | **Incus** | {pkgrel:incus} |
 | **Docker** | {pkgrel:docker-ce} |
-| **Devpod** | {pkgrel:devpod} |
 
 {changes}
 
