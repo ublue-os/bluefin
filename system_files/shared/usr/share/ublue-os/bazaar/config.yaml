@@ -97,7 +97,7 @@ sections:
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
   - title: "Office & Productivity"
-    subtitle: "May the paperclip"
+    subtitle: "May the paperclip be ever in your favor"
     rows: 3
     banner: file:///usr/share/ublue-os/bazaar/office.png
     banner-fit: cover
