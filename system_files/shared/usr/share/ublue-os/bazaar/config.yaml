@@ -60,6 +60,23 @@ sections:
       - com.microsoft.Edge
       - com.opera.Opera
       - com.vivaldi.Vivaldi
+  - title: "Bluefin Recommends"
+    subtitle: "Contributor's Favorite Applications"
+    rows: 2
+    banner: file:///usr/share/ublue-os/bazaar/streaming.png
+    banner-fit: cover
+    banner-text-halign: end
+    banner-text-valign: start
+    banner-height: 500
+    classes:
+      - bazzite-section
+    appids:
+      - io.github.pleromix.IceBox
+      - io.github.realmazharhussain.GdmSettings
+      - io.github.nozwock.Packet
+      - io.github.fabrialberio.pinapp
+      - com.github.ADBeveridge.Raider
+      - org.gnome.gitlab.YaLTeR.VideoTrimmer
   - title: "Streaming & Chat"
     subtitle: "Sprunk'd it."
     rows: 2
@@ -117,8 +134,7 @@ sections:
       - md.obsidian.Obsidian
       - org.standardnotes.standardnotes
       - com.slack.Slack
-      - com.github.IsmaelMartinez.teams_for_linux
-      - org.ardour.Ardour
+      - com.github.IsmaelMartinez.teams_for_linuxorg.gnome.gitlab.YaLTeR.VideoTrimmer
   - title: "Utilities"
     subtitle: "Stuff you didn't need until now."
     rows: 2
@@ -137,4 +153,22 @@ sections:
       - com.github.zocker_160.SyncThingy
       - org.fedoraproject.MediaWriter
       - org.raspberrypi.rpi-imager
+  - title: "Developers"
+    subtitle: "Unleash the power of cloud native development"
+    rows: 2
+    banner: file:///usr/share/ublue-os/bazaar/streaming.png
+    banner-fit: cover
+    banner-text-halign: end
+    banner-text-valign: start
+    banner-height: 500
+    classes:
+      - bazzite-section
+    appids:
+      - io.podman_desktop.PodmanDesktop
+      - com.getpostman.Postman
+      - io.dbeaver.DBeaverCommunity
+      - org.gnome.Builder
+      - io.kinvolk.Headlamp
+      - com.github.marhkb.Pods
+      - sh.loft.devpod
       - cc.arduino.IDE2
