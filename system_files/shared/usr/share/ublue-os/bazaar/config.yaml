@@ -71,6 +71,7 @@ sections:
     classes:
       - bazzite-section
     appids:
+      - be.alexandervanhee.gradia
       - io.github.pleromix.IceBox
       - io.github.realmazharhussain.GdmSettings
       - io.github.nozwock.Packet
