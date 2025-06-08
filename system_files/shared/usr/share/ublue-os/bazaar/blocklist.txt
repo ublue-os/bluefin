@@ -1,4 +1,7 @@
 com.visualstudio.code
+com.visualstudio.code-oss
+com.vscodium.codium
+com.vscodium.codium-insiders
 com.jetbrains.CLion
 com.jetbrains.DataGrip
 com.jetbrains.GoLand
@@ -11,5 +14,11 @@ com.jetbrains.PyCharm-Community
 com.jetbrains.Rider
 com.jetbrains.RubyMine
 com.jetbrains.RustRover
+com.google.AndroidStudio
 io.neovim.nvim
 org.vim.Vim
+dev.neovide.neovide
+io.github.zyedidia.micro
+com.helix_editor.Helix
+org.gnu.emacs
+app.devsuite.Ptyxis
