@@ -44,8 +44,8 @@ css: |
      transition-duration: 0.15s;
   }
 sections:
-  - title: "Gaming"
-    subtitle: "Now this will run on my 486?"
+  - title: "Browsers"
+    subtitle: "Use the web with your favorite browser"
     rows: 4
     banner: file:///usr/share/ublue-os/bazaar/gaming.png
     banner-fit: cover
@@ -55,42 +55,11 @@ sections:
     classes:
       - bazzite-section
     appids:
-      - com.heroicgameslauncher.hgl
-      - io.itch.itch
-      - org.prismlauncher.PrismLauncher
-      - io.mrarm.mcpelauncher
-      - org.vinegarhq.Sober
-      - org.zdoom.GZDoom
-      - org.openmw.OpenMW
-      - dev.goats.xivlauncher
-      - net.retrodeck.retrodeck
-      - org.libretro.RetroArch
-      - page.kramo.Cartridges
-      - org.pegasus_frontend.Pegasus
-      - info.cemu.Cemu
-      - org.DolphinEmu.dolphin-emu
-      - net.kuribo64.melonDS
-      - com.snes9x.Snes9x
-      - io.mgba.mGBA
-      - org.ppsspp.PPSSPP
-      - org.duckstation.DuckStation
-      - net.pcsx2.PCSX2
-      - net.rpcs3.RPCS3
-      - app.xemu.xemu
-      - org.mamedev.MAME
-      - io.github.stella_emu.Stella
-      - org.scummvm.ScummVM
-      - io.github.dosbox-staging
-      - com.github.k4zmu2a.spacecadetpinball
-      - sh.ppy.osu
-      - com.pokemmo.PokeMMO
-      - com.etlegacy.ETLegacy
-      - com.realm667.Wolfenstein_Blade_of_Agony
-      - org.srb2.SRB2
-      - org.srb2.SRB2Kart
-      - org.supertuxproject.SuperTux
-      - net.supertuxkart.SuperTuxKart
-      - io.github.limo_app.limo
+      - com.brave.Browser
+      - com.google.Chrome
+      - com.microsoft.Edge
+      - com.opera.Opera
+      - com.vivaldi.Vivaldi
   - title: "Streaming & Chat"
     subtitle: "Sprunk'd it."
     rows: 2
@@ -103,16 +72,9 @@ sections:
       - bazzite-section
     appids:
       - com.discordapp.Discord
-      - dev.vencord.Vesktop
-      - im.pidgin.Pidgin
-      - com.teamspeak.TeamSpeak
-      - info.mumble.Mumble
-      - im.riot.Riot
-      - org.squidowl.halloy
       - org.gnome.Fractal
       - com.obsproject.Studio
       - com.feaneron.Boatswain
-      - com.moonlight_stream.Moonlight
       - com.valvesoftware.SteamLink
       - com.parsecgaming.parsec
   - title: "Music & Media"
@@ -127,18 +89,14 @@ sections:
       - bazzite-section
     appids:
       - io.bassi.Amberol
-      - com.github.neithern.g4music
-      - org.atheme.audacious
       - com.spotify.Client
       - com.mastermindzh.tidal-hifi
       - org.videolan.VLC
       - com.github.iwalton3.jellyfin-media-player
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
-      - org.strawberrymusicplayer.strawberry
-      - camp.nook.nookdesktop
   - title: "Office & Productivity"
-    subtitle: "May the paperclip fellow have mercy."
+    subtitle: "May the paperclip have mercy."
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/office.png
     banner-fit: cover
@@ -148,7 +106,6 @@ sections:
     classes:
       - bazzite-section
     appids:
-      - org.mozilla.Thunderbird
       - org.libreoffice.LibreOffice
       - org.gimp.GIMP
       - org.kde.krita
@@ -175,13 +132,8 @@ sections:
     appids:
       - app.drey.Warp
       - org.deskflow.deskflow
-      - io.github.berarma.Oversteer
       - io.github.lawstorant.boxflat
       - io.github.radiolamp.mangojuice
-      - io.missioncenter.MissionCenter
-      - org.keepassxc.KeePassXC
-      - com.bitwarden.desktop
-      - org.qbittorrent.qBittorrent
       - com.github.zocker_160.SyncThingy
       - org.fedoraproject.MediaWriter
       - org.raspberrypi.rpi-imager
