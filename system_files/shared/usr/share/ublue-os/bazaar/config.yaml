@@ -55,11 +55,14 @@ sections:
     classes:
       - bazzite-section
     appids:
+      - io.github.fabrialberio.pinapp
+      - re.sonny.Eloquent
       - be.alexandervanhee.gradia
+      - app.fotema.Fotema
+      - app.drey.Damask
       - io.github.pleromix.IceBox
       - io.github.realmazharhussain.GdmSettings
       - io.github.nozwock.Packet
-      - io.github.fabrialberio.pinapp
       - com.github.ADBeveridge.Raider
       - org.gnome.gitlab.YaLTeR.VideoTrimmer    
   - title: "Browsers"
@@ -107,7 +110,10 @@ sections:
     classes:
       - bazzite-section
     appids:
+      - com.slack.Slack
+      - md.obsidian.Obsidian
       - io.gitlab.theevilskeleton.Upscaler
+      - io.github.alainm23.planify
       - org.libreoffice.LibreOffice
       - org.gimp.GIMP
       - org.kde.krita
@@ -116,14 +122,11 @@ sections:
       - io.github.nokse22.Exhibit
       - org.audacityteam.Audacity
       - org.ardour.Ardour
-      - md.obsidian.Obsidian
-      - org.standardnotes.standardnotes
-      - com.slack.Slack
-      - com.github.IsmaelMartinez.teams_for_linux
+      - org.gnome.Fractal
       - org.gnome.gitlab.YaLTeR.VideoTrimmer
   - title: "Games"
     subtitle: "Protocol Three: Protect the Pilot"
-    rows: 4
+    rows: 3
     banner: file:///usr/share/ublue-os/bazaar/music.png
     banner-fit: cover
     banner-text-halign: start
@@ -139,7 +142,6 @@ sections:
       - com.vysp3r.ProtonPlus
       - com.dec05eba.gpu_screen_recorder
       - com.github.Matoking.protontricks
-      - org.gnome.Fractal
       - com.obsproject.Studio
       - com.feaneron.Boatswain
       - com.valvesoftware.SteamLink
@@ -156,10 +158,11 @@ sections:
       - bazzite-section
     appids:
       - app.drey.Warp
+      - org.localsend.localsend_app
+      - com.github.zocker_160.SyncThingy
       - org.deskflow.deskflow
       - io.github.lawstorant.boxflat
       - io.github.radiolamp.mangojuice
-      - com.github.zocker_160.SyncThingy
       - org.fedoraproject.MediaWriter
       - org.raspberrypi.rpi-imager
   - title: "Developers"
@@ -174,16 +177,16 @@ sections:
       - bazzite-section
     appids:
       - io.podman_desktop.PodmanDesktop
+      - io.kinvolk.Headlamp
+      - sh.loft.devpod
+      - org.gnome.Builder
       - com.getpostman.Postman
       - io.dbeaver.DBeaverCommunity
-      - org.gnome.Builder
-      - io.kinvolk.Headlamp
       - com.github.marhkb.Pods
-      - sh.loft.devpod
       - cc.arduino.IDE2
   - title: "AI and Machine Learning"
     subtitle: "Experience the best of open source AI"
-    rows: 2
+    rows: 1
     banner: file:///usr/share/ublue-os/bazaar/gaming.png
     banner-fit: cover
     banner-text-halign: end
