@@ -119,7 +119,8 @@ sections:
       - md.obsidian.Obsidian
       - org.standardnotes.standardnotes
       - com.slack.Slack
-      - com.github.IsmaelMartinez.teams_for_linuxorg.gnome.gitlab.YaLTeR.VideoTrimmer
+      - com.github.IsmaelMartinez.teams_for_linux
+      - org.gnome.gitlab.YaLTeR.VideoTrimmer
   - title: "Games"
     subtitle: ""
     rows: 2
