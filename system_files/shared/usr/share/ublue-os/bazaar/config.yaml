@@ -122,8 +122,8 @@ sections:
       - com.github.IsmaelMartinez.teams_for_linux
       - org.gnome.gitlab.YaLTeR.VideoTrimmer
   - title: "Games"
-    subtitle: ""
-    rows: 2
+    subtitle: "Protocol Three: Protect the Pilot"
+    rows: 4
     banner: file:///usr/share/ublue-os/bazaar/music.png
     banner-fit: cover
     banner-text-halign: start
