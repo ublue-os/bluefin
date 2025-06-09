@@ -44,9 +44,27 @@ css: |
      transition-duration: 0.15s;
   }
 sections:
+  - title: "Bluefin Recommends"
+    subtitle: "Our Favorite Applications"
+    rows: 3
+    banner: file:///usr/share/ublue-os/bazaar/streaming.png
+    banner-fit: cover
+    banner-text-halign: end
+    banner-text-valign: start
+    banner-height: 500
+    classes:
+      - bazzite-section
+    appids:
+      - be.alexandervanhee.gradia
+      - io.github.pleromix.IceBox
+      - io.github.realmazharhussain.GdmSettings
+      - io.github.nozwock.Packet
+      - io.github.fabrialberio.pinapp
+      - com.github.ADBeveridge.Raider
+      - org.gnome.gitlab.YaLTeR.VideoTrimmer    
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
-    rows: 4
+    rows: 2
     banner: file:///usr/share/ublue-os/bazaar/gaming.png
     banner-fit: cover
     banner-text-halign: start
@@ -60,42 +78,8 @@ sections:
       - com.microsoft.Edge
       - com.opera.Opera
       - com.vivaldi.Vivaldi
-  - title: "Bluefin Recommends"
-    subtitle: "Contributor's Favorite Applications"
-    rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/streaming.png
-    banner-fit: cover
-    banner-text-halign: end
-    banner-text-valign: start
-    banner-height: 500
-    classes:
-      - bazzite-section
-    appids:
-      - io.github.pleromix.IceBox
-      - io.github.realmazharhussain.GdmSettings
-      - io.github.nozwock.Packet
-      - io.github.fabrialberio.pinapp
-      - com.github.ADBeveridge.Raider
-      - org.gnome.gitlab.YaLTeR.VideoTrimmer
-  - title: "Streaming & Chat"
-    subtitle: "Sprunk'd it."
-    rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/streaming.png
-    banner-fit: cover
-    banner-text-halign: end
-    banner-text-valign: start
-    banner-height: 500
-    classes:
-      - bazzite-section
-    appids:
-      - com.discordapp.Discord
-      - org.gnome.Fractal
-      - com.obsproject.Studio
-      - com.feaneron.Boatswain
-      - com.valvesoftware.SteamLink
-      - com.parsecgaming.parsec
   - title: "Music & Media"
-    subtitle: "Let me break it down for you."
+    subtitle: "Let me break it down for you"
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/music.png
     banner-fit: cover
@@ -113,8 +97,8 @@ sections:
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
   - title: "Office & Productivity"
-    subtitle: "May the paperclip have mercy."
-    rows: 2
+    subtitle: "May the paperclip be ever in your favor"
+    rows: 3
     banner: file:///usr/share/ublue-os/bazaar/office.png
     banner-fit: cover
     banner-text-halign: end
@@ -123,6 +107,7 @@ sections:
     classes:
       - bazzite-section
     appids:
+      - io.gitlab.theevilskeleton.Upscaler
       - org.libreoffice.LibreOffice
       - org.gimp.GIMP
       - org.kde.krita
@@ -136,8 +121,31 @@ sections:
       - com.slack.Slack
       - com.github.IsmaelMartinez.teams_for_linux
       - org.gnome.gitlab.YaLTeR.VideoTrimmer
+  - title: "Games"
+    subtitle: "Protocol Three: Protect the Pilot"
+    rows: 4
+    banner: file:///usr/share/ublue-os/bazaar/music.png
+    banner-fit: cover
+    banner-text-halign: start
+    banner-text-valign: start
+    banner-height: 500
+    classes:
+      - bazzite-section
+    appids:
+      - com.valvesoftware.Steam
+      - com.heroicgameslauncher.hgl
+      - com.discordapp.Discord
+      - net.lutris.Lutris
+      - com.vysp3r.ProtonPlus
+      - com.dec05eba.gpu_screen_recorder
+      - com.github.Matoking.protontricks
+      - org.gnome.Fractal
+      - com.obsproject.Studio
+      - com.feaneron.Boatswain
+      - com.valvesoftware.SteamLink
+      - com.parsecgaming.parsec
   - title: "Utilities"
-    subtitle: "Stuff you didn't need until now."
+    subtitle: "Stuff you didn't need until now"
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/utilities.png
     banner-fit: cover
@@ -173,3 +181,16 @@ sections:
       - com.github.marhkb.Pods
       - sh.loft.devpod
       - cc.arduino.IDE2
+  - title: "AI and Machine Learning"
+    subtitle: "Experience the best of open source AI"
+    rows: 2
+    banner: file:///usr/share/ublue-os/bazaar/gaming.png
+    banner-fit: cover
+    banner-text-halign: end
+    banner-text-valign: start
+    banner-height: 500
+    classes:
+      - bazzite-section
+    appids:
+      - com.jeffser.Alpaca
+      - io.github.qwersyk.Newelle
