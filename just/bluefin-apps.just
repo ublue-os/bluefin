@@ -124,8 +124,10 @@ install-jetbrains-toolbox:
     curl -sSfL -O "${DOWNLOAD_LINK}"
     curl -sSfL "${CHECKSUM_LINK}" | sha256sum -c
     tar zxf jetbrains-toolbox-"${BUILD_VERSION}".tar.gz
+    mkdir -p $HOME/.local/share/JetBrains/ToolboxApp/
+    mv jetbrains-toolbox-"${BUILD_VERSION}"/* $HOME/.local/share/JetBrains/ToolboxApp/
     echo "Launching JetBrains Toolbox"
-    ./jetbrains-toolbox-"${BUILD_VERSION}"/jetbrains-toolbox
+    $HOME/.local/share/JetBrains/ToolboxApp/bin/jetbrains-toolbox
 
 # alias for install-incus
 [group('Apps')]
