@@ -64,6 +64,7 @@ sections:
       - com.github.ADBeveridge.Raider
       - org.gnome.gitlab.YaLTeR.VideoTrimmer
       - org.gnome.gitlab.cheywood.Buffer
+      - io.github.kelvinnovais.Kasasa
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
@@ -114,6 +115,7 @@ sections:
       - md.obsidian.Obsidian
       - io.gitlab.theevilskeleton.Upscaler
       - io.github.alainm23.planify
+      - org.onlyoffice.desktopeditors
       - org.libreoffice.LibreOffice
       - org.gimp.GIMP
       - org.kde.krita
@@ -189,7 +191,6 @@ sections:
       - com.getpostman.Postman
       - de.leopoldluley.Clapgrep
       - me.iepure.devtoolbox
-      
       - io.dbeaver.DBeaverCommunity
       - cc.arduino.IDE2
       - dev.geopjr.Calligraphy
