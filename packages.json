@@ -81,6 +81,7 @@
 				"ublue-polkit-rules",
 				"ublue-setup-services",
 				"uld",
+				"usbip",
 				"usbmuxd",
 				"wireguard-tools",
 				"wl-clipboard",
