@@ -1,16 +1,12 @@
 ---
-name: Build ISOs (Live)
+name: Build ISOs (Live Anaconda)
 
 on:
   workflow_dispatch:
-    inputs:
-      upload-to-cloudflare:
-        description: "Upload to Cloudflare"
-        required: false
-        default: false
-        type: boolean
-  schedule:
-    - cron: "0 1 * * *"   
+  pull_request:
+    paths:
+      - ".github/workflows/reusable-build-iso-anaconda.yml"
+      - "iso_files/configure_iso_anaconda.sh"
 
 env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
@@ -28,14 +24,14 @@ jobs:
       fail-fast: false
       matrix:
         platform: [amd64]
-        flavor: ["", "nvidia-open"]
+        flavor: ["main", "nvidia-open"]
         image_version: ["gts", "stable"]
         include:
           - platform: amd64
-            flavor: ""
+            flavor: "main"
             image_version: lts
           - platform: arm64
-            flavor: ""
+            flavor: "main"
             image_version: lts
           - platform: amd64
             flavor: gdx
@@ -66,75 +62,69 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
+      - name: Setup Just
+        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+
+      - name: Check Just Syntax
+        shell: bash
+        run: |
+          just check
+
       - name: Format image ref
         id: image_ref
         env:
           FLAVOR: ${{ matrix.flavor }}
         run: |
-          OUTPUT_NAME="${IMAGE_REGISTRY}/${IMAGE_NAME}"
-          ARTIFACT_FORMAT=""
+          set -eoux pipefail          
+          image_name=$(just image_name "bluefin" "${{ matrix.image_version}}" "${{ matrix.flavor}}")
+          image_ref="${IMAGE_REGISTRY}/${image_name}"
           KARGS="NONE"
-          if [ "$FLAVOR" != "" ] ; then
-            OUTPUT_NAME="${OUTPUT_NAME}-${FLAVOR}"
-            ARTIFACT_FORMAT="-${FLAVOR}"
-            if [ "$FLAVOR" =~ nvidia ] ; then
-              KARGS="rd.driver.blacklist=nouveau,modprobe.blacklist=nouveau,nvidia-drm.modeset=1"
-            fi
-          fi
-          echo "image_ref=$OUTPUT_NAME" >> "${GITHUB_OUTPUT}"
-          echo "artifact_format=$ARTIFACT_FORMAT" >> "${GITHUB_OUTPUT}"
+          echo "image_ref=$image_ref" >> "${GITHUB_OUTPUT}"
+          echo "artifact_format="$image_name-${{ matrix.image_version }}-$(uname -m)"" >> "${GITHUB_OUTPUT}"
           echo "kargs=$KARGS" >> "${GITHUB_OUTPUT}"
-          
+
       - name: Build ISO
         id: build
         uses: ublue-os/titanoboa@main
         with:
           image-ref: ${{ steps.image_ref.outputs.image_ref }}:${{ matrix.image_version }}
           flatpaks-list: ${{ github.workspace }}/iso_files/system-flatpaks.list
-          hook-post-rootfs: ${{ github.workspace }}/iso_files/configure_iso.sh
+          hook-post-rootfs: ${{ github.workspace }}/iso_files/configure_iso_anaconda.sh
           kargs: ${{ steps.image_ref.outputs.kargs }}
 
       - name: Rename ISO
         id: rename
         env:
           OUTPUT_PATH: ${{ steps.build.outputs.iso-dest }}
-          OUTPUT_NAME: ${{ env.IMAGE_NAME }}-live${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}
-          PLATFORM: ${{ matrix.platform }}
           FLAVOR: ${{ matrix.flavor }}
+          OUTPUT_NAME: ${{ steps.image_ref.outputs.artifact_format }}
+          IMAGE_VERSION: ${{ matrix.image_version }}
         run: |
           set -x
           mkdir -p output
           OUTPUT_DIRECTORY="$(realpath output)"
-          if [ "${FLAVOR}" != "" ] ; then
-            IMAGE_NAME="${IMAGE_NAME}-${FLAVOR}"
-          fi
-          if [ $PLATFORM == "amd64" ]; then
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
-          else
-            sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
-            mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
-          fi
+          sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
+          mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
       - name: Upload to Job Artifacts
-        if: inputs.upload-to-cloudflare == false || github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: ${{ env.IMAGE_NAME }}-live${{ steps.image_ref.outputs.artifact_format }}-${{ matrix.image_version }}-${{ matrix.platform }}-iso
+          name: ${{ steps.image_ref.outputs.artifact_format }}
           if-no-files-found: error
           path: ${{ steps.rename.outputs.output_directory }}
 
       - name: Upload to CloudFlare
-        if: inputs.upload-to-cloudflare == true && github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request'
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
           RCLONE_CONFIG_R2_PROVIDER: Cloudflare
-          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID_2025 }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY_2025 }}
           RCLONE_CONFIG_R2_REGION: auto
-          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT_2025 }}
           SOURCE_DIR: ${{ steps.rename.outputs.output_directory }}
         run: |
           sudo apt-get update

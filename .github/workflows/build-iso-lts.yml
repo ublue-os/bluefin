@@ -1,12 +1,13 @@
-name: Anaconda GTS ISO
+name: Anaconda LTS ISO
 on:
   workflow_dispatch:
   workflow_call:
 
 jobs:
-  build-iso-gts:
-    name: Build GTS ISOs
+  build-iso-lts:
+    name: Build LTS ISOs
     uses: ./.github/workflows/reusable-build-iso.yml
     secrets: inherit
     with:
-      stream_name: gts
+      image_flavors: "['main', 'gdx']"
+      stream_name: lts

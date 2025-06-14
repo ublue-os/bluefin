@@ -38,6 +38,7 @@
 				"ibus-mozc",
 				"ifuse",
 				"input-remapper",
+				"iwd",
 				"jetbrains-mono-fonts-all",
 				"krb5-workstation",
 				"libgda",
@@ -51,7 +52,6 @@
 				"mesa-libGLU",
 				"mozc",
 				"nautilus-gsconnect",
-				"nautilus-open-any-terminal",
 				"nerd-fonts",
 				"oddjob-mkhomedir",
 				"opendyslexic-fonts",
@@ -196,6 +196,7 @@
 	"42": {
 		"include": {
 			"all": [
+        "bazaar",
         "google-noto-fonts-all",
         "uupd"
       ],

@@ -6,7 +6,11 @@ on:
       - main
       - testing
     paths-ignore:
-      - "**.md"
+      - '**.md'
+      - 'iso_files/**'
+      - 'bluefin_flatpaks/**'
+      - 'dx_flatpaks/**'
+      - '.github/workflows/*iso*'
   workflow_call:
   workflow_dispatch:
 
@@ -31,4 +35,3 @@ jobs:
     uses: ./.github/workflows/generate-release.yml
     with:
       stream_name: '["latest"]'
-
