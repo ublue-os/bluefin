@@ -33,8 +33,14 @@ function rebase_helper(){
         echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
         fi
 
-    choose_target=$(Choose date "${CHANNELS[@]}" cancel)
+    for channel in "${CHANNELS[@]}"; do
+        version=$(skopeo inspect --no-tags docker://ghcr.io/ublue-os/bluefin-dx:$channel | jq -r '.Labels["org.opencontainers.image.version"]' | sed 's/.*-//' | cut -c 1-2)
+        CHANNELS_F+=("$channel (F$version)")
+    done
+
+    choose_target=$(Choose date "${CHANNELS_F[@]}" cancel)
     if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
+        choose_target=${choose_target%% *}
         rebase_target="${base_image}:${choose_target}"
     elif [[ "$choose_target" == "date" ]]; then
         # shellcheck disable=SC2207
