@@ -1,4 +1,4 @@
-# #!/usr/bin/env bash
+#!/usr/bin/env bash
 
 source /usr/lib/ublue/setup-services/libsetup.sh
 
