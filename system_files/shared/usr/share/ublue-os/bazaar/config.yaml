@@ -65,6 +65,7 @@ sections:
       - org.gnome.gitlab.YaLTeR.VideoTrimmer
       - org.gnome.gitlab.cheywood.Buffer
       - io.github.kelvinnovais.Kasasa
+      - de.schmidhuberj.DieBahn
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
@@ -100,6 +101,7 @@ sections:
       - com.github.iwalton3.jellyfin-media-player
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
+      - com.rafaelmardojai.Blanket
   - title: "Office & Productivity"
     subtitle: "May the paperclip be ever in your favor"
     rows: 3
@@ -207,3 +209,18 @@ sections:
     appids:
       - com.jeffser.Alpaca
       - io.github.qwersyk.Newelle
+  - title: "Sustainability & Education"
+    subtitle: "Invest in the Future"
+    rows: 1
+    banner: file:///usr/share/ublue-os/bazaar/office.png
+    banner-fit: cover
+    banner-text-halign: end
+    banner-text-valign: start
+    banner-height: 500
+    classes:
+      - bazzite-section
+    appids:
+      - org.endlessos.Key
+      - io.github.david_swift.Flashcards
+      - dev.bragefuglseth.Keypunch
+      - org.tuxpaint.Tuxpaint
