@@ -59,6 +59,7 @@ sections:
       - org.gnome.gitlab.cheywood.Buffer
       - io.github.kelvinnovais.Kasasa
       - de.schmidhuberj.DieBahn
+      - com.github.maoschanz.drawing
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
@@ -143,8 +144,9 @@ sections:
       - com.obsproject.Studio
       - com.feaneron.Boatswain
       - com.valvesoftware.SteamLink
-      - com.parsecgaming.parsec
+      - org.gnome.Mahjongg
       - io.github.fragglet.sdl_sopwith
+      - org.gnome.Sudoku
   - title: "Utilities"
     subtitle: "Stuff you didn't need until now"
     rows: 3
@@ -168,9 +170,12 @@ sections:
       - org.fedoraproject.MediaWriter
       - org.raspberrypi.rpi-imager
       - hu.irl.cameractrls
+      - com.belmoussaoui.Decoder
+      - io.gitlab.adhami3310.Converter
+      - com.jeffser.Pigment
   - title: "Developers"
     subtitle: "Unleash the power of cloud native development"
-    rows: 2
+    rows: 3
     banner: file:///usr/share/ublue-os/bazaar/streaming.png
     banner-fit: cover
     banner-text-halign: end
@@ -181,14 +186,18 @@ sections:
     appids:
       - io.podman_desktop.PodmanDesktop
       - org.gnome.Builder
-      - io.kinvolk.Headlamp
-      - sh.loft.devpod
       - com.getpostman.Postman
-      - de.leopoldluley.Clapgrep
+      - io.kinvolk.Headlamp
       - me.iepure.devtoolbox
+      - de.leopoldluley.Clapgrep
+      - sh.loft.devpod
       - io.dbeaver.DBeaverCommunity
       - cc.arduino.IDE2
       - dev.geopjr.Calligraphy
+      - io.github.lo2dev.Echo
+      - org.gnome.design.IconLibrary
+      - io.github.ronniedroid.concessio
+      - io.github.nokse22.asciidraw
   - title: "AI and Machine Learning"
     subtitle: "Experience the best of open source AI"
     rows: 1
@@ -204,7 +213,7 @@ sections:
       - io.github.qwersyk.Newelle
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
-    rows: 1
+    rows: 2
     banner: file:///usr/share/ublue-os/bazaar/office.png
     banner-fit: cover
     banner-text-halign: end
@@ -217,3 +226,6 @@ sections:
       - io.github.david_swift.Flashcards
       - dev.bragefuglseth.Keypunch
       - org.tuxpaint.Tuxpaint
+      - im.bernard.Memorado
+      - io.github.josephmawa.Egghead
+      - io.github.r_sergii.multiElement
