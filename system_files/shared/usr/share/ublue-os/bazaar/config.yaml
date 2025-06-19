@@ -9,13 +9,6 @@ css: |
      margin: 30px;
      padding: 20px;
   }
-  .bazzite-section banner-text-bg {
-     background-color: var(--accent-color);
-     filter: blur(50px) brightness(0.3);
-     opacity: 0.75;
-     border-radius: 30px;
-     background-color: var(--accent-color);
-  }
   .bazzite-section banner-text {
      padding: 50px;
      color: lighter(var(--accent-color));
