@@ -71,7 +71,7 @@ sections:
     classes:
       - bazzite-section
     appids:
-      - org.mozilla.Firefox
+      - org.mozilla.firefox
       - com.brave.Browser
       - com.google.Chrome
       - com.microsoft.Edge
