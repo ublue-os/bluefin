@@ -166,7 +166,7 @@ sections:
       - org.cockpit_project.CockpitClient
       - org.gnome.gitlab.cheywood.Pulp
       - io.github.vikdevelop.SaveDesktop
-      - io.github.radiolamp.mangojuice
+      - org.gnome.World.PikaBackup
       - org.fedoraproject.MediaWriter
       - org.raspberrypi.rpi-imager
       - hu.irl.cameractrls
