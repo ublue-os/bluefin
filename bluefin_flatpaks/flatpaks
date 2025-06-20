@@ -22,7 +22,6 @@ app/org.gnome.Logs
 app/org.gnome.Loupe
 app/org.gnome.Maps
 app/org.gnome.NautilusPreviewer
-app/org.gnome.World.PikaBackup
 app/org.gnome.SimpleScan
 app/org.gnome.TextEditor
 app/org.gnome.Weather
