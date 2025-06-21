@@ -4,15 +4,25 @@ on:
     inputs:
       image_flavors:
         description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
+
         default: "['main', 'nvidia', 'nvidia-open']"
+
+
         type: string
       brand_name:
         description: "The Brand Name: bluefin"
+
+
+
         required: true
         default: bluefin
         type: string
       stream_name:
         description: "The Fedora Version: gts, stable, or latest"
+
+
+
+
         required: true
         type: string
       kernel_pin:
@@ -20,6 +30,9 @@ on:
         type: string
 
 env:
+
+
+
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 concurrency:
@@ -36,17 +49,25 @@ jobs:
       matrix:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
         base_name: ["${{ inputs.brand_name }}", "${{ inputs.brand_name }}-dx"]
+
+
         stream_name: ["${{ inputs.stream_name }}"]
 
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
+
+
       - name: Maximize build space
         uses: ublue-os/container-storage-action@main
+        with:
+          target-dir: /var/lib/containers
 
       - name: Setup Just
         uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+
+
 
       - name: Check Just Syntax
         shell: bash
@@ -258,3 +279,9 @@ jobs:
               exit 1
             fi
           done
+
+
+
+
+
+
