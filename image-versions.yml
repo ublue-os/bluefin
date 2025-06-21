@@ -2,4 +2,4 @@ images:
   - name: silverblue-main
     image: ghcr.io/ublue-os/silverblue-main
     tag: latest
-    digest: sha256:dd1464654febac32eb441d70d8bbadd6cf02e3b0c83397c8c3b015d311dfeebc
+    digest: sha256:652a632d368b5935d9a5967bdce077719941680709c163d577597a313e59467c
