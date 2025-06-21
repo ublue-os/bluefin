@@ -1,8 +1,13 @@
 css: |
+  .bazzite-section {
+     margin: 20px;
+     border-radius: 10px;
+     background: linear-gradient(to right, alpha(var(--accent-color), 0.2), alpha(var(--accent-bg-color), 0.3));
+  }
   .bazzite-section banner {
-     margin-top: 30px;
-     margin-left: 30px;
-     margin-right: 30px;
+     margin-top: 20px;
+     margin-left: 20px;
+     margin-right: 20px;
      border-radius: 10px;
   }
   .bazzite-section banner-text-overlay {
@@ -17,9 +22,8 @@ css: |
      color: #ffffff;
   }
   .bazzite-section subtitle {
-    color: var(--accent-color);
-    filter: brightness(1.25);
-    font-weight: 400;
+     color: #ffffff;
+     font-weight: 400;
   }
   .bazzite-section entry {
      background: linear-gradient(to right, alpha(var(--accent-color), 0.2), alpha(var(--accent-bg-color), 0.1));
@@ -27,12 +31,12 @@ css: |
      transition-duration: 0.25s;
   }
   .bazzite-section entry:hover {
-     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.5), alpha(var(--accent-color), 0.7));
+     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.3), alpha(var(--accent-color), 0.4));
      transition-property: background;
      transition-duration: 0.75s;
   }
   .bazzite-section entry:active {
-     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.5), alpha(var(--accent-color), 0.7));
+     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.6), alpha(var(--accent-color), 0.5));
      transition-property: background;
      transition-duration: 0.15s;
   }
