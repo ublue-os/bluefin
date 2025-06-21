@@ -44,7 +44,7 @@ sections:
   - title: "Bluefin Recommends"
     subtitle: "Our Favorite Applications"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/streaming.png
+    banner: file:///usr/share/ublue-os/bazaar/11-bluefin.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -67,7 +67,7 @@ sections:
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/gaming.png
+    banner: file:///usr/share/ublue-os/bazaar/01-bluefin.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
@@ -84,7 +84,7 @@ sections:
   - title: "Music & Media"
     subtitle: "Let me break it down for you"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/music.png
+    banner: file:///usr/share/ublue-os/bazaar/02-bluefin.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -103,7 +103,7 @@ sections:
   - title: "Office & Productivity"
     subtitle: "May the paperclip be ever in your favor"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/office.png
+    banner: file:///usr/share/ublue-os/bazaar/03-bluefin.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -130,7 +130,7 @@ sections:
   - title: "Games"
     subtitle: "Protocol Three: Protect the Pilot"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/music.png
+    banner: file:///usr/share/ublue-os/bazaar/04-bluefin.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
@@ -154,7 +154,7 @@ sections:
   - title: "Utilities"
     subtitle: "Stuff you didn't need until now"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/utilities.png
+    banner: file:///usr/share/ublue-os/bazaar/05-bluefin.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
@@ -180,7 +180,7 @@ sections:
   - title: "Developers"
     subtitle: "Unleash the power of cloud native development"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/streaming.png
+    banner: file:///usr/share/ublue-os/bazaar/06-bluefin.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -205,7 +205,7 @@ sections:
   - title: "AI and Machine Learning"
     subtitle: "Experience the best of open source AI"
     rows: 1
-    banner: file:///usr/share/ublue-os/bazaar/gaming.png
+    banner: file:///usr/share/ublue-os/bazaar/08-bluefin.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -218,7 +218,7 @@ sections:
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/office.png
+    banner: file:///usr/share/ublue-os/bazaar/10-bluefin.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
