@@ -48,7 +48,7 @@ sections:
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -71,7 +71,7 @@ sections:
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -86,9 +86,9 @@ sections:
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/02-bluefin.png
     banner-fit: cover
-    banner-text-halign: start
+    banner-text-halign: end
     banner-text-valign: end
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -106,8 +106,8 @@ sections:
     banner: file:///usr/share/ublue-os/bazaar/03-bluefin.png
     banner-fit: cover
     banner-text-halign: end
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -133,8 +133,8 @@ sections:
     banner: file:///usr/share/ublue-os/bazaar/04-bluefin.png
     banner-fit: cover
     banner-text-halign: start
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -157,8 +157,8 @@ sections:
     banner: file:///usr/share/ublue-os/bazaar/05-bluefin.png
     banner-fit: cover
     banner-text-halign: start
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -184,7 +184,7 @@ sections:
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -208,8 +208,8 @@ sections:
     banner: file:///usr/share/ublue-os/bazaar/08-bluefin.png
     banner-fit: cover
     banner-text-halign: end
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -220,9 +220,9 @@ sections:
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/10-bluefin.png
     banner-fit: cover
-    banner-text-halign: end
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-halign: start
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
