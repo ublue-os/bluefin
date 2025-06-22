@@ -204,7 +204,7 @@ sections:
       - org.gnome.design.IconLibrary
       - io.github.ronniedroid.concessio
       - io.github.nokse22.asciidraw
-- title: "Sustainability & Education"
+  - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/10-bluefin.png
