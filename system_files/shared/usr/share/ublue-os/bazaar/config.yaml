@@ -1,7 +1,7 @@
 css: |
   .bazzite-section {
      margin: 20px;
-     border-radius: 10px;
+     border-radius: 14px;
      background: linear-gradient(to right, alpha(var(--accent-color), 0.2), alpha(var(--accent-bg-color), 0.3));
   }
   .bazzite-section banner {
@@ -9,13 +9,15 @@ css: |
      margin-left: 20px;
      margin-right: 20px;
      border-radius: 10px;
+     filter: brightness(40%);
+     font-size: 3em;
   }
   .bazzite-section banner-text-overlay {
      margin: 30px;
      padding: 20px;
   }
   .bazzite-section banner-text {
-     padding: 50px;
+     padding: 80px;
      color: lighter(var(--accent-color));
   }
   .bazzite-section title {
