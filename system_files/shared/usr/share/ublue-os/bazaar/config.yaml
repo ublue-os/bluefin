@@ -104,7 +104,7 @@ sections:
       - com.rafaelmardojai.Blanket
   - title: "Office & Productivity"
     subtitle: "Work Smarter"
-    rows: 3
+    rows: 4
     banner: file:///usr/share/ublue-os/bazaar/03-bluefin.png
     banner-fit: cover
     banner-text-halign: end
@@ -117,14 +117,14 @@ sections:
       - md.obsidian.Obsidian
       - io.gitlab.theevilskeleton.Upscaler
       - io.github.alainm23.planify
+      - org.blender.Blender
       - org.onlyoffice.desktopeditors
       - org.libreoffice.LibreOffice
       - org.gimp.GIMP
       - org.kde.krita
       - org.inkscape.Inkscape
-      - org.blender.Blender
-      - com.logseq.Logseq
       - io.github.nokse22.Exhibit
+      - com.logseq.Logseq
       - org.audacityteam.Audacity
       - org.ardour.Ardour
       - org.gnome.Fractal
@@ -155,7 +155,7 @@ sections:
       - org.gnome.Sudoku
   - title: "Utilities"
     subtitle: "Gear up and kit out"
-    rows: 3
+    rows: 4
     banner: file:///usr/share/ublue-os/bazaar/05-bluefin.png
     banner-fit: cover
     banner-text-halign: start
@@ -179,9 +179,11 @@ sections:
       - com.belmoussaoui.Decoder
       - io.gitlab.adhami3310.Converter
       - com.jeffser.Pigment
+      - com.github.finefindus.eyedropper
+      - io.github.plrigaux.sysd-manager
   - title: "Developers"
     subtitle: "Unleash the power of Cloud Native"
-    rows: 3
+    rows: 4
     banner: file:///usr/share/ublue-os/bazaar/06-bluefin.png
     banner-fit: cover
     banner-text-halign: end
@@ -193,17 +195,18 @@ sections:
       - io.podman_desktop.PodmanDesktop
       - org.gnome.Builder
       - com.getpostman.Postman
-      - io.kinvolk.Headlamp
       - me.iepure.devtoolbox
+      - io.kinvolk.Headlamp
       - de.leopoldluley.Clapgrep
-      - sh.loft.devpod
       - io.dbeaver.DBeaverCommunity
       - cc.arduino.IDE2
+      - sh.loft.devpod
       - dev.geopjr.Calligraphy
       - io.github.lo2dev.Echo
       - org.gnome.design.IconLibrary
       - io.github.ronniedroid.concessio
       - io.github.nokse22.asciidraw
+      - dev.geopjr.Collision
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
