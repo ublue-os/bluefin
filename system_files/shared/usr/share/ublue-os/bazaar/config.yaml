@@ -204,6 +204,7 @@ sections:
       - org.gnome.design.IconLibrary
       - io.github.ronniedroid.concessio
       - io.github.nokse22.asciidraw
+      - dev.geopjr.Collision
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
