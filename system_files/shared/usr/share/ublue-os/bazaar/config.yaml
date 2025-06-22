@@ -83,8 +83,8 @@ sections:
       - com.microsoft.Edge
       - com.opera.Opera
       - com.vivaldi.Vivaldi
-  - title: "Music & Media"
-    subtitle: "Let me break it down for you"
+  - title: "Media"
+    subtitle: "The Freedom of Music"
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/02-bluefin.png
     banner-fit: cover
@@ -103,7 +103,7 @@ sections:
       - com.plexamp.Plexamp
       - com.rafaelmardojai.Blanket
   - title: "Office & Productivity"
-    subtitle: "May the paperclip be ever in your favor"
+    subtitle: "Work Smarter"
     rows: 3
     banner: file:///usr/share/ublue-os/bazaar/03-bluefin.png
     banner-fit: cover
@@ -154,7 +154,7 @@ sections:
       - io.github.fragglet.sdl_sopwith
       - org.gnome.Sudoku
   - title: "Utilities"
-    subtitle: "Stuff you didn't need until now"
+    subtitle: "Gear up and kit out"
     rows: 3
     banner: file:///usr/share/ublue-os/bazaar/05-bluefin.png
     banner-fit: cover
@@ -180,7 +180,7 @@ sections:
       - io.gitlab.adhami3310.Converter
       - com.jeffser.Pigment
   - title: "Developers"
-    subtitle: "Unleash the power of cloud native development"
+    subtitle: "Unleash the power of Cloud Native"
     rows: 3
     banner: file:///usr/share/ublue-os/bazaar/06-bluefin.png
     banner-fit: cover
@@ -204,20 +204,7 @@ sections:
       - org.gnome.design.IconLibrary
       - io.github.ronniedroid.concessio
       - io.github.nokse22.asciidraw
-  - title: "AI and Machine Learning"
-    subtitle: "Experience the best of open source AI"
-    rows: 1
-    banner: file:///usr/share/ublue-os/bazaar/08-bluefin.png
-    banner-fit: cover
-    banner-text-halign: end
-    banner-text-valign: end
-    banner-height: 400
-    classes:
-      - bazzite-section
-    appids:
-      - com.jeffser.Alpaca
-      - io.github.qwersyk.Newelle
-  - title: "Sustainability & Education"
+- title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
     banner: file:///usr/share/ublue-os/bazaar/10-bluefin.png
@@ -235,3 +222,17 @@ sections:
       - im.bernard.Memorado
       - io.github.josephmawa.Egghead
       - io.github.r_sergii.multiElement
+  - title: "AI and Machine Learning"
+    subtitle: "Explore the best of open source AI"
+    rows: 1
+    banner: file:///usr/share/ublue-os/bazaar/08-bluefin.png
+    banner-fit: cover
+    banner-text-halign: end
+    banner-text-valign: end
+    banner-height: 400
+    classes:
+      - bazzite-section
+    appids:
+      - com.jeffser.Alpaca
+      - io.github.qwersyk.Newelle
+  
