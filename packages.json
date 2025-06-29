@@ -196,14 +196,16 @@
 	"42": {
 		"include": {
 			"all": [
-        "bazaar",
-        "google-noto-fonts-all",
-        "uupd"
+        			"bazaar",
+        			"google-noto-fonts-all",
+        			"uupd"
       ],
 			"dx": []
 		},
 		"exclude": {
-			"all": [],
+			"all": [
+				"linux-uki-virt"	
+			],
 			"dx": []
 		}
 	}
