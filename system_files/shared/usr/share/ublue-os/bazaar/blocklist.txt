@@ -1,3 +1,4 @@
+app.devsuite.Ptyxis
 com.visualstudio.code
 com.visualstudio.code-oss
 com.vscodium.codium
