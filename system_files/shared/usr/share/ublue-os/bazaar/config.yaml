@@ -55,7 +55,7 @@ sections:
       - bazzite-section
     appids:
       - re.sonny.Eloquent
-      - io.github.fabrialberio.pinapp
+      - page.codeberg.libre_menu_editor.LibreMenuEditor
       - app.fotema.Fotema
       - be.alexandervanhee.gradia
       - app.drey.Damask
