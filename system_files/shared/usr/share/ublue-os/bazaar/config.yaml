@@ -225,6 +225,7 @@ sections:
       - im.bernard.Memorado
       - io.github.josephmawa.Egghead
       - io.github.r_sergii.multiElement
+      - org.turbowarp.TurboWarp
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
     rows: 1
