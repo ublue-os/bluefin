@@ -1,7 +1,6 @@
 [Unit]
-name=Universal Blue Missing /etc/hostname Workaround
-description=Workaround for the missing /etc/hostname file on Universal Blue systems
-after=network.target
+Description=Workaround for the missing /etc/hostname file on Universal Blue systems
+After=network.target
 ConditionPathExists=!/etc/hostname
 
 [Service]

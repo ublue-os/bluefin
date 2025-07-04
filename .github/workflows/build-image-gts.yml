@@ -6,6 +6,10 @@ on:
       - testing
     paths-ignore:
       - "**.md"
+      - "iso_files/**"
+      - "bluefin_flatpaks/**"
+      - "dx_flatpaks/**"
+      - ".github/workflows/*iso*"
   schedule:
     - cron: "50 5 * * 0" # 5:50 UTC Weekly on Sundays
   workflow_dispatch:
@@ -21,7 +25,7 @@ jobs:
       matrix:
         brand_name: [bluefin]
     with:
-      kernel_pin: 6.13.8-200.fc41.x86_64     ## This is where kernels get pinned.
+      #     kernel_pin: 6.13.8-200.fc41.x86_64     ## This is where kernels get pinned.
       brand_name: ${{ matrix.brand_name }}
       stream_name: gts
 
@@ -32,4 +36,3 @@ jobs:
     uses: ./.github/workflows/generate-release.yml
     with:
       stream_name: '["gts"]'
-

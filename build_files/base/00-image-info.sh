@@ -10,7 +10,7 @@ HOME_URL="https://projectbluefin.io"
 DOCUMENTATION_URL="https://docs.projectbluefin.io"
 SUPPORT_URL="https://github.com/ublue-os/bluefin/issues/"
 BUG_SUPPORT_URL="https://github.com/ublue-os/bluefin/issues/"
-CODE_NAME="Archaeopteryx"
+CODE_NAME="Deinonychus"
 VERSION="${VERSION:-00.00000000}"
 
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"

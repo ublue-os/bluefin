@@ -14,4 +14,4 @@ fi
 
 code --install-extension ms-vscode-remote.remote-containers
 code --install-extension ms-vscode-remote.remote-ssh
-code --install-extension ms-azuretools.vscode-docker
+code --install-extension ms-azuretools.vscode-containers
