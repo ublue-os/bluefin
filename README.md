@@ -11,7 +11,8 @@ For end users it provides a system as reliable as a Chromebook with near-zero ma
 
 - [projectbluefin.io](https://projectbluefin.io/#scene-picker)
 
-![image](https://github.com/ublue-os/bluefin/assets/1264109/b093bdec-40dc-48d2-b8ff-fcf0df390e8c)
+![image](https://github.com/user-attachments/assets/e7d2a0af-b011-459a-8ab7-c26d3ba50ae5)
+
 
 ## Documentation
 
