@@ -1,4 +1,5 @@
 app.devsuite.Ptyxis
+com.google.ChromeDev
 com.visualstudio.code
 com.visualstudio.code-oss
 com.vscodium.codium
