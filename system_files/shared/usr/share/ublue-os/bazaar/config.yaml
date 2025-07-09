@@ -95,6 +95,7 @@ sections:
       - bazzite-section
     appids:
       - com.spotify.Client
+      - app.ytmdesktop.ytmdesktop
       - de.haeckerfelix.Shortwave
       - io.bassi.Amberol
       - org.videolan.VLC
