@@ -30,7 +30,6 @@ rm -rf /usr/share/doc/just/README.*.md
 # Workaround for Bazaar on NVIDIA systems
 if jq -r '.["image-flavor"]' /usr/share/ublue-os/image-info.json | grep -q "nvidia"; then
   sed -i 's|^Exec=bazaar window --auto-service$|Exec=env GSK_RENDERER=opengl bazaar window --auto-service|' /usr/share/applications/io.github.kolunmi.Bazaar.desktop
-  echo "Applied NVIDIA workaround for Bazaar application"
 fi
 
 echo "::endgroup::"
