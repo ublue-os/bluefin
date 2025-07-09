@@ -1,32 +1,31 @@
 css: |
+  .bazzite-section {
+     margin: 20px;
+     border-radius: 14px;
+     background: linear-gradient(to right, alpha(var(--accent-color), 0.2), alpha(var(--accent-bg-color), 0.3));
+  }
   .bazzite-section banner {
-     margin-top: 30px;
-     margin-left: 30px;
-     margin-right: 30px;
+     margin-top: 20px;
+     margin-left: 20px;
+     margin-right: 20px;
      border-radius: 10px;
+     filter: brightness(40%);
+     font-size: 3em;
   }
   .bazzite-section banner-text-overlay {
      margin: 30px;
      padding: 20px;
   }
-  .bazzite-section banner-text-bg {
-     background-color: var(--accent-color);
-     filter: blur(50px) brightness(0.3);
-     opacity: 0.75;
-     border-radius: 30px;
-     background-color: var(--accent-color);
-  }
   .bazzite-section banner-text {
-     padding: 50px;
+     padding: 80px;
      color: lighter(var(--accent-color));
   }
   .bazzite-section title {
      color: #ffffff;
   }
   .bazzite-section subtitle {
-    color: var(--accent-color);
-    filter: brightness(1.25);
-    font-weight: 400;
+     color: #ffffff;
+     font-weight: 400;
   }
   .bazzite-section entry {
      background: linear-gradient(to right, alpha(var(--accent-color), 0.2), alpha(var(--accent-bg-color), 0.1));
@@ -34,12 +33,12 @@ css: |
      transition-duration: 0.25s;
   }
   .bazzite-section entry:hover {
-     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.5), alpha(var(--accent-color), 0.7));
+     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.3), alpha(var(--accent-color), 0.4));
      transition-property: background;
      transition-duration: 0.75s;
   }
   .bazzite-section entry:active {
-     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.5), alpha(var(--accent-color), 0.7));
+     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.6), alpha(var(--accent-color), 0.5));
      transition-property: background;
      transition-duration: 0.15s;
   }
@@ -47,16 +46,16 @@ sections:
   - title: "Bluefin Recommends"
     subtitle: "Our Favorite Applications"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/streaming.png
+    banner: file:///usr/share/ublue-os/bazaar/11-bluefin.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
       - re.sonny.Eloquent
-      - io.github.fabrialberio.pinapp
+      - page.codeberg.libre_menu_editor.LibreMenuEditor
       - app.fotema.Fotema
       - be.alexandervanhee.gradia
       - app.drey.Damask
@@ -65,49 +64,53 @@ sections:
       - org.gnome.gitlab.YaLTeR.VideoTrimmer
       - org.gnome.gitlab.cheywood.Buffer
       - io.github.kelvinnovais.Kasasa
+      - de.schmidhuberj.DieBahn
+      - com.github.maoschanz.drawing
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/gaming.png
+    banner: file:///usr/share/ublue-os/bazaar/01-bluefin.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
-      - org.mozilla.Firefox
+      - org.mozilla.firefox
       - com.brave.Browser
       - com.google.Chrome
       - com.microsoft.Edge
       - com.opera.Opera
       - com.vivaldi.Vivaldi
-  - title: "Music & Media"
-    subtitle: "Let me break it down for you"
+  - title: "Media"
+    subtitle: "The Freedom of Music"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/music.png
+    banner: file:///usr/share/ublue-os/bazaar/02-bluefin.png
     banner-fit: cover
-    banner-text-halign: start
+    banner-text-halign: end
     banner-text-valign: end
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
       - com.spotify.Client
+      - app.ytmdesktop.ytmdesktop
       - de.haeckerfelix.Shortwave
       - io.bassi.Amberol
       - org.videolan.VLC
       - com.github.iwalton3.jellyfin-media-player
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
+      - com.rafaelmardojai.Blanket
   - title: "Office & Productivity"
-    subtitle: "May the paperclip be ever in your favor"
-    rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/office.png
+    subtitle: "Work Smarter"
+    rows: 4
+    banner: file:///usr/share/ublue-os/bazaar/03-bluefin.png
     banner-fit: cover
     banner-text-halign: end
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -115,14 +118,14 @@ sections:
       - md.obsidian.Obsidian
       - io.gitlab.theevilskeleton.Upscaler
       - io.github.alainm23.planify
+      - org.blender.Blender
       - org.onlyoffice.desktopeditors
       - org.libreoffice.LibreOffice
       - org.gimp.GIMP
       - org.kde.krita
       - org.inkscape.Inkscape
-      - org.blender.Blender
-      - com.logseq.Logseq
       - io.github.nokse22.Exhibit
+      - com.logseq.Logseq
       - org.audacityteam.Audacity
       - org.ardour.Ardour
       - org.gnome.Fractal
@@ -130,11 +133,11 @@ sections:
   - title: "Games"
     subtitle: "Protocol Three: Protect the Pilot"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/music.png
+    banner: file:///usr/share/ublue-os/bazaar/04-bluefin.png
     banner-fit: cover
     banner-text-halign: start
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -148,16 +151,17 @@ sections:
       - com.obsproject.Studio
       - com.feaneron.Boatswain
       - com.valvesoftware.SteamLink
-      - com.parsecgaming.parsec
+      - org.gnome.Mahjongg
       - io.github.fragglet.sdl_sopwith
+      - org.gnome.Sudoku
   - title: "Utilities"
-    subtitle: "Stuff you didn't need until now"
-    rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/utilities.png
+    subtitle: "Gear up and kit out"
+    rows: 4
+    banner: file:///usr/share/ublue-os/bazaar/05-bluefin.png
     banner-fit: cover
     banner-text-halign: start
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
@@ -169,41 +173,71 @@ sections:
       - org.cockpit_project.CockpitClient
       - org.gnome.gitlab.cheywood.Pulp
       - io.github.vikdevelop.SaveDesktop
-      - io.github.radiolamp.mangojuice
+      - org.gnome.World.PikaBackup
       - org.fedoraproject.MediaWriter
       - org.raspberrypi.rpi-imager
       - hu.irl.cameractrls
+      - com.belmoussaoui.Decoder
+      - io.gitlab.adhami3310.Converter
+      - com.jeffser.Pigment
+      - com.github.finefindus.eyedropper
+      - io.github.plrigaux.sysd-manager
   - title: "Developers"
-    subtitle: "Unleash the power of cloud native development"
-    rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/streaming.png
+    subtitle: "Unleash the power of Cloud Native"
+    rows: 4
+    banner: file:///usr/share/ublue-os/bazaar/06-bluefin.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
-    banner-height: 500
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
       - io.podman_desktop.PodmanDesktop
       - org.gnome.Builder
-      - io.kinvolk.Headlamp
-      - sh.loft.devpod
       - com.getpostman.Postman
-      - de.leopoldluley.Clapgrep
       - me.iepure.devtoolbox
+      - io.kinvolk.Headlamp
+      - de.leopoldluley.Clapgrep
       - io.dbeaver.DBeaverCommunity
       - cc.arduino.IDE2
+      - sh.loft.devpod
       - dev.geopjr.Calligraphy
+      - io.github.lo2dev.Echo
+      - org.gnome.design.IconLibrary
+      - io.github.ronniedroid.concessio
+      - io.github.nokse22.asciidraw
+      - dev.geopjr.Collision
+  - title: "Sustainability & Education"
+    subtitle: "Invest in the Future"
+    rows: 2
+    banner: file:///usr/share/ublue-os/bazaar/10-bluefin.png
+    banner-fit: cover
+    banner-text-halign: start
+    banner-text-valign: end
+    banner-height: 400
+    classes:
+      - bazzite-section
+    appids:
+      - org.endlessos.Key
+      - io.github.david_swift.Flashcards
+      - dev.bragefuglseth.Keypunch
+      - org.tuxpaint.Tuxpaint
+      - im.bernard.Memorado
+      - io.github.josephmawa.Egghead
+      - io.github.r_sergii.multiElement
+      - org.turbowarp.TurboWarp
   - title: "AI and Machine Learning"
-    subtitle: "Experience the best of open source AI"
+    subtitle: "Explore the best of open source AI"
     rows: 1
-    banner: file:///usr/share/ublue-os/bazaar/gaming.png
+    banner: file:///usr/share/ublue-os/bazaar/08-bluefin.png
     banner-fit: cover
     banner-text-halign: end
-    banner-text-valign: start
-    banner-height: 500
+    banner-text-valign: end
+    banner-height: 400
     classes:
       - bazzite-section
     appids:
       - com.jeffser.Alpaca
       - io.github.qwersyk.Newelle
+  

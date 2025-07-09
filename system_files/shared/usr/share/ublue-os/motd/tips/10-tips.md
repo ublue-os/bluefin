@@ -1,5 +1,6 @@
 Bluefin is your gateway to Cloud Native - find your flock at [landscape.cncf.io](https://l.cncf.io)
-Support the app store! Donate to  [Flatpak](https://opencollective.com/flatpak)
+GNOME makes your desktop! Donate to [GNOME](https://donate.gnome.org)
+Support the app store! Donate to  [Bazaar](https://github.com/kolunmi/bazaar)!
 Need more indepth technical information?~Check out the [Bluefin Administrator's Guide](https://docs.projectbluefin.io/administration)
 Like servers? Check out [ucore](https://github.com/ublue-os/ucore)
 Update break something? You can roll back with `sudo bootc rollback`
