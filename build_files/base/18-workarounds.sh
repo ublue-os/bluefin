@@ -28,7 +28,7 @@ cp /usr/share/ublue-os/bling/* /usr/share/ublue-os/bluefin-cli
 rm -rf /usr/share/doc/just/README.*.md
 
 # Workaround for Bazaar on NVIDIA systems
-if jq -r '.["image-flavor"]' /usr/share/ublue-os/image-info.json | grep -q "nvidia"; then
+if [[ -f /usr/share/applications/io.github.kolunmi.Bazaar.desktop ]] && jq -e '.["image-flavor"] | test("nvidia")' /usr/share/ublue-os/image-info.json >/dev/null; then
   sed -i 's|^Exec=bazaar window --auto-service$|Exec=env GSK_RENDERER=opengl bazaar window --auto-service|' /usr/share/applications/io.github.kolunmi.Bazaar.desktop
 fi
 
