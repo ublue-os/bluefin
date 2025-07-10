@@ -99,6 +99,8 @@ sections:
       - de.haeckerfelix.Shortwave
       - io.bassi.Amberol
       - org.videolan.VLC
+      - com.github.wwmm.easyeffects
+      - me.timschneeberger.jdsp4linux
       - com.github.iwalton3.jellyfin-media-player
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
