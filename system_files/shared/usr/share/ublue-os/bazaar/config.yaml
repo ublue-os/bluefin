@@ -182,6 +182,7 @@ sections:
       - com.jeffser.Pigment
       - com.github.finefindus.eyedropper
       - io.github.plrigaux.sysd-manager
+      - org.mozilla.vpn
   - title: "Developers"
     subtitle: "Unleash the power of Cloud Native"
     rows: 4
