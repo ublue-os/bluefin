@@ -211,6 +211,7 @@ sections:
       - io.github.ronniedroid.concessio
       - io.github.nokse22.asciidraw
       - dev.geopjr.Collision
+      - io.github.tobagin.digger
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
