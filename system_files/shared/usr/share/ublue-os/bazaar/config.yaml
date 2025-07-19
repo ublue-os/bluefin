@@ -180,6 +180,7 @@ sections:
       - org.raspberrypi.rpi-imager
       - hu.irl.cameractrls
       - com.belmoussaoui.Decoder
+      - io.github.wartybix.Constrict
       - io.gitlab.adhami3310.Converter
       - com.jeffser.Pigment
       - com.github.finefindus.eyedropper
