@@ -20,6 +20,13 @@ set -eoux pipefail
 # see https://bugzilla.redhat.com/show_bug.cgi?id=2365882
 dnf -y swap atheros-firmware atheros-firmware-20250311-1$(rpm -E %{dist})
 
+
+# Only downgrade for F42
+if [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
+# Downgrade libdex to 0.9.1 because 0.10 makes bazaar crash under VMs and PCs with low specs
+dnf5 install -y libdex-0.9.1
+fi
+
 # Current bluefin systems have the bling.sh and bling.fish in their default locations
 mkdir -p /usr/share/ublue-os/bluefin-cli
 cp /usr/share/ublue-os/bling/* /usr/share/ublue-os/bluefin-cli
