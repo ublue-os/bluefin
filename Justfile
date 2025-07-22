@@ -229,13 +229,17 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     echo "::group:: Build Container"
 
     # Build Image
-    ${PODMAN} build \
-        "${BUILD_ARGS[@]}" \
-        "${LABELS[@]}" \
-        --target "${target}" \
-        --tag localhost/"${image_name}:${tag}" \
-        --file Containerfile \
-        .
+    PODMAN_BUILD_ARGS=("${BUILD_ARGS[@]}" "${LABELS[@]}" --target "${target}" --tag localhost/"${image_name}:${tag}" --file Containerfile)
+
+    # Add GitHub token secret if available (for CI/CD)
+    if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+        echo "Adding GitHub token as build secret"
+        PODMAN_BUILD_ARGS+=(--secret "id=GITHUB_TOKEN,env=GITHUB_TOKEN")
+    else
+        echo "No GitHub token found - build may hit rate limit"
+    fi
+
+    ${PODMAN} build "${PODMAN_BUILD_ARGS[@]}" .
     echo "::endgroup::"
 
     # Rechunk
