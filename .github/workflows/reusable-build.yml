@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Maximize build space
-        uses: Zeglius/container-storage-action@feat/hardcode-bind-mounts
+        uses: ublue-os/container-storage-action@main
         with:
           target-dir: /var/lib/containers
           mount-opts: compress-force=zstd:2
