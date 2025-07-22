@@ -73,8 +73,10 @@ jobs:
       - name: Build Image
         id: build-image
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo $(command -v just) repo_organization="${{ github.repository_owner }}" \
+          sudo -E $(command -v just) repo_organization="${{ github.repository_owner }}" \
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
@@ -105,8 +107,10 @@ jobs:
       - name: Rechunk Image
         id: rechunk-image
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo $(command -v just) rechunk "${{ matrix.base_name }}" \
+          sudo -E $(command -v just) rechunk "${{ matrix.base_name }}" \
                             "${{ matrix.stream_name }}" \
                             "${{ matrix.image_flavor }}" \
                             "1"
