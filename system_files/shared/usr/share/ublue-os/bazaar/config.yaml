@@ -156,6 +156,7 @@ sections:
       - org.gnome.Mahjongg
       - io.github.fragglet.sdl_sopwith
       - org.gnome.Sudoku
+      - org.wesnoth.Wesnoth
   - title: "Utilities"
     subtitle: "Gear up and kit out"
     rows: 4
