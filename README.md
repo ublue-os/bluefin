@@ -16,9 +16,10 @@ For end users it provides a system as reliable as a Chromebook with near-zero ma
 
 ## Documentation
 
-1. [Discussions and Announcements](https://universal-blue.discourse.group/c/bluefin/6) - strongly recommended!
-2. [Documentation](https://docs.projectbluefin.io/)
-3. [Contributing Guide](https://docs.projectbluefin.io/contributing)
+1. [Announcements](https://blog.projectbluefin.io/)
+2. [Discussions](https://community.projectbluefin.io/) - strongly recommended!
+3. [Documentation](https://docs.projectbluefin.io/)
+4. [Contributing Guide](https://docs.projectbluefin.io/contributing)
 
 ### Secure Boot
 
