@@ -1,4 +1,4 @@
-## Bluefin 
+# Bluefin 
 *Deinonychus antirrhopus*
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2503a44c1105456483517f793af75ee7)](https://app.codacy.com/gh/ublue-os/bluefin/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![GTS Images](https://github.com/ublue-os/bluefin/actions/workflows/build-image-gts.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-image-gts.yml)[![Stable Images](https://github.com/ublue-os/bluefin/actions/workflows/build-image-stable.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-image-stable.yml)[![Latest Images](https://github.com/ublue-os/bluefin/actions/workflows/build-image-latest-main.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-image-latest-main.yml)
@@ -7,19 +7,46 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ublue-os/bluefin-docs)
 
-For end users it provides a system as reliable as a Chromebook with near-zero maintainance. For developers, a powerful cloud native developer workflow. Check [Introduction to Bluefin](https://docs.projectbluefin.io/introduction/) for a feature walkthrough.
+**Bluefin** is a cloud-native desktop operating system that reimagines the Linux desktop experience for modern computing environments. 
 
-- [projectbluefin.io](https://projectbluefin.io/#scene-picker)
+For end users, it provides a system as reliable as a Chromebook with near-zero maintenance. For developers, it offers a kickass cloud-native developer workflow with integrated container tools, declarative system management, and seamless CI/CD integration. Check [Introduction to Bluefin](https://docs.projectbluefin.io/introduction/) for a feature walkthrough.
+
+🌐 **[Try Bluefin](https://projectbluefin.io/#scene-picker)**
 
 ![image](https://github.com/user-attachments/assets/e7d2a0af-b011-459a-8ab7-c26d3ba50ae5)
 
+## Mission
 
-## Documentation
+Bluefin's mission is to provide a robust, cloud-native desktop operating system that bridges the gap between consumer usability and enterprise-grade infrastructure practices. We aim to deliver:
 
-1. [Announcements](https://blog.projectbluefin.io/)
-2. [Discussions](https://community.projectbluefin.io/) - strongly recommended!
-3. [Documentation](https://docs.projectbluefin.io/)
-4. [Contributing Guide](https://docs.projectbluefin.io/contributing)
+- **Reliability**: Atomic updates ensuring system stability
+- **Developer Experience**: Integrated cloud-native tooling and workflows, including Kubernetes and container support
+- **Sustainability**: Reduced maintenance overhead through declarative system management
+- **Accessibility**: Desktop Linux that's approachable for users transitioning from traditional operating systems
+
+## Communications
+
+### Community Channels
+
+- **📰 [Announcements](https://blog.projectbluefin.io/)** - Official project blog and announcements
+- **💬 [Discussions](https://community.projectbluefin.io/)** - Community forum (strongly recommended!)
+- **📖 [Documentation](https://docs.projectbluefin.io/)** - Complete documentation portal
+- **🔧 [Contributing Guide](https://docs.projectbluefin.io/contributing)** - How to contribute to the project
+
+### Contact Information
+
+- **GitHub Issues**: [Bug reports and feature requests](https://github.com/ublue-os/bluefin/issues)
+- **GitHub Discussions**: [General questions and community support](https://github.com/ublue-os/bluefin/discussions)
+- **Community Forum**: [community.projectbluefin.io](https://community.projectbluefin.io/)
+
+### Maintainers
+
+See [CODEOWNERS](https://github.com/ublue-os/bluefin/blob/main/.github/CODEOWNERS) for the current list of project maintainers.
+
+
+## Getting Started
+
+Visit [projectbluefin.io](https://projectbluefin.io/#scene-picker) to explore installation options and get started with Bluefin.
 
 ### Secure Boot
 
@@ -41,6 +68,26 @@ If you'd like to enroll this key prior to installation or rebase, download the k
 sudo mokutil --timeout -1
 sudo mokutil --import public_key.der
 ```
+
+## Code of Conduct
+
+This project follows the [Universal Blue Community Guidelines](https://docs.projectbluefin.io/contributing#community-guidelines). We are committed to providing a welcoming and inclusive environment for all contributors and users.
+
+All participants in our community are expected to follow our code of conduct. Please report any violations to the project maintainers.
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+### Third-Party Components
+
+Bluefin incorporates and builds upon several open source projects:
+- **Fedora Linux** - Base operating system foundation
+- **GNOME Desktop Environment** - Desktop interface
+- **Universal Blue** - Cloud Native desktop infrastructure
+- **Various CNCF Projects** - Cloud-native tooling and containers
+
+All incorporated components maintain their respective licenses and attributions.
 
 ## Repobeats
 
