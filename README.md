@@ -7,9 +7,9 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ublue-os/bluefin-docs)
 
-**Bluefin** is a cloud-native desktop operating system that reimagines the Linux desktop experience for modern computing environments. Built on immutable infrastructure principles and leveraging container-native technologies, Bluefin delivers enterprise-grade reliability and developer-focused workflows.
+**Bluefin** is a cloud-native desktop operating system that reimagines the Linux desktop experience for modern computing environments. 
 
-For end users, it provides a system as reliable as a Chromebook with near-zero maintenance. For developers, it offers a powerful cloud-native developer workflow with integrated container tools, declarative system management, and seamless CI/CD integration. Check [Introduction to Bluefin](https://docs.projectbluefin.io/introduction/) for a feature walkthrough.
+For end users, it provides a system as reliable as a Chromebook with near-zero maintenance. For developers, it offers a kickass cloud-native developer workflow with integrated container tools, declarative system management, and seamless CI/CD integration. Check [Introduction to Bluefin](https://docs.projectbluefin.io/introduction/) for a feature walkthrough.
 
 🌐 **[Try Bluefin](https://projectbluefin.io/#scene-picker)**
 
@@ -19,28 +19,10 @@ For end users, it provides a system as reliable as a Chromebook with near-zero m
 
 Bluefin's mission is to provide a robust, cloud-native desktop operating system that bridges the gap between consumer usability and enterprise-grade infrastructure practices. We aim to deliver:
 
-- **Reliability**: Immutable, atomic updates ensuring system stability
-- **Developer Experience**: Integrated cloud-native tooling and workflows
+- **Reliability**: Atomic updates ensuring system stability
+- **Developer Experience**: Integrated cloud-native tooling and workflows, including Kubernetes and container support
 - **Sustainability**: Reduced maintenance overhead through declarative system management
 - **Accessibility**: Desktop Linux that's approachable for users transitioning from traditional operating systems
-
-## Project Scope
-
-### In Scope
-
-- **Immutable Desktop OS**: Container-based, atomic desktop operating system
-- **Cloud-Native Tooling**: Integration with Kubernetes, containers, and CNCF ecosystem
-- **Developer Workflows**: Optimized development environments and DevOps tooling
-- **Hardware Support**: Broad hardware compatibility including NVIDIA, HWE, ASUS, and Surface devices
-- **Security**: Secure Boot support, signed images, and supply chain security
-- **User Experience**: Modern desktop environment with simplified system management
-
-### Out of Scope
-
-- **Server Operating Systems**: Focused exclusively on desktop/workstation use cases
-- **Mobile Platforms**: Not targeting mobile or embedded systems
-- **Legacy Application Support**: Emphasis on containerized and modern application delivery
-- **Custom Kernel Development**: Based on upstream Fedora kernels with minimal modifications
 
 ## Communications
 
@@ -61,20 +43,6 @@ Bluefin's mission is to provide a robust, cloud-native desktop operating system 
 
 See [CODEOWNERS](https://github.com/ublue-os/bluefin/blob/main/.github/CODEOWNERS) for the current list of project maintainers.
 
-## Resources
-
-### Documentation
-
-1. [Announcements](https://blog.projectbluefin.io/)
-2. [Discussions](https://community.projectbluefin.io/) - strongly recommended!
-3. [Documentation](https://docs.projectbluefin.io/)
-4. [Contributing Guide](https://docs.projectbluefin.io/contributing)
-
-### Related Projects
-
-- **[Universal Blue](https://github.com/ublue-os/)** - The ecosystem of cloud-native desktop operating systems
-- **[Fedora Silverblue](https://fedoraproject.org/silverblue/)** - Upstream immutable desktop foundation
-- **[OCI Containers](https://opencontainers.org/)** - Container standards powering Bluefin's architecture
 
 ## Getting Started
 
@@ -116,7 +84,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 Bluefin incorporates and builds upon several open source projects:
 - **Fedora Linux** - Base operating system foundation
 - **GNOME Desktop Environment** - Desktop interface
-- **Universal Blue** - Immutable desktop infrastructure
+- **Universal Blue** - Cloud Native desktop infrastructure
 - **Various CNCF Projects** - Cloud-native tooling and containers
 
 All incorporated components maintain their respective licenses and attributions.
