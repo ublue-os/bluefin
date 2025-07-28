@@ -6,11 +6,11 @@ on:
       - main
       - testing
     paths-ignore:
+      - ".github/workflows/*iso*"
       - "**.md"
-      - "iso_files/**"
       - "bluefin_flatpaks/**"
       - "dx_flatpaks/**"
-      - ".github/workflows/*iso*"
+      - "iso_files/**"
   workflow_call:
   workflow_dispatch:
 
