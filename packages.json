@@ -201,13 +201,14 @@
 			"all": [
         			"bazaar",
         			"google-noto-fonts-all",
-        			"uupd"
+        			"uupd",
+        			"sudo-rs"
       ],
 			"dx": []
 		},
 		"exclude": {
 			"all": [
-  				"gnome-software"		
+  				"gnome-software"
 			],
 			"dx": []
 		}

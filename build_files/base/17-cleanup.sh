@@ -9,6 +9,12 @@ if [[ "$(rpm -E %fedora)" -eq "42" ]]; then
     sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 fi
 
+# setup sudo-rs
+if [[ "$(rpm -E %fedora)" -eq "42" ]]; then
+  ln -sf /usr/bin/su-rs /usr/bin/su
+  ln -sf /usr/bin/sudo-rs /usr/bin/sudo
+  ln -sf /usr/bin/visudo-rs /usr/bin/visudo
+fi
 
 # Setup Systemd
 systemctl enable rpm-ostree-countme.service
