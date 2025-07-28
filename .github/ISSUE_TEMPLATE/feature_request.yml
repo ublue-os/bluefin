@@ -16,19 +16,3 @@ body:
       value: "I'd like to request the package `vim` because ..."
     validations:
       required: true
-  - type: dropdown
-    id: image
-    attributes:
-      label: Image
-      description: Which specific image do you want?
-      options:
-        - All Images
-        - Bazzite
-        - Kinoite
-        - LXQt
-        - Mate
-        - Silverblue
-        - Ubuntu
-        - Vauxite
-    validations:
-      required: true
