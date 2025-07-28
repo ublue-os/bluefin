@@ -13,3 +13,18 @@ Tailscale is included, check out [their docs](https://tailscale.com/kb/1017/inst
 `ujust changelogs` shows a summary of the package changes since the last update
 Don't forget to check the [release notes](https://github.com/ublue-os/bluefin/releases) 
 Help keep Bluefin alive and healthy, consider [donating](https://docs.projectbluefin.io/donations)
+Develop with devcontainers! Use `devcontainer.json` files in your projects for isolated, reproducible environments
+Enable developer mode with `ujust devmode` then `ujust dx-group` to unlock the full cloud-native development experience
+Stick to Flatpaks and Homebrew - avoid layering packages to keep your system maintainable
+Use DistroShelf (in the logo menu under "Containers") to create pet containers for different distros
+`ujust jetbrains-toolbox` installs JetBrains tools in your home directory, independent of the OS
+`ujust bluefin-cli` enables modern terminal tools like atuin, eza, and starship for a better CLI experience
+Use Cockpit for local and remote system management - it's already included in DX mode
+Performance profiling tools are built-in: try `sysprof`, `bpftrace`, and other debugging tools
+Switch shells safely: change your shell in Terminal settings instead of system-wide with `chsh`
+VS Code comes with devcontainers extension pre-installed - perfect for containerized development
+Container development is OS-agnostic - your devcontainers work on Linux, macOS, and Windows
+Use `docker compose` for multi-container development if devcontainers don't fit your workflow
+Check out DevPod for open-source, client-only development environments that work with any IDE
+`ujust install-k8s-dev-tools` gets you started with Kubernetes development tools like kind and kubectl
+Bluefin separates the OS from your development environment - embrace the cloud-native workflow
