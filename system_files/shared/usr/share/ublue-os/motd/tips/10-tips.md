@@ -1,15 +1,16 @@
-Bluefin is your gateway to Cloud Native - find your flock at [landscape.cncf.io](https://l.cncf.io)
-GNOME makes your desktop! Donate to [GNOME](https://donate.gnome.org)
-Support the app store! Donate to  [Bazaar](https://github.com/kolunmi/bazaar)!
-Need more indepth technical information?~Check out the [Bluefin Administrator's Guide](https://docs.projectbluefin.io/administration)
-Like servers? Check out [ucore](https://github.com/ublue-os/ucore)
-Update break something? You can roll back with `sudo bootc rollback`
-Use `brew search` and `brew install` to install packages. Bluefin will take care of the updates automatically
-Use `Ctrl`-`Alt`-`Enter` to quickly open a terminal
-Tailscale is included, check out [their docs](https://tailscale.com/kb/1017/install)
-`ujust --choose` will show you each shortcut and the script it's running
-`tldr vim` will give you the basic rundown on commands for a given tool
-`ujust rebase-helper` can help you roll back to a specific image, or to a different channel entirely, check the docs for more info
-`ujust changelogs` shows a summary of the package changes since the last update
-Don't forget to check the [release notes](https://github.com/ublue-os/bluefin/releases) 
-Help keep Bluefin alive and healthy, consider [donating](https://docs.projectbluefin.io/donations)
+1.Open terminal quickly with `Ctrl`+`Alt`+`Enter` for instant CLI access
+2.Use `ujust --choose` to see all available shortcuts and their scripts
+3.Install CLI tools with `brew install <package>` - updates are automatic
+4.Roll back problematic updates with `sudo bootc rollback`
+5.Check package changes since last update with `ujust changelogs`
+6.Switch between update streams with `ujust rebase-helper`
+7.Install apps from Flathub using the Bazaar software center
+8.Get command help quickly with `tldr <command>` (try `tldr git`)
+9.Enable modern CLI tools with `ujust bluefin-cli` for better experience
+10.Use `ujust update` to manually refresh system, flatpaks, and brew
+11.Tailscale VPN is built-in - configure at tailscale.com
+12.Browse with Bold Brew TUI for homebrew package management
+13.See system info with `fastfetch` and hardware details
+14.Check admin guide at docs.projectbluefin.io/administration
+15.Support the project at docs.projectbluefin.io/donations
+16.Use distrobox for development - containerized environments made easy
