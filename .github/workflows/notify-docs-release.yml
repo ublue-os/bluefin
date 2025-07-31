@@ -1,0 +1,33 @@
+name: Notify Docs on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify bluefin-docs repository
+        uses: peter-evans/repository-dispatch@ff45666b9427631e3450e2d310485e434d9f2bbb # v3
+        with:
+          token: ${{ secrets.ORG_GITHUB_TOKEN }}
+          repository: ublue-os/bluefin-docs
+          event-type: bluefin-release
+          client-payload: |
+            {
+              "release": {
+                "tag_name": "${{ github.event.release.tag_name }}",
+                "name": "${{ github.event.release.name }}",
+                "body": ${{ toJSON(github.event.release.body) }},
+                "html_url": "${{ github.event.release.html_url }}",
+                "prerelease": ${{ github.event.release.prerelease }},
+                "draft": ${{ github.event.release.draft }},
+                "created_at": "${{ github.event.release.created_at }}",
+                "published_at": "${{ github.event.release.published_at }}"
+              },
+              "repository": {
+                "name": "${{ github.repository }}",
+                "html_url": "${{ github.event.repository.html_url }}"
+              }
+            }
