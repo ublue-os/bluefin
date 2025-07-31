@@ -34,9 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify bluefin-docs repository
-        uses: peter-evans/repository-dispatch@v2 
+        uses: peter-evans/repository-dispatch@v2
         with:
-          token: ${{ secrets.ORG_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository: ublue-os/bluefin-docs
           event-type: bluefin-release
           client-payload: |
