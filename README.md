@@ -5,6 +5,8 @@
 
 ![Bluefin Users](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ublue-os/countme/main/badge-endpoints/bluefin.json&label=Weekly%20Device%20Count)
 
+[![LFX Active Contributors](https://insights.linuxfoundation.org/api/badge/active-contributors?project=ublue-os-bluefin&repos=https://github.com/ublue-os/bluefin)](https://insights.linuxfoundation.org/project/ublue-os-bluefin/repository/ublue-os-bluefin/security)
+
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ublue-os/bluefin-docs)
 
 **Bluefin** is a cloud-native desktop operating system that reimagines the Linux desktop experience for modern computing environments. 
