@@ -23,8 +23,7 @@ Bluefin's mission is to provide a robust, cloud-native desktop operating system 
 
 - **Reliability**: Atomic updates ensuring system stability
 - **Developer Experience**: Integrated cloud-native tooling and workflows, including Kubernetes and container support
-- **Sustainability**: Reduced maintenance overhead through declarative system management
-- **Accessibility**: Desktop Linux that's approachable for users transitioning from traditional operating systems
+- **Sustainability**: Reduced maintenance overhead for contributors by using the latest cloud native infrastructure tools
 
 ## Communications
 
