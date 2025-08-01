@@ -519,20 +519,20 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         rm -rf "${COPYTMP}"
     fi
 
-    FLATPAK_DIR_SHORTNAME="bluefin_flatpaks"
+    FLATPAK_DIR_SHORTNAME="flatpaks"
 
     # Generate Flatpak List
     TEMP_FLATPAK_INSTALL_DIR="$(mktemp -d -p /tmp flatpak-XXXXX)"
     flatpak_refs=()
     while IFS= read -r line; do
         flatpak_refs+=("$line")
-    done < "${FLATPAK_DIR_SHORTNAME}/flatpaks"
+    done < "${FLATPAK_DIR_SHORTNAME}/system-flatpaks.list"
 
     # Add DX Flatpaks if needed
     if [[ "${image_name}" =~ dx ]]; then
         while IFS= read -r line; do
             flatpak_refs+=("$line")
-        done < "dx_flatpaks/flatpaks"
+        done < "flatpaks/system-flatpaks-dx.list"
     fi
 
     echo "Flatpak refs: ${flatpak_refs[@]}"
