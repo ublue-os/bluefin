@@ -8,8 +8,7 @@ on:
     paths-ignore:
       - ".github/workflows/*iso*"
       - "**.md"
-      - "bluefin_flatpaks/**"
-      - "dx_flatpaks/**"
+      - "flatpaks/**"
       - "iso_files/**"
   schedule:
     - cron: "50 5 * * 0" # 5:50 UTC sunday

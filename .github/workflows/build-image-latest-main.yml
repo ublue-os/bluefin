@@ -8,8 +8,7 @@ on:
     paths-ignore:
       - '.github/workflows/*iso*'
       - '**.md'
-      - 'bluefin_flatpaks/**'
-      - 'dx_flatpaks/**'
+      - 'flatpaks/**'
       - 'iso_files/**'
   workflow_call:
   workflow_dispatch:

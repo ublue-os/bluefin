@@ -88,7 +88,7 @@ jobs:
         uses: ublue-os/titanoboa@main
         with:
           image-ref: ${{ steps.image_ref.outputs.image_ref }}:${{ matrix.image_version }}
-          flatpaks-list: ${{ github.workspace }}/iso_files/system-flatpaks.list
+          flatpaks-list: ${{ github.workspace }}/flatpaks/system-flatpaks.list
           hook-post-rootfs: ${{ github.workspace }}/iso_files/configure_iso_anaconda.sh
           kargs: ${{ steps.image_ref.outputs.kargs }}
 
