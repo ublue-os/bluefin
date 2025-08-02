@@ -79,6 +79,7 @@
 				"ublue-brew",
 				"ublue-fastfetch",
 				"ublue-motd",
+				"ublue-os-libvirt-workarounds",
 				"ublue-polkit-rules",
 				"ublue-setup-services",
 				"uld",
