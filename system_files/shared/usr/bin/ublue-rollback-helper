@@ -33,7 +33,7 @@ function rebase_helper() {
 
   # Step 1: Choose image variant
   echo "Select your Bluefin image:"
-  IMAGE_OPTIONS=("bluefin" "bluefin-dx" "cancel")
+  IMAGE_OPTIONS=(bluefin bluefin-dx cancel)
   selected_image=$(Choose "${IMAGE_OPTIONS[@]}")
   [[ "$selected_image" == "cancel" ]] && exit 0
 
@@ -44,10 +44,20 @@ function rebase_helper() {
   declare -a CHANNELS
   CHANNELS=(latest stable stable-daily)
   echo "Available channels: latest, stable (weekly builds), stable-daily (daily builds)"
-  echo "latest is for testers. stable/stable-daily are for enthusiasts."
 
-  channel_selected=$(Choose "${CHANNELS[@]}" cancel)
-  [[ "$channel_selected" == "cancel" ]] && exit 0
+  # Fetch Fedora version per channel and build display list
+  declare -a CHANNELS_DISPLAY
+  declare -a CHANNELS_RAW
+
+  for channel in "${CHANNELS[@]}"; do
+    version=$(skopeo inspect --no-tags docker://${base_image}:${channel} | jq -r '.Labels["org.opencontainers.image.version"]' | sed 's/.*-//' | cut -c 1-2)
+    CHANNELS_DISPLAY+=("${channel} (F${version})")
+    CHANNELS_RAW+=("${channel}")
+  done
+
+  channel_choice=$(Choose "${CHANNELS_DISPLAY[@]}" cancel)
+  [[ "$channel_choice" == "cancel" ]] && exit 0
+  channel_selected=${channel_choice%% *}
 
   rebase_target="${base_image}:${channel_selected}"
 
