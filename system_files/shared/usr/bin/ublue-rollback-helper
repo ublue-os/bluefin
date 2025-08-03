@@ -42,8 +42,14 @@ function rebase_helper() {
 
   # Step 2: Channel Selection
   declare -a CHANNELS
-  CHANNELS=(latest stable stable-daily)
-  echo "Available channels: latest, stable (weekly builds), stable-daily (daily builds)"
+  if [[ "$composefs_enabled" == "true" ]]; then
+    CHANNELS=(latest stable stable-daily)
+    echo "The default selection is latest, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+    echo "Note: Since you are on Fedora 42+, you will not be able to rollback to the GTS version."
+  else
+    CHANNELS=(latest stable stable-daily gts)
+    echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+  fi
 
   # Fetch Fedora version per channel and build display list
   declare -a CHANNELS_DISPLAY
@@ -77,6 +83,19 @@ function rebase_helper() {
     [[ "$selected_tag" == "cancel" ]] && return 1
 
     rebase_target="${base_image}:${selected_tag}"
+  fi
+
+  # GTS rollback warnings
+  if [[ "$channel_selected" == "gts" && "$IMAGE_TAG" != "gts" ]]; then
+      echo "Warning: Rolling back Major Fedora Versions may not work as expected."
+  fi
+
+  if [[ "$channel_selected" != "gts" && "$IMAGE_TAG" == "gts" ]]; then
+      echo "Rebase to a non-GTS version is a one-way operation. You will not be able to rollback to GTS."
+      echo "Are you sure you want to proceed?"
+      if [[ $(Confirm) -ne "0" ]]; then
+          return 1
+      fi
   fi
 
   echo "Rebase target: ${rebase_target}"
