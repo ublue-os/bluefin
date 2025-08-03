@@ -244,11 +244,11 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
 
     # Rechunk
     if [[ "{{ rechunk }}" == "1" && "{{ ghcr }}" == "1" && "{{ pipeline }}" == "1" ]]; then
-        {{ just }} rechunk "${image}" "${tag}" "${flavor}" 1 1
+        ${SUDOIF} {{ just }} rechunk "${image}" "${tag}" "${flavor}" 1 1
     elif [[ "{{ rechunk }}" == "1" && "{{ ghcr }}" == "1" ]]; then
-        {{ just }} rechunk "${image}" "${tag}" "${flavor}" 1
+        ${SUDOIF} {{ just }} rechunk "${image}" "${tag}" "${flavor}" 1
     elif [[ "{{ rechunk }}" == "1" ]]; then
-        {{ just }} rechunk "${image}" "${tag}" "${flavor}"
+        ${SUDOIF} {{ just }} rechunk "${image}" "${tag}" "${flavor}"
     fi
 
 # Build Image and Rechunk
