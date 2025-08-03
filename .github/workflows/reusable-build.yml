@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Maximize build space
-        uses: ublue-os/container-storage-action@main
+        uses: ublue-os/container-storage-action@fb03d44358403015d2a12cc59c5fb658d957adc2
         with:
           target-dir: /var/lib/containers
           mount-opts: compress-force=zstd:2
