@@ -156,7 +156,7 @@ jobs:
         shell: bash
         run: |
           set -eoux pipefail
-          just tag-images "${{ env.IMAGE_NAME }}" \
+          sudo -E $(command -v just) tag-images "${{ env.IMAGE_NAME }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ steps.generate-tags.outputs.alias_tags }}"
 
