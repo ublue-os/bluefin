@@ -55,7 +55,10 @@ SPECS=(
     "anaconda-live"
 )
 if [[ "$IMAGE_TAG" =~ lts ]]; then
-    dnf config-manager --set-enabled centos-hyperscale
+    dnf config-manager --set-enabled centos-release-kmods-kernel
+    dnf copr enable -y jreilly/anaconda-webui
+
+    SPECS+=("anaconda-webui")
 elif [[ "$(rpm -E %fedora)" -ge 42 ]]; then
     SPECS+=("anaconda-webui")
 fi
@@ -85,12 +88,11 @@ efi_dir = fedora
 menu_auto_hide = True
 
 [Storage]
-default_scheme = BTRFS
-btrfs_compression = zstd:1
+default_scheme = xfs
 default_partitioning =
     /     (min 1 GiB, max 70 GiB)
     /home (min 500 MiB, free 50 GiB)
-    /var  (btrfs)
+    /var  
 
 [User Interface]
 custom_stylesheet = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css
@@ -112,7 +114,7 @@ fi
 
 # Configure
 . /etc/os-release
-if [[ "$IMAGE_TAG" =~ gts|lts ]]; then
+if [[ "$IMAGE_TAG" =~ gts ]]; then
     echo "Bluefin ${IMAGE_TAG^^} release $VERSION_ID (${VERSION_CODENAME:=Big Bird})" >/etc/system-release
 else
     echo "Bluefin release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
