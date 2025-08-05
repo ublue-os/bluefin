@@ -2,98 +2,118 @@
 
 #shellcheck disable=1091
 source /usr/lib/ujust/ujust.sh
-IMAGE_INFO="/usr/share/ublue-os/image-info.json"
-IMAGE_NAME=$(jq -r '."image-name"' < $IMAGE_INFO)
-IMAGE_TAG=$(jq -r '."image-tag"' < $IMAGE_INFO)
-IMAGE_VENDOR=$(jq -r '."image-vendor"' < $IMAGE_INFO)
-FEDORA_VERSION=$(jq -r '."fedora-version"' < $IMAGE_INFO)
-IMAGE_REGISTRY="ghcr.io/${IMAGE_VENDOR}"
 
-#Check if composefs is enabled
+IMAGE_INFO="/usr/share/ublue-os/image-info.json"
+IMAGE_NAME=$(jq -r '."image-name"' < "$IMAGE_INFO")
+IMAGE_TAG=$(jq -r '."image-tag"' < "$IMAGE_INFO")
+IMAGE_VENDOR=$(jq -r '."image-vendor"' < "$IMAGE_INFO")
+FEDORA_VERSION=$(jq -r '."fedora-version"' < "$IMAGE_INFO")
+IMAGE_REGISTRY="ghcr.io/${IMAGE_VENDOR}"
+ROOT_FS=$(findmnt -n -o FSTYPE /)
+
+# ComposeFS detection
 if findmnt / | grep -q 'composefs' && findmnt / | grep -q 'overlay'; then
   composefs_enabled=true
 else
   composefs_enabled=false
 fi
 
-function list_tags(){
-    skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}" | grep -E --color=never -- "$FEDORA_VERSION-([0-9]+)" | sort -rV | head -n 31
+function list_tags() {
+  local filter="$1"
+  skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}" \
+    | jq -r '.Tags[]' \
+    | grep -E --color=never "$filter" \
+    | sort -rV | head -n 31
 }
 
-function rebase_helper(){
-    base_image="${IMAGE_REGISTRY}/${IMAGE_NAME}"
-    echo "Which Tag would you like to rebase to?"
+function rebase_helper() {
+  echo "Current image: ${IMAGE_NAME}:${IMAGE_TAG} (Fedora ${FEDORA_VERSION})"
+  echo "Root filesystem: ${ROOT_FS}"
+  echo
 
-    if [[ "$composefs_enabled" == "true" ]]; then
-        CHANNELS=(latest stable stable-daily)
-        echo "The default selection is latest, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
-        echo "Note: Since you are on Fedora 42+, you will not be able to rollback to the GTS version."
-    elif [[ "$composefs_enabled" == "false" ]]; then
-        CHANNELS=(latest stable stable-daily gts)
-        echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
-        fi
+  # Step 1: Choose image variant
+  echo "Select your Bluefin image:"
+  IMAGE_OPTIONS=(bluefin bluefin-dx cancel)
+  selected_image=$(Choose "${IMAGE_OPTIONS[@]}")
+  [[ "$selected_image" == "cancel" ]] && exit 0
 
-    for channel in "${CHANNELS[@]}"; do
-        if [[ "$channel" == "gts" ]]; then
-            version=$(( ${VERSIONS_LIST[0]} - 1 ))
-        elif [[ "$channel" == "stable-daily" ]]; then
-            version="${VERSIONS_LIST[1]}"
-        else
-            version=$(skopeo inspect --no-tags docker://ghcr.io/ublue-os/bluefin-dx:$channel | jq -r '.Labels["org.opencontainers.image.version"]' | sed 's/.*-//' | cut -c 1-2)
-        fi
-        VERSIONS_LIST+=("$version")
-        CHANNELS_F+=("$channel (F$version)")
-    done
+  IMAGE_NAME="$selected_image"
+  base_image="${IMAGE_REGISTRY}/${IMAGE_NAME}"
 
-    choose_target=$(Choose date "${CHANNELS_F[@]}" cancel)
-    if [[ "$choose_target" != "date" && "$choose_target" != "cancel" ]]; then
-        choose_target=${choose_target%% *}
-        rebase_target="${base_image}:${choose_target}"
-    elif [[ "$choose_target" == "date" ]]; then
-        # shellcheck disable=SC2207
-        echo "Warning: This will pin you to a specific version, do not forget to rebase back to a channel to resume receiving updates."
-        valid_tags=( $(list_tags | sed 's/\"//g' | sed 's/,//g'))
-        target_tag=$(Choose cancel "${valid_tags[@]}")
-        if  grep -Eq "$FEDORA_VERSION-([0-9]+)" <<< "${target_tag}"; then
-            # target_tag=${target_tag:1:-2}
-            rebase_target="${base_image}:$target_tag"
-        else
-            return 1
-        fi
+  # Step 2: Channel Selection
+  declare -a CHANNELS
+  if [[ "$composefs_enabled" == "true" ]]; then
+    CHANNELS=(latest stable stable-daily)
+    echo "The default selection is latest, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+    echo "Note: Since you are on Fedora 42+, you will not be able to rollback to the GTS version."
+  else
+    CHANNELS=(latest stable stable-daily gts)
+    echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+  fi
 
-    else
-        return 1
-    fi
-    if  [[ "$choose_target" =~ "gts" && "$IMAGE_TAG" != "$choose_target" ]]; then
-        echo "Warning rolling back Major Fedora Versions may not work"
-    fi
-    if [[ "$choose_target" != "gts" && "$IMAGE_TAG" = "gts" ]]; then
-        echo "Rebase to a non-GTS version is a one-way operation, you will not be able to rollback to GTS."
-        echo "Is this what you want to do?"
-        if [[ $(Confirm) -ne "0" ]]; then
-            return 1
-        fi
-    fi
+  # Fetch Fedora version per channel and build display list
+  declare -a CHANNELS_DISPLAY
+  declare -a CHANNELS_RAW
 
-    echo "Rebase Target is ${rebase_target}"
-    echo "Confirm Rebase"
-    if [[ $(Confirm) -ne "0" ]]; then
-        return 1
-    fi
+  for channel in "${CHANNELS[@]}"; do
+    version=$(skopeo inspect --no-tags docker://${base_image}:${channel} | jq -r '.Labels["org.opencontainers.image.version"]' | sed 's/.*-//' | cut -c 1-2)
+    CHANNELS_DISPLAY+=("${channel} (F${version})")
+    CHANNELS_RAW+=("${channel}")
+  done
 
-    if /usr/bin/grep "^LockLayering=true" /etc/rpm-ostreed.conf &> /dev/null; then
-        pkexec bootc switch --enforce-container-sigpolicy "${rebase_target}"
-        return 0
-    fi
+  channel_choice=$(Choose "${CHANNELS_DISPLAY[@]}" cancel)
+  [[ "$channel_choice" == "cancel" ]] && exit 0
+  channel_selected=${channel_choice%% *}
+
+  rebase_target="${base_image}:${channel_selected}"
+
+  # Step 3: Date selection (scoped to channel)
+  echo "Would you like to pin to a specific build date?"
+  date_choice=$(Choose "no" "yes" cancel)
+  [[ "$date_choice" == "cancel" ]] && return 1
+
+  if [[ "$date_choice" == "yes" ]]; then
+    echo "Fetching available tags for channel: $channel_selected..."
+    filter="${channel_selected}-[0-9]{8}"
+
+    valid_tags=( $(list_tags "$filter") )
+    [[ "${#valid_tags[@]}" -eq 0 ]] && { echo "No tags found for filter: $filter"; return 1; }
+
+    selected_tag=$(Choose cancel "${valid_tags[@]}")
+    [[ "$selected_tag" == "cancel" ]] && return 1
+
+    rebase_target="${base_image}:${selected_tag}"
+  fi
+
+  # GTS rollback warnings
+  if [[ "$channel_selected" == "gts" && "$IMAGE_TAG" != "gts" ]]; then
+      echo "Warning: Rolling back Major Fedora Versions may not work as expected."
+  fi
+
+  if [[ "$channel_selected" != "gts" && "$IMAGE_TAG" == "gts" ]]; then
+      echo "Rebase to a non-GTS version is a one-way operation. You will not be able to rollback to GTS."
+      echo "Are you sure you want to proceed?"
+      if [[ $(Confirm) -ne "0" ]]; then
+          return 1
+      fi
+  fi
+
+  echo "Rebase target: ${rebase_target}"
+  echo "Confirm rebase?"
+  [[ $(Confirm) -ne 0 ]] && return 1
+
+  if grep -q "^LockLayering=true" /etc/rpm-ostreed.conf; then
+    pkexec bootc switch --enforce-container-sigpolicy "${rebase_target}"
+  else
     rpm-ostree rebase ostree-image-signed:docker://"${rebase_target}"
-    return 0
+  fi
 }
 
-echo "Choose your action."
+# Entry point
+echo "Choose your action:"
 option=$(Choose rebase cancel)
-
 if [[ "$option" == "rebase" ]]; then
-    rebase_helper || /usr/bin/ublue-rollback-helper
+  rebase_helper || /usr/bin/ublue-rollback-helper
 else
-    exit 0
+  exit 0
 fi

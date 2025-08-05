@@ -7,6 +7,7 @@ FROM scratch AS ctx
 COPY /system_files /system_files
 COPY /build_files /build_files
 COPY /iso_files /iso_files
+COPY /flatpaks /flatpaks
 COPY /just /just
 COPY packages.json /
 
