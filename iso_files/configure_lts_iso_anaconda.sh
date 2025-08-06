@@ -21,6 +21,7 @@ systemctl --global disable ublue-user-setup.service
 
 # remove anaconda-liveinst to be replaced with anaconda-live
 dnf remove -y anaconda-liveinst
+
 # Install Anaconda, Webui if >= F42
 SPECS=(
     "libdnf5"
