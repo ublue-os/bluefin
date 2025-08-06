@@ -23,6 +23,8 @@ systemctl --global disable ublue-user-setup.service
 dnf remove -y anaconda-liveinst
 # Install Anaconda, Webui if >= F42
 SPECS=(
+    "libdnf5"
+    "python3-libdnf5"
     "libblockdev"
     "libblockdev-lvm"
     "libblockdev-dm"
@@ -106,9 +108,7 @@ rm -rf /root/packages
 tee -a /usr/share/anaconda/interactive-defaults.ks <<EOF
 ostreecontainer --url=$IMAGE_REF:$IMAGE_TAG --transport=containers-storage --no-signature-verification
 %include /usr/share/anaconda/post-scripts/install-configure-upgrade.ks
-# %include /usr/share/anaconda/post-scripts/disable-fedora-flatpak.ks
 %include /usr/share/anaconda/post-scripts/install-flatpaks.ks
-# %include /usr/share/anaconda/post-scripts/secureboot-enroll-key.ks
 EOF
 
 # Signed Images
