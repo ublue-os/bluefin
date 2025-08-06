@@ -19,6 +19,8 @@ systemctl --global disable ublue-user-setup.service
 
 # Configure Anaconda
 
+# remove anaconda-liveinst to be replaced with anaconda-live
+dnf remove -y anaconda-liveinst
 # Install Anaconda, Webui if >= F42
 SPECS=(
     "libblockdev"
