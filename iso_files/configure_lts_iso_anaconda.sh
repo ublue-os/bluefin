@@ -1,4 +1,25 @@
+#!/usr/bin/env bash
+
+set -eoux pipefail
+
+IMAGE_INFO="$(cat /usr/share/ublue-os/image-info.json)"
+IMAGE_TAG="$(jq -c -r '."image-tag"' <<<"$IMAGE_INFO")"
+IMAGE_REF="$(jq -c -r '."image-ref"' <<<"$IMAGE_INFO")"
+IMAGE_REF="${IMAGE_REF##*://}"
+# sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
+
+# Configure Live Environment
+
+# Remove packages from liveCD to save space
+dnf remove -y google-noto-fonts-all ublue-brew ublue-motd yaru-theme || true
+
+# Setup dock
+tee /usr/share/glib-2.0/schemas/zz2-org.gnome.shell.gschema.override <<EOF
+[org.gnome.shell]
+welcome-dialog-last-shown-version='4294967295'
+favorite-apps = ['anaconda.desktop', 'documentation.desktop', 'discourse.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Nautilus.desktop']
 EOF
+
 
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
@@ -67,9 +88,8 @@ menu_auto_hide = True
 [Storage]
 file_system_type = xfs
 default_partitioning =
-    /     (min 1 GiB, max 70 GiB)
-    /home (min 500 MiB, free 50 GiB)
-    /var  
+    /     (min 5 GiB, max 70 GiB)
+    /var  (min 5 GiB) 
 
 [User Interface]
 custom_stylesheet = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css
@@ -92,8 +112,7 @@ echo "VARIANT_ID=bluefin-lts" >>/usr/lib/os-release
 # if [[ "$IMAGE_TAG" =~ gts ]]; then
 #     echo "Bluefin ${IMAGE_TAG^^} release $VERSION_ID (${VERSION_CODENAME:=Big Bird})" >/etc/system-release
 # else
-    echo "Bluefin release $VERSION_ID Achillobator" >/etc/system-release
-fi
+echo "Bluefin release $VERSION_ID Achillobator" >/etc/system-release
 sed -i 's/ANACONDA_PRODUCTVERSION=.*/ANACONDA_PRODUCTVERSION=""/' /usr/{,s}bin/liveinst || true
 sed -i 's|^Icon=.*|Icon=/usr/share/pixmaps/fedora-logo-icon.png|' /usr/share/applications/liveinst.desktop || true
 sed -i 's| Fedora| Bluefin|' /usr/share/anaconda/gnome/fedora-welcome || true
@@ -107,7 +126,7 @@ rm -rf /root/packages
 
 # Interactive Kickstart
 tee -a /usr/share/anaconda/interactive-defaults.ks <<EOF
-ostreecontainer --url=$IMAGE_REF:$IMAGE_TAG --transport=containers-storage --no-signature-verification
+ostreecontainer --url=ghcr.io/ublue-os/bluefin:lts --transport=containers-storage --no-signature-verification
 %include /usr/share/anaconda/post-scripts/install-configure-upgrade.ks
 %include /usr/share/anaconda/post-scripts/install-flatpaks.ks
 EOF
