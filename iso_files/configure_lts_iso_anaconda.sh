@@ -62,7 +62,7 @@ dnf install -y "${SPECS[@]}"
 
 
 # Fix the wrong dir for webui
-sudo sed -i 's|/usr/libexec/webui-desktop|/usr/libexec/anaconda/webui-desktop|g' /bin/liveinst
+sed -i 's|/usr/libexec/webui-desktop|/usr/libexec/anaconda/webui-desktop|g' /bin/liveinst
 
 # Anaconda Profile Detection
 
