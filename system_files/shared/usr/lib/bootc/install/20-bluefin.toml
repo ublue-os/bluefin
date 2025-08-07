@@ -1,2 +1,2 @@
 [install]
-root-fs-type = "btrfs"
+root-fs-type = "xfs"
