@@ -53,6 +53,12 @@ jobs:
           sudo apt install -y \
             podman
 
+      - name: Maximize build space (remove-software)
+        if: matrix. platform != 'arm64'
+        uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
+        with:
+          remove-codeql: true
+
       - name: Maximize build space
         uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
         continue-on-error: true
