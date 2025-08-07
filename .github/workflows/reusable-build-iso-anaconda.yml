@@ -53,11 +53,19 @@ jobs:
           sudo apt install -y \
             podman
 
-      - name: Maximize build space
-        if: matrix.platform != 'arm64'
+      - name: Maximize build space (remove-software)
+        if: matrix. platform != 'arm64'
         uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
         with:
           remove-codeql: true
+
+      - name: Maximize build space
+        uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
+        continue-on-error: true
+        with:
+          target-dir: /var/lib/containers
+          mount-opts: compress-force=zstd:2
+          loopback-free: 0.9
 
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -89,8 +97,10 @@ jobs:
         with:
           image-ref: ${{ steps.image_ref.outputs.image_ref }}:${{ matrix.image_version }}
           flatpaks-list: ${{ github.workspace }}/flatpaks/system-flatpaks.list
-          hook-post-rootfs: ${{ github.workspace }}/iso_files/configure_iso_anaconda.sh
+          hook-post-rootfs: ${{ matrix.image_version == 'lts' && format('{0}/iso_files/configure_lts_iso_anaconda.sh', github.workspace) || format('{0}/iso_files/configure_iso_anaconda.sh', github.workspace) }}
           kargs: ${{ steps.image_ref.outputs.kargs }}
+          builder-distro: ${{ matrix.image_version == 'lts' && 'centos' || 'fedora' }}
+          
 
       - name: Rename ISO
         id: rename
@@ -108,7 +118,7 @@ jobs:
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
       - name: Upload to Job Artifacts
-        if: github.event_name == 'pull_request'
+        if: github.ref_name == 'testing'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ steps.image_ref.outputs.artifact_format }}
