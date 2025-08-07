@@ -88,11 +88,11 @@ efi_dir = fedora
 menu_auto_hide = True
 
 [Storage]
-default_scheme = xfs
+default_scheme = btrfs
 default_partitioning =
     /     (min 1 GiB, max 70 GiB)
     /home (min 500 MiB, free 50 GiB)
-    /var  
+    /var  (btrfs) 
 
 [User Interface]
 custom_stylesheet = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css
