@@ -38,22 +38,20 @@ concurrency:
 jobs:
   build:
     name: Build ISOs
+    if: |
+      !(matrix.flavor == 'nvidia-open' && matrix.image_version == 'lts') &&
+      !(matrix.flavor == 'gdx' && matrix.image_version != 'lts')
+
     runs-on: ${{ matrix.platform == 'amd64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     strategy:
       fail-fast: false
       matrix:
         platform: [amd64]
-        flavor: ["main", "nvidia-open"]
+        flavor: ["main", "nvidia-open", "gdx"]
         image_version: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.image_version == 'all' && fromJSON('["gts", "stable", "lts"]') || fromJSON(format('["{0}"]', github.event.inputs.image_version))) || fromJSON('["gts", "stable"]') }}
         include:
-          - platform: amd64
-            flavor: "main"
-            image_version: lts
           - platform: arm64
             flavor: "main"
-            image_version: lts
-          - platform: amd64
-            flavor: gdx
             image_version: lts
           - platform: arm64
             flavor: gdx
@@ -102,12 +100,12 @@ jobs:
         env:
           FLAVOR: ${{ matrix.flavor }}
         run: |
-          set -eoux pipefail          
+          set -eoux pipefail
           image_name=$(just image_name "bluefin" "${{ matrix.image_version}}" "${{ matrix.flavor}}")
           image_ref="${IMAGE_REGISTRY}/${image_name}"
           KARGS="NONE"
           echo "image_ref=$image_ref" >> "${GITHUB_OUTPUT}"
-          echo "artifact_format="$image_name-${{ matrix.image_version }}-$(uname -m)"" >> "${GITHUB_OUTPUT}"
+          echo "artifact_format=$image_name-${{ matrix.image_version }}-$(uname -m)" >> "${GITHUB_OUTPUT}"
           echo "kargs=$KARGS" >> "${GITHUB_OUTPUT}"
 
       - name: Build ISO
