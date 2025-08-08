@@ -38,6 +38,7 @@ concurrency:
 jobs:
   build:
     name: Build ISOs
+    # Exclude nvidia-open from LTS and gdx from non-LTS versions
     if: |
       !(matrix.flavor == 'nvidia-open' && matrix.image_version == 'lts') &&
       !(matrix.flavor == 'gdx' && matrix.image_version != 'lts')
