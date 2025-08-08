@@ -8,7 +8,7 @@ on:
         description: 'Which image version to build'
         type: choice
         required: true
-        default: 'lts'
+        default: 'all'
         options:
           - lts
           - gts
