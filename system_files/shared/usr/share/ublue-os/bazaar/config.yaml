@@ -232,7 +232,7 @@ sections:
       - org.tuxpaint.Tuxpaint
       - im.bernard.Memorado
       - io.github.josephmawa.Egghead
-      - io.github.r_sergii.multiElement
+      - page.codeberg.lo_vely.Nucleus
       - org.turbowarp.TurboWarp
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"

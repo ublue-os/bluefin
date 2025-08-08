@@ -14,7 +14,7 @@ echo "::endgroup::"
 echo "::group:: Copy Files"
 
 # Copy ISO list for `install-system-flaptaks`
-install -Dm0644 -t /etc/ublue-os/ /ctx/iso_files/*.list
+install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
 
 # Copy Files to Container
 cp -r /ctx/just /tmp/just

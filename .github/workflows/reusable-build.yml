@@ -43,7 +43,8 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Maximize build space
-        uses: ublue-os/container-storage-action@main
+        uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
+        continue-on-error: true
         with:
           target-dir: /var/lib/containers
           mount-opts: compress-force=zstd:2
@@ -121,7 +122,7 @@ jobs:
         id: load-rechunk
         shell: bash
         run: |
-          just load-rechunk "${{ matrix.base_name }}" \
+          sudo -E $(command -v just) load-rechunk "${{ matrix.base_name }}" \
                             "${{ env.DEFAULT_TAG }}" \
                             "${{ matrix.image_flavor }}"
 
@@ -129,7 +130,7 @@ jobs:
         id: secureboot
         shell: bash
         run: |
-          just secureboot "${{ matrix.base_name }}" \
+          sudo -E $(command -v just) secureboot "${{ matrix.base_name }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ matrix.image_flavor }}"
 
@@ -156,7 +157,7 @@ jobs:
         shell: bash
         run: |
           set -eoux pipefail
-          just tag-images "${{ env.IMAGE_NAME }}" \
+          sudo -E $(command -v just) tag-images "${{ env.IMAGE_NAME }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ steps.generate-tags.outputs.alias_tags }}"
 
@@ -185,7 +186,7 @@ jobs:
             set -euox pipefail
 
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-              podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+              sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
             done
 
             if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
@@ -195,8 +196,8 @@ jobs:
               surface_name="${image_name/hwe/surface}"
 
               for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-                podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
-                podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
+                sudo -E podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
+                sudo -E podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
               done
             fi
 
