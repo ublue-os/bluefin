@@ -3,6 +3,17 @@ name: Build ISOs (Live Anaconda)
 
 on:
   workflow_dispatch:
+    inputs:
+      image_version:
+        description: 'Which image version to build'
+        type: choice
+        required: true
+        default: 'all'
+        options:
+          - lts
+          - gts
+          - stable
+          - all
   pull_request:
     paths:
       - ".github/workflows/reusable-build-iso-anaconda.yml"
