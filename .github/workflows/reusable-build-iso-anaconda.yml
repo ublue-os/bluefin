@@ -3,6 +3,25 @@ name: Build ISOs (Live Anaconda)
 
 on:
   workflow_dispatch:
+    inputs:
+      image_version:
+        description: 'Which image version to build'
+        type: choice
+        required: true
+        default: 'all'
+        options:
+          - lts
+          - gts
+          - stable
+          - all
+      upload_artifacts:
+        description: 'Upload ISOs as job artifacts'
+        type: boolean
+        default: false
+      upload_r2:
+        description: 'Upload ISOs to Cloudflare R2'
+        type: boolean
+        default: true
   pull_request:
     paths:
       - ".github/workflows/reusable-build-iso-anaconda.yml"
@@ -25,7 +44,7 @@ jobs:
       matrix:
         platform: [amd64]
         flavor: ["main", "nvidia-open"]
-        image_version: ["gts", "stable"]
+        image_version: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.image_version == 'all' && fromJSON('["gts", "stable", "lts"]') || fromJSON(format('["{0}"]', github.event.inputs.image_version))) || fromJSON('["gts", "stable"]') }}
         include:
           - platform: amd64
             flavor: "main"
@@ -100,7 +119,6 @@ jobs:
           hook-post-rootfs: ${{ matrix.image_version == 'lts' && format('{0}/iso_files/configure_lts_iso_anaconda.sh', github.workspace) || format('{0}/iso_files/configure_iso_anaconda.sh', github.workspace) }}
           kargs: ${{ steps.image_ref.outputs.kargs }}
           builder-distro: ${{ matrix.image_version == 'lts' && 'centos' || 'fedora' }}
-          
 
       - name: Rename ISO
         id: rename
@@ -118,7 +136,7 @@ jobs:
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
       - name: Upload to Job Artifacts
-        if: github.ref_name == 'testing'
+        if: github.ref_name == 'testing' || (github.event_name == 'workflow_dispatch' && github.event.inputs.upload_artifacts)
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ steps.image_ref.outputs.artifact_format }}
@@ -126,7 +144,7 @@ jobs:
           path: ${{ steps.rename.outputs.output_directory }}
 
       - name: Upload to CloudFlare
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || github.event.inputs.upload_r2)
         shell: bash
         env:
           RCLONE_CONFIG_R2_TYPE: s3
