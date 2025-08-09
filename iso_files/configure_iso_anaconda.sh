@@ -88,11 +88,10 @@ efi_dir = fedora
 menu_auto_hide = True
 
 [Storage]
-default_scheme = LVM
+file_system_type = xfs
 default_partitioning =
     /     (min 1 GiB, max 70 GiB)
     /var (min 5 GiB, free 50 GiB)
-
 
 [User Interface]
 custom_stylesheet = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css
