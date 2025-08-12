@@ -126,7 +126,7 @@ rm -rf /root/packages
 
 # Interactive Kickstart
 tee -a /usr/share/anaconda/interactive-defaults.ks <<EOF
-ostreecontainer --url=ghcr.io/ublue-os/bluefin:lts --transport=containers-storage --no-signature-verification
+ostreecontainer --url=$IMAGE_REF:$IMAGE_TAG --transport=containers-storage --no-signature-verification
 %include /usr/share/anaconda/post-scripts/install-configure-upgrade.ks
 %include /usr/share/anaconda/post-scripts/install-flatpaks.ks
 EOF
