@@ -1,4 +1,3 @@
-app/be.alexandervanhee.gradia
 app/com.github.PintaProject.Pinta
 app/com.github.rafostar.Clapper
 app/com.github.tchx84.Flatseal
@@ -8,7 +7,6 @@ app/io.github.flattool.Ignition
 app/io.github.flattool.Warehouse
 app/io.gitlab.adhami3310.Impression
 app/io.missioncenter.MissionCenter
-app/it.mijorus.smile
 app/org.gnome.Calculator
 app/org.gnome.Calendar
 app/org.gnome.Characters
