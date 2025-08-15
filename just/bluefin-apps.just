@@ -189,7 +189,7 @@ install-k8s-dev-tools:
 
 # Install AI tools
 [group('Apps')]
-install-AI-tools:
+install-ai-tools:
     #!/usr/bin/bash
     echo "🧠🤖 Adding AI tools..."
     brew bundle --file /usr/share/ublue-os/homebrew/bluefin-ai.Brewfile
