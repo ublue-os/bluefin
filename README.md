@@ -94,6 +94,27 @@ All incorporated components maintain their respective licenses and attributions.
 
 ![Alt](https://repobeats.axiom.co/api/embed/40b85b252bf6ea25eb90539d1adcea013ccae69a.svg "Repobeats analytics image")
 
+<!-- Copy-paste in your Readme.md file -->
+
+<a href="https://next.ossinsight.io/widgets/official/compose-org-participants-growth?activity=new&period=past_90_days&owner_id=120078124&repo_ids=611397346" target="_blank" style="display: block" align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=dark" width="657" height="auto">
+    <img alt="New trends of ublue-os" src="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=light" width="657" height="auto">
+  </picture>
+</a>
+
+<!-- Made with [OSS Insight](https://ossinsight.io/) -->
+
+<!-- Copy-paste in your Readme.md file -->
+
+<a href="https://next.ossinsight.io/widgets/official/compose-org-participants-growth?activity=active&period=past_90_days&owner_id=120078124&repo_ids=611397346" target="_blank" style="display: block" align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=active&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=dark" width="657" height="auto">
+    <img alt="Active trends of ublue-os" src="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=active&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=light" width="657" height="auto">
+  </picture>
+</a>
+
+
 ## Star History
 
 <a href="https://star-history.com/#ublue-os/bluefin&Date">
