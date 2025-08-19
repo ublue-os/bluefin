@@ -33,7 +33,14 @@ function rebase_helper() {
 
   # Step 1: Choose image variant
   echo "Select your Bluefin image:"
-  IMAGE_OPTIONS=(bluefin bluefin-dx cancel)
+  IMAGE_OPTIONS=(bluefin bluefin-dx)
+  
+  # Add current image if it's not already in the list
+  if [[ ! " ${IMAGE_OPTIONS[*]} " =~ \ ${IMAGE_NAME}\  ]]; then
+    IMAGE_OPTIONS+=("${IMAGE_NAME}")
+  fi
+  
+  IMAGE_OPTIONS+=(cancel)
   selected_image=$(Choose "${IMAGE_OPTIONS[@]}")
   [[ "$selected_image" == "cancel" ]] && exit 0
 
