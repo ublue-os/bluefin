@@ -39,4 +39,10 @@ if [[ -f /usr/share/applications/io.github.kolunmi.Bazaar.desktop ]] && jq -e '.
   sed -i 's|^Exec=bazaar window --auto-service$|Exec=env GSK_RENDERER=opengl bazaar window --auto-service|' /usr/share/applications/io.github.kolunmi.Bazaar.desktop
 fi
 
+# NVIDIA GTK4 bug
+# https://github.com/ublue-os/aurora/issues/841
+if jq -e '.["image-flavor"] | test("nvidia")' /usr/share/ublue-os/image-info.json >/dev/null; then
+  echo "GSK_RENDERER=ngl" >/usr/lib/environment.d/gsk.conf
+fi
+
 echo "::endgroup::"
