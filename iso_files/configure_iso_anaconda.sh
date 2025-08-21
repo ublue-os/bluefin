@@ -49,7 +49,7 @@ systemctl --global disable ublue-user-setup.service
 
 # Install Anaconda, Webui if >= F42
 SPECS=(
-    "libblockdev-btrfs"
+    "xfsprogs"
     "libblockdev-lvm"
     "libblockdev-dm"
     "anaconda-live"
@@ -91,7 +91,7 @@ menu_auto_hide = True
 file_system_type = xfs
 default_partitioning =
     /     (min 1 GiB, max 70 GiB)
-    /var (min 5 GiB, free 50 GiB)
+    /var  (min 5 GiB, free 50 GiB)
 
 [User Interface]
 custom_stylesheet = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css
