@@ -1,0 +1,9 @@
+#!/bin/bash
+# Install Ramalama from homebrew
+# This script will run on login and install Ramalama if not already installed
+if ! command -v ramalama &> /dev/null; then
+    echo "Ramalama is not installed. Installing now..."
+    brew install ramalama
+else
+    echo "Ramalama is already installed."
+fi

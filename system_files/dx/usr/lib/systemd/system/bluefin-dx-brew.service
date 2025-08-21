@@ -1,0 +1,9 @@
+[Unit]
+Description=Run bluefin-dx-brew once on user login
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/bluefin-dx-brew
+
+[Install]
+WantedBy=default.target
