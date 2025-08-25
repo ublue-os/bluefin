@@ -37,6 +37,7 @@
 				"gum",
 				"hplip",
 				"ibus-mozc",
+				"igt-gpu-tools",
 				"ifuse",
 				"input-remapper",
 				"iwd",
