@@ -61,4 +61,4 @@ jobs:
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
           body_path: ./changelog.md
           make_latest: ${{ matrix.version == 'stable' }}
-          prerelease: ${{ matrix.version != 'stable' }}
+          prerelease: false
