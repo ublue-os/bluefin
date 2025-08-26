@@ -204,6 +204,7 @@ sections:
       - me.iepure.devtoolbox
       - io.kinvolk.Headlamp
       - de.leopoldluley.Clapgrep
+      - com.mardojai.ForgeSparks
       - io.dbeaver.DBeaverCommunity
       - cc.arduino.IDE2
       - sh.loft.devpod
