@@ -46,8 +46,7 @@ css: |
     background: linear-gradient(to top, #2a0e07, #371610, #441e16, #52271a, #60301e, #6d3a25, #79442c, #864e33, #955b40, #a3694d, #b2775a, #c18568);
   }
   .ai-section {
-    background: linear-gradient(to right bottom, #6ba6df, #5d92c8, #4e7fb2, #406c9c, #325a87, #2e5682, #29517e, #254d79, #2a5483, #2e5c8d, #336398, #386ba2);
-
+    background: linear-gradient(90deg, #004466 0%, #507aa2 35%, #004466 100%);
   }
 sections:
   - title: "Bluefin Recommends"
