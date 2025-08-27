@@ -1,46 +1,52 @@
 css: |
-  .bazzite-section {
-     margin: 20px;
-     border-radius: 14px;
-     background: linear-gradient(to right, alpha(var(--accent-color), 0.2), alpha(var(--accent-bg-color), 0.3));
-  }
-  .bazzite-section banner {
-     margin-top: 20px;
-     margin-left: 20px;
-     margin-right: 20px;
+  .bluefin-section banner {
+     margin-top: 30px;
+     margin-left: 30px;
+     margin-right: 30px;
      border-radius: 10px;
-     filter: brightness(40%);
-     font-size: 3em;
   }
-  .bazzite-section banner-text-overlay {
+  .bluefin-section banner-text-overlay {
      margin: 30px;
      padding: 20px;
   }
-  .bazzite-section banner-text {
-     padding: 80px;
-     color: lighter(var(--accent-color));
-  }
-  .bazzite-section title {
+  .bluefin-section banner-text {
+     padding: 50px;
      color: #ffffff;
   }
-  .bazzite-section subtitle {
+  .bluefin-section title {
      color: #ffffff;
-     font-weight: 400;
   }
-  .bazzite-section entry {
-     background: linear-gradient(to right, alpha(var(--accent-color), 0.2), alpha(var(--accent-bg-color), 0.1));
-     transition-property: background;
-     transition-duration: 0.25s;
+  .bluefin-section subtitle {
+    color: #ffffff;
+    font-weight: 400;
   }
-  .bazzite-section entry:hover {
-     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.3), alpha(var(--accent-color), 0.4));
-     transition-property: background;
-     transition-duration: 0.75s;
+  .bluefin-section {
+    margin: 15px;
+    border-radius: 25px;
   }
-  .bazzite-section entry:active {
-     background: linear-gradient(to right, alpha(var(--accent-bg-color), 0.6), alpha(var(--accent-color), 0.5));
-     transition-property: background;
-     transition-duration: 0.15s;
+  .bluefin-section {
+    background: linear-gradient(to right top, #260e0c, #2f1414, #391a1a, #43201f, #4e2625, #572e2b, #613532, #6a3d38, #744840, #7e5349, #875e52, #916a5c);}
+  .browser-section {
+    background: linear-gradient(to left top, #252b57, #2b305b, #32365f, #383b63, #3e4167, #43476b, #494c6e, #4e5272, #545877, #5a5f7b, #606580, #666c84);
+  }
+  .music-section {
+    background: linear-gradient(to top, #0e2335, #0f273b, #112b41, #122f47, #13334d, #153751, #163a56, #183e5a, #1b425d, #1d4561, #204964, #234d67);
+  }
+  .office-section {
+    background: linear-gradient(to left top, #2a2d2c, #343833, #42423a, #544b41, #67544e, #785f5c, #886b6c, #98777d, #ad888d, #c39a9c, #d9acac, #efbebc);
+  }
+  .gaming-section {
+    background: linear-gradient(to left top, #234432, #274b37, #2a533c, #2e5a42, #326247, #36694d, #3b7152, #3f7858, #458060, #4c8867, #52906f, #599877);
+
+  }
+  .utilities-section {
+    background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
+  }
+  .dev-section {
+    background: linear-gradient(to top, #2a0e07, #371610, #441e16, #52271a, #60301e, #6d3a25, #79442c, #864e33, #955b40, #a3694d, #b2775a, #c18568);
+  }
+  .ai-section {
+    background: linear-gradient(90deg, #004466 0%, #507aa2 35%, #004466 100%);
   }
 sections:
   - title: "Bluefin Recommends"
@@ -52,7 +58,7 @@ sections:
     banner-text-valign: start
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
     appids:
       - re.sonny.Eloquent
       - page.codeberg.libre_menu_editor.LibreMenuEditor
@@ -75,7 +81,8 @@ sections:
     banner-text-valign: start
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
+      - browser-section
     appids:
       - org.mozilla.firefox
       - com.brave.Browser
@@ -92,7 +99,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
+      - music-section
     appids:
       - com.spotify.Client
       - app.ytmdesktop.ytmdesktop
@@ -114,7 +122,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
+      - office-section
     appids:
       - com.slack.Slack
       - md.obsidian.Obsidian
@@ -141,7 +150,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
+      - gaming-section
     appids:
       - com.valvesoftware.Steam
       - com.heroicgameslauncher.hgl
@@ -166,7 +176,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
+      - utilities-section
     appids:
       - app.drey.Warp
       - org.localsend.localsend_app
@@ -196,7 +207,8 @@ sections:
     banner-text-valign: start
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
+      - dev-section
     appids:
       - io.podman_desktop.PodmanDesktop
       - org.gnome.Builder
@@ -225,7 +237,7 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
     appids:
       - org.endlessos.Key
       - io.github.david_swift.Flashcards
@@ -244,8 +256,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bazzite-section
+      - bluefin-section
+      - ai-section
     appids:
       - com.jeffser.Alpaca
       - io.github.qwersyk.Newelle
-  
