@@ -15,20 +15,10 @@ css: |
   }
   .bluefin-section title {
      color: #ffffff;
-     text-shadow:
-      -1px -1px 0 black,
-       1px -1px 0 black,
-      -1px  1px 0 black,
-       1px  1px 0 black;
   }
   .bluefin-section subtitle {
     color: #ffffff;
     font-weight: 400;
-    text-shadow:
-      -1px -1px 0 black,
-       1px -1px 0 black,
-      -1px  1px 0 black,
-       1px  1px 0 black;
   }
   .bluefin-section {
     margin: 15px;
