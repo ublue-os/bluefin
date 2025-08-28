@@ -110,6 +110,12 @@ jobs:
           echo "artifact_format="$image_name-${{ matrix.image_version }}-$(uname -m)"" >> "${GITHUB_OUTPUT}"
           echo "kargs=$KARGS" >> "${GITHUB_OUTPUT}"
 
+      - name: Add Bazaar to LTS Flatpaks
+        if: matrix.image_version == 'lts'
+        run: |
+          set -eoux pipefail
+          echo "app/io.github.kolunmi.Bazaar" >> ${{ github.workspace }}/flatpaks/system-flatpaks.list
+
       - name: Build ISO
         id: build
         uses: ublue-os/titanoboa@main
