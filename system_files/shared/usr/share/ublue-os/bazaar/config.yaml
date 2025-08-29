@@ -36,7 +36,7 @@ css: |
     background: linear-gradient(to top, #0e2335, #0f273b, #112b41, #122f47, #13334d, #153751, #163a56, #183e5a, #1b425d, #1d4561, #204964, #234d67);
   }
   .office-section {
-    background: linear-gradient(to left top, #2a2d2c, #343833, #42423a, #544b41, #67544e, #785f5c, #886b6c, #98777d, #ad888d, #c39a9c, #d9acac, #efbebc);
+    background: linear-gradient(0deg, #2a2d2c, #b69092);
   }
   .gaming-section {
     background: linear-gradient(to left top, #234432, #274b37, #2a533c, #2e5a42, #326247, #36694d, #3b7152, #3f7858, #458060, #4c8867, #52906f, #599877);
