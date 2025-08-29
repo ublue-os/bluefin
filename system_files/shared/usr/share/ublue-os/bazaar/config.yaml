@@ -39,8 +39,7 @@ css: |
     background: linear-gradient(0deg, #2a2d2c, #b69092);
   }
   .gaming-section {
-    background: linear-gradient(to left top, #234432, #274b37, #2a533c, #2e5a42, #326247, #36694d, #3b7152, #3f7858, #458060, #4c8867, #52906f, #599877);
-
+    background: linear-gradient(0deg, #1c3727, #294a37);
   }
   .utilities-section {
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
