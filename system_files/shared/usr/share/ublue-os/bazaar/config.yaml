@@ -72,6 +72,7 @@ sections:
       - io.github.kelvinnovais.Kasasa
       - de.schmidhuberj.DieBahn
       - com.github.maoschanz.drawing
+      - io.github.swordpuffin.rewaita
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
