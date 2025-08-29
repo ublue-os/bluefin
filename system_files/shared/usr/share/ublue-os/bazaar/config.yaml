@@ -47,6 +47,8 @@ css: |
   .dev-section {
     background: linear-gradient(90deg, #2f2320 0%, #906860 50%, #2f2320 100%);
   }
+  .edu-section {
+    background: linear-gradient(0deg, #2a0e07, #7f4f39);
   }
   .ai-section {
     background: linear-gradient(90deg, #004466 0%, #507aa2 35%, #004466 100%);
@@ -242,6 +244,7 @@ sections:
     banner-height: 400
     classes:
       - bluefin-section
+      - edu-section
     appids:
       - org.endlessos.Key
       - io.github.david_swift.Flashcards
