@@ -45,7 +45,8 @@ css: |
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
   }
   .dev-section {
-    background: linear-gradient(to top, #2a0e07, #371610, #441e16, #52271a, #60301e, #6d3a25, #79442c, #864e33, #955b40, #a3694d, #b2775a, #c18568);
+    background: linear-gradient(90deg, #2f2320 0%, #906860 50%, #2f2320 100%);
+  }
   }
   .ai-section {
     background: linear-gradient(90deg, #004466 0%, #507aa2 35%, #004466 100%);
