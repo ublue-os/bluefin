@@ -11,21 +11,24 @@ css: |
   }
   .bluefin-section banner-text {
      padding: 50px;
-     color: #ffffff;
+     color: inherit;
+     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
   }
   .bluefin-section title {
-     color: #ffffff;
+     color: inherit;
   }
   .bluefin-section subtitle {
-    color: #ffffff;
+    color: inherit;
     font-weight: 400;
   }
   .bluefin-section {
     margin: 15px;
     border-radius: 25px;
+    color: #ffffff
   }
   .bluefin-section {
-    background: linear-gradient(to right top, #260e0c, #2f1414, #391a1a, #43201f, #4e2625, #572e2b, #613532, #6a3d38, #744840, #7e5349, #875e52, #916a5c);}
+    background: linear-gradient(0deg, #260e0c, #774c45);
+  }
   .browser-section {
     background: linear-gradient(to left top, #252b57, #2b305b, #32365f, #383b63, #3e4167, #43476b, #494c6e, #4e5272, #545877, #5a5f7b, #606580, #666c84);
   }
@@ -33,17 +36,19 @@ css: |
     background: linear-gradient(to top, #0e2335, #0f273b, #112b41, #122f47, #13334d, #153751, #163a56, #183e5a, #1b425d, #1d4561, #204964, #234d67);
   }
   .office-section {
-    background: linear-gradient(to left top, #2a2d2c, #343833, #42423a, #544b41, #67544e, #785f5c, #886b6c, #98777d, #ad888d, #c39a9c, #d9acac, #efbebc);
+    background: linear-gradient(0deg, #2a2d2c, #b69092);
   }
   .gaming-section {
-    background: linear-gradient(to left top, #234432, #274b37, #2a533c, #2e5a42, #326247, #36694d, #3b7152, #3f7858, #458060, #4c8867, #52906f, #599877);
-
+    background: linear-gradient(0deg, #1c3727, #294a37);
   }
   .utilities-section {
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
   }
   .dev-section {
-    background: linear-gradient(to top, #2a0e07, #371610, #441e16, #52271a, #60301e, #6d3a25, #79442c, #864e33, #955b40, #a3694d, #b2775a, #c18568);
+    background: linear-gradient(90deg, #2f2320 0%, #906860 50%, #2f2320 100%);
+  }
+  .edu-section {
+    background: linear-gradient(0deg, #2a0e07, #7f4f39);
   }
   .ai-section {
     background: linear-gradient(90deg, #004466 0%, #507aa2 35%, #004466 100%);
@@ -239,6 +244,7 @@ sections:
     banner-height: 400
     classes:
       - bluefin-section
+      - edu-section
     appids:
       - org.endlessos.Key
       - io.github.david_swift.Flashcards
