@@ -12,6 +12,7 @@ css: |
   .bluefin-section banner-text {
      padding: 50px;
      color: inherit;
+     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
   }
   .bluefin-section title {
      color: inherit;
