@@ -11,18 +11,19 @@ css: |
   }
   .bluefin-section banner-text {
      padding: 50px;
-     color: #ffffff;
+     color: inherit;
   }
   .bluefin-section title {
-     color: #ffffff;
+     color: inherit;
   }
   .bluefin-section subtitle {
-    color: #ffffff;
+    color: inherit;
     font-weight: 400;
   }
   .bluefin-section {
     margin: 15px;
     border-radius: 25px;
+    color: #ffffff
   }
   .bluefin-section {
     background: linear-gradient(to right top, #260e0c, #2f1414, #391a1a, #43201f, #4e2625, #572e2b, #613532, #6a3d38, #744840, #7e5349, #875e52, #916a5c);}
