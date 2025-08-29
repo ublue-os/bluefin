@@ -27,7 +27,8 @@ css: |
     color: #ffffff
   }
   .bluefin-section {
-    background: linear-gradient(to right top, #260e0c, #2f1414, #391a1a, #43201f, #4e2625, #572e2b, #613532, #6a3d38, #744840, #7e5349, #875e52, #916a5c);}
+    background: linear-gradient(0deg, #260e0c, #774c45);
+  }
   .browser-section {
     background: linear-gradient(to left top, #252b57, #2b305b, #32365f, #383b63, #3e4167, #43476b, #494c6e, #4e5272, #545877, #5a5f7b, #606580, #666c84);
   }
