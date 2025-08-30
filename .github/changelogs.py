@@ -381,11 +381,6 @@ def generate_changelog(
 
     changelog = CHANGELOG_FORMAT
 
-    if target == "gts":
-        changelog = changelog.splitlines()
-        del changelog[9]
-        changelog = '\n'.join(changelog)
-
     changelog = (
         changelog.replace("{handwritten}", handwritten if handwritten else HANDWRITTEN_PLACEHOLDER)
         .replace("{target}", target)
