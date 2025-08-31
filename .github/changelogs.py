@@ -51,7 +51,7 @@ From previous `{target}` version `{prev}` there have been the following changes.
 | Name | Version |
 | --- | --- |
 | **Kernel** | {pkgrel:kernel} |
-| **Gnome** | {pkgrel:gnome-control-center-filesystem} |
+| **Gnome** | {pkgrel:gnome-shell} |
 | **Mesa** | {pkgrel:mesa-filesystem} |
 | **Podman** | {pkgrel:podman} |
 | **Nvidia** | {pkgrel:nvidia-driver} |
@@ -86,7 +86,7 @@ This is an automatically generated changelog for release `{curr}`."""
 
 BLACKLIST_VERSIONS = [
     "kernel",
-    "gnome-control-center-filesystem",
+    "gnome-shell",
     "mesa-filesystem",
     "podman",
     "docker-ce",
