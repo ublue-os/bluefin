@@ -44,12 +44,11 @@ SYS_ID="$(cat /sys/devices/virtual/dmi/id/product_name)"
 if [[ "$VEN_ID" == "Framework" && "$SYS_ID" == "Laptop 13 ("* ]]; then
     echo "Framework Laptop 13 detected"
 
-    # 3.5mm jack fix. Framework 13 laptops need a quirk to disable headset presence detection for the 3.5 mm jack. The kernel auto-enables this quirk for most models but coverage is incomplete (as of kernel 6.16, Framework 13 Ryzen AI 300 is missing) so we enable it here explicitly.
-    # Kernel quirk: https://github.com/torvalds/linux/blame/v6.16/sound/pci/hda/patch_realtek.c#L11445-L11448
+    # Older versions of this script applied a modprobe flag to fix 3.5 mm jack headset detection
+    # which is no longer needed because the kernel applies this automatically.
     if [[ ! -f /etc/modprobe.d/alsa.conf ]]; then
-        echo "Applying 3.5mm audio jack fix"
-        tee /etc/modprobe.d/alsa.conf <<<"options snd-hda-intel index=1,0 model=auto,dell-headset-multi"
-        echo 0 | tee /sys/module/snd_hda_intel/parameters/power_save
+        echo "Removing obsolete 3.5mm audio jack fix"
+        rm -f /etc/modprobe.d/alsa.conf
     fi
 
     # Suspend fix for Framework 13 Ryzen 7040
