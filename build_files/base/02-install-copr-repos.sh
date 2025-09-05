@@ -1,18 +1,22 @@
 #!/usr/bin/bash
+# shellcheck disable=SC2016
 
 echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
 # Add Staging repo
-curl --retry 3 -Lo /etc/yum.repos.d/ublue-os-staging-fedora-"$(rpm -E %fedora)".repo \
-    https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"$(rpm -E %fedora)"/ublue-os-staging-fedora-"$(rpm -E %fedora)".repo
+dnf5 -y copr enable ublue-os/staging
 
-# Add Switcheroo Repo
-curl --retry 3 -Lo /etc/yum.repos.d/_copr_sentry-switcheroo-control_discrete.repo \
-    https://copr.fedorainfracloud.org/coprs/sentry/switcheroo-control_discrete/repo/fedora-"$(rpm -E %fedora)"/sentry-switcheroo-control_discrete-fedora-"$(rpm -E %fedora)".repo
+# Add Packages repo
+dnf5 -y copr enable ublue-os/packages
 
 # Add Nerd Fonts Repo
-curl --retry 3 -Lo /etc/yum.repos.d/_copr_che-nerd-fonts-"$(rpm -E %fedora)".repo https://copr.fedorainfracloud.org/coprs/che/nerd-fonts/repo/fedora-"$(rpm -E %fedora)"/che-nerd-fonts-fedora-"$(rpm -E %fedora)".repo
+dnf5 -y copr enable che/nerd-fonts
+
+# Add Terra
+dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+dnf5 -y install terra-release-extras || true
+dnf5 config-manager setopt "terra*".enabled=0
 
 echo "::endgroup::"

@@ -1,9 +1,0 @@
-[Unit]
-Description=Configure system for current user
-
-[Service]
-Type=simple
-ExecStart=/usr/libexec/ublue-user-setup
-
-[Install]
-WantedBy=default.target

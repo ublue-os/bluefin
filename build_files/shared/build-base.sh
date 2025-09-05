@@ -1,24 +1,34 @@
 #!/usr/bin/bash
 
-set -eou pipefail
+set -eoux pipefail
+
+mkdir -p /var/roothome
+
+echo "::group:: ===Install dnf5==="
+if [ "${FEDORA_MAJOR_VERSION}" -lt 41 ]; then
+    rpm-ostree install --idempotent dnf5 dnf5-plugins
+fi
+
+echo "::endgroup::"
 
 echo "::group:: Copy Files"
-# Make Alternatives Directory
-mkdir -p /var/lib/alternatives
+
+# Copy ISO list for `install-system-flaptaks`
+install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
 
 # Copy Files to Container
 cp -r /ctx/just /tmp/just
 cp /ctx/packages.json /tmp/packages.json
-cp /ctx/system_files/shared/etc/ublue-update/ublue-update.toml /tmp/ublue-update.toml
 rsync -rvK /ctx/system_files/shared/ /
-rsync -rvK /ctx/system_files/"${BASE_IMAGE_NAME}"/ /
+
+mkdir -p /tmp/scripts/helpers
+install -Dm0755 /ctx/build_files/shared/utils/ghcurl /tmp/scripts/helpers/ghcurl
+export PATH="/tmp/scripts/helpers:$PATH"
+
 echo "::endgroup::"
 
 # Generate image-info.json
 /ctx/build_files/base/00-image-info.sh
-
-# Build Fix - Fix known skew offenders
-/ctx/build_files/base/01-build-fix.sh
 
 # Get COPR Repos
 /ctx/build_files/base/02-install-copr-repos.sh
@@ -41,13 +51,7 @@ echo "::endgroup::"
 # Make HWE changes
 /ctx/build_files/base/09-hwe-additions.sh
 
-# Install Brew
-/ctx/build_files/base/10-brew.sh
-
 ## late stage changes
-
-# Make sure Bootc works
-/ctx/build_files/base/16-bootc.sh
 
 # Systemd and Remove Items
 /ctx/build_files/base/17-cleanup.sh
@@ -60,10 +64,8 @@ echo "::endgroup::"
 
 # Clean Up
 echo "::group:: Cleanup"
-mv /var/lib/alternatives /staged-alternatives
 /ctx/build_files/shared/clean-stage.sh
-mkdir -p /var/lib && mv /staged-alternatives /var/lib/alternatives &&
-    mkdir -p /var/tmp &&
+mkdir -p /var/tmp &&
     chmod -R 1777 /var/tmp
 ostree container commit
 echo "::endgroup::"

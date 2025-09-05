@@ -18,10 +18,7 @@ on:
       kernel_pin:
         description: "The full kernel version to pin"
         type: string
-    outputs:
-      images:
-        description: "An array of images built and pushed to the registry"
-        value: ${{ jobs.check.outputs.images }}
+
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
@@ -34,8 +31,6 @@ jobs:
     name: image
     runs-on: ubuntu-24.04
     continue-on-error: false
-    outputs:
-      image_full: ${{ steps.generate-outputs.outputs.image }}
     strategy:
       fail-fast: false
       matrix:
@@ -45,11 +40,18 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
-      - name: Install Just
-        shell: bash
-        run: bash .github/workflows/shared/install-just.sh
+      - name: Maximize build space
+        uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
+        continue-on-error: true
+        with:
+          target-dir: /var/lib/containers
+          mount-opts: compress-force=zstd:2
+          loopback-free: 0.9
+
+      - name: Setup Just
+        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
 
       - name: Check Just Syntax
         shell: bash
@@ -71,26 +73,47 @@ jobs:
           echo "Default Tag: ${DEFAULT_TAG}"
           echo "DEFAULT_TAG=${DEFAULT_TAG}" >> $GITHUB_ENV
 
-      - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@5a8b0374222a6fffddb1be9516b5fece9483bed0 # v8
-        with:
-          remove-codeql: true
-
       - name: Build Image
         id: build-image
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo just repo_organization="${{ github.repository_owner }}" \
+          sudo -E $(command -v just) repo_organization="${{ github.repository_owner }}" \
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
                                "${{ inputs.kernel_pin }}"
 
+      - name: Setup Syft
+        id: setup-syft
+        if: false
+        uses: anchore/sbom-action/download-syft@da167eac915b4e86f08b264dbdbc867b61be6f0c # v0
+        with:
+          syft-version: v1.20.0
+
+      - name: Generate SBOM
+        if: false
+        id: generate-sbom
+        env:
+          IMAGE: ${{ env.IMAGE_NAME }}
+          STREAM_NAME: ${{ matrix.stream_name }}
+          SYFT_CMD: ${{ steps.setup-syft.outputs.cmd }}
+        run: |
+          sudo systemctl start podman.socket
+
+          OUTPUT_PATH="$(mktemp -d)/sbom.json"
+          export SYFT_PARALLELISM=$(($(nproc)*2))
+          sudo $SYFT_CMD ${IMAGE}:${STREAM_NAME} -o spdx-json=${OUTPUT_PATH}
+          echo "OUTPUT_PATH=${OUTPUT_PATH}" >> $GITHUB_OUTPUT
+
       - name: Rechunk Image
         id: rechunk-image
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo just rechunk "${{ matrix.base_name }}" \
+          sudo -E $(command -v just) rechunk "${{ matrix.base_name }}" \
                             "${{ matrix.stream_name }}" \
                             "${{ matrix.image_flavor }}" \
                             "1"
@@ -99,7 +122,7 @@ jobs:
         id: load-rechunk
         shell: bash
         run: |
-          just load-rechunk "${{ matrix.base_name }}" \
+          sudo -E $(command -v just) load-rechunk "${{ matrix.base_name }}" \
                             "${{ env.DEFAULT_TAG }}" \
                             "${{ matrix.image_flavor }}"
 
@@ -107,7 +130,7 @@ jobs:
         id: secureboot
         shell: bash
         run: |
-          just secureboot "${{ matrix.base_name }}" \
+          sudo -E $(command -v just) secureboot "${{ matrix.base_name }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ matrix.image_flavor }}"
 
@@ -134,7 +157,7 @@ jobs:
         shell: bash
         run: |
           set -eoux pipefail
-          just tag-images "${{ env.IMAGE_NAME }}" \
+          sudo -E $(command -v just) tag-images "${{ env.IMAGE_NAME }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ steps.generate-tags.outputs.alias_tags }}"
 
@@ -163,7 +186,7 @@ jobs:
             set -euox pipefail
 
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-              podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+              sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
             done
 
             if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
@@ -173,14 +196,18 @@ jobs:
               surface_name="${image_name/hwe/surface}"
 
               for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-                podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
-                podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
+                sudo -E podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
+                sudo -E podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
               done
             fi
 
             digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
 
             echo "digest=${digest}" >> $GITHUB_OUTPUT
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@d58896d6a1865668819e1d91763c7751a165e159 # v3.9.2
+        if: github.event_name != 'pull_request'
 
       - name: Sign container image
         if: github.event_name != 'pull_request'
@@ -205,61 +232,27 @@ jobs:
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
-      - name: Generate file containing outputs
-        if: github.event_name != 'pull_request'
+      - name: Add SBOM Attestation
+        if: false
         env:
+          IMAGE: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           DIGEST: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
-          IMAGE_REGISTRY: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          FEDORA_VERSION: ${{ matrix.stream_name }}
-        run: echo "${IMAGE_REGISTRY}@${DIGEST}" > "${IMAGE_NAME}-${FEDORA_VERSION}.txt"
-
-      - name: Upload artifact
-        if: github.event_name != 'pull_request'
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4
-        with:
-          name: image-${{ env.IMAGE_NAME }}-${{ matrix.stream_name }}
-          retention-days: 1
-          if-no-files-found: error
-          path: |
-            ${{ env.IMAGE_NAME }}-${{ matrix.stream_name }}.txt
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          SBOM_OUTPUT: ${{ steps.generate-sbom.outputs.OUTPUT_PATH }}
+        run: |
+          cd "$(dirname "$SBOM_OUTPUT")"
+          cosign attest -y \
+            --predicate ./sbom.json \
+            --type spdxjson \
+            --key env://COSIGN_PRIVATE_KEY \
+            "${IMAGE}@${DIGEST}"
 
   check:
     name: Check all ${{ matrix.stream_name }} builds successful
     if: always()
     runs-on: ubuntu-latest
     needs: [build_container]
-    outputs:
-      images: ${{ steps.generate-outputs.outputs.images }}
     steps:
-      - name: Download artifacts
-        if: github.event_name != 'pull_request'
-        id: download-artifacts
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
-        with:
-          pattern: image-*
-          merge-multiple: true
-
-      - name: Create output
-        if: github.event_name != 'pull_request'
-        id: generate-outputs
-        env:
-          JOBS: ${{ toJson(needs) }}
-          ARTIFACT_PATH: ${{ steps.download-artifacts.outputs.download-path }}
-        run: |
-          # Initialize the array
-          images=()
-
-          # Populate the array with each line from each file in the artifacts directory
-          for file in $ARTIFACT_PATH/*; do
-              while IFS= read -r line; do
-                images+=("$line")
-              done < "$file"
-          done
-
-          # Create the GITHUB_OUTPUT in the format '["image1", "image2", ...]'
-          echo "images=$(printf '%s\n' "${images[@]}" | jq -R -s -c 'split("\n") | .[:-1]')" >> $GITHUB_OUTPUT
-
       - name: Check Jobs
         env:
           JOBS: ${{ toJson(needs) }}

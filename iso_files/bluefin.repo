@@ -1,0 +1,10 @@
+[copr:copr.fedorainfracloud.org:ublue-os:bluefin]
+name=Copr repo for bluefin owned by ublue-os
+baseurl=https://download.copr.fedorainfracloud.org/results/ublue-os/bluefin/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/ublue-os/bluefin/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1

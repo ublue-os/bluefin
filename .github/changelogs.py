@@ -51,7 +51,7 @@ From previous `{target}` version `{prev}` there have been the following changes.
 | Name | Version |
 | --- | --- |
 | **Kernel** | {pkgrel:kernel} |
-| **Gnome** | {pkgrel:gnome-control-center-filesystem} |
+| **Gnome** | {pkgrel:gnome-shell} |
 | **Mesa** | {pkgrel:mesa-filesystem} |
 | **Podman** | {pkgrel:podman} |
 | **Nvidia** | {pkgrel:nvidia-driver} |
@@ -61,7 +61,6 @@ From previous `{target}` version `{prev}` there have been the following changes.
 | --- | --- |
 | **Incus** | {pkgrel:incus} |
 | **Docker** | {pkgrel:docker-ce} |
-| **Devpod** | {pkgrel:devpod} |
 
 {changes}
 
@@ -87,7 +86,7 @@ This is an automatically generated changelog for release `{curr}`."""
 
 BLACKLIST_VERSIONS = [
     "kernel",
-    "gnome-control-center-filesystem",
+    "gnome-shell",
     "mesa-filesystem",
     "podman",
     "docker-ce",
@@ -381,11 +380,6 @@ def generate_changelog(
     title = CHANGELOG_TITLE.format_map(defaultdict(str, tag=curr, pretty=pretty))
 
     changelog = CHANGELOG_FORMAT
-
-    if target == "gts":
-        changelog = changelog.splitlines()
-        del changelog[9]
-        changelog = '\n'.join(changelog)
 
     changelog = (
         changelog.replace("{handwritten}", handwritten if handwritten else HANDWRITTEN_PLACEHOLDER)

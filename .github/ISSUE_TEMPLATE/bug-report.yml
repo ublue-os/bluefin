@@ -10,7 +10,7 @@ body:
     attributes:
       label: Describe the bug
       description: A clear and concise description of what the bug is.
-      placeholder: Tell us what happened!
+      placeholder: Tell us what happened! WE DO NOT SUPPORT REBASING FROM ANOTHER OS! If you went off the beaten path we cannot help you!
       value: "When I entered 2 + 2, I got the answer 6."
     validations:
       required: true

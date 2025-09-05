@@ -10,7 +10,7 @@ HOME_URL="https://projectbluefin.io"
 DOCUMENTATION_URL="https://docs.projectbluefin.io"
 SUPPORT_URL="https://github.com/ublue-os/bluefin/issues/"
 BUG_SUPPORT_URL="https://github.com/ublue-os/bluefin/issues/"
-CODE_NAME="Archaeopteryx"
+CODE_NAME="Deinonychus"
 VERSION="${VERSION:-00.00000000}"
 
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
@@ -20,6 +20,9 @@ IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 image_flavor="main"
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
   image_flavor="nvidia"
+fi
+if [[ "${IMAGE_NAME}" =~ nvidia-open ]]; then
+  image_flavor="nvidia-open"
 fi
 
 cat >$IMAGE_INFO <<EOF
@@ -36,7 +39,7 @@ EOF
 
 # OS Release File
 sed -i "s|^VARIANT_ID=.*|VARIANT_ID=$IMAGE_NAME|" /usr/lib/os-release
-sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"${IMAGE_PRETTY_NAME} (Version: ${VERSION} / FROM Fedora ${BASE_IMAGE_NAME^} $FEDORA_MAJOR_VERSION)\"|" /usr/lib/os-release
+sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"${IMAGE_PRETTY_NAME} (Version: ${VERSION})\"|" /usr/lib/os-release
 sed -i "s|^NAME=.*|NAME=\"$IMAGE_PRETTY_NAME\"|" /usr/lib/os-release
 sed -i "s|^HOME_URL=.*|HOME_URL=\"$HOME_URL\"|" /usr/lib/os-release
 sed -i "s|^DOCUMENTATION_URL=.*|DOCUMENTATION_URL=\"$DOCUMENTATION_URL\"|" /usr/lib/os-release
