@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout last 500 commits (for <commits> to work)
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           fetch-depth: 500
 
@@ -54,11 +54,11 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
         if: contains(fromJson('["gts", "stable"]'), matrix.version) && (github.event.schedule == '50 5 * * 0' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
         with:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
           body_path: ./changelog.md
           make_latest: ${{ matrix.version == 'stable' }}
-          prerelease: ${{ matrix.version != 'stable' }}
+          prerelease: false

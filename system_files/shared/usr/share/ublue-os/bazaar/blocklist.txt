@@ -20,7 +20,9 @@ com.visualstudio.code-oss
 com.vscodium.codium
 com.vscodium.codium-insiders
 dev.neovide.neovide
+io.github.kolunmi.Bazaar
 io.github.zyedidia.micro
 io.neovim.nvim
 org.gnu.emacs
 org.vim.Vim
+
