@@ -171,7 +171,7 @@ sections:
       - com.valvesoftware.SteamLink
       - org.gnome.Mahjongg
       - io.github.fragglet.sdl_sopwith
-      - org.gnome.Sudoku
+      - io.github.sepehr_rs.Sudoku
       - org.wesnoth.Wesnoth
   - title: "Utilities"
     subtitle: "Gear up and kit out"
