@@ -243,7 +243,9 @@ def get_versions(manifests: dict[str, Any]):
     pkgs = get_packages(manifests)
     for img_pkgs in pkgs.values():
         for pkg, v in img_pkgs.items():
-            versions[pkg] = re.sub(FEDORA_PATTERN, "", v)
+            v = re.sub(FEDORA_PATTERN, "", v)
+            v = re.sub(r"\.switcheroo", "", v)
+            versions[pkg] = v
     return versions
 
 

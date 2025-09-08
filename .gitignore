@@ -11,3 +11,8 @@ output.env
 version.txt
 
 devcontainer
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
