@@ -58,6 +58,12 @@ jobs:
           - platform: arm64
             flavor: gdx
             image_version: lts
+          - platform: amd64
+            flavor: "main"
+            image_version: lts-hwe
+          - platform: arm64
+            flavor: "main"
+            image_version: lts-hwe
     permissions:
       contents: read
       packages: read
@@ -111,7 +117,7 @@ jobs:
           echo "kargs=$KARGS" >> "${GITHUB_OUTPUT}"
 
       - name: Add Bazaar to LTS Flatpaks
-        if: matrix.image_version == 'lts'
+        if: matrix.image_version == 'lts' || matrix.image_version == 'lts-hwe'
         run: |
           set -eoux pipefail
           echo "app/io.github.kolunmi.Bazaar" >> ${{ github.workspace }}/flatpaks/system-flatpaks.list
@@ -122,9 +128,9 @@ jobs:
         with:
           image-ref: ${{ steps.image_ref.outputs.image_ref }}:${{ matrix.image_version }}
           flatpaks-list: ${{ github.workspace }}/flatpaks/system-flatpaks.list
-          hook-post-rootfs: ${{ matrix.image_version == 'lts' && format('{0}/iso_files/configure_lts_iso_anaconda.sh', github.workspace) || format('{0}/iso_files/configure_iso_anaconda.sh', github.workspace) }}
+          hook-post-rootfs: ${{ (matrix.image_version == 'lts' || matrix.image_version == 'lts-hwe') && format('{0}/iso_files/configure_lts_iso_anaconda.sh', github.workspace) || format('{0}/iso_files/configure_iso_anaconda.sh', github.workspace) }}
           kargs: ${{ steps.image_ref.outputs.kargs }}
-          builder-distro: ${{ matrix.image_version == 'lts' && 'centos' || 'fedora' }}
+          builder-distro: ${{ (matrix.image_version == 'lts' || matrix.image_version == 'lts-hwe') && 'centos' || 'fedora' }}
 
       - name: Rename ISO
         id: rename
