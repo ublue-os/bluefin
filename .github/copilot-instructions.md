@@ -245,3 +245,12 @@ The `packages.json` file defines package inclusion/exclusion per Fedora version:
 - Repository structure has changed significantly
 
 This repository is complex but well-structured. Following these instructions will significantly reduce build failures and exploration time.
+
+## Other Rules that are Important to the Maintainers
+
+- Ensure that [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) are used and enforced for every commit and pull request title.
+- Always be surgical with the least amount of code, the project strives to be easy to maintain.
+- Documentation for this project exists in ublue-os/bluefin-docs
+- Bluefin LTS exists in ublue-os/bluefin-lts
+
+
