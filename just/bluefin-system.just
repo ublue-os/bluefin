@@ -332,7 +332,7 @@ toggle-tailscale:
         fi
     fi
 
-# Toggle IWD 
+# Toggle IWD
 [group('System')]
 toggle-iwd:
     #!/usr/bin/bash

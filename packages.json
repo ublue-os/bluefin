@@ -210,7 +210,7 @@
 		},
 		"exclude": {
 			"all": [
-  				"gnome-software"		
+  				"gnome-software"
 			],
 			"dx": []
 		}

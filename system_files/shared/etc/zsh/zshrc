@@ -195,7 +195,7 @@ colors
 # Sourcing
 #####################
 
-# Brew 
+# Brew
 if [[ -o interactive ]] && [[ -d /home/linuxbrew/.linuxbrew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   if type brew &>/dev/null; then

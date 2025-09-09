@@ -17,7 +17,7 @@ body:
   - type: textarea
     id: bodhi
     attributes:
-      label: Bodhi Link (Optional)  
+      label: Bodhi Link (Optional)
       description: Add the bodhi link to the working version, this is very useful in order to pin a package quickly
       placeholder: Bodhi link
       value: "Pin to this version please: https://bodhi.fedoraproject.org/updates/FEDORA-2024-45d587348e"

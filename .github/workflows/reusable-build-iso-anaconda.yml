@@ -102,7 +102,7 @@ jobs:
         env:
           FLAVOR: ${{ matrix.flavor }}
         run: |
-          set -eoux pipefail          
+          set -eoux pipefail
           image_name=$(just image_name "bluefin" "${{ matrix.image_version}}" "${{ matrix.flavor}}")
           image_ref="${IMAGE_REGISTRY}/${image_name}"
           KARGS="NONE"
