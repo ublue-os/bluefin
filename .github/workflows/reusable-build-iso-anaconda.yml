@@ -61,7 +61,6 @@ jobs:
               "lts-hwe")
                 matrix='{"include":[
                   {"platform":"amd64","flavor":"main","image_version":"lts-hwe"},
-                  {"platform":"amd64","flavor":"nvidia-open","image_version":"lts-hwe"},
                   {"platform":"arm64","flavor":"main","image_version":"lts-hwe"}
                 ]}'
                 ;;
@@ -88,7 +87,6 @@ jobs:
                   {"platform":"amd64","flavor":"gdx","image_version":"lts"},
                   {"platform":"arm64","flavor":"gdx","image_version":"lts"},
                   {"platform":"amd64","flavor":"main","image_version":"lts-hwe"},
-                  {"platform":"amd64","flavor":"nvidia-open","image_version":"lts-hwe"},
                   {"platform":"arm64","flavor":"main","image_version":"lts-hwe"}
                 ]}'
                 ;;
