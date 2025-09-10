@@ -53,7 +53,6 @@ jobs:
               "lts")
                 matrix='{"include":[
                   {"platform":"amd64","flavor":"main","image_version":"lts"},
-                  {"platform":"amd64","flavor":"nvidia-open","image_version":"lts"},
                   {"platform":"arm64","flavor":"main","image_version":"lts"},
                   {"platform":"amd64","flavor":"gdx","image_version":"lts"},
                   {"platform":"arm64","flavor":"gdx","image_version":"lts"}
@@ -85,7 +84,6 @@ jobs:
                   {"platform":"amd64","flavor":"main","image_version":"stable"},
                   {"platform":"amd64","flavor":"nvidia-open","image_version":"stable"},
                   {"platform":"amd64","flavor":"main","image_version":"lts"},
-                  {"platform":"amd64","flavor":"nvidia-open","image_version":"lts"},
                   {"platform":"arm64","flavor":"main","image_version":"lts"},
                   {"platform":"amd64","flavor":"gdx","image_version":"lts"},
                   {"platform":"arm64","flavor":"gdx","image_version":"lts"},
