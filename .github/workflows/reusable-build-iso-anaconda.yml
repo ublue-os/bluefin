@@ -1,7 +1,7 @@
 ---
 name: Build ISOs (Live Anaconda)
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       image_version:
