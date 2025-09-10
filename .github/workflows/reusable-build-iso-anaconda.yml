@@ -101,7 +101,9 @@ jobs:
             ]}'
           fi
           
-          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+          # Compact the JSON and output it
+          compact_matrix=$(echo "$matrix" | jq -c .)
+          echo "matrix=$compact_matrix" >> $GITHUB_OUTPUT
           echo "Generated matrix:"
           echo "$matrix" | jq .
 
