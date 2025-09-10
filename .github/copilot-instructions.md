@@ -252,5 +252,3 @@ This repository is complex but well-structured. Following these instructions wil
 - Always be surgical with the least amount of code, the project strives to be easy to maintain.
 - Documentation for this project exists in ublue-os/bluefin-docs
 - Bluefin LTS exists in ublue-os/bluefin-lts
-
-
