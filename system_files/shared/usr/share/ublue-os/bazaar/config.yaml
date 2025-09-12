@@ -1,31 +1,32 @@
 css: |
-  .bluefin-section banner {
+  .global-section banner {
      margin-top: 30px;
      margin-left: 30px;
      margin-right: 30px;
      border-radius: 10px;
   }
-  .bluefin-section banner-text-overlay {
+  .global-section banner-text-overlay {
      margin: 30px;
      padding: 20px;
   }
-  .bluefin-section banner-text {
+  .global-section banner-text {
      padding: 50px;
      color: inherit;
      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
   }
-  .bluefin-section title {
+  .global-section title {
      color: inherit;
   }
-  .bluefin-section subtitle {
+  .global-section subtitle {
     color: inherit;
     font-weight: 400;
   }
-  .bluefin-section {
+  .global-section {
     margin: 15px;
     border-radius: 25px;
     color: #ffffff
   }
+
   .bluefin-section {
     background: linear-gradient(0deg, #260e0c, #774c45);
   }
@@ -63,6 +64,8 @@ sections:
     banner-text-valign: start
     banner-height: 400
     classes:
+      - global-section
+    dark-classes:
       - bluefin-section
     appids:
       - re.sonny.Eloquent
@@ -87,7 +90,8 @@ sections:
     banner-text-valign: start
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - browser-section
     appids:
       - org.mozilla.firefox
@@ -105,7 +109,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - music-section
     appids:
       - com.spotify.Client
@@ -128,7 +133,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - office-section
     appids:
       - com.slack.Slack
@@ -156,7 +162,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - gaming-section
     appids:
       - com.valvesoftware.Steam
@@ -182,7 +189,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - utilities-section
     appids:
       - app.drey.Warp
@@ -213,7 +221,8 @@ sections:
     banner-text-valign: start
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - dev-section
     appids:
       - io.podman_desktop.PodmanDesktop
@@ -243,7 +252,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - edu-section
     appids:
       - org.endlessos.Key
@@ -263,7 +273,8 @@ sections:
     banner-text-valign: end
     banner-height: 400
     classes:
-      - bluefin-section
+      - global-section
+    dark-classes:
       - ai-section
     appids:
       - com.jeffser.Alpaca
