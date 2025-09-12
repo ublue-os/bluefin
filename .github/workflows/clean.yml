@@ -17,7 +17,7 @@ jobs:
         uses: dataaxiom/ghcr-cleanup-action@cd0cdb900b5dbf3a6f2cc869f0dbb0b8211f50c4 # v1.0.16
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          packages: bluefin,bluefin-asus-nvidia,bluefin-dx,bluefin-dx-asus-nvidia,bluefin-dx-hwe,bluefin-dx-hwe-nvidia,bluefin-dx-nvidia,bluefin-hwe,bluefin-nvidia
+          packages: bluefin,bluefin-nvidia,bluefin-nvidia-open,bluefin-hwe,bluefin-hwe-nvidia,bluefin-hwe-nvidia-open,bluefin-asus,bluefin-asus-nvidia,bluefin-asus-nvidia-open,bluefin-surface,bluefin-surface-nvidia,bluefin-surface-nvidia-open,bluefin-dx,bluefin-dx-nvidia,bluefin-dx-nvidia-open,bluefin-dx-hwe,bluefin-dx-hwe-nvidia,bluefin-dx-hwe-nvidia-open,bluefin-dx-asus,bluefin-dx-asus-nvidia,bluefin-dx-asus-nvidia-open,bluefin-dx-surface,bluefin-dx-surface-nvidia,bluefin-dx-surface-nvidia-open
           older-than: 90 days
           delete-orphaned-images: true
           keep-n-tagged: 7
