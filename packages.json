@@ -116,6 +116,7 @@
 				"docker-ce",
 				"docker-ce-cli",
 				"docker-compose-plugin",
+				"docker-model-plugin",
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
