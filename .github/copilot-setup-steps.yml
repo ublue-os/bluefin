@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+      - name: Install and cache homebrew packages
+        uses: tecolicom/actions-use-homebrew-tools@v1
+        with:
+          tools: just, podman, buildah
 
-    - name: Install Packages
-      run: sudo apt-get update && sudo apt-get install -y just podman buildah
