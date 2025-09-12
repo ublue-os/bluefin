@@ -100,7 +100,7 @@ jobs:
               {"platform":"amd64","flavor":"nvidia-open","image_version":"stable"}
             ]}'
           fi
-          
+
           # Compact the JSON and output it
           compact_matrix=$(echo "$matrix" | jq -c .)
           echo "matrix=$compact_matrix" >> $GITHUB_OUTPUT
