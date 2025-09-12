@@ -89,7 +89,7 @@ menu_auto_hide = True
 file_system_type = xfs
 default_partitioning =
     /     (min 5 GiB, max 70 GiB)
-    /var  (min 5 GiB) 
+    /var  (min 5 GiB)
 
 [User Interface]
 custom_stylesheet = /usr/share/anaconda/pixmaps/silverblue/fedora-silverblue.css

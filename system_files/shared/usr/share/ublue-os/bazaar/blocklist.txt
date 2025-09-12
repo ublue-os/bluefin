@@ -25,4 +25,3 @@ io.github.zyedidia.micro
 io.neovim.nvim
 org.gnu.emacs
 org.vim.Vim
-
