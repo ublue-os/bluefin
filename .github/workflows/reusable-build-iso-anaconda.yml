@@ -32,10 +32,6 @@ env:
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
   IMAGE_NAME: "bluefin"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
-  cancel-in-progress: true
-
 jobs:
   # Define which variants to build based on input
   determine-matrix:
