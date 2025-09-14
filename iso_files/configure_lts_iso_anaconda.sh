@@ -52,7 +52,7 @@ SPECS=(
     "libblockdev-dm"
     "libblockdev-btrfs"
     "anaconda-live"
-    "anaconda-webui"
+    "anaconda-webui-49"
     "firefox"
 )
 
