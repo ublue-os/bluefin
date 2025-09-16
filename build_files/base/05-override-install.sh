@@ -4,18 +4,6 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-
-# Enable Terra repo (Extras does not exist on F40)
-# shellcheck disable=SC2016
-dnf5 -y swap \
-    --repo="terra, terra-extras" \
-    gnome-shell gnome-shell
-dnf5 versionlock add gnome-shell
-dnf5 -y swap \
-    --repo="terra, terra-extras" \
-    switcheroo-control switcheroo-control
-dnf5 versionlock add switcheroo-control
-
 # Fix for ID in fwupd
 dnf5 -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
