@@ -180,20 +180,6 @@ install-incus:
     echo 'Installing and configuring Incus.'
     /usr/libexec/bluefin-incus
 
-# Install Kubernetes CLI dev tools
-[group('Apps')]
-install-k8s-dev-tools:
-    #!/usr/bin/bash
-    echo "☸️🛠️ Adding Kubernetes command line tools..."
-    brew bundle --file /usr/share/ublue-os/homebrew/kubernetes.Brewfile
-
-# Install AI tools
-[group('Apps')]
-install-ai-tools:
-    #!/usr/bin/bash
-    echo "🧠🤖 Adding AI tools..."
-    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-ai.Brewfile
-
 # Set up command-not-found for Homebrew
 [group('Apps')]
 setup-brew-not-found ACTION="":
