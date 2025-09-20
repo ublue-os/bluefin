@@ -189,8 +189,8 @@ jobs:
           set -x
           mkdir -p output
           OUTPUT_DIRECTORY="$(realpath output)"
-          sha256sum "${OUTPUT_PATH}" | tee "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso-CHECKSUM"
           mv "${OUTPUT_PATH}" "${OUTPUT_DIRECTORY}/${OUTPUT_NAME}.iso"
+          (cd "${OUTPUT_DIRECTORY}" && sha256sum "${OUTPUT_NAME}.iso" | tee "${OUTPUT_NAME}.iso-CHECKSUM")
           echo "output_directory=$OUTPUT_DIRECTORY" >> "${GITHUB_OUTPUT}"
 
       - name: Upload to Job Artifacts
