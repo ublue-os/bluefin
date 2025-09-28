@@ -243,6 +243,7 @@ sections:
       - dev.geopjr.Collision
       - io.github.tobagin.digger
       - app.drey.Elastic
+      - io.github.mfat.sshpilot
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
