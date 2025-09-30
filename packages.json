@@ -119,6 +119,7 @@
 				"edk2-ovmf",
 				"flatpak-builder",
 				"genisoimage",
+				"git-subtree",
 				"git-svn",
 				"google-droid-sans-mono-fonts",
 				"google-go-mono-fonts",
