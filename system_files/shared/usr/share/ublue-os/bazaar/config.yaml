@@ -48,6 +48,9 @@ css: |
   .office-section {
     background: linear-gradient(0deg, #2a2d2c, #b69092);
   }
+  .office-section-dark {
+    background: linear-gradient(to top, #030a15, #070e19, #0a111d, #0d1421, #0f1625, #131c2f, #17233a, #1c2945, #25365b, #2f4371, #3a5088, #465ea0);
+  }
   .gaming-section {
     background: linear-gradient(0deg, #1c3727, #294a37);
   }
@@ -145,7 +148,8 @@ sections:
   - title: "Office & Productivity"
     subtitle: "Work Smarter"
     rows: 4
-    light-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-day.png
+    light-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-day.jxl
+    dark-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
@@ -154,6 +158,8 @@ sections:
       - global-section
     light-classes:
       - office-section
+    dark-classes:
+      - office-section-dark
     appids:
       - com.slack.Slack
       - md.obsidian.Obsidian
