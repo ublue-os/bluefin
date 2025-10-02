@@ -52,7 +52,10 @@ css: |
     background: linear-gradient(to top, #030a15, #070e19, #0a111d, #0d1421, #0f1625, #131c2f, #17233a, #1c2945, #25365b, #2f4371, #3a5088, #465ea0);
   }
   .gaming-section {
-    background: linear-gradient(0deg, #1c3727, #294a37);
+    background: linear-gradient(0deg, #1c3727, #85d0b0);
+  }
+  .gaming-section-dark {
+    background: linear-gradient(0deg, #080914, #393a58);
   }
   .utilities-section {
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
@@ -180,7 +183,8 @@ sections:
   - title: "Games"
     subtitle: "Protocol Three: Protect the Pilot"
     rows: 3
-    light-banner: file:///usr/share/ublue-os/bazaar/04-bluefin-day.png
+    light-banner: file:///usr/share/ublue-os/bazaar/04-bluefin-day.jxl
+    dark-banner: file:///usr/share/ublue-os/bazaar/04-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -189,6 +193,8 @@ sections:
       - global-section
     light-classes:
       - gaming-section
+    dark-classes:
+      - gaming-section-dark
     appids:
       - com.valvesoftware.Steam
       - com.heroicgameslauncher.hgl
