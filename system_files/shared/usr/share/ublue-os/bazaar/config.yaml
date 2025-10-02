@@ -58,14 +58,14 @@ sections:
   - title: "Bluefin Recommends"
     subtitle: "Our Favorite Applications"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/11-bluefin.png
+    light-banner: file:///usr/share/ublue-os/bazaar/11-bluefin-day.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - bluefin-section
     appids:
       - re.sonny.Eloquent
@@ -84,14 +84,14 @@ sections:
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/01-bluefin.png
+    light-banner: file:///usr/share/ublue-os/bazaar/01-bluefin-day.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - browser-section
     appids:
       - org.mozilla.firefox
@@ -103,14 +103,14 @@ sections:
   - title: "Media"
     subtitle: "The Freedom of Music"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/02-bluefin.png
+    light-banner: file:///usr/share/ublue-os/bazaar/02-bluefin-day.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - music-section
     appids:
       - com.spotify.Client
@@ -127,14 +127,14 @@ sections:
   - title: "Office & Productivity"
     subtitle: "Work Smarter"
     rows: 4
-    banner: file:///usr/share/ublue-os/bazaar/03-bluefin.png
+    light-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-day.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - office-section
     appids:
       - com.slack.Slack
@@ -156,14 +156,14 @@ sections:
   - title: "Games"
     subtitle: "Protocol Three: Protect the Pilot"
     rows: 3
-    banner: file:///usr/share/ublue-os/bazaar/04-bluefin.png
+    light-banner: file:///usr/share/ublue-os/bazaar/04-bluefin-day.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - gaming-section
     appids:
       - com.valvesoftware.Steam
@@ -183,7 +183,7 @@ sections:
   - title: "Utilities"
     subtitle: "Gear up and kit out"
     rows: 4
-    banner: file:///usr/share/ublue-os/bazaar/05-bluefin.png
+    dark-banner: file:///usr/share/ublue-os/bazaar/05-bluefin-night.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -215,14 +215,14 @@ sections:
   - title: "Developers"
     subtitle: "Unleash the power of Cloud Native"
     rows: 4
-    banner: file:///usr/share/ublue-os/bazaar/06-bluefin.png
+    light-banner: file:///usr/share/ublue-os/bazaar/06-bluefin-day.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - dev-section
     appids:
       - io.podman_desktop.PodmanDesktop
@@ -247,14 +247,14 @@ sections:
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
-    banner: file:///usr/share/ublue-os/bazaar/10-bluefin.png
+    light-banner: file:///usr/share/ublue-os/bazaar/10-bluefin-day.png
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - edu-section
     appids:
       - org.endlessos.Key
@@ -268,7 +268,7 @@ sections:
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
     rows: 1
-    banner: file:///usr/share/ublue-os/bazaar/08-bluefin.png
+    dark-banner: file:///usr/share/ublue-os/bazaar/08-bluefin-night.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
