@@ -33,6 +33,9 @@ css: |
   .browser-section {
     background: linear-gradient(to left top, #252b57, #2b305b, #32365f, #383b63, #3e4167, #43476b, #494c6e, #4e5272, #545877, #5a5f7b, #606580, #666c84);
   }
+  .browser-section-dark {
+    background: linear-gradient(to right top, #1f2843, #252e49, #2c344f, #323a56, #39405c, #414865, #494f6e, #515777, #5d6385, #696f93, #757ba2, #8288b1);
+  }
   .music-section {
     background: linear-gradient(to top, #0e2335, #0f273b, #112b41, #122f47, #13334d, #153751, #163a56, #183e5a, #1b425d, #1d4561, #204964, #234d67);
   }
@@ -84,7 +87,8 @@ sections:
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
-    light-banner: file:///usr/share/ublue-os/bazaar/01-bluefin-day.png
+    light-banner: file:///usr/share/ublue-os/bazaar/01-bluefin-day.jxl
+    dark-banner: file:///usr/share/ublue-os/bazaar/01-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
@@ -93,6 +97,8 @@ sections:
       - global-section
     light-classes:
       - browser-section
+    dark-classes:
+      - browser-section-dark
     appids:
       - org.mozilla.firefox
       - com.brave.Browser
