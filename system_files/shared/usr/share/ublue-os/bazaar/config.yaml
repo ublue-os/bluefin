@@ -64,7 +64,10 @@ css: |
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
   }
   .dev-section {
-    background: linear-gradient(90deg, #2f2320 0%, #906860 50%, #2f2320 100%);
+    background: linear-gradient(90deg, #8c4d38 0%, #906860 55%, #8c4d38 100%);
+  }
+  .dev-section-dark {
+    background: linear-gradient(90deg, #241a23 0%, #75554e 55%, #241a23 100%);
   }
   .edu-section {
     background: linear-gradient(0deg, #2a0e07, #7f4f39);
@@ -254,7 +257,8 @@ sections:
   - title: "Developers"
     subtitle: "Unleash the power of Cloud Native"
     rows: 4
-    light-banner: file:///usr/share/ublue-os/bazaar/06-bluefin-day.png
+    light-banner: file:///usr/share/ublue-os/bazaar/06-bluefin-day.jxl
+    dark-banner: file:///usr/share/ublue-os/bazaar/06-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -263,6 +267,8 @@ sections:
       - global-section
     light-classes:
       - dev-section
+    dark-classes:
+      - dev-section-dark
     appids:
       - io.podman_desktop.PodmanDesktop
       - org.gnome.Builder
