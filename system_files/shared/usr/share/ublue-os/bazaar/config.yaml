@@ -67,6 +67,9 @@ css: |
     background: linear-gradient(0deg, #2a0e07, #7f4f39);
   }
   .ai-section {
+    background: linear-gradient(90deg, #b56537 0%, #ffb267 35%, #b56537 100%);
+  }
+  .ai-section-dark {
     background: linear-gradient(90deg, #004466 0%, #507aa2 35%, #004466 100%);
   }
 sections:
@@ -298,15 +301,18 @@ sections:
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
     rows: 1
-    dark-banner: file:///usr/share/ublue-os/bazaar/08-bluefin-night.png
+    light-banner: file:///usr/share/ublue-os/bazaar/08-bluefin-day.jxl
+    dark-banner: file:///usr/share/ublue-os/bazaar/08-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - ai-section
+    dark-classes:
+      - ai-section-dark
     appids:
       - com.jeffser.Alpaca
       - io.github.qwersyk.Newelle
