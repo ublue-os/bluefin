@@ -24,7 +24,7 @@ css: |
   .global-section {
     margin: 15px;
     border-radius: 25px;
-    color: #ffffff
+    color: #ffffff;
   }
 
   .bluefin-section {
