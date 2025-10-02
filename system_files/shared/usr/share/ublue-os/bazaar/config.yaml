@@ -33,54 +33,63 @@ css: |
   .rec-section-dark {
     background: linear-gradient(to top, #0d0e19, #111324, #13182f, #161b3b, #1a1f47, #1e2351, #22275c, #272b66, #2c3171, #31387d, #363e88, #3b4594);
   }
+
   .browser-section {
     background: linear-gradient(to left top, #252b57, #2b305b, #32365f, #383b63, #3e4167, #43476b, #494c6e, #4e5272, #545877, #5a5f7b, #606580, #666c84);
   }
   .browser-section-dark {
     background: linear-gradient(to left top, #1f2843, #252e49, #2c344f, #323a56, #39405c, #414865, #494f6e, #515777, #5d6385, #696f93, #757ba2, #8288b1);
   }
+
   .music-section {
     background: linear-gradient(0deg, #356c94, #64aec7);
   }
   .music-section-dark {
     background: linear-gradient(to top, #10202c, #122432, #152937, #172d3d, #1a3243, #1f394b, #244053, #29475b, #325368, #3b5f74, #446b81, #4d788e);
   }
+
   .office-section {
     background: linear-gradient(0deg, #2a2d2c, #b69092);
   }
   .office-section-dark {
     background: linear-gradient(to top, #030a15, #070e19, #0a111d, #0d1421, #0f1625, #131c2f, #17233a, #1c2945, #25365b, #2f4371, #3a5088, #465ea0);
   }
+
   .gaming-section {
     background: linear-gradient(0deg, #1c3727, #85d0b0);
   }
   .gaming-section-dark {
     background: linear-gradient(0deg, #080914, #393a58);
   }
+
   .utilities-section {
     background: linear-gradient(to left top, #282217, #373227, #474438, #585549, #69685c, #747468, #808175, #8c8e82, #94988c, #9da395, #a5ada0, #adb8aa);
   }
   .utilities-section-dark {
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
   }
+
   .dev-section {
     background: linear-gradient(90deg, #8c4d38 0%, #906860 55%, #8c4d38 100%);
   }
   .dev-section-dark {
     background: linear-gradient(90deg, #241a23 0%, #75554e 55%, #241a23 100%);
   }
+
   .edu-section {
     background: linear-gradient(45deg, #2a0e07, #7f4f39);
   }
   .edu-section-dark {
     background: linear-gradient(45deg, #2b1c2c, #4C6897);
   }
+
   .ai-section {
     background: linear-gradient(90deg, #b56537 0%, #ffb267 35%, #b56537 100%);
   }
   .ai-section-dark {
     background: linear-gradient(90deg, #004466 0%, #507aa2 35%, #004466 100%);
   }
+
 sections:
   - title: "Bluefin Recommends"
     subtitle: "Our Favorite Applications"
@@ -111,6 +120,7 @@ sections:
       - de.schmidhuberj.DieBahn
       - com.github.maoschanz.drawing
       - io.github.swordpuffin.rewaita
+
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
@@ -133,6 +143,7 @@ sections:
       - com.microsoft.Edge
       - com.opera.Opera
       - com.vivaldi.Vivaldi
+
   - title: "Media"
     subtitle: "The Freedom of Music"
     rows: 2
@@ -160,6 +171,7 @@ sections:
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
       - com.rafaelmardojai.Blanket
+
   - title: "Office & Productivity"
     subtitle: "Work Smarter"
     rows: 4
@@ -192,6 +204,7 @@ sections:
       - org.ardour.Ardour
       - org.gnome.Fractal
       - org.gnome.gitlab.YaLTeR.VideoTrimmer
+
   - title: "Games"
     subtitle: "Protocol Three: Protect the Pilot"
     rows: 3
@@ -222,6 +235,7 @@ sections:
       - io.github.fragglet.sdl_sopwith
       - io.github.sepehr_rs.Sudoku
       - org.wesnoth.Wesnoth
+
   - title: "Utilities"
     subtitle: "Gear up and kit out"
     rows: 4
@@ -257,6 +271,7 @@ sections:
       - com.github.finefindus.eyedropper
       - io.github.plrigaux.sysd-manager
       - org.mozilla.vpn
+
   - title: "Developers"
     subtitle: "Unleash the power of Cloud Native"
     rows: 4
@@ -292,6 +307,7 @@ sections:
       - io.github.tobagin.digger
       - app.drey.Elastic
       - io.github.mfat.sshpilot
+
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
@@ -316,6 +332,7 @@ sections:
       - io.github.josephmawa.Egghead
       - page.codeberg.lo_vely.Nucleus
       - org.turbowarp.TurboWarp
+
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
     rows: 1
