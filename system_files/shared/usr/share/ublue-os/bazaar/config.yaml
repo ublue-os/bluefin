@@ -58,6 +58,9 @@ css: |
     background: linear-gradient(0deg, #080914, #393a58);
   }
   .utilities-section {
+    background: linear-gradient(to top, #282217, #373227, #474438, #585549, #69685c, #747468, #808175, #8c8e82, #94988c, #9da395, #a5ada0, #adb8aa);
+  }
+  .utilities-section-dark {
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
   }
   .dev-section {
@@ -216,15 +219,18 @@ sections:
   - title: "Utilities"
     subtitle: "Gear up and kit out"
     rows: 4
-    dark-banner: file:///usr/share/ublue-os/bazaar/05-bluefin-night.png
+    light-banner: file:///usr/share/ublue-os/bazaar/05-bluefin-day.jxl
+    dark-banner: file:///usr/share/ublue-os/bazaar/05-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
     banner-height: 400
     classes:
       - global-section
-    dark-classes:
+    light-classes:
       - utilities-section
+    dark-classes:
+      - utilities-section-dark
     appids:
       - app.drey.Warp
       - org.localsend.localsend_app
