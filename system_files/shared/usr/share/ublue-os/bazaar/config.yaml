@@ -27,8 +27,11 @@ css: |
     color: #ffffff;
   }
 
-  .bluefin-section {
+  .rec-section {
     background: linear-gradient(0deg, #260e0c, #774c45);
+  }
+  .rec-section-dark {
+    background: linear-gradient(to top, #0d0e19, #111324, #13182f, #161b3b, #1a1f47, #1e2351, #22275c, #272b66, #2c3171, #31387d, #363e88, #3b4594);
   }
   .browser-section {
     background: linear-gradient(to left top, #252b57, #2b305b, #32365f, #383b63, #3e4167, #43476b, #494c6e, #4e5272, #545877, #5a5f7b, #606580, #666c84);
@@ -64,7 +67,8 @@ sections:
   - title: "Bluefin Recommends"
     subtitle: "Our Favorite Applications"
     rows: 3
-    light-banner: file:///usr/share/ublue-os/bazaar/11-bluefin-day.png
+    light-banner: file:///usr/share/ublue-os/bazaar/11-bluefin-day.jxl
+    dark-banner: file:///usr/share/ublue-os/bazaar/11-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -72,7 +76,9 @@ sections:
     classes:
       - global-section
     light-classes:
-      - bluefin-section
+      - rec-section
+    dark-classes:
+      - rec-section-dark
     appids:
       - re.sonny.Eloquent
       - page.codeberg.libre_menu_editor.LibreMenuEditor
