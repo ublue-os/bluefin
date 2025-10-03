@@ -11,12 +11,14 @@ css: |
   }
   .global-section banner-text {
      padding: 50px;
-     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+     text-shadow: 1px 1px 4px rgba(0, 0, 5, 1);
   }
   .global-section title {
+     text-shadow: 1px 1px 4px rgba(0, 0, 5, 1);
   }
   .global-section subtitle {
     font-weight: 400;
+    text-shadow: 4px 4px 8px rgba(0, 0, 5, 1);
   }
 
   .global-section app-tile > button {
