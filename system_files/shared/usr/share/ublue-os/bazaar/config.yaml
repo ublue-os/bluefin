@@ -18,6 +18,11 @@ css: |
   .global-section subtitle {
     font-weight: 400;
   }
+
+  .global-section app-tile > button {
+    background-color: alpha(white, 0.1);
+  }
+
   .global-section {
     margin: 15px;
     border-radius: 25px;
