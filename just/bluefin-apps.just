@@ -280,7 +280,7 @@ setup-speech-support ACTION="":
         mkdir -p $HOME/.config/systemd/user
         # Copy the systemd user service if not already present
         if [ ! -f $HOME/.config/systemd/user/speech-dispatcherd.service ]; then
-            cp /usr/etc/systemd/user/speech-dispatcherd.service $HOME/.config/systemd/user/
+            cp /usr/lib/systemd/user/speech-dispatcherd.service $HOME/.config/systemd/user/
         fi
         # Disable system speech-dispatcher if running
         if systemctl is-enabled speech-dispatcherd.service 2>/dev/null; then
