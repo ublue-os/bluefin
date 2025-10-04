@@ -36,11 +36,6 @@ install-jetbrains-toolbox:
     echo "Launching JetBrains Toolbox"
     $HOME/.local/share/JetBrains/ToolboxApp/bin/jetbrains-toolbox
 
-# alias for install-incus
-[group('Apps')]
-incus:
-    @ujust install-incus
-
 # Install OpenTabletDriver, an open source, cross-platform, user-mode tablet driver
 [group('Apps')]
 install-opentabletdriver:
@@ -72,17 +67,3 @@ install-opentabletdriver:
     else
         echo "Have a good day :)!"
     fi
-
-# Install and configure Incus
-[group('Apps')]
-install-incus:
-    #!/usr/bin/env bash
-    source /usr/lib/ujust/ujust.sh
-    CURRENT_IMAGE=$(rpm-ostree status -b --json | jq -r '.deployments[0]."container-image-reference"')
-    if ! grep -e "-dx" <<< $CURRENT_IMAGE ; then
-        echo "Developer mode is currently ${b}${red}Disabled${n}."
-        echo "Run \"ujust devmode\" to turn on Developer mode."
-        exit
-    fi
-    echo 'Installing and configuring Incus.'
-    /usr/libexec/bluefin-incus
