@@ -32,7 +32,7 @@ css: |
   }
 
   .rec-section {
-    background: linear-gradient(0deg, #260e0c, #774c45);
+    background: linear-gradient(0deg, #774c45, #a5897b);
   }
   .rec-section-dark {
     background: linear-gradient(to top, #0d0e19, #111324, #13182f, #161b3b, #1a1f47, #1e2351, #22275c, #272b66, #2c3171, #31387d, #363e88, #3b4594);
