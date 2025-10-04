@@ -41,6 +41,15 @@ css: |
   .browser-section {
     background: linear-gradient(to left top, #252b57, #2b305b, #32365f, #383b63, #3e4167, #43476b, #494c6e, #4e5272, #545877, #5a5f7b, #606580, #666c84);
   }
+
+  .browser-section app-tile > button {
+    color: #ffffff;
+  }
+
+  .browser-section app-tile-installed-indicator {
+    color: #ffffff;
+  }
+
   .browser-section-dark {
     background: linear-gradient(to left top, #1f2843, #252e49, #2c344f, #323a56, #39405c, #414865, #494f6e, #515777, #5d6385, #696f93, #757ba2, #8288b1);
   }
