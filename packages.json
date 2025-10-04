@@ -71,6 +71,7 @@
 				"samba-winbind-clients",
 				"samba-winbind-modules",
 				"setools-console",
+				"speech-dispatcher",
 				"sssd-ad",
 				"sssd-krb5",
 				"sssd-nfs-idmap",

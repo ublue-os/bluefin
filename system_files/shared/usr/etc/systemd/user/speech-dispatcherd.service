@@ -1,0 +1,11 @@
+[Unit]
+Description=Speech-Dispatcher, common interface to speech synthesizers
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/speech-dispatcher -d -t 0
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=default.target
+Alias=speech-dispatcher.service

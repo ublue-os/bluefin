@@ -13,3 +13,6 @@ if [ "$ARCH" != "aarch64" ] ; then
 	rm -f "/var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/${ARCH}/stable/defaults/pref/*bluefin*.js"
 	/usr/bin/cp -rf /usr/share/ublue-os/firefox-config/* "/var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/${ARCH}/stable/defaults/pref/"
 fi
+
+# Set up Firefox speech-dispatcher access
+flatpak override --system --filesystem=xdg-run/speech-dispatcher:ro org.mozilla.firefox 2>/dev/null || true

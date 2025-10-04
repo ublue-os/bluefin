@@ -251,3 +251,68 @@ install-gaming-flatpaks:
                                             runtime/org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08 \
                                             runtime/org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/23.08 \
                                             runtime/com.valvesoftware.Steam.Utility.steamtinkerlaunch/x86_64/stable
+
+# Setup local speech support with Pied voices and speech-dispatcher
+[group('Apps')]
+setup-speech-support ACTION="":
+    #!/usr/bin/env bash
+    source /usr/lib/ujust/ujust.sh
+
+    OPTION={{ ACTION }}
+    if [ "$OPTION" == "help" ]; then
+        cat <<EOF
+    Usage: ujust setup-speech-support <option>
+      <option>: Specify the quick option to skip the prompt
+      Use 'install' to Install speech support with Pied voices
+      Use 'enable' to Enable speech-dispatcher user service
+      Use 'disable' to Disable speech-dispatcher user service
+      Use 'uninstall' to Uninstall Pied and disable speech support
+    EOF
+        exit 0
+    fi
+    if [ "$OPTION" == "" ]; then
+        echo "${bold}Setup Local Speech Support${normal}"
+        echo "This will install Pied for high-quality voices and configure speech-dispatcher"
+        OPTION=$(Choose "Install" "Enable" "Disable" "Uninstall" "Exit")
+    fi
+    if [[ "${OPTION,,}" =~ ^install ]]; then
+        echo "${green}${b}Installing${n} local speech support..."
+        mkdir -p $HOME/.config/systemd/user
+        # Copy the systemd user service if not already present
+        if [ ! -f $HOME/.config/systemd/user/speech-dispatcherd.service ]; then
+            cp /usr/etc/systemd/user/speech-dispatcherd.service $HOME/.config/systemd/user/
+        fi
+        # Disable system speech-dispatcher if running
+        if systemctl is-enabled speech-dispatcherd.service 2>/dev/null; then
+            echo "Disabling system speech-dispatcher service..."
+            sudo systemctl disable speech-dispatcherd.service 2>/dev/null || true
+        fi
+        # Install Pied flatpak for better voices
+        echo "Installing Pied flatpak for high-quality voices..."
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        flatpak install -y --user flathub page.codeberg.Elleo.Pied 2>/dev/null || \
+            echo "Note: Pied may not be available on Flathub yet. You can build it from https://github.com/Elleo/pied"
+        # Enable and start user service
+        systemctl --user daemon-reload
+        systemctl --user enable --now speech-dispatcherd.service
+        echo "${green}${b}Speech support installed and enabled${n}"
+        echo "Firefox has been configured with speech-dispatcher access."
+        echo "In Firefox about:config, narrate.enabled and narrate.filter-voices have been set."
+    elif [[ "${OPTION,,}" =~ ^enable ]]; then
+        echo "${green}${b}Enabling${n} speech-dispatcher user service..."
+        systemctl --user daemon-reload
+        systemctl --user enable --now speech-dispatcherd.service
+        echo "${green}${b}Speech support enabled${n}"
+    elif [[ "${OPTION,,}" =~ ^disable ]]; then
+        echo "${red}${b}Disabling${n} speech-dispatcher user service..."
+        systemctl --user disable --now speech-dispatcherd.service
+        echo "${red}${b}Speech support disabled${n}"
+    elif [[ "${OPTION,,}" =~ ^uninstall ]]; then
+        echo "${red}${b}Uninstalling${n} speech support..."
+        systemctl --user disable --now speech-dispatcherd.service 2>/dev/null || true
+        rm -f $HOME/.config/systemd/user/speech-dispatcherd.service
+        flatpak uninstall -y --user page.codeberg.Elleo.Pied 2>/dev/null || true
+        echo "${red}${b}Speech support uninstalled${n}"
+    else
+        echo "Have a good day :)!"
+    fi
