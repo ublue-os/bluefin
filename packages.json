@@ -85,6 +85,7 @@
 				"uld",
 				"usbip",
 				"usbmuxd",
+				"uupd",
 				"waypipe",
 				"wireguard-tools",
 				"wl-clipboard",
@@ -176,6 +177,7 @@
 				"firefox-langpacks",
 				"gnome-extensions-app",
 				"gnome-shell-extension-background-logo",
+				"gnome-software",
 				"gnome-software-rpm-ostree",
 				"gnome-terminal-nautilus",
 				"podman-docker",
@@ -184,36 +186,4 @@
 			"dx": []
 		}
 	},
-	"41": {
-		"include": {
-			"all": [
-				"epson-inkjet-printer-escpr",
-				"epson-inkjet-printer-escpr2",
-				"google-noto-fonts-all"
-			],
-			"dx": []
-		},
-		"exclude": {
-			"all": [
-
-			],
-			"dx": []
-		}
-	},
-	"42": {
-		"include": {
-			"all": [
-				"bazaar",
-				"google-noto-fonts-all",
-				"uupd"
-			],
-			"dx": []
-		},
-		"exclude": {
-			"all": [
-  				"gnome-software"
-			],
-			"dx": []
-		}
-	}
 }
