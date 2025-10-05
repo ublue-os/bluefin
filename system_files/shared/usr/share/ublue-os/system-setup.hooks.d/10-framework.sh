@@ -71,3 +71,17 @@ if [[ "$VEN_ID" == "Framework" && "$SYS_ID" == "Laptop 13 ("* ]]; then
         fi
     fi
 fi
+
+# Install framework_tool for Framework laptops
+if [[ ":Framework:" =~ :$VEN_ID: ]]; then
+    echo "Framework laptop detected, installing framework_tool in the background"
+
+    # Check if Homebrew is available and if it is tap and install framework_tool
+    if command -v brew &> /dev/null; then
+        echo "Installing framework_tool from ublue-os/homebrew-tap"
+        brew tap ublue-os/tap
+        brew install --cask framework_tool
+    else
+        echo "Warning: brew not found, skipping framework_tool installation"
+    fi
+fi
