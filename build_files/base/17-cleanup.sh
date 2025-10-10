@@ -27,6 +27,10 @@ systemctl enable input-remapper.service
 
 # Autostart bazaar
 systemctl --global enable bazaar.service
+
+# run flatpak preinstall once at startup
+systemctl enable flatpak-preinstall.service
+
 # Updater
 if systemctl cat -- uupd.timer &> /dev/null; then
     systemctl enable uupd.timer
