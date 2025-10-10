@@ -64,6 +64,13 @@ css: |
   .office-section {
     background: linear-gradient(0deg, #2a2d2c, #b69092);
   }
+  .office-section app-tile > button {
+    color: #ffffff;
+  }
+  .office-section app-tile-installed-indicator {
+    color: #ffffff;
+  }
+
   .office-section-dark {
     background: linear-gradient(to top, #030a15, #070e19, #0a111d, #0d1421, #0f1625, #131c2f, #17233a, #1c2945, #25365b, #2f4371, #3a5088, #465ea0);
   }
@@ -96,6 +103,13 @@ css: |
   .edu-section {
     background: linear-gradient(45deg, #2a0e07, #7f4f39);
   }
+  .edu-section app-tile > button {
+    color: #ffffff;
+  }
+  .edu-section app-tile-installed-indicator {
+    color: #ffffff;
+  }
+
   .edu-section-dark {
     background: linear-gradient(45deg, #2b1c2c, #4C6897);
   }
@@ -195,7 +209,7 @@ sections:
     light-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-day.jxl
     dark-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-night.jxl
     banner-fit: cover
-    banner-text-halign: end
+    banner-text-halign: start
     banner-text-valign: end
     banner-height: 400
     classes:
