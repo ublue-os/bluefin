@@ -125,8 +125,8 @@ sections:
   - title: "Bluefin Recommends"
     subtitle: "Our Favorite Applications"
     rows: 3
-    light-banner: file:///usr/share/ublue-os/bazaar/11-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/11-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/11-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/11-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -155,8 +155,8 @@ sections:
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
-    light-banner: file:///usr/share/ublue-os/bazaar/01-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/01-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/01-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/01-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
@@ -178,8 +178,8 @@ sections:
   - title: "Media"
     subtitle: "The Freedom of Music"
     rows: 2
-    light-banner: file:///usr/share/ublue-os/bazaar/02-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/02-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/02-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/02-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
@@ -206,8 +206,8 @@ sections:
   - title: "Office & Productivity"
     subtitle: "Work Smarter"
     rows: 4
-    light-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/03-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/03-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/03-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -239,8 +239,8 @@ sections:
   - title: "Games"
     subtitle: "Protocol Three: Protect the Pilot"
     rows: 3
-    light-banner: file:///usr/share/ublue-os/bazaar/04-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/04-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/04-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/04-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -270,8 +270,8 @@ sections:
   - title: "Utilities"
     subtitle: "Gear up and kit out"
     rows: 4
-    light-banner: file:///usr/share/ublue-os/bazaar/05-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/05-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/05-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/05-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -306,8 +306,8 @@ sections:
   - title: "Developers"
     subtitle: "Unleash the power of Cloud Native"
     rows: 4
-    light-banner: file:///usr/share/ublue-os/bazaar/06-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/06-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/06-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/06-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -342,8 +342,8 @@ sections:
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
-    light-banner: file:///usr/share/ublue-os/bazaar/10-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/10-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/10-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/10-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -367,8 +367,8 @@ sections:
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
     rows: 1
-    light-banner: file:///usr/share/ublue-os/bazaar/08-bluefin-day.jxl
-    dark-banner: file:///usr/share/ublue-os/bazaar/08-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/08-bluefin-day.jxl
+    dark-banner: file:///run/host/etc/bazaar/08-bluefin-night.jxl
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
