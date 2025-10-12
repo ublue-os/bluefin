@@ -19,4 +19,7 @@ dnf5 -y install --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/te
 dnf5 -y install terra-release-extras || true
 dnf5 config-manager setopt "terra*".enabled=0
 
+# TODO: remove me on next flatpak release
+dnf5 -y copr enable ublue-os/flatpak-test
+
 echo "::endgroup::"
