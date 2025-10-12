@@ -25,8 +25,8 @@ systemctl --global enable podman-auto-update.timer
 systemctl enable check-sb-key.service
 systemctl enable input-remapper.service
 
-# Autostart bazaar
-systemctl --global enable bazaar.service
+# Autostart bazaar, enable this when we fully moved over to flatpak
+#systemctl --global enable bazaar.service
 
 # run flatpak preinstall once at startup
 systemctl enable flatpak-preinstall.service
