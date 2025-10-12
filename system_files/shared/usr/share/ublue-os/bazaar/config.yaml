@@ -245,6 +245,7 @@ sections:
       - app.drey.Elastic
       - io.github.mfat.sshpilot
       - de.philippun1.turtle
+      - org.gnome.meld
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
