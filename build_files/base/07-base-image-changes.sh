@@ -37,6 +37,10 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
     sed -i 's/\/usr\/bin\/bazaar window --auto-service/gnome-software/' /etc/dconf/db/distro.d/04-bluefin-logomenu-extension
 fi
 
+# TODO: remove me when we fully switch to flatpak bazaar and are out of the transitionary period where we have both rpm and flatpak
+cp -r system_files/shared/usr/share/ublue-os/bazaar /etc
+sed -i 's|/usr/share/ublue-os/|/run/host/etc/|g' /etc/bazaar/config.yaml
+
 # Test bluefin gschema override for errors. If there are no errors, proceed with compiling bluefin gschema, which includes setting overrides.
 mkdir -p /tmp/bluefin-schema-test
 find /usr/share/glib-2.0/schemas/ -type f ! -name "*.gschema.override" -exec cp {} /tmp/bluefin-schema-test/ \;
