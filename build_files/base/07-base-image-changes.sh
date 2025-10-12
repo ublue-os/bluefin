@@ -38,7 +38,7 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
 fi
 
 # TODO: remove me when we fully switch to flatpak bazaar and are out of the transitionary period where we have both rpm and flatpak
-cp -r system_files/shared/usr/share/ublue-os/bazaar /etc
+cp -r /usr/share/ublue-os/bazaar /etc
 sed -i 's|/usr/share/ublue-os/|/run/host/etc/|g' /etc/bazaar/config.yaml
 
 # Test bluefin gschema override for errors. If there are no errors, proceed with compiling bluefin gschema, which includes setting overrides.
