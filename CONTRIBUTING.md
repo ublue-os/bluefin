@@ -2,6 +2,14 @@
 
 This guide provides detailed instructions for contributing to [Bluefin](https://projectbluefin.io), the Fedora Atomic-based developer workstation. Whether you're fixing bugs, adding features, or improving documentation, this guide will help you contribute effectively using the workflows established by the Bluefin maintainer team.
 
+:::tip
+
+You don't need permission to contribute to your own destiny.
+
+-- Amber Graner
+
+:::
+
 ## Overview
 
 **Repository:** [@ublue-os/bluefin](https://github.com/ublue-os/bluefin)  
