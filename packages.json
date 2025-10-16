@@ -82,7 +82,6 @@
 				"ublue-motd",
 				"ublue-polkit-rules",
 				"ublue-setup-services",
-				"uld",
 				"usbip",
 				"usbmuxd",
 				"waypipe",
@@ -189,7 +188,8 @@
 			"all": [
 				"epson-inkjet-printer-escpr",
 				"epson-inkjet-printer-escpr2",
-				"google-noto-fonts-all"
+				"google-noto-fonts-all",
+				"uld"
 			],
 			"dx": []
 		},
@@ -204,7 +204,9 @@
 		"include": {
 			"all": [
 				"bazaar",
+				"evolution-ews-core",
 				"google-noto-fonts-all",
+				"uld",
 				"uupd"
 			],
 			"dx": []
@@ -212,6 +214,20 @@
 		"exclude": {
 			"all": [
   				"gnome-software"
+			],
+			"dx": []
+		}
+	},
+	"43": {
+		"include": {
+			"all": [
+				"evolution-ews-core"
+			],
+			"dx": []
+		},
+		"exclude": {
+			"all": [
+				"gnome-software"
 			],
 			"dx": []
 		}

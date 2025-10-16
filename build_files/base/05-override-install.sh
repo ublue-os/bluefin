@@ -5,16 +5,18 @@ echo "::group:: ===$(basename "$0")==="
 set -eoux pipefail
 
 
-# Enable Terra repo (Extras does not exist on F40)
+# Enable Terra repo (Extras does not exist on F40, not used for F43+)
 # shellcheck disable=SC2016
-dnf5 -y swap \
-    --repo="terra, terra-extras" \
-    gnome-shell gnome-shell
-dnf5 versionlock add gnome-shell
-dnf5 -y swap \
-    --repo="terra, terra-extras" \
-    switcheroo-control switcheroo-control
-dnf5 versionlock add switcheroo-control
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
+    dnf5 -y swap \
+        --repo="terra, terra-extras" \
+        gnome-shell gnome-shell
+    dnf5 versionlock add gnome-shell
+    dnf5 -y swap \
+        --repo="terra, terra-extras" \
+        switcheroo-control switcheroo-control
+    dnf5 versionlock add switcheroo-control
+fi
 
 # Fix for ID in fwupd
 dnf5 -y swap \
