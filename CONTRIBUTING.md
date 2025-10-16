@@ -12,10 +12,10 @@ You don't need permission to contribute to your own destiny.
 
 ## Overview
 
-**Repository:** [@ublue-os/bluefin](https://github.com/ublue-os/bluefin)  
-**License:** Apache 2.0  
-**Maintainers:** 4 core maintainers (@castrojo, @p5, @m2Giles, @tulilirockz)  
-**Daily Activity:** 8-12 commits/day (including automated updates)  
+**Repository:** [@ublue-os/bluefin](https://github.com/ublue-os/bluefin)
+**License:** Apache 2.0
+**Maintainers:** 4 core maintainers (@castrojo, @p5, @m2Giles, @tulilirockz)
+**Daily Activity:** 8-12 commits/day (including automated updates)
 **Review Time:** Manual PRs reviewed within 24-48 hours
 
 ## Understanding Bluefin's Architecture
@@ -125,13 +125,13 @@ open "https://github.com/issues?q=is%3Aopen+is%3Aissue+user%3Aublue-os+archived%
    ```bash
    # For a bug fix
    git checkout -b fix/cockpit-startup-crash
-   
+
    # For a feature
    git checkout -b feat/add-bazaar-integration
-   
+
    # For documentation
    git checkout -b docs/improve-local-build-guide
-   
+
    # For chores/maintenance
    git checkout -b chore/update-copr-repos
    ```
@@ -1034,7 +1034,7 @@ xargs flatpak --system -y install --or-update < /etc/ublue-os/system-flatpaks-dx
 
 ## Featuring Flatpaks in Bazaar
 
-Bazaar’s featured sections are defined in a YAML configuration file:  
+Bazaar’s featured sections are defined in a YAML configuration file:
 `system_files/shared/usr/share/ublue-os/bazaar/config.yaml`
 
 Each section (e.g., "Bluefin Recommends", "Browsers", "Media") contains an `appids` list specifying which Flatpaks appear in that section. To feature a Flatpak:
