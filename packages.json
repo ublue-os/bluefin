@@ -227,6 +227,7 @@
 		},
 		"exclude": {
 			"all": [
+				"fwupd",
 				"gnome-software"
 			],
 			"dx": []
