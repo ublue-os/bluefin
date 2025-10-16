@@ -204,6 +204,7 @@
 		"include": {
 			"all": [
 				"bazaar",
+				"evolution-ews-core",
 				"google-noto-fonts-all",
 				"uupd"
 			],
@@ -212,6 +213,20 @@
 		"exclude": {
 			"all": [
   				"gnome-software"
+			],
+			"dx": []
+		}
+	},
+	"43": {
+		"include": {
+			"all": [
+				"evolution-ews-core"
+			],
+			"dx": []
+		},
+		"exclude": {
+			"all": [
+				"uld"
 			],
 			"dx": []
 		}
