@@ -12,10 +12,10 @@ You don't need permission to contribute to your own destiny.
 
 ## Overview
 
-**Repository:** [@ublue-os/bluefin](https://github.com/ublue-os/bluefin)  
-**License:** Apache 2.0  
-**Maintainers:** 4 core maintainers (@castrojo, @p5, @m2Giles, @tulilirockz)  
-**Daily Activity:** 8-12 commits/day (including automated updates)  
+**Repository:** [@ublue-os/bluefin](https://github.com/ublue-os/bluefin)
+**License:** Apache 2.0
+**Maintainers:** 4 core maintainers (@castrojo, @p5, @m2Giles, @tulilirockz)
+**Daily Activity:** 8-12 commits/day (including automated updates)
 **Review Time:** Manual PRs reviewed within 24-48 hours
 
 ## Understanding Bluefin's Architecture
@@ -125,13 +125,13 @@ open "https://github.com/issues?q=is%3Aopen+is%3Aissue+user%3Aublue-os+archived%
    ```bash
    # For a bug fix
    git checkout -b fix/cockpit-startup-crash
-   
+
    # For a feature
    git checkout -b feat/add-bazaar-integration
-   
+
    # For documentation
    git checkout -b docs/improve-local-build-guide
-   
+
    # For chores/maintenance
    git checkout -b chore/update-copr-repos
    ```
@@ -991,6 +991,92 @@ git diff Containerfile
 # Confirm the pin is removed
 git commit -m "chore: remove ostree pin after upstream fix"
 ```
+
+## Flatpak Management in Bluefin
+
+### 1. Upstream to Flathub
+
+Bluefin does not host its own Flatpak repository. All graphical applications must first be published on [Flathub](https://flathub.org/). To contribute a new Flatpak:
+
+- Ensure your application meets [Flathub’s technical and legal requirements](https://docs.flathub.org/docs/for-app-authors/requirements).
+- Prepare a Flatpak manifest and test local builds using `flatpak-builder`.
+- Submit your application to Flathub by forking the [flathub/flathub](https://github.com/flathub/flathub) repository, creating a new branch, adding your manifest and required files, and opening a pull request against the `new-pr` branch. Follow the [submission guide](https://docs.flathub.org/docs/for-app-authors/submission).
+- Respond to reviewer feedback and iterate as needed. Once approved, your app will be published on Flathub and available to Bluefin users.
+
+### 2. Flatpak Quality and Maintenance
+
+Maintain your Flatpak by following [Flathub’s maintenance guidelines](https://docs.flathub.org/docs/for-app-authors/maintenance). This includes updating runtimes, responding to build failures, and ensuring metadata quality. Applications that pass all quality checks are more likely to be featured both on Flathub and in downstream curated stores like Bazaar.
+
+## Managing System Flatpaks in Bluefin
+
+System-wide Flatpaks in Bluefin are managed through configuration files that list the Flatpak application IDs to be installed by default. These files are:
+
+- `/etc/ublue-os/system-flatpaks.list` for standard system Flatpaks
+- `/etc/ublue-os/system-flatpaks-dx.list` for developer mode Flatpaks
+
+To propose changes (add, update, or remove Flatpaks):
+
+1. Edit the relevant list file in the Bluefin repository (`flatpaks/system-flatpaks.list` or `flatpaks/system-flatpaks-dx.list`) and add or remove Flatpak IDs as needed. Each line should contain a single Flatpak app ID, for example:
+   ```
+   app/org.mozilla.firefox
+   app/org.gnome.Calculator
+   ```
+2. Submit a pull request with your changes. Maintainers will review and merge as appropriate.
+
+During system provisioning or updates, Bluefin installs or updates all Flatpaks listed in these files using the following logic:
+```bash
+flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
+xargs flatpak --system -y install --or-update < /etc/ublue-os/system-flatpaks.list
+# Developer mode Flatpaks are installed if developer mode is enabled
+xargs flatpak --system -y install --or-update < /etc/ublue-os/system-flatpaks-dx.list
+```
+[Reference](https://github.com/ublue-os/bluefin/blob/3ddc76eaf5536f7340e34b2242131c2f7a455bd1/just/bluefin-system.just)
+
+## Featuring Flatpaks in Bazaar
+
+Bazaar’s featured sections are defined in a YAML configuration file:
+`system_files/shared/usr/share/ublue-os/bazaar/config.yaml`
+
+Each section (e.g., "Bluefin Recommends", "Browsers", "Media") contains an `appids` list specifying which Flatpaks appear in that section. To feature a Flatpak:
+
+1. Ensure the Flatpak is available on Flathub and not present in the Bazaar blocklist (`system_files/shared/usr/share/ublue-os/bazaar/blocklist.txt`).
+2. Edit `config.yaml` and add the Flatpak’s app ID to the `appids` list of the desired section. For example:
+   ```yaml
+   sections:
+     - title: "Bluefin Recommends"
+       appids:
+         - org.mozilla.firefox
+         - org.gnome.Calculator
+         - com.example.YourApp   # <-- Add your app here
+   ```
+3. Optionally, create a new section if your application fits a new category.
+4. Submit a pull request with your changes. The Bazaar maintainers will review and merge as appropriate.
+
+[Reference](https://github.com/ublue-os/bluefin/blob/3ddc76eaf5536f7340e34b2242131c2f7a455bd1/system_files/shared/usr/share/ublue-os/bazaar/config.yaml)
+
+## Lifecycle Management
+
+### Updates
+
+- Flatpaks are updated automatically from Flathub. When a new version is published on Flathub, Bluefin systems will receive the update during the next system Flatpak update cycle.
+- To update a Flatpak’s version, update it on Flathub. No changes are needed in Bluefin unless the app ID changes or the app is removed.
+
+### Removals
+
+- To remove a Flatpak from Bluefin’s default install, delete its entry from the relevant system Flatpak list file and/or from Bazaar’s `config.yaml`.
+- To remove a Flatpak from Flathub, follow [Flathub’s end-of-life process](https://docs.flathub.org/docs/for-app-authors/maintenance#end-of-life).
+
+### Blocklisting
+
+- Some Flatpaks are explicitly excluded from Bazaar via the `blocklist.txt` file. Do not add blocklisted app IDs to Bazaar’s featured sections.
+
+### Maintenance Responsibility
+
+- Flatpak maintainers are responsible for keeping their applications up to date on Flathub.
+- Bluefin maintainers review and merge changes to system Flatpak lists and Bazaar configuration.
+
+
+
 
 ## Fedora Upstream Reporting
 
