@@ -19,9 +19,11 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
 fi
 
 # Fix for ID in fwupd
-dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-    fwupd fwupd
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
+    dnf5 -y swap \
+        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        fwupd fwupd
+fi
 
 # TODO: remove me on next flatpak release when preinstall landed
 dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
