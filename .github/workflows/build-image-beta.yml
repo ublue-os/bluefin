@@ -1,5 +1,17 @@
 name: Beta Images
 on:
+  merge_group: # Make Stable-Daily run on merge groups
+  pull_request:
+    branches:
+      - main
+      - testing
+    paths-ignore:
+      - ".github/workflows/*iso*"
+      - "**.md"
+      - "flatpaks/**"
+      - "iso_files/**"
+  schedule:
+    - cron: "50 5 * * 0" # 5:50 UTC sunday
   workflow_call:
   workflow_dispatch:
 
