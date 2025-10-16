@@ -6,7 +6,7 @@ on:
       - main
       - testing
     paths-ignore:
-      - ".github/workflows/*iso*"
+      - ".github/workflows/*iso*.yml"
       - "**.md"
       - "flatpaks/**"
       - "iso_files/**"
