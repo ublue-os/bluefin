@@ -19,9 +19,11 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
 fi
 
 # Fix for ID in fwupd
-dnf5 -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-    fwupd fwupd
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
+    dnf5 -y swap \
+        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        fwupd fwupd
+fi
 
 # Offline Bluefin documentation
 ghcurl "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
