@@ -223,14 +223,13 @@
 			"all": [
 				"evolution-ews-core"
 			],
-			"dx": [
-				"mozilla-fira-mono-fonts"
-			]
+			"dx": []
 		},
 		"exclude": {
 			"all": [
 				"fwupd",
-				"gnome-software"
+				"gnome-software",
+				"mozilla-fira-mono-fonts"
 			],
 			"dx": []
 		}
