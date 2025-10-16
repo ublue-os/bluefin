@@ -223,7 +223,9 @@
 			"all": [
 				"evolution-ews-core"
 			],
-			"dx": []
+			"dx": [
+				"mozilla-fira-mono-fonts"
+			]
 		},
 		"exclude": {
 			"all": [
