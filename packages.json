@@ -228,7 +228,8 @@
 		"exclude": {
 			"all": [
 				"fwupd",
-				"gnome-software"
+				"gnome-software",
+				"mozilla-fira-mono-fonts"
 			],
 			"dx": []
 		}
