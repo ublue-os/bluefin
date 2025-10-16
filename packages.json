@@ -227,8 +227,7 @@
 		},
 		"exclude": {
 			"all": [
-				"gnome-software",
-				"uld"
+				"gnome-software"
 			],
 			"dx": []
 		}
