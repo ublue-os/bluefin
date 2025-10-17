@@ -12,13 +12,6 @@ cp /ctx/packages.json /tmp/packages.json
 # Copy DX flatpak list
 install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/system-flatpaks-dx.list
 
-# Copy DX beta flatpaks if this is a beta build
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    if [[ -f /ctx/flatpaks/system-flatpaks-dx-beta.list ]]; then
-        install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/system-flatpaks-dx-beta.list
-    fi
-fi
-
 rsync -rvK /ctx/system_files/dx/ /
 
 mkdir -p /tmp/scripts/helpers
