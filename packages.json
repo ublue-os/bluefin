@@ -230,7 +230,9 @@
 				"fwupd",
 				"gnome-software"
 			],
-			"dx": []
+			"dx": [
+				"mozilla-fira-mono-fonts"
+			]
 		}
 	}
 }

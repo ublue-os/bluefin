@@ -34,7 +34,6 @@ if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
   rpm -q flatpak --qf "%{NAME} %{VENDOR}\n"
 fi
 
-
 # Offline Bluefin documentation
 ghcurl "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
 install -Dm0644 -t /usr/share/doc/bluefin/ /tmp/bluefin.pdf
