@@ -26,12 +26,14 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
 fi
 
 # TODO: remove me on next flatpak release when preinstall landed
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+  # print information about flatpak package, it should say from our copr
+  rpm -q flatpak --qf "%{NAME} %{VENDOR}\n"
+fi
 
-# print information about flatpak package, it should say from our copr
-rpm -q flatpak --qf "%{NAME} %{VENDOR}\n"
 
 # Offline Bluefin documentation
 ghcurl "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
