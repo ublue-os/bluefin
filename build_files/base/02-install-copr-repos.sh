@@ -21,4 +21,9 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
     dnf5 config-manager setopt "terra*".enabled=0
 fi
 
+# TODO: remove me on next flatpak release
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+  dnf5 -y copr enable ublue-os/flatpak-test
+fi
+
 echo "::endgroup::"

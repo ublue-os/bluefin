@@ -5,6 +5,7 @@ app/com.mattjakeman.ExtensionManager
 app/com.ranfdev.DistroShelf
 app/io.github.flattool.Ignition
 app/io.github.flattool.Warehouse
+app/io.github.kolunmi.Bazaar
 app/io.gitlab.adhami3310.Impression
 app/io.missioncenter.MissionCenter
 app/org.gnome.Calculator
