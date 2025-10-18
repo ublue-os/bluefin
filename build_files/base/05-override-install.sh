@@ -31,7 +31,7 @@ if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
   dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
   dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
   # print information about flatpak package, it should say from our copr
-  rpm -q flatpak --qf "%{NAME} %{VENDOR}\n"
+  rpm -q flatpak --qf "%{NAME} %{VENDOR}\n" | grep -F -e "flatpak-test"
 fi
 
 # Offline Bluefin documentation
