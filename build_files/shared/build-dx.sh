@@ -8,6 +8,10 @@ echo "::group:: Copy Files"
 
 # Copy Files to Image
 cp /ctx/packages.json /tmp/packages.json
+
+# Copy DX flatpak list
+install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/system-flatpaks-dx.list
+
 rsync -rvK /ctx/system_files/dx/ /
 
 mkdir -p /tmp/scripts/helpers
