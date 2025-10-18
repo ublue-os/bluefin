@@ -22,6 +22,8 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
 fi
 
 # TODO: remove me on next flatpak release
-dnf5 -y copr enable ublue-os/flatpak-test
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+  dnf5 -y copr enable ublue-os/flatpak-test
+fi
 
 echo "::endgroup::"
