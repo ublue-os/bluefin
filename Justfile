@@ -9,16 +9,7 @@ flavors := '(
     [main]=main
     [nvidia]=nvidia
     [nvidia-open]=nvidia-open
-    [hwe]=hwe
-    [hwe-nvidia]=hwe-nvidia
-    [hwe-nvidia-open]=hwe-nvidia-open
-    [asus]=asus
-    [asus-nvidia]=asus-nvidia
-    [asus-nvidia-open]=asus-nvidia-open
-    [surface]=surface
-    [surface-nvidia]=surface-nvidia
-    [surface-nvidia-open]=surface-nvidia-open
-
+    
     # Temporary for LTS to anaconda build-iso
     [gdx]=gdx
 )'
@@ -105,10 +96,6 @@ validate $image $tag $flavor:
     fi
     if [[ -z "$checkflavor" ]]; then
         echo "Invalid flavor..."
-        exit 1
-    fi
-    if [[ ! "$checktag" =~ latest && "$checkflavor" =~ hwe|asus|surface ]]; then
-        echo "HWE images are only built on latest..."
         exit 1
     fi
 
@@ -873,18 +860,6 @@ tag-images image_name="" default_tag="" tags="":
         ${PODMAN} tag $IMAGE {{ image_name }}:${tag}
     done
 
-    # HWE Tagging
-    if [[ "{{ image_name }}" =~ hwe ]]; then
-
-        image_name="{{ image_name }}"
-        asus_name="${image_name/hwe/asus}"
-        surface_name="${image_name/hwe/surface}"
-
-        for tag in {{ tags }}; do
-            ${PODMAN} tag "${IMAGE}" "${asus_name}":${tag}
-            ${PODMAN} tag "${IMAGE}" "${surface_name}":${tag}
-        done
-    fi
 
     # Show Images
     ${PODMAN} images

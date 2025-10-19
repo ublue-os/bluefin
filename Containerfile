@@ -9,7 +9,6 @@ COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
 COPY /just /just
-COPY packages.json /
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
