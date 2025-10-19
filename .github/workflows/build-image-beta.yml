@@ -27,6 +27,7 @@ jobs:
     with:
       brand_name: ${{ matrix.brand_name }}
       stream_name: beta
+      push: ${{ github.event_name != "pull_request" }}
 
   generate-release:
     name: Generate Release
