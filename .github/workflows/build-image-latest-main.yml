@@ -26,7 +26,6 @@ jobs:
       image_flavors: '["main", "nvidia", "nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
-      push: ${{ github.event_name != "pull_request" }}
 
   generate-release:
     name: Generate Release
