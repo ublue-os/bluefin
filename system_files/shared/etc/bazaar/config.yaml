@@ -266,6 +266,7 @@ sections:
       - io.github.fragglet.sdl_sopwith
       - io.github.sepehr_rs.Sudoku
       - org.wesnoth.Wesnoth
+      - org.endlessaccess.threadbare
 
   - title: "Utilities"
     subtitle: "Gear up and kit out"
