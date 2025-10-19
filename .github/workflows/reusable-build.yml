@@ -18,10 +18,6 @@ on:
       kernel_pin:
         description: "The full kernel version to pin"
         type: string
-      push:
-        description: "Whether the image should be pushed to a registry"
-        type: string
-        default: false
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -174,14 +170,14 @@ jobs:
           string: ${{ env.IMAGE_REGISTRY }}
 
       - name: Login to GitHub Container Registry
-        if: inputs.push == "true"
+        if: github.event_name != 'pull_request'
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.actor }} --password-stdin
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push to GHCR
         id: push
-        if: inputs.push == "true"
+        if: github.event_name != 'pull_request'
         uses: Wandalen/wretry.action@e68c23e6309f2871ca8ae4763e7629b9c258e1ea # v3.8.0
         with:
           attempt_limit: 3
@@ -223,7 +219,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
       - name: Sign container image
-        if: inputs.push == "true" && contains(matrix.image_flavor, 'hwe')
+        if: github.event_name != 'pull_request' && contains(matrix.image_flavor, 'hwe')
         shell: bash
         run: |
           image_name="${{ env.IMAGE_NAME }}"
