@@ -1,0 +1,7 @@
+brew "aichat"
+brew "block-goose-cli"
+tap "gptscript-ai/tap"
+brew "clio"
+brew "codex"
+brew "gemini-cli"
+brew "mods" 
