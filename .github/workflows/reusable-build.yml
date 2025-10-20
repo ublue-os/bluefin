@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       image_flavors:
-        description: "JSON string of flavors to build, '[main, nvidia, hwe, hwe-nvidia]'"
+        description: "JSON string of flavors to build, '[main, nvidia]'"
         default: "['main', 'nvidia', 'nvidia-open']"
         type: string
       brand_name:
@@ -189,18 +189,6 @@ jobs:
               sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
             done
 
-            if [[ "${{ matrix.image_flavor }}" =~ hwe ]]; then
-
-              image_name="${{ env.IMAGE_NAME }}"
-              asus_name="${image_name/hwe/asus}"
-              surface_name="${image_name/hwe/surface}"
-
-              for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-                sudo -E podman push ${asus_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${asus_name}:${tag}
-                sudo -E podman push ${surface_name}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${surface_name}:${tag}
-              done
-            fi
-
             digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
 
             echo "digest=${digest}" >> $GITHUB_OUTPUT
@@ -223,8 +211,6 @@ jobs:
         shell: bash
         run: |
           image_name="${{ env.IMAGE_NAME }}"
-          asus_name="${image_name/hwe/asus}"
-          surface_name="${image_name/hwe/surface}"
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${asus_name}@${TAGS}
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${surface_name}@${TAGS}
         env:
