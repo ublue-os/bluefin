@@ -211,8 +211,6 @@ jobs:
         shell: bash
         run: |
           image_name="${{ env.IMAGE_NAME }}"
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${asus_name}@${TAGS}
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${surface_name}@${TAGS}
         env:
           TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           COSIGN_EXPERIMENTAL: false
