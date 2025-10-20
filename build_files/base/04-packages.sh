@@ -117,7 +117,7 @@ esac
 
 # Install all Fedora packages (bulk - safe from COPR injection)
 echo "Installing ${#FEDORA_PACKAGES[@]} packages from Fedora repos..."
-dnf5 -y install "${FEDORA_PACKAGES[@]}"
+dnf -y install "${FEDORA_PACKAGES[@]}"
 
 # Install COPR packages using isolated enablement (secure)
 echo "Installing COPR packages with isolated repo enablement..."
@@ -188,7 +188,7 @@ esac
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     readarray -t INSTALLED_EXCLUDED < <(rpm -qa --queryformat='%{NAME}\n' "${EXCLUDED_PACKAGES[@]}" 2>/dev/null || true)
     if [[ "${#INSTALLED_EXCLUDED[@]}" -gt 0 ]]; then
-        dnf5 -y remove "${INSTALLED_EXCLUDED[@]}"
+        dnf -y remove "${INSTALLED_EXCLUDED[@]}"
     else
         echo "No excluded packages found to remove."
     fi
@@ -206,28 +206,30 @@ fi
 
 # shellcheck disable=SC2016
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf5 -y swap \
+    dnf -y swap \
         --repo=terra --repo=terra-extras \
         gnome-shell gnome-shell
-    dnf5 versionlock add gnome-shell
-    dnf5 -y swap \
+    dnf versionlock add gnome-shell
+    dnf -y swap \
         --repo=terra --repo=terra-extras \
         switcheroo-control switcheroo-control
-    dnf5 versionlock add switcheroo-control
+    dnf versionlock add switcheroo-control
 fi
 
 # Fix for ID in fwupd
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf5 -y swap \
+    dnf -y swap \
         --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
         fwupd fwupd
 fi
 
 # TODO: remove me on next flatpak release when preinstall landed
 if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
-  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
-  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+  dnf copr enable -y ublue-os/flatpak-test
+  dnf copr disable -y ublue-os/flatpak-test
+  dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+  dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+  dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
   # print information about flatpak package, it should say from our copr
   rpm -q flatpak --qf "%{NAME} %{VENDOR}\n" | grep ublue-os
 fi
@@ -250,10 +252,10 @@ if [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
 fi
 
 # Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
-dnf5 -y swap \
+dnf -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
     fedora-logos bluefin-logos
-dnf5 -y install \
+dnf -y install \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
     bluefin-plymouth
 
