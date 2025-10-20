@@ -1,4 +1,6 @@
 name: Validate Brewfiles
+permissions:
+  contents: read
 
 on:
   pull_request:
