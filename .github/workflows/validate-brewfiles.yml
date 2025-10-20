@@ -6,12 +6,6 @@ on:
   pull_request:
     paths:
       - "brew/**"
-  push:
-    branches:
-      - main
-    paths:
-      - "brew/**"
-
 jobs:
   validate:
     runs-on: ubuntu-latest
