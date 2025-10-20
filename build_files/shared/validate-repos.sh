@@ -115,26 +115,7 @@ if [[ $VALIDATION_FAILED -eq 1 ]]; then
     for repo in "${ENABLED_REPOS[@]}"; do
         echo "  • $repo"
     done
-    echo ""
-    echo "All repositories MUST be disabled before ostree container commit."
-    echo ""
-    echo "SECURITY IMPACT:"
-    echo "  - Enabled COPRs can inject malicious versions of Fedora packages"
-    echo "  - Repo metadata wastes space in immutable image"
-    echo "  - Can interfere with rpm-ostree operations"
-    echo ""
-    echo "Please check:"
-    echo "  - Cleanup scripts: build_files/base/17-cleanup.sh, build_files/dx/09-cleanup-dx.sh"
-    echo "  - Package installation uses isolated enablement (copr-helpers.sh)"
-    echo ""
-    echo "::endgroup::"
     exit 1
-else
-    echo "VALIDATION PASSED"
-    echo "======================================"
-    echo "All repositories are properly disabled."
-    echo "Image is ready for ostree container commit."
-    echo ""
 fi
 
 echo "::endgroup::"

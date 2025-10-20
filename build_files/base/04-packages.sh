@@ -4,7 +4,8 @@ echo "::group:: ===$(basename "$0")==="
 
 set -ouex pipefail
 
-# Load secure COPR helpers
+# All DNF-related operations should be done here whenever possible
+
 # shellcheck source=build_files/shared/copr-helpers.sh
 source /ctx/build_files/shared/copr-helpers.sh
 
@@ -192,5 +193,68 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
         echo "No excluded packages found to remove."
     fi
 fi
+
+
+# shellcheck disable=SC2016
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
+    thirdparty_repo_install "terra" \
+                           'terra,https://repos.fyralabs.com/terra$releasever' \
+                           "terra-release" \
+                           "terra-release-extras" \
+                           "terra*"
+fi
+
+# shellcheck disable=SC2016
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
+    dnf5 -y swap \
+        --repo=terra --repo=terra-extras \
+        gnome-shell gnome-shell
+    dnf5 versionlock add gnome-shell
+    dnf5 -y swap \
+        --repo=terra --repo=terra-extras \
+        switcheroo-control switcheroo-control
+    dnf5 versionlock add switcheroo-control
+fi
+
+# Fix for ID in fwupd
+if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
+    dnf5 -y swap \
+        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+        fwupd fwupd
+fi
+
+# TODO: remove me on next flatpak release when preinstall landed
+if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+  # print information about flatpak package, it should say from our copr
+  rpm -q flatpak --qf "%{NAME} %{VENDOR}\n" | grep ublue-os
+fi
+
+
+## Pins and Overrides
+## Use this section to pin packages in order to avoid regressions
+# Remember to leave a note with rationale/link to issue for each pin!
+#
+# Example:
+#if [ "$FEDORA_MAJOR_VERSION" -eq "41" ]; then
+#    Workaround pkcs11-provider regression, see issue #1943
+#    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
+#fi
+
+# Only downgrade for F42
+if [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
+    # Downgrade libdex to 0.9.1 because 0.10 makes bazaar crash under VMs and PCs with low specs
+    dnf5 install -y libdex-0.9.1
+fi
+
+# Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
+dnf5 -y swap \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
+    fedora-logos bluefin-logos
+dnf5 -y install \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
+    bluefin-plymouth
 
 echo "::endgroup::"
