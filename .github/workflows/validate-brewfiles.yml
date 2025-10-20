@@ -1,0 +1,46 @@
+name: Validate Brewfiles
+
+on:
+  pull_request:
+    paths:
+      - "brew/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "brew/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Validate Brewfiles
+        shell: bash
+        run: |
+          echo "Validating Brewfiles in brew/ directory..."
+          EXIT_CODE=0
+
+          for brewfile in brew/*.Brewfile; do
+            if [ -f "$brewfile" ]; then
+              echo "Checking $brewfile..."
+              if brew bundle check --file="$brewfile" --no-upgrade; then
+                echo "✓ $brewfile is valid"
+              else
+                echo "✗ $brewfile validation failed"
+                EXIT_CODE=1
+              fi
+            fi
+          done
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "All Brewfiles are valid!"
+          else
+            echo "Some Brewfiles failed validation"
+            exit 1
+          fi
