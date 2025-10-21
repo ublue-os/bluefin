@@ -16,7 +16,6 @@ source /ctx/build_files/shared/copr-helpers.sh
 
 # DX packages from Fedora repos - common to all versions
 FEDORA_PACKAGES=(
-    adobe-source-code-pro-fonts
     android-tools
     bcc
     bpftop
@@ -43,9 +42,6 @@ FEDORA_PACKAGES=(
     genisoimage
     git-subtree
     git-svn
-    google-droid-sans-mono-fonts
-    google-go-mono-fonts
-    ibm-plex-mono-fonts
     iotop
     libvirt
     libvirt-nss
@@ -57,8 +53,6 @@ FEDORA_PACKAGES=(
     podman-compose
     podman-machine
     podman-tui
-    podmansh
-    powerline-fonts
     qemu
     qemu-char-spice
     qemu-device-display-virtio-gpu
@@ -89,11 +83,6 @@ echo "Installing DX COPR packages with isolated repo enablement..."
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "42" ]]; then
     copr_install_isolated "ganto/lxc4" "incus" "incus-agent" "lxc"
 fi
-
-copr_install_isolated "ganto/umoci" "umoci"
-copr_install_isolated "karmab/kcli" "kcli"
-copr_install_isolated "atim/ubuntu-fonts" "ubuntu-family-fonts"
-copr_install_isolated "gmaglione/podman-bootc" "podman-bootc"
 
 # DX packages to exclude - common to all versions
 EXCLUDED_PACKAGES=()
