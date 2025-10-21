@@ -43,8 +43,8 @@ FEDORA_PACKAGES=(
     gum
     hplip
     ibus-mozc
-    igt-gpu-tools
     ifuse
+    igt-gpu-tools
     input-remapper
     iwd
     jetbrains-mono-fonts-all
@@ -78,6 +78,7 @@ FEDORA_PACKAGES=(
     sssd-ad
     sssd-krb5
     sssd-nfs-idmap
+    switcheroo-control
     tailscale
     tmux
     usbip
