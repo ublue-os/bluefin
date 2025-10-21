@@ -194,28 +194,6 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     fi
 fi
 
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    thirdparty_repo_install "terra" \
-                           'terra,https://repos.fyralabs.com/terra$releasever' \
-                           "terra-release" \
-                           "terra-release-extras" \
-                           "terra*"
-fi
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        gnome-shell gnome-shell
-    dnf versionlock add gnome-shell
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        switcheroo-control switcheroo-control
-    dnf versionlock add switcheroo-control
-fi
-
 # Fix for ID in fwupd
 if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
     dnf -y swap \
