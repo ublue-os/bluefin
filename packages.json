@@ -189,6 +189,7 @@
 				"epson-inkjet-printer-escpr",
 				"epson-inkjet-printer-escpr2",
 				"google-noto-fonts-all",
+				"google-noto-sans-vf-fonts",
 				"uld"
 			],
 			"dx": []
@@ -206,6 +207,7 @@
 				"bazaar",
 				"evolution-ews-core",
 				"google-noto-fonts-all",
+				"google-noto-sans-vf-fonts",
 				"uld",
 				"uupd"
 			],
@@ -222,7 +224,9 @@
 		"include": {
 			"all": [
 				"bazaar",
-				"evolution-ews-core"
+				"evolution-ews-core",
+				"google-noto-fonts-all",
+				"google-noto-sans-vf-fonts"
 			],
 			"dx": []
 		},
