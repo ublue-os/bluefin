@@ -26,7 +26,10 @@ mkdir -p /etc/modules-load.d && cat >>/etc/modules-load.d/ip_tables.conf <<EOF
 iptable_nat
 EOF
 
-# Install Packages and Kernel Modules
+# Install AKMODS
+/ctx/build_files/dx/02-install-kernel-akmods-dx.sh
+
+# Install Packages
 /ctx/build_files/dx/03-packages-dx.sh
 
 # Fetch Install
