@@ -6,10 +6,12 @@ on:
       - main
       - testing
     paths-ignore:
-      - '.github/workflows/*iso*'
-      - '**.md'
-      - 'flatpaks/**'
-      - 'iso_files/**'
+      - "**.md"
+      - ".github/workflows/*iso*.yml"
+      - ".github/workflows/*validate*.yml"
+      - "brew/**"
+      - "flatpaks/**"
+      - "iso_files/**"
   workflow_call:
   workflow_dispatch:
 

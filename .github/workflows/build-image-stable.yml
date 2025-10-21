@@ -6,8 +6,10 @@ on:
       - main
       - testing
     paths-ignore:
-      - ".github/workflows/*iso*"
       - "**.md"
+      - ".github/workflows/*iso*.yml"
+      - ".github/workflows/*validate*.yml"
+      - "brew/**"
       - "flatpaks/**"
       - "iso_files/**"
   schedule:
