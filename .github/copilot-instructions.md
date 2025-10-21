@@ -32,7 +32,7 @@ This document provides essential information for coding agents working with the 
 
 ### Architecture
 - **Two Build Targets**: `base` (regular users) and `dx` (developer experience)
-- **Image Flavors**: main, nvidia, nvidia-open
+- **Image Flavors**: main, nvidia-open
 - **Fedora Versions**: 42, 43 supported
 - **Build Process**: Sequential shell scripts in build_files/ directory
 
