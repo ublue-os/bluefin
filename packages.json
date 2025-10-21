@@ -208,7 +208,6 @@
 				"bazaar",
 				"evolution-ews-core",
 				"google-noto-fonts-all",
-				"google-noto-sans-vf-fonts",
 				"uld",
 				"uupd"
 			],
@@ -226,7 +225,6 @@
 			"all": [
 				"bazaar",
 				"evolution-ews-core",
-				"google-noto-fonts-all",
 			],
 			"dx": []
 		},
