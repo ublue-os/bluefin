@@ -53,26 +53,43 @@ done
 flatpak remote-add --system --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 systemctl disable flatpak-add-fedora-repos.service
 
-# Disable all COPRs and RPM Fusion Repos
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo
-dnf5 -y copr disable ublue-os/staging
-dnf5 -y copr disable ublue-os/packages
-dnf5 -y copr disable che/nerd-fonts
-dnf5 -y copr disable phracek/PyCharm
+# NOTE: With isolated COPR installation, most repos are never enabled globally.
+# We only need to clean up repos that were enabled during the build process.
 
-# TODO: remove me on next flatpak release
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-  dnf5 -y copr disable ublue-os/flatpak-test
-fi
-
-# NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
-for i in /etc/yum.repos.d/rpmfusion-*; do
-    sed -i 's@enabled=1@enabled=0@g' "$i"
+# Disable third-party repos
+for repo in negativo17-fedora-multimedia tailscale fedora-cisco-openh264; do
+    if [[ -f "/etc/yum.repos.d/${repo}.repo" ]]; then
+        sed -i 's@enabled=1@enabled=0@g' "/etc/yum.repos.d/${repo}.repo"
+    fi
 done
 
+# Disable Terra repos (installed on F42 and earlier)
+for i in /etc/yum.repos.d/terra*.repo; do
+    if [[ -f "$i" ]]; then
+        sed -i 's@enabled=1@enabled=0@g' "$i"
+    fi
+done
+
+# Disable all COPR repos (should already be disabled by helpers, but ensure)
+for i in /etc/yum.repos.d/_copr:*.repo; do
+    if [[ -f "$i" ]]; then
+        sed -i 's@enabled=1@enabled=0@g' "$i"
+    fi
+done
+
+# NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
+if [[ -f "/etc/yum.repos.d/_copr_ublue-os-akmods.repo" ]]; then
+    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
+fi
+
+# Disable RPM Fusion repos
+for i in /etc/yum.repos.d/rpmfusion-*.repo; do
+    if [[ -f "$i" ]]; then
+        sed -i 's@enabled=1@enabled=0@g' "$i"
+    fi
+done
+
+# Disable fedora-coreos-pool if it exists
 if [ -f /etc/yum.repos.d/fedora-coreos-pool.repo ]; then
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-coreos-pool.repo
 fi
