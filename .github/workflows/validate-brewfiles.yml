@@ -15,6 +15,17 @@ jobs:
 
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@main
+        
+      - name: Install Brewfile dependencies
+        run: |
+          # Loop through all Brewfiles and install dependencies for each
+          for brewfile in brew/*.Brewfile; do
+            if [ -f "$brewfile" ]; then
+              echo "Installing dependencies from $brewfile..."
+              # You may need to remove --no-upgrade if you want to install
+              brew bundle install --file="$brewfile" 
+            fi
+          done
 
       - name: Validate Brewfiles
         shell: bash
