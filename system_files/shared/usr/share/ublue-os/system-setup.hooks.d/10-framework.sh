@@ -72,16 +72,39 @@ if [[ "$VEN_ID" == "Framework" && "$SYS_ID" == "Laptop 13 ("* ]]; then
     fi
 fi
 
-# Install framework_tool for Framework laptops
+# Install framework_tool and wallpapers for Framework laptops
 if [[ ":Framework:" =~ :$VEN_ID: ]]; then
-    echo "Framework laptop detected, installing framework_tool in the background"
+    TOOL_MARKER="/var/lib/ublue-os/framework-tool.installed"
+    WALLPAPER_MARKER="/var/lib/ublue-os/framework-wallpapers.installed"
 
-    # Check if Homebrew is available and if it is tap and install framework_tool
+    # Check if Homebrew is available
     if command -v brew &> /dev/null; then
-        echo "Installing framework_tool from ublue-os/homebrew-tap"
-        brew tap ublue-os/tap
-        brew install --cask framework_tool
+        if [[ ! -f "$TOOL_MARKER" ]]; then
+            echo "Framework laptop detected, installing framework_tool"
+            if brew install --cask ublue-os/tap/framework_tool; then
+                mkdir -p /var/lib/ublue-os
+                touch "$TOOL_MARKER"
+                echo "framework_tool installed successfully"
+            else
+                echo "Warning: framework_tool installation failed, will retry on next run"
+            fi
+        else
+            echo "framework_tool already installed, skipping"
+        fi
+
+        if [[ ! -f "$WALLPAPER_MARKER" ]]; then
+            echo "Installing Framework wallpapers"
+            if brew install --cask ublue-os/tap/framework-wallpapers; then
+                mkdir -p /var/lib/ublue-os
+                touch "$WALLPAPER_MARKER"
+                echo "Framework wallpapers installed successfully"
+            else
+                echo "Warning: framework-wallpapers installation failed, will retry on next run"
+            fi
+        else
+            echo "Framework wallpapers already installed, skipping"
+        fi
     else
-        echo "Warning: brew not found, skipping framework_tool installation"
+        echo "Warning: brew not found, skipping Framework software installation (will retry when brew is available)"
     fi
 fi
