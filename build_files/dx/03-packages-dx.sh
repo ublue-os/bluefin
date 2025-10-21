@@ -49,7 +49,6 @@ FEDORA_PACKAGES=(
     iotop
     libvirt
     libvirt-nss
-    mozilla-fira-mono-fonts
     nicstat
     numactl
     osbuild-selinux
