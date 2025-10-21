@@ -224,7 +224,7 @@
 		"include": {
 			"all": [
 				"bazaar",
-				"evolution-ews-core",
+				"evolution-ews-core"
 			],
 			"dx": []
 		},
