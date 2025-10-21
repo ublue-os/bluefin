@@ -186,10 +186,10 @@
 	"41": {
 		"include": {
 			"all": [
+				"adwaita-fonts-all",
 				"epson-inkjet-printer-escpr",
 				"epson-inkjet-printer-escpr2",
 				"google-noto-fonts-all",
-				"google-noto-sans-vf-fonts",
 				"uld"
 			],
 			"dx": []
@@ -204,6 +204,7 @@
 	"42": {
 		"include": {
 			"all": [
+				"adwaita-fonts-all",
 				"bazaar",
 				"evolution-ews-core",
 				"google-noto-fonts-all",
@@ -226,7 +227,6 @@
 				"bazaar",
 				"evolution-ews-core",
 				"google-noto-fonts-all",
-				"google-noto-sans-vf-fonts"
 			],
 			"dx": []
 		},
