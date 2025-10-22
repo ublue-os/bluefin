@@ -20,6 +20,9 @@ install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
 cp -r /ctx/just /tmp/just
 rsync -rvK /ctx/system_files/shared/ /
 
+mkdir -p /usr/share/ublue-os/homebrew/
+cp /ctx/brew/*.Brewfile /usr/share/ublue-os/homebrew/
+
 mkdir -p /tmp/scripts/helpers
 install -Dm0755 /ctx/build_files/shared/utils/ghcurl /tmp/scripts/helpers/ghcurl
 export PATH="/tmp/scripts/helpers:$PATH"

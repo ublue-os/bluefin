@@ -1,4 +1,3 @@
-tap "homebrew/bundle"
 cask "font-caskaydia-mono-nerd-font"
 cask "font-droid-sans-mono-nerd-font"
 cask "font-go-mono-nerd-font"
