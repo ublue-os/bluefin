@@ -21,6 +21,8 @@ jobs:
         run: |
           echo "Validating Brewfiles in brew/ directory..."
 
+          set -xeuo pipefail
+
           find "brew" -iname '*\.Brewfile*' -print0 | \
             while IFS= read -r -d '' brewfile ; do \
               echo "::group:: ===$(basename $brewfile)==="
