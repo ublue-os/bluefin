@@ -134,6 +134,11 @@ install-system-flatpaks $dx="dynamic":
         xargs flatpak --system -y install --or-update < $TARGET_DEVMODE_FILE
     fi
 
+# Install fonts
+[group('System')]
+install-fonts:
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-fonts.Brewfile
+
 # Configure grub bootmenu visibility
 [group('System')]
 configure-grub:
