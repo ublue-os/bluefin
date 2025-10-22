@@ -21,12 +21,12 @@ jobs:
         run: |
           echo "Validating Brewfiles in brew/ directory..."
 
-          set -xeuo pipefail
 
           find "brew" -iname '*\.Brewfile*' -print0 | \
             while IFS= read -r -d '' brewfile ; do \
               echo "::group:: ===$(basename $brewfile)==="
               grep -E -e "^tap" $brewfile > taps.Brewfile
+              set -xeuo pipefail
               brew bundle --file=./taps.Brewfile
               if brew bundle exec whoami --file="$brewfile" | grep -F -e "${USER}" ; then
                 echo "✓ $brewfile is valid"
@@ -34,5 +34,6 @@ jobs:
                 echo "✗ $brewfile validation failed"
                 exit 1
               fi
+              set +xeuo pipefail
               echo "::endgroup::"
             done
