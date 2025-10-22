@@ -1,0 +1,37 @@
+name: Validate Flatpaks
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    paths:
+      - "flatpaks/**"
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Set up Flathub
+        shell: bash
+        run: |
+          sudo apt install -y flatpak
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+      - name: Validate Brewfiles
+        shell: bash
+        run: |
+          echo "Validating flatpak files in flatpaks/ directory..."
+
+          set -xeuo pipefail
+
+          find "flatpaks" -iname '*\.list*' -print0 | \
+            while IFS= read -r -d '' flatpaks_file ; do \
+              echo "::group:: ===$(basename "$flatpaks_file")==="
+              grep -v "#.*" "$flatpaks_file" | \
+                while read -r flatpak ; do \
+                  flatpak remote-info --user flathub "${flatpak}"
+                done
+              echo "::endgroup::"
+            done
