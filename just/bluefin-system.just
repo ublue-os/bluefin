@@ -134,6 +134,19 @@ install-system-flatpaks $dx="dynamic":
         xargs flatpak --system -y install --or-update < $TARGET_DEVMODE_FILE
     fi
 
+# Install Brewfile bundles
+[group('System')]
+bluefin-ai:
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-ai.Brewfile
+
+[group('System')]
+bluefin-fonts:
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-fonts.Brewfile
+
+[group('System')]
+bluefin-k8s:
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-k8s.Brewfile
+
 # Configure grub bootmenu visibility
 [group('System')]
 configure-grub:
