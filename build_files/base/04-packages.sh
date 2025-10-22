@@ -153,10 +153,10 @@ case "$FEDORA_MAJOR_VERSION" in
         # bazaar and uupd from ublue-os/packages
         copr_install_isolated "ublue-os/packages" "bazaar" "uupd"
         ;;
-    43)
+    # 43)
         # bazaar from ublue-os/packages
-        copr_install_isolated "ublue-os/packages" "bazaar"
-        ;;
+        # copr_install_isolated "ublue-os/packages" "bazaar"
+        # ;;
 esac
 
 # Packages to exclude - common to all versions
