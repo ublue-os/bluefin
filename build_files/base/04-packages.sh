@@ -38,6 +38,7 @@ FEDORA_PACKAGES=(
     gnome-shell-extension-blur-my-shell
     gnome-shell-extension-caffeine
     gnome-shell-extension-dash-to-dock
+    gnome-shell-extension-gsconnect
     gnome-tweaks
     gum
     hplip
@@ -58,6 +59,7 @@ FEDORA_PACKAGES=(
     make
     mesa-libGLU
     mozc
+    nautilus-gsconnect
     oddjob-mkhomedir
     opendyslexic-fonts
     openssh-askpass
