@@ -9,8 +9,6 @@ on:
       - "**.md"
       - ".github/workflows/*iso*.yml"
       - ".github/workflows/*validate*.yml"
-      - "brew/**"
-      - "flatpaks/**"
       - "iso_files/**"
   workflow_call:
   workflow_dispatch:
