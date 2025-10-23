@@ -85,6 +85,9 @@ toggle-devmode:
     if gum choose "Do you want to also install the default development flatpaks?" ; then
         ujust install-system-flatpaks 1
     fi
+    if gum choose "Do you want to install extra monospace fonts?" ; then
+        ujust bluefin-fonts
+    fi
 
 # Configure docker,incus-admin,libvirt, container manager, serial permissions
 [group('System')]
