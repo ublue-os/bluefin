@@ -245,12 +245,6 @@ fi
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
 
-# Only downgrade for F42
-if [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
-    # Downgrade libdex to 0.9.1 because 0.10 makes bazaar crash under VMs and PCs with low specs
-    dnf5 install -y libdex-0.9.1
-fi
-
 # Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
 dnf -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
