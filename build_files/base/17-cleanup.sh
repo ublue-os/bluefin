@@ -27,7 +27,7 @@ systemctl enable check-sb-key.service
 systemctl enable input-remapper.service
 
 # run flatpak preinstall once at startup
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   systemctl enable flatpak-preinstall.service
 fi
 
