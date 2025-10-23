@@ -6,11 +6,7 @@ version-script framework tool 1 || exit 0
 
 set -x
 
-CPU_VENDOR=$(grep "vendor_id" "/proc/cpuinfo" | uniq | awk -F": " '{ print $2 }')
 VEN_ID="$(cat /sys/devices/virtual/dmi/id/chassis_vendor)"
-BIOS_VERSION="$(cat /sys/devices/virtual/dmi/id/bios_version 2>/dev/null)"
-
-SYS_ID="$(cat /sys/devices/virtual/dmi/id/product_name)"
 
 # Install framework_tool and wallpapers for Framework laptops
 if [[ ":Framework:" =~ :$VEN_ID: ]]; then
