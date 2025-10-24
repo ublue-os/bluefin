@@ -224,7 +224,7 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
 fi
 
 # TODO: remove me on next flatpak release when preinstall landed
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   dnf copr enable -y ublue-os/flatpak-test
   dnf copr disable -y ublue-os/flatpak-test
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
