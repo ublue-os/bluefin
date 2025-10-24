@@ -15,6 +15,7 @@ systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
 systemctl enable dconf-update.service
 systemctl enable ublue-guest-user.service
+systemctl --global enable bazaar.service
 systemctl enable brew-setup.service
 systemctl enable brew-upgrade.timer
 systemctl enable brew-update.timer
@@ -25,11 +26,8 @@ systemctl --global enable podman-auto-update.timer
 systemctl enable check-sb-key.service
 systemctl enable input-remapper.service
 
-# Autostart bazaar, enable this when we fully moved over to flatpak
-#systemctl --global enable bazaar.service
-
 # run flatpak preinstall once at startup
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   systemctl enable flatpak-preinstall.service
 fi
 

@@ -19,6 +19,7 @@ source /ctx/build_files/shared/copr-helpers.sh
 FEDORA_PACKAGES=(
     adcli
     adw-gtk3-theme
+    adwaita-fonts-all
     bash-color-prompt
     bootc
     borgbackup
@@ -151,10 +152,10 @@ case "$FEDORA_MAJOR_VERSION" in
         # bazaar and uupd from ublue-os/packages
         copr_install_isolated "ublue-os/packages" "bazaar" "uupd"
         ;;
-    43)
+    # 43)
         # bazaar from ublue-os/packages
-        copr_install_isolated "ublue-os/packages" "bazaar"
-        ;;
+        # copr_install_isolated "ublue-os/packages" "bazaar"
+        # ;;
 esac
 
 # Packages to exclude - common to all versions
@@ -200,7 +201,7 @@ if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
 fi
 
 # TODO: remove me on next flatpak release when preinstall landed
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
+if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   dnf copr enable -y ublue-os/flatpak-test
   dnf copr disable -y ublue-os/flatpak-test
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
@@ -220,12 +221,6 @@ fi
 #    Workaround pkcs11-provider regression, see issue #1943
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
-
-# Only downgrade for F42
-if [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
-    # Downgrade libdex to 0.9.1 because 0.10 makes bazaar crash under VMs and PCs with low specs
-    dnf5 install -y libdex-0.9.1
-fi
 
 # Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
 dnf -y swap \
