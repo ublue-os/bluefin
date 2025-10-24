@@ -19,6 +19,7 @@ source /ctx/build_files/shared/copr-helpers.sh
 FEDORA_PACKAGES=(
     adcli
     adw-gtk3-theme
+    adwaita-fonts-all
     bash-color-prompt
     bootc
     borgbackup
