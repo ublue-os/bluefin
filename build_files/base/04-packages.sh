@@ -20,7 +20,6 @@ FEDORA_PACKAGES=(
     adcli
     adw-gtk3-theme
     bash-color-prompt
-    bcache-tools
     bootc
     borgbackup
     cryfs
@@ -39,12 +38,13 @@ FEDORA_PACKAGES=(
     gnome-shell-extension-blur-my-shell
     gnome-shell-extension-caffeine
     gnome-shell-extension-dash-to-dock
+    gnome-shell-extension-gsconnect
     gnome-tweaks
     gum
     hplip
     ibus-mozc
-    igt-gpu-tools
     ifuse
+    igt-gpu-tools
     input-remapper
     iwd
     jetbrains-mono-fonts-all
@@ -59,6 +59,7 @@ FEDORA_PACKAGES=(
     make
     mesa-libGLU
     mozc
+    nautilus-gsconnect
     oddjob-mkhomedir
     opendyslexic-fonts
     openssh-askpass
@@ -78,6 +79,7 @@ FEDORA_PACKAGES=(
     sssd-ad
     sssd-krb5
     sssd-nfs-idmap
+    switcheroo-control
     tailscale
     tmux
     usbip
@@ -86,7 +88,6 @@ FEDORA_PACKAGES=(
     wireguard-tools
     wl-clipboard
     xprop
-    yaru-theme
     zenity
     zsh
 )
@@ -127,11 +128,8 @@ copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 
 # From ublue-os/staging
 copr_install_isolated "ublue-os/staging" \
-    "gnome-shell-extension-gsconnect" \
     "gnome-shell-extension-logo-menu" \
     "gnome-shell-extension-search-light" \
-    "gnome-shell-extension-tailscale-gnome-qs" \
-    "nautilus-gsconnect"
 
 # From ublue-os/packages
 copr_install_isolated "ublue-os/packages" \
@@ -192,28 +190,6 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     else
         echo "No excluded packages found to remove."
     fi
-fi
-
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    thirdparty_repo_install "terra" \
-                           'terra,https://repos.fyralabs.com/terra$releasever' \
-                           "terra-release" \
-                           "terra-release-extras" \
-                           "terra*"
-fi
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        gnome-shell gnome-shell
-    dnf versionlock add gnome-shell
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        switcheroo-control switcheroo-control
-    dnf versionlock add switcheroo-control
 fi
 
 # Fix for ID in fwupd
