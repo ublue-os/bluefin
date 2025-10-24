@@ -20,7 +20,6 @@ FEDORA_PACKAGES=(
     adcli
     adw-gtk3-theme
     bash-color-prompt
-    bcache-tools
     bootc
     borgbackup
     cryfs
@@ -39,6 +38,7 @@ FEDORA_PACKAGES=(
     gnome-shell-extension-blur-my-shell
     gnome-shell-extension-caffeine
     gnome-shell-extension-dash-to-dock
+    gnome-shell-extension-gsconnect
     gnome-tweaks
     gum
     hplip
@@ -59,6 +59,7 @@ FEDORA_PACKAGES=(
     make
     mesa-libGLU
     mozc
+    nautilus-gsconnect
     oddjob-mkhomedir
     opendyslexic-fonts
     openssh-askpass
@@ -86,7 +87,6 @@ FEDORA_PACKAGES=(
     wireguard-tools
     wl-clipboard
     xprop
-    yaru-theme
     zenity
     zsh
 )
@@ -127,11 +127,8 @@ copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 
 # From ublue-os/staging
 copr_install_isolated "ublue-os/staging" \
-    "gnome-shell-extension-gsconnect" \
     "gnome-shell-extension-logo-menu" \
     "gnome-shell-extension-search-light" \
-    "gnome-shell-extension-tailscale-gnome-qs" \
-    "nautilus-gsconnect"
 
 # From ublue-os/packages
 copr_install_isolated "ublue-os/packages" \
