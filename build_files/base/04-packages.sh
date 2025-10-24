@@ -43,8 +43,8 @@ FEDORA_PACKAGES=(
     gum
     hplip
     ibus-mozc
-    igt-gpu-tools
     ifuse
+    igt-gpu-tools
     input-remapper
     iwd
     jetbrains-mono-fonts-all
@@ -79,6 +79,7 @@ FEDORA_PACKAGES=(
     sssd-ad
     sssd-krb5
     sssd-nfs-idmap
+    switcheroo-control
     tailscale
     tmux
     usbip
@@ -189,28 +190,6 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     else
         echo "No excluded packages found to remove."
     fi
-fi
-
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    thirdparty_repo_install "terra" \
-                           'terra,https://repos.fyralabs.com/terra$releasever' \
-                           "terra-release" \
-                           "terra-release-extras" \
-                           "terra*"
-fi
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        gnome-shell gnome-shell
-    dnf versionlock add gnome-shell
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        switcheroo-control switcheroo-control
-    dnf versionlock add switcheroo-control
 fi
 
 # Fix for ID in fwupd
