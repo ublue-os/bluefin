@@ -5,12 +5,12 @@ on:
       - main
       - testing
     paths-ignore:
-      - ".github/workflows/*iso*"
       - "**.md"
-      - "flatpaks/**"
+      - ".github/workflows/*iso*.yml"
+      - ".github/workflows/*validate*.yml"
       - "iso_files/**"
-  schedule:
-    - cron: "50 5 * * 0" # 5:50 UTC Weekly on Sundays
+# schedule:
+#   - cron: "50 5 * * 0" # 5:50 UTC Weekly on Sundays
   workflow_dispatch:
   workflow_call:
 

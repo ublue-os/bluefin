@@ -8,6 +8,7 @@ COPY /system_files /system_files
 COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
+COPY /brew /brew
 COPY /just /just
 
 ## bluefin image section

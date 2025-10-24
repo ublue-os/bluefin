@@ -20,23 +20,20 @@ jobs:
         shell: bash
         run: |
           echo "Validating Brewfiles in brew/ directory..."
-          EXIT_CODE=0
 
-          for brewfile in brew/*.Brewfile; do
-            if [ -f "$brewfile" ]; then
-              echo "Checking $brewfile..."
-              if brew bundle check --file="$brewfile" --no-upgrade; then
+
+          find "brew" -iname '*\.Brewfile*' -print0 | \
+            while IFS= read -r -d '' brewfile ; do \
+              echo "::group:: ===$(basename $brewfile)==="
+              grep -E -e "^tap" $brewfile > taps.Brewfile
+              set -xeuo pipefail
+              brew bundle --file=./taps.Brewfile
+              if brew bundle exec whoami --file="$brewfile" | grep -F -e "${USER}" ; then
                 echo "✓ $brewfile is valid"
               else
                 echo "✗ $brewfile validation failed"
-                EXIT_CODE=1
+                exit 1
               fi
-            fi
-          done
-
-          if [ $EXIT_CODE -eq 0 ]; then
-            echo "All Brewfiles are valid!"
-          else
-            echo "Some Brewfiles failed validation"
-            exit 1
-          fi
+              set +xeuo pipefail
+              echo "::endgroup::"
+            done
