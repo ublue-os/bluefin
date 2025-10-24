@@ -124,6 +124,7 @@ sections:
       - tv.plex.PlexDesktop
       - com.plexamp.Plexamp
       - com.rafaelmardojai.Blanket
+      - de.haeckerfelix.AudioSharing
   - title: "Office & Productivity"
     subtitle: "Work Smarter"
     rows: 4

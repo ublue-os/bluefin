@@ -2,7 +2,7 @@
 
 echo "::group:: ===$(basename "$0")==="
 
-set -ouex pipefail
+set -xeuo pipefail
 
 IMAGE_PRETTY_NAME="Bluefin"
 IMAGE_LIKE="fedora"

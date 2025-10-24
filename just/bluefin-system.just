@@ -85,6 +85,9 @@ toggle-devmode:
     if gum choose "Do you want to also install the default development flatpaks?" ; then
         ujust install-system-flatpaks 1
     fi
+    if gum choose "Do you want to install extra monospace fonts?" ; then
+        ujust bluefin-fonts
+    fi
 
 # Configure docker,incus-admin,libvirt, container manager, serial permissions
 [group('System')]
@@ -133,6 +136,19 @@ install-system-flatpaks $dx="dynamic":
     if [ "$ADD_DEVMODE" == "1" ] ; then
         xargs flatpak --system -y install --or-update < $TARGET_DEVMODE_FILE
     fi
+
+# Install Brewfile bundles
+[group('System')]
+bluefin-ai:
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-ai.Brewfile
+
+[group('System')]
+bluefin-fonts:
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-fonts.Brewfile
+
+[group('System')]
+bluefin-k8s:
+    brew bundle --file /usr/share/ublue-os/homebrew/bluefin-k8s.Brewfile
 
 # Configure grub bootmenu visibility
 [group('System')]

@@ -4,36 +4,6 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-
-# Enable Terra repo (Extras does not exist on F40, not used for F43+)
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf5 -y swap \
-        --repo="terra, terra-extras" \
-        gnome-shell gnome-shell
-    dnf5 versionlock add gnome-shell
-    dnf5 -y swap \
-        --repo="terra, terra-extras" \
-        switcheroo-control switcheroo-control
-    dnf5 versionlock add switcheroo-control
-fi
-
-# Fix for ID in fwupd
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf5 -y swap \
-        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        fwupd fwupd
-fi
-
-# TODO: remove me on next flatpak release when preinstall landed
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
-  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
-  dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
-  # print information about flatpak package, it should say from our copr
-  rpm -q flatpak --qf "%{NAME} %{VENDOR}\n" | grep ublue-os
-fi
-
 # Offline Bluefin documentation
 ghcurl "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
 install -Dm0644 -t /usr/share/doc/bluefin/ /tmp/bluefin.pdf
@@ -54,9 +24,6 @@ glib-compile-schemas /usr/share/glib-2.0/schemas
 rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
 mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
 rm -rf /usr/share/pixmaps/faces/bluefin
-
-dnf -y swap fedora-logos bluefin-logos
-dnf -y install bluefin-plymouth
 
 # Consolidate Just Files
 
