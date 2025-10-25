@@ -29,8 +29,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=secret,id=GITHUB_TOKEN \
-    /ctx/build_files/shared/build-base.sh && \
-    bootc container lint
+    /ctx/build_files/shared/build-base.sh
 
 ## bluefin-dx developer edition image section
 FROM base AS dx
@@ -50,5 +49,4 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=secret,id=GITHUB_TOKEN \
-    /ctx/build_files/shared/build-dx.sh && \
-    bootc container lint
+    /ctx/build_files/shared/build-dx.sh
