@@ -2,15 +2,6 @@
 
 set -eoux pipefail
 
-mkdir -p /var/roothome
-
-echo "::group:: ===Install dnf5==="
-if [ "${FEDORA_MAJOR_VERSION}" -lt 41 ]; then
-    rpm-ostree install --idempotent dnf5 dnf5-plugins
-fi
-
-echo "::endgroup::"
-
 echo "::group:: Copy Files"
 
 # Copy ISO list for `install-system-flaptaks`
@@ -19,7 +10,6 @@ install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
 # Copy Files to Container
 cp -r /ctx/just /tmp/just
 rsync -rvK /ctx/system_files/shared/ /
-
 mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/brew/*.Brewfile /usr/share/ublue-os/homebrew/
 
@@ -58,14 +48,11 @@ echo "::endgroup::"
 # Regenerate initramfs
 /ctx/build_files/base/19-initramfs.sh
 
-# Clean Up
-echo "::group:: Cleanup"
-/ctx/build_files/shared/clean-stage.sh
-mkdir -p /var/tmp &&
-    chmod -R 1777 /var/tmp
-
 # Validate all repos are disabled before committing
 /ctx/build_files/shared/validate-repos.sh
 
-ostree container commit
+# Clean Up
+echo "::group:: Cleanup"
+/ctx/build_files/shared/clean-stage.sh
+
 echo "::endgroup::"
