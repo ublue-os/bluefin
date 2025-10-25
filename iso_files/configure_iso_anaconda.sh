@@ -208,7 +208,7 @@ PartOf=graphical-session.target
 
 [Service]
 Type=oneshot
-ExecStart=bash -c 'gunzip -c /usr/share/cockpit/anaconda-webui/index.js.gz | sed "s/\$0 installation\"),a.PRETTY_NAME/\$0 installation\"),\"Bluefin\"/g" | gzip > /usr/share/cockpit/anaconda-webui/index.js.gz.new && mv /usr/share/cockpit/anaconda-webui/index.js.gz.new /usr/share/cockpit/anaconda-webui/index.js.gz'
+ExecStart=bash -c 'gunzip -c /usr/share/cockpit/anaconda-webui/index.js.gz | sed "s/\([a-z]\)\.PRETTY_NAME/\"Bluefin\"/g" | gzip > /usr/share/cockpit/anaconda-webui/index.js.gz.new && mv /usr/share/cockpit/anaconda-webui/index.js.gz.new /usr/share/cockpit/anaconda-webui/index.js.gz'
 ExecStart=sed -i 's/osRelease\.PRETTY_NAME/"Bluefin"/g' /usr/share/cockpit/anaconda-webui/index.js.map
 RemainAfterExit=yes
 
