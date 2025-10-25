@@ -12,9 +12,6 @@ find /var -mindepth 1 -delete
 find /boot -mindepth 1 -delete
 mkdir -p /var /boot
 
-# Make /usr/local writeable
-ln -s /var/usrlocal /usr/local
-
 mkdir -p /var/tmp &&
     chmod -R 1777 /var/tmp
 
