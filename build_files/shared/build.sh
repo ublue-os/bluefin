@@ -8,10 +8,13 @@ echo "::group:: Copy Files"
 install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
 
 # Copy Files to Container
-cp -r /ctx/just /tmp/just
 rsync -rvK /ctx/system_files/shared/ /
 mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/brew/*.Brewfile /usr/share/ublue-os/homebrew/
+
+# Consolidate Just Files
+cp -r /ctx/just /tmp/just
+find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>/usr/share/ublue-os/just/60-custom.just
 
 mkdir -p /tmp/scripts/helpers
 install -Dm0755 /ctx/build_files/shared/utils/ghcurl /tmp/scripts/helpers/ghcurl
@@ -31,9 +34,6 @@ echo "::endgroup::"
 # Install Overrides and Fetch Install
 /ctx/build_files/base/05-override-install.sh
 
-# Base Image Changes
-/ctx/build_files/base/07-base-image-changes.sh
-
 # Get Firmare for Framework
 /ctx/build_files/base/08-firmware.sh
 
@@ -47,6 +47,11 @@ echo "::endgroup::"
 
 # Regenerate initramfs
 /ctx/build_files/base/19-initramfs.sh
+
+if [ "${IMAGE_FLAVOR}" == "dx" ] ; then
+  # Now we build DX!
+  /ctx/build_files/shared/build-dx.sh
+fi
 
 # Validate all repos are disabled before committing
 /ctx/build_files/shared/validate-repos.sh
