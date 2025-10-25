@@ -115,12 +115,6 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     # Base Image
     base_image_name="silverblue"
 
-    # Target
-    if [[ "${image}" =~ dx ]]; then
-        target="dx"
-    else
-        target="base"
-    fi
 
     # AKMODS Flavor and Kernel Version
     if [[ "${flavor}" =~ hwe ]]; then
@@ -178,6 +172,11 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
 
     # Build Arguments
     BUILD_ARGS=()
+    # Target
+    if [[ "${image}" =~ dx ]]; then
+        BUILD_ARGS+=("--build-arg" "IMAGE_FLAVOR=dx")
+        target="dx"
+    fi
     BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${akmods_flavor}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${base_image_name}")
     BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${fedora_version}")
@@ -214,7 +213,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     echo "::group:: Build Container"
 
     # Build Image
-    PODMAN_BUILD_ARGS=("${BUILD_ARGS[@]}" "${LABELS[@]}" --target "${target}" --tag localhost/"${image_name}:${tag}" --file Containerfile)
+    PODMAN_BUILD_ARGS=("${BUILD_ARGS[@]}" "${LABELS[@]}" --tag localhost/"${image_name}:${tag}" --file Containerfile)
 
     # Add GitHub token secret if available (for CI/CD)
     if [[ -n "${GITHUB_TOKEN:-}" ]]; then

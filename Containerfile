@@ -23,30 +23,17 @@ ARG KERNEL="6.10.10-200.fc40.x86_64"
 ARG SHA_HEAD_SHORT="dedbeef"
 ARG UBLUE_IMAGE_TAG="stable"
 ARG VERSION=""
+ARG IMAGE_FLAVOR=""
 
 # Build, cleanup, commit.
-RUN --mount=type=cache,dst=/var/cache/libdnf5 \
-    --mount=type=cache,dst=/var/cache/rpm-ostree \
+RUN --mount=type=tmpfs,dst=/tmp \
+    --mount=type=tmpfs,dst=/var \
+    --mount=type=tmpfs,dst=/boot \
     --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=secret,id=GITHUB_TOKEN \
-    /ctx/build_files/shared/build-base.sh
+    /ctx/build_files/shared/build.sh
 
-## bluefin-dx developer edition image section
-FROM base AS dx
-
-ARG AKMODS_FLAVOR="coreos-stable"
-ARG BASE_IMAGE_NAME="silverblue"
-ARG FEDORA_MAJOR_VERSION="41"
-ARG IMAGE_NAME="bluefin-dx"
-ARG IMAGE_VENDOR="ublue-os"
-ARG KERNEL="6.10.10-200.fc40.x86_64"
-ARG SHA_HEAD_SHORT="dedbeef"
-ARG UBLUE_IMAGE_TAG="stable"
-ARG VERSION=""
-
-# Build, Clean-up, Commit
-RUN --mount=type=cache,dst=/var/cache/libdnf5 \
-    --mount=type=cache,dst=/var/cache/rpm-ostree \
-    --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=secret,id=GITHUB_TOKEN \
-    /ctx/build_files/shared/build-dx.sh
+# Makes `/opt` writeable by default
+# Needs to be here to make the main image build strict (no /opt there)
+# This is for downstream images/stuff like k0s
+RUN rm -rf /opt && ln -s /var/opt /opt 

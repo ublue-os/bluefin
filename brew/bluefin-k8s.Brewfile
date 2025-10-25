@@ -1,4 +1,5 @@
 tap "buildpacks/tap"
+brew "kind"
 brew "cdk8s"
 tap "k0sproject/tap"
 brew "k0sctl"
