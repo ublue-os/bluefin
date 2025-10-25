@@ -196,3 +196,25 @@ mokutil --timeout -1 || :
 echo -e "$ENROLLMENT_PASSWORD\n$ENROLLMENT_PASSWORD" | mokutil --import "$SECUREBOOT_KEY" || :
 %end
 EOF
+
+
+# Create systemd user service for anaconda-webui patching
+mkdir -p /usr/lib/systemd/user
+tee /usr/lib/systemd/user/patch-anaconda-webui.service <<'EOF'
+[Unit]
+Description=Patch Anaconda WebUI for Bluefin branding
+After=graphical-session-pre.target
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=bash -c 'gunzip -c /usr/share/cockpit/anaconda-webui/index.js.gz | sed "s/\$0 installation\"),a.PRETTY_NAME/\$0 installation\"),\"Bluefin\"/g" | gzip > /usr/share/cockpit/anaconda-webui/index.js.gz.new && mv /usr/share/cockpit/anaconda-webui/index.js.gz.new /usr/share/cockpit/anaconda-webui/index.js.gz'
+ExecStart=sed -i 's/osRelease\.PRETTY_NAME/"Bluefin"/g' /usr/share/cockpit/anaconda-webui/index.js.map
+RemainAfterExit=yes
+
+[Install]
+WantedBy=graphical-session.target
+EOF
+
+# Enable the service 
+systemctl --global enable patch-anaconda-webui.service
