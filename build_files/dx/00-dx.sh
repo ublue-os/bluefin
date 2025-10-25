@@ -69,7 +69,7 @@ echo "Installing ${#FEDORA_PACKAGES[@]} DX packages from Fedora repos..."
 dnf5 -y install "${FEDORA_PACKAGES[@]}"
 
 dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
-dnf config-manager setopt docker-ce-stable.enabled=0
+sed -i "s/enabled=.*/enabled=0/g" /etc/yum.repos.d/docker-ce.repo
 dnf -y install --enablerepo=docker-ce-stable \
     containerd.io \
     docker-buildx-plugin \
@@ -86,7 +86,7 @@ enabled=1
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
-dnf config-manager setopt code.enabled=0
+sed -i "s/enabled=.*/enabled=0/g" /etc/yum.repos.d/vscode.repo
 dnf -y install --enablerepo=code \
     code
 
