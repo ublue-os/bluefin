@@ -157,7 +157,7 @@ copr_install_isolated "ublue-os/packages" \
         # bazaar from ublue-os/packages
         # copr_install_isolated "ublue-os/packages" "bazaar"
         # ;;
-esac
+# esac
 
 # Packages to exclude - common to all versions
 EXCLUDED_PACKAGES=(
