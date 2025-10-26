@@ -81,7 +81,6 @@ FEDORA_PACKAGES=(
     sssd-krb5
     sssd-nfs-idmap
     switcheroo-control
-    tailscale
     tmux
     usbip
     usbmuxd
@@ -119,8 +118,9 @@ esac
 echo "Installing ${#FEDORA_PACKAGES[@]} packages from Fedora repos..."
 dnf -y install "${FEDORA_PACKAGES[@]}"
 
-# Install COPR packages using isolated enablement (secure)
-echo "Installing COPR packages with isolated repo enablement..."
+dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+dnf config-manager setopt tailscale-stable.enabled=0
+dnf -y install --enablerepo='tailscale-stable' tailscale
 
 # From che/nerd-fonts
 copr_install_isolated "che/nerd-fonts" "nerd-fonts"
