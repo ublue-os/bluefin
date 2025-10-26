@@ -99,14 +99,12 @@ case "$FEDORA_MAJOR_VERSION" in
         FEDORA_PACKAGES+=(
             epson-inkjet-printer-escpr
             epson-inkjet-printer-escpr2
-            google-noto-fonts-all
             uld
         )
         ;;
     42)
         FEDORA_PACKAGES+=(
             evolution-ews-core
-            google-noto-fonts-all
             uld
         )
         ;;
