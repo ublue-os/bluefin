@@ -179,7 +179,7 @@ case "$FEDORA_MAJOR_VERSION" in
         EXCLUDED_PACKAGES+=(gnome-software)
         ;;
     43)
-        EXCLUDED_PACKAGES+=(fwupd gnome-software)
+        EXCLUDED_PACKAGES+=(gnome-software)
         ;;
 esac
 
@@ -194,11 +194,9 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
 fi
 
 # Fix for ID in fwupd
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf -y swap \
-        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        fwupd fwupd
-fi
+dnf -y swap \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+    fwupd fwupd
 
 # TODO: remove me on next flatpak release when preinstall landed
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
