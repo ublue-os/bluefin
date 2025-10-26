@@ -144,14 +144,15 @@ copr_install_isolated "ublue-os/packages" \
     "ublue-fastfetch" \
     "ublue-motd" \
     "ublue-polkit-rules" \
-    "ublue-setup-services"
+    "ublue-setup-services" \
+    "uupd"
 
 # Version-specific COPR packages
-case "$FEDORA_MAJOR_VERSION" in
-    42)
+# case "$FEDORA_MAJOR_VERSION" in
+#    42)
         # bazaar and uupd from ublue-os/packages
-        copr_install_isolated "ublue-os/packages" "bazaar" "uupd"
-        ;;
+        # copr_install_isolated "ublue-os/packages" "bazaar" "uupd"
+        # ;;
     # 43)
         # bazaar from ublue-os/packages
         # copr_install_isolated "ublue-os/packages" "bazaar"
