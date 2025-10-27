@@ -364,6 +364,7 @@ sections:
       - io.github.josephmawa.Egghead
       - page.codeberg.lo_vely.Nucleus
       - org.turbowarp.TurboWarp
+      - as.may.moat
 
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
