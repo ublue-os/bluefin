@@ -26,17 +26,6 @@ mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
 rm -rf /usr/share/pixmaps/faces/bluefin
 
 
-# Register Fonts
-fc-cache -f /usr/share/fonts/ubuntu
-fc-cache -f /usr/share/fonts/inter
-
-
-#!/usr/bin/bash
-
-echo "::group:: ===$(basename "$0")==="
-
-set -ouex pipefail
-
 # Remove desktop entries
 if [[ -f /usr/share/applications/gnome-system-monitor.desktop ]]; then
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/gnome-system-monitor.desktop
@@ -80,8 +69,5 @@ echo "Running error test for bluefin gschema override. Aborting if failed."
 glib-compile-schemas --strict /tmp/bluefin-schema-test
 echo "Compiling gschema to include bluefin setting overrides"
 glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
-
-echo "::endgroup::"
-
 
 echo "::endgroup::"
