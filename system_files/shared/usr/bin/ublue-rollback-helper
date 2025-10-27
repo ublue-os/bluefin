@@ -11,13 +11,6 @@ FEDORA_VERSION=$(jq -r '."fedora-version"' < "$IMAGE_INFO")
 IMAGE_REGISTRY="ghcr.io/${IMAGE_VENDOR}"
 ROOT_FS=$(findmnt -n -o FSTYPE /)
 
-# ComposeFS detection
-if findmnt / | grep -q 'composefs' && findmnt / | grep -q 'overlay'; then
-  composefs_enabled=true
-else
-  composefs_enabled=false
-fi
-
 function list_tags() {
   local filter="$1"
   skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}" \
@@ -42,14 +35,8 @@ function rebase_helper() {
 
   # Step 2: Channel Selection
   declare -a CHANNELS
-  if [[ "$composefs_enabled" == "true" ]]; then
-    CHANNELS=(latest stable stable-daily)
-    echo "The default selection is latest, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
-    echo "Note: Since you are on Fedora 42+, you will not be able to rollback to the GTS version."
-  else
-    CHANNELS=(latest stable stable-daily gts)
-    echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
-  fi
+  CHANNELS=(latest stable stable-daily gts)
+  echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
 
   # Fetch Fedora version per channel and build display list
   declare -a CHANNELS_DISPLAY
