@@ -7,13 +7,8 @@ set -eoux pipefail
 dnf clean all
 
 rm -rf /.gitkeep
-rm -rf /tmp/* || true
-find /var -mindepth 1 -delete
-find /boot -mindepth 1 -delete
-mkdir -p /var /boot
-
-mkdir -p /var/tmp &&
-    chmod -R 1777 /var/tmp
+find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
+find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
 
 bootc container lint 
 
