@@ -1,0 +1,49 @@
+name: Generate GTS Changelog Issue
+on:
+  workflow_dispatch:
+    inputs:
+      prev_tag:
+        description: "Previous GTS tag (e.g., gts-41.20251024)"
+        required: true
+        type: string
+      curr_tag:
+        description: "Current GTS tag (e.g., gts-42.20251028)"
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      prev_tag:
+        description: "Previous GTS tag"
+        type: string
+        required: true
+      curr_tag:
+        description: "Current GTS tag"
+        type: string
+        required: true
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  generate-changelog-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcb5dd907a8 # v5
+        with:
+          fetch-depth: 500
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Generate and post changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 .github/generate_gts_changelog_issue.py \
+            "${{ inputs.prev_tag }}" \
+            "${{ inputs.curr_tag }}" \
+            --workdir . \
+            --repo ublue-os/bluefin
