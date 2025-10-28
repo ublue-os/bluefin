@@ -20,6 +20,19 @@ welcome-dialog-last-shown-version='4294967295'
 favorite-apps = ['anaconda.desktop', 'documentation.desktop', 'discourse.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Nautilus.desktop']
 EOF
 
+# Disable suspend/sleep during live environment and initial setup
+# This prevents the system from suspending during installation or first-boot user creation
+tee /usr/share/glib-2.0/schemas/zz3-bluefin-installer-power.gschema.override <<EOF
+[org.gnome.settings-daemon.plugins.power]
+sleep-inactive-ac-type='nothing'
+sleep-inactive-battery-type='nothing'
+sleep-inactive-ac-timeout=0
+sleep-inactive-battery-timeout=0
+
+[org.gnome.desktop.session]
+idle-delay=uint32 0
+EOF
+
 # don't autostart gnome-software session service
 rm -f /etc/xdg/autostart/org.gnome.Software.desktop
 
