@@ -44,12 +44,6 @@ tee /usr/share/glib-2.0/schemas/zz1-bluefin-modifications-mutter-exp-feats.gsche
 experimental-features=[${MUTTER_EXP_FEATS}]
 EOF
 
-# GNOME Terminal is replaced with Ptyxis
-# Make schema valid on GNOME <47 which do not contain the accent-color key or xwayland-native-scaling mutter feature
-sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/org.gnome.Terminal.desktop
-sed -i 's@accent-color="slate"@@g' /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
-sed -i 's@'", "\''xwayland-native-scaling'\''@@g' /usr/share/glib-2.0/schemas/zz1-bluefin-modifications-mutter-exp-feats.gschema.override
-
 # Test bluefin gschema override for errors. If there are no errors, proceed with compiling bluefin gschema, which includes setting overrides.
 mkdir -p /tmp/bluefin-schema-test
 find /usr/share/glib-2.0/schemas/ -type f ! -name "*.gschema.override" -exec cp {} /tmp/bluefin-schema-test/ \;
