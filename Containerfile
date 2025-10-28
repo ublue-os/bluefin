@@ -25,10 +25,9 @@ ARG UBLUE_IMAGE_TAG="stable"
 ARG VERSION=""
 ARG IMAGE_FLAVOR=""
 
-# Build, cleanup, commit.
-RUN --mount=type=tmpfs,dst=/tmp \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/boot \
+# Build, cleanup, lint.
+RUN --mount=type=cache,dst=/var/cache/libdnf5 \
+    --mount=type=cache,dst=/var/cache/rpm-ostree \
     --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=secret,id=GITHUB_TOKEN \
     /ctx/build_files/shared/build.sh
