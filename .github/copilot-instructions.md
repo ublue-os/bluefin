@@ -37,7 +37,9 @@ This document provides essential information for coding agents working with the 
 - **Two Build Targets**: `base` (regular users) and `dx` (developer experience)
 - **Image Flavors**: main, nvidia-open
 - **Fedora Versions**: 42, 43 supported
+- **Stream Tags**: `latest` (F42/43), `beta` (F42/43), `stable` (F42), `gts` (F42 Grand Touring Support)
 - **Build Process**: Sequential shell scripts in build_files/ directory
+- **Base Images**: Uses `ghcr.io/ublue-os/silverblue-main` as foundation from Universal Blue
 
 ## Build Instructions
 
@@ -160,8 +162,21 @@ The repository uses mandatory pre-commit validation:
 ### GitHub Actions Workflows
 - `build-image-latest-main.yml` - Builds latest images on main branch changes
 - `build-image-stable.yml` - Builds stable release images
-- `build-image-gts.yml` - Builds GTS (Go-To-Stable) images
+- `build-image-gts.yml` - Builds GTS (Grand Touring Support) images
+- `build-image-beta.yml` - Builds beta images for testing F42/F43
 - `reusable-build.yml` - Core build logic for all image variants
+- `build-iso-lts.yml` - Builds LTS ISO images
+- `generate-release.yml` - Generates release artifacts and changelogs
+- `validate-brewfiles.yml` - Validates Homebrew Brewfile syntax
+- `validate-flatpaks.yml` - Validates Flatpak list files
+- `clean.yml` - Cleanup old images and artifacts
+- `moderator.yml` - Repository moderation tasks
+
+**Workflow Architecture:**
+- Stream-specific workflows (gts, stable, latest, beta) call `reusable-build.yml`
+- `reusable-build.yml` builds both base and dx variants for all flavors (main, nvidia-open)
+- Fedora version is dynamically detected based on stream tag
+- Images are signed with cosign and pushed to GHCR
 
 ### Manual Validation Steps
 1. `pre-commit run --all-files` - Runs validation hooks (2-3 minutes, .devcontainer.json failure is expected)
@@ -176,8 +191,19 @@ Packages are defined directly in build scripts rather than in a central configur
 - `build_files/base/04-packages.sh` - Core package installations
   - `FEDORA_PACKAGES` array - Packages from official Fedora repos (installed in bulk)
   - `COPR_PACKAGES` array - Packages from COPR repos (installed individually with isolated enablement)
-  - Fedora version-specific package sections using case statements (e.g., `41)`, `42)`, `43)`)
+  - Fedora version-specific package sections using case statements (e.g., `42)`, `43)`)
 - `build_files/dx/00-dx.sh` - Developer experience package additions
+
+### COPR Package Installation
+COPR packages use the `copr_install_isolated()` helper function from `build_files/shared/copr-helpers.sh`:
+```bash
+# Install packages from COPR with isolated repo enablement
+copr_install_isolated "ublue-os/staging" package1 package2
+```
+This function:
+1. Enables the COPR repo
+2. Immediately disables it
+3. Installs packages with `--enablerepo` flag to prevent repo conflicts
 
 ### Making Package Changes
 1. Edit the appropriate shell script in `build_files/base/` or `build_files/dx/`
@@ -206,6 +232,66 @@ Packages are defined directly in build scripts rather than in a central configur
 - `Justfile` - Build recipe definitions and validation
 - `.github/renovate.json5` - Automated dependency updates
 - `Containerfile` - Container build instructions
+
+## Build System Deep Dive
+
+### Justfile Structure
+The `Justfile` is the central build orchestration tool with these key recipes:
+
+**Validation Recipes:**
+- `just check` - Validates Just syntax across all .just files
+- `just fix` - Auto-formats Just files
+- `just validate <image> <tag> <flavor>` - Validates image/tag/flavor combinations
+
+**Build Recipes:**
+- `just build <image> <tag> <flavor>` - Main build command (calls build.sh)
+- `just build-ghcr <image> <tag> <flavor>` - Build for GHCR (GitHub Container Registry)
+- `just rechunk <image> <tag> <flavor>` - Rechunk image for optimization
+
+**Image/Tag Definitions:**
+```bash
+images: bluefin, bluefin-dx
+flavors: main, nvidia-open
+tags: gts, stable, latest, beta
+```
+
+**Version Detection:**
+- `just fedora_version <image> <tag> <flavor>` - Dynamically detects Fedora version from upstream base images
+- For `gts` and `stable`: Checks `ghcr.io/ublue-os/base-main:<tag>`
+- For `latest`/`beta`: Checks corresponding upstream tags
+- Returns the Fedora major version (e.g., 42, 43)
+
+### Containerfile Multi-Stage Build
+The `Containerfile` uses a multi-stage build process:
+
+1. **Stage `ctx`** (FROM scratch): Copies all build context (system_files, build_files, etc.)
+2. **Stage `base`** (FROM silverblue-main): Base Bluefin image
+   - Mounts build context from `ctx` stage
+   - Runs `/ctx/build_files/shared/build.sh` which executes all scripts in order
+3. **Stage `dx`** (optional, in full Containerfile): Developer experience layer
+
+**Build Arguments:**
+- `BASE_IMAGE_NAME` - Upstream base (silverblue/kinoite)
+- `FEDORA_MAJOR_VERSION` - Dynamically set by Just (42/43)
+- `IMAGE_NAME` - Target image name (bluefin/bluefin-dx)
+- `KERNEL` - Pinned kernel version (optional)
+- `UBLUE_IMAGE_TAG` - Stream tag (gts/stable/latest/beta)
+
+### Build Script Execution Order
+Scripts in `build_files/base/` execute in numerical order:
+1. `00-image-info.sh` - Sets image metadata and os-release info
+2. `03-install-kernel-akmods.sh` - Installs kernel and akmod packages
+3. `04-packages.sh` - Installs Fedora and COPR packages
+4. `05-override-install.sh` - Overrides base image packages
+5. `08-firmware.sh` - Firmware configurations
+6. `17-cleanup.sh` - Cleanup operations
+7. `18-workarounds.sh` - Temporary fixes/workarounds
+8. `19-initramfs.sh` - Regenerates initramfs
+
+### Additional Recipe Collections
+- `just/bluefin-apps.just` - User-facing app management recipes
+- `just/bluefin-system.just` - System management recipes
+- `brew/*.Brewfile` - Homebrew package collections (ai, cli, fonts, k8s)
 
 ## Development Guidelines
 
