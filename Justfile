@@ -493,7 +493,7 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
     # if [[ "$tag" != lts ]]; then
     #     FEDORA_VERSION=$(${PODMAN} inspect ${IMAGE_FULL} | jq -r '.[]["Config"]["Labels"]["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
     # else
-    FEDORA_VERSION=41
+    FEDORA_VERSION=42
     # fi
 
     # Load Image into rootful podman

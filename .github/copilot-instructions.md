@@ -195,11 +195,14 @@ Packages are defined directly in build scripts rather than in a central configur
 - `build_files/dx/00-dx.sh` - Developer experience package additions
 
 ### COPR Package Installation
+
 COPR packages use the `copr_install_isolated()` helper function from `build_files/shared/copr-helpers.sh`:
 ```bash
 # Install packages from COPR with isolated repo enablement
 copr_install_isolated "ublue-os/staging" package1 package2
+
 ```
+
 This function:
 1. Enables the COPR repo
 2. Immediately disables it

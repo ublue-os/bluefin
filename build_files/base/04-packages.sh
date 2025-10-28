@@ -94,13 +94,6 @@ FEDORA_PACKAGES=(
 
 # Version-specific Fedora package additions
 case "$FEDORA_MAJOR_VERSION" in
-    41)
-        FEDORA_PACKAGES+=(
-            epson-inkjet-printer-escpr
-            epson-inkjet-printer-escpr2
-            uld
-        )
-        ;;
     42)
         FEDORA_PACKAGES+=(
             evolution-ews-core
