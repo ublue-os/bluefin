@@ -138,6 +138,7 @@ sections:
     dark-classes:
       - rec-section-dark
     appids:
+      - net.codelogistics.letters
       - re.sonny.Eloquent
       - page.codeberg.libre_menu_editor.LibreMenuEditor
       - app.fotema.Fotema
