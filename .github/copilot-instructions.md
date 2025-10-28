@@ -4,20 +4,19 @@ This document provides essential information for coding agents working with the 
 
 ## Repository Overview
 
-**Bluefin** is a cloud-native desktop operating system that reimagines the Linux desktop experience. It's an immutable OS built on Fedora Linux using container technologies with atomic updates.
+**Bluefin** is a cloud-native desktop operating system that reimagines the Linux desktop experience. It's an OS built on Fedora Linux using container technologies with atomic updates.
 
 - **Type**: Container-based Linux distribution build system (75MB total, 74MB system files)
 - **Base**: Fedora Linux with GNOME Desktop + Universal Blue infrastructure
 - **Languages**: Bash scripts, JSON configuration, Python utilities
 - **Build System**: Just (command runner), Podman/Docker containers, GitHub Actions
-- **Target**: Immutable desktop OS with two variants (base + developer experience)
+- **Target**: desktop OS with two variants (base + developer experience)
 
 ## Repository Structure
 
 ### Root Directory Files
 - `Containerfile` - Main container build definition (multi-stage: base → dx)
 - `Justfile` - Build automation recipes (33KB - like Makefile but more readable)
-- `packages.json` - Package inclusion/exclusion lists per Fedora version and variant
 - `.pre-commit-config.yaml` - Pre-commit hooks for basic validation
 - `image-versions.yml` - Image version configurations
 - `cosign.pub` - Container signing public key
@@ -25,9 +24,13 @@ This document provides essential information for coding agents working with the 
 ### Key Directories
 - `system_files/` (74MB) - User-space files, configurations, fonts, themes
 - `build_files/` - Build scripts organized as base/, dx/, shared/
+  - `base/` - Base image build scripts (00-image-info.sh through 19-initramfs.sh)
+  - `dx/` - Developer experience build scripts
+  - `shared/` - Common build utilities and helper scripts
 - `.github/workflows/` - Comprehensive CI/CD pipelines
 - `just/` - Additional Just recipes for apps and system management
-- `flatpaks/` - Flatpak application lists
+- `brew/` - Homebrew Brewfile definitions for various tool collections
+- `flatpaks/` - Flatpak application lists (system-flatpaks.list, system-flatpaks-dx.list)
 - `iso_files/` - ISO installation configurations
 
 ### Architecture
@@ -64,13 +67,10 @@ pip install pre-commit
 # Note: .devcontainer.json will fail JSON check due to comments - this is expected
 pre-commit run --all-files
 
-# 2. Check specific JSON files manually:
-python3 -c "import json; json.load(open('packages.json'))"
-
-# 3. Check Just syntax (requires Just installation)
+# 2. Check Just syntax (requires Just installation)
 just check  # Only if Just command runner is available
 
-# 4. Fix formatting issues automatically
+# 3. Fix formatting issues automatically
 just fix    # Only if Just command runner is available
 ```
 
@@ -128,9 +128,6 @@ grep -n "^[a-zA-Z].*:" Justfile | head -20
 
 # Fix end-of-file and trailing whitespace automatically
 pre-commit run --all-files
-
-# Validate specific JSON files (excluding .devcontainer.json):
-python3 -c "import json; json.load(open('packages.json'))"  # Should pass
 ```
 
 **Just syntax errors (if Just is available):**
@@ -168,38 +165,32 @@ The repository uses mandatory pre-commit validation:
 
 ### Manual Validation Steps
 1. `pre-commit run --all-files` - Runs validation hooks (2-3 minutes, .devcontainer.json failure is expected)
-2. `python3 -c "import json; json.load(open('packages.json'))"` - Validate critical JSON files
-3. `just check` - Validates Just syntax (if Just is available, 30 seconds)
-4. `just fix` - Auto-fixes formatting issues (if Just is available, 30 seconds)
-5. Test builds only if making container-related changes (30+ minutes)
+2. `just check` - Validates Just syntax (if Just is available, 30 seconds)
+3. `just fix` - Auto-fixes formatting issues (if Just is available, 30 seconds)
+4. Test builds only if making container-related changes (30+ minutes)
 
 ## Package Management
 
-### packages.json Structure
-The `packages.json` file defines package inclusion/exclusion per Fedora version:
-```json
-{
-  "all": {
-    "include": {
-      "all": ["package1", "package2"],  // Base image packages
-      "dx": ["dev-package1", "dev-package2"]  // Developer additions
-    },
-    "exclude": {
-      "all": ["unwanted-package"],
-      "dx": []
-    }
-  },
-  "41": {  // Fedora 41 specific overrides
-    "include": {"all": ["fedora41-only-package"]},
-    "exclude": {"all": []}
-  }
-}
-```
+### Package Configuration
+Packages are defined directly in build scripts rather than in a central configuration file:
+- `build_files/base/04-packages.sh` - Core package installations
+  - `FEDORA_PACKAGES` array - Packages from official Fedora repos (installed in bulk)
+  - `COPR_PACKAGES` array - Packages from COPR repos (installed individually with isolated enablement)
+  - Fedora version-specific package sections using case statements (e.g., `41)`, `42)`, `43)`)
+- `build_files/dx/00-dx.sh` - Developer experience package additions
 
 ### Making Package Changes
-1. Edit `packages.json` following the existing structure
-2. Validate JSON syntax: `pre-commit run check-json --all-files`
-3. Test with container build if critical changes
+1. Edit the appropriate shell script in `build_files/base/` or `build_files/dx/`
+2. Add packages to the appropriate array (`FEDORA_PACKAGES` or `COPR_PACKAGES`)
+3. For version-specific packages, add them in the Fedora version case statement
+4. Validate shell script syntax: `bash -n build_files/base/04-packages.sh`
+5. Run pre-commit hooks: `pre-commit run --all-files`
+6. Test with container build if making critical changes
+
+### Package Security Model
+**CRITICAL**: Packages are split into separate arrays to prevent COPR repos from injecting malicious versions of Fedora packages:
+- Fedora packages are installed first in bulk (safe)
+- COPR packages are installed individually with isolated repo enablement
 
 ## Configuration Files
 
@@ -232,7 +223,7 @@ The `packages.json` file defines package inclusion/exclusion per Fedora version:
 - **Shell scripts**: Follow existing patterns in build_files/
 
 ### Common Modification Patterns
-- **Adding packages**: Edit `packages.json`, validate JSON syntax
+- **Adding packages**: Edit `build_files/base/04-packages.sh`, add to appropriate array
 - **System configuration**: Modify files in `system_files/shared/`
 - **Build logic**: Edit scripts in `build_files/base/` or `build_files/dx/`
 - **CI/CD**: Modify workflows in `.github/workflows/`
