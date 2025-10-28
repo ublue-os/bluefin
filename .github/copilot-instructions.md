@@ -189,8 +189,8 @@ The `packages.json` file defines package inclusion/exclusion per Fedora version:
       "dx": []
     }
   },
-  "41": {  // Fedora 41 specific overrides
-    "include": {"all": ["fedora41-only-package"]},
+  "42": {  // Fedora 42 specific overrides
+    "include": {"all": ["fedora42-only-package"]},
     "exclude": {"all": []}
   }
 }
