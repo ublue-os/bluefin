@@ -2,6 +2,8 @@
 name: Build ISOs (Live Anaconda)
 
 "on":
+  schedule:
+    - cron: "0 2 1 * *" # First day of each month at 2:00 AM UTC
   workflow_dispatch:
     inputs:
       image_version:
@@ -87,6 +89,18 @@ jobs:
                 ]}'
                 ;;
             esac
+          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+            # Monthly scheduled build: GTS, LTS, and Stable
+            matrix='{"include":[
+              {"platform":"amd64","flavor":"main","image_version":"gts"},
+              {"platform":"amd64","flavor":"nvidia-open","image_version":"gts"},
+              {"platform":"amd64","flavor":"main","image_version":"stable"},
+              {"platform":"amd64","flavor":"nvidia-open","image_version":"stable"},
+              {"platform":"amd64","flavor":"main","image_version":"lts"},
+              {"platform":"arm64","flavor":"main","image_version":"lts"},
+              {"platform":"amd64","flavor":"gdx","image_version":"lts"},
+              {"platform":"arm64","flavor":"gdx","image_version":"lts"}
+            ]}'
           else
             # Default for non-workflow_dispatch (like pull_request)
             matrix='{"include":[
