@@ -175,6 +175,8 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
 fi
 
 # Fix for ID in fwupd
+dnf copr enable -y ublue-os/staging
+dnf copr disable -y ublue-os/staging
 dnf -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
     fwupd fwupd
