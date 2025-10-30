@@ -32,7 +32,7 @@ if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
 fi
 
 # Updater
-if systemctl cat -- uupd.timer &> /dev/null; then
+if test -e /usr/lib/systemd/system/uupd.timer; then
     systemctl enable uupd.timer
 else
     systemctl enable rpm-ostreed-automatic.timer
