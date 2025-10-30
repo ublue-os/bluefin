@@ -35,11 +35,6 @@ FEDORA_PACKAGES=(
     gcc
     git-credential-libsecret
     glow
-    gnome-shell-extension-appindicator
-    gnome-shell-extension-blur-my-shell
-    gnome-shell-extension-caffeine
-    gnome-shell-extension-dash-to-dock
-    gnome-shell-extension-gsconnect
     gnome-tweaks
     gum
     hplip
@@ -118,18 +113,12 @@ dnf -y install --enablerepo='tailscale-stable' tailscale
 # From che/nerd-fonts
 copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 
-# From ublue-os/staging
-copr_install_isolated "ublue-os/staging" \
-    "gnome-shell-extension-logo-menu" \
-    "gnome-shell-extension-search-light" \
-
 # From ublue-os/packages
 copr_install_isolated "ublue-os/packages" \
     "bluefin-backgrounds" \
     "bluefin-cli-logos" \
     "bluefin-faces" \
     "bluefin-fastfetch" \
-    "bluefin-schemas" \
     "ublue-bling" \
     "ublue-brew" \
     "ublue-fastfetch" \
