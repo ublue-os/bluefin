@@ -8,7 +8,7 @@ images := '(
 flavors := '(
     [main]=main
     [nvidia-open]=nvidia-open
-    
+
     # Temporary for LTS to anaconda build-iso
     [gdx]=gdx
 )'

@@ -137,6 +137,24 @@ install-system-flatpaks $dx="dynamic":
         xargs flatpak --system -y install --or-update < $TARGET_DEVMODE_FILE
     fi
 
+# Install extra system flatpaks for rebasers
+[group('System')]
+install-system-flatpaks-extra:
+    #!/usr/bin/bash
+    TARGET_FLATPAK_EXTRA_FILE="${TARGET_FLATPAK_EXTRA_FILE:-/etc/ublue-os/system-flatpaks-extra.list}"
+    flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
+    xargs flatpak --system -y install --or-update < $TARGET_FLATPAK_EXTRA_FILE
+
+# Alias to install both system flatpaks and extra flatpaks
+[group('System')]
+alias bluefin-apps := install-all-system-flatpaks
+
+# Install all system flatpaks (both base and extra)
+[group('System')]
+install-all-system-flatpaks:
+    @just install-system-flatpaks
+    @just install-system-flatpaks-extra
+
 # Install Brewfile bundles
 [group('System')]
 bluefin-ai:
