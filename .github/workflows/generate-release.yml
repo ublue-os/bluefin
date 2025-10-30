@@ -55,7 +55,7 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2
-        if: contains(fromJson('["gts", "stable"]'), matrix.version) && (github.event.schedule == '50 5 * * 0' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
+        if: contains(fromJson('["gts", "stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
         with:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
