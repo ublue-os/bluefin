@@ -23,7 +23,7 @@ Container development is OS-agnostic - your devcontainers work on Linux, macOS, 
 Use `docker compose` for multi-container development if devcontainers don't fit your workflow
 Check out DevPod for open-source, client-only development environments that work with any IDE
 `ujust bluefin-k8s` gets you started with Kubernetes development tools like `kind` and `kubectl`
-`ujust bluefin-ai` installs in the a selection of AI tools
+`ujust bluefin-ai` installs a selection of AI tools
 `ujust bluefin-fonts` installs a well-curated collection of monospace fonts
 Open a folder with Clapgrep (Found in the Bazaar App Store) for super powerful search
 Bluefin separates the OS from your development environment - embrace the cloud-native workflow
