@@ -147,11 +147,7 @@ install-system-flatpaks-extra:
 
 # Alias to install both system flatpaks and extra flatpaks
 [group('System')]
-alias bluefin-apps := install-all-system-flatpaks
-
-# Install all system flatpaks (both base and extra)
-[group('System')]
-install-all-system-flatpaks:
+bluefin-apps:
     @just install-system-flatpaks
     @just install-system-flatpaks-extra
 
