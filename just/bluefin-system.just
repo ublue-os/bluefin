@@ -149,9 +149,9 @@ install-system-flatpaks-extra:
 [group('System')]
 bluefin-apps:
     #!/usr/bin/env bash
-    echo "Installing standard system flatpaks..."
+    echo "Installing default system flatpaks..."
     just install-system-flatpaks
-    echo "Installing extra system flatpaks..."
+    echo "Installing some extra awesome applications..."
     just install-system-flatpaks-extra
 
 # Install Brewfile bundles
