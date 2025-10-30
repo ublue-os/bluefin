@@ -148,8 +148,11 @@ install-system-flatpaks-extra:
 # Alias to install both system flatpaks and extra flatpaks
 [group('System')]
 bluefin-apps:
-    @just install-system-flatpaks
-    @just install-system-flatpaks-extra
+    #!/usr/bin/env bash
+    echo "Installing standard system flatpaks..."
+    just install-system-flatpaks
+    echo "Installing extra system flatpaks..."
+    just install-system-flatpaks-extra
 
 # Install Brewfile bundles
 [group('System')]
