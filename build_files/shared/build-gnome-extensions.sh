@@ -16,6 +16,8 @@ glib-compile-schemas /usr/share/gnome-shell/extensions/appindicatorsupport@rgcjo
 glib-compile-schemas /usr/share/gnome-shell/extensions/logomenu@aryan_k/schemas
 
 # Caffeine
+# The Caffeine extension is built/packaged into a temporary subdirectory (tmp/caffeine/caffeine@patapon.info).
+# Unlike other extensions, it must be moved to the standard extensions directory so GNOME Shell can detect it.
 mv /usr/share/gnome-shell/extensions/tmp/caffeine/caffeine@patapon.info /usr/share/gnome-shell/extensions/caffeine@patapon.info
 glib-compile-schemas /usr/share/gnome-shell/extensions/caffeine@patapon.info/schemas
 
