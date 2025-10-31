@@ -12,7 +12,6 @@ IMPORTANT_PACKAGES_DX=(
     docker-compose-plugin
     flatpak-builder
     libvirt
-    podman-bootc
     qemu
     rocm-runtime
 )
