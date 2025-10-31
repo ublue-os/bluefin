@@ -59,6 +59,7 @@ FEDORA_PACKAGES=(
     tiptop
     trace-cmd
     udica
+    util-linux-script
     virt-manager
     virt-v2v
     virt-viewer

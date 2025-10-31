@@ -25,6 +25,7 @@ systemctl --global enable ublue-user-setup.service
 systemctl --global enable podman-auto-update.timer
 systemctl enable check-sb-key.service
 systemctl enable input-remapper.service
+systemctl enable flatpak-nuke-fedora.service
 
 # run flatpak preinstall once at startup
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
@@ -32,13 +33,11 @@ if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
 fi
 
 # Updater
-if systemctl cat -- uupd.timer &> /dev/null; then
-    systemctl enable uupd.timer
-else
-    systemctl enable rpm-ostreed-automatic.timer
-    systemctl enable flatpak-system-update.timer
-    systemctl --global enable flatpak-user-update.timer
-fi
+systemctl enable uupd.timer
+
+# Disable the old update timer
+systemctl disable rpm-ostreed-automatic.timer
+systemctl disable flatpak-system-update.timer
 
 # Hide Desktop Files. Hidden removes mime associations
 for file in fish htop nvtop; do
