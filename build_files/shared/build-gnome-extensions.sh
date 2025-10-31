@@ -5,7 +5,7 @@ set -eoux pipefail
 echo "::group:: ===$(basename "$0")==="
 
 # Install tooling
-dnf5 -y install glib2-devel meson
+dnf5 -y install glib2-devel meson sassc
 
 # Build Extensions
 
@@ -41,7 +41,7 @@ make -C /usr/share/gnome-shell/extensions/search-light@icedman.github.com
 glib-compile-schemas /usr/share/gnome-shell/extensions/search-light@icedman.github.com/schemas
 
 # Cleanup
-dnf5 -y remove glib2-devel meson
+dnf5 -y remove glib2-devel meson sassc
 rm -rf /usr/share/gnome-shell/extensions/tmp
 
 echo "::endgroup::"
