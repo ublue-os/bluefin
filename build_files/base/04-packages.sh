@@ -84,6 +84,7 @@ FEDORA_PACKAGES=(
     tmux
     usbip
     usbmuxd
+    VK_hdr_layer
     waypipe
     wireguard-tools
     wl-clipboard
