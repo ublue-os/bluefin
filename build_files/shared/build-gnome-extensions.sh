@@ -37,7 +37,7 @@ meson install -C /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.i
 # GSConnect installs schemas to /usr/share/glib-2.0/schemas and meson compiles them automatically
 
 # Search Light
-make -C /usr/share/gnome-shell/extensions/search-light@icedman.github.com
+make build -C /usr/share/gnome-shell/extensions/search-light@icedman.github.com
 glib-compile-schemas /usr/share/gnome-shell/extensions/search-light@icedman.github.com/schemas
 
 # Cleanup
