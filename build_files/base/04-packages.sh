@@ -175,16 +175,16 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
 fi
 
 # Fix for ID in fwupd
-dnf copr enable -y ublue-os/staging
-dnf copr disable -y ublue-os/staging
+dnf -y copr enable ublue-os/staging
+dnf -y copr disable ublue-os/staging
 dnf -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
     fwupd fwupd
 
 # TODO: remove me on next flatpak release when preinstall landed
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
-  dnf copr enable -y ublue-os/flatpak-test
-  dnf copr disable -y ublue-os/flatpak-test
+  dnf -y copr enable ublue-os/flatpak-test
+  dnf -y copr disable ublue-os/flatpak-test
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
