@@ -56,6 +56,9 @@ fi
 # Validate all repos are disabled before committing
 /ctx/build_files/shared/validate-repos.sh
 
+# Simple Tests
+/ctx/build_files/base/20-tests.sh
+
 # Clean Up
 echo "::group:: Cleanup"
 /ctx/build_files/shared/clean-stage.sh

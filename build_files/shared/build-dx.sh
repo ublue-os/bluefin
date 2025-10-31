@@ -31,6 +31,9 @@ EOF
 # Validate all repos are disabled before committing
 /ctx/build_files/shared/validate-repos.sh
 
+# dx specific tests
+/ctx/build_files/dx/01-tests-dx.sh
+
 # Clean Up
 echo "::group:: Cleanup"
 /ctx/build_files/shared/clean-stage.sh
