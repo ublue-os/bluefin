@@ -34,7 +34,7 @@ glib-compile-schemas /usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail
 # GSConnect
 meson setup --prefix=/usr /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build
 meson install -C /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build --skip-subprojects
-glib-compile-schemas /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/schemas
+# GSConnect installs schemas to /usr/share/glib-2.0/schemas and meson compiles them automatically
 
 # Search Light
 make -C /usr/share/gnome-shell/extensions/search-light@icedman.github.com
