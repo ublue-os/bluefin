@@ -1,12 +1,21 @@
 #!/usr/bin/bash
 
-echo "::group:: ===$(basename "$0")==="
-
 set -ouex pipefail
 
 # Load secure COPR helpers
-# shellcheck source=build_files/shared/copr-helpers.sh
-source /ctx/build_files/shared/copr-helpers.sh
+source "${SCRIPT_PATHS}/copr-helpers.sh"
+
+# Apply IP Forwarding before installing Docker to prevent messing with LXC networking
+sysctl -p
+
+# Load iptable_nat module for docker-in-docker.
+# See:
+#   - https://github.com/ublue-os/bluefin/issues/2365
+#   - https://github.com/devcontainers/features/issues/1235
+mkdir -p /etc/modules-load.d
+tee /etc/modules-load.d/ip_tables.conf <<EOF
+iptable_nat
+EOF
 
 # DX packages from Fedora repos - common to all versions
 FEDORA_PACKAGES=(
@@ -126,5 +135,3 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 for i in /etc/yum.repos.d/rpmfusion-*; do
     sed -i 's@enabled=1@enabled=0@g' "$i"
 done
-
-echo "::endgroup::"

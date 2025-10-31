@@ -1,7 +1,5 @@
 #!/usr/bin/bash
 
-echo "::group:: ===$(basename "$0")==="
-
 set -eoux pipefail
 
 # Beta Updates Testing Repo...
@@ -84,7 +82,7 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     fi
 
     # Install Nvidia RPMs
-    ghcurl "https://raw.githubusercontent.com/ublue-os/main/main/build_files/nvidia-install.sh" -o /tmp/nvidia-install.sh
+    "${SCRIPTS_PATH}/ghcurl" "https://raw.githubusercontent.com/ublue-os/main/main/build_files/nvidia-install.sh" -o /tmp/nvidia-install.sh
     chmod +x /tmp/nvidia-install.sh
     IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
     rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
@@ -121,5 +119,3 @@ if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     depmod -a -v "${KERNEL}"
     echo "zfs" >/usr/lib/modules-load.d/zfs.conf
 fi
-
-echo "::endgroup::"

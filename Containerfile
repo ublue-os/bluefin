@@ -3,9 +3,10 @@ ARG FEDORA_MAJOR_VERSION="42"
 ARG SOURCE_IMAGE="${BASE_IMAGE_NAME}-main"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 
-FROM scratch AS ctx
-COPY /system_files /system_files
-COPY /build_files /build_files
+FROM scratch AS context
+COPY system_files /files
+COPY system_files_overrides /overrides
+COPY build_scripts /build_scripts
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
 COPY /brew /brew
@@ -25,12 +26,11 @@ ARG UBLUE_IMAGE_TAG="stable"
 ARG VERSION=""
 ARG IMAGE_FLAVOR=""
 
-# Build, cleanup, lint.
-RUN --mount=type=cache,dst=/var/cache/libdnf5 \
-    --mount=type=cache,dst=/var/cache/rpm-ostree \
-    --mount=type=bind,from=ctx,source=/,target=/ctx \
+# Build, cleanup, commit.
+RUN --mount=type=tmpfs,dst=/boot \
+    --mount=type=bind,from=context,source=/,target=/run/context \
     --mount=type=secret,id=GITHUB_TOKEN \
-    /ctx/build_files/shared/build.sh
+    /run/context/build_scripts/build.sh
 
 # Makes `/opt` writeable by default
 # Needs to be here to make the main image build strict (no /opt there)

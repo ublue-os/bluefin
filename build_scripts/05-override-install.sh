@@ -1,15 +1,13 @@
 #!/usr/bin/bash
 
-echo "::group:: ===$(basename "$0")==="
-
 set -eoux pipefail
 
 # Offline Bluefin documentation
-ghcurl "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
+"${SCRIPTS_PATH}/ghcurl" "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
 install -Dm0644 -t /usr/share/doc/bluefin/ /tmp/bluefin.pdf
 
 # Starship Shell Prompt
-ghcurl "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" --retry 3 -o /tmp/starship.tar.gz
+"${SCRIPTS_PATH}/ghcurl" "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" --retry 3 -o /tmp/starship.tar.gz
 tar -xzf /tmp/starship.tar.gz -C /tmp
 install -c -m 0755 /tmp/starship /usr/bin
 # shellcheck disable=SC2016
@@ -54,5 +52,3 @@ echo "Running error test for bluefin gschema override. Aborting if failed."
 glib-compile-schemas --strict /tmp/bluefin-schema-test
 echo "Compiling gschema to include bluefin setting overrides"
 glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
-
-echo "::endgroup::"

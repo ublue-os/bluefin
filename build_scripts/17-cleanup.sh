@@ -1,7 +1,5 @@
 #!/usr/bin/bash
 
-echo "::group:: ===$(basename "$0")==="
-
 set -eoux pipefail
 
 # Prevent Distrobox containers from being updated via the background service
@@ -83,5 +81,3 @@ done
 if [ -f /etc/yum.repos.d/fedora-coreos-pool.repo ]; then
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-coreos-pool.repo
 fi
-
-echo "::endgroup::"

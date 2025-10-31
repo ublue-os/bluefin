@@ -1,8 +1,9 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
-echo "::group:: ===$(basename "$0")==="
+set -xeuo pipefail
 
-set -eou pipefail
+# Image cleanup
+# Specifically called by build.sh
 
 REPOS_DIR="/etc/yum.repos.d"
 VALIDATION_FAILED=0
@@ -104,8 +105,6 @@ if [[ -f "$REPOS_DIR/fedora-updates-testing.repo" ]]; then
 fi
 
 # Final summary
-echo ""
-echo "======================================"
 if [[ $VALIDATION_FAILED -eq 1 ]]; then
     echo "VALIDATION FAILED"
     echo "======================================"
@@ -117,4 +116,14 @@ if [[ $VALIDATION_FAILED -eq 1 ]]; then
     exit 1
 fi
 
-echo "::endgroup::"
+dnf clean all
+
+systemctl mask flatpak-add-fedora-repos.service
+rm -f /usr/lib/systemd/system/flatpak-add-fedora-repos.service
+
+rm -rf /.gitkeep
+find /var -mindepth 1 -delete
+find /boot -mindepth 1 -delete
+mkdir -p /var /boot
+
+bootc container lint

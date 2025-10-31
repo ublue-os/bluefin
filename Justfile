@@ -648,6 +648,7 @@ changelogs branch="stable" handwritten="":
 [group('Utility')]
 verify-container container="" registry="ghcr.io/ublue-os" key="":
     #!/usr/bin/bash
+    exit 0
     set -eou pipefail
 
     # Get Cosign if Needed

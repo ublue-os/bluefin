@@ -1,13 +1,10 @@
 #!/usr/bin/bash
 
-echo "::group:: ===$(basename "$0")==="
-
 set -ouex pipefail
 
 # All DNF-related operations should be done here whenever possible
 
-# shellcheck source=build_files/shared/copr-helpers.sh
-source /ctx/build_files/shared/copr-helpers.sh
+source "${SCRIPTS_PATH}/copr-helpers.sh"
 
 # NOTE:
 # Packages are split into FEDORA_PACKAGES and COPR_PACKAGES to prevent
@@ -210,5 +207,3 @@ dnf -y swap \
 dnf -y install \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
     bluefin-plymouth
-
-echo "::endgroup::"
