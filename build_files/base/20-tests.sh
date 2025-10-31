@@ -11,6 +11,9 @@ test -f /usr/share/flatpak/preinstall.d/bazaar.preinstall
 # Basic smoke test to check if the flatpak version is from our copr
 flatpak preinstall --help
 
+# Make sure this garbage never makes it to an image
+test -f /usr/lib/systemd/system/flatpak-add-fedora-repos.service && false
+
 IMPORTANT_PACKAGES=(
     distrobox
     fish
