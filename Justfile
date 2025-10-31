@@ -567,7 +567,6 @@ build-iso $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
 
     curl -Lo iso_files/bluefin.repo https://copr.fedorainfracloud.org/coprs/ublue-os/bluefin/repo/fedora-${FEDORA_VERSION}/ublue-os-bluefin-fedora-${FEDORA_VERSION}.repo
     iso_build_args+=("--volume=${PWD}:/github/workspace/")
-    iso_build_args+=("{{ iso_builder_image }}")
     iso_build_args+=(ARCH="$(uname -m)")
     iso_build_args+=(REPOS="/github/workspace/iso_files/bluefin.repo /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora-updates.repo")
     iso_build_args+=(ENROLLMENT_PASSWORD="universalblue")
