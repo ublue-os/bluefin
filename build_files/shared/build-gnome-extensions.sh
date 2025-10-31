@@ -5,7 +5,7 @@ set -eoux pipefail
 echo "::group:: ===$(basename "$0")==="
 
 # Install tooling
-dnf5 -y install glib2-devel meson sassc
+dnf5 -y install glib2-devel meson sassc cmake dbus-devel
 
 # Build Extensions
 
@@ -32,7 +32,7 @@ make -C /usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com
 glib-compile-schemas /usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com/schemas
 
 # GSConnect
-meson setup /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build
+meson setup --prefix=/usr /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build
 meson install -C /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build --skip-subprojects --no-rebuild
 glib-compile-schemas /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/schemas
 
@@ -41,7 +41,7 @@ make -C /usr/share/gnome-shell/extensions/search-light@icedman.github.com
 glib-compile-schemas /usr/share/gnome-shell/extensions/search-light@icedman.github.com/schemas
 
 # Cleanup
-dnf5 -y remove glib2-devel meson sassc
+dnf5 -y remove glib2-devel meson sassc cmake dbus-devel
 rm -rf /usr/share/gnome-shell/extensions/tmp
 
 echo "::endgroup::"
