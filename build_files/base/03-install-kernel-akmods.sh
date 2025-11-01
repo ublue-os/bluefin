@@ -90,7 +90,7 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     case "$FEDORA_MAJOR_VERSION" in
         43)
             echo "%_pkgverify_level none" > /etc/rpm/macros.verify
-            dnf install -y nvidia-container-toolkit
+            dnf5 install -y nvidia-container-toolkit
             rm /etc/rpm/macros.verify
             ;;
     esac
