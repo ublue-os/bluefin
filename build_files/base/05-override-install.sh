@@ -18,6 +18,7 @@ echo 'eval "$(starship init bash)"' >>/etc/bashrc
 # Automatic wallpaper changing by month
 HARDCODED_RPM_MONTH="12"
 sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
+rm /usr/share/glib-2.0/schemas/gschemas.compiled
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
 # Required for bluefin faces to work without conflicting with a ton of packages
