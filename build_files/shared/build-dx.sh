@@ -36,3 +36,6 @@ echo "::group:: Cleanup"
 /ctx/build_files/shared/clean-stage.sh
 
 echo "::endgroup::"
+
+# dx specific tests
+/ctx/build_files/dx/01-tests-dx.sh

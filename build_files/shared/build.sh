@@ -64,3 +64,6 @@ echo "::group:: Cleanup"
 /ctx/build_files/shared/clean-stage.sh
 
 echo "::endgroup::"
+
+# Simple Tests
+/ctx/build_files/base/20-tests.sh
