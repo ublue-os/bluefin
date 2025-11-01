@@ -4,6 +4,7 @@ app/app.fotema.Fotema
 app/be.alexandervanhee.gradia
 app/com.belmoussaoui.Authenticator
 app/com.belmoussaoui.Decoder
+app/com.belmoussaoui.Obfuscate
 app/com.github.hugolabe.Wike
 app/com.github.zocker_160.SyncThingy
 app/com.pojtinger.felicitas.Sessions
