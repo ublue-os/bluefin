@@ -16,6 +16,9 @@ mkdir -p /etc/modules-load.d
 tee /etc/modules-load.d/ip_tables.conf <<EOF
 iptable_nat
 EOF
+tee /usr/lib/sysctl.d/99-docker-ce.conf <<'EOF'
+net.ipv4.ip_forward = 1
+EOF
 
 # DX packages from Fedora repos - common to all versions
 FEDORA_PACKAGES=(
