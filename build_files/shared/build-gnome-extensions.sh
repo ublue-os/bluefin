@@ -34,6 +34,8 @@ glib-compile-schemas --strict /usr/share/gnome-shell/extensions/dash-to-dock@mic
 # GSConnect installs schemas to /usr/share/glib-2.0/schemas and meson compiles them automatically
 
 # Logo Menu
+install -Dpm0755 -t /usr/bin /usr/share/gnome-shell/extensions/logomenu@aryan_k/distroshelf-helper
+install -Dpm0755 -t /usr/bin /usr/share/gnome-shell/extensions/logomenu@aryan_k/missioncenter-helper
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/logomenu@aryan_k/schemas
 
 # Search Light
