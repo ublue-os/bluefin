@@ -25,6 +25,7 @@ app/org.gnome.NautilusPreviewer
 app/org.gnome.Papers
 app/org.gnome.Showtime
 app/org.gnome.SimpleScan
+app/org.gnome.Snapshot
 app/org.gnome.TextEditor
 app/org.gnome.Weather
 app/org.mozilla.firefox
