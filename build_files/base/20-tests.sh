@@ -76,5 +76,51 @@ for unit in "${IMPORTANT_UNITS[@]}"; do
         exit 1
     fi
 done
+SHORTCUTS_TO_TEST=(
+        "org.gnome.desktop.wm.keybindings:show-desktop:['<Super>d']"
+        "org.gnome.desktop.wm.keybindings:switch-applications:['<Super>Tab']"
+        "org.gnome.desktop.wm.keybindings:switch-applications-backward:['<Shift><Super>Tab']"
+        "org.gnome.desktop.wm.keybindings:switch-windows:['<Alt>Tab']"
+        "org.gnome.desktop.wm.keybindings:switch-windows-backward:['<Shift><Alt>Tab']"
+        "org.gnome.desktop.wm.keybindings:switch-input-source:['<Shift><Super>space']"
+        "org.gnome.desktop.wm.keybindings:unmaximize:['<Super>Down']"
+        "org.gnome.settings-daemon.plugins.media-keys:home:['<Super>e']"
+        "org.gnome.shell.extensions.search-light:shortcut-search:['<Super>space']"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0:binding:<Control><Alt>t"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0:command:/usr/bin/ptyxis --new-window"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1:binding:<Control><Alt>Return"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1:command:/usr/bin/ptyxis --new-window"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2:binding:<Control><Shift>Escape"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2:command:flatpak run io.missioncenter.MissionCenter"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3:binding:<Control><Alt>BackSpace"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3:command:flatpak run com.jeffser.Alpaca"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4:binding:<Super>Print"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4:command:flatpak run be.alexandervanhee.gradia --screenshot"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5:binding:<Control><Alt>space"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5:command:flatpak run it.mijorus.smile"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6:binding:<Super>period"
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6:command:flatpak run it.mijorus.smile"
+)
+
+    for shortcut in "${SHORTCUTS_TO_TEST[@]}"; do
+        IFS=':' read -r schema key expected <<< "$shortcut"
+        actual=$(gsettings get "$schema" "$key" 2>/dev/null || echo "NOT_FOUND")
+        
+        if [[ "$actual" != "$expected" ]]; then
+            echo "❌ Keyboard shortcut mismatch: $schema:$key"
+            echo "   Expected: $expected"
+            echo "   Got: $actual"
+            ((failed++))
+        else
+            echo "✓ $schema:$key"
+        fi
+    done
+
+    if [[ "$failed" -gt 0 ]]; then
+        echo "Keyboard shortcuts validation failed"
+        exit 1
+    fi
+
+
 
 echo "::endgroup::"
