@@ -71,18 +71,6 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     tar -xvzf /tmp/akmods-rpms/"$NVIDIA_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-rpms/
 
-    # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
-    # Exclude for non-beta.... doesn't appear to exist for F42 yet?
-    if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
-        dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
-    else
-        # Monkey patch right now...
-        if ! grep -q negativo17 <(rpm -qi mesa-dri-drivers); then
-            dnf5 -y swap --repo=updates-testing \
-                mesa-dri-drivers mesa-dri-drivers
-        fi
-    fi
-
     # Install nvidia-container-toolkit separately to workaround 
     # https://github.com/NVIDIA/nvidia-container-toolkit/issues/1307
     #
@@ -94,6 +82,18 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
             rm /etc/rpm/macros.verify
             ;;
     esac
+
+    # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
+    # Exclude for non-beta.... doesn't appear to exist for F42 yet?
+    if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
+        dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
+    else
+        # Monkey patch right now...
+        if ! grep -q negativo17 <(rpm -qi mesa-dri-drivers); then
+            dnf5 -y swap --repo=updates-testing \
+                mesa-dri-drivers mesa-dri-drivers
+        fi
+    fi
 
     # Install Nvidia RPMs
     ghcurl "https://raw.githubusercontent.com/ublue-os/main/main/build_files/nvidia-install.sh" -o /tmp/nvidia-install.sh
