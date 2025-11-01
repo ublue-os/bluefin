@@ -3,6 +3,7 @@ app/app.drey.Warp
 app/app.fotema.Fotema
 app/be.alexandervanhee.gradia
 app/com.belmoussaoui.Authenticator
+app/com.belmoussaoui.Decoder
 app/com.github.hugolabe.Wike
 app/com.github.zocker_160.SyncThingy
 app/com.pojtinger.felicitas.Sessions
