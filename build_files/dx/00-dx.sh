@@ -112,18 +112,6 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     fi
 fi
 
-# Install nvidia-container-toolkit separately to workaround 
-# https://github.com/NVIDIA/nvidia-container-toolkit/issues/1307
-#
-# Should be reverted when the RPM is created with a modern OS
-case "$FEDORA_MAJOR_VERSION" in
-    43)
-        echo "%_pkgverify_level none" > /etc/rpm/macros.verify
-        dnf install -y nvidia-container-toolkit
-        rm /etc/rpm/macros.verify
-        ;;
-esac
-
 systemctl enable docker.socket
 systemctl enable podman.socket
 systemctl enable swtpm-workaround.service
