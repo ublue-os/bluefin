@@ -6,6 +6,7 @@ app/com.belmoussaoui.Authenticator
 app/com.belmoussaoui.Decoder
 app/com.belmoussaoui.Obfuscate
 app/com.github.hugolabe.Wike
+app/com.github.jeromerobert.pdfarranger
 app/com.github.zocker_160.SyncThingy
 app/com.pojtinger.felicitas.Sessions
 app/de.haeckerfelix.Shortwave
