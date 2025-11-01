@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 # Load secure COPR helpers
-source "${SCRIPT_PATHS}/copr-helpers.sh"
+source "${SCRIPTS_PATH}/copr-helpers.sh"
 
 # Apply IP Forwarding before installing Docker to prevent messing with LXC networking
 sysctl -p
