@@ -1,5 +1,4 @@
 app/com.github.PintaProject.Pinta
-app/com.github.rafostar.Clapper
 app/com.github.tchx84.Flatseal
 app/com.mattjakeman.ExtensionManager
 app/com.ranfdev.DistroShelf
@@ -22,6 +21,7 @@ app/org.gnome.Maps
 app/org.gnome.NautilusPreviewer
 app/org.gnome.Papers
 app/org.gnome.SimpleScan
+app/org.gnome.Showtime
 app/org.gnome.TextEditor
 app/org.gnome.Weather
 app/org.gnome.baobab
