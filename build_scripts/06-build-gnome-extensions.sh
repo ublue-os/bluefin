@@ -2,8 +2,6 @@
 
 set -eoux pipefail
 
-echo "::group:: ===$(basename "$0")==="
-
 # Install tooling
 dnf5 -y install glib2-devel meson sassc cmake dbus-devel
 
@@ -43,5 +41,3 @@ glib-compile-schemas /usr/share/gnome-shell/extensions/search-light@icedman.gith
 # Cleanup
 dnf5 -y remove glib2-devel meson sassc cmake dbus-devel
 rm -rf /usr/share/gnome-shell/extensions/tmp
-
-echo "::endgroup::"
