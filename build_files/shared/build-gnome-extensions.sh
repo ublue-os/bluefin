@@ -40,7 +40,7 @@ glib-compile-schemas --strict /usr/share/gnome-shell/extensions/logomenu@aryan_k
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/search-light@icedman.github.com/schemas
 
 rm /usr/share/glib-2.0/schemas/gschemas.compiled
-glib-compile-schemas --strict /usr/share/glib-2.0/schemas
+glib-compile-schemas /usr/share/glib-2.0/schemas
 
 # Cleanup
 dnf5 -y remove glib2-devel meson sassc cmake dbus-devel
