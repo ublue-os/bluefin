@@ -31,7 +31,7 @@ glib-compile-schemas --strict /usr/share/gnome-shell/extensions/dash-to-dock@mic
 # GSConnect (commented out until G49 support)
 meson setup --prefix=/usr /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build
 meson install -C /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build --skip-subprojects
-GSConnect installs schemas to /usr/share/glib-2.0/schemas and meson compiles them automatically
+# GSConnect installs schemas to /usr/share/glib-2.0/schemas and meson compiles them automatically
 
 # Logo Menu
 # xdg-terminal-exec is required for this extension as it opens up terminals using that script
