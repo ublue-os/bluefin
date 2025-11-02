@@ -21,7 +21,6 @@ Switch shells safely: change your shell in Terminal settings instead of system-w
 VS Code comes with devcontainers extension pre-installed - perfect for containerized development
 Container development is OS-agnostic - your devcontainers work on Linux, macOS, and Windows
 Use `docker compose` for multi-container development if devcontainers don't fit your workflow
-Check out DevPod for open-source, client-only development environments that work with any IDE
 `ujust bluefin-k8s` gets you started with Kubernetes development tools like `kind` and `kubectl`
 `ujust bluefin-ai` installs a selection of AI tools
 `ujust bluefin-fonts` installs a well-curated collection of monospace fonts
