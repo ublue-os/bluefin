@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 The Bluefin Project Contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 # Bluefin Contributor's Guide
 
 This guide provides detailed instructions for contributing to [Bluefin](https://projectbluefin.io), the Fedora Atomic-based developer workstation. Whether you're fixing bugs, adding features, or improving documentation, this guide will help you contribute effectively using the workflows established by the Bluefin maintainer team.
@@ -1063,7 +1067,7 @@ Each section (e.g., "Bluefin Recommends", "Browsers", "Media") contains an `appi
 
 ### Removals
 
-- To remove a Flatpak from Bluefin’s default install, delete its entry from the relevant system Flatpak list file and/or from Bazaar’s `config.yaml`.
+- To remove a Flatpak from Bluefin’s default install, delete its entry from the relevant system FlatPak list file and/or from Bazaar’s `config.yaml`.
 - To remove a Flatpak from Flathub, follow [Flathub’s end-of-life process](https://docs.flathub.org/docs/for-app-authors/maintenance#end-of-life).
 
 ### Blocklisting

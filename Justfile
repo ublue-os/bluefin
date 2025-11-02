@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 The Bluefin Project Contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 repo_organization := "ublue-os"
 rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.2.4@sha256:8a84bd5a029681aa8db523f927b7c53b5aded9b078b81605ac0a2fedc969f528"
 images := '(

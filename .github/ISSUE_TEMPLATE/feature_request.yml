@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 the Bluefin project contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 name: Request a Package
 description: Request an RPM package to be included in an image
 labels: [package-request]

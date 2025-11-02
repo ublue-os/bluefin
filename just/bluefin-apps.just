@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2024-2025 The Bluefin Project Contributors
+
 # vim: set ft=make :
 ########################
 ### bluefin-apps.just

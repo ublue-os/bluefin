@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+# SPDX-FileCopyrightText: 2023-2025 The Bluefin Project Contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 set -eoux pipefail
 
 echo "::group:: ===$(basename "$0")==="

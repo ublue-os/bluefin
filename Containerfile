@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 The Bluefin Project Contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 ARG BASE_IMAGE_NAME="silverblue"
 ARG FEDORA_MAJOR_VERSION="42"
 ARG SOURCE_IMAGE="${BASE_IMAGE_NAME}-main"

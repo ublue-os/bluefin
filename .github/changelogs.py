@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 the Bluefin project contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 from itertools import product
 import subprocess
 import json
@@ -42,7 +46,7 @@ COMMITS_FORMAT = "### Commits\n| Hash | Subject |\n| --- | --- |{commits}\n\n"
 COMMIT_FORMAT = "\n| **[{short}](https://github.com/ublue-os/bluefin/commit/{githash})** | {subject} |"
 
 CHANGELOG_TITLE = "{tag}: {pretty}"
-CHANGELOG_FORMAT = """\
+CHANGELOG_FORMAT = """
 {handwritten}
 
 From previous `{target}` version `{prev}` there have been the following changes. **One package per new version shown.**
@@ -81,7 +85,7 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{cu
 Be sure to read the [documentation](https://docs.projectbluefin.io/) for more information
 on how to use your cloud native system.
 """
-HANDWRITTEN_PLACEHOLDER = """\
+HANDWRITTEN_PLACEHOLDER = """
 This is an automatically generated changelog for release `{curr}`."""
 
 BLACKLIST_VERSIONS = [
@@ -170,9 +174,8 @@ def get_packages(manifests: dict[str, Any]):
     packages = {}
     for img, manifest in manifests.items():
         try:
-            packages[img] = json.loads(manifest["Labels"]["dev.hhd.rechunk.info"])[
-                "packages"
-            ]
+            packages[img] = json.loads(manifest["Labels"]["dev.hhd.rechunk.info"])
+                ["packages"]
         except Exception as e:
             print(f"Failed to get packages for {img}:\n{e}")
     return packages
@@ -366,7 +369,7 @@ def generate_changelog(
             fedora_version = ""
 
         # Remove .0 from curr
-        curr_pretty = re.sub(r"\.\d{1,2}$", "", curr)
+        curr_pretty = re.sub(r"\.d{{1,2}}$", "", curr)
         # Remove target- from curr
         curr_pretty = re.sub(rf"^[a-z]+-|^[0-9]+-", "", curr_pretty)
         if target == "stable-daily":

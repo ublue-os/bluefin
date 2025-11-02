@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023-2025 the Bluefin project contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 name: Bug Report
 description: Report an issue about using Bluefin
 body:
