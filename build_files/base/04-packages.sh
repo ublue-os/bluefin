@@ -21,6 +21,7 @@ FEDORA_PACKAGES=(
     adw-gtk3-theme
     adwaita-fonts-all
     bash-color-prompt
+    bcache-tools
     bootc
     borgbackup
     cryfs
