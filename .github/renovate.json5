@@ -19,6 +19,11 @@
     },
     ],
 
+  // Enable git-submodules manager for GNOME extensions
+  "git-submodules": {
+    "enabled": true
+  },
+
   "packageRules": [
     {
       "automerge": true,
@@ -38,6 +43,41 @@
       "automerge": true,
       "matchUpdateTypes": ["digest"],
       "matchDepNames": ["ghcr.io/ublue-os/silverblue-main"],
+    },
+    // GNOME extensions git-submodules - track stable releases where available
+    {
+      "matchManagers": ["git-submodules"],
+      "matchPackagePatterns": ["ubuntu/gnome-shell-extension-appindicator"],
+      "versioning": "semver",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["git-submodules"],
+      "matchPackagePatterns": ["micheleg/dash-to-dock"],
+      "versioning": "regex:^extensions\\.gnome\\.org-v(?<major>\\d+)$",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["git-submodules"],
+      "matchPackagePatterns": ["GSConnect/gnome-shell-extension-gsconnect"],
+      "versioning": "semver",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["git-submodules"],
+      "matchPackagePatterns": ["eonpatapon/gnome-shell-extension-caffeine"],
+      "versioning": "semver",
+      "automerge": false
+    },
+    // GNOME extensions without releases - track main/master branch
+    {
+      "matchManagers": ["git-submodules"],
+      "matchPackagePatterns": [
+        "xscriptor/blur-my-shell",
+        "ublue-os/Logomenu",
+        "icedman/search-light"
+      ],
+      "automerge": false
     }
   ]
 }
