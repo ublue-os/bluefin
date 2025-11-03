@@ -4,7 +4,7 @@
 	branch = v61
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/blur-my-shell@aunetx"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/blur-my-shell@aunetx
-	url = https://github.com/xscriptor/blur-my-shell.git
+	url = https://github.com/aunetx/blur-my-shell.git
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/tmp/caffeine"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/tmp/caffeine
 	url = https://github.com/eonpatapon/gnome-shell-extension-caffeine.git
