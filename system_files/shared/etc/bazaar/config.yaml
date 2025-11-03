@@ -330,7 +330,6 @@ sections:
       - com.mardojai.ForgeSparks
       - io.dbeaver.DBeaverCommunity
       - cc.arduino.IDE2
-      - sh.loft.devpod
       - dev.geopjr.Calligraphy
       - io.github.lo2dev.Echo
       - org.gnome.design.IconLibrary

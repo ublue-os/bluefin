@@ -1,5 +1,4 @@
 # 󱍢 Welcome to Bluefin
-
 󱋩 `%IMAGE_NAME%:%IMAGE_TAG%`
 
 |  Command | Description |
@@ -9,11 +8,11 @@
 | `ujust bluefin-cli` | Enable terminal bling |
 | `brew help` | Manage command line packages |
 
-Donate to [Bazaar](https://github.com/kolunmi/bazaar), the next generation app store for Flathub!
+%TIP%
 
 - **󰊤** [Issues](https://issues.projectbluefin.io)
+- **󰊤** [Ask Bluefin](https://ask.projectbluefin.io)
 - **󰈙** [Documentation](http://docs.projectbluefin.io)
-- **󰊌** [Discuss](https://community.projectbluefin.io)
-- **󰊌** [Leave Feedback](https://feedback.projectbluefin.io)
+
 
 %KEY_WARN%
