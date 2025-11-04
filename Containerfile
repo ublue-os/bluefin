@@ -36,3 +36,5 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 # Needs to be here to make the main image build strict (no /opt there)
 # This is for downstream images/stuff like k0s
 RUN rm -rf /opt && ln -s /var/opt /opt
+
+RUN bootc container lint
