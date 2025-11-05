@@ -35,7 +35,7 @@ function rebase_helper() {
 
   # Step 2: Channel Selection
   declare -a CHANNELS
-  CHANNELS=(latest stable stable-daily gts)
+  CHANNELS=(gts stable stable-daily latest)
   echo "The default selection is gts, stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
 
   # Fetch Fedora version per channel and build display list
