@@ -770,7 +770,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     set -eou pipefail
 
     TODAY="$(date +%A)"
-    WEEKLY="Sunday"
+    WEEKLY="Tuesday"
     if [[ {{ ghcr }} == "0" ]]; then
         rm -f /tmp/manifest.json
     fi
