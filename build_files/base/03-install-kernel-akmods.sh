@@ -71,6 +71,18 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     tar -xvzf /tmp/akmods-rpms/"$NVIDIA_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-rpms/
 
+    # Install nvidia-container-toolkit separately to workaround 
+    # https://github.com/NVIDIA/nvidia-container-toolkit/issues/1307
+    #
+    # Should be reverted when the RPM is created with a modern OS
+    case "$FEDORA_MAJOR_VERSION" in
+        43)
+            echo "%_pkgverify_level none" > /etc/rpm/macros.verify
+            dnf5 install -y nvidia-container-toolkit
+            rm /etc/rpm/macros.verify
+            ;;
+    esac
+
     # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
     # Exclude for non-beta.... doesn't appear to exist for F42 yet?
     if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
