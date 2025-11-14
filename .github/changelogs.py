@@ -11,12 +11,12 @@ REGISTRY = "docker://ghcr.io/ublue-os/"
 IMAGE_MATRIX_LATEST = {
     "experience": ["base", "dx"],
     "de": ["gnome"],
-    "image_flavor": ["main", "nvidia", "hwe", "hwe-nvidia"],
+    "image_flavor": ["main", "nvidia-open"],
 }
 IMAGE_MATRIX = {
     "experience": ["base", "dx"],
     "de": ["gnome"],
-    "image_flavor": ["main", "nvidia"],
+    "image_flavor": ["main", "nvidia-open"],
 }
 
 RETRIES = 3
@@ -34,8 +34,7 @@ OTHER_NAMES = {
     "base": "### Base Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
     "dx": "### [Dev Experience Images](https://docs.projectbluefin.io/bluefin-dx)\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
     "gnome": "### [Bluefin Images](https://projectbluefin.io/)\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
-    "nvidia": "### Nvidia Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
-    "hwe": "### HWE Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
+    "nvidia-open": "### Nvidia Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
 }
 
 COMMITS_FORMAT = "### Commits\n| Hash | Subject |\n| --- | --- |{commits}\n\n"
@@ -213,9 +212,7 @@ def get_package_groups(target: str, prev: dict[str, Any], manifests: dict[str, A
             if img not in pkg:
                 continue
 
-            if t == "hwe" and "hwe" not in image_flavor:
-                continue
-            if t == "nvidia" and "nvidia" not in image_flavor:
+            if t == "nvidia-open" and "nvidia-open" not in image_flavor:
                 continue
             if t == "gnome" and de != "gnome":
                 continue
