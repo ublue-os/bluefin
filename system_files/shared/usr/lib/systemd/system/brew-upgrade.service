@@ -2,7 +2,8 @@
 Description=Upgrade Brew packages
 After=local-fs.target
 After=network-online.target
-ConditionPathIsSymbolicLink=/home/linuxbrew/.linuxbrew/bin/brew
+ConditionPathExists=/home/linuxbrew/.linuxbrew/bin/brew
+ConditionPathIsExecutable=/home/linuxbrew/.linuxbrew/bin/brew
 
 [Service]
 User=1000

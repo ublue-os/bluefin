@@ -1,3 +1,2 @@
-enable brew-setup.service
 enable brew-update.timer
 enable brew-upgrade.timer
