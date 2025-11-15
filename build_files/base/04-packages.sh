@@ -29,6 +29,7 @@ FEDORA_PACKAGES=(
     ddcutil
     evtest
     fastfetch
+    file
     firewall-config
     fish
     foo2zjs
