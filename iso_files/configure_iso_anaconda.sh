@@ -11,7 +11,7 @@ sbkey='https://github.com/ublue-os/akmods/raw/main/certs/public_key.der'
 # Configure Live Environment
 
 # Remove packages from liveCD to save space
-dnf remove -y ublue-brew ublue-motd || true
+dnf remove -y ublue-motd || true
 
 # Setup dock
 tee /usr/share/glib-2.0/schemas/zz2-org.gnome.shell.gschema.override <<EOF
