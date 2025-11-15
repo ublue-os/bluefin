@@ -77,16 +77,22 @@ for unit in "${IMPORTANT_UNITS[@]}"; do
     fi
 done
 
-# Test Homebrew installation files
-echo "Testing Homebrew installation files..."
+# Test Homebrew build-time installation
+echo "Testing Homebrew build-time installation..."
 
-# Test that the homebrew installer script exists and is executable
-test -f /usr/share/ublue-os/homebrew-install.sh || { echo "Missing homebrew installer script"; exit 1; }
-test -x /usr/share/ublue-os/homebrew-install.sh || { echo "Homebrew installer script is not executable"; exit 1; }
+# Test that Homebrew is actually installed
+test -x /var/home/linuxbrew/.linuxbrew/bin/brew || { echo "Homebrew binary not found or not executable"; exit 1; }
+/var/home/linuxbrew/.linuxbrew/bin/brew --version || { echo "Homebrew --version failed"; exit 1; }
+
+# Verify /home -> /var/home symlink works (ostree system feature)
+test -d /home/linuxbrew/.linuxbrew || { echo "/home/linuxbrew not accessible (ostree /home symlink issue)"; exit 1; }
+
+# Test directory ownership (should be UID/GID 1000)
+stat -c "%u:%g" /var/home/linuxbrew/.linuxbrew | grep -q "1000:1000" || { echo "Homebrew directory has wrong ownership"; exit 1; }
 
 # Test that all systemd service files exist
+# Homebrew now installed at build-time
 HOMEBREW_SYSTEMD_FILES=(
-    /usr/lib/systemd/system/brew-setup.service
     /usr/lib/systemd/system/brew-update.service
     /usr/lib/systemd/system/brew-update.timer
     /usr/lib/systemd/system/brew-upgrade.service
