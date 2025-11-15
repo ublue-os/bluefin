@@ -124,7 +124,6 @@ copr_install_isolated "ublue-os/packages" \
     "bluefin-schemas" \
     "bluefin-fastfetch" \
     "ublue-bling" \
-    "ublue-brew" \
     "ublue-fastfetch" \
     "ublue-motd" \
     "ublue-polkit-rules" \
