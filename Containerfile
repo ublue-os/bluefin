@@ -34,15 +34,11 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 # Install Homebrew
 RUN --mount=type=cache,dst=/var/cache/homebrew,uid=1000,gid=1000 \
     set -eoux pipefail && \
-    # Create linuxbrew user with fixed UID/GID for compatibility with first user \
     useradd -u 1000 -m -s /bin/bash -c "Homebrew Build User" linuxbrew && \
-    # Create Homebrew directory structure in /var/home (persists across ostree) \
     mkdir -p /var/home/linuxbrew/.linuxbrew && \
     chown -R 1000:1000 /var/home/linuxbrew && \
-    # Create cache directories \
     mkdir -p /var/cache/homebrew /var/lib/homebrew && \
     chown -R 1000:1000 /var/cache/homebrew /var/lib/homebrew && \
-    # Download and run Homebrew installer as linuxbrew user \
     su - linuxbrew -c "bash -c ' \
         export NONINTERACTIVE=1 && \
         export HOMEBREW_BREW_GIT_REMOTE=https://github.com/Homebrew/brew && \
@@ -50,15 +46,11 @@ RUN --mount=type=cache,dst=/var/cache/homebrew,uid=1000,gid=1000 \
         export HOMEBREW_NO_AUTO_UPDATE=1 && \
         curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash \
     '" && \
-    # Disable git auto-gc to prevent background processes \
     su - linuxbrew -c "git config --global gc.auto 0" && \
-    # Verify installation \
     test -x /var/home/linuxbrew/.linuxbrew/bin/brew && \
     /var/home/linuxbrew/.linuxbrew/bin/brew --version && \
     test -d /var/home/linuxbrew/.linuxbrew/Homebrew && \
-    # Clean up linuxbrew user (ownership preserved via UID/GID 1000) \
     userdel linuxbrew && \
-    # Cleanup cache \
     dnf clean all
 
 # Makes `/opt` writeable by default
