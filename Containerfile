@@ -44,7 +44,7 @@ RUN --mount=type=cache,dst=/var/cache/homebrew,uid=1000,gid=1000 \
         export HOMEBREW_BREW_GIT_REMOTE=https://github.com/Homebrew/brew && \
         export HOMEBREW_CORE_GIT_REMOTE=https://github.com/Homebrew/homebrew-core && \
         export HOMEBREW_NO_AUTO_UPDATE=1 && \
-        curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash \
+        ghcurl --retry 3 https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash \
     '" && \
     su - linuxbrew -c "git config --global gc.auto 0" && \
     test -x /var/home/linuxbrew/.linuxbrew/bin/brew && \
