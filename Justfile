@@ -743,7 +743,7 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
             skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
         fi
     fi
-    fedora_version=$(jq -r '.Labels["ostree.linux"]' < /tmp/manifest.json | grep -oP 'fc\K[0-9]+')
+    fedora_version=$(jq -r '.Labels["org.opencontainers.image.version"]' < /tmp/manifest.json | grep -oP '^[0-9]+')
     if [[ -n "${kernel_pin:-}" ]]; then
         fedora_version=$(echo "${kernel_pin}" | grep -oP 'fc\K[0-9]+')
     fi
