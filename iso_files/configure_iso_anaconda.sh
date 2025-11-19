@@ -67,6 +67,7 @@ SPECS=(
     "libblockdev-lvm"
     "libblockdev-dm"
     "anaconda-live"
+    "firefox"
 )
 if [[ "$IMAGE_TAG" =~ lts ]]; then
     dnf config-manager --set-enabled centos-release-kmods-kernel
