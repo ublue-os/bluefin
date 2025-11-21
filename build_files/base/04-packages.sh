@@ -211,7 +211,7 @@ dnf -y install \
 #    Workaround pkcs11-provider regression, see issue #1943
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
-if [[ "${UBLUE_IMAGE_TAG}" != "latest" && "${UBLUE_IMAGE_TAG}" != "beta" ]] ; then
+if [[ "${UBLUE_IMAGE_TAG}" != "latest" && "${UBLUE_IMAGE_TAG}" != "beta" && "${FEDORA_MAJOR_VERSION}" == "43" ]] ; then
     # Downgrade mutter - 20 Nov 2025 - there seems to be a bug with the latest version
     # where control-alt-<arrow> will leave the arrow key in a weird state,
     # repeating the keystroke until interrupted
