@@ -289,9 +289,11 @@ setup-speech-support ACTION="":
         fi
         # Install Pied flatpak for better voices
         echo "Installing Pied flatpak for high-quality voices..."
-        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        flatpak install -y --user flathub page.codeberg.Elleo.Pied 2>/dev/null || \
-            echo "Note: Pied may not be available on Flathub yet. You can build it from https://github.com/Elleo/pied"
+        echo "Note: Pied is be available on Flathub yet. Installing from https://github.com/Elleo/pied now"
+        URL=$(curl -s https://api.github.com/repos/Elleo/pied/releases | jq -r 'first(.[] | .assets[]? | select(.browser_download_url | endswith(".flatpak")) | .browser_download_url)')
+        curl -sL -o ~/Downloads/Pied.flatpak "$URL"
+        flatpak install --user ~/Downloads/Pied.flatpak -y
+        rm ~/Downloads/Pied.flatpak
         # Enable and start user service
         systemctl --user daemon-reload
         systemctl --user enable --now speech-dispatcherd.service
