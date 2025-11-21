@@ -311,7 +311,7 @@ def get_commits(prev_manifests, manifests, workdir: str):
         for commit in commits.split("\n"):
             if not commit:
                 continue
-            parts = commit.split("|")
+            parts = commit.split("|", 3)
             if len(parts) < 4:
                 continue
             githash, short, author, subject = parts
