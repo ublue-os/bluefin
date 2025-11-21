@@ -194,6 +194,13 @@ if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   rpm -q flatpak --qf "%{NAME} %{VENDOR}\n" | grep ublue-os
 fi
 
+# Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
+dnf -y swap \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
+    fedora-logos bluefin-logos
+dnf -y install \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
+    bluefin-plymouth
 
 ## Pins and Overrides
 ## Use this section to pin packages in order to avoid regressions
@@ -204,13 +211,13 @@ fi
 #    Workaround pkcs11-provider regression, see issue #1943
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
-
-# Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
-dnf -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
-    fedora-logos bluefin-logos
-dnf -y install \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
-    bluefin-plymouth
+if [[ "${UBLUE_IMAGE_TAG}" != "latest" && "${UBLUE_IMAGE_TAG}" != "beta" ]] ; then
+    # Downgrade mutter - 20 Nov 2025 - there seems to be a bug with the latest version
+    # where control-alt-<arrow> will leave the arrow key in a weird state,
+    # repeating the keystroke until interrupted
+    # Thank you @adamisrael :salute:
+    # FIXME: please un-pin as soon as this is fixed upstream
+    dnf downgrade -y mutter-49.1-1.fc43
+fi
 
 echo "::endgroup::"
