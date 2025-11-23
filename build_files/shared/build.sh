@@ -12,7 +12,6 @@ dnf remove -y ublue-os-just
 
 # Copy Files to Container
 rsync -rvK /ctx/system_files/shared/ /
-cat /usr/share/ublue-os/just/00-entry.just
 mkdir -p /usr/share/ublue-os/homebrew/
 cp /ctx/brew/*.Brewfile /usr/share/ublue-os/homebrew/
 
