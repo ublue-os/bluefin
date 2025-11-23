@@ -33,6 +33,7 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 
 # Install Homebrew
 RUN --mount=type=cache,dst=/var/cache/homebrew,uid=1000,gid=1000 \
+    --mount=type=bind,from=ctx,source=/,target=/ctx \
     set -eoux pipefail && \
     useradd -u 1000 -m -s /bin/bash -c "Homebrew Build User" linuxbrew && \
     mkdir -p /var/home/linuxbrew/.linuxbrew && \
@@ -44,12 +45,13 @@ RUN --mount=type=cache,dst=/var/cache/homebrew,uid=1000,gid=1000 \
         export HOMEBREW_BREW_GIT_REMOTE=https://github.com/Homebrew/brew && \
         export HOMEBREW_CORE_GIT_REMOTE=https://github.com/Homebrew/homebrew-core && \
         export HOMEBREW_NO_AUTO_UPDATE=1 && \
-        ghcurl --retry 3 https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash \
+        /ctx/build_files/shared/utils/ghcurl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh --retry 3 | bash \
     '" && \
     su - linuxbrew -c "git config --global gc.auto 0" && \
     test -x /var/home/linuxbrew/.linuxbrew/bin/brew && \
     /var/home/linuxbrew/.linuxbrew/bin/brew --version && \
     test -d /var/home/linuxbrew/.linuxbrew/Homebrew && \
+    chown -R root:root /var/home/linuxbrew /var/cache/homebrew /var/lib/homebrew && \
     userdel linuxbrew && \
     dnf clean all
 

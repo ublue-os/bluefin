@@ -21,6 +21,10 @@ systemctl enable check-sb-key.service
 systemctl enable input-remapper.service
 systemctl enable flatpak-nuke-fedora.service
 
+# Homebrew auto-update and upgrade timers
+systemctl enable brew-update.timer
+systemctl enable brew-upgrade.timer
+
 # run flatpak preinstall once at startup
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   systemctl enable flatpak-preinstall.service
