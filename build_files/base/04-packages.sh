@@ -45,6 +45,7 @@ FEDORA_PACKAGES=(
     input-remapper
     iwd
     jetbrains-mono-fonts-all
+    just
     krb5-workstation
     libgda
     libgda-sqlite
