@@ -8,7 +8,6 @@ COPY /system_files /system_files
 COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
-COPY /brew /brew
 COPY --from=ghcr.io/projectbluefin/common /system_files /system_files/shared
 
 ## bluefin image section
