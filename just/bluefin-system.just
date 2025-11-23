@@ -167,6 +167,17 @@ bluefin-fonts:
 bluefin-k8s:
     brew bundle --file /usr/share/ublue-os/homebrew/bluefin-k8s.Brewfile
 
+clean-system:
+    #!/usr/bin/bash
+    podman image prune -af
+    podman volume prune -f
+    flatpak uninstall --unused
+    rpm-ostree cleanup -bm
+    if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+        brew autoremove
+        brew cleanup
+    fi
+
 # Configure grub bootmenu visibility
 [group('System')]
 configure-grub:
@@ -180,6 +191,16 @@ alias rollback-helper := rebase-helper
 [group('System')]
 rebase-helper:
     @/usr/bin/ublue-rollback-helper
+
+# Enable automatic LUKS unlock via TPM
+setup-luks-tpm-unlock:
+    #!/usr/bin/bash
+    sudo /usr/libexec/luks-enable-tpm2-autounlock
+
+# Disable automatic LUKS unlock via TPM
+remove-luks-tpm-unlock:
+    #!/usr/bin/bash
+    sudo /usr/libexec/luks-disable-tpm2-autounlock
 
 # Toggle IWD
 [group('System')]
