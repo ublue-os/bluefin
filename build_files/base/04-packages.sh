@@ -45,6 +45,7 @@ FEDORA_PACKAGES=(
     input-remapper
     iwd
     jetbrains-mono-fonts-all
+    just
     krb5-workstation
     libgda
     libgda-sqlite
@@ -60,6 +61,7 @@ FEDORA_PACKAGES=(
     oddjob-mkhomedir
     opendyslexic-fonts
     openssh-askpass
+    powerstat
     powertop
     printer-driver-brlaser
     pulseaudio-utils

@@ -7,14 +7,11 @@ echo "::group:: Copy Files"
 # Copy ISO list for `install-system-flaptaks`
 install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
 
+# We need to remove this package here because lots of files we add from `projectbluefin/common` override the rpm files and they also go away when you do `dnf remove`
+dnf remove -y ublue-os-just
+
 # Copy Files to Container
 rsync -rvK /ctx/system_files/shared/ /
-mkdir -p /usr/share/ublue-os/homebrew/
-cp /ctx/brew/*.Brewfile /usr/share/ublue-os/homebrew/
-
-# Consolidate Just Files
-cp -r /ctx/just /tmp/just
-find /tmp/just -iname '*.just' -exec printf "\n\n" \; -exec cat {} \; >>/usr/share/ublue-os/just/60-custom.just
 
 mkdir -p /tmp/scripts/helpers
 install -Dm0755 /ctx/build_files/shared/utils/ghcurl /tmp/scripts/helpers/ghcurl
