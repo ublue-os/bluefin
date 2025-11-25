@@ -19,6 +19,7 @@ source /ctx/build_files/shared/copr-helpers.sh
 FEDORA_PACKAGES=(
     adcli
     adw-gtk3-theme
+    adwaita-fonts-all
     bash-color-prompt
     bcache-tools
     bootc
@@ -35,19 +36,16 @@ FEDORA_PACKAGES=(
     gcc
     git-credential-libsecret
     glow
-    gnome-shell-extension-appindicator
-    gnome-shell-extension-blur-my-shell
-    gnome-shell-extension-caffeine
-    gnome-shell-extension-dash-to-dock
     gnome-tweaks
     gum
     hplip
     ibus-mozc
-    igt-gpu-tools
     ifuse
+    igt-gpu-tools
     input-remapper
     iwd
     jetbrains-mono-fonts-all
+    just
     krb5-workstation
     libgda
     libgda-sqlite
@@ -59,9 +57,11 @@ FEDORA_PACKAGES=(
     make
     mesa-libGLU
     mozc
+    nautilus-gsconnect
     oddjob-mkhomedir
     opendyslexic-fonts
     openssh-askpass
+    powerstat
     powertop
     printer-driver-brlaser
     pulseaudio-utils
@@ -78,7 +78,7 @@ FEDORA_PACKAGES=(
     sssd-ad
     sssd-krb5
     sssd-nfs-idmap
-    tailscale
+    switcheroo-control
     tmux
     usbip
     usbmuxd
@@ -86,25 +86,15 @@ FEDORA_PACKAGES=(
     wireguard-tools
     wl-clipboard
     xprop
-    yaru-theme
     zenity
     zsh
 )
 
 # Version-specific Fedora package additions
 case "$FEDORA_MAJOR_VERSION" in
-    41)
-        FEDORA_PACKAGES+=(
-            epson-inkjet-printer-escpr
-            epson-inkjet-printer-escpr2
-            google-noto-fonts-all
-            uld
-        )
-        ;;
     42)
         FEDORA_PACKAGES+=(
             evolution-ews-core
-            google-noto-fonts-all
             uld
         )
         ;;
@@ -119,45 +109,39 @@ esac
 echo "Installing ${#FEDORA_PACKAGES[@]} packages from Fedora repos..."
 dnf -y install "${FEDORA_PACKAGES[@]}"
 
-# Install COPR packages using isolated enablement (secure)
-echo "Installing COPR packages with isolated repo enablement..."
+dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+dnf config-manager setopt tailscale-stable.enabled=0
+dnf -y install --enablerepo='tailscale-stable' tailscale
 
 # From che/nerd-fonts
 copr_install_isolated "che/nerd-fonts" "nerd-fonts"
-
-# From ublue-os/staging
-copr_install_isolated "ublue-os/staging" \
-    "gnome-shell-extension-gsconnect" \
-    "gnome-shell-extension-logo-menu" \
-    "gnome-shell-extension-search-light" \
-    "gnome-shell-extension-tailscale-gnome-qs" \
-    "nautilus-gsconnect"
 
 # From ublue-os/packages
 copr_install_isolated "ublue-os/packages" \
     "bluefin-backgrounds" \
     "bluefin-cli-logos" \
     "bluefin-faces" \
-    "bluefin-fastfetch" \
     "bluefin-schemas" \
+    "bluefin-fastfetch" \
     "ublue-bling" \
     "ublue-brew" \
     "ublue-fastfetch" \
     "ublue-motd" \
     "ublue-polkit-rules" \
-    "ublue-setup-services"
+    "ublue-setup-services" \
+    "uupd"
 
 # Version-specific COPR packages
-case "$FEDORA_MAJOR_VERSION" in
-    42)
+# case "$FEDORA_MAJOR_VERSION" in
+#    42)
         # bazaar and uupd from ublue-os/packages
-        copr_install_isolated "ublue-os/packages" "bazaar" "uupd"
-        ;;
-    43)
+        # copr_install_isolated "ublue-os/packages" "bazaar" "uupd"
+        # ;;
+    # 43)
         # bazaar from ublue-os/packages
-        copr_install_isolated "ublue-os/packages" "bazaar"
-        ;;
-esac
+        # copr_install_isolated "ublue-os/packages" "bazaar"
+        # ;;
+# esac
 
 # Packages to exclude - common to all versions
 EXCLUDED_PACKAGES=(
@@ -180,7 +164,7 @@ case "$FEDORA_MAJOR_VERSION" in
         EXCLUDED_PACKAGES+=(gnome-software)
         ;;
     43)
-        EXCLUDED_PACKAGES+=(fwupd gnome-software)
+        EXCLUDED_PACKAGES+=(gnome-software)
         ;;
 esac
 
@@ -194,39 +178,17 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     fi
 fi
 
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    thirdparty_repo_install "terra" \
-                           'terra,https://repos.fyralabs.com/terra$releasever' \
-                           "terra-release" \
-                           "terra-release-extras" \
-                           "terra*"
-fi
-
-# shellcheck disable=SC2016
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        gnome-shell gnome-shell
-    dnf versionlock add gnome-shell
-    dnf -y swap \
-        --repo=terra --repo=terra-extras \
-        switcheroo-control switcheroo-control
-    dnf versionlock add switcheroo-control
-fi
-
 # Fix for ID in fwupd
-if [[ "${FEDORA_MAJOR_VERSION}" -lt "43" ]]; then
-    dnf -y swap \
-        --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        fwupd fwupd
-fi
+dnf -y copr enable ublue-os/staging
+dnf -y copr disable ublue-os/staging
+dnf -y swap \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+    fwupd fwupd
 
 # TODO: remove me on next flatpak release when preinstall landed
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-  dnf copr enable -y ublue-os/flatpak-test
-  dnf copr disable -y ublue-os/flatpak-test
+if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
+  dnf -y copr enable ublue-os/flatpak-test
+  dnf -y copr disable ublue-os/flatpak-test
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
@@ -234,6 +196,13 @@ if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
   rpm -q flatpak --qf "%{NAME} %{VENDOR}\n" | grep ublue-os
 fi
 
+# Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
+dnf -y swap \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
+    fedora-logos bluefin-logos
+dnf -y install \
+    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
+    bluefin-plymouth
 
 ## Pins and Overrides
 ## Use this section to pin packages in order to avoid regressions
@@ -244,19 +213,13 @@ fi
 #    Workaround pkcs11-provider regression, see issue #1943
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
-
-# Only downgrade for F42
-if [ "$FEDORA_MAJOR_VERSION" -eq "42" ]; then
-    # Downgrade libdex to 0.9.1 because 0.10 makes bazaar crash under VMs and PCs with low specs
-    dnf5 install -y libdex-0.9.1
+if [[ "${UBLUE_IMAGE_TAG}" != "latest" && "${UBLUE_IMAGE_TAG}" != "beta" && "${FEDORA_MAJOR_VERSION}" == "43" ]] ; then
+    # Downgrade mutter - 20 Nov 2025 - there seems to be a bug with the latest version
+    # where control-alt-<arrow> will leave the arrow key in a weird state,
+    # repeating the keystroke until interrupted
+    # Thank you @adamisrael :salute:
+    # FIXME: please un-pin as soon as this is fixed upstream
+    dnf downgrade -y mutter-49.1-1.fc43
 fi
-
-# Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
-dnf -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
-    fedora-logos bluefin-logos
-dnf -y install \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
-    bluefin-plymouth
 
 echo "::endgroup::"

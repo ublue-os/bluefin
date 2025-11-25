@@ -1,0 +1,14 @@
+[Unit]
+Description=Bazaar background service
+Documentation=https://github.com/kolunmi/bazaar
+After=graphical-session.target
+StartLimitBurst=10
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=flatpak run --command=bazaar io.github.kolunmi.Bazaar --no-window
+StandardOutput=journal
+
+[Install]
+WantedBy=graphical-session.target

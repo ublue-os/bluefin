@@ -41,9 +41,9 @@ Bluefin images are built using:
 
 | Channel | Purpose | Update Frequency | Fedora Version |
 |---------|---------|------------------|----------------|
-| **latest** | Daily builds | Multiple times per day | 42 (current) |
-| **stable** | Weekly builds | Weekly | 42 |
-| **gts** | Long-term support | As needed | 41 (LTS) |
+| **latest** | Daily builds | Multiple times per day | 43 (current) |
+| **stable** | Weekly builds | Weekly | 43 |
+| **gts** | Long-term support | As needed | 42 (LTS) |
 
 ## Getting Started
 
@@ -892,7 +892,7 @@ git push origin your-branch
 strategy:
   matrix:
     variant: [bluefin, bluefin-dx]
-    fedora: [41, 42]
+    fedora: [42, 43]
 ```
 
 ### Build Script Development

@@ -6,10 +6,11 @@ on:
       - main
       - testing
     paths-ignore:
-      - '.github/workflows/*iso*'
-      - '**.md'
-      - 'flatpaks/**'
-      - 'iso_files/**'
+      - ".github/workflows/*iso*.yml"
+      - ".github/workflows/*validate*.yml"
+      - "**.md"
+      - "flatpaks/**"
+      - "iso_files/**"
   workflow_call:
   workflow_dispatch:
 
@@ -23,7 +24,7 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
-      image_flavors: '["main", "nvidia", "nvidia-open"]'
+      image_flavors: '["main", "nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
 
