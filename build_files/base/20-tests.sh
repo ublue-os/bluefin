@@ -62,6 +62,7 @@ done
 #fi
 
 IMPORTANT_UNITS=(
+    brew-setup.service
     brew-update.timer
     brew-upgrade.timer
     rpm-ostree-countme.timer

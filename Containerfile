@@ -31,29 +31,26 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
     --mount=type=secret,id=GITHUB_TOKEN \
     /ctx/build_files/shared/build.sh
 
-# Install Homebrew
-RUN --mount=type=cache,dst=/var/cache/homebrew,uid=1000,gid=1000 \
-    --mount=type=bind,from=ctx,source=/,target=/ctx \
+# Download Homebrew tarball (extracted at first boot by brew-setup.service)
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=secret,id=GITHUB_TOKEN \
     set -eoux pipefail && \
-    useradd -u 1000 -m -s /bin/bash -c "Homebrew Build User" linuxbrew && \
-    mkdir -p /var/home/linuxbrew/.linuxbrew && \
-    chown -R 1000:1000 /var/home/linuxbrew && \
-    mkdir -p /var/cache/homebrew /var/lib/homebrew && \
-    chown -R 1000:1000 /var/cache/homebrew /var/lib/homebrew && \
-    su - linuxbrew -c "bash -c ' \
-        export NONINTERACTIVE=1 && \
-        export HOMEBREW_BREW_GIT_REMOTE=https://github.com/Homebrew/brew && \
-        export HOMEBREW_CORE_GIT_REMOTE=https://github.com/Homebrew/homebrew-core && \
-        export HOMEBREW_NO_AUTO_UPDATE=1 && \
-        /ctx/build_files/shared/utils/ghcurl https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh --retry 3 | bash \
-    '" && \
-    su - linuxbrew -c "git config --global gc.auto 0" && \
-    test -x /var/home/linuxbrew/.linuxbrew/bin/brew && \
-    /var/home/linuxbrew/.linuxbrew/bin/brew --version && \
-    test -d /var/home/linuxbrew/.linuxbrew/Homebrew && \
-    chown -R root:root /var/home/linuxbrew /var/cache/homebrew /var/lib/homebrew && \
-    userdel linuxbrew && \
-    dnf clean all
+    ARCH=$(uname -m) && \
+    # Get latest homebrew release tag from GitHub API
+    HOMEBREW_RELEASE=$(curl -sL \
+        -H "Accept: application/vnd.github+json" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        "https://api.github.com/repos/ublue-os/packages/releases" | \
+        jq -r '[.[] | select(.tag_name | startswith("homebrew-"))][0].tag_name') && \
+    echo "Using Homebrew release: ${HOMEBREW_RELEASE}" && \
+    HOMEBREW_BASE_URL="https://github.com/ublue-os/packages/releases/download/${HOMEBREW_RELEASE}" && \
+    # Download tarball to /usr/share 
+    /ctx/build_files/shared/utils/ghcurl "${HOMEBREW_BASE_URL}/homebrew-${ARCH}.tar.zst" --retry 3 -o /usr/share/homebrew.tar.zst && \
+    # Download and verify checksum
+    EXPECTED_SHA=$(/ctx/build_files/shared/utils/ghcurl "${HOMEBREW_BASE_URL}/homebrew-${ARCH}.sha256" --retry 3 | awk '{print $1}') && \
+    echo "${EXPECTED_SHA}  /usr/share/homebrew.tar.zst" | sha256sum -c && \
+    # Verify tarball exists
+    test -f /usr/share/homebrew.tar.zst
 
 # Makes `/opt` writeable by default
 # Needs to be here to make the main image build strict (no /opt there)

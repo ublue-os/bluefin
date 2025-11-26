@@ -21,7 +21,8 @@ systemctl enable check-sb-key.service
 systemctl enable input-remapper.service
 systemctl enable flatpak-nuke-fedora.service
 
-# Homebrew auto-update and upgrade timers
+# Homebrew setup (extracts tarball on first boot) and auto-update/upgrade timers
+systemctl enable brew-setup.service
 systemctl enable brew-update.timer
 systemctl enable brew-upgrade.timer
 
