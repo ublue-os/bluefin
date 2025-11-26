@@ -39,4 +39,4 @@ body:
     id: extra-context
     attributes:
       label: Extra information or context
-      description: Add any other context about the problem here.
+      description: If you are reporting a regression: Use `ujust rebase-helper` to find the version that used to work. Report the working version and the broken version so that other users can rebase and confirm the issue!
