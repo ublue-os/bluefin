@@ -5,10 +5,7 @@ echo "::group:: ===$(basename "$0")==="
 set -eoux pipefail
 
 # Prevent Distrobox containers from being updated via the background service
-if [[ "$(rpm -E %fedora)" -eq "42" ]]; then
-    sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
-fi
-
+sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 
 # Setup Systemd
 systemctl enable rpm-ostree-countme.service
