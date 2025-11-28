@@ -11,6 +11,7 @@ on:
       - "**.md"
       - "flatpaks/**"
       - "iso_files/**"
+      - "system_files/shared/etc/bazaar/**"
   workflow_call:
   workflow_dispatch:
 
