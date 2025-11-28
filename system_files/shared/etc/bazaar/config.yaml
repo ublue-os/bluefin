@@ -3,7 +3,7 @@ css: |
      margin-top: 30px;
      margin-left: 30px;
      margin-right: 30px;
-     border-radius: 10px;
+     border-radius: 12px;
   }
   .global-section banner-text-overlay {
      margin: 30px;
@@ -27,13 +27,22 @@ css: |
 
   .global-section {
     margin: 15px;
-    border-radius: 25px;
+    border-radius: 12px;
     color: #ffffff;
+  }
+
+  .global-section app-tile-verified-check {
+    color: var(--fg-color);
+  }
+
+  .global-section app-tile-installed-indicator {
+    color: var(--fg-color);
   }
 
   .rec-section {
     background: linear-gradient(0deg, #774c45, #a5897b);
   }
+
   .rec-section-dark {
     background: linear-gradient(to top, #0d0e19, #111324, #13182f, #161b3b, #1a1f47, #1e2351, #22275c, #272b66, #2c3171, #31387d, #363e88, #3b4594);
   }
@@ -67,19 +76,12 @@ css: |
   .office-section app-tile > button {
     color: #ffffff;
   }
-  .office-section app-tile-installed-indicator {
-    color: #ffffff;
-  }
-
   .office-section-dark {
     background: linear-gradient(to top, #030a15, #070e19, #0a111d, #0d1421, #0f1625, #131c2f, #17233a, #1c2945, #25365b, #2f4371, #3a5088, #465ea0);
   }
 
   .gaming-section {
     background: linear-gradient(0deg, #1c3727, #85d0b0);
-  }
-  .gaming-section app-tile-installed-indicator {
-    color: #243a98;
   }
 
   .gaming-section-dark {
@@ -96,6 +98,7 @@ css: |
   .dev-section {
     background: linear-gradient(90deg, #8c4d38 0%, #906860 55%, #8c4d38 100%);
   }
+
   .dev-section-dark {
     background: linear-gradient(90deg, #241a23 0%, #75554e 55%, #241a23 100%);
   }
@@ -103,10 +106,8 @@ css: |
   .edu-section {
     background: linear-gradient(45deg, #2a0e07, #7f4f39);
   }
+
   .edu-section app-tile > button {
-    color: #ffffff;
-  }
-  .edu-section app-tile-installed-indicator {
     color: #ffffff;
   }
 
