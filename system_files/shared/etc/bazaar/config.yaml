@@ -89,7 +89,7 @@ css: |
   }
 
   .utilities-section {
-    background: linear-gradient(to left top, #282217, #373227, #474438, #585549, #69685c, #747468, #808175, #8c8e82, #94988c, #9da395, #a5ada0, #adb8aa);
+    background: linear-gradient(to left top, #dbdbc4, #cdd2bc, #bfc9b5, #b2c0af, #a6b7a8, #9fb09f, #98a996, #91a28d, #919a7f, #929271, #958866, #997e5d);
   }
   .utilities-section-dark {
     background: linear-gradient(to left top, #111b24, #15202d, #1a2636, #212b3f, #293048, #313652, #3a3c5c, #444266, #4f4b74, #5a5582, #665e90, #72689f);
