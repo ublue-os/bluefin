@@ -8,7 +8,7 @@ COPY /system_files /system_files
 COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
-COPY --from=ghcr.io/projectbluefin/common:latest@sha256:e10f4af0f9d508d4661f4426c1c835ce02a770787e8d1561758ee953dfde06a7 /system_files /system_files/shared
+COPY --from=ghcr.io/projectbluefin/common:latest@sha256:786eddf7b5219ef4ddc67672bc2f362d9015b35b2fdfcecd4edd78b8228c848c /system_files /system_files/shared
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
