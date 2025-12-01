@@ -159,10 +159,10 @@ EXCLUDED_PACKAGES=(
 # Version-specific package exclusions
 case "$FEDORA_MAJOR_VERSION" in
     42)
-        EXCLUDED_PACKAGES+=(gnome-software)
+        EXCLUDED_PACKAGES+=(gnome-software cosign)
         ;;
     43)
-        EXCLUDED_PACKAGES+=(gnome-software)
+        EXCLUDED_PACKAGES+=(gnome-software cosign)
         ;;
 esac
 
