@@ -12,6 +12,7 @@ dnf remove -y ublue-os-just
 
 # Copy Files to Container
 rsync -rvK /ctx/system_files/shared/ /
+rsync -rvK /ctx/system_files/gnome/ /
 
 mkdir -p /tmp/scripts/helpers
 install -Dm0755 /ctx/build_files/shared/utils/ghcurl /tmp/scripts/helpers/ghcurl

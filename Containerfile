@@ -8,7 +8,8 @@ COPY /system_files /system_files
 COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
-COPY --from=ghcr.io/projectbluefin/common:latest@sha256:010a877426875af903b5135d53605337c0bac6c893e2ad3e203473824ae3675c /system_files /system_files/shared
+# needs to be reverted after testing
+COPY --from=ghcr.io/ahmedadan/common:homebrew-migration@sha256:c2445eff9026f7e97eff3de756ee037bad30f668a2e3c54c947a21d60594b876 /system_files/shared /system_files/shared
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
