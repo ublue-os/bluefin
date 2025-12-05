@@ -101,6 +101,7 @@ case "$FEDORA_MAJOR_VERSION" in
     43)
         FEDORA_PACKAGES+=(
             evolution-ews-core
+            gnupg2-scdaemon
         )
         ;;
 esac
