@@ -37,6 +37,7 @@ FEDORA_PACKAGES=(
     git-credential-libsecret
     glow
     gnome-tweaks
+    gnupg2-scdaemon
     gum
     hplip
     ibus-mozc
