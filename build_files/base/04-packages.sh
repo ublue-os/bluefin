@@ -37,7 +37,6 @@ FEDORA_PACKAGES=(
     git-credential-libsecret
     glow
     gnome-tweaks
-    gnupg2-scdaemon
     gum
     hplip
     ibus-mozc
@@ -102,6 +101,7 @@ case "$FEDORA_MAJOR_VERSION" in
     43)
         FEDORA_PACKAGES+=(
             evolution-ews-core
+            gnupg2-scdaemon
         )
         ;;
 esac
