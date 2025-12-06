@@ -11,7 +11,7 @@ IMAGE_REF="${IMAGE_REF##*://}"
 # Configure Live Environment
 
 # Remove packages from liveCD to save space
-dnf remove -y google-noto-fonts-all ublue-brew ublue-motd yaru-theme || true
+dnf remove -y ublue-motd || true
 
 # Setup dock
 tee /usr/share/glib-2.0/schemas/zz2-org.gnome.shell.gschema.override <<EOF
@@ -38,9 +38,9 @@ glib-compile-schemas /usr/share/glib-2.0/schemas
 systemctl disable rpm-ostree-countme.service
 systemctl disable tailscaled.service
 systemctl disable bootloader-update.service
-# systemctl disable brew-upgrade.timer
-# systemctl disable brew-update.timer
-# systemctl disable brew-setup.service
+systemctl disable brew-upgrade.timer
+systemctl disable brew-update.timer
+systemctl disable brew-setup.service
 systemctl disable rpm-ostreed-automatic.timer
 systemctl disable uupd.timer
 systemctl disable ublue-system-setup.service
