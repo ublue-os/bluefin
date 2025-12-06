@@ -5,6 +5,8 @@ body:
     attributes:
       value: |
         Thank you for taking the time to fill out this bug report! (She bites sometimes)
+
+        Check out the [Project Opportunities](https://github.com/ublue-os/bluefin/discussions/3423) to see if there's a place you can help out!
   - type: textarea
     id: describe-bug
     attributes:
@@ -39,4 +41,4 @@ body:
     id: extra-context
     attributes:
       label: Extra information or context
-      description: If you are reporting a regression: Use `ujust rebase-helper` to find the version that used to work. Report the working version and the broken version so that other users can rebase and confirm the issue!
+      description: If you are reporting a regression, use `ujust rebase-helper` to find the version that used to work. Report the working version and the broken version so that other users can rebase and confirm the issue!
