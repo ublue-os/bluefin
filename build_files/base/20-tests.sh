@@ -4,6 +4,14 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
+test -f /usr/bin/ujust
+test -f /usr/share/ublue-os/just/00-entry.just
+test -f /usr/share/ublue-os/just/apps.just
+test -f /usr/share/ublue-os/just/default.just
+test -f /usr/share/ublue-os/just/system.just
+test -f /usr/share/ublue-os/just/update.just
+test -f /usr/share/ublue-os/homebrew/fonts.Brewfile
+
 # If this file is not on the image bazaar will automatically be removed from users systems :(
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall
 test -f /usr/share/flatpak/preinstall.d/bazaar.preinstall
@@ -49,17 +57,16 @@ for package in "${UNWANTED_PACKAGES[@]}"; do
     fi
 done
 
-# TODO: Enable when libnvidia-container-tools are on F43
-#if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
-#  NV_PACKAGES=(
-#      libnvidia-container-tools
-#      kmod-nvidia
-#      nvidia-driver-cuda
-#)
-#  for package in "${NV_PACKAGES[@]}"; do
-#      rpm -q "${package}" >/dev/null || { echo "Missing NVIDIA package: ${package}... Exiting"; exit 1 ; }
-#  done
-#fi
+if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
+  NV_PACKAGES=(
+      libnvidia-container-tools
+      kmod-nvidia
+      nvidia-driver-cuda
+)
+  for package in "${NV_PACKAGES[@]}"; do
+      rpm -q "${package}" >/dev/null || { echo "Missing NVIDIA package: ${package}... Exiting"; exit 1 ; }
+  done
+fi
 
 IMPORTANT_UNITS=(
     brew-update.timer
