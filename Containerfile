@@ -13,6 +13,7 @@ COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
 COPY --from=common /system_files /system_files/shared
+COPY --from=common /shared /system_files/shared
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
