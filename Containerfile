@@ -12,9 +12,8 @@ COPY /system_files /system_files
 COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
-COPY --from=common /system_files /system_files/shared
-# TODO: Enable me when https://github.com/projectbluefin/common/pull/27 merged
-#COPY --from=common /shared /system_files/shared
+COPY --from=common /system_files/shared /system_files/shared
+COPY --from=common /system_files/bluefin /system_files/shared
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
