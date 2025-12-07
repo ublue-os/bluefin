@@ -4,9 +4,11 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-for i in bin/ujust share/ublue-os/just/{00-entry.just,apps.just,default.just,system.just,update.just,homebrew/fonts.Brewfile} ; do
+for i in bin/ujust share/ublue-os/just/{00-entry.just,apps.just,default.just,system.just,update.just,} ; do
    stat /usr/$i
 done
+
+test -f /usr/share/ublue-os/homebrew/fonts.Brewfile
 
 # If this file is not on the image bazaar will automatically be removed from users systems :(
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall
