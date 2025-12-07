@@ -1,5 +1,6 @@
 repo_organization := "ublue-os"
 rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.2.4@sha256:8a84bd5a029681aa8db523f927b7c53b5aded9b078b81605ac0a2fedc969f528"
+common_image := "ghcr.io/projectbluefin/common:latest"
 images := '(
     [bluefin]=bluefin
     [bluefin-dx]=bluefin-dx
@@ -111,6 +112,8 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     # Image Name
     image_name=$({{ just }} image_name {{ image }} {{ tag }} {{ flavor }})
 
+    common_image_sha=$(yq -r '.images[] | select(.name == "common") | .digest' image-versions.yml)
+
     # Base Image
     base_image_name="silverblue"
 
@@ -151,6 +154,8 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         {{ just }} verify-container "akmods-nvidia-open:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
 
+    {{ just }} verify-container "common:latest@${common_image_sha}" ghcr.io/projectbluefin https://raw.githubusercontent.com/projectbluefin/common/refs/heads/main/cosign.pub
+
     # Get Version
     if [[ "${tag}" =~ stable ]]; then
         ver="${fedora_version}.$(date +%Y%m%d)"
@@ -178,6 +183,8 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     fi
     BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${akmods_flavor}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${base_image_name}")
+    BUILD_ARGS+=("--build-arg" "COMMON_IMAGE={{ common_image }}")
+    BUILD_ARGS+=("--build-arg" "COMMON_IMAGE_SHA=${common_image_sha}")
     BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${fedora_version}")
     BUILD_ARGS+=("--build-arg" "IMAGE_NAME=${image_name}")
     BUILD_ARGS+=("--build-arg" "IMAGE_VENDOR={{ repo_organization }}")

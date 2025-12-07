@@ -2,13 +2,19 @@ ARG BASE_IMAGE_NAME="silverblue"
 ARG FEDORA_MAJOR_VERSION="42"
 ARG SOURCE_IMAGE="${BASE_IMAGE_NAME}-main"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
+ARG COMMON_IMAGE="ghcr.io/projectbluefin/common:latest"
+ARG COMMON_IMAGE_SHA=""
+
+FROM ${COMMON_IMAGE}@${COMMON_IMAGE_SHA} AS common
 
 FROM scratch AS ctx
 COPY /system_files /system_files
 COPY /build_files /build_files
 COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
-COPY --from=ghcr.io/projectbluefin/common:latest@sha256:010a877426875af903b5135d53605337c0bac6c893e2ad3e203473824ae3675c /system_files /system_files/shared
+COPY --from=common /system_files /system_files/shared
+# TODO: Enable me when https://github.com/projectbluefin/common/pull/27 merged
+#COPY --from=common /shared /system_files/shared
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
