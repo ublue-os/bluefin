@@ -13,9 +13,6 @@ systemctl enable tailscaled.service
 systemctl enable dconf-update.service
 systemctl enable ublue-guest-user.service
 systemctl --global enable bazaar.service
-systemctl enable brew-setup.service
-systemctl enable brew-upgrade.timer
-systemctl enable brew-update.timer
 systemctl enable ublue-fix-hostname.service
 systemctl enable ublue-system-setup.service
 systemctl --global enable ublue-user-setup.service
@@ -23,6 +20,11 @@ systemctl --global enable podman-auto-update.timer
 systemctl enable check-sb-key.service
 systemctl enable input-remapper.service
 systemctl enable flatpak-nuke-fedora.service
+
+# Homebrew setup (extracts tarball on first boot) and auto-update/upgrade timers
+systemctl enable brew-setup.service
+systemctl enable brew-update.timer
+systemctl enable brew-upgrade.timer
 
 # run flatpak preinstall once at startup
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
