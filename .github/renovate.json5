@@ -41,7 +41,10 @@
     {
       "automerge": true,
       "matchUpdateTypes": ["digest"],
-      "matchDepNames": ["ghcr.io/ublue-os/silverblue-main"],
+      "matchDepNames": [
+        "ghcr.io/ublue-os/silverblue-main",
+        "ghcr.io/projectbluefin/common"
+      ]
     }
   ]
 }
