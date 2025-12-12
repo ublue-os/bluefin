@@ -7,6 +7,8 @@ set -eoux pipefail
 # We do not need anything here at all
 rm -rf /usr/src
 rm -rf /usr/share/doc
+# Remove kernel-devel from rpmdb because all package files are removed from /usr/src
+rpm --erase --nodeps kernel-devel
 
 mkdir -p /usr/share/doc/bluefin
 # Offline Bluefin documentation
