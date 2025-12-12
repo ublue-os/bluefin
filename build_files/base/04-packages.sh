@@ -119,6 +119,7 @@ copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 
 # From ublue-os/packages
 copr_install_isolated "ublue-os/packages" \
+    "bluefin-backgrounds" \
     "bluefin-cli-logos" \
     "bluefin-schemas" \
     "ublue-bling" \
