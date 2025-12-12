@@ -231,6 +231,7 @@ rows:
           banner-text-valign: end
           banner-height: 400
           appids:
+            - com.collaboraoffice.Office
             - com.slack.Slack
             - md.obsidian.Obsidian
             - io.gitlab.theevilskeleton.Upscaler
