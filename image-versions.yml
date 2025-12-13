@@ -6,4 +6,4 @@ images:
   - name: common
     image: ghcr.io/projectbluefin/common
     tag: latest
-    digest: sha256:5ca019227fb328d5e19c37e18b180c336547efe42f8280a868620582b9991397
+    digest: sha256:0e8690f9f81ab696bc30cc61f95efc4f7ceb3e4fa557faf2c8e325670b04babf
