@@ -193,9 +193,6 @@ if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
 fi
 
 # Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
-dnf -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
-    fedora-logos bluefin-logos
 dnf -y install \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
     bluefin-plymouth

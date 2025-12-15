@@ -57,6 +57,7 @@ done
 # these packages are supposed to be removed
 # and are considered footguns
 UNWANTED_PACKAGES=(
+    fedora-logos
     firefox
     gnome-software
     gnome-software-rpm-ostree
