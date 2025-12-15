@@ -192,11 +192,6 @@ if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test install flatpak-debuginfo flatpak-libs-debuginfo flatpak-session-helper-debuginfo
 fi
 
-# Swap/install bluefin branding packages from ublue-os/packages COPR using isolated enablement
-dnf -y install \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:packages \
-    bluefin-plymouth
-
 ## Pins and Overrides
 ## Use this section to pin packages in order to avoid regressions
 # Remember to leave a note with rationale/link to issue for each pin!
