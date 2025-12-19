@@ -11,8 +11,8 @@
         type="rss"
         text="Bluefin News"
         title="Bluefin News"
-        xmlUrl="https://universal-blue.discourse.group/tag/bluefin-news.rss"
-        htmlUrl="https://universal-blue.discourse.group/tag/bluefin-news"
+        xmlUrl="https://docs.projectbluefin.io/blog/atom.xml"
+        htmlUrl="https://docs.projectbluefin.io/blog"
       />
       <outline
         type="rss"
