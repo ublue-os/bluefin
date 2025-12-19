@@ -14,6 +14,12 @@ test -f /usr/share/ublue-os/homebrew/fonts.Brewfile
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall
 test -f /usr/share/flatpak/preinstall.d/bazaar.preinstall
 
+# NewsFlash preinstall file must exist (prevents auto-removal)
+test -f /usr/share/flatpak/preinstall.d/newsflash.preinstall
+
+# NewsFlash OPML configuration must exist (provides default feeds for manual import)
+test -f /usr/share/ublue-os/newsflash/bluefin-feeds.opml
+
 # Basic smoke test to check if the flatpak version is from our copr
 flatpak preinstall --help
 

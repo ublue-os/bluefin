@@ -6,6 +6,7 @@ app/io.github.flattool.Ignition
 app/io.github.flattool.Warehouse
 app/io.github.kolunmi.Bazaar
 app/io.gitlab.adhami3310.Impression
+app/io.gitlab.news_flash.NewsFlash
 app/io.missioncenter.MissionCenter
 app/it.mijorus.smile
 app/org.gnome.baobab

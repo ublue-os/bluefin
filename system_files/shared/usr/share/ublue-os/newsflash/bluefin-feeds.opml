@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Bluefin News Feeds</title>
+    <dateCreated>2025-12-19T00:00:00Z</dateCreated>
+    <ownerName>Project Bluefin</ownerName>
+  </head>
+  <body>
+    <outline text="Bluefin" title="Bluefin">
+      <outline
+        type="rss"
+        text="Bluefin News"
+        title="Bluefin News"
+        xmlUrl="https://universal-blue.discourse.group/tag/bluefin-news.rss"
+        htmlUrl="https://universal-blue.discourse.group/tag/bluefin-news"
+      />
+      <outline
+        type="rss"
+        text="Bluefin Release Notes"
+        title="Bluefin Release Notes"
+        xmlUrl="https://github.com/ublue-os/bluefin/releases.atom"
+        htmlUrl="https://github.com/ublue-os/bluefin/releases"
+      />
+    </outline>
+  </body>
+</opml>

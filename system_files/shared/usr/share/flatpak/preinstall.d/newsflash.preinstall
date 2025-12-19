@@ -1,0 +1,3 @@
+[Flatpak Preinstall io.gitlab.news_flash.NewsFlash]
+Branch=stable
+IsRuntime=false
