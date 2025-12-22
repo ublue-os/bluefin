@@ -15,7 +15,9 @@ def get_geoclue_client():
 
     # Set client properties
     client.DesktopId = "bluefin-dynamic-wallpaper"
-    client.RequestedAccuracyLevel = 1
+    # Request city-level accuracy (4) instead of country-level (1) to ensure
+    # sufficiently precise latitude for reliable hemisphere detection.
+    client.RequestedAccuracyLevel = 4
     client.Start()
 
     return bus, client
