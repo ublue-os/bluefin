@@ -10,16 +10,14 @@ VEN_ID="$(cat /sys/devices/virtual/dmi/id/chassis_vendor)"
 
 # Install framework_tool and wallpapers for Framework laptops
 if [[ ":Framework:" =~ :$VEN_ID: ]]; then
-    TOOL_MARKER="/var/lib/ublue-os/framework-tool.installed"
-    WALLPAPER_MARKER="/var/lib/ublue-os/framework-wallpapers.installed"
+    BREW_PREFIX="/home/linuxbrew/.linuxbrew"
 
-    # Check if Homebrew is available
-    if command -v brew &> /dev/null; then
-        if [[ ! -f "$TOOL_MARKER" ]]; then
+    # Check if Homebrew is available and user has write permissions
+    if command -v brew &> /dev/null && [[ -w "$BREW_PREFIX" ]]; then
+        # Check if framework_tool is already installed via brew
+        if ! brew list --cask framework_tool &> /dev/null; then
             echo "Framework laptop detected, installing framework_tool"
             if brew install --cask ublue-os/tap/framework_tool; then
-                mkdir -p /var/lib/ublue-os
-                touch "$TOOL_MARKER"
                 echo "framework_tool installed successfully"
             else
                 echo "Warning: framework_tool installation failed, will retry on next run"
@@ -28,11 +26,10 @@ if [[ ":Framework:" =~ :$VEN_ID: ]]; then
             echo "framework_tool already installed, skipping"
         fi
 
-        if [[ ! -f "$WALLPAPER_MARKER" ]]; then
+        # Check if framework-wallpapers is already installed via brew
+        if ! brew list --cask framework-wallpapers &> /dev/null; then
             echo "Installing Framework wallpapers"
             if brew install --cask ublue-os/tap/framework-wallpapers; then
-                mkdir -p /var/lib/ublue-os
-                touch "$WALLPAPER_MARKER"
                 echo "Framework wallpapers installed successfully"
             else
                 echo "Warning: framework-wallpapers installation failed, will retry on next run"
@@ -41,6 +38,6 @@ if [[ ":Framework:" =~ :$VEN_ID: ]]; then
             echo "Framework wallpapers already installed, skipping"
         fi
     else
-        echo "Warning: brew not found, skipping Framework software installation (will retry when brew is available)"
+        echo "Warning: brew not found or user lacks write permission to $BREW_PREFIX, skipping Framework software installation (will retry when available)"
     fi
 fi
