@@ -4,8 +4,11 @@ ARG SOURCE_IMAGE="${BASE_IMAGE_NAME}-main"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
 ARG COMMON_IMAGE="ghcr.io/projectbluefin/common:latest"
 ARG COMMON_IMAGE_SHA=""
+ARG BREW_IMAGE="ghcr.io/ublue-os/brew:latest"
+ARG BREW_IMAGE_SHA=""
 
 FROM ${COMMON_IMAGE}@${COMMON_IMAGE_SHA} AS common
+FROM ${BREW_IMAGE}@${BREW_IMAGE_SHA} AS brew
 
 FROM scratch AS ctx
 COPY /system_files /system_files
@@ -14,6 +17,7 @@ COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
 COPY --from=common /system_files/shared /system_files/shared
 COPY --from=common /system_files/bluefin /system_files/shared
+COPY --from=brew /system_files /system_files/shared
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
