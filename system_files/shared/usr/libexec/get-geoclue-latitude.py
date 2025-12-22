@@ -28,8 +28,12 @@ def wait_for_location(bus, client):
         try:
             if hasattr(client, 'Location') and client.Location:
                 location_obj = bus.get("org.freedesktop.GeoClue2", client.Location)
-                if hasattr(location_obj, 'Latitude') and location_obj.Latitude is not None:
-                    return location_obj.Latitude
+                if (hasattr(location_obj, 'Latitude') and hasattr(location_obj, 'Longitude')):
+                    latitude = location_obj.Latitude
+                    longitude = location_obj.Longitude
+                    # Treat (0.0, 0.0) as potentially uninitialized default coordinates.
+                    if latitude is not None and longitude is not None and not (latitude == 0.0 and longitude == 0.0):
+                        return latitude
         except Exception as e:
             # Ignore "object does not export any interfaces" errors during initialization
             if "object does not export any interfaces" not in str(e):
