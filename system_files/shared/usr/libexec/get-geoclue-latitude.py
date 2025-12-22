@@ -39,7 +39,7 @@ def wait_for_location(bus, client):
         except Exception as e:
             # Ignore "object does not export any interfaces" errors during initialization
             if "object does not export any interfaces" not in str(e):
-                print(f"Unexpected error while waiting for location: {e}", file=sys.stderr)
+                print(f"error: unexpected error while waiting for location: {e}", file=sys.stderr)
                 sys.exit(1)
 
         time.sleep(POLL_INTERVAL_SECONDS)
@@ -57,7 +57,7 @@ def main():
 
     except Exception as e:
         if "org.freedesktop.DBus.Error.AccessDenied" in str(e):
-            print("error: Location services disabled or denied", file=sys.stderr)
+            print("error: location services disabled or denied", file=sys.stderr)
             sys.exit(2)
         else:
             print(f"error: {e}", file=sys.stderr)
