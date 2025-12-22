@@ -37,8 +37,8 @@ else
     # Determine hemisphere
     if [[ "${LATITUDE:0:1}" == "-" ]]; then
         HEMISPHERE="south"
-        # Add 6 months and wrap around if needed
-        MONTH_NUM=$(( (MONTH_NUM + 6 - 1) % 12 + 1 ))
+        # Add 6 months for southern hemisphere seasons; months are 1–12 so adjust before modulo
+        MONTH_NUM=$(( (MONTH_NUM + 5) % 12 + 1 ))
     else
         HEMISPHERE="north"
     fi
