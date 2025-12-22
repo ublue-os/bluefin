@@ -7,6 +7,3 @@ brew "swiftly"
 # Code quality tools
 brew "swiftlint"
 brew "swiftformat"
-
-# Tooling foundation (for future IDE integration)
-brew "sourcekitten"
