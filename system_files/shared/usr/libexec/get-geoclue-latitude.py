@@ -51,7 +51,7 @@ def main():
 
     except Exception as e:
         if "org.freedesktop.DBus.Error.AccessDenied" in str(e):
-            print("Location services disabled or denied", file=sys.stderr)
+            print("error: Location services disabled or denied", file=sys.stderr)
             sys.exit(2)
         else:
             print(f"error: {e}", file=sys.stderr)
