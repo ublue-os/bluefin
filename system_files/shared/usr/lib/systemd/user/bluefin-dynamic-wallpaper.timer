@@ -1,6 +1,7 @@
 [Unit]
 Description=Run Bluefin Dynamic Wallpaper daily
-PartOf=graphical-session.target
+Wants=graphical-session.target
+After=graphical-session.target
 
 [Timer]
 OnBootSec=1min
