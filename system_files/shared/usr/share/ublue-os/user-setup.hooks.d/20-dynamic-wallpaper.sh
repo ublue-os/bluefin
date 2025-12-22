@@ -8,5 +8,5 @@ set -euo pipefail
 
 # Enable dynamic wallpaper service and timer
 echo "Enabling dynamic wallpaper service and timer"
-systemctl --user enable --now bluefin-dynamic-wallpaper.service
+systemctl --user enable bluefin-dynamic-wallpaper.service
 systemctl --user enable --now bluefin-dynamic-wallpaper.timer
