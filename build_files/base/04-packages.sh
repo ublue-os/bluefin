@@ -24,6 +24,7 @@ FEDORA_PACKAGES=(
     bcache-tools
     bootc
     borgbackup
+    containerd
     cryfs
     davfs2
     ddcutil
