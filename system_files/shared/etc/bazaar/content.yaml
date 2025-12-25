@@ -357,6 +357,7 @@ rows:
             - io.github.tobagin.digger
             - app.drey.Elastic
             - io.github.mfat.sshpilot
+            - io.github.shonebinu.Brief
 
   - sections:
       - expand-horizontally: true
