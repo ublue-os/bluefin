@@ -26,7 +26,7 @@ def wait_for_location(bus, client):
     """Wait for location data to become available."""
     max_attempts = int(LOCATION_TIMEOUT_SECONDS / POLL_INTERVAL_SECONDS)
 
-    for attempt in range(max_attempts):
+    for _ in range(max_attempts):
         try:
             if hasattr(client, 'Location') and client.Location:
                 location_obj = bus.get("org.freedesktop.GeoClue2", client.Location)
@@ -62,6 +62,7 @@ def main():
         else:
             print(f"error: {e}", file=sys.stderr)
             sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
