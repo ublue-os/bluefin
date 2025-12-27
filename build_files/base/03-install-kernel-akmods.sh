@@ -105,10 +105,10 @@ if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     # Declare ZFS RPMs
     ZFS_RPMS=(
         /tmp/akmods-zfs/kmods/zfs/kmod-zfs-"${KERNEL}"-*.rpm
-        /tmp/akmods-zfs/kmods/zfs/libnvpair3-*.rpm
-        /tmp/akmods-zfs/kmods/zfs/libuutil3-*.rpm
-        /tmp/akmods-zfs/kmods/zfs/libzfs6-*.rpm
-        /tmp/akmods-zfs/kmods/zfs/libzpool6-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libnvpair[0-9]-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libuutil[0-9]-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libzfs[0-9]-*.rpm
+        /tmp/akmods-zfs/kmods/zfs/libzpool[0-9]-*.rpm
         /tmp/akmods-zfs/kmods/zfs/python3-pyzfs-*.rpm
         /tmp/akmods-zfs/kmods/zfs/zfs-*.rpm
         pv

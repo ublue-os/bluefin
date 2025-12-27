@@ -1,5 +1,5 @@
 repo_organization := "ublue-os"
-rechunker_image := "ghcr.io/hhd-dev/rechunk:v1.2.4@sha256:8a84bd5a029681aa8db523f927b7c53b5aded9b078b81605ac0a2fedc969f528"
+rechunker_image := "ghcr.io/ublue-os/legacy-rechunk:v1.0.0-x86_64@sha256:1ee0b4ad0eee9b300cca1afd8cf78b78ce77bcc0d5aa16b07a195c6c22f1c9b4"
 common_image := "ghcr.io/projectbluefin/common:latest"
 images := '(
     [bluefin]=bluefin
