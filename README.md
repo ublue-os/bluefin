@@ -23,27 +23,17 @@ Bluefin's mission is to provide a robust, cloud-native desktop operating system 
 
 - **Reliability**: Atomic updates ensuring system stability
 - **Developer Experience**: Integrated cloud-native tooling and workflows, including Kubernetes and container support
-- **Sustainability**: Reduced maintenance overhead for contributors by using the latest cloud native infrastructure tools
+- **Sustainability**: Reduced maintenance overhead for contributors by using the latest cloud native infrastructure tech
 
 ## Communications
 
 ### Community Channels
 
 - **📰 [Announcements](https://blog.projectbluefin.io/)** - Official project blog and announcements
+- **[Project Board](https://todo.projectbluefin.io)** - What we're working on
 - **💬 [Discussions](https://community.projectbluefin.io/)** - Community forum (strongly recommended!)
-- **📖 [Documentation](https://docs.projectbluefin.io/)** - Complete documentation portal
+- **📖 [Documentation](https://docs.projectbluefin.io/)** - Documentation and User Guides
 - **🔧 [Contributing Guide](https://docs.projectbluefin.io/contributing)** - How to contribute to the project
-
-### Contact Information
-
-- **GitHub Issues**: [Bug reports and feature requests](https://github.com/ublue-os/bluefin/issues)
-- **GitHub Discussions**: [General questions and community support](https://github.com/ublue-os/bluefin/discussions)
-- **Community Forum**: [community.projectbluefin.io](https://community.projectbluefin.io/)
-
-### Maintainers
-
-See [CODEOWNERS](https://github.com/ublue-os/bluefin/blob/main/.github/CODEOWNERS) for the current list of project maintainers.
-
 
 ## Getting Started
 
