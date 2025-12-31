@@ -8,14 +8,14 @@
   <body>
     <outline text="Bluefin" title="Bluefin">
       <outline
-        type="rss"
+        type="atom"
         text="Bluefin News"
         title="Bluefin News"
         xmlUrl="https://docs.projectbluefin.io/blog/atom.xml"
         htmlUrl="https://docs.projectbluefin.io/blog"
       />
       <outline
-        type="rss"
+        type="atom"
         text="Bluefin Release Notes"
         title="Bluefin Release Notes"
         xmlUrl="https://github.com/ublue-os/bluefin/releases.atom"
