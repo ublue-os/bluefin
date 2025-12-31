@@ -7,8 +7,8 @@ echo "::group:: Copy Files"
 # Copy ISO list for `install-system-flaptaks`
 install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
 
-# We need to remove this package here because lots of files we add from `projectbluefin/common` override the rpm files and they also go away when you do `dnf remove`
-dnf remove -y ublue-os-just ublue-os-signing
+# We need to remove these packages here because lots of files we add from `projectbluefin/common` override the rpm files and they also go away when you do `dnf remove`
+dnf remove -y ublue-os-just ublue-os-signing ublue-os-luks
 
 # Copy Files to Container
 rsync -rvK /ctx/system_files/shared/ /
