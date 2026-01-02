@@ -8,21 +8,18 @@ set -eoux pipefail
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 
 # Setup Systemd
+systemctl --global enable bazaar.service
+systemctl --global enable podman-auto-update.timer
+systemctl --global enable ublue-user-setup.service
+systemctl enable brew-setup.service
+systemctl enable brew-update.timer
+systemctl enable brew-upgrade.timer
+systemctl enable dconf-update.service
+systemctl enable flatpak-nuke-fedora.service
+systemctl enable input-remapper.service
 systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
-systemctl enable dconf-update.service
-systemctl enable ublue-guest-user.service
-systemctl --global enable bazaar.service
-systemctl enable brew-setup.service
-systemctl enable brew-upgrade.timer
-systemctl enable brew-update.timer
-systemctl enable ublue-fix-hostname.service
 systemctl enable ublue-system-setup.service
-systemctl --global enable ublue-user-setup.service
-systemctl --global enable podman-auto-update.timer
-systemctl enable check-sb-key.service
-systemctl enable input-remapper.service
-systemctl enable flatpak-nuke-fedora.service
 
 # run flatpak preinstall once at startup
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
