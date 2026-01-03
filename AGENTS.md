@@ -30,7 +30,7 @@ This document provides essential information for coding agents working with the 
 - `.github/workflows/` - Comprehensive CI/CD pipelines
 - `just/` - Additional Just recipes for apps and system management
 - `brew/` - Homebrew Brewfile definitions for various tool collections
-- `iso_files/` - ISO installation configurations
+- `flatpaks/` - Flatpak application lists (system-flatpaks.list, system-flatpaks-dx.list)
 
 ### Architecture
 - **Two Build Targets**: `base` (regular users) and `dx` (developer experience)
@@ -164,7 +164,6 @@ The repository uses mandatory pre-commit validation:
 - `build-image-gts.yml` - Builds GTS (Grand Touring Support) images
 - `build-image-beta.yml` - Builds beta images for testing F42/F43
 - `reusable-build.yml` - Core build logic for all image variants
-- `build-iso-lts.yml` - Builds LTS ISO images
 - `generate-release.yml` - Generates release artifacts and changelogs
 - `validate-brewfiles.yml` - Validates Homebrew Brewfile syntax
 - `clean.yml` - Cleanup old images and artifacts
