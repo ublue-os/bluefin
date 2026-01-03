@@ -4,9 +4,6 @@ set -eoux pipefail
 
 echo "::group:: Copy Files"
 
-# Copy ISO list for `install-system-flaptaks`
-install -Dm0644 -t /etc/ublue-os/ /ctx/flatpaks/*.list
-
 # We need to remove this package here because lots of files we add from `projectbluefin/common` override the rpm files and they also go away when you do `dnf remove`
 dnf remove -y ublue-os-luks ublue-os-just ublue-os-udev-rules ublue-os-signing ublue-os-update-services
 
