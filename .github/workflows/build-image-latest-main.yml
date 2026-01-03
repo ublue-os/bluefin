@@ -6,11 +6,9 @@ on:
       - main
       - testing
     paths-ignore:
-      - ".github/workflows/*iso*.yml"
       - ".github/workflows/*validate*.yml"
       - "**.md"
       - "flatpaks/**"
-      - "iso_files/**"
       - "system_files/shared/etc/bazaar/**"
   workflow_call:
   workflow_dispatch:
