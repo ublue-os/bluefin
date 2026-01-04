@@ -13,7 +13,6 @@ FROM ${BREW_IMAGE}@${BREW_IMAGE_SHA} AS brew
 FROM scratch AS ctx
 COPY /system_files /system_files
 COPY /build_files /build_files
-COPY /iso_files /iso_files
 COPY /flatpaks /flatpaks
 COPY --from=common /system_files/shared /system_files/shared
 COPY --from=common /system_files/bluefin /system_files/shared
