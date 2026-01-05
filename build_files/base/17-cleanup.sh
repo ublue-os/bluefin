@@ -12,8 +12,6 @@ systemctl --global enable bazaar.service
 systemctl --global enable podman-auto-update.timer
 systemctl --global enable ublue-user-setup.service
 systemctl enable brew-setup.service
-systemctl enable brew-update.timer
-systemctl enable brew-upgrade.timer
 systemctl enable dconf-update.service
 systemctl enable flatpak-nuke-fedora.service
 systemctl enable input-remapper.service

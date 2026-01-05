@@ -82,8 +82,6 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
 fi
 
 IMPORTANT_UNITS=(
-    brew-update.timer
-    brew-upgrade.timer
     rpm-ostree-countme.timer
     tailscaled.service
     ublue-system-setup.service
