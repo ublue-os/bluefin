@@ -1,5 +1,3 @@
-*.iso
-*.iso-CHECKSUM
 flatpaks_with_deps
 flatpak.*
 

@@ -7,9 +7,7 @@ on:
       - testing
     paths-ignore:
       - "**.md"
-      - ".github/workflows/*iso*.yml"
       - ".github/workflows/*validate*.yml"
-      - "iso_files/**"
       - "system_files/shared/etc/bazaar/**"
   schedule:
     - cron: "0 1 * * TUE" # Every Tuesday at 1:00 AM UTC (same as bluefin-lts)
