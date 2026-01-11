@@ -89,7 +89,47 @@ FEDORA_PACKAGES=(
     xprop
     zenity
     zsh
+    adw-gtk3-theme
+    gvfs-nfs
+    ibus-unikey
+    ibus-mozc
+
+    alsa-firmware
+    alsa-tools-firmware
+    flatpak-spawn
+    pipewire-libs-extra
+    oversteer-udev
+    google-noto-sans-cjk-fonts 
+    grub2-tools-extra
+    htop
+    intel-vaapi-driver
+    libcamera-gstreamer
+    libcamera-tools
+    libimobiledevice-utils
+    libva-utils
+    lshw
+    mtools
+    net-tools
+    ocl-icd
+    openrgb-udev-rules
+    oversteer-udev
+    pam-u2f
+    pam_yubico
+    pamu2fcfg
+    pipewire-libs-extra
+    smartmontools
+    solaar-udev
+    squashfs-tools
+    symlinks
+    tcpdump
+    traceroute
+    vim
+    yubikey-manager 
 )
+
+if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
+    dnf install -y nvtop
+fi
 
 # Version-specific Fedora package additions
 case "$FEDORA_MAJOR_VERSION" in
@@ -114,6 +154,12 @@ dnf -y install "${FEDORA_PACKAGES[@]}"
 dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 dnf config-manager setopt tailscale-stable.enabled=0
 dnf -y install --enablerepo='tailscale-stable' tailscale
+
+dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo
+dnf config-manager setopt fedora-multimedia.enabled=0
+dnf -y install --enablerepo=fedora-multimedia \
+    -x PackageKit* \
+    ffmpeg libavcodec @multimedia gstreamer1-plugins-{bad-free,bad-free-libs,good,base} lame{,-libs} libjxl ffmpegthumbnailer
 
 # From che/nerd-fonts
 copr_install_isolated "che/nerd-fonts" "nerd-fonts"
@@ -146,6 +192,10 @@ EXCLUDED_PACKAGES=(
     gnome-terminal-nautilus
     podman-docker
     yelp
+    totem-video-thumbnailer
+    gnome-software
+    google-noto-sans-cjk-vf-fonts
+    default-fonts-cjk-sans
 )
 
 # Version-specific package exclusions
