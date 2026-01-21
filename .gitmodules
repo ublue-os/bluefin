@@ -2,6 +2,10 @@
 	path = system_files/shared/usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com
 	url = https://github.com/ubuntu/gnome-shell-extension-appindicator.git
 	branch = v61
+[submodule "system_files/shared/usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io"]
+	path = system_files/shared/usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io
+	url = https://github.com/AlexanderVanhee/bazaar-companion.git
+	branch = main
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/blur-my-shell@aunetx"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/blur-my-shell@aunetx
 	url = https://github.com/aunetx/blur-my-shell.git
