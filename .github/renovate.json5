@@ -42,7 +42,7 @@
       "automerge": true,
       "matchUpdateTypes": ["digest"],
       "matchDepNames": [
-        "quay.io/fedora-ostree-desktops/silverblue"
+        "quay.io/fedora-ostree-desktops/silverblue",
         "ghcr.io/projectbluefin/common"
       ]
     }
