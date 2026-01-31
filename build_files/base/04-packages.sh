@@ -51,6 +51,7 @@ source /ctx/build_files/shared/copr-helpers.sh
 # malicious COPRs from injecting fake versions of Fedora packages.
 # Fedora packages are installed first in bulk (safe).
 # COPR packages are installed individually with isolated enablement.
+
 # Base packages from Fedora repos - common to all versions
 FEDORA_PACKAGES=(
     adcli
@@ -118,6 +119,7 @@ FEDORA_PACKAGES=(
     powerstat
     powertop
     python3-pip
+    nvtop
     python3-pygit2
     rclone
     restic
@@ -144,10 +146,6 @@ FEDORA_PACKAGES=(
     zenity
     zsh
 )
-
-if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
-    dnf install -y nvtop
-fi
 
 # Version-specific Fedora package additions
 case "$FEDORA_MAJOR_VERSION" in
