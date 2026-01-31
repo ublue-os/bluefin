@@ -5,8 +5,16 @@ echo "::group:: ===$(basename "$0")==="
 set -ouex pipefail
 
 # All DNF-related operations should be done here whenever possible
-#
+
 # use negativo17 for 3rd party packages with higher priority than default
+# mitigate upstream packaging bug: https://bugzilla.redhat.com/show_bug.cgi?id=2332429
+# swap the incorrectly installed OpenCL-ICD-Loader for ocl-icd, the expected package
+# TODO: remove me when F42 dropped, F43 is not affected
+if [[ "$(rpm -E %fedora)" == "42" ]]; then
+dnf5 -y swap --repo='fedora' \
+    OpenCL-ICD-Loader ocl-icd
+fi
+
 if ! grep -q fedora-multimedia <(dnf5 repolist); then
     # Enable or Install Repofile
     dnf5 config-manager setopt fedora-multimedia.enabled=1 ||
