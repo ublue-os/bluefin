@@ -57,7 +57,9 @@ done
 # these packages are supposed to be removed
 # and are considered footguns
 UNWANTED_PACKAGES=(
+    fedora-flathub-remote
     fedora-logos
+    fedora-third-party
     firefox
     gnome-software
     gnome-software-rpm-ostree
