@@ -110,7 +110,6 @@ FEDORA_PACKAGES=(
     mtools
     nautilus-gsconnect
     net-tools
-    ocl-icd
     oddjob-mkhomedir
     opendyslexic-fonts
     openrgb-udev-rules
