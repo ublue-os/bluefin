@@ -76,7 +76,10 @@ FEDORA_PACKAGES=(
     git-credential-libsecret
     glow
     gnome-tweaks
+    google-noto-sans-balinese-fonts
     google-noto-sans-cjk-fonts
+    google-noto-sans-javanese-fonts
+    google-noto-sans-sundanese-fonts
     grub2-tools-extra
     gum
     gvfs-nfs
