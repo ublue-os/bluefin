@@ -110,6 +110,7 @@ FEDORA_PACKAGES=(
     mtools
     nautilus-gsconnect
     net-tools
+    nvtop
     oddjob-mkhomedir
     opendyslexic-fonts
     openrgb-udev-rules
@@ -121,7 +122,6 @@ FEDORA_PACKAGES=(
     powerstat
     powertop
     python3-pip
-    nvtop
     python3-pygit2
     rclone
     restic
