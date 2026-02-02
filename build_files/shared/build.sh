@@ -21,11 +21,11 @@ echo "::endgroup::"
 # Generate image-info.json
 /ctx/build_files/base/00-image-info.sh
 
-# Install Kernel and Akmods
-/ctx/build_files/base/03-install-kernel-akmods.sh
-
 # Install Additional Packages
-/ctx/build_files/base/04-packages.sh
+/ctx/build_files/base/03-packages.sh
+
+# Install Kernel and Akmods
+/ctx/build_files/base/04-install-kernel-akmods.sh
 
 # Install Overrides and Fetch Install
 /ctx/build_files/base/05-override-install.sh
