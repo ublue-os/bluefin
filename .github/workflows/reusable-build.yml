@@ -44,18 +44,6 @@ jobs:
         with:
           submodules: recursive
 
-      # We use both actions as stable nvidia-open-dx failed due to /var/tmp being too small
-
-      # mount /mnt as /var/lib/containers
-      - name: Mount BTRFS for podman storage
-        id: container-storage-action
-        uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
-        continue-on-error: true
-        with:
-          target-dir: /var/lib/containers
-          mount-opts: compress-force=zstd:2
-          loopback-free: '1'
-
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@695eb75bc387dbcd9685a8e72d23439d8686cba6 # v10
 
