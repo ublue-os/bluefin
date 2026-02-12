@@ -23,7 +23,7 @@ jobs:
       matrix:
         brand_name: [bluefin]
     with:
-      # kernel_pin: 6.14.11-200.fc41.x86_64    ## This is where kernels get pinned.
+      kernel_pin: 6.17.12-200.fc42.x86_64 ## Pin to 6.17 for ZFS compatibility
       brand_name: ${{ matrix.brand_name }}
       stream_name: gts
 
