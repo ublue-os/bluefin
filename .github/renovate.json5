@@ -42,9 +42,14 @@
       "automerge": true,
       "matchUpdateTypes": ["digest"],
       "matchDepNames": [
-        "ghcr.io/ublue-os/silverblue-main",
+        "quay.io/fedora-ostree-desktops/silverblue",
         "ghcr.io/projectbluefin/common"
       ]
+    },
+    {
+      "matchDepNames": ["quay.io/fedora-ostree-desktops/silverblue"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }

@@ -54,10 +54,28 @@ for package in "${IMPORTANT_PACKAGES[@]}"; do
     rpm -q "${package}" >/dev/null || { echo "Missing package: ${package}... Exiting"; exit 1 ; }
 done
 
+# these should be sourced from negativo's fedora-multimedia repo
+# as Fedora can't ship patent encumbered video codecs
+NEGATIVO=(
+    ffmpeg
+    libheif
+    libva
+    mesa-filesystem
+    mesa-va-drivers
+    pipewire-libs-extra
+    x264-libs
+    x265-libs
+)
+
+for package in "${NEGATIVO[@]}"; do
+  rpm -q --qf "%{NAME} %{VENDOR}" "${package}" | grep -q "negativo17\.org" || { echo "${package} not from negativo... Exiting"; exit 1 ; }
+done
 # these packages are supposed to be removed
 # and are considered footguns
 UNWANTED_PACKAGES=(
+    fedora-flathub-remote
     fedora-logos
+    fedora-third-party
     firefox
     gnome-software
     gnome-software-rpm-ostree
