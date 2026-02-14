@@ -36,9 +36,6 @@ echo "::endgroup::"
 # Build GNOME Extensions from Git Submodules
 /ctx/build_files/shared/build-gnome-extensions.sh
 
-# Get Firmare for Framework
-/ctx/build_files/base/08-firmware.sh
-
 ## late stage changes
 
 # Systemd and Remove Items
