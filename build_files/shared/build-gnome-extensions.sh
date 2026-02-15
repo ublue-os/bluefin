@@ -12,6 +12,9 @@ dnf5 -y install glib2-devel meson sassc cmake dbus-devel
 # AppIndicator Support
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com/schemas
 
+# Bazaar Companion
+mv /usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io/src/ /usr/share/gnome-shell/extensions/bazaar-integration@kolunmi.github.io/
+
 # Blur My Shell
 make -C /usr/share/gnome-shell/extensions/blur-my-shell@aunetx
 unzip -o /usr/share/gnome-shell/extensions/blur-my-shell@aunetx/build/blur-my-shell@aunetx.shell-extension.zip -d /usr/share/gnome-shell/extensions/blur-my-shell@aunetx
