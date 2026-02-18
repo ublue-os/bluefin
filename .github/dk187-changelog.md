@@ -6,16 +6,23 @@ This is an automatically generated changelog for release `stable-20260217`.
 From previous version `stable-20260212` there have been the following changes. **One package per new version shown.**
 
 
-### bluefin Packages
+## bluefin Packages
+### Added
 | Name | Version |
 | --- | --- |
 | ✨ python3-pskc | 1.4-1 |
 
+### Removed
+| Name | Version |
+| --- | --- |
 | ❌ kmod-openrazer | 100.0.0.git.624.0663c556-1 |
 | ❌ kmod-xone | 1000.0.0.git.1355.08361cab-1 |
 | ❌ openrazer-kmod-common | 100.0.0.git.624.0663c556-1 |
 | ❌ xone-kmod-common | 1000.0.0.git.1355.08361cab-1 |
 
+### Changed
+| Name | Version |
+| --- | --- |
 | 🔄 bluez | 5.85-1 ➡️ 5.86-2 |
 | 🔄 bluez-cups | 5.85-1 ➡️ 5.86-2 |
 | 🔄 bluez-libs | 5.85-1 ➡️ 5.86-2 |
@@ -99,16 +106,23 @@ From previous version `stable-20260212` there have been the following changes. *
 | 🔄 zlib-ng-compat-devel | 2.3.2-2 ➡️ 2.3.3-1 |
 
 
-### bluefin-dx Packages
+## bluefin-dx Packages
+### Added
 | Name | Version |
 | --- | --- |
 | ✨ python3-pskc | 1.4-1 |
 
+### Removed
+| Name | Version |
+| --- | --- |
 | ❌ kmod-openrazer | 100.0.0.git.624.0663c556-1 |
 | ❌ kmod-xone | 1000.0.0.git.1355.08361cab-1 |
 | ❌ openrazer-kmod-common | 100.0.0.git.624.0663c556-1 |
 | ❌ xone-kmod-common | 1000.0.0.git.1355.08361cab-1 |
 
+### Changed
+| Name | Version |
+| --- | --- |
 | 🔄 bluez | 5.85-1 ➡️ 5.86-2 |
 | 🔄 bluez-cups | 5.85-1 ➡️ 5.86-2 |
 | 🔄 bluez-libs | 5.85-1 ➡️ 5.86-2 |
@@ -202,13 +216,10 @@ From previous version `stable-20260212` there have been the following changes. *
 
 
 
-
-### Commits
+## Commits
 | Hash | Subject | Author |
 | --- | --- | --- |
 | **[0b0ac9631e140b11571e0362509a5618fb87eef8](https://github.com/ublue-os/bluefin/commit/0b0ac9631e140b11571e0362509a5618fb87eef8)** | fix: remove xone and openrazer (#4203) | Jorge O. Castro |
 | **[5601480567090caffd00e6ad480e7aee0ebecde2](https://github.com/ublue-os/bluefin/commit/5601480567090caffd00e6ad480e7aee0ebecde2)** | chore(deps): update ghcr.io/ublue-os/silverblue-main:latest docker digest to 22c2a2f (#4196) | ubot-7274[bot] |
 | **[119d23e6061902ca4e5591a0c43444cd17815286](https://github.com/ublue-os/bluefin/commit/119d23e6061902ca4e5591a0c43444cd17815286)** | chore(deps): update ghcr.io/ublue-os/silverblue-main:latest docker digest to 9049fca (#4188) | ubot-7274[bot] |
 | **[57f643815e386ffe78c45878260e27d7cc9e0d91](https://github.com/ublue-os/bluefin/commit/57f643815e386ffe78c45878260e27d7cc9e0d91)** | Change kernel pin to version 6.17.12-300.fc43 | Jorge O. Castro |
-
-

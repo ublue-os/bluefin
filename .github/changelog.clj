@@ -158,19 +158,29 @@ This is an automatically generated changelog for release `{{curr_tag}}`.
 From previous version `{{prev_tag}}` there have been the following changes. **One package per new version shown.**
 
 {% for img, pkg_diff in diff %}
-### {{img}} Packages
+## {{img}} Packages
+### Added
 | Name | Version |
 | --- | --- |
-{% for name, data in pkg_diff.added %}| ✨ {{name}} | {{data}} |{% endfor %}
-{% for name, data in pkg_diff.removed %}| ❌ {{name}} | {{data}} |{% endfor %}
-{% for name, data in pkg_diff.changed %}| 🔄 {{name}} | {{data.from}} ➡️ {{data.to}} |{% endfor %}
+{% for name, data in pkg_diff.added %}| ✨ {{name}} | {{data}} |
 {% endfor %}
-
+### Removed
+| Name | Version |
+| --- | --- |
+{% for name, data in pkg_diff.removed %}| ❌ {{name}} | {{data}} |
+{% endfor %}
+### Changed
+| Name | Version |
+| --- | --- |
+{% for name, data in pkg_diff.changed %}| 🔄 {{name}} | {{data.from}} ➡️ {{data.to}} |
+{% endfor %}
+{% endfor %}
 {% if commits %}
-### Commits
+## Commits
 | Hash | Subject | Author |
 | --- | --- | --- |
-{% for commit in commits %}| **[{{commit.hash}}](https://github.com/ublue-os/bluefin/commit/{{commit.hash}})** | {{commit.subject}} | {{commit.author}} |{% endfor %}
+{% for commit in commits %}| **[{{commit.hash}}](https://github.com/ublue-os/bluefin/commit/{{commit.hash}})** | {{commit.subject}} | {{commit.author}} |
+{% endfor %}
 {% endif %}
 ")
 
