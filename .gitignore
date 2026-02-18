@@ -14,3 +14,7 @@ devcontainer
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Clojure
+.clj-kondo/
+.lsp
