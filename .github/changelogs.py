@@ -1,464 +1,510 @@
-from itertools import product
-import subprocess
+#!/usr/bin/env python3
+
+import sys
 import json
+import subprocess
 import time
-from typing import Any
 import re
-from collections import defaultdict
+import base64
+import argparse
+import logging
+import warnings
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Callable
 
-REGISTRY = "docker://ghcr.io/ublue-os/"
+# ----------------------------------------------------------------------------
+# Configuration
+# ----------------------------------------------------------------------------
 
-IMAGE_MATRIX_LATEST = {
-    "experience": ["base", "dx"],
-    "de": ["gnome"],
-    "image_flavor": ["main", "nvidia-open"],
+IMAGE_CONFIGS = {
+    "bluefin": {
+        "registry": "ghcr.io/ublue-os/",
+        "cosign_key": "https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/cosign.pub",
+        "images": ["bluefin", "bluefin-dx"],
+    },
+    "aurora": {
+        "registry": "ghcr.io/ublue-os/",
+        "cosign_key": "https://raw.githubusercontent.com/ublue-os/aurora/refs/heads/main/cosign.pub",
+        "images": ["aurora", "aurora-dx"],
+    },
 }
-IMAGE_MATRIX = {
-    "experience": ["base", "dx"],
-    "de": ["gnome"],
-    "image_flavor": ["main", "nvidia-open"],
+
+# Default family if none is specified
+DEFAULT_FAMILY = "bluefin"
+
+FEATURED_PACKAGES = {
+    "kernel": "kernel",
+    "gnome": "gnome-shell",
+    "mesa": "mesa",
+    "podman": "podman",
+    "nvidia": "akmod-nvidia",
+    "docker": "docker",
+    "systemd": "systemd",
+    "bootc": "bootc"
+}
+
+# Release variant labels for the changelog heading
+VARIANT_LABELS = {
+    "stable": "Stable Release",
+    "lts":    "LTS Release",
+    "gts":    "GTS Release",
+    "beta":   "Beta Release",
 }
 
 RETRIES = 3
-RETRY_WAIT = 5
-FEDORA_PATTERN = re.compile(r"\.fc\d\d")
-START_PATTERN = lambda target: re.compile(rf"{target}-\d\d\d+")
+RETRY_WAIT_S = 2.0
 
-PATTERN_ADD = "\n| ✨ | {name} | | {version} |"
-PATTERN_CHANGE = "\n| 🔄 | {name} | {prev} | {new} |"
-PATTERN_REMOVE = "\n| ❌ | {name} | {version} | |"
-PATTERN_PKGREL_CHANGED = "{prev} ➡️ {new}"
-PATTERN_PKGREL = "{version}"
-COMMON_PAT = "### All Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n"
-OTHER_NAMES = {
-    "base": "### Base Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
-    "dx": "### [Dev Experience Images](https://docs.projectbluefin.io/bluefin-dx)\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
-    "gnome": "### [Bluefin Images](https://projectbluefin.io/)\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
-    "nvidia-open": "### Nvidia Images\n| | Name | Previous | New |\n| --- | --- | --- | --- |{changes}\n\n",
-}
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+log = logging.getLogger(__name__)
 
-COMMITS_FORMAT = "### Commits\n| Hash | Subject | Author |\n| --- | --- | --- |{commits}\n\n"
-COMMIT_FORMAT = "\n| **[{short}](https://github.com/ublue-os/bluefin/commit/{githash})** | {subject} | {author} |"
+# ----------------------------------------------------------------------------
+# Utilities
+# ----------------------------------------------------------------------------
 
-CHANGELOG_TITLE = "{tag}: {pretty}"
-CHANGELOG_FORMAT = """\
-{handwritten}
-
-From previous `{target}` version `{prev}` there have been the following changes. **One package per new version shown.**
-
-### Major packages
-| Name | Version |
-| --- | --- |
-| **Kernel** | {pkgrel:kernel} |
-| **Gnome** | {pkgrel:gnome-shell} |
-| **Mesa** | {pkgrel:mesa-filesystem} |
-| **Podman** | {pkgrel:podman} |
-| **Nvidia** | {pkgrel:nvidia-driver} |
-
-### Major DX packages
-| Name | Version |
-| --- | --- |
-| **Incus** | {pkgrel:incus} |
-| **Docker** | {pkgrel:docker-ce} |
-
-{changes}
-
-### How to rebase
-For current users, type the following to rebase to this version:
-```bash
-# Get Image Name
-IMAGE_NAME=$(jq -r '.["image-name"]' < /usr/share/ublue-os/image-info.json)
-
-# For this Stream
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{target}
-
-# For this Specific Image:
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/$IMAGE_NAME:{curr}
-```
-
-### Documentation
-Be sure to read the [documentation](https://docs.projectbluefin.io/) for more information
-on how to use your cloud native system.
-"""
-HANDWRITTEN_PLACEHOLDER = """\
-This is an automatically generated changelog for release `{curr}`."""
-
-BLACKLIST_VERSIONS = [
-    "kernel",
-    "gnome-shell",
-    "mesa-filesystem",
-    "podman",
-    "docker-ce",
-    "incus",
-    "devpod",
-    "nvidia-driver"
-]
-
-
-def get_images(target: str):
-    if "latest" in target:
-        matrix = IMAGE_MATRIX_LATEST
+def run_cmd(cmd: list[str]) -> str:
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode == 0:
+        return result.stdout
     else:
-        matrix = IMAGE_MATRIX
+        raise Exception(f"Command failed\nCmd: {cmd}\nExit: {result.returncode}\nErr: {result.stderr}")
 
-    for experience, de, image_flavor in product(*matrix.values()):
-        img = ""
-        if de == "gnome":
-            img += "bluefin"
-
-        if experience == "dx":
-            img += "-dx"
-
-        if image_flavor != "main":
-            img += "-"
-            img += image_flavor
-
-        yield img, experience, de, image_flavor
-
-
-def get_manifests(target: str):
-    out = {}
-    imgs = list(get_images(target))
-    for j, (img, _, _, _) in enumerate(imgs):
-        output = None
-        print(f"Getting {img}:{target} manifest ({j+1}/{len(imgs)}).")
-        for i in range(RETRIES):
-            try:
-                output = subprocess.run(
-                    ["skopeo", "inspect", REGISTRY + img + ":" + target],
-                    check=True,
-                    stdout=subprocess.PIPE,
-                ).stdout
-                break
-            except subprocess.CalledProcessError:
-                print(
-                    f"Failed to get {img}:{target}, retrying in {RETRY_WAIT} seconds ({i+1}/{RETRIES})"
-                )
-                time.sleep(RETRY_WAIT)
-        if output is None:
-            print(f"Failed to get {img}:{target}, skipping")
-            continue
-        out[img] = json.loads(output)
-    return out
-
-
-def get_tags(target: str, manifests: dict[str, Any]):
-    tags = set()
-
-    first = next(iter(manifests.values()))
-    for tag in first["RepoTags"]:
-        # Tags ending with .0 should not exist
-        if tag.endswith(".0"):
-            continue
-        if re.match(START_PATTERN(target), tag):
-            tags.add(tag)
-
-    for manifest in manifests.values():
-        for tag in list(tags):
-            if tag not in manifest["RepoTags"]:
-                tags.remove(tag)
-
-    tags = list(sorted(tags))
-    if not len(tags) >= 2:
-        print("No current and previous tags found")
-        exit(1)
-    return tags[-2], tags[-1]
-
-
-def get_packages(manifests: dict[str, Any]):
-    packages = {}
-    for img, manifest in manifests.items():
+def retry(n: int, f: Callable) -> any:
+    for attempt in range(1, n + 1):
         try:
-            packages[img] = json.loads(manifest["Labels"]["dev.hhd.rechunk.info"])[
-                "packages"
-            ]
+            return f()
         except Exception as e:
-            print(f"Failed to get packages for {img}:\n{e}")
-    return packages
-
-
-def get_package_groups(target: str, prev: dict[str, Any], manifests: dict[str, Any]):
-    common = set()
-    others = {k: set() for k in OTHER_NAMES.keys()}
-
-    npkg = get_packages(manifests)
-    ppkg = get_packages(prev)
-
-    keys = set(npkg.keys()) | set(ppkg.keys())
-    pkg = defaultdict(set)
-    for k in keys:
-        pkg[k] = set(npkg.get(k, {})) | set(ppkg.get(k, {}))
-
-    # Find common packages
-    first = True
-    for img, experience, de, image_flavor in get_images(target):
-        if img not in pkg:
-            continue
-
-        if first:
-            for p in pkg[img]:
-                common.add(p)
-        else:
-            for c in common.copy():
-                if c not in pkg[img]:
-                    common.remove(c)
-
-        first = False
-
-    # Find other packages
-    for t, other in others.items():
-        first = True
-        for img, experience, de, image_flavor in get_images(target):
-            if img not in pkg:
-                continue
-
-            if t == "nvidia-open" and "nvidia-open" not in image_flavor:
-                continue
-            if t == "gnome" and de != "gnome":
-                continue
-            if t == "base" and experience != "base":
-                continue
-            if t == "dx" and experience != "dx":
-                continue
-
-            if first:
-                for p in pkg[img]:
-                    if p not in common:
-                        other.add(p)
+            if attempt < n:
+                log.warning(f"Attempt {attempt}/{n} failed: {e}. Retrying in {RETRY_WAIT_S}s…")
+                time.sleep(RETRY_WAIT_S)
             else:
-                for c in other.copy():
-                    if c not in pkg[img]:
-                        other.remove(c)
+                raise
 
-            first = False
+# ----------------------------------------------------------------------------
+# SBOM Fetching
+# ----------------------------------------------------------------------------
 
-    return sorted(common), {k: sorted(v) for k, v in others.items()}
+def fetch_manifest(registry: str, image: str, tag: str) -> dict:
+    def _fetch():
+        out = run_cmd(["skopeo", "inspect", f"docker://{registry}{image}:{tag}"])
+        return json.loads(out)
+    return retry(RETRIES, _fetch)
 
+def get_digest(registry: str, image: str, tag: str) -> str:
+    return fetch_manifest(registry, image, tag).get("Digest")
 
-def get_versions(manifests: dict[str, Any]):
-    versions = {}
-    pkgs = get_packages(manifests)
-    for img_pkgs in pkgs.values():
-        for pkg, v in img_pkgs.items():
-            v = re.sub(FEDORA_PATTERN, "", v)
-            v = re.sub(r"\.switcheroo", "", v)
-            versions[pkg] = v
-    return versions
+def extract_payloads(s: str) -> list[str]:
+    """
+    cosign verify-attestation can emit multiple JSON lines, one per attestation.
+    Extract all payload values so we can find the SPDX one.
+    """
+    return re.findall(r'"payload"\s*:\s*"([^"]+)"', s)
 
+def fetch_sbom(registry: str, cosign_key: str, image: str, digest: str) -> dict:
+    def _fetch():
+        cmd = [
+            "cosign", "verify-attestation",
+            "--type", "spdxjson",
+            "--key", cosign_key,
+            f"{registry}{image}@{digest}"
+        ]
+        raw = run_cmd(cmd)
 
-def calculate_changes(pkgs: list[str], prev: dict[str, str], curr: dict[str, str]):
-    added = []
-    changed = []
-    removed = []
+        payloads = extract_payloads(raw)
+        if not payloads:
+            raise ValueError("No payload found in attestation output.")
 
-    blacklist_ver = set([curr.get(v, None) for v in BLACKLIST_VERSIONS])
+        # Iterate all payloads and return the first one that contains SPDX artifacts
+        for payload_b64 in payloads:
+            try:
+                payload_bytes = base64.b64decode(payload_b64)
+                payload_json = json.loads(payload_bytes.decode("utf-8"))
+                predicate = payload_json.get("predicate", {})
+                if predicate.get("artifacts") or predicate.get("packages"):
+                    return predicate
+            except Exception as e:
+                log.warning(f"Skipping payload that failed to decode: {e}")
+                continue
 
-    for pkg in pkgs:
-        # Clearup changelog by removing mentioned packages
-        if pkg in BLACKLIST_VERSIONS:
-            continue
-        if pkg in curr and curr.get(pkg, None) in blacklist_ver:
-            continue
-        if pkg in prev and prev.get(pkg, None) in blacklist_ver:
-            continue
+        raise ValueError("No valid SPDX predicate found among attestation payloads.")
 
-        if pkg not in prev:
-            added.append(pkg)
-        elif pkg not in curr:
-            removed.append(pkg)
-        elif prev[pkg] != curr[pkg]:
-            changed.append(pkg)
+    return retry(RETRIES, _fetch)
 
-        blacklist_ver.add(curr.get(pkg, None))
-        blacklist_ver.add(prev.get(pkg, None))
+# ----------------------------------------------------------------------------
+# Package Extraction
+# ----------------------------------------------------------------------------
 
-    out = ""
-    for pkg in added:
-        out += PATTERN_ADD.format(name=pkg, version=curr[pkg])
-    for pkg in changed:
-        out += PATTERN_CHANGE.format(name=pkg, prev=prev[pkg], new=curr[pkg])
-    for pkg in removed:
-        out += PATTERN_REMOVE.format(name=pkg, version=prev[pkg])
-    return out
+EPOCH_PATTERN = re.compile(r"^\d+:")
+FEDORA_PATTERN = re.compile(r"\.fc\d+")
 
+def normalize_version(v: str) -> str:
+    v = EPOCH_PATTERN.sub("", v)
+    v = FEDORA_PATTERN.sub("", v)
+    return v
 
-def get_commits(prev_manifests, manifests, workdir: str):
+def parse_packages(sbom: dict) -> dict:
+    pkg_map = {}
+    for artifact in sbom.get("artifacts", []):
+        if artifact.get("type") == "rpm":
+            name = artifact.get("name")
+            version = artifact.get("version")
+            if name and version:
+                pkg_map[name] = normalize_version(version)
+            else:
+                log.debug(f"Skipping malformed artifact (missing name or version): {artifact}")
+    return dict(sorted(pkg_map.items()))
+
+def fetch_packages(registry: str, cosign_key: str, image: str, tag: str) -> dict:
+    digest = get_digest(registry, image, tag)
+    sbom = fetch_sbom(registry, cosign_key, image, digest)
+    return parse_packages(sbom)
+
+def build_release(registry: str, cosign_key: str, images: list[str], tag: str) -> dict:
+    """Fetch packages for all images in parallel."""
+    results = {}
+
+    def _fetch_one(img):
+        log.info(f"Fetching packages for {img}:{tag}…")
+        return img, fetch_packages(registry, cosign_key, img, tag)
+
+    with ThreadPoolExecutor(max_workers=len(images)) as executor:
+        futures = {executor.submit(_fetch_one, img): img for img in images}
+        for future in as_completed(futures):
+            img, pkgs = future.result()  # raises on error
+            results[img] = {"packages": pkgs}
+
+    return results
+
+# ----------------------------------------------------------------------------
+# Diff Logic
+# ----------------------------------------------------------------------------
+
+def diff_packages(prev_pkgs: dict, curr_pkgs: dict) -> dict:
+    prev_keys = set(prev_pkgs.keys())
+    curr_keys = set(curr_pkgs.keys())
+
+    added = {k: curr_pkgs[k] for k in curr_keys - prev_keys}
+    removed = {k: prev_pkgs[k] for k in prev_keys - curr_keys}
+    changed = {
+        k: {"from": prev_pkgs[k], "to": curr_pkgs[k]}
+        for k in prev_keys & curr_keys if prev_pkgs[k] != curr_pkgs[k]
+    }
+
+    return {
+        "added": dict(sorted(added.items())),
+        "removed": dict(sorted(removed.items())),
+        "changed": dict(sorted(changed.items()))
+    }
+
+def diff_images(prev_release: dict, curr_release: dict) -> dict:
+    result = {}
+    for img, curr_data in curr_release.items():
+        prev_pkgs = prev_release.get(img, {}).get("packages", {})
+        result[img] = diff_packages(prev_pkgs, curr_data["packages"])
+    return result
+
+def common_packages(release: dict) -> list:
+    if not release:
+        return []
+    package_sets = [set(data["packages"].keys()) for data in release.values()]
+    return sorted(set.intersection(*package_sets))
+
+# ----------------------------------------------------------------------------
+# Git Commit Extraction
+# ----------------------------------------------------------------------------
+
+def fetch_commits(prev_tag: str, curr_tag: str) -> list[dict]:
     try:
-        start = next(iter(prev_manifests.values()))["Labels"][
-            "org.opencontainers.image.revision"
-        ]
-        finish = next(iter(manifests.values()))["Labels"][
-            "org.opencontainers.image.revision"
-        ]
-
-        commits = subprocess.run(
-            [
-                "git",
-                "-C",
-                workdir,
-                "log",
-                "--pretty=format:%H|%h|%an|%s",
-                f"{start}..{finish}",
-            ],
-            check=True,
-            stdout=subprocess.PIPE,
-        ).stdout.decode("utf-8")
-
-        out = ""
-        for commit in commits.split("\n"):
-            if not commit:
-                continue
-            parts = commit.split("|", 3)
-            if len(parts) < 4:
-                continue
-            githash, short, author, subject = parts
-
-            if subject.lower().startswith("merge"):
-                continue
-            if subject.lower().startswith("chore"):
-                continue
-
-            out += (
-                COMMIT_FORMAT.replace("{short}", short)
-                .replace("{subject}", subject)
-                .replace("{githash}", githash)
-                .replace("{author}", author)
-            )
-
-        if out:
-            return COMMITS_FORMAT.format(commits=out)
-        return ""
+        out = run_cmd(["git", "log", "--pretty=format:%H;%s;%an", f"{prev_tag}..{curr_tag}"])
     except Exception as e:
-        print(f"Failed to get commits:\n{e}")
-        return ""
+        log.warning(f"Could not fetch git commits between {prev_tag} and {curr_tag}: {e}")
+        return []
 
+    commits = []
+    for line in out.strip().splitlines():
+        if line:
+            parts = line.split(";", 2)
+            if len(parts) == 3:
+                commits.append({"hash": parts[0], "subject": parts[1], "author": parts[2]})
+    return commits
 
-def generate_changelog(
-    handwritten: str | None,
-    target: str,
-    pretty: str | None,
-    workdir: str,
-    prev_manifests,
-    manifests,
-):
-    common, others = get_package_groups(target, prev_manifests, manifests)
-    versions = get_versions(manifests)
-    prev_versions = get_versions(prev_manifests)
+# ----------------------------------------------------------------------------
+# Tag Discovery
+# ----------------------------------------------------------------------------
 
-    prev, curr = get_tags(target, manifests)
+def get_tag_list(registry: str, image: str, tag: str) -> list[str]:
+    """Fetch all tags for the given image from the registry."""
+    manifest = fetch_manifest(registry, image, tag)
+    return manifest.get("RepoTags", [])
 
-    if not pretty:
-        # Generate pretty version since we dont have it
-        try:
-            finish: str = next(iter(manifests.values()))["Labels"][
-                "org.opencontainers.image.revision"
-            ]
-        except Exception as e:
-            print(f"Failed to get finish hash:\n{e}")
-            finish = ""
-        try:
-            linux: str = next(iter(manifests.values()))["Labels"][
-                "ostree.linux"
-            ]
-            start=linux.find(".fc") + 3
-            fedora_version=linux[start:start+2]
-        except Exception as e:
-            print(f"Failed to get linux version:\n{e}")
-            fedora_version = ""
+def discover_tags(family: str, stream: str) -> tuple[str, str]:
+    """
+    Find the latest two tags for the given stream (e.g. 'stable', 'latest').
+    Returns (prev_tag, curr_tag).
+    """
+    config = IMAGE_CONFIGS.get(family)
+    if not config:
+        raise ValueError(f"Unknown family: {family}")
+    
+    registry = config["registry"]
+    # Use the first image in the list to find tags
+    image = config["images"][0]
+    
+    # Map 'stable' stream to the tag to inspect for RepoTags (usually just the stream name)
+    # The old script inspected image:stream to get RepoTags.
+    
+    log.info(f"Discovering tags for {family} {stream}...")
+    tags = get_tag_list(registry, image, stream)
+    
+    # Filter tags: looking for {stream}-YYYYMMDD or similar patterns.
+    # The old script used regex: f"{target}-\d\d\d+" (where target=stable)
+    # Examples: stable-20260217
+    
+    # We also need to filter out tags ending in .0 if strictly following old logic,
+    # but let's just look for the date pattern.
+    
+    # Pattern: ^stream-(?:\d+\.)?\d{8}(?:\.\d+)?$ (matches stable-20250101, stable-43.20250101, stable-20250101.1)
+    
+    pattern = re.compile(rf"^{stream}-(?:\d+\.)?\d{{8}}(?:\.\d+)?$")
+    
+    filtered_tags = sorted([t for t in tags if pattern.match(t)])
+    
+    if len(filtered_tags) < 2:
+        raise ValueError(f"Found fewer than 2 tags matching pattern '{pattern.pattern}' for {stream}. Found: {filtered_tags}")
+        
+    prev = filtered_tags[-2]
+    curr = filtered_tags[-1]
+    
+    log.info(f"Discovered tags: prev={prev}, curr={curr}")
+    return prev, curr
 
-        # Remove .0 from curr
-        curr_pretty = re.sub(r"\.\d{1,2}$", "", curr)
-        # Remove target- from curr
-        curr_pretty = re.sub(rf"^[a-z]+-|^[0-9]+-", "", curr_pretty)
-        if target == "stable-daily":
-            curr_pretty = re.sub(rf"^[a-z]+-", "", curr_pretty)
-        if not fedora_version + "." in curr_pretty:
-            curr_pretty=fedora_version + "." + curr_pretty
-        pretty = target.capitalize()
-        pretty += " (F" + curr_pretty
-        if finish:
-            pretty += ", #" + finish[:7]
-        pretty += ")"
+# ----------------------------------------------------------------------------
+# Markdown Generation
+# ----------------------------------------------------------------------------
 
-    title = CHANGELOG_TITLE.format_map(defaultdict(str, tag=curr, pretty=pretty))
+def infer_variant_label(tag: str) -> str:
+    """
+    Derive a human-readable release label from the tag, e.g.:
+      'stable-20250101' -> 'Stable Release'
+      'lts-20250101'    -> 'LTS Release'
+      'gts-20250101'    -> 'GTS Release'
+    Falls back to the raw tag if no known variant prefix is matched.
+    """
+    prefix = tag.split("-")[0].lower()
+    return VARIANT_LABELS.get(prefix, f"{prefix.upper()} Release")
 
-    changelog = CHANGELOG_FORMAT
+def render_changelog(data: dict, handwritten: str = "") -> str:
+    prev_tag = data["prev-tag"]
+    curr_tag = data["curr-tag"]
+    variant_label = infer_variant_label(curr_tag)
 
-    changelog = (
-        changelog.replace("{handwritten}", handwritten if handwritten else HANDWRITTEN_PLACEHOLDER)
-        .replace("{target}", target)
-        .replace("{prev}", prev)
-        .replace("{curr}", curr)
+    lines = [
+        f"# 🦕 {curr_tag}: {variant_label}",
+        ""
+    ]
+    
+    if handwritten:
+        lines.append(handwritten)
+        lines.append("")
+
+    lines.extend([
+        f"This is an automatically generated changelog for release `{curr_tag}`.",
+        "",
+        f"From previous version `{prev_tag}` there have been the following changes. **Only packages that actually changed are shown.**",
+        ""
+    ])
+
+    for img, pkg_diff in data["diff"].items():
+        lines.append(f"## 📦 {img} Packages")
+        lines.append("")
+
+        if pkg_diff.get("added"):
+            lines.append("### ✨ Added")
+            lines.append("| Package | Version |")
+            lines.append("| --- | --- |")
+            for name, version in pkg_diff["added"].items():
+                lines.append(f"| {name} | {version} |")
+            lines.append("")
+
+        if pkg_diff.get("removed"):
+            lines.append("### ❌ Removed")
+            lines.append("| Package | Version |")
+            lines.append("| --- | --- |")
+            for name, version in pkg_diff["removed"].items():
+                lines.append(f"| {name} | {version} |")
+            lines.append("")
+
+        if pkg_diff.get("changed"):
+            lines.append("### 🔄 Changed")
+            lines.append("| Package | Version |")
+            lines.append("| --- | --- |")
+            for name, changes in pkg_diff["changed"].items():
+                lines.append(f"| {name} | {changes['from']} ➡️ {changes['to']} |")
+            lines.append("")
+
+    commits = data.get("commits", [])
+    if commits:
+        lines.append("## 📜 Commits")
+        lines.append("| Hash | Subject | Author |")
+        lines.append("| --- | --- | --- |")
+        for commit in commits:
+            short_hash = commit["hash"][:7]
+            lines.append(f"| 🔹 **[{short_hash}](https://github.com/ublue-os/bluefin/commit/{commit['hash']})** | {commit['subject']} | {commit['author']} |")
+        lines.append("")
+
+    return "\n".join(lines)
+
+# ----------------------------------------------------------------------------
+# Public API
+# ----------------------------------------------------------------------------
+
+def extract_featured(packages: dict) -> dict:
+    featured = {}
+    for label, pkg_name in FEATURED_PACKAGES.items():
+        if pkg_name in packages:
+            featured[label] = packages[pkg_name]
+    return featured
+
+def build_website_data(curr_release: dict) -> dict:
+    return {
+        img: {"featured": extract_featured(data["packages"])}
+        for img, data in curr_release.items()
+    }
+
+def build_release_data(
+    prev_tag: str,
+    curr_tag: str,
+    family: str = DEFAULT_FAMILY,
+    images: list[str] | None = None,
+) -> dict:
+    config = IMAGE_CONFIGS.get(family)
+    if config is None:
+        raise ValueError(f"Unknown image family '{family}'. Known families: {list(IMAGE_CONFIGS.keys())}")
+
+    registry   = config["registry"]
+    cosign_key = config["cosign_key"]
+    images     = images or config["images"]
+
+    prev_release = build_release(registry, cosign_key, images, prev_tag)
+    curr_release = build_release(registry, cosign_key, images, curr_tag)
+    diff         = diff_images(prev_release, curr_release)
+    commits      = fetch_commits(prev_tag, curr_tag)
+    website      = build_website_data(curr_release)
+
+    return {
+        "family": family,
+        "prev-tag": prev_tag,
+        "curr-tag": curr_tag,
+        "images": images,
+        "releases": {"previous": prev_release, "current": curr_release},
+        "common-packages": common_packages(curr_release),
+        "diff": diff,
+        "commits": commits,
+        "website": website
+    }
+
+# ----------------------------------------------------------------------------
+# CLI
+# ----------------------------------------------------------------------------
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate a changelog between two Bluefin/Aurora image releases.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-
-    for pkg, v in versions.items():
-        if pkg not in prev_versions or prev_versions[pkg] == v:
-            changelog = changelog.replace(
-                "{pkgrel:" + pkg + "}", PATTERN_PKGREL.format(version=v)
-            )
-        else:
-            changelog = changelog.replace(
-                "{pkgrel:" + pkg + "}",
-                PATTERN_PKGREL_CHANGED.format(prev=prev_versions[pkg], new=v),
-            )
-
-    changes = ""
-    changes += get_commits(prev_manifests, manifests, workdir)
-    common = calculate_changes(common, prev_versions, versions)
-    if common:
-        changes += COMMON_PAT.format(changes=common)
-    for k, v in others.items():
-        chg = calculate_changes(v, prev_versions, versions)
-        if chg:
-            changes += OTHER_NAMES[k].format(changes=chg)
-
-    changelog = changelog.replace("{changes}", changes)
-
-    return title, changelog
+    
+    # Make prev_tag/curr_tag optional if stream is provided
+    parser.add_argument("prev_tag", nargs="?", help="Previous release tag (e.g. stable-20250101)")
+    parser.add_argument("curr_tag", nargs="?", help="Current release tag (e.g. stable-20250201)")
+    
+    parser.add_argument(
+        "--stream",
+        help="Release stream (e.g. stable, latest) to automatically discover tags",
+    )
+    
+    parser.add_argument(
+        "--family",
+        default=DEFAULT_FAMILY,
+        choices=list(IMAGE_CONFIGS.keys()),
+        help="Image family to generate the changelog for",
+    )
+    parser.add_argument(
+        "--images",
+        nargs="+",
+        metavar="IMAGE",
+        help="Override the default image list for the chosen family",
+    )
+    parser.add_argument(
+        "--output", "-o",
+        metavar="FILE",
+        help="Output file path (defaults to changelog.md or changelog.json)",
+    )
+    parser.add_argument(
+        "--output-env",
+        metavar="FILE",
+        help="Output environment file (TITLE=... TAG=...)",
+    )
+    parser.add_argument(
+        "--handwritten",
+        help="Optional handwritten text to include at the top of the changelog",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output raw JSON instead of Markdown",
+    )
+    parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="Enable debug logging",
+    )
+    return parser.parse_args()
 
 
 def main():
-    import argparse
+    args = parse_args()
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("target", help="Target tag")
-    parser.add_argument("output", help="Output environment file")
-    parser.add_argument("changelog", help="Output changelog file")
-    parser.add_argument("--pretty", help="Subject for the changelog")
-    parser.add_argument("--workdir", help="Git directory for commits")
-    parser.add_argument("--handwritten", help="Handwritten changelog")
-    args = parser.parse_args()
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+        
+    # Validation
+    if args.stream:
+        if args.prev_tag or args.curr_tag:
+            log.warning("Arguments 'prev_tag' and 'curr_tag' are ignored when '--stream' is provided.")
+        
+        prev_tag, curr_tag = discover_tags(args.family, args.stream)
+    else:
+        if not args.prev_tag or not args.curr_tag:
+            log.error("Either '--stream' OR 'prev_tag' and 'curr_tag' must be provided.")
+            sys.exit(1)
+        prev_tag = args.prev_tag
+        curr_tag = args.curr_tag
 
-    # Remove refs/tags, refs/heads, refs/remotes e.g.
-    # Tags cannot include / anyway.
-    target = args.target.split('/')[-1]
+    out_file = args.output or ("changelog.json" if args.json else "changelog.md")
 
-    if target == "main":
-        target = "stable"
-
-    manifests = get_manifests(target)
-    prev, curr = get_tags(target, manifests)
-    print(f"Previous tag: {prev}")
-    print(f" Current tag: {curr}")
-
-    prev_manifests = get_manifests(prev)
-    title, changelog = generate_changelog(
-        args.handwritten,
-        target,
-        args.pretty,
-        args.workdir,
-        prev_manifests,
-        manifests,
+    release_data = build_release_data(
+        prev_tag=prev_tag,
+        curr_tag=curr_tag,
+        family=args.family,
+        images=args.images,
     )
 
-    print(f"Changelog:\n# {title}\n{changelog}")
-    print(f"\nOutput:\nTITLE=\"{title}\"\nTAG={curr}")
-
-    with open(args.changelog, "w") as f:
-        f.write(changelog)
-
-    with open(args.output, "w") as f:
-        f.write(f'TITLE="{title}"\nTAG={curr}\n')
+    if args.json:
+        with open(out_file, "w") as f:
+            json.dump(release_data, f, indent=2)
+        log.info(f"✅ JSON written to {out_file}")
+    else:
+        rendered_md = render_changelog(release_data, handwritten=args.handwritten)
+        with open(out_file, "w") as f:
+            f.write(rendered_md)
+        log.info(f"✅ Markdown written to {out_file}")
+        
+    if args.output_env:
+        # Generate title similar to old script logic
+        variant_label = infer_variant_label(curr_tag)
+        title = f"{curr_tag}: {variant_label}"
+        with open(args.output_env, "w") as f:
+             f.write(f'TITLE="{title}"\nTAG={curr_tag}\n')
+        log.info(f"✅ Env file written to {args.output_env}")
 
 
 if __name__ == "__main__":
