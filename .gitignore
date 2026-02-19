@@ -17,4 +17,4 @@ __pycache__/
 
 # Clojure
 .clj-kondo/
-.lsp
+.lsp/
