@@ -161,35 +161,45 @@
 ;; ----------------------------------------------------------------------------
 
 (def changelog-template "
-# {{curr_tag}}: Stable Release
+# 🦖 {{curr_tag}}: Stable Release
 
 This is an automatically generated changelog for release `{{curr_tag}}`.
 
-From previous version `{{prev_tag}}` there have been the following changes. **One package per new version shown.**
+From previous version `{{prev_tag}}` there have been the following changes. **Only packages that actually changed are shown.**
 
 {% for img, pkg_diff in diff %}
-## {{img}} Packages
-### Added
-| Name | Version |
+## 🐳 {{img}} Packages
+
+{% if pkg_diff.added %}
+### ✨ Added
+| Package | Version |
 | --- | --- |
-{% for name, data in pkg_diff.added %}| ✨ {{name}} | {{data}} |
+{% for name, data in pkg_diff.added %}| {{name}} | {{data}} |
 {% endfor %}
-### Removed
-| Name | Version |
+{% endif %}
+
+{% if pkg_diff.removed %}
+### ❌ Removed
+| Package | Version |
 | --- | --- |
-{% for name, data in pkg_diff.removed %}| ❌ {{name}} | {{data}} |
+{% for name, data in pkg_diff.removed %}| {{name}} | {{data}} |
 {% endfor %}
-### Changed
-| Name | Version |
+{% endif %}
+
+{% if pkg_diff.changed %}
+### 🔄 Changed
+| Package | Version |
 | --- | --- |
-{% for name, data in pkg_diff.changed %}| 🔄 {{name}} | {{data.from}} ➡️ {{data.to}} |
+{% for name, data in pkg_diff.changed %}| {{name}} | {{data.from}} ➡️ {{data.to}} |
 {% endfor %}
+{% endif %}
 {% endfor %}
+
 {% if commits %}
-## Commits
+## 📝 Commits
 | Hash | Subject | Author |
 | --- | --- | --- |
-{% for commit in commits %}| **[{{commit.hash}}](https://github.com/ublue-os/bluefin/commit/{{commit.hash}})** | {{commit.subject}} | {{commit.author}} |
+{% for commit in commits %}| 🔹 **[{{commit.short-hash}}](https://github.com/ublue-os/bluefin/commit/{{commit.hash}})** | {{commit.subject}} | {{commit.author}} |
 {% endfor %}
 {% endif %}
 ")
@@ -198,9 +208,9 @@ From previous version `{{prev_tag}}` there have been the following changes. **On
   [{:keys [prev-tag curr-tag diff commits]}]
   (selmer/render changelog-template
                  {:prev_tag prev-tag
-                  :curr_tag curr-tag
+                  :curr_tag (str/capitalize curr-tag)
                   :diff diff
-                  :commits commits}))
+                  :commits (map #(assoc % :short-hash (subs (:hash %) 0 7)) commits)}))
 
 ;; ----------------------------------------------------------------------------
 ;; Public API
@@ -254,13 +264,11 @@ From previous version `{{prev_tag}}` there have been the following changes. **On
       (case format
         :json
         (let [json-str (json/generate-string release-data {:pretty true})]
-          (println json-str)
           (spit out-file json-str)
           (println "\n✅ JSON written to" out-file))
 
         :markdown
         (let [rendered-md (render-changelog release-data)]
-          (println rendered-md)
           (spit out-file rendered-md)
           (println "\n✅ Markdown written to" out-file))))))
 
