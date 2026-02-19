@@ -18,6 +18,16 @@
 (def default-images
   ["bluefin" "bluefin-dx"])
 
+(def featured-packages
+  {"kernel"   "kernel"
+   "gnome"    "gnome-shell"
+   "mesa"     "mesa"
+   "podman"   "podman"
+   "nvidia"   "akmod-nvidia"
+   "docker"   "docker"
+   "systemd"  "systemd"
+   "bootc"    "bootc"})
+
 (def retries 3)
 (def retry-wait-ms 2000)
 
@@ -196,38 +206,62 @@ From previous version `{{prev_tag}}` there have been the following changes. **On
 ;; Public API
 ;; ----------------------------------------------------------------------------
 
+(defn extract-featured [packages]
+  (into (sorted-map)
+        (for [[label pkg-name] featured-packages
+              :let [version (get packages pkg-name)]
+              :when version]
+          [label version])))
+
+(defn build-website-data [curr-release]
+  (into (sorted-map)
+        (for [[img {:keys [packages]}] curr-release]
+          [img {:featured (extract-featured packages)}])))
+
 (defn build-release-data
   [{:keys [images prev-tag curr-tag]
     :or {images default-images}}]
   (let [prev (build-release images prev-tag)
         curr (build-release images curr-tag)
         diff (diff-images prev curr)
-        commits (fetch-commits prev-tag curr-tag)]
+        commits (fetch-commits prev-tag curr-tag)
+        website (build-website-data curr)]
     {:prev-tag prev-tag
      :curr-tag curr-tag
      :images images
      :releases {:previous prev :current curr}
      :common-packages (common-packages curr)
      :diff diff
-     :commits commits}))
+     :commits commits
+     :website website}))
 
 ;; ----------------------------------------------------------------------------
 ;; CLI
 ;; ----------------------------------------------------------------------------
 
 (defn -main [& args]
-  (let [[prev-tag curr-tag out-file] args
-        out-file (or out-file "changelog.md")]
+  (let [[prev-tag curr-tag & rest] args
+        format (if (some #{"--json"} rest) :json :markdown)
+        out-file (or (first (remove #{"--json"} rest))
+                     (if (= format :json)
+                       "changelog.json"
+                       "changelog.md"))]
     (when (or (nil? prev-tag) (nil? curr-tag))
-      (println "Usage: bb changelog.clj <prev-tag> <curr-tag> [output-file]")
+      (println "Usage: bb changelog.clj <prev-tag> <curr-tag> [output-file] [--json]")
       (System/exit 1))
     (let [release-data (build-release-data {:prev-tag prev-tag
-                                            :curr-tag curr-tag})
-          rendered-md  (render-changelog release-data)]
-      ;; Print Markdown to stdout
-      (println rendered-md)
-      ;; Write Markdown to file
-      (spit out-file rendered-md)
-      (println "\n✅ Changelog written to" out-file))))
+                                            :curr-tag curr-tag})]
+      (case format
+        :json
+        (let [json-str (json/generate-string release-data {:pretty true})]
+          (println json-str)
+          (spit out-file json-str)
+          (println "\n✅ JSON written to" out-file))
+
+        :markdown
+        (let [rendered-md (render-changelog release-data)]
+          (println rendered-md)
+          (spit out-file rendered-md)
+          (println "\n✅ Markdown written to" out-file))))))
 
 (apply -main *command-line-args*)
