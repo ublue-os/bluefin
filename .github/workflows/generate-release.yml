@@ -36,19 +36,18 @@ jobs:
         with:
           fetch-depth: 500
 
-      - name: Setup Just
-        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
-
-      - name: Check Just Syntax
-        shell: bash
-        run: |
-          just check
-
       - name: Generate Release Text
+        uses: hanthor/changelog-action@master
+        with:
+          stream: ${{ matrix.version }}
+          family: bluefin
+          handwritten: ${{ inputs.handwritten }}
+          output-env: ./output.env
+
+      - name: Load outputs
         id: generate-release-text
         shell: bash
         run: |
-          just changelogs "${{ matrix.version }}" "${{ inputs.handwritten }}"
           source ./output.env
           echo "title=${TITLE}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
