@@ -464,7 +464,7 @@ run $image="bluefin" $tag="latest" $flavor="main":
 changelogs branch="stable" handwritten="":
     #!/usr/bin/bash
     set -eou pipefail
-    python3 ./.github/changelogs.py "{{ branch }}" ./output.env ./changelog.md --workdir . --handwritten "{{ handwritten }}"
+    python3 ./.github/changelogs.py --stream "{{ branch }}" --output-env ./output.env --output ./changelog.md --handwritten "{{ handwritten }}"
 
 # Verify Container with Cosign
 [group('Utility')]
