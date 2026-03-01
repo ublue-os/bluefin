@@ -20,12 +20,6 @@ ghcurl "https://github.com/starship/starship/releases/latest/download/starship-x
 tar -xzf /tmp/starship.tar.gz -C /tmp
 install -c -m 0755 /tmp/starship /usr/bin
 
-# Automatic wallpaper changing by month
-HARDCODED_RPM_MONTH="12"
-sed -i "/picture-uri/ s/${HARDCODED_RPM_MONTH}/$(date +%m)/" "/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override"
-rm /usr/share/glib-2.0/schemas/gschemas.compiled
-glib-compile-schemas /usr/share/glib-2.0/schemas
-
 # Required for bluefin faces to work without conflicting with a ton of packages
 rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
 mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces

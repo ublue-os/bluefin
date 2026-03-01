@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Set the appropriate wallpaper based on month and hemisphere
+# This will be run at login and periodically to update the wallpaper
+
+readonly WALLPAPER_BASE_PATH="/usr/share/backgrounds/bluefin"
+
+# Don't clobber custom wallpaper (check both light and dark URIs)
+CURRENT_WALLPAPER="$(gsettings get org.gnome.desktop.background picture-uri)"
+CURRENT_WALLPAPER="${CURRENT_WALLPAPER#\'file://}"
+CURRENT_WALLPAPER="${CURRENT_WALLPAPER%\'}"
+
+CURRENT_WALLPAPER_DARK="$(gsettings get org.gnome.desktop.background picture-uri-dark)"
+CURRENT_WALLPAPER_DARK="${CURRENT_WALLPAPER_DARK#\'file://}"
+CURRENT_WALLPAPER_DARK="${CURRENT_WALLPAPER_DARK%\'}"
+
+if [[ "$CURRENT_WALLPAPER" != "${WALLPAPER_BASE_PATH}"/*-bluefin.xml ]] || \
+   [[ "$CURRENT_WALLPAPER_DARK" != "${WALLPAPER_BASE_PATH}"/*-bluefin.xml ]]; then
+    echo "User has a personal wallpaper set. Not changing it."
+    exit 0
+fi
+
+MONTH="$(date +%m)"
+MONTH_NUM="${MONTH#0}"  # Remove leading zero if present
+
+LATITUDE="$(/usr/libexec/get-geoclue-latitude)" && LOCATION_EXIT=0 || LOCATION_EXIT=$?
+
+HEMISPHERE="north"  # Default: northern hemisphere
+
+if [[ $LOCATION_EXIT -eq 2 ]]; then
+    echo "Location services disabled or denied, defaulting to northern hemisphere"
+elif [[ $LOCATION_EXIT -ne 0 ]]; then
+    echo "Error getting location, defaulting to northern hemisphere"
+elif ! [[ "$LATITUDE" =~ ^-?[0-9]+\.?[0-9]*$ ]]; then
+    echo "Invalid latitude format: $LATITUDE, defaulting to northern hemisphere"
+elif [[ "${LATITUDE:0:1}" == "-" ]]; then
+    HEMISPHERE="south"
+    MONTH_NUM=$(( (MONTH_NUM + 5) % 12 + 1 ))
+fi
+
+# Format month with leading zero if needed
+if [[ $MONTH_NUM -lt 10 ]]; then
+    MONTH_PADDED="0$MONTH_NUM"
+else
+    MONTH_PADDED="$MONTH_NUM"
+fi
+
+WALLPAPER_PATH="${WALLPAPER_BASE_PATH}/${MONTH_PADDED}-bluefin.xml"
+
+if [[ ! -f "$WALLPAPER_PATH" ]]; then
+    echo "Wallpaper file not found: $WALLPAPER_PATH" >&2
+    exit 1
+fi
+
+# Apply the wallpaper
+if gsettings set org.gnome.desktop.background picture-uri "file://$WALLPAPER_PATH" && \
+   gsettings set org.gnome.desktop.background picture-uri-dark "file://$WALLPAPER_PATH"; then
+    echo "Successfully set wallpaper to $WALLPAPER_PATH (adjusted month: $MONTH_NUM, hemisphere: $HEMISPHERE)"
+else
+    echo "Failed to set wallpaper" >&2
+    exit 1
+fi
