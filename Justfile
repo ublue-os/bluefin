@@ -11,7 +11,6 @@ flavors := '(
     [nvidia-open]=nvidia-open
 )'
 tags := '(
-    [gts]=gts
     [stable]=stable
     [latest]=latest
     [beta]=beta
@@ -116,7 +115,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     # AKMODS Flavor and Kernel Version
     if [[ "${flavor}" =~ hwe ]]; then
         akmods_flavor="bazzite"
-    elif [[ "${tag}" =~ gts|stable ]]; then
+    elif [[ "${tag}" =~ stable ]]; then
         akmods_flavor="coreos-stable"
     elif [[ "${tag}" =~ beta ]]; then
         akmods_flavor="main"
@@ -627,11 +626,11 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     # Weekly Stable / Rebuild Stable on workflow_dispatch
     github_event="{{ github_event }}"
     if [[ "{{ tag }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${github_event}" =~ schedule ]]; then
-        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts-${version}" "gts-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "${github_event}" =~ workflow_dispatch|workflow_call ]]; then
-        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts-${version}" "gts-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
-        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts-${version}" "gts-${version:3}")
     elif [[ ! "{{ tag }}" =~ stable|beta ]]; then
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${version}" "${FEDORA_VERSION}-${version:3}")
     fi
@@ -685,7 +684,7 @@ tag-images image_name="" default_tag="" tags="":
 #   > just retag-nvidia-on-ghcr latest latest-41.20250228.1 0
 #
 # working_tag: The tag of the most recent known good image (e.g., stable-daily-41.20250126.3)
-# stream:      One of latest, stable-daily, stable or gts
+# stream:      One of latest, stable-daily, or stable
 # dry_run:     Only print the skopeo commands instead of running them
 #
 # First generate a PAT with package write access (https://github.com/settings/tokens)

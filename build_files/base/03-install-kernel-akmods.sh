@@ -90,7 +90,7 @@ kargs = ["rd.driver.blacklist=nouveau", "modprobe.blacklist=nouveau", "nvidia-dr
 EOF
 fi
 
-# ZFS for gts/stable
+# ZFS for stable
 if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     # Fetch ZFS RPMs
     skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-zfs:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-zfs
