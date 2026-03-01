@@ -35,21 +35,3 @@ jobs:
     uses: ./.github/workflows/generate-release.yml
     with:
       stream_name: '["stable", "stable-daily"]'
-
-  repoint-gts:
-    name: Repoint GTS Tags to Stable
-    needs: [build-image-stable]
-    if: github.event_name != 'pull_request'
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Login to GHCR
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | skopeo login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Copy stable images to gts tag
-        run: |
-          for image in bluefin bluefin-dx bluefin-nvidia-open bluefin-dx-nvidia-open; do
-            skopeo copy \
-              docker://ghcr.io/ublue-os/${image}:stable \
-              docker://ghcr.io/ublue-os/${image}:gts
-          done

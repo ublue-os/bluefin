@@ -626,11 +626,11 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
     # Weekly Stable / Rebuild Stable on workflow_dispatch
     github_event="{{ github_event }}"
     if [[ "{{ tag }}" =~ "stable" && "${WEEKLY}" == "${TODAY}" && "${github_event}" =~ schedule ]]; then
-        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts-${version}" "gts-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "${github_event}" =~ workflow_dispatch|workflow_call ]]; then
-        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts-${version}" "gts-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
-        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}")
+        BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts-${version}" "gts-${version:3}")
     elif [[ ! "{{ tag }}" =~ stable|beta ]]; then
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${version}" "${FEDORA_VERSION}-${version:3}")
     fi
