@@ -169,6 +169,7 @@ The repository uses mandatory pre-commit validation:
 - `moderator.yml` - Repository moderation tasks
 
 **Workflow Architecture:**
+
 - Stream-specific workflows (stable, latest, beta) call `reusable-build.yml`
 - `reusable-build.yml` builds both base and dx variants for all flavors (main, nvidia-open)
 - Fedora version is dynamically detected based on stream tag
