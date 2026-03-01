@@ -8,9 +8,6 @@ permissions:
     id-token: write
 
 jobs:
-    build-image-gts:
-        uses: ./.github/workflows/build-image-gts.yml
-        secrets: inherit
     build-image-stable:
         uses: ./.github/workflows/build-image-stable.yml
         secrets: inherit

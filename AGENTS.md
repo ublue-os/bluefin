@@ -36,7 +36,7 @@ This document provides essential information for coding agents working with the 
 - **Two Build Targets**: `base` (regular users) and `dx` (developer experience)
 - **Image Flavors**: main, nvidia-open
 - **Fedora Versions**: 42, 43 supported
-- **Stream Tags**: `latest` (F42/43), `beta` (F42/43), `stable` (F42), `gts` (F42 Grand Touring Support)
+- **Stream Tags**: `latest` (F42/43), `beta` (F42/43), `stable` (F42)
 - **Build Process**: Sequential shell scripts in build_files/ directory
 - **Base Images**: Uses `ghcr.io/ublue-os/silverblue-main` as foundation from Universal Blue
 
@@ -161,7 +161,6 @@ The repository uses mandatory pre-commit validation:
 ### GitHub Actions Workflows
 - `build-image-latest-main.yml` - Builds latest images on main branch changes
 - `build-image-stable.yml` - Builds stable release images
-- `build-image-gts.yml` - Builds GTS (Grand Touring Support) images
 - `build-image-beta.yml` - Builds beta images for testing F42/F43
 - `reusable-build.yml` - Core build logic for all image variants
 - `generate-release.yml` - Generates release artifacts and changelogs
@@ -170,7 +169,7 @@ The repository uses mandatory pre-commit validation:
 - `moderator.yml` - Repository moderation tasks
 
 **Workflow Architecture:**
-- Stream-specific workflows (gts, stable, latest, beta) call `reusable-build.yml`
+- Stream-specific workflows (stable, latest, beta) call `reusable-build.yml`
 - `reusable-build.yml` builds both base and dx variants for all flavors (main, nvidia-open)
 - Fedora version is dynamically detected based on stream tag
 - Images are signed with cosign and pushed to GHCR
@@ -252,12 +251,12 @@ The `Justfile` is the central build orchestration tool with these key recipes:
 ```bash
 images: bluefin, bluefin-dx
 flavors: main, nvidia-open
-tags: gts, stable, latest, beta
+tags: stable, latest, beta
 ```
 
 **Version Detection:**
 - `just fedora_version <image> <tag> <flavor>` - Dynamically detects Fedora version from upstream base images
-- For `gts` and `stable`: Checks `ghcr.io/ublue-os/base-main:<tag>`
+- For `stable`: Checks `ghcr.io/ublue-os/base-main:<tag>`
 - For `latest`/`beta`: Checks corresponding upstream tags
 - Returns the Fedora major version (e.g., 42, 43)
 
@@ -275,7 +274,7 @@ The `Containerfile` uses a multi-stage build process:
 - `FEDORA_MAJOR_VERSION` - Dynamically set by Just (42/43)
 - `IMAGE_NAME` - Target image name (bluefin/bluefin-dx)
 - `KERNEL` - Pinned kernel version (optional)
-- `UBLUE_IMAGE_TAG` - Stream tag (gts/stable/latest/beta)
+- `UBLUE_IMAGE_TAG` - Stream tag (stable/latest/beta)
 
 ### Build Script Execution Order
 Scripts in `build_files/base/` execute in numerical order:

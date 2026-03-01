@@ -12,7 +12,7 @@ on:
         default: bluefin
         type: string
       stream_name:
-        description: "The Fedora Version: gts, stable, or latest"
+        description: "The Fedora Version: stable, latest, or beta"
         required: true
         type: string
       kernel_pin:
