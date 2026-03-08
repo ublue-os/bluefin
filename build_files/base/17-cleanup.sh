@@ -8,7 +8,7 @@ set -eoux pipefail
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 
 # Setup Systemd
-systemctl --global enable bazaar.service
+# systemctl --global enable bazaar.service
 systemctl --global enable podman-auto-update.timer
 systemctl --global enable ublue-user-setup.service
 systemctl enable brew-setup.service
