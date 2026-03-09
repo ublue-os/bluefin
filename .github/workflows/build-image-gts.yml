@@ -23,7 +23,7 @@ jobs:
       matrix:
         brand_name: [bluefin]
     with:
-      kernel_pin: 6.17.12-200.fc42.x86_64 ## Pin to 6.17 for ZFS compatibility
+   #  kernel_pin: 6.17.12-200.fc42.x86_64 ## Pin to 6.17 for ZFS compatibility
       brand_name: ${{ matrix.brand_name }}
       stream_name: gts
 
