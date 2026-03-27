@@ -70,13 +70,15 @@ for package in "${UNWANTED_PACKAGES[@]}"; do
     fi
 done
 
-#TODO: add libnvidia-container-tools back once its available for F44
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
   NV_PACKAGES=(
-      libnvidia-container-tools
       kmod-nvidia
       nvidia-driver-cuda
-)
+  )
+  # TODO: add libnvidia-container-tools back once its available for F44
+  if [[ "${FEDORA_MAJOR_VERSION}" != "44" ]]; then
+      NV_PACKAGES+=(libnvidia-container-tools)
+  fi
   for package in "${NV_PACKAGES[@]}"; do
       rpm -q "${package}" >/dev/null || { echo "Missing NVIDIA package: ${package}... Exiting"; exit 1 ; }
   done

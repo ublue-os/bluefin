@@ -8,6 +8,7 @@ on:
       - "**.md"
       - ".github/workflows/*validate*.yml"
       - "system_files/shared/etc/bazaar/**"
+      - "flatpaks/**"
   push:
     branches:
       - beta
@@ -15,6 +16,7 @@ on:
       - "**.md"
       - ".github/workflows/*validate*.yml"
       - "system_files/shared/etc/bazaar/**"
+      - "flatpaks/**"
   workflow_call:
   workflow_dispatch:
 
