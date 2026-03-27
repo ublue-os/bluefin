@@ -8,7 +8,6 @@ IMPORTANT_PACKAGES_DX=(
     code
     containerd.io
     docker-ce
-    docker-buildx-plugin
     docker-compose-plugin
     flatpak-builder
     libvirt
@@ -16,14 +15,23 @@ IMPORTANT_PACKAGES_DX=(
     rocm-runtime
 )
 
+# docker-buildx-plugin not available for F44
+if [[ "${FEDORA_MAJOR_VERSION}" != "44" ]]; then
+    IMPORTANT_PACKAGES_DX+=(docker-buildx-plugin)
+fi
+
 for package in "${IMPORTANT_PACKAGES_DX[@]}"; do
     rpm -q "${package}" >/dev/null || { echo "Missing package: ${package}... Exiting"; exit 1 ; }
 done
 
 IMPORTANT_UNITS=(
-    docker.socket
     podman.socket
 )
+
+# docker.socket only enabled when docker-ce is present (not for F44)
+if [[ "${FEDORA_MAJOR_VERSION}" != "44" ]]; then
+    IMPORTANT_UNITS+=(docker.socket)
+fi
 
 for unit in "${IMPORTANT_UNITS[@]}"; do
     if ! systemctl is-enabled "$unit" 2>/dev/null | grep -q "^enabled$"; then

@@ -100,6 +100,11 @@ case "$FEDORA_MAJOR_VERSION" in
     43)
         EXCLUDED_PACKAGES+=(mozilla-fira-mono-fonts)
         ;;
+    44)
+        # docker-buildx-plugin not yet available for F44
+        # TODO: remove once https://download.docker.com/linux/fedora/44 includes docker-buildx-plugin
+        EXCLUDED_PACKAGES+=(docker-buildx-plugin)
+        ;;
 esac
 
 # Remove excluded packages if they are installed
@@ -112,7 +117,9 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     fi
 fi
 
-systemctl enable docker.socket
+if rpm -q docker-ce >/dev/null; then
+    systemctl enable docker.socket
+fi
 systemctl enable podman.socket
 systemctl enable swtpm-workaround.service
 systemctl enable libvirt-workaround.service

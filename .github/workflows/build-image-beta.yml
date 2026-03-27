@@ -1,16 +1,20 @@
 name: Beta Images
 on:
-  merge_group: # Make Beta Images run on merge groups
+  #merge_group:
   pull_request:
     branches:
-      - main
-      - testing
+      - beta
     paths-ignore:
       - "**.md"
       - ".github/workflows/*validate*.yml"
       - "system_files/shared/etc/bazaar/**"
-  schedule:
-    - cron: "50 5 * * 0" # 5:50 UTC sunday
+  push:
+    branches:
+      - beta
+    paths-ignore:
+      - "**.md"
+      - ".github/workflows/*validate*.yml"
+      - "system_files/shared/etc/bazaar/**"
   workflow_call:
   workflow_dispatch:
 

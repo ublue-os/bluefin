@@ -42,7 +42,6 @@ FEDORA_PACKAGES=(
     hplip
     ibus-mozc
     ifuse
-    igt-gpu-tools
     input-remapper
     iwd
     jetbrains-mono-fonts-all
@@ -175,6 +174,8 @@ dnf -y copr disable ublue-os/staging
 dnf -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
     fwupd fwupd
+
+systemctl disable flatpak-add-fedora-repos.service || true
 
 # TODO: remove me on next flatpak release when preinstall landed in Fedora
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
