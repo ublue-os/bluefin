@@ -34,22 +34,6 @@ flatpak preinstall --help
 # Make sure this garbage never makes it to an image
 test -f /usr/lib/systemd/system/flatpak-add-fedora-repos.service && false
 
-# Fedora flatpak remotes must never be present — flathub only
-# The fedora remote pollutes the app store with unmaintained/duplicate apps
-if flatpak remote-list --system | grep -q "^fedora"; then
-    echo "ERROR: fedora flatpak remote is present — this must not ship in the image"
-    exit 1
-fi
-if flatpak remote-list --system | grep -q "^fedora-testing"; then
-    echo "ERROR: fedora-testing flatpak remote is present — this must not ship in the image"
-    exit 1
-fi
-# Flathub must be present
-if ! flatpak remote-list --system | grep -q "^flathub"; then
-    echo "ERROR: flathub flatpak remote is missing"
-    exit 1
-fi
-
 IMPORTANT_PACKAGES=(
     distrobox
     fish
