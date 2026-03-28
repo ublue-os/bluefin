@@ -2,7 +2,7 @@ on:
   workflow_call:
     inputs:
       stream_name:
-        description: "Release Tag (e.g. gts, stable)"
+        description: "Release Tag (e.g. stable)"
         type: string
         required: true
   workflow_dispatch:
@@ -10,12 +10,10 @@ on:
       handwritten:
         description: "Small Changelog about changes in this build"
       stream_name:
-        description: "Release Tag (e.g. gts, stable)"
+        description: "Release Tag (e.g. stable)"
         required: true
         type: choice
         options:
-          - '["gts", "stable"]'
-          - '["gts"]'
           - '["stable"]'
 
 permissions:
@@ -32,12 +30,12 @@ jobs:
 
     steps:
       - name: Checkout last 500 commits (for <commits> to work)
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 500
 
       - name: Setup Just
-        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+        uses: extractions/setup-just@f8a3cce218d9f83db3a2ecd90e41ac3de6cdfd9b # v3
 
       - name: Check Just Syntax
         shell: bash
@@ -54,8 +52,8 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
-        if: contains(fromJson('["gts", "stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2
+        if: contains(fromJson('["stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
         with:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
