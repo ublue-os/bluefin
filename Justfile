@@ -559,38 +559,18 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
     #!/usr/bin/bash
     set -eou pipefail
     {{ just }} validate {{ image }} {{ tag }} {{ flavor }}
-    if [[ ! -f /tmp/manifest.json ]]; then
-        # Determine Version
-        if [[ "{{ tag }}" =~ stable ]]; then
-            VERSION="{{ stable_version }}"
-        elif [[ "{{ tag }}" =~ beta ]]; then
-            VERSION="{{ beta_version }}"
-        else
-            VERSION="{{ latest_version }}"
-        fi
-
-        # Determine Akmods Flavor
-        if [[ "{{ tag }}" =~ stable ]]; then
-            AKMODS_FLAVOR="coreos-stable"
-        else
-            AKMODS_FLAVOR="main"
-        fi
-
-        # Verify akmods existence
-        echo "Checking for akmods: ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${VERSION}" >&2
-        if ! skopeo inspect --retry-times 3 "docker://ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${VERSION}" > /dev/null; then
-             echo "Error: Akmods not found for flavor ${AKMODS_FLAVOR} and version ${VERSION}" >&2
-             exit 1
-        fi
-
-        # Write cache
-        echo "{\"Labels\": {\"org.opencontainers.image.version\": \"${VERSION}\"}}" > /tmp/manifest.json
+    # Determine Version
+    if [[ "{{ tag }}" =~ stable ]]; then
+        VERSION="{{ stable_version }}"
+    elif [[ "{{ tag }}" =~ beta ]]; then
+        VERSION="{{ beta_version }}"
+    else
+        VERSION="{{ latest_version }}"
     fi
-    fedora_version=$(jq -r '.Labels["org.opencontainers.image.version"]' < /tmp/manifest.json | grep -oP '^[0-9]+')
     if [[ -n "${kernel_pin:-}" ]]; then
-        fedora_version=$(echo "${kernel_pin}" | grep -oP 'fc\K[0-9]+')
+        VERSION=$(echo "${kernel_pin}" | grep -oP 'fc\K[0-9]+')
     fi
-    echo "${fedora_version}"
+    echo "${VERSION}"
 
 # Image Name
 [group('Utility')]
