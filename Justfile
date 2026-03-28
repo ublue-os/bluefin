@@ -567,9 +567,6 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
     else
         VERSION="{{ latest_version }}"
     fi
-    if [[ -n "${kernel_pin:-}" ]]; then
-        VERSION=$(echo "${kernel_pin}" | grep -oP 'fc\K[0-9]+')
-    fi
     echo "${VERSION}"
 
 # Image Name
