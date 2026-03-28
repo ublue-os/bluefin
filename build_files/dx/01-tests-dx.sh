@@ -25,13 +25,9 @@ for package in "${IMPORTANT_PACKAGES_DX[@]}"; do
 done
 
 IMPORTANT_UNITS=(
+    docker.socket
     podman.socket
 )
-
-# docker.socket only enabled when docker-ce is present (not for F44)
-if [[ "${FEDORA_MAJOR_VERSION}" != "44" ]]; then
-    IMPORTANT_UNITS+=(docker.socket)
-fi
 
 for unit in "${IMPORTANT_UNITS[@]}"; do
     if ! systemctl is-enabled "$unit" 2>/dev/null | grep -q "^enabled$"; then
