@@ -156,6 +156,9 @@ case "$FEDORA_MAJOR_VERSION" in
     43)
         EXCLUDED_PACKAGES+=(gnome-software cosign)
         ;;
+    44)
+        EXCLUDED_PACKAGES+=(gnome-software cosign)
+        ;;
 esac
 
 # Remove excluded packages if they are installed
