@@ -679,6 +679,29 @@ tag-images image_name="" default_tag="" tags="":
     # Show Images
     ${PODMAN} images
 
+# DNF CI package cache
+[group('Utility')]
+setup-cache $image="bluefin" $tag="latest" $ghcr="0" $github_event="0":
+    #!/usr/bin/bash
+    set -eou pipefail
+
+    image_name=$({{ just }} image_name '{{ image }}')
+    fedora_version=$({{ just }} fedora_version '{{ image }}' '{{ tag }}')
+
+    ALLOW_CACHE_WRITE="false"
+
+    BLESSED_IMAGE=bluefin-dx
+
+    if [[ "${image_name}" == "${BLESSED_IMAGE}" ]] && \
+       [[ "{{ ghcr }}" == "1" ]] && \
+       [[ "${github_event}" == "workflow_dispatch" || "${github_event}" == "schedule" ]]; then
+        ALLOW_CACHE_WRITE="true"
+    fi
+
+    CACHE_NAME="${BLESSED_IMAGE}-${fedora_version}"
+
+    echo "${CACHE_NAME}" "${ALLOW_CACHE_WRITE}"
+
 # Examples:
 #   > just retag-nvidia-on-ghcr stable-daily stable-daily-41.20250126.3 0
 #   > just retag-nvidia-on-ghcr latest latest-41.20250228.1 0
