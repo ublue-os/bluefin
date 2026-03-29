@@ -42,7 +42,6 @@ FEDORA_PACKAGES=(
     hplip
     ibus-mozc
     ifuse
-    igt-gpu-tools
     input-remapper
     iwd
     jetbrains-mono-fonts-all
@@ -136,6 +135,7 @@ copr_install_isolated "ublue-os/packages" "uupd"
 
 # Packages to exclude - common to all versions
 EXCLUDED_PACKAGES=(
+    cosign
     fedora-bookmarks
     fedora-chromium-config
     fedora-chromium-config-gnome
@@ -143,21 +143,12 @@ EXCLUDED_PACKAGES=(
     firefox-langpacks
     gnome-extensions-app
     gnome-shell-extension-background-logo
+    gnome-software
     gnome-software-rpm-ostree
     gnome-terminal-nautilus
     podman-docker
     yelp
 )
-
-# Version-specific package exclusions
-case "$FEDORA_MAJOR_VERSION" in
-    42)
-        EXCLUDED_PACKAGES+=(gnome-software cosign)
-        ;;
-    43)
-        EXCLUDED_PACKAGES+=(gnome-software cosign)
-        ;;
-esac
 
 # Remove excluded packages if they are installed
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
@@ -176,8 +167,11 @@ dnf -y swap \
     --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
     fwupd fwupd
 
+systemctl disable flatpak-add-fedora-repos.service || true
+
 # TODO: remove me on next flatpak release when preinstall landed in Fedora
-if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
+# Not needed on F44+ where flatpak ships the preinstall feature natively
+if [[ "$(rpm -E %fedora)" -ge "42" ]] && [[ "$(rpm -E %fedora)" -lt "44" ]]; then
   dnf -y copr enable ublue-os/flatpak-test
   dnf -y copr disable ublue-os/flatpak-test
   dnf -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak

@@ -71,13 +71,21 @@ dnf5 -y install "${FEDORA_PACKAGES[@]}"
 
 dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
 sed -i "s/enabled=.*/enabled=0/g" /etc/yum.repos.d/docker-ce.repo
-dnf -y install --enablerepo=docker-ce-stable \
-    containerd.io \
-    docker-buildx-plugin \
-    docker-ce \
-    docker-ce-cli \
-    docker-compose-plugin \
+
+# docker-buildx-plugin is not yet available for F44 — install it only on other versions
+# TODO: collapse back to a single install block once F44 ships docker-buildx-plugin
+# https://download.docker.com/linux/fedora/44/x86_64/stable/repodata/
+DOCKER_PACKAGES=(
+    containerd.io
+    docker-ce
+    docker-ce-cli
+    docker-compose-plugin
     docker-model-plugin
+)
+if [[ "${FEDORA_MAJOR_VERSION}" != "44" ]]; then
+    DOCKER_PACKAGES+=(docker-buildx-plugin)
+fi
+dnf -y install --enablerepo=docker-ce-stable "${DOCKER_PACKAGES[@]}"
 
 tee /etc/yum.repos.d/vscode.repo <<'EOF'
 [code]
@@ -112,7 +120,9 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
     fi
 fi
 
-systemctl enable docker.socket
+if rpm -q docker-ce >/dev/null 2>&1; then
+    systemctl enable docker.socket
+fi
 systemctl enable podman.socket
 systemctl enable swtpm-workaround.service
 systemctl enable libvirt-workaround.service

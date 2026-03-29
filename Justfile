@@ -1,4 +1,7 @@
 repo_organization := "ublue-os"
+stable_version := "43"
+latest_version := "43"
+beta_version := "44"
 rechunker_image := "ghcr.io/ublue-os/legacy-rechunk:v1.0.1-x86_64@sha256:2627cbf92ca60ab7372070dcf93b40f457926f301509ffba47a04d6a9e1ddaf7"
 common_image := "ghcr.io/projectbluefin/common:latest"
 brew_image := "ghcr.io/ublue-os/brew:latest"
@@ -556,19 +559,15 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
     #!/usr/bin/bash
     set -eou pipefail
     {{ just }} validate {{ image }} {{ tag }} {{ flavor }}
-    if [[ ! -f /tmp/manifest.json ]]; then
-        if [[ "{{ tag }}" =~ stable ]]; then
-            # CoreOS does not uses cosign
-            skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable > /tmp/manifest.json
-        else
-            skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
-        fi
+    # Determine Version
+    if [[ "{{ tag }}" =~ stable ]]; then
+        VERSION="{{ stable_version }}"
+    elif [[ "{{ tag }}" =~ beta ]]; then
+        VERSION="{{ beta_version }}"
+    else
+        VERSION="{{ latest_version }}"
     fi
-    fedora_version=$(jq -r '.Labels["org.opencontainers.image.version"]' < /tmp/manifest.json | grep -oP '^[0-9]+')
-    if [[ -n "${kernel_pin:-}" ]]; then
-        fedora_version=$(echo "${kernel_pin}" | grep -oP 'fc\K[0-9]+')
-    fi
-    echo "${fedora_version}"
+    echo "${VERSION}"
 
 # Image Name
 [group('Utility')]
