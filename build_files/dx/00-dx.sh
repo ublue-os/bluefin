@@ -49,9 +49,6 @@ FEDORA_PACKAGES=(
     qemu-system-x86-core
     qemu-user-binfmt
     qemu-user-static
-    rocm-hip
-    rocm-opencl
-    rocm-smi
     sysprof
     incus
     incus-agent
@@ -68,6 +65,14 @@ FEDORA_PACKAGES=(
 
 echo "Installing ${#FEDORA_PACKAGES[@]} DX packages from Fedora repos..."
 dnf5 -y install "${FEDORA_PACKAGES[@]}"
+
+# rocm doesn't work well on nvidia
+if [[ ! "${IMAGE_NAME}" =~ nvidia ]]; then
+  dnf install -y \
+    rocm-hip \
+    rocm-opencl \
+    rocm-smi
+fi
 
 dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
 sed -i "s/enabled=.*/enabled=0/g" /etc/yum.repos.d/docker-ce.repo
