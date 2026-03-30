@@ -43,6 +43,8 @@ jobs:
   generate-release:
     name: Generate Release
     needs: [build-image-beta]
+    permissions:
+      contents: write
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
