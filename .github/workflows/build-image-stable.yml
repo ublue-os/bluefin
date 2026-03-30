@@ -38,6 +38,8 @@ jobs:
   generate-release:
     name: Generate Release
     needs: [build-image-stable]
+    permissions:
+      contents: write
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
