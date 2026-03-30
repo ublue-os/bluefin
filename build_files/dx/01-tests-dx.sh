@@ -13,7 +13,6 @@ IMPORTANT_PACKAGES_DX=(
     flatpak-builder
     libvirt
     qemu
-    rocm-runtime
 )
 
 for package in "${IMPORTANT_PACKAGES_DX[@]}"; do

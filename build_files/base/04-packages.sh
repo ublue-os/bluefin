@@ -20,6 +20,7 @@ FEDORA_PACKAGES=(
     adcli
     adw-gtk3-theme
     adwaita-fonts-all
+    autofs
     bash-color-prompt
     bcache-tools
     bootc
