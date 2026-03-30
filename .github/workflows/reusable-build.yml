@@ -26,10 +26,18 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   build_container:
     name: image
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
     continue-on-error: false
     strategy:
       fail-fast: false
@@ -257,6 +265,14 @@ jobs:
           SBOM_DIGEST: ${{ steps.upload-sbom.outputs.sbom_digest }}
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${LOWERCASE}/${IMAGE_NAME}@${SBOM_DIGEST}
+
+      - name: Attestation
+        if: github.event_name != 'pull_request'
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 #v4.1.0
+        with:
+          subject-name: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
+          push-to-registry: true
 
   check:
     name: Check all ${{ matrix.stream_name }} builds successful
