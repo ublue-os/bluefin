@@ -18,6 +18,8 @@ on:
       - "system_files/shared/etc/bazaar/**"
       - "flatpaks/**"
   workflow_call:
+  schedule:
+    - cron: "17 0 * * *"  # Daily at 00:17 UTC
   workflow_dispatch:
 
 jobs:
