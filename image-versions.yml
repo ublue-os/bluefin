@@ -2,7 +2,7 @@ images:
   - name: silverblue-main
     image: ghcr.io/ublue-os/silverblue-main
     tag: latest
-    digest: sha256:8be64d142f42c39e04fd2d84f6bfaa8bb5b8f86aea66547668265b475f09cefe
+    digest: sha256:c376f5eb47e97b5d5b142630d6130c780f458e2c897e0ea3f6f271652b93df79
   - name: common
     image: ghcr.io/projectbluefin/common
     tag: latest
