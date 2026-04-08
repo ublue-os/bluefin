@@ -4,7 +4,9 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-dnf clean all
+# Revert back to upstream defaults
+dnf config-manager setopt keepcache=0
+dnf versionlock clear
 
 systemctl mask flatpak-add-fedora-repos.service
 rm -f /usr/lib/systemd/system/flatpak-add-fedora-repos.service
