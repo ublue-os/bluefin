@@ -25,6 +25,11 @@ Bluefin's mission is to provide a robust, cloud-native desktop operating system 
 - **Developer Experience**: Integrated cloud-native tooling and workflows, including Kubernetes and container support
 - **Sustainability**: Reduced maintenance overhead for contributors by using the latest cloud native infrastructure tech
 
+## Releases
+
+[![Bluefin](https://docs.projectbluefin.io/img/cards/bluefin-light.png#gh-light-mode-only)](https://docs.projectbluefin.io/changelogs)
+[![Bluefin](https://docs.projectbluefin.io/img/cards/bluefin-dark.png#gh-dark-mode-only)](https://docs.projectbluefin.io/changelogs)
+
 ## Communications
 
 ### Community Channels
