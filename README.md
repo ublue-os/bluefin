@@ -27,8 +27,12 @@ Bluefin's mission is to provide a robust, cloud-native desktop operating system 
 
 ## Releases
 
-[![Bluefin](https://docs.projectbluefin.io/img/cards/bluefin-light.png#gh-light-mode-only)](https://docs.projectbluefin.io/changelogs)
-[![Bluefin](https://docs.projectbluefin.io/img/cards/bluefin-dark.png#gh-dark-mode-only)](https://docs.projectbluefin.io/changelogs)
+<a href="https://docs.projectbluefin.io/changelogs">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://docs.projectbluefin.io/img/cards/bluefin-dark.png">
+    <img src="https://docs.projectbluefin.io/img/cards/bluefin-light.png" alt="Bluefin" width="800">
+  </picture>
+</a>
 
 ## Communications
 
