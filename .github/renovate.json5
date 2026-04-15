@@ -39,11 +39,15 @@
       "automerge": false
     },
     {
+      "matchUpdateTypes": ["pin", "digest", "pinDigest"],
+      "matchDepNames": ["ghcr.io/projectbluefin/common"],
+      "automerge": false
+    },
+    {
       "automerge": true,
       "matchUpdateTypes": ["digest"],
       "matchDepNames": [
-        "ghcr.io/ublue-os/silverblue-main",
-        "ghcr.io/projectbluefin/common"
+        "ghcr.io/ublue-os/silverblue-main"
       ]
     }
   ]
