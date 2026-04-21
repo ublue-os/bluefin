@@ -141,6 +141,7 @@ EXCLUDED_PACKAGES=(
     firefox-langpacks
     gnome-extensions-app
     gnome-shell-extension-background-logo
+    gnome-software
     gnome-software-rpm-ostree
     gnome-terminal-nautilus
     podman-docker
@@ -150,10 +151,10 @@ EXCLUDED_PACKAGES=(
 # Version-specific package exclusions
 case "$FEDORA_MAJOR_VERSION" in
     42)
-        EXCLUDED_PACKAGES+=(gnome-software cosign)
+        EXCLUDED_PACKAGES+=(cosign)
         ;;
     43)
-        EXCLUDED_PACKAGES+=(gnome-software cosign)
+        EXCLUDED_PACKAGES+=(cosign)
         ;;
 esac
 
