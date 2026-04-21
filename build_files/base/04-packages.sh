@@ -134,6 +134,7 @@ copr_install_isolated "ublue-os/packages" "uupd"
 
 # Packages to exclude - common to all versions
 EXCLUDED_PACKAGES=(
+    cosign
     fedora-bookmarks
     fedora-chromium-config
     fedora-chromium-config-gnome
@@ -147,16 +148,6 @@ EXCLUDED_PACKAGES=(
     podman-docker
     yelp
 )
-
-# Version-specific package exclusions
-case "$FEDORA_MAJOR_VERSION" in
-    42)
-        EXCLUDED_PACKAGES+=(cosign)
-        ;;
-    43)
-        EXCLUDED_PACKAGES+=(cosign)
-        ;;
-esac
 
 # Remove excluded packages if they are installed
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
