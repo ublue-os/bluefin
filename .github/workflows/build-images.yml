@@ -3,9 +3,11 @@ on:
     workflow_dispatch:
 
 permissions:
-    contents: read
+    contents: write
     packages: write
     id-token: write
+    attestations: write
+    artifact-metadata: write
 
 jobs:
     build-image-stable:
