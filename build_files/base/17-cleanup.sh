@@ -19,6 +19,10 @@ systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
 systemctl enable ublue-system-setup.service
 
+# see /usr/bin/rechunker-group-fix
+# DO NOT REMOVE THIS
+systemctl enable rechunker-group-fix.service
+
 # run flatpak preinstall once at startup
 if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
   systemctl enable flatpak-preinstall.service
