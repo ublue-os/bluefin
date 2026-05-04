@@ -163,24 +163,18 @@ jobs:
           echo "SBOM=${SBOM}" >> $GITHUB_OUTPUT
           sudo rm -rf ${OCI_DIR}
 
-      - name: Rechunk Image
-        id: rechunk-image
-        shell: bash
+      - name: Rechunk Image with rpm-ostree
+        id: rechunker
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MATRIX_BASE_NAME: ${{ matrix.base_name }}
+          MATRIX_STREAM_NAME: ${{ matrix.stream_name }}
+          MATRIX_IMAGE_FLAVOR: ${{ matrix.image_flavor }}
+          DEFAULT_TAG: ${{ env.DEFAULT_TAG }}
         run: |
-          sudo -E $(command -v just) rechunk "${{ matrix.base_name }}" \
-                            "${{ matrix.stream_name }}" \
-                            "${{ matrix.image_flavor }}" \
+          sudo -E $(command -v just) rechunk "${MATRIX_BASE_NAME}" \
+                            "${MATRIX_STREAM_NAME}" \
+                            "${MATRIX_IMAGE_FLAVOR}" \
                             "1"
-
-      - name: Load Image into Podman
-        id: load-rechunk
-        shell: bash
-        run: |
-          sudo -E $(command -v just) load-rechunk "${{ matrix.base_name }}" \
-                            "${{ env.DEFAULT_TAG }}" \
-                            "${{ matrix.image_flavor }}"
 
       - name: Secureboot Check
         id: secureboot
@@ -189,6 +183,38 @@ jobs:
           sudo -E $(command -v just) secureboot "${{ matrix.base_name }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ matrix.image_flavor }}"
+
+      - name: Export to OCI Archive
+        if: github.event_name == 'pull_request'
+        id: oci-archive
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          DEFAULT_TAG: ${{ env.DEFAULT_TAG }}
+        run: |
+          sudo -E $(command -v just) export-oci "${{ matrix.base_name }}" \
+                            "${{ env.DEFAULT_TAG }}" \
+                            "${{ matrix.image_flavor }}"
+
+      - name: Upload OCI dir as Artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+        with:
+          name: ${{ env.IMAGE_NAME }}.oci
+          path: ${{ env.IMAGE_NAME }}.oci
+          archive: false
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: PR Testing Instructions
+        if: github.event_name == 'pull_request'
+        id: pr-summary
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          MATRIX_STREAM_NAME: "${{ matrix.stream_name }}"
+        run: |
+          echo "Download the .oci file" >> $GITHUB_STEP_SUMMARY
+          echo "Rebase: sudo bootc switch --transport oci-archive /path/to/${IMAGE_NAME}.oci" >> $GITHUB_STEP_SUMMARY
+          echo "Go back to the production image e.g.: sudo bootc switch --enforce-container-sigpolicy ghcr.io/ublue-os/${IMAGE_NAME}:${MATRIX_STREAM_NAME}" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate tags
         id: generate-tags
@@ -225,10 +251,18 @@ jobs:
         with:
           string: ${{ env.IMAGE_REGISTRY }}
 
+      # TODO: remove me when we have a new podman in 26.04 runners
+      # needed because old podman doesn't push layer annotations for
+      # the rpm-ostree rechunker at all
+      - name: install podman from brew
+        if: github.event_name != 'pull_request'
+        run: |
+          /home/linuxbrew/.linuxbrew/bin/brew install podman
+
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | /home/linuxbrew/.linuxbrew/bin/podman login ghcr.io -u ${{ github.actor }} --password-stdin
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push to GHCR
@@ -241,9 +275,15 @@ jobs:
           timeout_minutes: 30
           command: |
             set -euox pipefail
+            # HACK: push a second time so layer annotations are pushed
+            # TODO: remove me when https://github.com/containers/podman/issues/27796 fixed
 
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-              sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+              sudo -E /home/linuxbrew/.linuxbrew/bin/podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+            done
+
+            for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
+              sudo -E /home/linuxbrew/.linuxbrew/bin/podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
             done
 
             digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
