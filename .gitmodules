@@ -1,7 +1,7 @@
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com
 	url = https://github.com/ubuntu/gnome-shell-extension-appindicator.git
-	branch = v61
+	branch = v64
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io
 	url = https://github.com/AlexanderVanhee/bazaar-companion.git
@@ -13,15 +13,15 @@
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/tmp/caffeine"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/tmp/caffeine
 	url = https://github.com/eonpatapon/gnome-shell-extension-caffeine.git
-	branch = v58
+	branch = v60
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com
 	url = https://github.com/micheleg/dash-to-dock.git
-	branch = extensions.gnome.org-v102
+	branch = extensions.gnome.org-v105
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io
 	url = https://github.com/GSConnect/gnome-shell-extension-gsconnect.git
-	branch = v71
+	branch = v72
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/logomenu@aryan_k"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/logomenu@aryan_k
 	url = https://github.com/ublue-os/Logomenu.git
