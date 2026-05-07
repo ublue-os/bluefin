@@ -49,6 +49,8 @@ FEDORA_PACKAGES=(
     jetbrains-mono-fonts-all
     just
     krb5-workstation
+    libappindicator-gtk3
+    libayatana-appindicator-gtk3
     libgda
     libgda-sqlite
     libimobiledevice
