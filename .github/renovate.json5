@@ -21,6 +21,25 @@
       ],
       datasourceTemplate: 'docker',
     },
+    // Track GNOME extension submodules that pin to a release tag via the
+    // `branch =` field in .gitmodules. Renovate's git-submodules manager
+    // alone can't see new tags because tags don't move; this rewrites the
+    // `branch =` line and the git-submodules manager then advances the SHA.
+    // Uses github-tags (not github-releases) because some upstreams ship
+    // git tags without publishing GitHub Releases (e.g. caffeine).
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.gitmodules$/',
+      ],
+      matchStringsStrategy: 'recursive',
+      matchStrings: [
+        '\\[submodule "[^"]+"\\][^\\[]*?url\\s*=\\s*https?://github\\.com/(?<depName>[^/\\s]+/[^/\\s]+?)(?:\\.git)?\\s[^\\[]*?branch\\s*=\\s*(?<currentValue>\\S*v\\d+\\S*)',
+      ],
+      datasourceTemplate: 'github-tags',
+      versioningTemplate: 'loose',
+      depTypeTemplate: 'gnome-extension',
+    },
     ],
 
   "packageRules": [
@@ -49,6 +68,15 @@
       "matchDepNames": [
         "ghcr.io/ublue-os/silverblue-main"
       ]
+    },
+    {
+      "matchDepTypes": ["gnome-extension"],
+      "matchPackageNames": ["micheleg/dash-to-dock"],
+      "versioning": "regex:^extensions\\.gnome\\.org-v(?<major>\\d+)$"
+    },
+    {
+      "matchDepTypes": ["gnome-extension"],
+      "groupName": "GNOME extensions"
     }
   ]
 }
