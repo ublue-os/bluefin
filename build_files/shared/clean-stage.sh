@@ -8,6 +8,8 @@ set -eoux pipefail
 dnf config-manager setopt keepcache=0
 dnf versionlock clear
 
+# This comes last because we can't *ever* afford to ship fedora flatpaks on the image
+systemctl disable flatpak-add-fedora-repos.service
 systemctl mask flatpak-add-fedora-repos.service
 rm -f /usr/lib/systemd/system/flatpak-add-fedora-repos.service
 

@@ -16,10 +16,7 @@ systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
 systemctl enable ublue-system-setup.service
 
-# run flatpak preinstall once at startup
-if [[ "$(rpm -E %fedora)" -ge "42" ]]; then
-  systemctl enable flatpak-preinstall.service
-fi
+systemctl enable flatpak-preinstall.service
 
 # Updater
 systemctl enable uupd.timer
