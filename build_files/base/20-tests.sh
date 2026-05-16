@@ -79,6 +79,7 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
 fi
 
 IMPORTANT_UNITS=(
+    rechunker-group-fix.service
     rpm-ostree-countme.timer
     tailscaled.service
     ublue-system-setup.service

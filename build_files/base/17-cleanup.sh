@@ -16,6 +16,10 @@ systemctl enable rpm-ostree-countme.service
 systemctl enable tailscaled.service
 systemctl enable ublue-system-setup.service
 
+# see /usr/bin/rechunker-group-fix
+# DO NOT REMOVE THIS
+systemctl enable rechunker-group-fix.service
+
 systemctl enable flatpak-preinstall.service
 
 # Updater
