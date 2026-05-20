@@ -18,6 +18,10 @@
 	path = system_files/shared/usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com
 	url = https://github.com/micheleg/dash-to-dock.git
 	branch = extensions.gnome.org-v105
+[submodule "system_files/shared/usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io"]
+	path = system_files/shared/usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io
+	url = https://github.com/AlexanderVanhee/gradia-capture.git
+	branch = master
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io
 	url = https://github.com/GSConnect/gnome-shell-extension-gsconnect.git

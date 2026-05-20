@@ -31,6 +31,12 @@ glib-compile-schemas --strict /usr/share/gnome-shell/extensions/caffeine@patapon
 make -C /usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com/schemas
 
+# Gradia Capture
+bash /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/build.sh
+unzip -o /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/gradia-integration@alexandervanhee.github.io.shell-extension.zip -d /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io
+rm -f /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/gradia-integration@alexandervanhee.github.io.shell-extension.zip
+glib-compile-schemas --strict /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/schemas
+
 # GSConnect (commented out until G49 support)
 meson setup --prefix=/usr /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build
 meson install -C /usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io/_build --skip-subprojects
