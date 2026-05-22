@@ -39,6 +39,7 @@ jobs:
     needs: [build-image-latest]
     permissions:
       contents: write
+      actions: read
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:

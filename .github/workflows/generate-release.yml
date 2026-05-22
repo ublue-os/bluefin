@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 name: Generate Release
 jobs:
@@ -53,6 +54,14 @@ jobs:
           echo "title=${TITLE}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
+      - name: Download SBOM release assets
+        if: contains(fromJson('["stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          pattern: sbom-*
+          path: release-assets
+          merge-multiple: true
+
       - name: Create Release
         uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
         if: contains(fromJson('["stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
@@ -60,5 +69,6 @@ jobs:
           name: ${{ steps.generate-release-text.outputs.title }}
           tag_name: ${{ steps.generate-release-text.outputs.tag }}
           body_path: ./changelog.md
+          files: release-assets/*.sbom.json
           make_latest: ${{ matrix.version == 'stable' }}
           prerelease: false

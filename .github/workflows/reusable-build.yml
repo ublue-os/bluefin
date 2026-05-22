@@ -163,6 +163,25 @@ jobs:
           echo "SBOM=${SBOM}" >> $GITHUB_OUTPUT
           sudo rm -rf ${OCI_DIR}
 
+      - name: Prepare SBOM release asset
+        if: github.event_name != 'pull_request'
+        id: prepare-release-sbom
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          SBOM: ${{ steps.generate-sbom.outputs.SBOM }}
+        run: |
+          RELEASE_SBOM="$(mktemp -d)/${IMAGE_NAME}.sbom.json"
+          cp "${SBOM}" "${RELEASE_SBOM}"
+          echo "release_sbom=${RELEASE_SBOM}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload SBOM artifact for release workflow
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sbom-${{ env.IMAGE_NAME }}
+          path: ${{ steps.prepare-release-sbom.outputs.release_sbom }}
+          retention-days: 30
+
       - name: Rechunk Image
         id: rechunk-image
         shell: bash
