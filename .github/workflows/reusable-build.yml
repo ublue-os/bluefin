@@ -146,22 +146,15 @@ jobs:
         if: github.event_name != 'pull_request'
         id: generate-sbom
         env:
-          IMAGE: ${{ env.IMAGE_NAME }}
-          STREAM_NAME: ${{ matrix.stream_name }}
+          MATRIX_BASE_NAME: ${{ matrix.base_name }}
+          MATRIX_STREAM_NAME: ${{ matrix.stream_name }}
+          MATRIX_IMAGE_FLAVOR: ${{ matrix.image_flavor }}
           SYFT_CMD: ${{ steps.setup-syft.outputs.cmd }}
-          OCI_DIR: "/tmp/image-oci-dir"
         run: |
-          mkdir -p ${OCI_DIR}/rootfs
-          sudo podman container create --replace --name "${IMAGE}" "localhost/${IMAGE}:${STREAM_NAME}"
-          sudo podman export "${IMAGE}" | sudo tar -C ${OCI_DIR}/rootfs -xf -
-          sudo podman container rm "${IMAGE}"
-
-          SBOM="$(mktemp -d)/sbom.json"
-          export SYFT_PARALLELISM=$(($(nproc)*2))
-          sudo $SYFT_CMD --source-name "${IMAGE}"-"${STREAM_NAME}" ${OCI_DIR} -o syft-json=${SBOM}
-          du -sh ${SBOM}
-          echo "SBOM=${SBOM}" >> $GITHUB_OUTPUT
-          sudo rm -rf ${OCI_DIR}
+          sudo -E $(command -v just) gen-sbom "${MATRIX_BASE_NAME}" \
+                            "${MATRIX_STREAM_NAME}" \
+                            "${MATRIX_IMAGE_FLAVOR}" \
+                            "${SYFT_CMD}"
 
       - name: Rechunk Image
         id: rechunk-image
@@ -288,8 +281,10 @@ jobs:
         env:
           IMAGE: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           DIGEST: ${{ steps.push.outputs.digest }}
-          SBOM: ${{ steps.generate-sbom.outputs.SBOM }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
         run: |
+          SBOM="sbom_out/${IMAGE_NAME}/sbom.json"
+
           cd "$(dirname "${SBOM}")"
           oras attach \
             --artifact-type application/vnd.spdx+json \
