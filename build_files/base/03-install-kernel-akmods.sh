@@ -39,7 +39,6 @@ sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 
 # RPMFUSION Dependent AKMODS
 if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 -y install /tmp/akmods/kmods/*framework-laptop*.rpm || true
     dnf5 -y install \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm || true
     dnf5 -y install \
@@ -49,8 +48,6 @@ if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
     dnf5 -y remove rpmfusion-free-release || true
     dnf5 -y remove rpmfusion-nonfree-release || true
 else
-    dnf5 -y install \
-        /tmp/akmods/kmods/*framework-laptop*.rpm
     dnf5 -y install \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
