@@ -235,12 +235,17 @@ jobs:
           command: |
             set -euox pipefail
 
+            digest_file="$PWD/.push-digest"
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-              sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+              dest=${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
+              if [[ "${tag}" == "${{ env.DEFAULT_TAG }}" ]]; then
+                sudo -E podman push --digestfile "${digest_file}" ${{ env.IMAGE_NAME }}:${tag} "${dest}"
+              else
+                sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} "${dest}"
+              fi
             done
 
-            digest=$(skopeo inspect docker://${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }} --format '{{.Digest}}')
-
+            digest="$(cat "${digest_file}")"
             echo "digest=${digest}" >> $GITHUB_OUTPUT
 
       - name: Install Cosign
@@ -251,16 +256,6 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
-        env:
-          TAGS: ${{ steps.push.outputs.digest }}
-          COSIGN_EXPERIMENTAL: false
-          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
-
-      - name: Sign container image
-        if: github.event_name != 'pull_request' && contains(matrix.image_flavor, 'hwe')
-        shell: bash
-        run: |
-          image_name="${{ env.IMAGE_NAME }}"
         env:
           TAGS: ${{ steps.push.outputs.digest }}
           COSIGN_EXPERIMENTAL: false
