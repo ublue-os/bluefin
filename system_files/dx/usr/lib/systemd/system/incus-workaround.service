@@ -1,5 +1,5 @@
 [Unit]
-Description=Workaround swtpm not having the correct label
+Description=Workaround incus not having the correct label
 ConditionFileIsExecutable=/usr/bin/incus
 ConditionFileIsExecutable=/usr/bin/incus-agent
 ConditionPathExists=/usr/lib/incus
