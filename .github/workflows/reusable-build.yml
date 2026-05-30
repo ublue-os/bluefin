@@ -63,6 +63,8 @@ jobs:
 
       - name: Install Just
         uses: taiki-e/install-action@873c7452cadb7c034694a1282227095d93fbdf92 # just
+        with:
+          tool: just
 
       - name: Check Just Syntax
         shell: bash
