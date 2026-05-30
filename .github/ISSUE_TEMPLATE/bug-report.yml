@@ -1,0 +1,44 @@
+name: Bug Report
+description: Report an issue about using Bluefin
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this bug report! (She bites sometimes)
+
+        Check out the [Project Opportunities](https://github.com/ublue-os/bluefin/discussions/3423) to see if there's a place you can help out!
+  - type: textarea
+    id: describe-bug
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what happened! WE DO NOT SUPPORT REBASING FROM ANOTHER OS! If you went off the beaten path we cannot help you!
+      value: "When I entered 2 + 2, I got the answer 6."
+    validations:
+      required: true
+  - type: textarea
+    id: expected-bahavior
+    attributes:
+      label: What did you expect to happen?
+      description: A clear and concise description of what you expected to happen.
+      placeholder: What were you expecting to happen?
+      value: "I expected 2 + 2 to equal 4, but instead 2 + 2 equaled 6!"
+    validations:
+      required: true
+  - type: textarea
+    id: version
+    attributes:
+      label: Output of `bootc status`
+      description: Please run `sudo bootc status` and paste the output here, it is the only way we can verify the exact image you are on for debugging purposes.
+      render: shell
+  - type: textarea
+    id: groups
+    attributes:
+      label: Output of `groups`
+      description: Please run `groups` and paste the output here.
+      render: shell
+  - type: textarea
+    id: extra-context
+    attributes:
+      label: Extra information or context
+      description: If you are reporting a regression, use `ujust rebase-helper` to find the version that used to work. Report the working version and the broken version so that other users can rebase and confirm the issue!

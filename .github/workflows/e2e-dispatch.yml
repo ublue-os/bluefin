@@ -1,0 +1,156 @@
+name: E2E Dispatch
+
+on:
+  issue_comment:
+    types: [created]
+
+# Baseline: read-only. Jobs that need elevated access declare it themselves.
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/e2e')
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      pull-requests: write
+      issues: write
+      actions: write
+    outputs:
+      authorized: ${{ steps.permission.outputs.authorized }}
+      image: ${{ steps.get-digest.outputs.image }}
+    steps:
+      - name: Check commenter permission
+        id: permission
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          PERMISSION=$(gh api /repos/${{ github.repository }}/collaborators/${{ github.event.comment.user.login }}/permission \
+            --jq '.permission' 2>/dev/null || echo "none")
+          if [[ "$PERMISSION" == "admin" || "$PERMISSION" == "write" || "$PERMISSION" == "maintain" ]]; then
+            echo "authorized=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "authorized=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Post starting comment
+        if: steps.permission.outputs.authorized == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "🧪 E2E triggered by @${{ github.event.comment.user.login }}. Building PR image and running suites: smoke, developer, vanilla-gnome." \
+            --repo ${{ github.repository }}
+
+      - name: Post unauthorized comment
+        if: steps.permission.outputs.authorized == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "❌ /e2e requires write access to this repository." \
+            --repo ${{ github.repository }}
+
+      - name: Exit if unauthorized
+        if: steps.permission.outputs.authorized == 'false'
+        run: exit 1
+
+      - name: Get PR info
+        if: steps.permission.outputs.authorized == 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          PR_DATA=$(gh pr view ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --json headRefOid,headRefName \
+            --jq '{sha: .headRefOid, branch: .headRefName}')
+          SHA=$(echo "$PR_DATA" | jq -r '.sha')
+          BRANCH=$(echo "$PR_DATA" | jq -r '.branch')
+          SHORT_SHA="${SHA:0:7}"
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+          echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger PR build
+        if: steps.permission.outputs.authorized == 'true'
+        id: build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # PR_BRANCH bound here to prevent shell injection via branch names
+          PR_BRANCH: ${{ steps.pr.outputs.branch }}
+        run: |
+          set -euo pipefail
+          DISPATCH_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          gh workflow run build-image-testing.yml \
+            --ref "$PR_BRANCH" \
+            -R "${{ github.repository }}"
+          sleep 60
+          RUN_ID=""
+          for i in $(seq 1 20); do
+            RUN_ID=$(gh run list \
+              --workflow build-image-testing.yml \
+              --branch "$PR_BRANCH" \
+              --event workflow_dispatch \
+              --repo "${{ github.repository }}" \
+              --limit 10 \
+              --json databaseId,createdAt \
+              --jq ".[] | select(.createdAt >= \"${DISPATCH_TIME}\") | .databaseId" \
+              | head -1)
+            [ -n "$RUN_ID" ] && break
+            echo "Waiting for build run to appear (attempt $i/20)..."
+            sleep 30
+          done
+          if [ -z "$RUN_ID" ]; then
+            echo "ERROR: Could not find build run"
+            exit 1
+          fi
+          gh run watch "$RUN_ID" --exit-status -R "${{ github.repository }}"
+          echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
+
+      - name: Download build digest
+        if: steps.permission.outputs.authorized == 'true'
+        id: get-digest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download "${{ steps.build.outputs.run_id }}" \
+            --repo "${{ github.repository }}" \
+            --name "image-digest-testing-bluefin-main" \
+            --dir /tmp/digest
+          # File: main-bluefin.txt, content: "<image_name>=sha256:..."
+          DIGEST=$(grep "=" /tmp/digest/main-bluefin.txt | head -1 | cut -d= -f2-)
+          echo "image=ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}" >> "$GITHUB_OUTPUT"
+
+  e2e:
+    if: needs.dispatch.outputs.authorized == 'true'
+    needs: [dispatch]
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
+    with:
+      image: ${{ needs.dispatch.outputs.image }}
+      suites: smoke,developer,vanilla-gnome
+
+  report:
+    needs: [dispatch, e2e]
+    if: always() && needs.dispatch.outputs.authorized == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Post result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ needs.e2e.result }}
+        run: |
+          if [[ "$RESULT" == "success" ]]; then
+            MSG="✅ E2E passed on ${{ needs.dispatch.outputs.image }}"
+          else
+            MSG="❌ E2E failed on ${{ needs.dispatch.outputs.image }} — check workflow run for details."
+          fi
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "$MSG" \
+            --repo ${{ github.repository }}

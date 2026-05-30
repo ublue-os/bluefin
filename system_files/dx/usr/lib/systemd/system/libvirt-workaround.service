@@ -1,0 +1,13 @@
+[Unit]
+Description=Workaround to relabel libvirt files and directories
+ConditionPathIsDirectory=/var/lib/libvirt/
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=-/usr/sbin/restorecon -R /var/log/libvirt/
+ExecStart=-/usr/sbin/restorecon -R /var/lib/libvirt/
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

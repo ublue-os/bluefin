@@ -1,0 +1,186 @@
+name: Weekly Testing Promotion
+
+on:
+  schedule:
+    - cron: '0 6 * * 2' # Tuesday 06:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-testing-promotion
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  ensure-testing-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      run_id: ${{ steps.find-run.outputs.run_id }}
+      testing_sha: ${{ steps.record-sha.outputs.sha }}
+      image: ${{ steps.get-digest.outputs.image }}
+    steps:
+      - name: Record testing HEAD SHA
+        id: record-sha
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SHA=$(gh api repos/${{ github.repository }}/git/ref/heads/testing --jq '.object.sha')
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "Locked testing SHA: $SHA"
+
+      - name: Record dispatch time
+        run: |
+          set -euo pipefail
+          echo "DISPATCH_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
+      - name: Trigger testing build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run build-image-testing.yml --ref testing -R ${{ github.repository }}
+
+      - name: Wait for API lag
+        run: sleep 60
+
+      - name: Find dispatched testing build run
+        id: find-run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          RUN_ID=""
+          for i in $(seq 1 20); do
+            RUN_ID=$(gh run list \
+              --workflow build-image-testing.yml \
+              --branch testing \
+              --event workflow_dispatch \
+              --repo ${{ github.repository }} \
+              --limit 10 \
+              --json databaseId,createdAt \
+              --jq ".[] | select(.createdAt >= \"$DISPATCH_TIME\") | .databaseId" \
+              | head -1)
+            [ -n "$RUN_ID" ] && break
+            echo "Waiting for build-image-testing.yml run to appear in API (attempt $i/20)..."
+            sleep 30
+          done
+
+          if [ -z "$RUN_ID" ]; then
+            echo "ERROR: Could not locate build-image-testing.yml run dispatched at $DISPATCH_TIME"
+            exit 1
+          fi
+
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "Found build-image-testing.yml run $RUN_ID"
+
+      - name: Watch testing build run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run watch "${{ steps.find-run.outputs.run_id }}" --exit-status --repo ${{ github.repository }}
+
+      - name: Download build digest
+        id: get-digest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download "${{ steps.find-run.outputs.run_id }}" \
+            --repo "${{ github.repository }}" \
+            --name "image-digest-testing-bluefin-main" \
+            --dir /tmp/digest
+          # File: main-bluefin.txt, content: "bluefin=sha256:..."
+          DIGEST=$(grep "=" /tmp/digest/main-bluefin.txt | head -1 | cut -d= -f2-)
+          echo "image=ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}" >> "$GITHUB_OUTPUT"
+          echo "E2E will test: ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}"
+
+  e2e:
+    needs: [ensure-testing-build]
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
+    with:
+      image: ${{ needs.ensure-testing-build.outputs.image }}
+      suites: smoke,developer,vanilla-gnome
+
+  promote-to-main:
+    needs: [e2e, ensure-testing-build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      has_diff: ${{ steps.check-diff.outputs.has_diff }}
+    steps:
+      - name: Checkout testing
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+          ref: testing
+
+      - name: Configure git
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Verify testing SHA has not advanced
+        env:
+          LOCKED_SHA: ${{ needs.ensure-testing-build.outputs.testing_sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin testing
+          CURRENT_SHA=$(git rev-parse origin/testing)
+          if [ "$CURRENT_SHA" != "$LOCKED_SHA" ]; then
+            echo "ERROR: testing advanced during build/e2e ($LOCKED_SHA → $CURRENT_SHA)"
+            echo "Untested commits would reach main. Aborting — rerun next week."
+            exit 1
+          fi
+          echo "✅ testing SHA unchanged: $CURRENT_SHA"
+
+      - name: Check diff between testing and main
+        id: check-diff
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          if git diff --quiet origin/main origin/testing; then
+            echo "No diff between testing and main — nothing to promote"
+            echo "has_diff=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_diff=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fast-forward main to testing
+        if: steps.check-diff.outputs.has_diff == 'true'
+        run: |
+          set -euo pipefail
+          git push origin HEAD:refs/heads/main
+          echo "✅ Promoted testing → main"
+
+  trigger-stable-build:
+    needs: [promote-to-main]
+    if: needs.promote-to-main.outputs.has_diff == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger stable build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run build-image-stable.yml --ref main -R ${{ github.repository }}
+          echo "✅ Triggered build-image-stable.yml on main"
+
+  trigger-latest-build:
+    needs: [promote-to-main]
+    if: needs.promote-to-main.outputs.has_diff == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger latest build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run build-image-latest-main.yml --ref main -R ${{ github.repository }}
+          echo "✅ Triggered build-image-latest-main.yml on main"

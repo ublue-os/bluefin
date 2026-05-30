@@ -1,0 +1,21 @@
+name: Build All Images
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    packages: write
+    id-token: write
+    attestations: write
+    artifact-metadata: write
+
+jobs:
+    build-image-stable:
+        uses: ./.github/workflows/build-image-stable.yml
+        secrets: inherit
+    build-image-latest-main:
+        uses: ./.github/workflows/build-image-latest-main.yml
+        secrets: inherit
+    build-image-beta:
+        uses: ./.github/workflows/build-image-beta.yml
+        secrets: inherit

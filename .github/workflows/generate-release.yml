@@ -1,0 +1,66 @@
+on:
+  workflow_call:
+    inputs:
+      stream_name:
+        description: "Release Tag (e.g. stable)"
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      handwritten:
+        description: "Small Changelog about changes in this build"
+      stream_name:
+        description: "Release Tag (e.g. stable)"
+        required: true
+        type: choice
+        options:
+          - '["stable"]'
+
+permissions: {}
+
+name: Generate Release
+jobs:
+  generate-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJson( inputs.stream_name ) }}
+
+    steps:
+      - name: Checkout last 500 commits (for <commits> to work)
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 500
+
+      - name: Install Just
+        uses: taiki-e/install-action@873c7452cadb7c034694a1282227095d93fbdf92 # just
+
+      - name: Check Just Syntax
+        shell: bash
+        run: |
+          just check
+
+      - name: Install ORAS
+        uses: oras-project/setup-oras@38de303aac69abb66f3e6255b7198bff35f323e3 # v2.0.0
+
+      - name: Generate Release Text
+        id: generate-release-text
+        shell: bash
+        run: |
+          just changelogs "${{ matrix.version }}" "${{ inputs.handwritten }}"
+          source ./output.env
+          echo "title=${TITLE}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        if: contains(fromJson('["stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
+        with:
+          name: ${{ steps.generate-release-text.outputs.title }}
+          tag_name: ${{ steps.generate-release-text.outputs.tag }}
+          body_path: ./changelog.md
+          make_latest: ${{ matrix.version == 'stable' }}
+          prerelease: false

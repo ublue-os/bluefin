@@ -1,0 +1,12 @@
+blank_issues_enabled: true
+contact_links:
+contact_links:
+  - name: Feature Requests
+    url: https://github.com/projectbluefin/common/issues/new/choose
+    about: Vetting your ideas via discussion usually helps
+  - name: Ask Bluefin
+    url: https://ask.projectbluefin.io
+    about: Ask our trained raptor questions about Bluefin
+  - name: Questions and Feedback
+    url: https://community.projectbluefin.io
+    about: Share tips and help others

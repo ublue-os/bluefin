@@ -1,0 +1,42 @@
+name: Testing Images
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - testing
+    paths-ignore:
+      - ".github/workflows/*validate*.yml"
+      - "**.md"
+      - "flatpaks/**"
+      - "system_files/shared/etc/bazaar/**"
+  push:
+    branches:
+      - testing
+    paths-ignore:
+      - ".github/workflows/*validate*.yml"
+      - "**.md"
+      - "flatpaks/**"
+      - "system_files/shared/etc/bazaar/**"
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+  artifact-metadata: write
+
+jobs:
+  build-image-testing:
+    name: Build Testing Images
+    uses: ./.github/workflows/reusable-build.yml
+    secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        brand_name: ["bluefin"]
+    with:
+      image_flavors: '["main", "nvidia-open"]'
+      brand_name: ${{ matrix.brand_name }}
+      stream_name: testing

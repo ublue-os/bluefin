@@ -1,0 +1,42 @@
+name: PR Validation — testsuite
+
+on:
+  pull_request:
+    branches:
+      - testing
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install just
+        uses: taiki-e/install-action@873c7452cadb7c034694a1282227095d93fbdf92 # just
+
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Check Just syntax
+        shell: bash
+        run: just check
+
+      - name: Shellcheck build scripts
+        shell: bash
+        run: |
+          shopt -s globstar nullglob
+          shellcheck build_files/**/*.sh
+
+      - name: Run pre-commit
+        shell: bash
+        run: pre-commit run --all-files
