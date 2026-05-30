@@ -1,11 +1,11 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Feature Requests
-    url: https://github.com/projectbluefin/common/issues/new/choose
-    about: Vetting your ideas via discussion usually helps
-  - name: Ask Bluefin
-    url: https://ask.projectbluefin.io
-    about: Ask our trained raptor questions about Bluefin
-  - name: Questions and Feedback
-    url: https://community.projectbluefin.io
-    about: Share tips and help others
+  - name: "Bluefin Documentation"
+    url: https://docs.projectbluefin.io
+    about: "User documentation, FAQ, and feature guides."
+  - name: "Contribution guide"
+    url: https://github.com/projectbluefin/bluefin/blob/testing/CONTRIBUTING.md
+    about: "Build, validation, and workflow rules — read before opening a PR."
+  - name: "Project Bluefin website"
+    url: https://projectbluefin.io
+    about: "Homepage and announcement posts."

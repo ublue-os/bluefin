@@ -1,54 +1,67 @@
-name: Bug Report
-description: Report an issue about using Bluefin
+name: "Bug report"
+description: "Something is broken. You are the only person who can confirm it."
+labels: ["type/bug", "needs-triage"]
+type: "Bug"
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to fill out this bug report! (She bites sometimes)
+        ## You are the most important person in this process
 
-        Check out the [Project Opportunities](https://github.com/projectbluefin/bluefin/discussions) to see if there's a place you can help out!
+        No agent can reproduce what happened on your machine. No maintainer has your exact hardware. You are the ground truth.
 
-        Run `ujust report` before submitting if you can. It creates a diagnostic summary, uploads it to your GitHub gist, and can open this form with the gist URL pre-filled.
+        **This process is human-driven by design.** A maintainer will read your report, decide what it means, and route it to the right epic. Agents can then implement the fix — but only after a human has confirmed the issue is real and specific enough to act on.
+
+        The faster you are specific, the faster this moves:
+
+        | Vague report | "Screen goes black sometimes" | Sits in **New** — can't triage without more info |
+        |---|---|---|
+        | Specific report | "Screen blanks on suspend on AMD ZBook, `journalctl` shows `amdgpu: failed to idle ring`" | Goes to **Ready** — an agent can pick this up today |
+
+        **Run this before filling out the form:**
+
+        ```bash
+        ujust report
+        ```
+
+        It captures your image, kernel, extensions, hardware, and failed units. You review everything before it uploads. Paste the gist URL below and we likely have everything we need — no follow-up questions.
+
+        If you opened this form manually, use <https://github.com/projectbluefin/bluefin/issues/new>.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "Before submitting"
+      options:
+        - label: "I searched existing issues and this is not a duplicate"
+          required: true
+        - label: "I ran ujust report (or am about to — paste the URL below)"
+          required: false
+
   - type: input
     id: report-link
     attributes:
-      label: ujust report gist URL
-      description: Optional GitHub gist created by `ujust report`.
-      placeholder: https://gist.github.com/...
+      label: "ujust report gist URL"
+      description: "Run `ujust report` and paste the gist URL here. This gives maintainers everything they need."
+      placeholder: "https://gist.github.com/..."
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "What happened?"
+      description: "What did you do? What did you expect? What did you see instead? Be as specific as you can."
+      placeholder: "Describe the bug..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: "Steps to reproduce"
+      description: "Numbered steps. If you can't reproduce it reliably, say so."
+      placeholder: |
+        1. Open...
+        2. Run...
+        3. See error...
     validations:
       required: false
-  - type: textarea
-    id: describe-bug
-    attributes:
-      label: Describe the bug
-      description: A clear and concise description of what the bug is.
-      placeholder: Tell us what happened! WE DO NOT SUPPORT REBASING FROM ANOTHER OS! If you went off the beaten path we cannot help you!
-      value: "When I entered 2 + 2, I got the answer 6."
-    validations:
-      required: true
-  - type: textarea
-    id: expected-bahavior
-    attributes:
-      label: What did you expect to happen?
-      description: A clear and concise description of what you expected to happen.
-      placeholder: What were you expecting to happen?
-      value: "I expected 2 + 2 to equal 4, but instead 2 + 2 equaled 6!"
-    validations:
-      required: true
-  - type: textarea
-    id: version
-    attributes:
-      label: Output of `bootc status`
-      description: Please run `sudo bootc status` and paste the output here, it is the only way we can verify the exact image you are on for debugging purposes.
-      render: shell
-  - type: textarea
-    id: groups
-    attributes:
-      label: Output of `groups`
-      description: Please run `groups` and paste the output here.
-      render: shell
-  - type: textarea
-    id: extra-context
-    attributes:
-      label: Extra information or context
-      description: If you are reporting a regression, use `ujust rebase-helper` to find the version that used to work. Report the working version and the broken version so that other users can rebase and confirm the issue!

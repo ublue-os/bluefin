@@ -1,0 +1,62 @@
+name: "Feature request"
+description: "Propose something new. Specific proposals ship. Vague ones wait."
+labels: ["type/feature", "status/discussing"]
+type: "Feature"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Humans decide what gets built. Contributors build it.
+
+        This is not a ticket system — it is a conversation between you and the people building Bluefin.
+        A maintainer will read this, decide if it fits the project's direction, and approve it.
+        Once approved, a contributor or agent can claim and ship it.
+
+        **The bottleneck is almost never implementation. It is clarity.**
+
+        Contributors can implement well-scoped work fast — sometimes the same day. But they can only
+        act on what is clearly defined.
+
+        **Ask yourself before submitting:**
+        - Can someone read this and know exactly what file to change?
+        - Does "done" have a clear finish line — a command to run, a thing to see?
+        - Is this specific to Bluefin, or would it be better filed upstream (GNOME, Fedora, bootc)?
+
+        Maintainers use the Bluefin project board at <https://github.com/projectbluefin/bluefin> to decide what moves forward.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "What would you like to see?"
+      description: "Plain language. What is missing, broken, or annoying? Be specific — name the command, the file, the workflow step."
+      placeholder: "Add this feature or ask for a design review"
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "What does done look like?"
+      description: "Describe the end state. What command do you run? What do you see? What file changes? A concrete finish line is what allows this to be implemented."
+      placeholder: "When this is done, running `ujust ...` will..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Which area does this affect?"
+      options:
+        - "GNOME / desktop experience"
+        - "Developer experience (DX)"
+        - "Flatpaks / applications"
+        - "Homebrew / CLI tools"
+        - "ujust recipes"
+        - "CI / GitHub Actions"
+        - "Hardware support"
+        - "NVIDIA"
+        - "ISO / installation"
+        - "Documentation"
+        - "Other"
+    validations:
+      required: false
