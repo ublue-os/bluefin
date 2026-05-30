@@ -14,16 +14,20 @@ permissions:
   actions: write
 
 jobs:
-  ensure-testing-build:
+  # Verify that post-testing-e2e.yml already ran smoke tests on the current
+  # testing HEAD since every push to testing triggers it. If e2e hasn't passed
+  # on the current HEAD (e.g., a new push just landed), fail fast rather than
+  # promoting untested code.
+  verify-e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 15
     outputs:
-      run_id: ${{ steps.find-run.outputs.run_id }}
-      testing_sha: ${{ steps.record-sha.outputs.sha }}
+      testing_sha: ${{ steps.lock-sha.outputs.sha }}
+      build_run_id: ${{ steps.find-build.outputs.run_id }}
       image: ${{ steps.get-digest.outputs.image }}
     steps:
-      - name: Record testing HEAD SHA
-        id: record-sha
+      - name: Lock testing HEAD SHA
+        id: lock-sha
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -32,58 +36,62 @@ jobs:
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
           echo "Locked testing SHA: $SHA"
 
-      - name: Record dispatch time
-        run: |
-          set -euo pipefail
-          echo "DISPATCH_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
-
-      - name: Trigger testing build
+      - name: Find passing post-testing-e2e run for this SHA
+        id: find-e2e
         env:
           GH_TOKEN: ${{ github.token }}
+          LOCKED_SHA: ${{ steps.lock-sha.outputs.sha }}
         run: |
           set -euo pipefail
-          gh workflow run build-image-testing.yml --ref testing -R ${{ github.repository }}
 
-      - name: Wait for API lag
-        run: sleep 60
+          # Look for a successful post-testing-e2e run on the locked SHA.
+          # post-testing-e2e.yml fires via workflow_run — its head_sha matches
+          # the testing push SHA that triggered it.
+          E2E_STATUS=$(gh run list \
+            --workflow post-testing-e2e.yml \
+            --branch testing \
+            --repo "${{ github.repository }}" \
+            --limit 20 \
+            --json headSha,conclusion \
+            --jq ".[] | select(.headSha == \"$LOCKED_SHA\") | .conclusion" \
+            | head -1)
 
-      - name: Find dispatched testing build run
-        id: find-run
+          echo "E2E status for $LOCKED_SHA: ${E2E_STATUS:-not found}"
+
+          if [ "$E2E_STATUS" != "success" ]; then
+            echo "ERROR: post-testing-e2e has not passed on testing HEAD ($LOCKED_SHA)."
+            echo "  Status: ${E2E_STATUS:-no run found}"
+            echo "  Either e2e is still running, failed, or testing just advanced."
+            echo "  Rerun this workflow once post-testing-e2e passes."
+            exit 1
+          fi
+
+          echo "✅ post-testing-e2e passed on testing HEAD"
+
+      - name: Find the build run for this SHA
+        id: find-build
         env:
           GH_TOKEN: ${{ github.token }}
+          LOCKED_SHA: ${{ steps.lock-sha.outputs.sha }}
         run: |
           set -euo pipefail
 
-          RUN_ID=""
-          for i in $(seq 1 20); do
-            RUN_ID=$(gh run list \
-              --workflow build-image-testing.yml \
-              --branch testing \
-              --event workflow_dispatch \
-              --repo ${{ github.repository }} \
-              --limit 10 \
-              --json databaseId,createdAt \
-              --jq ".[] | select(.createdAt >= \"$DISPATCH_TIME\") | .databaseId" \
-              | head -1)
-            [ -n "$RUN_ID" ] && break
-            echo "Waiting for build-image-testing.yml run to appear in API (attempt $i/20)..."
-            sleep 30
-          done
+          RUN_ID=$(gh run list \
+            --workflow build-image-testing.yml \
+            --branch testing \
+            --repo "${{ github.repository }}" \
+            --limit 20 \
+            --json databaseId,headSha,conclusion \
+            --jq ".[] | select(.headSha == \"$LOCKED_SHA\" and .conclusion == \"success\") | .databaseId" \
+            | head -1)
 
           if [ -z "$RUN_ID" ]; then
-            echo "ERROR: Could not locate build-image-testing.yml run dispatched at $DISPATCH_TIME"
+            echo "ERROR: No successful build run found for SHA $LOCKED_SHA"
             exit 1
           fi
 
           echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
-          echo "Found build-image-testing.yml run $RUN_ID"
-
-      - name: Watch testing build run
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          gh run watch "${{ steps.find-run.outputs.run_id }}" --exit-status --repo ${{ github.repository }}
+          echo "Found build run $RUN_ID for SHA $LOCKED_SHA"
 
       - name: Download build digest
         id: get-digest
@@ -91,24 +99,23 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh run download "${{ steps.find-run.outputs.run_id }}" \
+          gh run download "${{ steps.find-build.outputs.run_id }}" \
             --repo "${{ github.repository }}" \
             --name "image-digest-testing-bluefin-main" \
             --dir /tmp/digest
-          # File: main-bluefin.txt, content: "bluefin=sha256:..."
           DIGEST=$(grep "=" /tmp/digest/main-bluefin.txt | head -1 | cut -d= -f2-)
           echo "image=ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}" >> "$GITHUB_OUTPUT"
-          echo "E2E will test: ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}"
+          echo "Promoting: ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}"
 
   e2e:
-    needs: [ensure-testing-build]
+    needs: [verify-e2e]
     uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
     with:
-      image: ${{ needs.ensure-testing-build.outputs.image }}
-      suites: smoke,developer,vanilla-gnome
+      image: ${{ needs.verify-e2e.outputs.image }}
+      suites: developer,vanilla-gnome
 
   promote-to-latest-and-stable:
-    needs: [e2e, ensure-testing-build]
+    needs: [e2e, verify-e2e]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
@@ -128,13 +135,13 @@ jobs:
 
       - name: Verify testing SHA has not advanced
         env:
-          LOCKED_SHA: ${{ needs.ensure-testing-build.outputs.testing_sha }}
+          LOCKED_SHA: ${{ needs.verify-e2e.outputs.testing_sha }}
         run: |
           set -euo pipefail
           git fetch origin testing
           CURRENT_SHA=$(git rev-parse origin/testing)
           if [ "$CURRENT_SHA" != "$LOCKED_SHA" ]; then
-            echo "ERROR: testing advanced during build/e2e ($LOCKED_SHA → $CURRENT_SHA)"
+            echo "ERROR: testing advanced during e2e ($LOCKED_SHA → $CURRENT_SHA)"
             echo "Untested commits would reach latest/stable. Aborting — rerun next week."
             exit 1
           fi

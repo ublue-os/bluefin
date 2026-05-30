@@ -1,0 +1,49 @@
+name: Post-Testing E2E
+
+# Runs e2e smoke tests after every successful push build on the testing branch.
+# This gates the testing branch continuously so the weekly promotion
+# (weekly-testing-promotion.yml) promotes only e2e-verified commits.
+on:
+  workflow_run:
+    workflows: ["Testing Images"]
+    types: [completed]
+    branches: [testing]
+
+permissions: read-all
+
+concurrency:
+  group: post-testing-e2e-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    # Only run for push events (not merge_group or workflow_dispatch)
+    # and only when the build succeeded.
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      image: ${{ steps.get-digest.outputs.image }}
+    steps:
+      - name: Download build digest
+        id: get-digest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download "${{ github.event.workflow_run.id }}" \
+            --repo "${{ github.repository }}" \
+            --name "image-digest-testing-bluefin-main" \
+            --dir /tmp/digest
+          DIGEST=$(grep "=" /tmp/digest/main-bluefin.txt | head -1 | cut -d= -f2-)
+          echo "image=ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}" >> "$GITHUB_OUTPUT"
+          echo "Testing image: ghcr.io/${{ github.repository_owner }}/bluefin@${DIGEST}"
+
+  run-e2e:
+    needs: [e2e]
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
+    with:
+      image: ${{ needs.e2e.outputs.image }}
+      suites: smoke
