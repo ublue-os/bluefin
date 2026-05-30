@@ -3,7 +3,7 @@ name: PR Validation — testsuite
 on:
   pull_request:
     branches:
-      - testing
+      - main
   merge_group:
 
 concurrency:
