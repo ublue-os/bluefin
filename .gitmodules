@@ -26,9 +26,9 @@
 	path = system_files/shared/usr/share/gnome-shell/extensions/gsconnect@andyholmes.github.io
 	url = https://github.com/GSConnect/gnome-shell-extension-gsconnect.git
 	branch = v72
-[submodule "system_files/shared/usr/share/gnome-shell/extensions/logomenu@aryan_k"]
-	path = system_files/shared/usr/share/gnome-shell/extensions/logomenu@aryan_k
-	url = https://github.com/ublue-os/Logomenu.git
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/search-light@icedman.github.com"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/search-light@icedman.github.com
 	url = https://github.com/icedman/search-light.git
+[submodule "system_files/shared/usr/share/gnome-shell/extensions/custom-command-list@storageb.github.com"]
+	path = system_files/shared/usr/share/gnome-shell/extensions/custom-command-list@storageb.github.com
+	url = https://github.com/StorageB/custom-command-menu.git
