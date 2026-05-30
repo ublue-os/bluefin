@@ -1,5 +1,0 @@
-[bluefin-countme]
-name=Bluefin Count Me
-metalink=https://countme.projectbluefin.io/count?os=bluefin&version=$releasever&arch=$basearch
-enabled=1
-countme=1
