@@ -14,7 +14,7 @@ jobs:
       packages: write
     steps:
       - name: Delete Images Older Than 90 Days
-        uses: dataaxiom/ghcr-cleanup-action@34a2b6c814b9c6bcb92f78cba3e56a7ab9ca7a86 # v1.1.0
+        uses: dataaxiom/ghcr-cleanup-action@f092b48ba3b604b2a83690dc4b2bbb3392e1045f # v1.2.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           packages: bluefin,bluefin-nvidia,bluefin-nvidia-open,bluefin-hwe,bluefin-hwe-nvidia,bluefin-hwe-nvidia-open,bluefin-asus,bluefin-asus-nvidia,bluefin-asus-nvidia-open,bluefin-surface,bluefin-surface-nvidia,bluefin-surface-nvidia-open,bluefin-dx,bluefin-dx-nvidia,bluefin-dx-nvidia-open,bluefin-dx-hwe,bluefin-dx-hwe-nvidia,bluefin-dx-hwe-nvidia-open,bluefin-dx-asus,bluefin-dx-asus-nvidia,bluefin-dx-asus-nvidia-open,bluefin-dx-surface,bluefin-dx-surface-nvidia,bluefin-dx-surface-nvidia-open
