@@ -182,7 +182,7 @@ jobs:
                             "${{ matrix.image_flavor }}" \
                             "1"
 
-      - name: Load Image into Podman
+      - name: Retag Rechunked Image
         id: load-rechunk
         shell: bash
         run: |

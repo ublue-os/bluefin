@@ -1,5 +1,6 @@
 repo_organization := "projectbluefin"
-rechunker_image := "ghcr.io/ublue-os/legacy-rechunk:v1.0.1-x86_64@sha256:2627cbf92ca60ab7372070dcf93b40f457926f301509ffba47a04d6a9e1ddaf7"
+base_image_org := "quay.io/fedora-ostree-desktops"
+base_image_name := "silverblue"
 common_image := "ghcr.io/projectbluefin/common:latest"
 brew_image := "ghcr.io/ublue-os/brew:latest"
 images := '(
@@ -116,6 +117,8 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         akmods_flavor="bazzite"
     elif [[ "${tag}" =~ stable ]]; then
         akmods_flavor="coreos-stable"
+    elif [[ "${tag}" =~ beta ]]; then
+        akmods_flavor="main"
     else
         akmods_flavor="main"
     fi
@@ -197,12 +200,12 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     LABELS+=("--label" "org.opencontainers.image.title=${image_name}")
     LABELS+=("--label" "org.opencontainers.image.version=${ver}")
     LABELS+=("--label" "ostree.linux=${kernel_release}")
-    LABELS+=("--label" "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/projectbluefin/bluefin/refs/heads/testing/README.md")
+    LABELS+=("--label" "io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/README.md")
     LABELS+=("--label" "io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4")
     LABELS+=("--label" "org.opencontainers.image.description=The next generation Linux workstation, designed for reliability, performance, and sustainability.")
     LABELS+=("--label" "containers.bootc=1")
     LABELS+=("--label" "org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)")
-    LABELS+=("--label" "org.opencontainers.image.source=https://raw.githubusercontent.com/projectbluefin/bluefin/refs/heads/testing/Containerfile")
+    LABELS+=("--label" "org.opencontainers.image.source=https://raw.githubusercontent.com/ublue-os/bluefin/refs/heads/main/Containerfile")
     LABELS+=("--label" "org.opencontainers.image.url=https://projectbluefin.io")
     LABELS+=("--label" "org.opencontainers.image.vendor={{ repo_organization }}")
     LABELS+=("--label" "io.artifacthub.package.deprecated=false")
@@ -259,10 +262,8 @@ build-pipeline image="bluefin" tag="latest" flavor="main" kernel_pin="":
 # Rechunk Image
 [group('Image')]
 [private]
-rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
+rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0" previous_build="0":
     #!/usr/bin/bash
-
-    echo "::group:: Rechunk Prep"
     set -eoux pipefail
 
     # Validate
@@ -277,143 +278,79 @@ rechunk $image="bluefin" $tag="latest" $flavor="main" ghcr="0" pipeline="0":
         {{ just }} build "${image}" "${tag}" "${flavor}"
     fi
 
-    # Load into Rootful Podman
-    ID=$(${SUDOIF} ${PODMAN} images --filter reference=localhost/"${image_name}":"${tag}" --format "'{{ '{{.ID}}' }}'")
-    if [[ -z "$ID" && ! ${PODMAN} =~ docker ]]; then
-        COPYTMP=$(mktemp -p "${PWD}" -d -t podman_scp.XXXXXXXXXX)
-        ${SUDOIF} TMPDIR=${COPYTMP} ${PODMAN} image scp ${UID}@localhost::localhost/"${image_name}":"${tag}" root@localhost::localhost/"${image_name}":"${tag}"
-        rm -rf "${COPYTMP}"
+    if [[ "{{ ghcr }}" == "0" ]]; then
+        {{ just }} load-rootful "${image}" "${tag}" "${flavor}"
     fi
 
-    # Prep Container
-    CREF=$(${SUDOIF} ${PODMAN} create localhost/"${image_name}":"${tag}" bash)
-    OLD_IMAGE=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Image')
-    OUT_NAME="${image_name}_build"
-    MOUNT=$(${SUDOIF} ${PODMAN} mount "${CREF}")
+    IMAGE_REF=localhost/"${image_name}":"${tag}"
+    fedora_version=$(${SUDOIF} ${PODMAN} inspect "${IMAGE_REF}" | jq -r '.[].Config.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
 
-    # Fedora Version
-    fedora_version=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')
+    # TODO: Switch fully to --previous-build once rpm-ostree 2026.1+ lands everywhere.
+    if [[ "{{ previous_build }}" == "1" ]]; then
+        PREVIOUS_IMAGE=ghcr.io/{{ repo_organization }}/"${image_name}":"${tag}"
 
-    # Label Version
-    VERSION=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')
-
-    # Git SHA
-    SHA="dedbeef"
-    if [[ -z "$(git status -s)" ]]; then
-        SHA=$(git rev-parse HEAD)
+        if skopeo inspect "docker://${PREVIOUS_IMAGE}" | jq -e '.LayersData[1:] | all(.Annotations?["ostree.components"]?)' >/dev/null; then
+            ${SUDOIF} ${PODMAN} pull "${PREVIOUS_IMAGE}"
+        else
+            echo "${PREVIOUS_IMAGE} is not chunked yet. Building a fresh layer plan instead."
+            PREVIOUS_IMAGE=""
+        fi
     fi
 
-    # Rest of Labels
-    LABELS="
-        io.artifacthub.package.deprecated=false
-        io.artifacthub.package.keywords=bootc,fedora,bluefin,ublue,universal-blue
-        io.artifacthub.package.logo-url=https://avatars.githubusercontent.com/u/120078124?s=200&v=4
-        io.artifacthub.package.maintainers=[{\"name\": \"castrojo\", \"email\": \"jorge.castro@gmail.com\"}]
-        io.artifacthub.package.readme-url=https://raw.githubusercontent.com/projectbluefin/bluefin/refs/heads/testing/README.md
-        org.opencontainers.image.created=$(date -u +%Y\-%m\-%d\T%H\:%M\:%S\Z)
-        org.opencontainers.image.license=Apache-2.0
-        org.opencontainers.image.source=https://raw.githubusercontent.com/projectbluefin/bluefin/refs/heads/testing/Containerfile
-        org.opencontainers.image.title=${image_name}
-        org.opencontainers.image.url=https://projectbluefin.io
-        org.opencontainers.image.vendor={{ repo_organization }}
-        ostree.linux=$(${SUDOIF} ${PODMAN} inspect $CREF | jq -r '.[].Config.Labels["ostree.linux"]')
-        containers.bootc=1
-    "
-
-    # Cleanup Space during Github Action
     if [[ "{{ ghcr }}" == "1" ]]; then
-        base_image_name=silverblue-main
-        if [[ "${tag}" =~ stable ]]; then
-            tag="stable-daily"
+        CHUNKED_IMAGE=localhost/"${image_name}":"${tag}"
+        if [[ -n "${PREVIOUS_IMAGE:-}" ]]; then
+            CHUNKED_IMAGE="${PREVIOUS_IMAGE}"
         fi
-        ID=$(${SUDOIF} ${PODMAN} images --filter reference=ghcr.io/{{ repo_organization }}/"${base_image_name}":${fedora_version} --format "{{ '{{.ID}}' }}")
-        if [[ -n "$ID" ]]; then
-            ${PODMAN} rmi "$ID"
-        fi
+    else
+        # Keep the original unrechunked image around for local builds.
+        CHUNKED_IMAGE=localhost/"${image_name}":"${tag}"-chunked
     fi
 
-    # Rechunk Container
-    rechunker="{{ rechunker_image }}"
-
-    echo "::endgroup::"
-    echo "::group:: Prune"
-
-    # Run Rechunker's Prune
     ${SUDOIF} ${PODMAN} run --rm \
         --pull=${PULL_POLICY} \
-        --security-opt label=disable \
-        --volume "$MOUNT":/var/tree \
-        --env TREE=/var/tree \
-        --user 0:0 \
-        "${rechunker}" \
-        /sources/rechunk/1_prune.sh
+        --privileged \
+        -v "/var/lib/containers:/var/lib/containers" \
+        --entrypoint /usr/bin/rpm-ostree \
+        "{{ base_image_org }}/{{ base_image_name }}:${fedora_version}" \
+        compose build-chunked-oci \
+        --max-layers 127 \
+        --format-version=2 \
+        --bootc \
+        --from "${IMAGE_REF}" \
+        --output containers-storage:${CHUNKED_IMAGE}
 
-    echo "::endgroup::"
-    echo "::group:: Create ostree tree"
-
-    # Run Rechunker's Create
-    ${SUDOIF} ${PODMAN} run --rm \
-        --security-opt label=disable \
-        --volume "$MOUNT":/var/tree \
-        --volume "cache_ostree:/var/ostree" \
-        --env TREE=/var/tree \
-        --env REPO=/var/ostree/repo \
-        --env RESET_TIMESTAMP=1 \
-        --user 0:0 \
-        "${rechunker}" \
-        /sources/rechunk/2_create.sh
-
-    # Cleanup Temp Container Reference
-    ${SUDOIF} ${PODMAN} unmount "$CREF"
-    ${SUDOIF} ${PODMAN} rm "$CREF"
-    ${SUDOIF} ${PODMAN} rmi "$OLD_IMAGE"
-
-    echo "::endgroup::"
-    echo "::group:: Rechunker"
-
-    # Run Rechunker
-    ${SUDOIF} ${PODMAN} run --rm \
-        --pull=${PULL_POLICY} \
-        --security-opt label=disable \
-        --volume "$PWD:/workspace" \
-        --volume "$PWD:/var/git" \
-        --volume cache_ostree:/var/ostree \
-        --env REPO=/var/ostree/repo \
-        --env PREV_REF=ghcr.io/projectbluefin/"${image_name}":"${tag}" \
-        --env OUT_NAME="$OUT_NAME" \
-        --env LABELS="${LABELS}" \
-        --env "DESCRIPTION='An interpretation of the Ubuntu spirit built on Fedora technology'" \
-        --env "VERSION=${VERSION}" \
-        --env VERSION_FN=/workspace/version.txt \
-        --env OUT_REF="oci:$OUT_NAME" \
-        --env GIT_DIR="/var/git" \
-        --env REVISION="$SHA" \
-        --user 0:0 \
-        "${rechunker}" \
-        /sources/rechunk/3_chunk.sh
-
-    # Fix Permissions of OCI
-    ${SUDOIF} find ${OUT_NAME} -type d -exec chmod 0755 {} \; || true
-    ${SUDOIF} find ${OUT_NAME}* -type f -exec chmod 0644 {} \; || true
-
-    if [[ "${UID}" -gt "0" ]]; then
-        ${SUDOIF} chown "${UID}:${GROUPS}" -R "${PWD}"
-    elif [[ -n "${SUDO_UID:-}" ]]; then
-        chown "${SUDO_UID}":"${SUDO_GID}" -R "${PWD}"
+    if [[ "{{ ghcr }}" == "1" && -n "${PREVIOUS_IMAGE:-}" ]]; then
+        ${SUDOIF} ${PODMAN} tag "${CHUNKED_IMAGE}" "${IMAGE_REF}"
+        ${SUDOIF} ${PODMAN} image rm -f "${CHUNKED_IMAGE}"
     fi
-
-    # Remove cache_ostree
-    ${SUDOIF} ${PODMAN} volume rm cache_ostree
-
-    echo "::endgroup::"
 
     # Pipeline Checks
     if [[ {{ pipeline }} == "1" && -n "${SUDO_USER:-}" ]]; then
-        sudo -u "${SUDO_USER}" {{ just }} load-rechunk "${image}" "${tag}" "${flavor}"
         sudo -u "${SUDO_USER}" {{ just }} secureboot "${image}" "${tag}" "${flavor}"
     fi
 
-# Load OCI into Podman Store
+# Load an image into rootful Podman for rechunking
+[group('Image')]
+load-rootful $image="bluefin" $tag="latest" $flavor="main":
+    #!/usr/bin/bash
+    set -oux pipefail
+
+    # Validate
+    {{ just }} validate {{ image }} {{ tag }} {{ flavor }}
+
+    # Image Name
+    image_name=$({{ just }} image_name {{ image }} {{ tag }} {{ flavor }})
+
+    if [[ ! "$(id -u)" == 0 && ! ${PODMAN} =~ docker ]]; then
+        ID=$(${PODMAN} images --filter reference=localhost/"${image_name}":"${tag}" --format "'{{ '{{.ID}}' }}'")
+        if [[ -z "$ID" ]]; then
+            {{ just }} build "${image}" "${tag}" "${flavor}"
+        fi
+        ${PODMAN} image scp localhost/"${image_name}":"${tag}" root@localhost::
+    fi
+
+# Retag rechunked images for downstream steps
 [group('Image')]
 load-rechunk image="bluefin" tag="latest" flavor="main":
     #!/usr/bin/bash
@@ -425,14 +362,30 @@ load-rechunk image="bluefin" tag="latest" flavor="main":
     # Image Name
     image_name=$({{ just }} image_name {{ image }} {{ tag }} {{ flavor }})
 
-    # Load Image
-    OUT_NAME="${image_name}_build"
-    IMAGE=$(${PODMAN} pull oci:"${PWD}"/"${OUT_NAME}")
-    ${PODMAN} tag ${IMAGE} localhost/"${image_name}":{{ tag }}
+    source_tag="{{ tag }}"
+    if [[ "{{ tag }}" == "stable-daily" ]]; then
+        source_tag="stable"
+    fi
 
-    # Cleanup
-    rm -rf "${OUT_NAME}*"
-    rm -f previous.manifest.json
+    source_ref=localhost/"${image_name}":"${source_tag}"
+    source_chunked_ref=${source_ref}-chunked
+    target_ref=localhost/"${image_name}":"{{ tag }}"
+
+    SOURCE_ID=$(${PODMAN} images --filter reference="${source_chunked_ref}" --format "'{{ '{{.ID}}' }}'")
+    if [[ -n "${SOURCE_ID}" ]]; then
+        source_ref="${source_chunked_ref}"
+    fi
+
+    if [[ "${source_ref}" == "${target_ref}" ]]; then
+        exit 0
+    fi
+
+    IMAGE=$(${PODMAN} inspect "${source_ref}" | jq -r '.[].Id')
+    TARGET_ID=$(${PODMAN} images --filter reference="${target_ref}" --format "'{{ '{{.ID}}' }}'")
+    if [[ -n "${TARGET_ID}" ]]; then
+        ${PODMAN} rmi "${target_ref}" || true
+    fi
+    ${PODMAN} tag "${IMAGE}" "${target_ref}"
 
 # Run Container
 [group('Image')]
@@ -633,7 +586,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
         BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts" "gts-${version}" "gts-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
         BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts" "gts-${version}" "gts-${version:3}")
-    elif [[ ! "{{ tag }}" =~ stable && "{{ tag }}" != "testing" ]]; then
+    elif [[ ! "{{ tag }}" =~ stable|beta && "{{ tag }}" != "testing" ]]; then
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${version}" "${FEDORA_VERSION}-${version:3}")
     fi
 
