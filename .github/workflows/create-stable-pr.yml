@@ -1,0 +1,129 @@
+name: Create Stable Promotion PR
+
+# Maintains a living draft PR showing what commits on testing are pending
+# promotion to stable. Humans can review it at any time; the weekly
+# scheduled promotion (weekly-testing-promotion.yml) does the actual merge.
+on:
+  push:
+    branches: [testing]
+  workflow_dispatch:
+
+concurrency:
+  group: create-stable-pr
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout testing
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: testing
+          fetch-depth: 0
+
+      - name: Fetch stable
+        run: git fetch origin stable
+
+      - name: Detect and repair squash-merge damage on stable
+        # Squash-merging a promotion PR creates a commit with only one parent,
+        # which permanently breaks the merge base. Future promotion PRs then show
+        # all historical commits (DIRTY state). This guard auto-detects and repairs
+        # squash damage so the next PR creation always starts from a clean state.
+        #
+        # Permanent fix: disable allow_squash_merge in repo settings.
+        continue-on-error: true
+        run: |
+          PARENT_COUNT=$(git cat-file -p origin/stable | grep -c "^parent")
+          if [ "$PARENT_COUNT" -ge 2 ]; then
+            echo "✅ stable branch merge base is healthy (merge commit with $PARENT_COUNT parents)"
+            exit 0
+          fi
+
+          echo "⚠️  Squash merge detected on stable branch! stable tip has only 1 parent."
+          echo "   This breaks the merge base and causes promotion PRs to show stale commits."
+
+          # Only auto-repair when stable and testing have identical tree content.
+          STABLE_TREE=$(git rev-parse origin/stable^{tree})
+          TESTING_TREE=$(git rev-parse origin/testing^{tree})
+          if [ "$STABLE_TREE" != "$TESTING_TREE" ]; then
+            echo "   testing has new commits not yet reviewed for stable. Skipping auto-repair."
+            exit 0
+          fi
+
+          echo "   Trees are identical — safe to repair. Merging testing → stable to restore 2-parent history..."
+
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+          git checkout -B stable origin/stable
+          git merge -X theirs origin/testing --no-edit -m "ci: repair merge base after squash-merge [automated]"
+
+          git remote set-url origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git push origin stable
+
+          echo "✅ stable branch merge base repaired — re-fetching for PR creation"
+          git fetch origin stable
+
+      - name: Check content diff
+        id: diff
+        run: |
+          if git diff --quiet origin/stable origin/testing; then
+            echo "No content difference between stable and testing. Nothing to promote."
+            echo "has_diff=false" >> "$GITHUB_OUTPUT"
+          elif [ -z "$(git log origin/stable..origin/testing --oneline)" ]; then
+            echo "stable is ahead of or diverged from testing with no commits to promote."
+            echo "has_diff=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_diff=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build commit list
+        if: steps.diff.outputs.has_diff == 'true'
+        id: commits
+        run: |
+          LIST=$(git log origin/stable..origin/testing --oneline)
+
+          if [ -z "$LIST" ]; then
+            # Fallback when the commit graph can't resolve (e.g., first ever promotion).
+            LIST=$(git diff --name-status origin/stable origin/testing)
+          fi
+
+          {
+            echo "list<<EOF"
+            echo "$LIST"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create or update promote PR
+        if: steps.diff.outputs.has_diff == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_LIST: ${{ steps.commits.outputs.list }}
+        run: |
+          BODY=$(printf '## Commits pending promotion to `stable`\n\n%s\n\n---\n_**Merge this PR** (Create a merge commit) to promote. Do NOT squash — squash-merge breaks the merge base and causes PR bloat. The weekly scheduled workflow (`weekly-testing-promotion.yml`) promotes automatically after e2e passes, but you can also merge this PR manually to promote immediately._\n' "${COMMIT_LIST}")
+
+          EXISTING=$(gh pr list \
+            --base stable \
+            --head testing \
+            --state open \
+            --json number \
+            --jq '.[0].number' \
+            2>/dev/null || echo "")
+
+          if [ -n "$EXISTING" ]; then
+            echo "Updating existing promote PR #${EXISTING}"
+            printf '%s\n' "${BODY}" | gh pr edit "$EXISTING" --body-file -
+          else
+            echo "Creating new draft promote PR"
+            printf '%s\n' "${BODY}" | gh pr create \
+              --draft \
+              --base stable \
+              --head testing \
+              --title "promote: testing → stable" \
+              --body-file -
+          fi
