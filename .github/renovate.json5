@@ -3,7 +3,7 @@
   "extends": [
     "config:best-practices",
   ],
-  "baseBranches": ["testing"],
+  "baseBranches": ["main"],
 
   "git-submodules": {
     "enabled": true
