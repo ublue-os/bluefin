@@ -65,7 +65,6 @@ FEDORA_PACKAGES=(
     oddjob-mkhomedir
     opendyslexic-fonts
     openssh-askpass
-    powerstat
     powertop
     printer-driver-brlaser
     pulseaudio-utils
@@ -93,6 +92,11 @@ FEDORA_PACKAGES=(
     zsh
 )
 
+# x86_64-only Fedora packages
+FEDORA_PACKAGES_AMD64=(
+    powerstat
+)
+
 # Version-specific Fedora package additions
 case "$FEDORA_MAJOR_VERSION" in
     42)
@@ -111,7 +115,12 @@ esac
 
 # Install all Fedora packages (bulk - safe from COPR injection)
 echo "Installing ${#FEDORA_PACKAGES[@]} packages from Fedora repos..."
-dnf -y install "${FEDORA_PACKAGES[@]}"
+PACKAGES=( "${FEDORA_PACKAGES[@]}" )
+# Add arch-specific packages
+if [[ $(arch) == x86_64 ]]; then
+    PACKAGES+=( "${FEDORA_PACKAGES_AMD64[@]}" )
+fi
+dnf -y install "${PACKAGES[@]}"
 
 dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 dnf config-manager setopt tailscale-stable.enabled=0

@@ -40,3 +40,6 @@ jobs:
       image_flavors: '["main", "nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
+      # FIXME: enable when ublue-os/akmods has ARM builds
+      # architecture: '["aarch64","x86_64"]'
+      architecture: '["x86_64"]'

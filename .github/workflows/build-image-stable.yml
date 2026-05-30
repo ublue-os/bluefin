@@ -28,9 +28,13 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
+     image_flavors: '["main", "nvidia-open"]'
  #    kernel_pin: 6.17.12-300.fc43.x86_64 ## Pin to 6.17 for ZFS compatibility
-      brand_name: ${{ matrix.brand_name }}
-      stream_name: stable
+     brand_name: ${{ matrix.brand_name }}
+     stream_name: stable
+     # FIXME: enable when ublue-os/akmods has ARM builds
+     # architecture: '["aarch64","x86_64"]'
+     architecture: '["x86_64"]'
 
   generate-release:
     name: Generate Release

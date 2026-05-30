@@ -22,6 +22,11 @@ on:
       kernel_pin:
         description: "The full kernel version to pin"
         type: string
+      architecture:
+        description: "JSON string of architectures to build, '[\"aarch64\", \"x86_64\"]'"
+        default: "['x86_64']"
+        required: false
+        type: string
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -35,7 +40,7 @@ permissions: {}
 jobs:
   build_container:
     name: image
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.architecture == 'x86_64' && 'ubuntu-24.04' || 'ubuntu-24.04-arm' }}
     env:
       DIGEST_FILE: ${{ github.workspace }}/.push-digest
     permissions:
@@ -51,6 +56,10 @@ jobs:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
         base_name: ["${{ inputs.brand_name }}", "${{ inputs.brand_name }}-dx"]
         stream_name: ["${{ inputs.stream_name }}"]
+        architecture: ${{ fromJson(inputs.architecture) }}
+        exclude:
+          - architecture: aarch64
+            base_name: "${{ inputs.brand_name }}-dx"
 
     steps:
       - name: Checkout
@@ -111,7 +120,7 @@ jobs:
           CACHE_NAME: ${{ steps.setup-cache.outputs.cache_name }}
         with:
           path: /var/tmp/buildah-cache-*
-          key: ${{ runner.os }}-${{ runner.arch }}-buildah-${{ env.CACHE_NAME }}
+          key: ${{ runner.os }}-${{ matrix.architecture }}-buildah-${{ env.CACHE_NAME }}
 
       - name: Build Image
         id: build-image
@@ -139,7 +148,7 @@ jobs:
           CACHE_NAME: ${{ steps.setup-cache.outputs.cache_name }}
         with:
           path: /var/tmp/buildah-cache-*
-          key: ${{ runner.os }}-${{ runner.arch }}-buildah-${{ env.CACHE_NAME }}
+          key: ${{ runner.os }}-${{ matrix.architecture }}-buildah-${{ env.CACHE_NAME }}
 
       - name: Setup Syft
         id: setup-syft
