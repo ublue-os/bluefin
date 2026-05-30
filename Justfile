@@ -13,7 +13,6 @@ flavors := '(
 tags := '(
     [stable]=stable
     [latest]=latest
-    [beta]=beta
     [testing]=testing
 )'
 export SUDOIF := if `id -u` == "0" { "" } else { "sudo" }
@@ -117,8 +116,6 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         akmods_flavor="bazzite"
     elif [[ "${tag}" =~ stable ]]; then
         akmods_flavor="coreos-stable"
-    elif [[ "${tag}" =~ beta ]]; then
-        akmods_flavor="main"
     else
         akmods_flavor="main"
     fi
@@ -636,7 +633,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
         BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts" "gts-${version}" "gts-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
         BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts" "gts-${version}" "gts-${version:3}")
-    elif [[ ! "{{ tag }}" =~ stable|beta && "{{ tag }}" != "testing" ]]; then
+    elif [[ ! "{{ tag }}" =~ stable && "{{ tag }}" != "testing" ]]; then
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${version}" "${FEDORA_VERSION}-${version:3}")
     fi
 

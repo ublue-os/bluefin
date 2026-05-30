@@ -37,6 +37,7 @@ jobs:
     needs: [build-image-stable]
     permissions:
       contents: write
+      actions: read
     secrets: inherit
     uses: ./.github/workflows/generate-release.yml
     with:
