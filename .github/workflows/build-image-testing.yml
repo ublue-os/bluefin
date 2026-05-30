@@ -1,14 +1,6 @@
 name: Testing Images
 on:
   merge_group:
-  pull_request:
-    branches:
-      - testing
-    paths-ignore:
-      - ".github/workflows/*validate*.yml"
-      - "**.md"
-      - "flatpaks/**"
-      - "system_files/shared/etc/bazaar/**"
   push:
     branches:
       - testing

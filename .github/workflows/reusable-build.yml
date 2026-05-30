@@ -260,6 +260,29 @@ jobs:
               fi
             done
 
+      - name: Upload OCI dir as Artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ env.IMAGE_NAME }}.oci
+          path: ${{ env.IMAGE_NAME }}_build
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: PR Testing Instructions
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "### 🫐 Test this PR build" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download the \`.oci\` artifact, unzip it, then:" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "sudo bootc switch --transport oci /absolute/path/to/${{ env.IMAGE_NAME }}_build" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "To go back:" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "sudo bootc switch --enforce-container-sigpolicy ghcr.io/projectbluefin/${{ env.IMAGE_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
       - name: Export digest
         id: digest
         if: github.event_name != 'pull_request'
