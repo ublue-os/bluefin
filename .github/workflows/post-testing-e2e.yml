@@ -43,7 +43,7 @@ jobs:
 
   run-e2e:
     needs: [e2e]
-    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@12bd892e476ef930ae3240eff71402390bba8da9 # main
     with:
       image: ${{ needs.e2e.outputs.image }}
       suites: smoke
