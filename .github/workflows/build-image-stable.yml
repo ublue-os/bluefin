@@ -1,9 +1,8 @@
 name: Stable Images
 on:
-  merge_group: # Make Stable-Daily run on merge groups
   push:
     branches:
-      - main
+      - stable
     paths-ignore:
       - ".github/workflows/*validate*.yml"
       - "**.md"

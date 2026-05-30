@@ -3,7 +3,7 @@ on:
   merge_group:
   pull_request:
     branches:
-      - main
+      - latest
     paths-ignore:
       - ".github/workflows/*validate*.yml"
       - "**.md"
@@ -11,7 +11,7 @@ on:
       - "system_files/shared/etc/bazaar/**"
   push:
     branches:
-      - main
+      - latest
     paths-ignore:
       - ".github/workflows/*validate*.yml"
       - "**.md"

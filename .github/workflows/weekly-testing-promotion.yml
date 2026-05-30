@@ -107,7 +107,7 @@ jobs:
       image: ${{ needs.ensure-testing-build.outputs.image }}
       suites: smoke,developer,vanilla-gnome
 
-  promote-to-main:
+  promote-to-latest-and-stable:
     needs: [e2e, ensure-testing-build]
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -135,33 +135,34 @@ jobs:
           CURRENT_SHA=$(git rev-parse origin/testing)
           if [ "$CURRENT_SHA" != "$LOCKED_SHA" ]; then
             echo "ERROR: testing advanced during build/e2e ($LOCKED_SHA → $CURRENT_SHA)"
-            echo "Untested commits would reach main. Aborting — rerun next week."
+            echo "Untested commits would reach latest/stable. Aborting — rerun next week."
             exit 1
           fi
           echo "✅ testing SHA unchanged: $CURRENT_SHA"
 
-      - name: Check diff between testing and main
+      - name: Check diff between testing and latest
         id: check-diff
         run: |
           set -euo pipefail
-          git fetch origin main
-          if git diff --quiet origin/main origin/testing; then
-            echo "No diff between testing and main — nothing to promote"
+          git fetch origin latest stable 2>/dev/null || true
+          if git diff --quiet origin/latest origin/testing 2>/dev/null; then
+            echo "No diff between testing and latest — nothing to promote"
             echo "has_diff=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_diff=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Fast-forward main to testing
+      - name: Fast-forward latest and stable to testing
         if: steps.check-diff.outputs.has_diff == 'true'
         run: |
           set -euo pipefail
-          git push origin HEAD:refs/heads/main
-          echo "✅ Promoted testing → main"
+          git push origin HEAD:refs/heads/latest
+          git push origin HEAD:refs/heads/stable
+          echo "✅ Promoted testing → latest + stable"
 
   trigger-stable-build:
-    needs: [promote-to-main]
-    if: needs.promote-to-main.outputs.has_diff == 'true'
+    needs: [promote-to-latest-and-stable]
+    if: needs.promote-to-latest-and-stable.outputs.has_diff == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger stable build
@@ -169,12 +170,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh workflow run build-image-stable.yml --ref main -R ${{ github.repository }}
-          echo "✅ Triggered build-image-stable.yml on main"
+          gh workflow run build-image-stable.yml --ref stable -R ${{ github.repository }}
+          echo "✅ Triggered build-image-stable.yml on stable"
 
   trigger-latest-build:
-    needs: [promote-to-main]
-    if: needs.promote-to-main.outputs.has_diff == 'true'
+    needs: [promote-to-latest-and-stable]
+    if: needs.promote-to-latest-and-stable.outputs.has_diff == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger latest build
@@ -182,5 +183,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh workflow run build-image-latest-main.yml --ref main -R ${{ github.repository }}
-          echo "✅ Triggered build-image-latest-main.yml on main"
+          gh workflow run build-image-latest-main.yml --ref latest -R ${{ github.repository }}
+          echo "✅ Triggered build-image-latest-main.yml on latest"
