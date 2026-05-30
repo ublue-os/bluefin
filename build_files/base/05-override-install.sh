@@ -15,23 +15,33 @@ mkdir -p /usr/share/doc/bluefin
 ghcurl "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
 install -Dm0644 -t /usr/share/doc/bluefin/ /tmp/bluefin.pdf
 
+# Footgun, See: https://github.com/ublue-os/main/issues/598
+rm -f /usr/bin/chsh /usr/bin/lchsh
+
+# Add linuxbrew to the list of paths usable by `sudo`
+# not a sudoers.d override because we want to get updates from upstream and not break everything
+sed -Ei "s/secure_path = (.*)/secure_path = \1:\/home\/linuxbrew\/.linuxbrew\/bin/" /etc/sudoers
+
+# https://github.com/ublue-os/main/pull/334
+ln -s "/usr/share/fonts/google-noto-sans-cjk-fonts" "/usr/share/fonts/noto-cjk"
+
+# use CoreOS' generator for emergency/rescue boot
+# see detail: https://github.com/ublue-os/main/issues/653
+mkdir -p /usr/lib/systemd/system-generators
+ghcurl "https://raw.githubusercontent.com/coreos/fedora-coreos-config/refs/heads/stable/overlay.d/05core/usr/lib/systemd/system-generators/coreos-sulogin-force-generator" --retry 3 -Lo /usr/lib/systemd/system-generators/coreos-sulogin-force-generator
+chmod +x /usr/lib/systemd/system-generators/coreos-sulogin-force-generator
+
 # Starship Shell Prompt
 ghcurl "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" --retry 3 -o /tmp/starship.tar.gz
 tar -xzf /tmp/starship.tar.gz -C /tmp
 install -c -m 0755 /tmp/starship /usr/bin
 
-# Required for bluefin faces to work without conflicting with a ton of packages
-rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
-mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
-rm -rf /usr/share/pixmaps/faces/bluefin
-
-# Remove desktop entries
-if [[ -f /usr/share/applications/gnome-system-monitor.desktop ]]; then
-    sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/gnome-system-monitor.desktop
-fi
-if [[ -f /usr/share/applications/org.gnome.SystemMonitor.desktop ]]; then
-    sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/org.gnome.SystemMonitor.desktop
-fi
+# Configure firewalld with Fedora Workstation defaults
+# https://src.fedoraproject.org/rpms/firewalld/blob/rawhide/f/firewalld.spec
+ghcurl "https://src.fedoraproject.org/rpms/firewalld/raw/rawhide/f/FedoraWorkstation.xml" --retry 3 -Lo /usr/lib/firewalld/zones/FedoraWorkstation.xml
+grep -F -e '<port protocol="udp" port="1025-65535"/>' /usr/lib/firewalld/zones/FedoraWorkstation.xml
+sed -i 's|^DefaultZone=.*|DefaultZone=FedoraWorkstation|g' /etc/firewalld/firewalld.conf
+sed -i 's|^IPv6_rpfilter=.*|IPv6_rpfilter=loose|g' /etc/firewalld/firewalld.conf
 
 # Add Mutter experimental-features
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
@@ -39,5 +49,8 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     echo "Compiling gschema to include bluefin setting overrides"
     glib-compile-schemas /usr/share/glib-2.0/schemas
 fi
+
+# Rebuild gdk-pixbuf loader cache so all installed loaders are registered
+gdk-pixbuf-query-loaders-64 --update-cache
 
 echo "::endgroup::"

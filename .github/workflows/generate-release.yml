@@ -55,8 +55,10 @@ jobs:
         run: |
           just changelogs "${{ matrix.version }}" "${{ inputs.handwritten }}"
           source ./output.env
-          echo "title=${TITLE}" >> $GITHUB_OUTPUT
-          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          {
+            echo "title=${TITLE}"
+            echo "tag=${TAG}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Download SBOM release assets
         if: contains(fromJson('["stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))

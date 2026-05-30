@@ -3,7 +3,7 @@
   "extends": [
     "config:best-practices",
   ],
-  "baseBranches": ["main"],
+  "baseBranchPatterns": ["main"],
 
   "git-submodules": {
     "enabled": true
@@ -67,8 +67,13 @@
       "automerge": true,
       "matchUpdateTypes": ["digest"],
       "matchDepNames": [
-        "ghcr.io/ublue-os/silverblue-main"
+        "quay.io/fedora-ostree-desktops/silverblue"
       ]
+    },
+    {
+      "matchDepNames": ["quay.io/fedora-ostree-desktops/silverblue"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     },
     {
       "matchDepTypes": ["gnome-extension"],

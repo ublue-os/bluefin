@@ -71,9 +71,11 @@ jobs:
           SHA=$(echo "$PR_DATA" | jq -r '.sha')
           BRANCH=$(echo "$PR_DATA" | jq -r '.branch')
           SHORT_SHA="${SHA:0:7}"
-          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
-          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
-          echo "branch=${BRANCH}" >> "$GITHUB_OUTPUT"
+          {
+            echo "sha=${SHA}"
+            echo "short_sha=${SHORT_SHA}"
+            echo "branch=${BRANCH}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Trigger PR build
         if: steps.permission.outputs.authorized == 'true'

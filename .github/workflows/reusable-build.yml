@@ -12,7 +12,6 @@ on:
         type: string
       brand_name:
         description: "The Brand Name: bluefin"
-        required: true
         default: bluefin
         type: string
       stream_name:
@@ -84,7 +83,7 @@ jobs:
         shell: bash
         run: |
           IMAGE_NAME="$(just image_name ${{ matrix.base_name }} ${{ matrix.stream_name }} ${{ matrix.image_flavor }})"
-          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> "$GITHUB_ENV"
 
       - name: Default Tag
         shell: bash
@@ -93,7 +92,7 @@ jobs:
                        ${{ matrix.stream_name }} \
                        "1")"
           echo "Default Tag: ${DEFAULT_TAG}"
-          echo "DEFAULT_TAG=${DEFAULT_TAG}" >> $GITHUB_ENV
+          echo "DEFAULT_TAG=${DEFAULT_TAG}" >> "$GITHUB_ENV"
 
       - name: DNF Package Cache Setup
         shell: bash
@@ -128,7 +127,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo -E $(command -v just) repo_organization="${{ github.repository_owner }}" \
+          sudo -E "$(command -v just)" repo_organization="${{ github.repository_owner }}" \
                     build-ghcr "${{ matrix.base_name }}" \
                                "${{ matrix.stream_name }}" \
                                "${{ matrix.image_flavor }}" \
@@ -166,7 +165,7 @@ jobs:
           MATRIX_IMAGE_FLAVOR: ${{ matrix.image_flavor }}
           SYFT_CMD: ${{ steps.setup-syft.outputs.cmd }}
         run: |
-          sudo -E $(command -v just) gen-sbom "${MATRIX_BASE_NAME}" \
+          sudo -E "$(command -v just)" gen-sbom "${MATRIX_BASE_NAME}" \
                             "${MATRIX_STREAM_NAME}" \
                             "${MATRIX_IMAGE_FLAVOR}" \
                             "${SYFT_CMD}"
@@ -177,7 +176,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo -E $(command -v just) rechunk "${{ matrix.base_name }}" \
+          sudo -E "$(command -v just)" rechunk "${{ matrix.base_name }}" \
                             "${{ matrix.stream_name }}" \
                             "${{ matrix.image_flavor }}" \
                             "1"
@@ -186,7 +185,7 @@ jobs:
         id: load-rechunk
         shell: bash
         run: |
-          sudo -E $(command -v just) load-rechunk "${{ matrix.base_name }}" \
+          sudo -E "$(command -v just)" load-rechunk "${{ matrix.base_name }}" \
                             "${{ env.DEFAULT_TAG }}" \
                             "${{ matrix.image_flavor }}"
 
@@ -194,7 +193,7 @@ jobs:
         id: secureboot
         shell: bash
         run: |
-          sudo -E $(command -v just) secureboot "${{ matrix.base_name }}" \
+          sudo -E "$(command -v just)" secureboot "${{ matrix.base_name }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ matrix.image_flavor }}"
 
@@ -214,14 +213,14 @@ jobs:
 
           echo "Tags for this Action..."
           echo "$alias_tags"
-          echo "alias_tags=${alias_tags}" >> $GITHUB_OUTPUT
+          echo "alias_tags=${alias_tags}" >> "$GITHUB_OUTPUT"
 
       # Tag Images
       - name: Tag Images
         shell: bash
         run: |
           set -eoux pipefail
-          sudo -E $(command -v just) tag-images "${{ env.IMAGE_NAME }}" \
+          sudo -E "$(command -v just)" tag-images "${{ env.IMAGE_NAME }}" \
                           "${{ env.DEFAULT_TAG }}" \
                           "${{ steps.generate-tags.outputs.alias_tags }}"
 
@@ -251,6 +250,7 @@ jobs:
             set -euox pipefail
 
             rm -f "${{ env.DIGEST_FILE }}"
+            # shellcheck disable=SC2086 - word splitting on alias_tags is intentional
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
               dest=${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
               if [[ "${tag}" == "${{ env.DEFAULT_TAG }}" ]]; then
@@ -272,16 +272,18 @@ jobs:
       - name: PR Testing Instructions
         if: github.event_name == 'pull_request'
         run: |
-          echo "### 🫐 Test this PR build" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Download the \`.oci\` artifact, unzip it, then:" >> $GITHUB_STEP_SUMMARY
-          echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "sudo bootc switch --transport oci /absolute/path/to/${{ env.IMAGE_NAME }}_build" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "To go back:" >> $GITHUB_STEP_SUMMARY
-          echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "sudo bootc switch --enforce-container-sigpolicy ghcr.io/projectbluefin/${{ env.IMAGE_NAME }}" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### 🫐 Test this PR build"
+            echo ""
+            echo "Download the \`.oci\` artifact, unzip it, then:"
+            echo '```bash'
+            echo "sudo bootc switch --transport oci /absolute/path/to/${{ env.IMAGE_NAME }}_build"
+            echo '```'
+            echo "To go back:"
+            echo '```bash'
+            echo "sudo bootc switch --enforce-container-sigpolicy ghcr.io/projectbluefin/${{ env.IMAGE_NAME }}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Export digest
         id: digest
@@ -315,7 +317,7 @@ jobs:
       - name: Sign container image
         if: github.event_name != 'pull_request'
         run: |
-          cosign sign -y ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
+          cosign sign -y "${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}"
         env:
           TAGS: ${{ steps.digest.outputs.digest }}
 
@@ -341,13 +343,13 @@ jobs:
           cd "$(dirname "${SBOM}")"
           oras attach \
             --artifact-type application/vnd.spdx+json \
-            --annotation filename=$(basename "$SBOM") \
+            --annotation "filename=$(basename "$SBOM")" \
             "${IMAGE}@${DIGEST}" \
-            "$(basename ${SBOM})"
+            "$(basename "$SBOM")"
 
           sbom_digest=$(oras discover --format json "${IMAGE}@${DIGEST}" | jq -r '.referrers[] | select(.artifactType == "application/vnd.spdx+json") | .digest')
 
-          echo "sbom_digest=${sbom_digest}" >> $GITHUB_OUTPUT
+          echo "sbom_digest=${sbom_digest}" >> "$GITHUB_OUTPUT"
 
       - name: Sign SBOM OCI Artifact
         if: github.event_name != 'pull_request'
@@ -356,7 +358,7 @@ jobs:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           SBOM_DIGEST: ${{ steps.upload-sbom.outputs.sbom_digest }}
         run: |
-          cosign sign -y ${LOWERCASE}/${IMAGE_NAME}@${SBOM_DIGEST}
+          cosign sign -y "${LOWERCASE}/${IMAGE_NAME}@${SBOM_DIGEST}"
 
       - name: Attestation
         if: github.event_name != 'pull_request'
@@ -367,7 +369,7 @@ jobs:
           push-to-registry: true
 
   check:
-    name: Check all ${{ matrix.stream_name }} builds successful
+    name: Check all ${{ inputs.stream_name }} builds successful
     if: always()
     runs-on: ubuntu-latest
     needs: [build_container]
@@ -377,9 +379,9 @@ jobs:
           JOBS: ${{ toJson(needs) }}
         run: |
           echo "Job status:"
-          echo $JOBS | jq -r 'to_entries[] | " - \(.key): \(.value.result)"'
+          echo "$JOBS" | jq -r 'to_entries[] | " - \(.key): \(.value.result)"'
 
-          for i in $(echo $JOBS | jq -r 'to_entries[] | .value.result'); do
+          for i in $(echo "$JOBS" | jq -r 'to_entries[] | .value.result'); do
             if [ "$i" != "success" ] && [ "$i" != "skipped" ]; then
               echo ""
               echo "Status check not okay!"
@@ -407,9 +409,11 @@ jobs:
         id: merge
         run: |
           DIGESTS=$(cat /tmp/digests/*.txt | jq -Rs 'split("\n") | map(select(length > 0)) | map(split("=")) | map({(.[0]): .[1]}) | add')
-          echo "digests<<EOF" >> "$GITHUB_OUTPUT"
-          echo "${DIGESTS}" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          {
+            echo "digests<<EOF"
+            echo "${DIGESTS}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Set empty digests
         if: github.event_name == 'pull_request'

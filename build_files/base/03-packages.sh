@@ -6,6 +6,42 @@ set -ouex pipefail
 
 # All DNF-related operations should be done here whenever possible
 
+# use negativo17 for 3rd party packages with higher priority than default
+# mitigate upstream packaging bug: https://bugzilla.redhat.com/show_bug.cgi?id=2332429
+# swap the incorrectly installed OpenCL-ICD-Loader for ocl-icd, the expected package
+# TODO: remove me when F42 dropped, F43 is not affected
+if [[ "$(rpm -E %fedora)" == "42" ]]; then
+dnf5 -y swap --repo='fedora' \
+    OpenCL-ICD-Loader ocl-icd
+fi
+
+if ! grep -q fedora-multimedia <(dnf5 repolist); then
+    # Enable or Install Repofile
+    dnf5 config-manager setopt fedora-multimedia.enabled=1 ||
+        dnf5 config-manager addrepo --from-repofile="https://negativo17.org/repos/fedora-multimedia.repo"
+fi
+# Set higher priority
+dnf5 config-manager setopt fedora-multimedia.priority=90
+
+# use override to replace mesa and others with less crippled versions
+OVERRIDES=(
+    "intel-gmmlib"
+    "intel-mediasdk"
+    "intel-vpl-gpu-rt"
+    "libheif"
+    "libva"
+    "libva-intel-media-driver"
+    "mesa-dri-drivers"
+    "mesa-filesystem"
+    "mesa-libEGL"
+    "mesa-libGL"
+    "mesa-libgbm"
+    "mesa-vulkan-drivers"
+)
+
+dnf5 distro-sync --skip-unavailable -y --repo='fedora-multimedia' "${OVERRIDES[@]}"
+dnf5 versionlock add "${OVERRIDES[@]}"
+
 # shellcheck source=build_files/shared/copr-helpers.sh
 source /ctx/build_files/shared/copr-helpers.sh
 
@@ -20,9 +56,10 @@ FEDORA_PACKAGES=(
     adcli
     adw-gtk3-theme
     adwaita-fonts-all
+    alsa-firmware
+    alsa-tools-firmware
     autofs
-    bash-color-prompt
-    bootc
+    bcache-tools
     borgbackup
     containerd
     cryfs
@@ -32,6 +69,7 @@ FEDORA_PACKAGES=(
     fastfetch
     firewall-config
     fish
+    flatpak-spawn
     foo2zjs
     fuse-encfs
     gcc
@@ -39,34 +77,53 @@ FEDORA_PACKAGES=(
     git-credential-libsecret
     glow
     gnome-tweaks
+    google-noto-sans-balinese-fonts
+    google-noto-sans-cjk-fonts
+    google-noto-sans-javanese-fonts
+    google-noto-sans-sundanese-fonts
+    grub2-tools-extra
     gum
-    hplip
+    gvfs-nfs
+    htop
     ibus-mozc
+    ibus-unikey
     ifuse
     igt-gpu-tools
     input-remapper
+    intel-vaapi-driver
     iwd
     jetbrains-mono-fonts-all
     just
     krb5-workstation
     libappindicator-gtk3
     libayatana-appindicator-gtk3
+    libcamera-gstreamer
+    libcamera-tools
     libgda
     libgda-sqlite
-    libimobiledevice
+    libimobiledevice-utils
     libratbag-ratbagd
+    libsss_autofs
+    libva-utils
     libxcrypt-compat
     lm_sensors
+    lshw
     make
-    mesa-libGLU
     mozc
+    mtools
     nautilus-gsconnect
+    net-tools
+    nvtop
     oddjob-mkhomedir
     opendyslexic-fonts
+    openrgb-udev-rules
     openssh-askpass
+    pam-u2f
+    pam_yubico
+    pamu2fcfg
+    pipewire-libs-extra
+    powerstat
     powertop
-    printer-driver-brlaser
-    pulseaudio-utils
     python3-pip
     python3-pygit2
     rclone
@@ -77,23 +134,22 @@ FEDORA_PACKAGES=(
     samba-winbind-clients
     samba-winbind-modules
     setools-console
-    sssd-nfs-idmap
-    switcheroo-control
+    smartmontools
+    solaar-udev
+    squashfs-tools
+    sssd-ad
+    sssd-krb5
+    symlinks
+    tcpdump
     tmux
+    traceroute
     usbip
-    usbmuxd
+    vim
     waypipe
-    wireguard-tools
-    wl-clipboard
     xdg-terminal-exec
-    xprop
+    yubikey-manager
     zenity
     zsh
-)
-
-# x86_64-only Fedora packages
-FEDORA_PACKAGES_AMD64=(
-    powerstat
 )
 
 # Version-specific Fedora package additions
@@ -106,49 +162,37 @@ case "$FEDORA_MAJOR_VERSION" in
         ;;
     43)
         FEDORA_PACKAGES+=(
-            evolution-ews-core
-            gnupg2-scdaemon
         )
         ;;
 esac
 
 # Install all Fedora packages (bulk - safe from COPR injection)
 echo "Installing ${#FEDORA_PACKAGES[@]} packages from Fedora repos..."
-PACKAGES=( "${FEDORA_PACKAGES[@]}" )
-# Add arch-specific packages
-if [[ $(arch) == x86_64 ]]; then
-    PACKAGES+=( "${FEDORA_PACKAGES_AMD64[@]}" )
-fi
-dnf -y install "${PACKAGES[@]}"
+dnf -y install "${FEDORA_PACKAGES[@]}"
 
 dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
 dnf config-manager setopt tailscale-stable.enabled=0
 dnf -y install --enablerepo='tailscale-stable' tailscale
 
+dnf -y install --enablerepo=fedora-multimedia \
+    -x PackageKit* \
+    ffmpeg{,-libs} libavcodec @multimedia gstreamer1-plugins-{bad-free,bad-free-libs,good,base} lame{,-libs} libfdk-aac libjxl ffmpegthumbnailer
+
 # From che/nerd-fonts
 copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 
 # From ublue-os/packages
-copr_install_isolated "ublue-os/packages" "uupd"
-
-# Version-specific COPR packages
-# case "$FEDORA_MAJOR_VERSION" in
-#    42)
-        # bazaar and uupd from ublue-os/packages
-        # copr_install_isolated "ublue-os/packages" "bazaar" "uupd"
-        # ;;
-    # 43)
-        # bazaar from ublue-os/packages
-        # copr_install_isolated "ublue-os/packages" "bazaar"
-        # ;;
-# esac
+copr_install_isolated "ublue-os/packages" \
+    "uupd" \
+    "oversteer-udev"
 
 # Packages to exclude - common to all versions
 EXCLUDED_PACKAGES=(
-    cosign
+    default-fonts-cjk-sans
     fedora-bookmarks
     fedora-chromium-config
     fedora-chromium-config-gnome
+    fedora-third-party
     firefox
     firefox-langpacks
     gnome-extensions-app
@@ -156,7 +200,9 @@ EXCLUDED_PACKAGES=(
     gnome-software
     gnome-software-rpm-ostree
     gnome-terminal-nautilus
+    google-noto-sans-cjk-vf-fonts
     podman-docker
+    totem-video-thumbnailer
     yelp
 )
 

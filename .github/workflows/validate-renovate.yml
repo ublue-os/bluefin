@@ -28,7 +28,7 @@ jobs:
         shell: bash
         env:
           RENOVATE_VERSION: latest
-        run: npm install -g renovate@${RENOVATE_VERSION}
+        run: npm install -g "renovate@${RENOVATE_VERSION}"
 
       - name: Validate Renovate config
         shell: bash

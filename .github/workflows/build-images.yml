@@ -16,6 +16,3 @@ jobs:
     build-image-latest-main:
         uses: ./.github/workflows/build-image-latest-main.yml
         secrets: inherit
-    build-image-beta:
-        uses: ./.github/workflows/build-image-beta.yml
-        secrets: inherit
