@@ -1,6 +1,10 @@
 name: Reusable Build and Push
 on:
   workflow_call:
+    outputs:
+      digests:
+        description: "JSON map of image_name to digest"
+        value: ${{ jobs.collect-digests.outputs.digests }}
     inputs:
       image_flavors:
         description: "JSON string of flavors to build, '[main, nvidia]'"
@@ -32,6 +36,8 @@ jobs:
   build_container:
     name: image
     runs-on: ubuntu-24.04
+    env:
+      DIGEST_FILE: ${{ github.workspace }}/.push-digest
     permissions:
       contents: read
       packages: write
@@ -56,9 +62,7 @@ jobs:
         uses: ublue-os/remove-unwanted-software@695eb75bc387dbcd9685a8e72d23439d8686cba6 # v10
 
       - name: Install Just
-        run: |
-          /home/linuxbrew/.linuxbrew/bin/brew install just
-          echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
+        uses: taiki-e/install-action@873c7452cadb7c034694a1282227095d93fbdf92 # just
 
       - name: Check Just Syntax
         shell: bash
@@ -235,18 +239,36 @@ jobs:
           command: |
             set -euox pipefail
 
-            digest_file="$PWD/.push-digest"
+            rm -f "${{ env.DIGEST_FILE }}"
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
               dest=${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
               if [[ "${tag}" == "${{ env.DEFAULT_TAG }}" ]]; then
-                sudo -E podman push --digestfile "${digest_file}" ${{ env.IMAGE_NAME }}:${tag} "${dest}"
+                sudo -E podman push --digestfile "${{ env.DIGEST_FILE }}" ${{ env.IMAGE_NAME }}:${tag} "${dest}"
               else
                 sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} "${dest}"
               fi
             done
 
-            digest="$(cat "${digest_file}")"
-            echo "digest=${digest}" >> $GITHUB_OUTPUT
+      - name: Export digest
+        id: digest
+        if: github.event_name != 'pull_request'
+        run: |
+          DIGEST=$(cat "${{ env.DIGEST_FILE }}")
+          echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
+
+      - name: Write digest to artifact
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p /tmp/digests
+          echo "${{ env.IMAGE_NAME }}=${{ steps.digest.outputs.digest }}" >> /tmp/digests/${{ matrix.image_flavor }}-${{ matrix.base_name }}.txt
+
+      - name: Upload digest artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@65c4c4a1e8fd04b4e76d21d66c8c49a394765ef9 # v4
+        with:
+          name: image-digest-${{ inputs.stream_name }}-${{ matrix.base_name }}-${{ matrix.image_flavor }}
+          path: /tmp/digests/
+          retention-days: 1
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@7e8b541eb2e61bf99390e1afd4be13a184e9ebc5 # v3.10.1
@@ -257,7 +279,7 @@ jobs:
         run: |
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
         env:
-          TAGS: ${{ steps.push.outputs.digest }}
+          TAGS: ${{ steps.digest.outputs.digest }}
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
 
@@ -275,7 +297,7 @@ jobs:
         id: upload-sbom
         env:
           IMAGE: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          DIGEST: ${{ steps.push.outputs.digest }}
+          DIGEST: ${{ steps.digest.outputs.digest }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
         run: |
           SBOM="sbom_out/${IMAGE_NAME}/sbom.json"
@@ -307,7 +329,7 @@ jobs:
         uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 #v4.1.0
         with:
           subject-name: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-digest: ${{ steps.digest.outputs.digest }}
           push-to-registry: true
 
   check:
@@ -330,3 +352,31 @@ jobs:
               exit 1
             fi
           done
+
+  collect-digests:
+    name: Collect image digests
+    runs-on: ubuntu-latest
+    needs: [check]
+    outputs:
+      digests: ${{ steps.merge.outputs.digests || steps.empty.outputs.digests }}
+    steps:
+      - name: Download all digest artifacts
+        if: github.event_name != 'pull_request'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: image-digest-${{ inputs.stream_name }}-*
+          merge-multiple: true
+          path: /tmp/digests
+
+      - name: Merge digests
+        if: github.event_name != 'pull_request'
+        id: merge
+        run: |
+          DIGESTS=$(cat /tmp/digests/*.txt | jq -Rs 'split("\n") | map(select(length > 0)) | map(split("=")) | map({(.[0]): .[1]}) | add')
+          echo "digests=${DIGESTS}" >> "$GITHUB_OUTPUT"
+
+      - name: Set empty digests
+        if: github.event_name == 'pull_request'
+        id: empty
+        run: |
+          echo 'digests={}' >> "$GITHUB_OUTPUT"

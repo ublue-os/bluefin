@@ -4,7 +4,14 @@ on:
   pull_request:
     branches:
       - main
-      - testing
+    paths-ignore:
+      - ".github/workflows/*validate*.yml"
+      - "**.md"
+      - "flatpaks/**"
+      - "system_files/shared/etc/bazaar/**"
+  push:
+    branches:
+      - main
     paths-ignore:
       - ".github/workflows/*validate*.yml"
       - "**.md"
@@ -34,12 +41,3 @@ jobs:
       brand_name: ${{ matrix.brand_name }}
       stream_name: latest
 
-  generate-release:
-    name: Generate Release
-    needs: [build-image-latest]
-    permissions:
-      contents: write
-    secrets: inherit
-    uses: ./.github/workflows/generate-release.yml
-    with:
-      stream_name: '["latest"]'

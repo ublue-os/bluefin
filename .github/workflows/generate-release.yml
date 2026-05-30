@@ -36,9 +36,7 @@ jobs:
           fetch-depth: 500
 
       - name: Install Just
-        run: |
-          /home/linuxbrew/.linuxbrew/bin/brew install just
-          echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
+        uses: taiki-e/install-action@873c7452cadb7c034694a1282227095d93fbdf92 # just
 
       - name: Check Just Syntax
         shell: bash

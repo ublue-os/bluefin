@@ -1,0 +1,48 @@
+name: Renovate Auto-merge
+
+on:
+  workflow_run:
+    workflows: ["PR Validation — testsuite"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    name: Auto-merge Renovate PRs
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Find Renovate PR for this commit
+        id: find-pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          PR_NUMBER=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --state open \
+            --json number,headRefOid,author \
+            --jq ".[] | select(.headRefOid == \"$HEAD_SHA\") | select(.author.login == \"renovate[bot]\") | .number" \
+            | head -1)
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No open Renovate PR found for SHA $HEAD_SHA — skipping"
+            echo "pr_number=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Found Renovate PR #$PR_NUMBER"
+            echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Enable auto-merge
+        if: steps.find-pr.outputs.pr_number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge ${{ steps.find-pr.outputs.pr_number }} \
+            --auto \
+            --merge \
+            --repo ${{ github.repository }}
+          echo "✅ Auto-merge enabled on PR #${{ steps.find-pr.outputs.pr_number }}"

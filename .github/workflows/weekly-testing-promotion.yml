@@ -1,0 +1,188 @@
+name: Weekly Testing Promotion
+
+on:
+  schedule:
+    - cron: '0 6 * * 2' # Tuesday 06:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-testing-promotion
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  packages: read
+
+jobs:
+  ensure-testing-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      run_id: ${{ steps.find-run.outputs.run_id }}
+    steps:
+      - name: Record dispatch time
+        run: |
+          set -euo pipefail
+          echo "DISPATCH_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
+      - name: Trigger testing build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run build-image-testing.yml --ref testing -R ${{ github.repository }}
+
+      - name: Wait for API lag
+        run: |
+          set -euo pipefail
+          sleep 60
+
+      - name: Find dispatched testing build run
+        id: find-run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          RUN_ID=""
+          for i in $(seq 1 20); do
+            RUN_ID=$(gh run list \
+              --workflow build-image-testing.yml \
+              --branch testing \
+              --event workflow_dispatch \
+              --repo ${{ github.repository }} \
+              --limit 10 \
+              --json databaseId,createdAt \
+              --jq ".[] | select(.createdAt >= \"$DISPATCH_TIME\") | .databaseId" \
+              | head -1)
+            [ -n "$RUN_ID" ] && break
+            echo "Waiting for build-image-testing.yml run to appear in API (attempt $i/20)..."
+            sleep 30
+          done
+
+          if [ -z "$RUN_ID" ]; then
+            echo "ERROR: Could not locate build-image-testing.yml run dispatched at $DISPATCH_TIME"
+            exit 1
+          fi
+
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "Found build-image-testing.yml run $RUN_ID"
+
+      - name: Watch testing build run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run watch "${{ steps.find-run.outputs.run_id }}" --exit-status --repo ${{ github.repository }}
+
+  e2e:
+    needs: [ensure-testing-build]
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@main
+    secrets: inherit
+    with:
+      image: ghcr.io/${{ github.repository_owner }}/bluefin:testing
+      suites: smoke,developer,vanilla-gnome
+
+  promote-to-main:
+    needs: [e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      has_diff: ${{ steps.check-diff.outputs.has_diff }}
+    steps:
+      - name: Checkout testing
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+          ref: testing
+
+      - name: Configure git
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check diff between testing and main
+        id: check-diff
+        run: |
+          set -euo pipefail
+          git fetch origin main testing
+          if git diff --quiet origin/main origin/testing; then
+            echo "No diff between testing and main — nothing to promote"
+            echo "has_diff=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_diff=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or find PR and enable auto-merge
+        id: promote
+        if: steps.check-diff.outputs.has_diff == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          EXISTING=$(gh pr list \
+            --base main \
+            --head testing \
+            --state open \
+            --repo ${{ github.repository }} \
+            --json number \
+            --jq '.[0].number' 2>/dev/null || echo "")
+
+          if [ -n "$EXISTING" ]; then
+            PR_NUMBER="$EXISTING"
+            echo "Found existing PR #$PR_NUMBER"
+          else
+            PR_URL=$(gh pr create \
+              --base main \
+              --head testing \
+              --title "promote: testing → main (weekly e2e passed)" \
+              --body "Automated promotion after weekly e2e passed. Suites: smoke, developer, vanilla-gnome." \
+              --repo ${{ github.repository }})
+            PR_NUMBER="${PR_URL##*/}"
+            echo "Created PR #$PR_NUMBER"
+          fi
+
+          gh pr merge "$PR_NUMBER" --auto --merge --repo ${{ github.repository }}
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for PR to merge
+        if: steps.check-diff.outputs.has_diff == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          PR_NUMBER="${{ steps.promote.outputs.pr_number }}"
+          for i in $(seq 1 30); do
+            STATE=$(gh pr view "$PR_NUMBER" --repo ${{ github.repository }} --json state --jq '.state')
+            if [ "$STATE" = "MERGED" ]; then
+              echo "PR #$PR_NUMBER merged successfully"
+              exit 0
+            fi
+            if [ "$STATE" = "CLOSED" ]; then
+              echo "ERROR: PR #$PR_NUMBER was closed without merging"
+              exit 1
+            fi
+            echo "Waiting for PR #$PR_NUMBER to merge (attempt $i/30)..."
+            sleep 30
+          done
+
+          echo "ERROR: PR #$PR_NUMBER did not merge within the expected time"
+          exit 1
+
+  trigger-stable-build:
+    needs: [promote-to-main]
+    if: needs.promote-to-main.outputs.has_diff == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger stable build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run build-image-stable.yml --ref main -R ${{ github.repository }}
+          echo "✅ Triggered build-image-stable.yml on main"

@@ -14,6 +14,7 @@ tags := '(
     [stable]=stable
     [latest]=latest
     [beta]=beta
+    [testing]=testing
 )'
 export SUDOIF := if `id -u` == "0" { "" } else { "sudo" }
 export PODMAN := if path_exists("/usr/bin/podman") == "true" { env("PODMAN", "/usr/bin/podman") } else if path_exists("/usr/bin/docker") == "true" { env("PODMAN", "docker") } else { env("PODMAN", "exit 1 ; ") }
@@ -559,6 +560,8 @@ fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
         if [[ "{{ tag }}" =~ stable ]]; then
             # CoreOS does not uses cosign
             skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable > /tmp/manifest.json
+        elif [[ "{{ tag }}" == "testing" ]]; then
+            skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:latest > /tmp/manifest.json
         else
             skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
         fi
@@ -620,6 +623,9 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
         BUILD_TAGS+=("stable-daily" "${version}" "stable-daily-${version}" "stable-daily-${version:3}")
     else
         BUILD_TAGS+=("{{ tag }}" "{{ tag }}-${version}" "{{ tag }}-${version:3}")
+        if [[ "{{ tag }}" == "latest" ]]; then
+            BUILD_TAGS+=("stable-daily" "stable-daily-${version}" "stable-daily-${version:3}")
+        fi
     fi
 
     # Weekly Stable / Rebuild Stable on workflow_dispatch
@@ -630,7 +636,7 @@ generate-build-tags image="bluefin" tag="latest" flavor="main" kernel_pin="" ghc
         BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts" "gts-${version}" "gts-${version:3}")
     elif [[ "{{ tag }}" =~ "stable" && "{{ ghcr }}" == "0" ]]; then
         BUILD_TAGS+=("stable" "stable-${version}" "stable-${version:3}" "gts" "gts-${version}" "gts-${version:3}")
-    elif [[ ! "{{ tag }}" =~ stable|beta ]]; then
+    elif [[ ! "{{ tag }}" =~ stable|beta && "{{ tag }}" != "testing" ]]; then
         BUILD_TAGS+=("${FEDORA_VERSION}" "${FEDORA_VERSION}-${version}" "${FEDORA_VERSION}-${version:3}")
     fi
 
@@ -653,6 +659,8 @@ generate-default-tag tag="latest" ghcr="0":
         DEFAULT_TAG="stable-daily"
     elif [[ "{{ tag }}" =~ stable && "{{ ghcr }}" == "0" ]]; then
         DEFAULT_TAG="stable"
+    elif [[ "{{ tag }}" == "testing" ]]; then
+        DEFAULT_TAG="testing"
     else
         DEFAULT_TAG="{{ tag }}"
     fi

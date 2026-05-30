@@ -1,9 +1,17 @@
-name: Stable Images
+name: Testing Images
 on:
-  merge_group: # Make Stable-Daily run on merge groups
+  merge_group:
+  pull_request:
+    branches:
+      - testing
+    paths-ignore:
+      - ".github/workflows/*validate*.yml"
+      - "**.md"
+      - "flatpaks/**"
+      - "system_files/shared/etc/bazaar/**"
   push:
     branches:
-      - main
+      - testing
     paths-ignore:
       - ".github/workflows/*validate*.yml"
       - "**.md"
@@ -20,8 +28,8 @@ permissions:
   artifact-metadata: write
 
 jobs:
-  build-image-stable:
-    name: Build Stable Images
+  build-image-testing:
+    name: Build Testing Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
     strategy:
@@ -29,16 +37,6 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
- #    kernel_pin: 6.17.12-300.fc43.x86_64 ## Pin to 6.17 for ZFS compatibility
+      image_flavors: '["main", "nvidia-open"]'
       brand_name: ${{ matrix.brand_name }}
-      stream_name: stable
-
-  generate-release:
-    name: Generate Release
-    needs: [build-image-stable]
-    permissions:
-      contents: write
-    secrets: inherit
-    uses: ./.github/workflows/generate-release.yml
-    with:
-      stream_name: '["stable"]'
+      stream_name: testing
