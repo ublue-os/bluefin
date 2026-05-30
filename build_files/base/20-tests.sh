@@ -19,7 +19,7 @@ echo "${KEY1_SHA256}  ${KEY1}" | sha256sum -c -
 echo "${BACKUP_KEY_SHA256}  ${BACKUP_KEY}" | sha256sum -c -
 
 for i in bin/ujust share/ublue-os/just/{00-entry.just,apps.just,default.just,system.just,update.just,} ; do
-   stat /usr/$i
+   stat /usr/"$i"
 done
 
 test -f /usr/share/ublue-os/homebrew/fonts.Brewfile

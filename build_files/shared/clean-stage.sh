@@ -17,6 +17,7 @@ rm -rf /.gitkeep
 find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
 find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
 rm -rf /tmp && mkdir -p /tmp
+# shellcheck disable=SC2114
 rm -rf /boot && mkdir -p /boot
 
 echo "::endgroup::"

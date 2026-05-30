@@ -6,7 +6,7 @@ body:
       value: |
         Thank you for taking the time to fill out this bug report! (She bites sometimes)
 
-        Check out the [Project Opportunities](https://github.com/ublue-os/bluefin/discussions/3423) to see if there's a place you can help out!
+        Check out the [Project Opportunities](https://github.com/projectbluefin/bluefin/discussions) to see if there's a place you can help out!
   - type: textarea
     id: describe-bug
     attributes:
