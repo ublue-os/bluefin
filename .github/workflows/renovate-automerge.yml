@@ -23,7 +23,7 @@ jobs:
         run: |
           PR_NUMBER=$(gh pr list \
             --repo ${{ github.repository }} \
-            --base testing \
+            --base main \
             --state open \
             --json number,headRefOid,author \
             --jq ".[] | select(.headRefOid == \"$HEAD_SHA\") | select(.author.login == \"renovate[bot]\") | .number" \
@@ -44,6 +44,6 @@ jobs:
         run: |
           gh pr merge ${{ steps.find-pr.outputs.pr_number }} \
             --auto \
-            --merge \
+            --squash \
             --repo ${{ github.repository }}
           echo "✅ Auto-merge enabled on PR #${{ steps.find-pr.outputs.pr_number }}"
