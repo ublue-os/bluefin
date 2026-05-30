@@ -7,6 +7,16 @@ body:
         Thank you for taking the time to fill out this bug report! (She bites sometimes)
 
         Check out the [Project Opportunities](https://github.com/projectbluefin/bluefin/discussions) to see if there's a place you can help out!
+
+        Run `ujust report` before submitting if you can. It creates a diagnostic summary, uploads it to your GitHub gist, and can open this form with the gist URL pre-filled.
+  - type: input
+    id: report-link
+    attributes:
+      label: ujust report gist URL
+      description: Optional GitHub gist created by `ujust report`.
+      placeholder: https://gist.github.com/...
+    validations:
+      required: false
   - type: textarea
     id: describe-bug
     attributes:
