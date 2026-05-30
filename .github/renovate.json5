@@ -55,7 +55,7 @@
     },
     {
       "matchUpdateTypes": ["pin", "digest", "pinDigest"],
-      "matchPackageNames": ["ghcr.io/jasonn3/build-container-installer"],
+      "matchPackageNames": ["quay.io/coreos/chunkah"],
       "automerge": false
     },
     {
