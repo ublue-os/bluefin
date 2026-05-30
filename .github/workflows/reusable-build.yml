@@ -276,6 +276,10 @@ jobs:
         uses: sigstore/cosign-installer@7e8b541eb2e61bf99390e1afd4be13a184e9ebc5 # v3.10.1
         if: github.event_name != 'pull_request'
 
+      - name: Fix sigstore cache permissions
+        if: github.event_name != 'pull_request'
+        run: sudo chown -R "$(id -u):$(id -g)" "${HOME}/.sigstore" 2>/dev/null || true
+
       - name: Sign container image
         if: github.event_name != 'pull_request'
         run: |
