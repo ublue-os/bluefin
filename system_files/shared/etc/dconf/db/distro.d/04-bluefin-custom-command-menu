@@ -1,0 +1,61 @@
+[org/gnome/shell/extensions/custom-command-list]
+menuoptions-setting=2
+menuicon-setting='ublue-logo-symbolic'
+menulocation-setting=1
+show-arrow=false
+command-order=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+entryrow1a-setting='---$(hostname)'
+entryrow1b-setting=''
+entryrow1c-setting=''
+visible1-setting=true
+
+entryrow2a-setting='About'
+entryrow2b-setting='gnome-control-center system about'
+entryrow2c-setting=''
+visible2-setting=true
+
+entryrow3a-setting='System Monitor'
+entryrow3b-setting='/usr/bin/missioncenter-helper'
+entryrow3c-setting=''
+visible3-setting=true
+
+entryrow4a-setting='System Settings'
+entryrow4b-setting='gnome-control-center'
+entryrow4c-setting=''
+visible4-setting=true
+
+entryrow5a-setting='---Applications'
+entryrow5b-setting=''
+entryrow5c-setting=''
+visible5-setting=true
+
+entryrow6a-setting='Bazaar App Store'
+entryrow6b-setting='/usr/bin/flatpak run io.github.kolunmi.Bazaar'
+entryrow6c-setting=''
+visible6-setting=true
+
+entryrow7a-setting='Extensions'
+entryrow7b-setting='flatpak run com.mattjakeman.ExtensionManager'
+entryrow7c-setting=''
+visible7-setting=true
+
+entryrow8a-setting='Terminal'
+entryrow8b-setting='xdg-terminal-exec'
+entryrow8c-setting=''
+visible8-setting=true
+
+entryrow9a-setting='---Help'
+entryrow9b-setting=''
+entryrow9c-setting=''
+visible9-setting=true
+
+entryrow10a-setting='Documentation'
+entryrow10b-setting='xdg-open https://docs.projectbluefin.io/'
+entryrow10c-setting=''
+visible10-setting=true
+
+entryrow11a-setting='Ask Bluefin'
+entryrow11b-setting='xdg-open https://ask.projectbluefin.io'
+entryrow11c-setting=''
+visible11-setting=true
