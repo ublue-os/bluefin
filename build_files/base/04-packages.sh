@@ -22,7 +22,6 @@ FEDORA_PACKAGES=(
     adwaita-fonts-all
     autofs
     bash-color-prompt
-    bcache-tools
     bootc
     borgbackup
     containerd
@@ -170,13 +169,6 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
         echo "No excluded packages found to remove."
     fi
 fi
-
-# Fix for ID in fwupd
-dnf -y copr enable ublue-os/staging
-dnf -y copr disable ublue-os/staging
-dnf -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-    fwupd fwupd
 
 ## Pins and Overrides
 ## Use this section to pin packages in order to avoid regressions
