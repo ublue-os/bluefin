@@ -1,0 +1,32 @@
+# We have this script so that people using images with `nss-altfiles` (`/usr/lib/g{roup,shadow}`)
+# do not break their systems when rebasing to an image without that
+# This usually happens when using https://github.com/hhd-dev/rechunk then rebasing to an image without it.
+# Please DO NOT remove this unless this is fully, completely obsolete.
+# This is exactly what is making it break: https://github.com/ublue-os/legacy-rechunk/blob/1d2b0c2e99afbdc2eb06788ae28e157a88b03d70/1_prune.sh#L41-L47
+# Users WILL experience black screens and systems will NOT boot if this script malfunctions. Please test this properly and always make sure this works
+# Relevant issues:
+# - https://github.com/bootc-dev/bootc/issues/1179#issuecomment-2708305926
+# - https://github.com/ublue-os/main/issues/759
+# - https://github.com/ublue-os/bluefin-lts/issues/918
+# - https://github.com/ublue-os/image-template/issues/177
+# - https://github.com/ublue-os/aurora/issues/1468
+# - https://github.com/ublue-os/bluefin/issues/3852
+# This got created on Tue, 16 Dec 2025 00:44:58 -0300
+[Unit]
+Description=Fix groups for Legacy rechunker
+ConditionPathExists=/run/ostree-booted
+Wants=local-fs.target
+After=local-fs.target
+Before=systemd-user-sessions.service
+# Before=systemd-sysusers.service
+
+[Service]
+Type=oneshot
+ExecStart=bash -c 'touch /etc/gshadow && chmod 600 /etc/gshadow'
+ExecStart=bash -c 'rm /etc/gshadow'
+ExecStart=systemd-sysusers
+ExecStart=rechunker-group-fix
+ExecStart=systemd-tmpfiles --create --remove --boot --exclude-prefix=/dev
+
+[Install]
+WantedBy=default.target multi-user.target

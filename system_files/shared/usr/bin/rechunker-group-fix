@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# To use this script, you'll want to put this in your systemd service:
+# rm /etc/gshadow
+# systemd-sysusers
+# (run this script)
+# systemd-tmpfiles --create --remove --boot --exclude-prefix=/dev
+# This will populate /etc/group successfully, and then populate /etc/gshadow
+# with any missing groups that we nuked when we removed /etc/gshadow
+
+GSHADOW_FILE="/etc/gshadow"
+GROUP_FILE="/etc/group"
+
+for f in $(cat $GROUP_FILE); do
+   cut -f1 -d':' <(echo $f) | xargs -I{} grep ^"{}" $GSHADOW_FILE &>/dev/null || \
+     echo $(cut -f1 -d':' <(echo $f)):'!*::' >> $GSHADOW_FILE
+done
