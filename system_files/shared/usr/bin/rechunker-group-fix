@@ -11,7 +11,7 @@
 GSHADOW_FILE="/etc/gshadow"
 GROUP_FILE="/etc/group"
 
-for f in $(cat $GROUP_FILE); do
-   cut -f1 -d':' <(echo $f) | xargs -I{} grep ^"{}" $GSHADOW_FILE &>/dev/null || \
-     echo $(cut -f1 -d':' <(echo $f)):'!*::' >> $GSHADOW_FILE
-done
+while IFS=: read -r group_name _rest; do
+    grep -q "^${group_name}:" "$GSHADOW_FILE" 2>/dev/null || \
+        printf '%s:!*::\n' "$group_name" >> "$GSHADOW_FILE"
+done < "$GROUP_FILE"
