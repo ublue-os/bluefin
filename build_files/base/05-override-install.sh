@@ -12,7 +12,7 @@ rpm --erase --nodeps kernel-devel
 
 mkdir -p /usr/share/doc/bluefin
 # Offline Bluefin documentation
-ghcurl "https://github.com/ublue-os/bluefin-docs/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
+ghcurl "https://github.com/projectbluefin/documentation/releases/download/0.1/bluefin.pdf" --retry 3 -o /tmp/bluefin.pdf
 install -Dm0644 -t /usr/share/doc/bluefin/ /tmp/bluefin.pdf
 
 # Footgun, See: https://github.com/ublue-os/main/issues/598
