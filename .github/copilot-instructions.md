@@ -49,5 +49,5 @@ just/                  # Extra just recipes
 ## Related projects
 
 - Documentation: [projectbluefin/bluefin-docs](https://github.com/projectbluefin/bluefin-docs) / [docs.projectbluefin.io](https://docs.projectbluefin.io)
-- LTS variant: [ublue-os/bluefin-lts](https://github.com/ublue-os/bluefin-lts)
+- LTS variant: [projectbluefin/bluefin-lts](https://github.com/projectbluefin/bluefin-lts)
 - Common layer: [projectbluefin/common](https://github.com/projectbluefin/common)
