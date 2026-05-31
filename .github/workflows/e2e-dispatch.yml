@@ -131,7 +131,10 @@ jobs:
   e2e:
     if: needs.dispatch.outputs.authorized == 'true'
     needs: [dispatch]
-    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
+    permissions:
+      packages: write
+      contents: read
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@12bd892e476ef930ae3240eff71402390bba8da9 # main
     with:
       image: ${{ needs.dispatch.outputs.image }}
       suites: smoke,developer,vanilla-gnome

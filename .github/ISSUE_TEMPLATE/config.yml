@@ -4,7 +4,7 @@ contact_links:
     url: https://docs.projectbluefin.io
     about: "User documentation, FAQ, and feature guides."
   - name: "Contribution guide"
-    url: https://github.com/projectbluefin/bluefin/blob/testing/CONTRIBUTING.md
+    url: https://github.com/projectbluefin/bluefin/blob/main/CONTRIBUTING.md
     about: "Build, validation, and workflow rules — read before opening a PR."
   - name: "Project Bluefin website"
     url: https://projectbluefin.io

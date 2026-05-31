@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   # Verify that post-testing-e2e.yml already ran smoke tests on the current
-  # testing HEAD since every push to testing triggers it. If e2e hasn't passed
+  # main HEAD since every push to main triggers it. If e2e hasn't passed
   # on the current HEAD (e.g., a new push just landed), fail fast rather than
   # promoting untested code.
   verify-e2e:
@@ -26,15 +26,15 @@ jobs:
       build_run_id: ${{ steps.find-build.outputs.run_id }}
       image: ${{ steps.get-digest.outputs.image }}
     steps:
-      - name: Lock testing HEAD SHA
+      - name: Lock main HEAD SHA
         id: lock-sha
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          SHA=$(gh api repos/${{ github.repository }}/git/ref/heads/testing --jq '.object.sha')
+          SHA=$(gh api repos/${{ github.repository }}/git/ref/heads/main --jq '.object.sha')
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
-          echo "Locked testing SHA: $SHA"
+          echo "Locked main SHA: $SHA"
 
       - name: Find passing post-testing-e2e run for this SHA
         id: find-e2e
@@ -46,10 +46,10 @@ jobs:
 
           # Look for a successful post-testing-e2e run on the locked SHA.
           # post-testing-e2e.yml fires via workflow_run — its head_sha matches
-          # the testing push SHA that triggered it.
+          # the main push SHA that triggered it.
           E2E_STATUS=$(gh run list \
             --workflow post-testing-e2e.yml \
-            --branch testing \
+            --branch main \
             --repo "${{ github.repository }}" \
             --limit 20 \
             --json headSha,conclusion \
@@ -59,14 +59,14 @@ jobs:
           echo "E2E status for $LOCKED_SHA: ${E2E_STATUS:-not found}"
 
           if [ "$E2E_STATUS" != "success" ]; then
-            echo "ERROR: post-testing-e2e has not passed on testing HEAD ($LOCKED_SHA)."
+            echo "ERROR: post-testing-e2e has not passed on main HEAD ($LOCKED_SHA)."
             echo "  Status: ${E2E_STATUS:-no run found}"
-            echo "  Either e2e is still running, failed, or testing just advanced."
+            echo "  Either e2e is still running, failed, or main just advanced."
             echo "  Rerun this workflow once post-testing-e2e passes."
             exit 1
           fi
 
-          echo "✅ post-testing-e2e passed on testing HEAD"
+          echo "✅ post-testing-e2e passed on main HEAD"
 
       - name: Find the build run for this SHA
         id: find-build
@@ -78,7 +78,7 @@ jobs:
 
           RUN_ID=$(gh run list \
             --workflow build-image-testing.yml \
-            --branch testing \
+            --branch main \
             --repo "${{ github.repository }}" \
             --limit 20 \
             --json databaseId,headSha,conclusion \
@@ -109,7 +109,10 @@ jobs:
 
   e2e:
     needs: [verify-e2e]
-    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
+    permissions:
+      packages: write
+      contents: read
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@12bd892e476ef930ae3240eff71402390bba8da9 # main
     with:
       image: ${{ needs.verify-e2e.outputs.image }}
       suites: developer,vanilla-gnome
@@ -121,11 +124,11 @@ jobs:
     outputs:
       has_diff: ${{ steps.check-diff.outputs.has_diff }}
     steps:
-      - name: Checkout testing
+      - name: Checkout main
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
-          ref: testing
+          ref: main
 
       - name: Configure git
         run: |
@@ -133,39 +136,39 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Verify testing SHA has not advanced
+      - name: Verify main SHA has not advanced
         env:
           LOCKED_SHA: ${{ needs.verify-e2e.outputs.testing_sha }}
         run: |
           set -euo pipefail
-          git fetch origin testing
-          CURRENT_SHA=$(git rev-parse origin/testing)
+          git fetch origin main
+          CURRENT_SHA=$(git rev-parse origin/main)
           if [ "$CURRENT_SHA" != "$LOCKED_SHA" ]; then
-            echo "ERROR: testing advanced during e2e ($LOCKED_SHA → $CURRENT_SHA)"
+            echo "ERROR: main advanced during e2e ($LOCKED_SHA → $CURRENT_SHA)"
             echo "Untested commits would reach latest/stable. Aborting — rerun next week."
             exit 1
           fi
-          echo "✅ testing SHA unchanged: $CURRENT_SHA"
+          echo "✅ main SHA unchanged: $CURRENT_SHA"
 
-      - name: Check diff between testing and latest
+      - name: Check diff between main and latest
         id: check-diff
         run: |
           set -euo pipefail
           git fetch origin latest stable 2>/dev/null || true
-          if git diff --quiet origin/latest origin/testing 2>/dev/null; then
-            echo "No diff between testing and latest — nothing to promote"
+          if git diff --quiet origin/latest origin/main 2>/dev/null; then
+            echo "No diff between main and latest — nothing to promote"
             echo "has_diff=false" >> "$GITHUB_OUTPUT"
           else
             echo "has_diff=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Fast-forward latest and stable to testing
+      - name: Fast-forward latest and stable to main
         if: steps.check-diff.outputs.has_diff == 'true'
         run: |
           set -euo pipefail
           git push origin HEAD:refs/heads/latest
           git push origin HEAD:refs/heads/stable
-          echo "✅ Promoted testing → latest + stable"
+          echo "✅ Promoted main → latest + stable"
 
   trigger-stable-build:
     needs: [promote-to-latest-and-stable]

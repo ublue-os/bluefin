@@ -1,13 +1,13 @@
 name: Post-Testing E2E
 
-# Runs e2e smoke tests after every successful push build on the testing branch.
-# This gates the testing branch continuously so the weekly promotion
+# Runs e2e smoke tests after every successful push build on main.
+# This gates main continuously so the weekly promotion
 # (weekly-testing-promotion.yml) promotes only e2e-verified commits.
 on:
   workflow_run:
     workflows: ["Testing Images"]
     types: [completed]
-    branches: [testing]
+    branches: [main]
 
 permissions: read-all
 
@@ -43,7 +43,10 @@ jobs:
 
   run-e2e:
     needs: [e2e]
-    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@3bc7b6ff0e4ceeea734e1e57c09caada469f9a66 # main
+    permissions:
+      packages: write
+      contents: read
+    uses: projectbluefin/testsuite/.github/workflows/e2e.yml@74c86f1a967f51cb0c7adf3732036ae2f7b89b4c # main
     with:
       image: ${{ needs.e2e.outputs.image }}
       suites: smoke
