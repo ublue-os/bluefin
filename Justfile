@@ -670,15 +670,13 @@ setup-cache $image="bluefin" $tag="latest" $ghcr="0" $github_event="0":
 
     ALLOW_CACHE_WRITE="false"
 
-    BLESSED_IMAGE=bluefin-dx
-
-    if [[ "${image_name}" == "${BLESSED_IMAGE}" ]] && \
-       [[ "{{ ghcr }}" == "1" ]] && \
+    # Allow cache write for any image on schedule/workflow_dispatch pushes
+    if [[ "{{ ghcr }}" == "1" ]] && \
        [[ "${github_event}" == "workflow_dispatch" || "${github_event}" == "schedule" ]]; then
         ALLOW_CACHE_WRITE="true"
     fi
 
-    CACHE_NAME="${BLESSED_IMAGE}-${fedora_version}"
+    CACHE_NAME="${image_name}-${fedora_version}"
 
     echo "${CACHE_NAME}" "${ALLOW_CACHE_WRITE}"
 

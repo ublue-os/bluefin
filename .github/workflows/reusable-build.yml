@@ -120,6 +120,8 @@ jobs:
         with:
           path: /var/tmp/buildah-cache-*
           key: ${{ runner.os }}-${{ matrix.architecture }}-buildah-${{ env.CACHE_NAME }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.architecture }}-buildah-
 
       - name: Build Image
         id: build-image
@@ -249,14 +251,38 @@ jobs:
           command: |
             set -euox pipefail
 
+            REGISTRY="${{ steps.registry_case.outputs.lowercase }}"
+            IMAGE="${{ env.IMAGE_NAME }}"
+            DEFAULT_TAG="${{ env.DEFAULT_TAG }}"
+
             rm -f "${{ env.DIGEST_FILE }}"
+
+            # Push default tag with full upload (two-push pattern for annotation stability)
+            # Workaround for https://github.com/containers/podman/issues/27796
+            sudo -E podman push \
+              --compression-format zstd:chunked \
+              --compression-level 3 \
+              --force-compression \
+              --retry 5 \
+              --retry-delay 30s \
+              "${IMAGE}:${DEFAULT_TAG}" "${REGISTRY}/${IMAGE}:${DEFAULT_TAG}"
+
+            sudo -E podman push \
+              --compression-format zstd:chunked \
+              --compression-level 3 \
+              --force-compression \
+              --retry 5 \
+              --retry-delay 30s \
+              --digestfile "${{ env.DIGEST_FILE }}" \
+              "${IMAGE}:${DEFAULT_TAG}" "${REGISTRY}/${IMAGE}:${DEFAULT_TAG}"
+
+            # Server-side tag copies — no re-upload of image data
             # shellcheck disable=SC2086 - word splitting on alias_tags is intentional
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
-              dest=${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
-              if [[ "${tag}" == "${{ env.DEFAULT_TAG }}" ]]; then
-                sudo -E podman push --digestfile "${{ env.DIGEST_FILE }}" ${{ env.IMAGE_NAME }}:${tag} "${dest}"
-              else
-                sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} "${dest}"
+              if [[ "${tag}" != "${DEFAULT_TAG}" ]]; then
+                skopeo copy \
+                  "docker://${REGISTRY}/${IMAGE}:${DEFAULT_TAG}" \
+                  "docker://${REGISTRY}/${IMAGE}:${tag}"
               fi
             done
 
