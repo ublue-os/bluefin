@@ -109,6 +109,9 @@ jobs:
 
   e2e:
     needs: [verify-e2e]
+    permissions:
+      packages: write
+      contents: read
     uses: projectbluefin/testsuite/.github/workflows/e2e.yml@12bd892e476ef930ae3240eff71402390bba8da9 # main
     with:
       image: ${{ needs.verify-e2e.outputs.image }}
