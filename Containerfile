@@ -1,5 +1,5 @@
 ARG BASE_IMAGE_NAME="silverblue"
-ARG FEDORA_MAJOR_VERSION="43"
+ARG FEDORA_MAJOR_VERSION="43@sha256:d0ba53e62bf61ddee07cdf3c5ec95b85aaa6ad058dc622dadd0e6ddf4dc4bc61"
 ARG BASE_IMAGE="quay.io/fedora-ostree-desktops/silverblue"
 ARG COMMON_IMAGE="ghcr.io/projectbluefin/common:latest"
 ARG COMMON_IMAGE_SHA=""
