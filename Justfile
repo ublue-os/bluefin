@@ -35,6 +35,13 @@ check:
     echo "Checking syntax: Justfile"
     {{ just }} --unstable --fmt --check -f Justfile
 
+# Validate Shell Scripts with ShellCheck (requires: shellcheck)
+[group('Just')]
+validate-scripts:
+    #!/usr/bin/bash
+    set -eoux pipefail
+    shellcheck build_files/**/*.sh
+
 # Fix Just Syntax
 [group('Just')]
 fix:
