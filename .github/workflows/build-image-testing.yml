@@ -3,7 +3,7 @@ on:
   merge_group:
   push:
     branches:
-      - testing
+      - main
     paths-ignore:
       - ".github/workflows/*validate*.yml"
       - "**.md"
