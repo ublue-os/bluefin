@@ -4,19 +4,20 @@
 
 ## Load the right skill first
 
-Before working on any task, load the skill that matches your work:
+Skills live in this repo under [`docs/skills/`](docs/skills/README.md).
+Read the matching file before making any changes.
 
-| Task | Skill to load |
-|------|--------------|
-| Build, validate, or submit a PR | `bluefin-build` |
-| Debug a CI failure | `bluefin-ci` |
-| Add, remove, or update a package | `bluefin-packages` |
-| Cut a release or manage stream tags | `bluefin-release` |
-| Review or merge a Renovate PR | `bluefin-renovate` |
-| COPR repos, cosign, or security decisions | `bluefin-security` |
-| Understand image variants and stream matrix | `bluefin-variants` |
-| Work on the LTS image | `bluefin-lts` |
-| Build or promote ISOs | `bluefin-iso` |
+| Task | Skill file |
+|------|------------|
+| Build, validate, or submit a PR | [docs/skills/build.md](docs/skills/build.md) |
+| Debug a CI failure | [docs/skills/ci.md](docs/skills/ci.md) |
+| Add, remove, or update a package | [docs/skills/packages.md](docs/skills/packages.md) |
+| Cut a release or manage stream tags | [docs/skills/release.md](docs/skills/release.md) |
+| Review or merge a Renovate PR | [docs/skills/renovate.md](docs/skills/renovate.md) |
+| COPR repos, cosign, or security decisions | [docs/skills/security.md](docs/skills/security.md) |
+| Understand image variants and stream matrix | [docs/skills/variants.md](docs/skills/variants.md) |
+| Work on the LTS image | [docs/skills/lts.md](docs/skills/lts.md) |
+| Build or promote ISOs | [docs/skills/iso.md](docs/skills/iso.md) |
 
 ## Repo layout (quick reference)
 
