@@ -26,14 +26,14 @@ jobs:
             --base main \
             --state open \
             --json number,headRefOid,author \
-            --jq ".[] | select(.headRefOid == \"$HEAD_SHA\") | select(.author.login == \"renovate[bot]\") | .number" \
+            --jq ".[] | select(.headRefOid == \"$HEAD_SHA\") | select(.author.login == \"renovate[bot]\" or .author.login == \"app/mergeraptor\") | .number" \
             | head -1)
 
           if [ -z "$PR_NUMBER" ]; then
-            echo "No open Renovate PR found for SHA $HEAD_SHA — skipping"
+            echo "No open Renovate/Mergeraptor PR found for SHA $HEAD_SHA — skipping"
             echo "pr_number=" >> "$GITHUB_OUTPUT"
           else
-            echo "Found Renovate PR #$PR_NUMBER"
+            echo "Found Renovate/Mergeraptor PR #$PR_NUMBER"
             echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
           fi
 
