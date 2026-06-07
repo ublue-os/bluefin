@@ -92,7 +92,6 @@ FEDORA_PACKAGES=(
     zenity
     zsh
 )
-
 # Version-specific Fedora package additions
 case "$FEDORA_MAJOR_VERSION" in
     42)
@@ -104,6 +103,11 @@ case "$FEDORA_MAJOR_VERSION" in
     43)
         FEDORA_PACKAGES+=(
             evolution-ews-core
+            gnupg2-scdaemon
+        )
+        ;;
+    44)
+        FEDORA_PACKAGES+=(
             gnupg2-scdaemon
         )
         ;;
