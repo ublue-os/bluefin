@@ -179,4 +179,11 @@ dnf -y swap \
 #    rpm-ostree override replace https://bodhi.fedoraproject.org/updates/FEDORA-2024-dd2e9fb225
 #fi
 
+# -- Vulkan AppImage Compatibility Fix --
+# Create a standard symlink for NVIDIA Vulkan drivers.
+# Fixes an issue where AppImages and standalone games fail to detect the GPU 
+# because they search for "nvidia_icd.json" instead of the upstream "nvidia_icd.x86_64.json".
+mkdir -p /usr/share/vulkan/icd.d/
+ln -sf /usr/share/vulkan/icd.d/nvidia_icd.x86_64.json /usr/share/vulkan/icd.d/nvidia_icd.json
+
 echo "::endgroup::"
