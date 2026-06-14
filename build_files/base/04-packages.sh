@@ -166,7 +166,7 @@ fi
 dnf -y copr enable ublue-os/staging
 dnf -y copr disable ublue-os/staging
 dnf -y swap \
-    --repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
+    --from-repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
     fwupd fwupd
 
 ## Pins and Overrides
