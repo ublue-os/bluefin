@@ -60,6 +60,7 @@ FEDORA_PACKAGES=(
     virt-manager
     virt-v2v
     virt-viewer
+    wtype
     ydotool
 )
 
