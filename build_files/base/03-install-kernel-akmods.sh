@@ -83,6 +83,13 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     tee /usr/lib/bootc/kargs.d/00-nvidia.toml <<EOF
 kargs = ["rd.driver.blacklist=nouveau", "modprobe.blacklist=nouveau", "nvidia-drm.modeset=1", "initcall_blacklist=simpledrm_platform_driver_init"]
 EOF
+
+    # Slim the initramfs compress with zstd and skip amd and intel gpu drivers on nvidia machines
+    mkdir -p /usr/lib/dracut/dracut.conf.d
+    tee /usr/lib/dracut/dracut.conf.d/99-nvidia-slim.conf <<EOF
+compress="zstd -19 -T0"
+omit_drivers+=" amdgpu radeon i915 xe nouveau "
+EOF
 fi
 
 # ZFS for stable
