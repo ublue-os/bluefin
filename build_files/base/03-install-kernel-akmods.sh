@@ -83,9 +83,18 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     tee /usr/lib/bootc/kargs.d/00-nvidia.toml <<EOF
 kargs = ["rd.driver.blacklist=nouveau", "modprobe.blacklist=nouveau", "nvidia-drm.modeset=1", "initcall_blacklist=simpledrm_platform_driver_init"]
 EOF
+    # Drop AMD GPU drivers/firmware unused on Nvidia systems. Keep i915/xe for Nvidia+Intel hybrid laptops.
     mkdir -p /usr/lib/dracut/dracut.conf.d
-    tee /usr/lib/dracut/dracut.conf.d/99-nvidia-slim.conf <<EOF
-compress="zstd -19 -T0"
+    sed -i 's/ amdgpu / /g; s/ radeon / /g; s/ nouveau / /g' \
+        /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
+    tee /usr/lib/dracut/dracut.conf.d/zz-nvidia-slim.conf <<EOF
+omit_drivers+=" amdgpu radeon nouveau "
+EOF
+else
+    # Drop Nvidia drivers/firmware on non-nvidia images.
+    mkdir -p /usr/lib/dracut/dracut.conf.d
+    tee /usr/lib/dracut/dracut.conf.d/zz-non-nvidia-slim.conf <<EOF
+omit_drivers+=" nvidia nvidia_drm nvidia_modeset nvidia_peermem nvidia_uvm nouveau "
 EOF
 fi
 
