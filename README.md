@@ -1,125 +1,78 @@
-# Bluefin
-*Deinonychus antirrhopus*
+# bluefin
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2503a44c1105456483517f793af75ee7)](https://app.codacy.com/gh/ublue-os/bluefin/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ublue-os/bluefin/badge)](https://scorecard.dev/viewer/?uri=github.com/ublue-os/bluefin)[![Stable Images](https://github.com/ublue-os/bluefin/actions/workflows/build-image-stable.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-image-stable.yml)[![Latest Images](https://github.com/ublue-os/bluefin/actions/workflows/build-image-latest-main.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-image-latest-main.yml)
+Custom [Bluefin](https://projectbluefin.io/) images with NVIDIA 580 proprietary drivers and Epson printer support, built for personal use on Maxwell/Pascal/Volta hardware.
 
-[<img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/ublue-os/countme/main/badge-endpoints/bluefin.json&label=Bluefin&logo=data:image%2Fpng;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC%2FxhBQAAAAFzUkdCAdnJLH8AAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB%2BkHDxYrIEJpLs8AAAXQSURBVFjD7ZZrbFtnGcf%2F55z3XO1jJ7ZjO7c2Sd1bmnVNM5o2tIh2mgYf6IYYk5iAsolREAMJaRI3CZAmkCYkJk0UpKBpW7VVRR0S64o2NNY1nVibdkvWdk7WS2wnji%2BxHdvpOcfnfg6fQEOwSkiJ%2BJLf9%2Bd9fh%2Be93n%2BwDrrrPN%2FhlrrBjs7H4kM7OvfF44mDsf6kgfqRAyYrZW3i6cmvnNu5g86WavGI9u%2BzX%2F2C596SZDbvxQRWMo1W5idnQHXl0L3th1HFuOXZzGDp5m1EggbA0O7eq1nmfo8ZVXyWFnKI5XqQUuKwFGbkCNyKub3HFszgZqVXhrq3b0NvudUm3bS79kINdIF17DgwQXLC22Tpy7Pr4nA%2FWNPEK7Rv%2F319PO%2FjyV2jbu6Je%2FZIOyLGg1wKxVoQghEECBE2MKqDeHm2CPJ%2BHB8%2F5bR0WGfpr9JeDZOeGHJVJV3qrcyk1ud5Sc7E6GEJIhYau%2BDRhF8dOnK5B0FDg49ThZzy2ObH9j9XYbmUjRhZgPt4ZuU55amXjkHe8XwEju6tvfvH34sMbC5TZQk0FIIvmdDWa4gHIvD1nWYug61VkG4fB0hiYMR7Ydi2yjfyP3yEwUevu%2F7T3WPjf6gs6s7wPM8bB%2BAIKJFCBzTg0cBlOvArFdA0wxc1wANAoqmwXACwIvwHQueZUBr1BBKboBRyIF3W6CD7SABHlNv%2FO3R%2FxDYEnqo%2F96ffO14Isjvl2wbqqbAjSfh16qgbQuBaASaYcAmElzThG2boAkHQmhYpgUp2gGlXIQginAsEzTLgqEZUDQN13VAKAKP9qDVKrULL7%2B79d%2F2wKGxxw%2FsOvz5v0gsZLpewbKiICnRsOabkAUOK80qiFZByNCgtHfBlOMgHgOGMIAHEIaB12qBE3g0a1WwUhDNUh69Ayn4lAfLsGBRNkTiAGr16en8C%2FV%2FCXzu3qOH9o4MviaqBUlt%2BQiEg6jV6hBTG5Av5%2BHIAVxrMnAJDYuWQZVa6IYCz%2FPA8jY4QYShtSCxBIThYTsOGNdH3%2BatcD0bhqoie2sOvRt70CyXJ0pT5WcAgBlLPSrI3vaffvozqed7wgH26rUMBlOdmLyUtof7Ikwul7tQLjVemFpQzto8f5fPUBINAsBH87YGrWVgcSaDjs4OiJIEyqcAyke1WIVEXMiMDZ8PgmEoULaBWmYeMxezP5%2B4Mv4BADDtgR3S6N6O32xKyHFHbaLRbOkdvM3emC2fDHJG%2FczZpa%2B8Of3c6fncxYkOo%2Fe5Sr5%2BwYMd0xVtAPBBcSyUpoJYNAQxIAI%2BoN1uIrtQwkgY8CkCgVCwaBYsL2DuZhEs638xpG1qVfQP3yXdUfarG9rYVoyYuJatn9sS5dpW6s2reoD9xi9eftb%2F%2BIxcnHuxDuDVL3c%2BcfrU%2Bd%2F6ewYeCzoB%2Bliyt%2F2hGOdLlKHAtmzM3VyEKAdQzZfQ32uiYOgIiQJuhxK4e2QTPnjtLcCnbwAAE5UGC0M94lZVb509ebrxY8PW3i%2FowWfOnD%2Fmf9IXnZm%2FBAAoNKatUmXqzw%2BOHfxRTKR42lBx4fyHoEMByBIHDTTMhQXIroZioAODsofyrTzy2ao2XTx5BADIZOZEcTKDo%2F98%2FPoV5P%2FXLShYismprjy3qJy8XW0c4FtqiE6E5xdyyq%2B4kHP37m7%2BhzElh6wfQU1ptGyb%2Btmhe77Fnn1v3F6VWxAkqR2m7e2aTKt7BMnZa%2BrOpXJGPRrvYCjP5t%2B5q4v%2B3vKy5r3xev5EUqb%2B9NfpF3%2BdLb7vAcCq5IFszjo%2BvF04YqsrO7%2F%2B5OGhm3MLbsvwXg23i6%2BU5orpP16sDnEy2WjxZCZTcEofr10VgZ6dHRO65eu772k%2Fdv2jue7Lf79Cg2aFtra2DC8G3z6TPp4GkP5vtfRqCLx5%2FneuYVjpZIiM1GYXKFvlirpujy9kmstNw5DvVLtqkaywbJyI2I5XXNHJ6MFB8%2BrVxafemhlfRHY9eK9zZ%2F4BT9GkAVNsoqgAAAAASUVORK5CYII%3D">](https://github.com/ublue-os/bluefin)
+## Images
 
-[![LFX Active Contributors](https://insights.linuxfoundation.org/api/badge/active-contributors?project=ublue-os-bluefin&repos=https://github.com/ublue-os/bluefin)](https://insights.linuxfoundation.org/project/ublue-os-bluefin/repository/ublue-os-bluefin/security)
+All images are published at `ghcr.io/lbssousa/` and rebuilt daily.
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ublue-os/bluefin-docs)
+| Image | Base | Additions |
+|---|---|---|
+| `bluefin` | `ublue-os/bluefin:stable` | Epson |
+| `bluefin-dx` | `ublue-os/bluefin-dx:stable` | Epson |
+| `bluefin-nvidia` | `ublue-os/bluefin:stable` | NVIDIA 580 + Epson |
+| `bluefin-dx-nvidia` | `ublue-os/bluefin-dx:stable` | NVIDIA 580 + Epson |
+| `bluefin-nvidia-open` | `ublue-os/bluefin-nvidia-open:stable` | Epson |
+| `bluefin-dx-nvidia-open` | `ublue-os/bluefin-dx-nvidia-open:stable` | Epson |
 
-**Bluefin** is a cloud-native desktop operating system that reimagines the Linux desktop experience for modern computing environments.
+## About the NVIDIA 580 driver
 
-For end users, it provides a system as reliable as a Chromebook with near-zero maintenance. For developers, it offers a kickass cloud-native developer workflow with integrated container tools, declarative system management, and seamless CI/CD integration. Check [Introduction to Bluefin](https://docs.projectbluefin.io/introduction/) for a feature walkthrough.
+Driver branch 580 is the last to support **Maxwell, Pascal, and Volta** GPUs (GeForce 700–10xx series and Titan V). Starting from branch 590, NVIDIA dropped support for these architectures.
 
-🌐 **[Try Bluefin](https://projectbluefin.io/#scene-picker)**
+The `bluefin-nvidia` and `bluefin-dx-nvidia` images use the proprietary 580 driver sourced from the [negativo17 `fedora-nvidia-lts` repository](https://negativo17.org/nvidia-driver-580-lts-repository/), maintained until ~June 2028.
 
-![image](https://github.com/user-attachments/assets/e7d2a0af-b011-459a-8ab7-c26d3ba50ae5)
+The `bluefin-nvidia-open` and `bluefin-dx-nvidia-open` images inherit the NVIDIA open drivers directly from the official Bluefin upstream images (Turing+ GPUs only).
 
-## Mission
+## Installation
 
-Bluefin's mission is to provide a robust, cloud-native desktop operating system that bridges the gap between consumer usability and enterprise-grade infrastructure practices. We aim to deliver:
-
-- **Reliability**: Atomic updates ensuring system stability
-- **Developer Experience**: Integrated cloud-native tooling and workflows, including Kubernetes and container support
-- **Sustainability**: Reduced maintenance overhead for contributors by using the latest cloud native infrastructure tech
-
-## Releases
-
-<a href="https://docs.projectbluefin.io/changelogs">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://docs.projectbluefin.io/img/cards/bluefin-dark.png">
-    <img src="https://docs.projectbluefin.io/img/cards/bluefin-light.png" alt="Bluefin" width="800">
-  </picture>
-</a>
-
-## Communications
-
-### Community Channels
-
-- **📰 [Announcements](https://blog.projectbluefin.io/)** - Official project blog and announcements
-- **[Project Board](https://todo.projectbluefin.io)** - What we're working on
-- **💬 [Discussions](https://community.projectbluefin.io/)** - Community forum (strongly recommended!)
-- **📖 [Documentation](https://docs.projectbluefin.io/)** - Documentation and User Guides
-- **🔧 [Contributing Guide](https://docs.projectbluefin.io/contributing)** - How to contribute to the project
-
-## Getting Started
-
-Visit [projectbluefin.io](https://projectbluefin.io/#scene-picker) to explore installation options and get started with Bluefin.
-
-### Secure Boot
-
-Secure Boot is supported by default on our systems, providing an additional layer of security. After the first installation, you will be prompted to enroll the secure boot key in the BIOS.
-
-Enter the password `universalblue`
-when prompted to enroll our key.
-
-If this step is not completed during the initial setup, you can manually enroll the key by running the following command in the terminal:
-
-`
-ujust enroll-secure-boot-key
-`
-
-Secure boot is supported with our custom key. The pub key can be found in the root of the akmods repository [here](https://github.com/ublue-os/akmods/raw/main/certs/public_key.der).
-If you'd like to enroll this key prior to installation or rebase, download the key and run the following:
+Switch to the image matching your hardware:
 
 ```bash
-sudo mokutil --timeout -1
-sudo mokutil --import public_key.der
+# NVIDIA proprietary (Maxwell/Pascal/Volta — GeForce 700-10xx)
+sudo bootc switch ghcr.io/lbssousa/bluefin-nvidia:stable
+
+# NVIDIA open (Turing+ — GeForce 16xx/20xx/30xx/40xx/50xx)
+sudo bootc switch ghcr.io/lbssousa/bluefin-nvidia-open:stable
+
+# No NVIDIA GPU
+sudo bootc switch ghcr.io/lbssousa/bluefin:stable
 ```
 
-## Code of Conduct
+### SecureBoot (NVIDIA proprietary only)
 
-This project follows the [Universal Blue Community Guidelines](https://docs.projectbluefin.io/contributing#community-guidelines). We are committed to providing a welcoming and inclusive environment for all contributors and users.
+After first boot, enroll the MOK key to allow the signed NVIDIA module to load:
 
-All participants in our community are expected to follow our code of conduct. Please report any violations to the project maintainers.
+```bash
+sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
+# enter a temporary password, then confirm it in the MOK Manager on next reboot
+```
 
-## License
+## How it works
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+### Image architecture
 
-### Third-Party Components
+Each image is a thin layer on top of the official Bluefin upstream image — no packages are reinstalled, no base is rebuilt from scratch. This keeps the diff minimal and the sync with upstream automatic.
 
-Bluefin incorporates and builds upon several open source projects:
-- **Fedora Linux** - Base operating system foundation
-- **GNOME Desktop Environment** - Desktop interface
-- **Universal Blue** - Cloud Native desktop infrastructure
-- **Various CNCF Projects** - Cloud-native tooling and containers
+```
+ghcr.io/ublue-os/bluefin:stable          ← official Bluefin (unchanged)
+  └─ signing policy (ghcr.io/lbssousa)   ← 00-signing.sh
+  └─ Epson printer driver + utility      ← 20-epson.sh
+```
 
-All incorporated components maintain their respective licenses and attributions.
+For the NVIDIA proprietary variants, pre-built kernel modules from `ghcr.io/ublue-os/akmods-nvidia-lts` are installed on top of the Bluefin base. The CI derives the exact kernel version from the pinned base image at build time and selects the corresponding `main-44-<kernel>` akmod tag — ensuring the kernel module always matches the running kernel.
 
-## Repobeats
+### Staying in sync
 
-![Alt](https://repobeats.axiom.co/api/embed/40b85b252bf6ea25eb90539d1adcea013ccae69a.svg "Repobeats analytics image")
+- **Upstream Bluefin**: Renovate bumps the base image digests in `image-versions.yml` automatically. Digest updates for all six base images auto-merge.
+- **NVIDIA kernel modules**: When the base image digest changes to a new kernel, CI automatically derives the new kernel version and fetches the matching `akmods-nvidia-lts` tag. No manual action needed.
+- **Epson packages**: A weekly workflow checks the Epson Download Center API and the AUR for new versions. If both a new version and download URL are found, a PR is opened automatically.
 
-<!-- Copy-paste in your Readme.md file -->
+## Verification
 
-<a href="https://next.ossinsight.io/widgets/official/compose-org-participants-growth?activity=new&period=past_90_days&owner_id=120078124&repo_ids=611397346" target="_blank" style="display: block" align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=dark" width="657" height="auto">
-    <img alt="New trends of ublue-os" src="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=new&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=light" width="657" height="auto">
-  </picture>
-</a>
+Images are signed with [cosign](https://github.com/sigstore/cosign). The public key is committed at `cosign.pub` in this repository. The signing policy is embedded in the image itself under `/etc/containers/policy.json`, so `bootc upgrade` verifies signatures automatically.
 
-<!-- Made with [OSS Insight](https://ossinsight.io/) -->
+To verify manually:
 
-<!-- Copy-paste in your Readme.md file -->
-
-<a href="https://next.ossinsight.io/widgets/official/compose-org-participants-growth?activity=active&period=past_90_days&owner_id=120078124&repo_ids=611397346" target="_blank" style="display: block" align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=active&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=dark" width="657" height="auto">
-    <img alt="Active trends of ublue-os" src="https://next.ossinsight.io/widgets/official/compose-org-participants-growth/thumbnail.png?activity=active&period=past_90_days&owner_id=120078124&repo_ids=611397346&image_size=4x7&color_scheme=light" width="657" height="auto">
-  </picture>
-</a>
-
-
-## Star History
-
-<a href="https://star-history.com/#ublue-os/bluefin&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ublue-os/bluefin&type=Date" />
-  </picture>
-</a>
+```bash
+cosign verify --key cosign.pub ghcr.io/lbssousa/bluefin:stable
+```
