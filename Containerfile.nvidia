@@ -1,0 +1,86 @@
+# Produces: lbssousa/bluefin-nvidia and lbssousa/bluefin-dx-nvidia
+# Layers NVIDIA 580 proprietary drivers + Epson on top of official Bluefin images.
+#
+# Key design (hybrid bluefin-br + Bazzite):
+#   - FROM the finished Bluefin image (simpler than rebuilding from silverblue-main)
+#   - akmods-nvidia-lts tag encodes the exact kernel version → casamento correto por construção
+#   - Digest pinning via image-versions.yml + Renovate for deterministic builds
+#   - Defense-in-depth: kernel guard in install-nvidia.sh aborts on any mismatch
+#
+# Build args:
+#   BASE_IMAGE         — ghcr.io/ublue-os/bluefin or bluefin-dx
+#   BASE_TAG           — image tag (default: stable)
+#   BASE_DIGEST        — sha256 digest (pinned)
+#   KERNEL_VERSION     — kernel EVR+arch from the pinned base (e.g. 7.0.9-205.fc44.x86_64)
+#   AKMODS_TAG         — akmods tag for MOK key (e.g. main-44)
+#   AKMODS_DIGEST      — sha256 digest of akmods image (pinned)
+#   AKMODS_NVIDIA_TAG  — akmods-nvidia-lts tag encoding exact kernel (main-44-<KERNEL_VERSION>)
+#   AKMODS_NVIDIA_DIGEST — sha256 digest of akmods-nvidia-lts image (pinned)
+
+# renovate: datasource=docker depName=ghcr.io/ublue-os/bluefin
+ARG BASE_IMAGE="ghcr.io/ublue-os/bluefin"
+ARG BASE_TAG="stable"
+ARG BASE_DIGEST="sha256:9f0201d21641133b15c5e58e6cf85008259e8ffce1c7169a063f7474f2f56c41"
+
+ARG KERNEL_VERSION="7.0.9-205.fc44.x86_64"
+
+# renovate: datasource=docker depName=ghcr.io/ublue-os/akmods
+ARG AKMODS_TAG="main-44"
+ARG AKMODS_DIGEST="sha256:616d6b718922d58ace2dbb00c4d8f2c48e8005dfbd24217e7bada5ba176e56e0"
+
+# renovate: datasource=docker depName=ghcr.io/ublue-os/akmods-nvidia-lts
+ARG AKMODS_NVIDIA_TAG="main-44-7.0.9-205.fc44.x86_64"
+ARG AKMODS_NVIDIA_DIGEST="sha256:e01b8e00f0e460f09ad22afa1d8f6ba7b1d53e25c0ddefbbb0a994274c7de0d3"
+
+# akmods image provides ublue-os-akmods-addons (SecureBoot MOK enrollment key)
+FROM ghcr.io/ublue-os/akmods:${AKMODS_TAG}@${AKMODS_DIGEST} AS akmods
+
+# Pre-built proprietary NVIDIA 580 kernel modules (negativo17 fedora-nvidia-lts repo)
+# Tag encodes exact kernel version → casamento garantido por construção
+FROM ghcr.io/ublue-os/akmods-nvidia-lts:${AKMODS_NVIDIA_TAG}@${AKMODS_NVIDIA_DIGEST} AS akmods-nvidia
+
+FROM scratch AS ctx
+COPY build_files /build_files
+COPY cosign.pub /cosign.pub
+
+FROM ${BASE_IMAGE}:${BASE_TAG}@${BASE_DIGEST}
+
+ARG IMAGE_NAME="bluefin-nvidia"
+ARG IMAGE_TAG="stable"
+ARG KERNEL_VERSION
+
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV IMAGE_TAG=${IMAGE_TAG}
+
+# Signing policy (runs before NVIDIA to keep NVIDIA layer cache independent of signing changes)
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build_files/00-signing.sh
+
+# Install NVIDIA 580 proprietary drivers
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=bind,from=akmods,source=/rpms/ublue-os,target=/tmp/akmods-addons \
+    --mount=type=bind,from=akmods-nvidia,source=/rpms,target=/tmp/akmods-nv \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    KERNEL_VERSION="${KERNEL_VERSION}" \
+    /ctx/build_files/10-nvidia.sh
+
+# Install Epson printer support
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build_files/20-epson.sh
+
+# Regenerate initramfs to include NVIDIA kmod + set kernel boot args
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build_files/90-finalize.sh
+
+RUN bootc container lint

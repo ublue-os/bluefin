@@ -1,0 +1,320 @@
+---
+# Builds and publishes 6 custom Bluefin image variants.
+#
+# Images produced (all at ghcr.io/lbssousa/):
+#   bluefin              — Bluefin + Epson
+#   bluefin-dx           — Bluefin DX + Epson
+#   bluefin-nvidia       — Bluefin + NVIDIA 580 proprietary + Epson
+#   bluefin-dx-nvidia    — Bluefin DX + NVIDIA 580 proprietary + Epson
+#   bluefin-nvidia-open  — Bluefin nvidia-open + Epson (driver already in base)
+#   bluefin-dx-nvidia-open — Bluefin DX nvidia-open + Epson (driver already in base)
+#
+# Tag scheme:
+#   stable-daily         — every daily build
+#   stable               — promoted weekly (Tuesdays) or on workflow_dispatch
+#   gts                  — alias for stable
+#   NN.YYYYMMDD[.B]      — timestamp tag (NN = Fedora version)
+#
+name: Build and push images
+
+on:
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "**/*.md"
+      - ".github/workflows/*validate*.yml"
+      - ".github/workflows/check-epson-updates.yml"
+  schedule:
+    - cron: '0 2 * * *'   # 02:00 UTC daily
+  workflow_dispatch:
+
+env:
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
+
+jobs:
+  build_push:
+    name: Build ${{ matrix.image_name }}
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ matrix.image_name }}
+      cancel-in-progress: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ── Base variants (Epson only) ───────────────────────────────────
+          - image_name: bluefin
+            containerfile: Containerfile
+            base_versions_key: bluefin
+            needs_nvidia_lts: false
+            image_desc: "Bluefin com suporte a impressoras Epson"
+
+          - image_name: bluefin-dx
+            containerfile: Containerfile
+            base_versions_key: bluefin-dx
+            needs_nvidia_lts: false
+            image_desc: "Bluefin DX com suporte a impressoras Epson"
+
+          # ── NVIDIA 580 proprietary + Epson ───────────────────────────────
+          - image_name: bluefin-nvidia
+            containerfile: Containerfile.nvidia
+            base_versions_key: bluefin
+            needs_nvidia_lts: true
+            image_desc: "Bluefin com driver NVIDIA 580 proprietário + Epson"
+
+          - image_name: bluefin-dx-nvidia
+            containerfile: Containerfile.nvidia
+            base_versions_key: bluefin-dx
+            needs_nvidia_lts: true
+            image_desc: "Bluefin DX com driver NVIDIA 580 proprietário + Epson"
+
+          # ── NVIDIA open + Epson (driver already in upstream base) ────────
+          - image_name: bluefin-nvidia-open
+            containerfile: Containerfile.nvidia-open
+            base_versions_key: bluefin-nvidia-open
+            needs_nvidia_lts: false
+            image_desc: "Bluefin NVIDIA open com suporte a impressoras Epson"
+
+          - image_name: bluefin-dx-nvidia-open
+            containerfile: Containerfile.nvidia-open
+            base_versions_key: bluefin-dx-nvidia-open
+            needs_nvidia_lts: false
+            image_desc: "Bluefin DX NVIDIA open com suporte a impressoras Epson"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc \
+                      /usr/local/share/boost /usr/share/swift /opt/hostedtoolcache
+          df -h /
+
+      - name: Mount BTRFS for podman storage
+        uses: ublue-os/container-storage-action@911baca08baf30c8654933e9e9723cb399892140
+        continue-on-error: true
+        with:
+          target-dir: /var/lib/containers
+          mount-opts: compress-force=zstd:2
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq \
+            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Read image versions
+        id: versions
+        run: |
+          set -euo pipefail
+
+          KEY="${{ matrix.base_versions_key }}"
+          BASE_IMAGE=$(yq -r ".images[] | select(.name == \"${KEY}\") | .image" image-versions.yml)
+          BASE_TAG=$(yq -r ".images[] | select(.name == \"${KEY}\") | .tag" image-versions.yml)
+          BASE_DIGEST=$(yq -r ".images[] | select(.name == \"${KEY}\") | .digest" image-versions.yml)
+
+          echo "BASE_IMAGE=${BASE_IMAGE}" >> "${GITHUB_ENV}"
+          echo "BASE_TAG=${BASE_TAG}" >> "${GITHUB_ENV}"
+          echo "BASE_DIGEST=${BASE_DIGEST}" >> "${GITHUB_ENV}"
+
+          # Resolve Fedora major version from base image labels
+          FEDORA_MAJOR_VERSION=$(skopeo inspect --retry-times 3 \
+            "docker://${BASE_IMAGE}:${BASE_TAG}@${BASE_DIGEST}" \
+            | jq -r '.Labels["org.opencontainers.image.version"] // empty' \
+            | grep -oP '^\d+')
+          if [[ -z "${FEDORA_MAJOR_VERSION}" ]]; then
+            echo "::error::Could not resolve Fedora major version from ${BASE_IMAGE}@${BASE_DIGEST}"
+            exit 1
+          fi
+          echo "FEDORA_MAJOR_VERSION=${FEDORA_MAJOR_VERSION}" >> "${GITHUB_ENV}"
+
+          if [[ "${{ matrix.needs_nvidia_lts }}" == "true" ]]; then
+            # Kernel version recorded in image-versions.yml (must match akmods-nvidia-lts tag)
+            KERNEL_VERSION=$(yq -r ".images[] | select(.name == \"${KEY}\") | .kernel" image-versions.yml)
+            AKMODS_TAG=$(yq -r '.images[] | select(.name == "akmods-main") | .tag' image-versions.yml)
+            AKMODS_DIGEST=$(yq -r '.images[] | select(.name == "akmods-main") | .digest' image-versions.yml)
+            AKMODS_NVIDIA_TAG=$(yq -r '.images[] | select(.name == "akmods-nvidia-lts-main") | .tag' image-versions.yml)
+            AKMODS_NVIDIA_DIGEST=$(yq -r '.images[] | select(.name == "akmods-nvidia-lts-main") | .digest' image-versions.yml)
+
+            # ── Preflight: validate kernel alignment ──────────────────────
+            # The akmods-nvidia-lts tag encodes the kernel version. Extract it
+            # and compare with the kernel recorded in image-versions.yml.
+            # A mismatch means the two entries were not bumped atomically.
+            AKMOD_KERNEL="${AKMODS_NVIDIA_TAG#main-44-}"  # strip "main-44-" prefix
+            if [[ "${AKMOD_KERNEL}" != "${KERNEL_VERSION}" ]]; then
+              echo "::error::Kernel alignment failure!"
+              echo "::error::  image-versions.yml kernel  : ${KERNEL_VERSION}"
+              echo "::error::  akmods-nvidia-lts tag kernel: ${AKMOD_KERNEL}"
+              echo "::error::Update image-versions.yml so both entries use the same kernel version."
+              exit 1
+            fi
+            echo "Preflight OK: kernel ${KERNEL_VERSION} aligned with akmods-nvidia-lts tag"
+
+            echo "KERNEL_VERSION=${KERNEL_VERSION}" >> "${GITHUB_ENV}"
+            echo "AKMODS_TAG=${AKMODS_TAG}" >> "${GITHUB_ENV}"
+            echo "AKMODS_DIGEST=${AKMODS_DIGEST}" >> "${GITHUB_ENV}"
+            echo "AKMODS_NVIDIA_TAG=${AKMODS_NVIDIA_TAG}" >> "${GITHUB_ENV}"
+            echo "AKMODS_NVIDIA_DIGEST=${AKMODS_NVIDIA_DIGEST}" >> "${GITHUB_ENV}"
+          fi
+
+      - name: Determine timestamp tag
+        run: |
+          BASE_VER="${FEDORA_MAJOR_VERSION}.$(date -u +%Y%m%d)"
+          REPO="${IMAGE_REGISTRY,,}/${{ matrix.image_name }}"
+          if skopeo list-tags "docker://${REPO}" > /tmp/repotags.json 2>/dev/null; then
+            if jq -e "any(.Tags[]; contains(\"${BASE_VER}\"))" /tmp/repotags.json > /dev/null; then
+              POINT=1
+              while jq -e "any(.Tags[]; contains(\"${BASE_VER}.${POINT}\"))" /tmp/repotags.json > /dev/null 2>&1; do
+                (( POINT++ ))
+              done
+              TIMESTAMP_TAG="${BASE_VER}.${POINT}"
+            else
+              TIMESTAMP_TAG="${BASE_VER}"
+            fi
+          else
+            TIMESTAMP_TAG="${BASE_VER}"
+          fi
+          echo "TIMESTAMP_TAG=${TIMESTAMP_TAG}" >> "${GITHUB_ENV}"
+
+      - name: Determine push tags
+        id: tags
+        run: |
+          TODAY=$(date -u +%A)
+          VERSION_SHORT="${TIMESTAMP_TAG#*.}"
+          TAGS="stable-daily ${TIMESTAMP_TAG} stable-daily-${TIMESTAMP_TAG} stable-daily-${VERSION_SHORT}"
+          if [[ "${{ github.event_name }}" == "schedule" && "${TODAY}" == "Tuesday" ]] || \
+             [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TAGS="${TAGS} stable stable-${TIMESTAMP_TAG} stable-${VERSION_SHORT} gts gts-${TIMESTAMP_TAG} gts-${VERSION_SHORT}"
+          fi
+          echo "tags=${TAGS}" >> "${GITHUB_OUTPUT}"
+          echo "DEFAULT_TAG=stable-daily" >> "${GITHUB_ENV}"
+
+      - name: Build image
+        id: build
+        uses: redhat-actions/buildah-build@43f07bd7ede3b36f1f396e6fe54b277ac1b7e5e0 # v2
+        with:
+          containerfiles: ./${{ matrix.containerfile }}
+          image: ${{ matrix.image_name }}
+          tags: ${{ env.DEFAULT_TAG }}
+          labels: |
+            org.opencontainers.image.title=${{ matrix.image_name }}
+            org.opencontainers.image.description=${{ matrix.image_desc }}
+            org.opencontainers.image.version=${{ env.TIMESTAMP_TAG }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+            containers.bootc=1
+          build-args: |
+            BASE_IMAGE=${{ env.BASE_IMAGE }}
+            BASE_TAG=${{ env.BASE_TAG }}
+            BASE_DIGEST=${{ env.BASE_DIGEST }}
+            IMAGE_NAME=${{ matrix.image_name }}
+            IMAGE_TAG=${{ env.DEFAULT_TAG }}
+            KERNEL_VERSION=${{ env.KERNEL_VERSION }}
+            AKMODS_TAG=${{ env.AKMODS_TAG }}
+            AKMODS_DIGEST=${{ env.AKMODS_DIGEST }}
+            AKMODS_NVIDIA_TAG=${{ env.AKMODS_NVIDIA_TAG }}
+            AKMODS_NVIDIA_DIGEST=${{ env.AKMODS_NVIDIA_DIGEST }}
+          oci: false
+
+      - name: Rechunk image
+        run: |
+          RECHUNK_IMAGE="quay.io/centos-bootc/centos-bootc:stream10"
+          for attempt in 1 2 3; do
+            sudo podman pull "${RECHUNK_IMAGE}" && break
+            [[ "${attempt}" -eq 3 ]] && exit 1
+            sleep 30
+          done
+          podman save "localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}" | sudo podman load
+          sudo podman run --rm --privileged \
+            -v /var/lib/containers:/var/lib/containers \
+            --entrypoint /usr/libexec/bootc-base-imagectl \
+            "${RECHUNK_IMAGE}" \
+            rechunk --max-layers 67 \
+            "localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}" \
+            "localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}-rechunked"
+          sudo podman tag \
+            "localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}-rechunked" \
+            "localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}"
+          sudo podman rmi "localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}-rechunked"
+          sudo podman save "localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}" | podman load
+
+      - name: Tag for registry
+        run: |
+          for tag in ${{ steps.tags.outputs.tags }}; do
+            podman tag "${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}" \
+                       "${{ matrix.image_name }}:${tag}"
+          done
+
+      - name: Login to GHCR
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to GHCR
+        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        id: push
+        with:
+          registry: ${{ env.IMAGE_REGISTRY }}
+          image: ${{ matrix.image_name }}
+          tags: ${{ steps.tags.outputs.tags }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@d7543c93d881b35a8faa02e8e3605f69b7a1ce62 # v3
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+
+      - name: Sign images
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+        run: |
+          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ matrix.image_name }}"
+          for tag in ${{ steps.tags.outputs.tags }}; do
+            cosign sign -y --key env://COSIGN_PRIVATE_KEY --tlog-upload=false \
+              "${IMAGE_FULL}:${tag}"
+          done
+
+      - name: Setup Syft
+        id: syft
+        uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+
+      - name: Generate SBOM
+        id: sbom
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        run: |
+          OUTPUT_PATH="$(mktemp -d)/sbom.spdx.json"
+          IMAGE_REF="localhost/${{ matrix.image_name }}:${{ env.DEFAULT_TAG }}"
+          MOUNT_PATH=$(sudo podman image mount "${IMAGE_REF}")
+          trap "sudo podman image umount '${IMAGE_REF}'; sudo podman rmi '${IMAGE_REF}'" EXIT
+          sudo ${{ steps.syft.outputs.cmd }} scan "dir:${MOUNT_PATH}" -o spdx-json="${OUTPUT_PATH}"
+          sudo chown "$(id -u):$(id -g)" "${OUTPUT_PATH}"
+          echo "OUTPUT_PATH=${OUTPUT_PATH}" >> "${GITHUB_OUTPUT}"
+
+      - name: Attest SBOM
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          SBOM_OUTPUT: ${{ steps.sbom.outputs.OUTPUT_PATH }}
+        run: |
+          cosign attest -y \
+            --predicate "${SBOM_OUTPUT}" \
+            --type spdxjson \
+            --key env://COSIGN_PRIVATE_KEY \
+            --tlog-upload=false \
+            "${{ env.IMAGE_REGISTRY }}/${{ matrix.image_name }}@${{ steps.push.outputs.digest }}"

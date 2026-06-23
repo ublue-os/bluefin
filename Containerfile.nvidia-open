@@ -1,15 +1,16 @@
-# Produces: lbssousa/bluefin and lbssousa/bluefin-dx
-# Layers Epson printer support on top of the official Bluefin images.
+# Produces: lbssousa/bluefin-nvidia-open and lbssousa/bluefin-dx-nvidia-open
+# Layers Epson printer support on top of the official Bluefin nvidia-open images.
+# NVIDIA open drivers are already present in the base image — no akmod work needed.
 #
 # Build args:
-#   BASE_IMAGE  — full image name (ghcr.io/ublue-os/bluefin or bluefin-dx)
+#   BASE_IMAGE  — full image name (ghcr.io/ublue-os/bluefin-nvidia-open or bluefin-dx-nvidia-open)
 #   BASE_TAG    — image tag (default: stable)
 #   BASE_DIGEST — sha256 digest (pinned by image-versions.yml + Renovate)
 
-# renovate: datasource=docker depName=ghcr.io/ublue-os/bluefin
-ARG BASE_IMAGE="ghcr.io/ublue-os/bluefin"
+# renovate: datasource=docker depName=ghcr.io/ublue-os/bluefin-nvidia-open
+ARG BASE_IMAGE="ghcr.io/ublue-os/bluefin-nvidia-open"
 ARG BASE_TAG="stable"
-ARG BASE_DIGEST="sha256:9f0201d21641133b15c5e58e6cf85008259e8ffce1c7169a063f7474f2f56c41"
+ARG BASE_DIGEST="sha256:62ce646bff7aedade2ddad29051938f48ce4d2af532486dc42ae61ee823da915"
 
 FROM scratch AS ctx
 COPY build_files /build_files
@@ -17,7 +18,7 @@ COPY cosign.pub /cosign.pub
 
 FROM ${BASE_IMAGE}:${BASE_TAG}@${BASE_DIGEST}
 
-ARG IMAGE_NAME="bluefin"
+ARG IMAGE_NAME="bluefin-nvidia-open"
 ARG IMAGE_TAG="stable"
 
 ENV IMAGE_NAME=${IMAGE_NAME}
