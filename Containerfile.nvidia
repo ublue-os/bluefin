@@ -28,9 +28,10 @@ ARG KERNEL_VERSION="7.0.9-205.fc44.x86_64"
 ARG AKMODS_TAG="main-44"
 ARG AKMODS_DIGEST="sha256:616d6b718922d58ace2dbb00c4d8f2c48e8005dfbd24217e7bada5ba176e56e0"
 
-# renovate: datasource=docker depName=ghcr.io/ublue-os/akmods-nvidia-lts
-ARG AKMODS_NVIDIA_TAG="main-44-7.0.9-205.fc44.x86_64"
-ARG AKMODS_NVIDIA_DIGEST="sha256:e01b8e00f0e460f09ad22afa1d8f6ba7b1d53e25c0ddefbbb0a994274c7de0d3"
+# Tag and digest are computed in CI from the base image's ostree.linux label.
+# Default here uses the floating tag for local builds only.
+ARG AKMODS_NVIDIA_TAG="main-44"
+ARG AKMODS_NVIDIA_DIGEST="sha256:faea6763c972ade8e3063cdf541f12d3c8490ed34238f29c9e4dd75b2799d4db"
 
 # akmods image provides ublue-os-akmods-addons (SecureBoot MOK enrollment key)
 FROM ghcr.io/ublue-os/akmods:${AKMODS_TAG}@${AKMODS_DIGEST} AS akmods

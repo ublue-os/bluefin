@@ -125,11 +125,12 @@ jobs:
           echo "BASE_TAG=${BASE_TAG}" >> "${GITHUB_ENV}"
           echo "BASE_DIGEST=${BASE_DIGEST}" >> "${GITHUB_ENV}"
 
-          # Resolve Fedora major version from base image labels
-          FEDORA_MAJOR_VERSION=$(skopeo inspect --retry-times 3 \
-            "docker://${BASE_IMAGE}:${BASE_TAG}@${BASE_DIGEST}" \
-            | jq -r '.Labels["org.opencontainers.image.version"] // empty' \
-            | grep -oP '^\d+')
+          # Resolve Fedora major version and kernel from the pinned base image
+          BASE_LABELS=$(skopeo inspect --retry-times 3 \
+            "docker://${BASE_IMAGE}:${BASE_TAG}@${BASE_DIGEST}" | jq -r '.Labels')
+
+          FEDORA_MAJOR_VERSION=$(echo "${BASE_LABELS}" | \
+            jq -r '."org.opencontainers.image.version" // empty' | grep -oP '^\d+')
           if [[ -z "${FEDORA_MAJOR_VERSION}" ]]; then
             echo "::error::Could not resolve Fedora major version from ${BASE_IMAGE}@${BASE_DIGEST}"
             exit 1
@@ -137,26 +138,31 @@ jobs:
           echo "FEDORA_MAJOR_VERSION=${FEDORA_MAJOR_VERSION}" >> "${GITHUB_ENV}"
 
           if [[ "${{ matrix.needs_nvidia_lts }}" == "true" ]]; then
-            # Kernel version recorded in image-versions.yml (must match akmods-nvidia-lts tag)
-            KERNEL_VERSION=$(yq -r ".images[] | select(.name == \"${KEY}\") | .kernel" image-versions.yml)
-            AKMODS_TAG=$(yq -r '.images[] | select(.name == "akmods-main") | .tag' image-versions.yml)
-            AKMODS_DIGEST=$(yq -r '.images[] | select(.name == "akmods-main") | .digest' image-versions.yml)
-            AKMODS_NVIDIA_TAG=$(yq -r '.images[] | select(.name == "akmods-nvidia-lts-main") | .tag' image-versions.yml)
-            AKMODS_NVIDIA_DIGEST=$(yq -r '.images[] | select(.name == "akmods-nvidia-lts-main") | .digest' image-versions.yml)
-
-            # ── Preflight: validate kernel alignment ──────────────────────
-            # The akmods-nvidia-lts tag encodes the kernel version. Extract it
-            # and compare with the kernel recorded in image-versions.yml.
-            # A mismatch means the two entries were not bumped atomically.
-            AKMOD_KERNEL="${AKMODS_NVIDIA_TAG#main-44-}"  # strip "main-44-" prefix
-            if [[ "${AKMOD_KERNEL}" != "${KERNEL_VERSION}" ]]; then
-              echo "::error::Kernel alignment failure!"
-              echo "::error::  image-versions.yml kernel  : ${KERNEL_VERSION}"
-              echo "::error::  akmods-nvidia-lts tag kernel: ${AKMOD_KERNEL}"
-              echo "::error::Update image-versions.yml so both entries use the same kernel version."
+            # Derive kernel version from the pinned base image — no manual field needed.
+            # When Renovate bumps the base digest, CI automatically follows to the right
+            # kernel-exact akmods-nvidia-lts tag.
+            KERNEL_VERSION=$(echo "${BASE_LABELS}" | jq -r '."ostree.linux" // empty')
+            if [[ -z "${KERNEL_VERSION}" ]]; then
+              echo "::error::Could not derive kernel version from base image (ostree.linux label missing)"
               exit 1
             fi
-            echo "Preflight OK: kernel ${KERNEL_VERSION} aligned with akmods-nvidia-lts tag"
+            echo "Derived kernel version from base image: ${KERNEL_VERSION}"
+
+            AKMODS_TAG=$(yq -r '.images[] | select(.name == "akmods-main") | .tag' image-versions.yml)
+            AKMODS_DIGEST=$(yq -r '.images[] | select(.name == "akmods-main") | .digest' image-versions.yml)
+
+            # Construct kernel-exact tag and fetch its digest live.
+            # This guarantees kernel↔akmod alignment by construction.
+            AKMODS_NVIDIA_TAG="main-44-${KERNEL_VERSION}"
+            echo "Looking up akmods-nvidia-lts tag: ${AKMODS_NVIDIA_TAG}"
+            AKMODS_NVIDIA_DIGEST=$(skopeo inspect --retry-times 3 --format='{{.Digest}}' \
+              "docker://ghcr.io/ublue-os/akmods-nvidia-lts:${AKMODS_NVIDIA_TAG}" 2>/dev/null || true)
+            if [[ -z "${AKMODS_NVIDIA_DIGEST}" ]]; then
+              echo "::error::Tag ${AKMODS_NVIDIA_TAG} not yet available in ghcr.io/ublue-os/akmods-nvidia-lts"
+              echo "::error::UBlue may not have built the akmod for this kernel yet. Retry later."
+              exit 1
+            fi
+            echo "Resolved ${AKMODS_NVIDIA_TAG} → ${AKMODS_NVIDIA_DIGEST}"
 
             echo "KERNEL_VERSION=${KERNEL_VERSION}" >> "${GITHUB_ENV}"
             echo "AKMODS_TAG=${AKMODS_TAG}" >> "${GITHUB_ENV}"

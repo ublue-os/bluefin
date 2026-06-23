@@ -1,56 +1,42 @@
 # Image versions pinned by digest for deterministic builds.
-# Renovate updates digests automatically via the docker datasource.
+# Renovate updates all digests automatically via the docker datasource.
 #
-# For the nvidia variants, KERNEL_VERSION must match the kernel embedded in
-# the akmods-nvidia-lts tag. The CI preflight validates this and fails fast
-# if they diverge (e.g. after a kernel bump where only one entry was updated).
-#
-# Bump procedure when bluefin:stable ships a new kernel:
-#   1. Renovate bumps bluefin + bluefin-dx digests (and updates kernel: field)
-#   2. Renovate bumps akmods-nvidia-lts tag to main-44-<new-kernel> + digest
-#   3. CI preflight validates alignment; build proceeds if they match
+# For NVIDIA proprietary variants, the CI derives KERNEL_VERSION at build time
+# by inspecting the pinned base image digest (ostree.linux label), then
+# constructs the kernel-exact akmods-nvidia-lts tag (main-44-<KERNEL_VERSION>)
+# and fetches its digest live. This keeps kernel alignment fully automatic:
+# when Renovate bumps the bluefin digest to a new kernel, the CI automatically
+# follows to the right akmod tag — no manual field to maintain.
 
 images:
   # ── Base images ─────────────────────────────────────────────────────────
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable
-    # kernel: kernel version currently shipped by this image (must match akmods-nvidia-lts tag)
-    kernel: 7.0.9-205.fc44.x86_64
-    # renovate: datasource=docker depName=ghcr.io/ublue-os/bluefin versioning=docker
     digest: sha256:9f0201d21641133b15c5e58e6cf85008259e8ffce1c7169a063f7474f2f56c41
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
     tag: stable
-    kernel: 7.0.9-205.fc44.x86_64
-    # renovate: datasource=docker depName=ghcr.io/ublue-os/bluefin-dx versioning=docker
     digest: sha256:7b7cc6bf35a1e4d26c50d588784fb208bbeb465adfa352e1509a3c01b7ec8271
 
   - name: bluefin-nvidia-open
     image: ghcr.io/ublue-os/bluefin-nvidia-open
     tag: stable
-    # renovate: datasource=docker depName=ghcr.io/ublue-os/bluefin-nvidia-open versioning=docker
     digest: sha256:62ce646bff7aedade2ddad29051938f48ce4d2af532486dc42ae61ee823da915
 
   - name: bluefin-dx-nvidia-open
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable
-    # renovate: datasource=docker depName=ghcr.io/ublue-os/bluefin-dx-nvidia-open versioning=docker
     digest: sha256:839a2e4d802dce173780cb37d4ae5bf996e1c189c13e6b01a82793ae8e21abfd
 
   # ── Akmods (for NVIDIA proprietary variants only) ────────────────────────
   - name: akmods-main
     image: ghcr.io/ublue-os/akmods
     tag: main-44
-    # Provides ublue-os-akmods-addons (SecureBoot MOK enrollment key).
-    # renovate: datasource=docker depName=ghcr.io/ublue-os/akmods versioning=docker
     digest: sha256:616d6b718922d58ace2dbb00c4d8f2c48e8005dfbd24217e7bada5ba176e56e0
 
   - name: akmods-nvidia-lts-main
     image: ghcr.io/ublue-os/akmods-nvidia-lts
-    # Tag encodes the exact kernel version — casamento correto por construção.
-    # Must stay in sync with the kernel: field of the bluefin and bluefin-dx entries above.
-    tag: main-44-7.0.9-205.fc44.x86_64
-    # renovate: datasource=docker depName=ghcr.io/ublue-os/akmods-nvidia-lts versioning=docker
-    digest: sha256:e01b8e00f0e460f09ad22afa1d8f6ba7b1d53e25c0ddefbbb0a994274c7de0d3
+    tag: main-44
+    digest: sha256:faea6763c972ade8e3063cdf541f12d3c8490ed34238f29c9e4dd75b2799d4db
