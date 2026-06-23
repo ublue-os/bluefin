@@ -136,12 +136,15 @@ download_epson \
     "${UTILITY_FALLBACK_URL}" \
     "epson-printer-utility RPM"
 
-# Install the binary RPM:
-# --nodeps   : skip dependency checks (LSB compatibility shim not present on modern Fedora)
-# --nodigest : skip payload-digest verification; RPM 4.19+ (Fedora 40+) rejects
-#              packages built without a SHA-256 payload digest header, which
-#              applies to this older Epson binary RPM
-rpm -i --nodeps --nodigest "${UTILITY_RPM}"
+# Extract the RPM cpio payload directly instead of using rpm -i.
+# Some versions of this RPM list parent directories (e.g. /opt/) that already
+# exist in the base image; rpm's internal cpio then fails with "mkdir failed -
+# File exists". Extracting with cpio -idmu handles pre-existing directories
+# gracefully by not failing on existing dirs.
+UTILITY_EXTRACT=$(mktemp -d)
+(cd "${UTILITY_EXTRACT}" && rpm2cpio "${UTILITY_RPM}" | cpio -idmu)
+cp -a "${UTILITY_EXTRACT}/." /
+rm -rf "${UTILITY_EXTRACT}"
 
 echo "::endgroup::"
 
