@@ -136,22 +136,65 @@ download_epson \
     "${UTILITY_FALLBACK_URL}" \
     "epson-printer-utility RPM"
 
-# Extract the RPM cpio payload directly instead of using rpm -i.
-# Some versions of this RPM list parent directories (e.g. /opt/) that already
-# exist in the base image; rpm's internal cpio then fails with "mkdir failed -
-# File exists". Extracting with cpio -idmu handles pre-existing directories
-# gracefully by not failing on existing dirs.
+# Extract the RPM cpio payload to a staging directory.
+# We don't use 'rpm -i' for two reasons:
+# 1. Some versions have duplicate directory entries in the cpio archive that
+#    cause "mkdir failed - File exists" when /opt already exists in the base image.
+# 2. The RPM installs its UI binary and resources under /opt/epson-printer-utility/,
+#    but in bootc /opt is a symlink to /var/opt (mutable state). Files in /var are
+#    not updated on 'bootc upgrade'. We relocate the application to /usr/lib
+#    (immutable OS layer) and create a /var/opt compatibility symlink so the binary
+#    can still resolve its hardcoded /opt/epson-printer-utility/ resource paths.
 UTILITY_EXTRACT=$(mktemp -d)
 (cd "${UTILITY_EXTRACT}" && rpm2cpio "${UTILITY_RPM}" | cpio -idmu)
-cp -a "${UTILITY_EXTRACT}/." /
+
+# /usr content (CUPS backend, daemon, service file, docs) — goes directly to /usr.
+cp -a "${UTILITY_EXTRACT}/usr/." /usr/
+
+# Relocate /opt/epson-printer-utility → /usr/lib/epson-printer-utility (immutable layer).
+cp -a "${UTILITY_EXTRACT}/opt/epson-printer-utility" /usr/lib/epson-printer-utility
+
+# Compatibility symlink: /opt → /var/opt, so this makes /opt/epson-printer-utility
+# resolve to /usr/lib/epson-printer-utility at runtime, where the binary looks for
+# its resource files. On bootc upgrade /usr/lib is replaced; /var/opt symlink persists
+# and automatically points to the new version.
+mkdir -p /var/opt
+ln -sfn /usr/lib/epson-printer-utility /var/opt/epson-printer-utility
+
 rm -rf "${UTILITY_EXTRACT}"
 
-echo "::endgroup::"
+# ── Post-install scriptlet (replicated for bootc) ─────────────────────────────
+# The RPM scriptlet cannot run in a container build; we replicate its relevant
+# steps here, adapted for an immutable OS image.
 
-echo "::group:: Enable Services"
+# Binary into PATH
+ln -sfn /usr/lib/epson-printer-utility/bin/epson-printer-utility \
+        /usr/bin/epson-printer-utility
 
-# Enable the Epson Connect Billing Daemon used by epson-printer-utility
-systemctl enable ecbd.service || true
+# Udev rules: ship in the immutable system path instead of /etc/udev/rules.d/
+# (the scriptlet's target). /usr/lib/udev/rules.d/ is read-only and survives upgrades.
+install -Dm0644 \
+    /usr/lib/epson-printer-utility/rules/79-udev-epson.rules \
+    /usr/lib/udev/rules.d/79-udev-epson.rules
+
+# Desktop entry
+install -Dm0644 \
+    /usr/lib/epson-printer-utility/epson-printer-utility.desktop \
+    /usr/share/applications/epson-printer-utility.desktop
+
+# Move service file from /usr/lib/epson-backend/ to the standard systemd path
+# so that systemctl can find and enable it.
+install -Dm0644 \
+    /usr/lib/epson-backend/ecbd.service \
+    /usr/lib/systemd/system/ecbd.service
+
+systemctl enable ecbd.service
+
+# Register the Epson backend port used by ecbd (cbtd 35587/tcp).
+# /etc/services is mutable in bootc and 3-way merged on upgrade — safe to modify.
+if ! grep -q 'cbtd' /etc/services 2>/dev/null; then
+    printf '\ncbtd\t35587/tcp\t# Epson printer backend\n' >> /etc/services
+fi
 
 echo "::endgroup::"
 
