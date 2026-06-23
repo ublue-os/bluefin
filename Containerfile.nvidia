@@ -60,6 +60,13 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build_files/00-signing.sh
 
+# Compile GNOME extension schemas missing from the upstream build
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build_files/05-gnome-extensions.sh
+
 # Install NVIDIA 580 proprietary drivers
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=bind,from=akmods,source=/rpms/ublue-os,target=/tmp/akmods-addons \

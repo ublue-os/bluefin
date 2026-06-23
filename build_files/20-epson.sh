@@ -178,9 +178,40 @@ install -Dm0644 \
     /usr/lib/udev/rules.d/79-udev-epson.rules
 
 # Desktop entry
+#
+# The RPM's .desktop file (at /opt/epson-printer-utility/epson-printer-utility.desktop)
+# has two problems that would break the shortcut in GNOME Shell:
+#
+#   1. Exec= and Icon= both use hardcoded /opt/epson-printer-utility/ paths.
+#      GNOME Shell's GFileIcon loader may not follow the /opt→/var/opt→/usr/lib
+#      symlink chain reliably, which can cause the entry to be silently discarded.
+#
+#   2. Categories=Application; uses a deprecated top-level category that modern
+#      desktop-file-validate rejects as invalid.
+#
+# Fix: install the app icon to the standard pixmaps path (no symlink needed),
+# then write a clean replacement .desktop that references /usr/bin and /usr/share.
+
 install -Dm0644 \
-    /usr/lib/epson-printer-utility/epson-printer-utility.desktop \
-    /usr/share/applications/epson-printer-utility.desktop
+    /usr/lib/epson-printer-utility/resource/Images/AppIcon.png \
+    /usr/share/pixmaps/epson-printer-utility.png
+
+cat > /usr/share/applications/epson-printer-utility.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=Epson Printer Utility
+GenericName=Epson Printer Utility
+Comment=Configure and maintain Epson printers
+Exec=/usr/bin/epson-printer-utility
+Icon=epson-printer-utility
+Terminal=false
+Categories=Utility;Printing;
+Name[ja_JP]=Epson Printer Utility
+EOF
+
+# Rebuild the MIME/desktop database so file managers and GNOME Software
+# pick up the new entry immediately.
+update-desktop-database /usr/share/applications
 
 # Move service file from /usr/lib/epson-backend/ to the standard systemd path
 # so that systemctl can find and enable it.
