@@ -125,9 +125,10 @@ jobs:
           echo "BASE_TAG=${BASE_TAG}" >> "${GITHUB_ENV}"
           echo "BASE_DIGEST=${BASE_DIGEST}" >> "${GITHUB_ENV}"
 
-          # Resolve Fedora major version and kernel from the pinned base image
+          # Resolve Fedora major version and kernel from the pinned base image.
+          # skopeo only accepts tag OR digest, not both — use digest alone.
           BASE_LABELS=$(skopeo inspect --retry-times 3 \
-            "docker://${BASE_IMAGE}:${BASE_TAG}@${BASE_DIGEST}" | jq -r '.Labels')
+            "docker://${BASE_IMAGE}@${BASE_DIGEST}" | jq -r '.Labels')
 
           FEDORA_MAJOR_VERSION=$(echo "${BASE_LABELS}" | \
             jq -r '."org.opencontainers.image.version" // empty' | grep -oP '^\d+')
