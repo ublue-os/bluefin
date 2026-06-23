@@ -8,12 +8,12 @@ All images are published at `ghcr.io/lbssousa/` and rebuilt daily.
 
 | Image | Base | Additions |
 |---|---|---|
-| `bluefin` | `ublue-os/bluefin:stable` | Epson |
-| `bluefin-dx` | `ublue-os/bluefin-dx:stable` | Epson |
-| `bluefin-nvidia` | `ublue-os/bluefin:stable` | NVIDIA 580 + Epson |
-| `bluefin-dx-nvidia` | `ublue-os/bluefin-dx:stable` | NVIDIA 580 + Epson |
-| `bluefin-nvidia-open` | `ublue-os/bluefin-nvidia-open:stable` | Epson |
-| `bluefin-dx-nvidia-open` | `ublue-os/bluefin-dx-nvidia-open:stable` | Epson |
+| `bluefin` | `ublue-os/bluefin:stable` | Epson, FIDO2/U2F |
+| `bluefin-dx` | `ublue-os/bluefin-dx:stable` | Epson, FIDO2/U2F |
+| `bluefin-nvidia` | `ublue-os/bluefin:stable` | NVIDIA 580 + Epson, FIDO2/U2F |
+| `bluefin-dx-nvidia` | `ublue-os/bluefin-dx:stable` | NVIDIA 580 + Epson, FIDO2/U2F |
+| `bluefin-nvidia-open` | `ublue-os/bluefin-nvidia-open:stable` | Epson, FIDO2/U2F |
+| `bluefin-dx-nvidia-open` | `ublue-os/bluefin-dx-nvidia-open:stable` | Epson, FIDO2/U2F |
 
 ## About the NVIDIA 580 driver
 
@@ -47,6 +47,16 @@ sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
 # enter a temporary password, then confirm it in the MOK Manager on next reboot
 ```
 
+### FIDO2/U2F authentication
+
+All images include `pam-u2f`, enabling hardware security key authentication for login and sudo. The upstream Bluefin image ships `libfido2` (udev rules for device access) but omits the PAM module, so `authselect`'s `with-pam-u2f` feature would reference a missing `pam_u2f.so`.
+
+To enable it after installation, if not already configured:
+
+```bash
+authselect enable-feature with-pam-u2f
+```
+
 ## How it works
 
 ### Image architecture
@@ -57,6 +67,7 @@ Each image is a thin layer on top of the official Bluefin upstream image — no 
 ghcr.io/ublue-os/bluefin:stable          ← official Bluefin (unchanged)
   └─ signing policy (ghcr.io/lbssousa)   ← 00-signing.sh
   └─ Epson printer driver + utility      ← 20-epson.sh
+  └─ pam-u2f (FIDO2/U2F PAM module)     ← 30-u2f.sh
 ```
 
 For the NVIDIA proprietary variants, pre-built kernel modules from `ghcr.io/ublue-os/akmods-nvidia-lts` are installed on top of the Bluefin base. The CI derives the exact kernel version from the pinned base image at build time and selects the corresponding `main-44-<kernel>` akmod tag — ensuring the kernel module always matches the running kernel.
