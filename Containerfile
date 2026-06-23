@@ -28,6 +28,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build_files/00-signing.sh && \
-    /ctx/build_files/20-epson.sh
+    /ctx/build_files/20-epson.sh && \
+    /ctx/build_files/30-u2f.sh
 
 RUN bootc container lint
