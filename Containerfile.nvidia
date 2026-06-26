@@ -31,7 +31,7 @@ ARG AKMODS_DIGEST="sha256:8356e10d82b43bcf37ab3d06af4b1ca6ddf892d97ee6e915d973af
 # Tag and digest are computed in CI from the base image's ostree.linux label.
 # Default here uses the floating tag for local builds only.
 ARG AKMODS_NVIDIA_TAG="main-44"
-ARG AKMODS_NVIDIA_DIGEST="sha256:db284adecb8289d4fdbfd52a12df8855bbc2287c619b97340c24bbf58e23d1a6"
+ARG AKMODS_NVIDIA_DIGEST="sha256:ae628c4093482cc63c2d9dbe12f91c9942b37e0aacc4b44822daa26bff69b5a3"
 
 # akmods image provides ublue-os-akmods-addons (SecureBoot MOK enrollment key)
 FROM ghcr.io/ublue-os/akmods:${AKMODS_TAG}@${AKMODS_DIGEST} AS akmods
