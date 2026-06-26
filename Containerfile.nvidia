@@ -26,7 +26,7 @@ ARG KERNEL_VERSION="7.0.9-205.fc44.x86_64"
 
 # renovate: datasource=docker depName=ghcr.io/ublue-os/akmods
 ARG AKMODS_TAG="main-44"
-ARG AKMODS_DIGEST="sha256:8356e10d82b43bcf37ab3d06af4b1ca6ddf892d97ee6e915d973afacd60e7941"
+ARG AKMODS_DIGEST="sha256:3f092398e62758a996e44202802d0373b3915b154e83d6bc5bd8d45be754143a"
 
 # Tag and digest are computed in CI from the base image's ostree.linux label.
 # Default here uses the floating tag for local builds only.
