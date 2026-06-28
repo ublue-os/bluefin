@@ -29,9 +29,11 @@ LIBFPRINT_REPO="https://github.com/lbssousa/libfprint"
 # Runtime dependency of the SIGFM matcher (stays in the final image).
 dnf5 -y install opencv
 
-# Build-time only dependencies, removed again at the end.
+# Build-time only dependencies. pkg-config is intentionally NOT listed: the
+# base image already ships it (kmod depends on it), so removing it would break
+# the dnf transaction.
 BUILD_DEPS=(
-    meson ninja-build gcc gcc-c++ git-core pkgconf-pkg-config
+    meson ninja-build gcc gcc-c++ git-core
     glib2-devel libgusb-devel libgudev-devel nss-devel pixman-devel cairo-devel
     gobject-introspection-devel systemd-devel openssl-devel opencv-devel
     python3-gobject gtk-doc
@@ -48,7 +50,11 @@ ninja -C /tmp/libfprint/build
 ninja -C /tmp/libfprint/build install
 
 rm -rf /tmp/libfprint
-dnf5 -y remove "${BUILD_DEPS[@]}"
+# Revert exactly the build-deps install transaction above. This removes the
+# toolchain and the -devel packages it pulled in, while leaving the runtime
+# `opencv` (installed in a separate, earlier transaction) and any pre-existing
+# base packages (e.g. pkg-config) untouched — avoiding dependency conflicts.
+dnf5 -y history undo last || true
 dnf5 -y clean all
 
 echo "::endgroup::"
