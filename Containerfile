@@ -30,6 +30,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build_files/00-signing.sh && \
     /ctx/build_files/05-gnome-extensions.sh && \
     /ctx/build_files/20-epson.sh && \
-    /ctx/build_files/30-u2f.sh
+    /ctx/build_files/30-u2f.sh && \
+    /ctx/build_files/40-goodix-fingerprint.sh
 
 RUN bootc container lint

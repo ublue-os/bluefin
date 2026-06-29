@@ -91,6 +91,13 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build_files/30-u2f.sh
 
+# Goodix 538d fingerprint reader (libfprint goodixtls53xd + SIGFM)
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    /ctx/build_files/40-goodix-fingerprint.sh
+
 # Regenerate initramfs to include NVIDIA kmod + set kernel boot args
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
