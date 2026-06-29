@@ -42,6 +42,11 @@ dnf5 -y install "${BUILD_DEPS[@]}"
 
 git clone --depth 1 --branch "$LIBFPRINT_TAG" "$LIBFPRINT_REPO" /tmp/libfprint
 
+# The bluefin-dx images ship ccache, which meson auto-uses as a compiler
+# launcher; in the buildah sandbox it fails with "ccache: error: File exists".
+# Disable it for this one-shot build (no caching needed).
+export CCACHE_DISABLE=1
+
 meson setup /tmp/libfprint/build /tmp/libfprint \
     --prefix=/usr --libdir=lib64 --buildtype=release \
     -Ddoc=false -Dgtk-examples=false -Dintrospection=true -Dinstalled-tests=false
