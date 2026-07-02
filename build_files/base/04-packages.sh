@@ -22,7 +22,6 @@ FEDORA_PACKAGES=(
     adwaita-fonts-all
     autofs
     bash-color-prompt
-    bcache-tools
     bootc
     borgbackup
     containerd
