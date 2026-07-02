@@ -1,0 +1,12 @@
+blocklists:
+  - block:
+    - com.visualstudio.code-oss
+    - com.vscodium.codium-insiders
+    - io.neovim.nvim
+    - org.vim.Vim
+    - io.github.zyedidia.micro
+    - com.helix_editor.Helix
+    - org.gnu.emacs
+    - app.devsuite.Ptyxis
+    - org.freedesktop.fwupd
+    - io.github.kolunmi.Bazaar

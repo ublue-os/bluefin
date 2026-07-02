@@ -11,11 +11,12 @@ FROM ${COMMON_IMAGE}@${COMMON_IMAGE_SHA} AS common
 FROM ${BREW_IMAGE}@${BREW_IMAGE_SHA} AS brew
 
 FROM scratch AS ctx
-COPY /system_files /system_files
 COPY /build_files /build_files
 COPY --from=common /system_files/shared /system_files/shared
 COPY --from=common /system_files/bluefin /system_files/shared
 COPY --from=brew /system_files /system_files/shared
+# bluefin-owned files overlay last so they take precedence over common
+COPY /system_files /system_files
 
 ## bluefin image section
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
