@@ -6,9 +6,6 @@ version-script theming user 1 || exit 0
 
 set -xeuo pipefail
 
-echo 'Disabling Blur my Shell popup blur by default'
-dconf write /org/gnome/shell/extensions/blur-my-shell/popup/blur false
-
 VEN_ID="$(cat /sys/devices/virtual/dmi/id/chassis_vendor)"
 
 if [[ ":Framework:" =~ :$VEN_ID: ]]; then
