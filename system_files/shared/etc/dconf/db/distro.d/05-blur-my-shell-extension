@@ -1,0 +1,3 @@
+# Disable Blur my Shell popup blur by default system-wide
+[org/gnome/shell/extensions/blur-my-shell/popup]
+blur=false
