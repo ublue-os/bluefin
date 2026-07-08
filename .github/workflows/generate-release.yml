@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: Checkout last 500 commits (for <commits> to work)
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 500
 
@@ -58,7 +58,7 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3
         if: contains(fromJson('["stable"]'), matrix.version) && (github.event.schedule == '0 1 * * TUE' || contains(fromJson('["workflow_dispatch", "workflow_call"]'), github.event_name))
         with:
           name: ${{ steps.generate-release-text.outputs.title }}

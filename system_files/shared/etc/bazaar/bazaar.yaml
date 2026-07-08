@@ -1,0 +1,56 @@
+yaml-blocklist-paths:
+  - /run/host/etc/bazaar/blocklist.yaml
+
+
+hooks:
+  - id: jetbrains-toolbox
+    when: before-transaction
+    dialogs:
+      - id: jetbrains-warning
+        title: >-
+          JetBrains IDEs are not supported in this format
+        # If true, render inline markup commands in body; see
+        # https://docs.gtk.org/Pango/pango_markup.html
+        body-use-markup: true
+        body: >-
+          This is a <a href="https://www.jetbrains.com/">JetBrains</a>
+          application and is not officially supported on Flatpak. We
+          recommend using the Toolbox app to manage JetBrains IDEs.
+        # Determines which option will be assumed if the user hits the
+        # escape key or otherwise cancels the dialog
+        default-response-id: cancel
+        options:
+          - id: cancel
+            string: "Cancel"
+          - id: run-ujust
+            string: "Download JetBrains Toolbox"
+            # can be "destructive" or "suggested" or omit for no
+            # styling
+            style: suggested
+    shell: exec python3 /run/host/etc/bazaar/hooks.py
+
+  - id: code
+    when: before-transaction
+    dialogs:
+      - id: code-warning
+        title: >-
+          VS Code like IDEs are not supported in this format
+        # If true, render inline markup commands in body; see
+        # https://docs.gtk.org/Pango/pango_markup.html
+        body-use-markup: true
+        body: >-
+          This is an app based on <a href="https://code.visualstudio.com/">Visual Studio Code</a>
+          and is not officially supported on Flatpak. We
+          recommend using the Homebrew version of the app instead.
+        # Determines which option will be assumed if the user hits the
+        # escape key or otherwise cancels the dialog
+        default-response-id: cancel
+        options:
+          - id: cancel
+            string: "Cancel"
+          - id: download
+            string: "Download from Homebrew"
+            # can be "destructive" or "suggested" or omit for no
+            # styling
+            style: suggested
+    shell: exec python3 /run/host/etc/bazaar/hooks.py
