@@ -1,7 +1,7 @@
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com
 	url = https://github.com/ubuntu/gnome-shell-extension-appindicator.git
-	branch = v64
+	branch = v65
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io
 	url = https://github.com/bazaar-org/bazaar-companion.git
@@ -17,7 +17,7 @@
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com
 	url = https://github.com/micheleg/dash-to-dock.git
-	branch = extensions.gnome.org-v105
+	branch = extensions.gnome.org-v106
 [submodule "system_files/shared/usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io"]
 	path = system_files/shared/usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io
 	url = https://github.com/AlexanderVanhee/gradia-capture.git
