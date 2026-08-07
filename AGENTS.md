@@ -257,9 +257,14 @@ tags: stable, latest, beta
 
 **Version Detection:**
 - `just fedora_version <image> <tag> <flavor>` - Dynamically detects Fedora version from upstream base images
-- For `stable`: Checks `ghcr.io/ublue-os/base-main:<tag>`
-- For `latest`/`beta`: Checks corresponding upstream tags
-- Returns the Fedora major version (e.g., 42, 43)
+- For `stable`: Checks `quay.io/fedora/fedora-coreos:stable` (CoreOS does not use cosign)
+- For `latest`/`beta`/`gts`: Checks `ghcr.io/ublue-os/base-main:<tag>`
+- A `kernel_pin` overrides the result, taking the version from the `fcNN` portion of the kernel
+- Returns the Fedora major version (e.g., 43, 44)
+
+Do not assume the streams sit on different Fedora releases. They frequently
+resolve to the same major version, so anything version-dependent must key off
+the value this recipe returns rather than off the stream name.
 
 ### Containerfile Multi-Stage Build
 The `Containerfile` uses a multi-stage build process:
@@ -272,10 +277,49 @@ The `Containerfile` uses a multi-stage build process:
 
 **Build Arguments:**
 - `BASE_IMAGE_NAME` - Upstream base (silverblue/kinoite)
-- `FEDORA_MAJOR_VERSION` - Dynamically set by Just (42/43)
+- `BASE_IMAGE_SHA` - Digest of the base image, resolved from `image-versions.yml`
+- `FEDORA_MAJOR_VERSION` - Dynamically set by Just (43/44)
 - `IMAGE_NAME` - Target image name (bluefin/bluefin-dx)
 - `KERNEL` - Pinned kernel version (optional)
 - `UBLUE_IMAGE_TAG` - Stream tag (stable/latest/beta)
+
+### Base Image Pinning
+
+`image-versions.yml` is the single source of truth for pinned upstream digests,
+and every entry in it is load-bearing. `just build` reads each digest with `yq`
+and passes it into the Containerfile, which builds `FROM image:tag@digest`.
+
+Base image entries are keyed by Fedora major version and must be named
+`<base_image_name>-main-<fedora_version>`, for example `silverblue-main-44`.
+The key is the version `just fedora_version` resolves at build time, not the
+stream name, so the pinned digest can never disagree with the version the
+kernel and akmods were resolved for.
+
+At a Fedora rollover, add a new entry before building. A missing entry fails
+the build with `No digest pinned for silverblue-main-<version>` rather than
+silently falling back to a floating tag.
+
+`repo:tag@sha256:...` is valid for buildah `FROM` and for cosign, but `skopeo
+inspect` and `podman manifest inspect` both reject it with "Docker references
+with both a tag and digest are currently not supported". Do not "fix" a working
+`FROM` on the basis of that error.
+
+### Publishing and Image Signing
+
+Every tag is pushed twice. podman does not send layer annotations on the first
+push unless the layers already exist in the registry, so the first push of a
+rechunked image produces a different manifest digest than later pushes. Pushing
+each tag once left every tag on its own digest while only one of them received
+the cosign signature, the SBOM and the attestation. See
+[containers/podman#27796](https://github.com/containers/podman/issues/27796)
+and the equivalent workaround in `ublue-os/aurora`. Do not collapse the
+duplicate push.
+
+Publishing is skipped for `pull_request` events, so PR builds validate the
+image but never push. `Latest Images` publishes only on `merge_group` and
+`workflow_dispatch`; there is no cron. Only `Stable Images` is scheduled
+(Tuesdays 01:00 UTC). Merging directly to `main` and bypassing the merge queue
+therefore publishes nothing.
 
 ### Build Script Execution Order
 Scripts in `build_files/base/` execute in numerical order:
@@ -322,6 +366,25 @@ Scripts in `build_files/base/` execute in numerical order:
 - Repository structure has changed significantly
 
 This repository is complex but well-structured. Following these instructions will significantly reduce build failures and exploration time.
+
+## Dependency Updates (Renovate)
+
+Renovate is configured in `.github/renovate.json5` and tracks its work on the
+Dependency Dashboard, issue #2680.
+
+Never hand-edit a `renovate/*` branch and never merge `main` into one. Renovate
+will not update or replace a branch it no longer owns; the PR moves to "PR
+Edited (Blocked)" on the dashboard and that dependency silently stops updating.
+Nothing about the PR looks wrong from the outside, so this is only visible on
+the dashboard. `rebaseWhen` is set to `behind-base-branch` so Renovate keeps its
+own branches current and there is no reason to touch them by hand.
+
+Closing a Renovate PR is not a fix either. It moves the entry to "PR Closed
+(Blocked)" and Renovate stops recreating it. Only close one once the dependency
+has actually been updated by other means, and say so in the closing comment.
+
+Renovate PRs are authored by `app/ubot-7274`, not `app/renovate`. Filtering by
+the latter silently returns nothing.
 
 ## Other Rules that are Important to the Maintainers
 
