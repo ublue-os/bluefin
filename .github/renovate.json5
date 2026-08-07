@@ -8,8 +8,10 @@
     "enabled": true
   },
 
-  // Do not rebase when the default branch is updated
-  "rebaseWhen": "never",
+  // Renovate cannot touch a branch that has been manually edited, which
+  // silently stalls the dependency for months. Keep its own branches current
+  // instead of hand-merging main into them.
+  "rebaseWhen": "behind-base-branch",
     customManagers: [
     {
       customType: 'regex',
