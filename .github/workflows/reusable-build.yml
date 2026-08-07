@@ -238,11 +238,10 @@ jobs:
             digest_file="$PWD/.push-digest"
             for tag in ${{ steps.generate-tags.outputs.alias_tags }}; do
               dest=${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}:${tag}
-              if [[ "${tag}" == "${{ env.DEFAULT_TAG }}" ]]; then
-                sudo -E podman push --digestfile "${digest_file}" ${{ env.IMAGE_NAME }}:${tag} "${dest}"
-              else
-                sudo -E podman push ${{ env.IMAGE_NAME }}:${tag} "${dest}"
-              fi
+              sudo -E podman push --digestfile "${digest_file}" ${{ env.IMAGE_NAME }}:${tag} "${dest}"
+              # We need to push twice to workaround https://github.com/containers/podman/issues/27796
+              # If we don't do this then the digest changes and we are only signing this specific tag
+              sudo -E podman push --digestfile "${digest_file}" ${{ env.IMAGE_NAME }}:${tag} "${dest}"
             done
 
             digest="$(cat "${digest_file}")"
