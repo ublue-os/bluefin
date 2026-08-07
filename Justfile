@@ -135,8 +135,18 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     fi
     fedora_version=$({{ just }} fedora_version '{{ image }}' '{{ tag }}' '{{ flavor }}' '{{ kernel_pin }}')
 
-    # Verify Base Image with cosign
-    {{ just }} verify-container "${base_image_name}-main:${fedora_version}"
+    # Base image digest pin, keyed by the resolved Fedora version so the pinned
+    # digest can never disagree with the version everything else is built for.
+    base_image_entry="${base_image_name}-main-${fedora_version}"
+    base_image_sha=$(yq -r ".images[] | select(.name == \"${base_image_entry}\") | .digest" image-versions.yml)
+    if [[ -z "${base_image_sha}" || "${base_image_sha}" == "null" ]]; then
+        echo "No digest pinned for ${base_image_entry} in image-versions.yml." >&2
+        echo "Add an entry for Fedora ${fedora_version} before building." >&2
+        exit 1
+    fi
+
+    # Verify Base Image with cosign, pinned by digest
+    {{ just }} verify-container "${base_image_name}-main:${fedora_version}@${base_image_sha}"
 
     # Kernel Release/Pin
     if [[ -z "${kernel_pin:-}" ]]; then
@@ -184,6 +194,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     fi
     BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${akmods_flavor}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${base_image_name}")
+    BUILD_ARGS+=("--build-arg" "BASE_IMAGE_SHA=${base_image_sha}")
     BUILD_ARGS+=("--build-arg" "COMMON_IMAGE={{ common_image }}")
     BUILD_ARGS+=("--build-arg" "COMMON_IMAGE_SHA=${common_image_sha}")
     BUILD_ARGS+=("--build-arg" "BREW_IMAGE={{ brew_image }}")
