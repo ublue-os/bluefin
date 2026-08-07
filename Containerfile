@@ -2,6 +2,7 @@ ARG BASE_IMAGE_NAME="silverblue"
 ARG FEDORA_MAJOR_VERSION="42"
 ARG SOURCE_IMAGE="${BASE_IMAGE_NAME}-main"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${SOURCE_IMAGE}"
+ARG BASE_IMAGE_SHA=""
 ARG COMMON_IMAGE="ghcr.io/projectbluefin/common:latest"
 ARG COMMON_IMAGE_SHA=""
 ARG BREW_IMAGE="ghcr.io/ublue-os/brew:latest"
@@ -19,7 +20,7 @@ COPY --from=brew /system_files /system_files/shared
 COPY /system_files /system_files
 
 ## bluefin image section
-FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS base
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION}@${BASE_IMAGE_SHA} AS base
 
 ARG AKMODS_FLAVOR="coreos-stable"
 ARG BASE_IMAGE_NAME="silverblue"
