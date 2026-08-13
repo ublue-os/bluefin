@@ -31,7 +31,8 @@ jobs:
       matrix:
         brand_name: ["bluefin"]
     with:
-      kernel_pin: 7.0.12-201.fc44.x86_64
+      # Pin stable to a kernel if needed, like for ZFS compatibility
+      # kernel_pin: 7.0.12-201.fc44.x86_64
       brand_name: ${{ matrix.brand_name }}
       stream_name: stable
 
