@@ -83,8 +83,7 @@ dnf -y install --enablerepo=docker-ce-stable \
     docker-buildx-plugin \
     docker-ce \
     docker-ce-cli \
-    docker-compose-plugin \
-    docker-model-plugin
+    docker-compose-plugin
 
 tee /etc/yum.repos.d/vscode.repo <<'EOF'
 [code]
