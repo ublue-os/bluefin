@@ -164,7 +164,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         {{ just }} verify-container "akmods-nvidia-open:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
 
-    {{ just }} verify-container "common:latest@${common_image_sha}" ghcr.io/projectbluefin https://raw.githubusercontent.com/projectbluefin/common/refs/heads/main/cosign.pub
+    {{ just }} verify-container "common:latest@${common_image_sha}" ghcr.io/projectbluefin keyless
     {{ just }} verify-container "brew:latest@${brew_image_sha}" ghcr.io/ublue-os https://raw.githubusercontent.com/ublue-os/brew/refs/heads/main/cosign.pub
 
     # Get Version
@@ -509,10 +509,18 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
         key="https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub"
     fi
 
-    # Verify Container using cosign public key
-    if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" >/dev/null; then
-        echo "NOTICE: Verification failed. Please ensure your public key is correct."
-        exit 1
+    # Verify Container using cosign
+    if [[ "${key}" == "keyless" ]]; then
+        # Keyless verification for images signed via Sigstore OIDC (projectbluefin/common)
+        if ! cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity-regexp='^https://github\.com/projectbluefin/(common|actions)/\.github/workflows/' "{{ registry }}"/"{{ container }}" >/dev/null; then
+            echo "NOTICE: Keyless verification failed. Please ensure the certificate identity is correct."
+            exit 1
+        fi
+    else
+        if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" >/dev/null; then
+            echo "NOTICE: Verification failed. Please ensure your public key is correct."
+            exit 1
+        fi
     fi
 
 # Secureboot Check
