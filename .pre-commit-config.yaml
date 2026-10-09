@@ -5,7 +5,11 @@ repos:
     rev: v4.4.0
     hooks:
         - id: check-json
+          exclude: ^\.devcontainer\.json$
         - id: check-toml
         - id: check-yaml
         - id: end-of-file-fixer
         - id: trailing-whitespace
+        - id: check-merge-conflict
+        - id: detect-private-key
+        - id: check-added-large-files
