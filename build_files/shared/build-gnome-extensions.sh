@@ -22,9 +22,13 @@ glib-compile-schemas --strict /usr/share/gnome-shell/extensions/blur-my-shell@au
 rm -rf /usr/share/gnome-shell/extensions/blur-my-shell@aunetx/build
 
 # Caffeine
-# The Caffeine extension is built/packaged into a temporary subdirectory (tmp/caffeine/caffeine@patapon.info).
-# Unlike other extensions, it must be moved to the standard extensions directory so GNOME Shell can detect it.
-mv /usr/share/gnome-shell/extensions/tmp/caffeine/caffeine@patapon.info /usr/share/gnome-shell/extensions/caffeine@patapon.info
+# Caffeine is built/packaged into a temporary subdirectory (tmp/caffeine/caffeine@patapon.info). Its `make build`
+# target runs `gnome-extensions pack --podir=locale`, which compiles the extension's .po catalogues into
+# locale/<lang>/LC_MESSAGES/<domain>.mo (a bare copy would ship unreadable .po source and gettext would find
+# nothing); the zip lands one directory up, so unpack it into the standard extensions directory so GNOME Shell
+# can detect it.
+make -C /usr/share/gnome-shell/extensions/tmp/caffeine build
+unzip -o /usr/share/gnome-shell/extensions/tmp/caffeine/caffeine@patapon.info.zip -d /usr/share/gnome-shell/extensions/caffeine@patapon.info
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/caffeine@patapon.info/schemas
 
 # Dash to Dock
