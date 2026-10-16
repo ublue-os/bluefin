@@ -5,12 +5,12 @@ images:
   # `silverblue-main-${fedora_version}`; add a new one at each Fedora rollover.
   - name: silverblue-main-43
     image: ghcr.io/ublue-os/silverblue-main
-    tag: 44
-    digest: sha256:7f829bceba48df411642833d9f3c2b8d6ed49d89ce8a1963f686a7f57b74c612
+    tag: 45
+    digest: sha256:955ef3a904a4039536dd74f67db833b3b0fb3bae2f91d3c0c4da2d92419ca6fc
   - name: silverblue-main-44
     image: ghcr.io/ublue-os/silverblue-main
-    tag: 44
-    digest: sha256:7f829bceba48df411642833d9f3c2b8d6ed49d89ce8a1963f686a7f57b74c612
+    tag: 45
+    digest: sha256:955ef3a904a4039536dd74f67db833b3b0fb3bae2f91d3c0c4da2d92419ca6fc
   - name: common
     image: ghcr.io/projectbluefin/common
     tag: latest
