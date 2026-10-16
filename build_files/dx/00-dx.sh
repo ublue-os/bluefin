@@ -118,6 +118,8 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
         echo "No excluded packages found to remove."
     fi
 fi
+# Newer selinux-policy from the dx packages overwrites rpm-ostree's subs_dist fix
+sed -i 's|^/var/home[[:space:]]\+/home$|/home /var/home|' /etc/selinux/targeted/contexts/files/file_contexts.subs_dist
 
 systemctl enable docker.socket
 systemctl enable podman.socket
