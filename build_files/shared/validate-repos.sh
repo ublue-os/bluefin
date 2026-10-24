@@ -5,6 +5,8 @@ echo "::group:: ===$(basename "$0")==="
 set -eou pipefail
 
 REPOS_DIR="/etc/yum.repos.d"
+# Fedora 45+ ships its own repo files here instead of /etc/yum.repos.d
+FEDORA_REPOS_DIR="/usr/share/dnf5/repos.d"
 VALIDATION_FAILED=0
 ENABLED_REPOS=()
 
@@ -74,10 +76,11 @@ OTHER_REPOS=(
 )
 
 for repo_name in "${OTHER_REPOS[@]}"; do
-    repo_path="$REPOS_DIR/$repo_name"
-    if [[ -f "$repo_path" ]]; then
-        check_repo_file "$repo_path"
-    fi
+    for repo_path in "$REPOS_DIR/$repo_name" "$FEDORA_REPOS_DIR/$repo_name"; do
+        if [[ -f "$repo_path" ]]; then
+            check_repo_file "$repo_path"
+        fi
+    done
 done
 
 echo ""
@@ -88,20 +91,22 @@ done
 
 echo ""
 echo "Checking Fedora updates-testing (should be disabled unless beta)..."
-if [[ -f "$REPOS_DIR/fedora-updates-testing.repo" ]]; then
-    if grep -q "^enabled=1" "$REPOS_DIR/fedora-updates-testing.repo" 2>/dev/null; then
-        # Allow updates-testing to be enabled for beta builds
-        if [[ "${UBLUE_IMAGE_TAG:-stable}" == "beta" ]]; then
-            echo "updates-testing is enabled (allowed for beta builds)"
+for repo_path in "$REPOS_DIR/fedora-updates-testing.repo" "$FEDORA_REPOS_DIR/fedora-updates-testing.repo"; do
+    if [[ -f "$repo_path" ]]; then
+        if grep -q "^enabled=1" "$repo_path" 2>/dev/null; then
+            # Allow updates-testing to be enabled for beta builds
+            if [[ "${UBLUE_IMAGE_TAG:-stable}" == "beta" ]]; then
+                echo "updates-testing is enabled (allowed for beta builds)"
+            else
+                echo "ENABLED: fedora-updates-testing.repo (should only be enabled for beta)"
+                ENABLED_REPOS+=("fedora-updates-testing.repo")
+                VALIDATION_FAILED=1
+            fi
         else
-            echo "ENABLED: fedora-updates-testing.repo (should only be enabled for beta)"
-            ENABLED_REPOS+=("fedora-updates-testing.repo")
-            VALIDATION_FAILED=1
+            echo "Disabled: fedora-updates-testing.repo"
         fi
-    else
-        echo "Disabled: fedora-updates-testing.repo"
     fi
-fi
+done
 
 # Final summary
 echo ""
