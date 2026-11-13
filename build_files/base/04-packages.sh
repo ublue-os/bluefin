@@ -111,6 +111,11 @@ case "$FEDORA_MAJOR_VERSION" in
             gnupg2-scdaemon
         )
         ;;
+    45)
+        FEDORA_PACKAGES+=(
+            gnupg2-scdaemon
+        )
+        ;;
 esac
 
 # Install all Fedora packages (bulk - safe from COPR injection)

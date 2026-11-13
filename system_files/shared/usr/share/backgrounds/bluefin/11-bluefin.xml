@@ -1,0 +1,21 @@
+<!-- Overrides common's 11-bluefin.xml: swap day/night without fading. Remove once common ships this -->
+<background>
+        <starttime>
+                <year>2018</year>
+                <month>1</month>
+                <day>1</day>
+                <hour>7</hour>
+                <minute>0</minute>
+                <second>0</second>
+        </starttime>
+
+        <static>
+                <file>/usr/share/backgrounds/bluefin/11-bluefin-day.svg</file>
+                <duration>37800.0</duration>
+        </static>
+
+        <static>
+                <file>/usr/share/backgrounds/bluefin/11-bluefin-night.svg</file>
+                <duration>48600.0</duration>
+        </static>
+</background>
