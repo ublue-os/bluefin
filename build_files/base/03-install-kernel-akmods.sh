@@ -4,11 +4,6 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
-# Beta Updates Testing Repo...
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 config-manager setopt updates-testing.enabled=1
-fi
-
 # Remove Existing Kernel
 for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra; do
     rpm --erase $pkg --nodeps
@@ -38,23 +33,12 @@ dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
 
 # RPMFUSION Dependent AKMODS
-if [[ "${UBLUE_IMAGE_TAG}" == "beta" ]]; then
-    dnf5 -y install \
-        https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm || true
-    dnf5 -y install \
-        https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm || true
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm || true
-    dnf5 -y remove rpmfusion-free-release || true
-    dnf5 -y remove rpmfusion-nonfree-release || true
-else
-    dnf5 -y install \
-        https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
-        https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
-    dnf5 -y install \
-        v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-    dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
-fi
+dnf5 -y install \
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"$(rpm -E %fedora)".noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"$(rpm -E %fedora)".noarch.rpm
+dnf5 -y install \
+    v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
+dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
 
 # Nvidia AKMODS
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
@@ -65,16 +49,7 @@ if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     mv /tmp/rpms/* /tmp/akmods-rpms/
 
     # Exclude the Golang Nvidia Container Toolkit in Fedora Repo
-    # Exclude for non-beta.... doesn't appear to exist for F42 yet?
-    if [[ "${UBLUE_IMAGE_TAG}" != "beta" ]]; then
-        dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
-    else
-        # Monkey patch right now...
-        if ! grep -q negativo17 <(rpm -qi mesa-dri-drivers); then
-            dnf5 -y swap --repo=updates-testing \
-                mesa-dri-drivers mesa-dri-drivers
-        fi
-    fi
+    dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
 
     # Install Nvidia RPMs
     IMAGE_NAME="${BASE_IMAGE_NAME}" AKMODNV_PATH="/tmp/akmods-rpms" MULTILIB=0 /tmp/akmods-rpms/ublue-os/nvidia-install.sh
