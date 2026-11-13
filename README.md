@@ -1,4 +1,9 @@
-# Bluefin
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/projectbluefin/artwork/main/assets/vector/logos/bluefin-classic/main/bluefin-classic-logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/projectbluefin/artwork/main/assets/vector/logos/bluefin-classic/main/bluefin-classic-logo-light.svg">
+  <img alt="Bluefin Classic" src="https://raw.githubusercontent.com/projectbluefin/artwork/main/assets/vector/logos/bluefin-classic/main/bluefin-classic-logo-light.svg" width="400">
+</picture>
+
 *Deinonychus antirrhopus*
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2503a44c1105456483517f793af75ee7)](https://app.codacy.com/gh/ublue-os/bluefin/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ublue-os/bluefin/badge)](https://scorecard.dev/viewer/?uri=github.com/ublue-os/bluefin)[![Stable Images](https://github.com/ublue-os/bluefin/actions/workflows/build-image-stable.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-image-stable.yml)[![Latest Images](https://github.com/ublue-os/bluefin/actions/workflows/build-image-latest-main.yml/badge.svg)](https://github.com/ublue-os/bluefin/actions/workflows/build-image-latest-main.yml)

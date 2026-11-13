@@ -83,8 +83,7 @@ dnf -y install --enablerepo=docker-ce-stable \
     docker-buildx-plugin \
     docker-ce \
     docker-ce-cli \
-    docker-compose-plugin \
-    docker-model-plugin
+    docker-compose-plugin
 
 tee /etc/yum.repos.d/vscode.repo <<'EOF'
 [code]
@@ -118,13 +117,20 @@ if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
         echo "No excluded packages found to remove."
     fi
 fi
+# Newer selinux-policy from the dx packages overwrites rpm-ostree's subs_dist fix
+sed -i 's|^/var/home[[:space:]]\+/home$|/home /var/home|' /etc/selinux/targeted/contexts/files/file_contexts.subs_dist
 
 systemctl enable docker.socket
 systemctl enable podman.socket
 systemctl enable libvirt-workaround.service
 systemctl enable bluefin-dx-groups.service
 
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
+# Fedora 45+ ships its own repo files in /usr/share/dnf5/repos.d instead of /etc/yum.repos.d
+for repo_file in /etc/yum.repos.d/fedora-cisco-openh264.repo /usr/share/dnf5/repos.d/fedora-cisco-openh264.repo; do
+    if [[ -f "$repo_file" ]]; then
+        sed -i 's@enabled=1@enabled=0@g' "$repo_file"
+    fi
+done
 
 # NOTE: we won't use dnf5 copr plugin for ublue-os/akmods until our upstream provides the COPR standard naming
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
