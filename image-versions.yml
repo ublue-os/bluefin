@@ -6,7 +6,7 @@ images:
   - name: silverblue-main-44
     image: ghcr.io/ublue-os/silverblue-main
     tag: 44
-    digest: sha256:99b744cf5c37e7ba59a3efc41022b0d595fbcc347a08862ec231a5604b249846
+    digest: sha256:0dc1e5b4a5d984d5231be94e7ab4f3dd48b37038b34aa252e018394037209060
   - name: silverblue-main-45
     image: ghcr.io/ublue-os/silverblue-main
     tag: 45
