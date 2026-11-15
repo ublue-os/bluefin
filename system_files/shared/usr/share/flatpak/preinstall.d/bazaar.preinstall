@@ -1,0 +1,6 @@
+# NEVER REMOVE THIS FILE
+# THIS WILL REMOVE BAZAAR FROM EVERYONES SYSTEMS IF WE REMOVE THIS
+
+[Flatpak Preinstall io.github.kolunmi.Bazaar]
+Branch=stable
+IsRuntime=false

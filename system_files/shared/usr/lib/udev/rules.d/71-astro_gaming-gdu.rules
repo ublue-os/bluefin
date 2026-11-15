@@ -1,0 +1,2 @@
+# ASTRO Gaming C40 Controller; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="9886", ATTRS{idProduct}=="0025", MODE="0660", TAG+="uaccess"

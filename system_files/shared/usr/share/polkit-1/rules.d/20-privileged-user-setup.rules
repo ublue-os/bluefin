@@ -1,0 +1,10 @@
+polkit.addRule(function(action,subject) {
+    if ( (action.id == "org.freedesktop.policykit.exec") &&
+         (action.lookup("program") == "/usr/bin/ublue-privileged-setup") &&
+         (subject.isInGroup("wheel") ) ) {
+      return polkit.Result.YES;
+    }
+
+    return polkit.Result.NOT_HANDLED;
+  }
+);

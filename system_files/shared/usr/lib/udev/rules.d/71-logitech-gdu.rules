@@ -1,0 +1,5 @@
+# Logitech F310 Gamepad; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c216", MODE="0660", TAG+="uaccess"
+
+# Logitech F710 Wireless Gamepad; USB #EXPERIMENTAL
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c21f", MODE="0660", TAG+="uaccess"

@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+BLING_CLI_DIRECTORY="/usr/share/ublue-os/bling"
+
+BLING_SCRIPT_SOURCE=""
+TARGET_CONFIG_FILE=""
+shell="$(basename "${SHELL}")"
+case "${shell}" in
+    "fish")
+        BLING_SCRIPT_SOURCE="bling.fish"
+        TARGET_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/fish/config.fish"
+    ;;
+    "zsh")
+        BLING_SCRIPT_SOURCE="bling.sh"
+        TARGET_CONFIG_FILE="${ZDOTDIR:-$HOME}/.zshrc"
+    ;;
+    "bash")
+        BLING_SCRIPT_SOURCE="bling.sh"
+        TARGET_CONFIG_FILE="${HOME}/.bashrc"
+    ;;
+    *)
+        echo 'Unknown shell. You are on your own.'
+        exit 1
+    ;;
+esac
+
+function is-bling-installed() {
+    [ -f "$TARGET_CONFIG_FILE" ] || return 1
+
+    if [ -n "$(grep -n "source $BLING_CLI_DIRECTORY/$BLING_SCRIPT_SOURCE" "$TARGET_CONFIG_FILE" | grep -Eo '^[^:]+')" ]; then
+        return 0
+    fi
+    return 1
+}
+
+[ -f "${BLING_ENV_SCRIPT:-/usr/share/ublue-os/bling/env.sh}" ] && . "${BLING_ENV_SCRIPT:-/usr/share/ublue-os/bling/env.sh}"
+
+BLING_MESSAGE_ENABLE="${BLING_MESSAGE_ENABLE:-Enable bling for ${shell}?}"
+BLING_MESSAGE_DISABLE="${BLING_MESSAGE_DISABLE:-Disable bling for ${shell}?}"
+
+if is-bling-installed "${shell}" ; then
+    gum confirm "${BLING_MESSAGE_DISABLE}"
+    if ! sed -i "/### ${BLING_SCRIPT_SOURCE} source start/,/### ${BLING_SCRIPT_SOURCE} source end/d" "${TARGET_CONFIG_FILE}" ; then
+        sed -i "$(grep -n "source ${BLING_SCRIPT_SOURCE}" "${TARGET_CONFIG_FILE}" | grep -Eo '^[^:]+')"d "${HOME}/.bashrc"
+    fi
+    echo "Bling removed. Reopen your terminal so that the configurations may be removed"
+else
+    gum confirm "${BLING_MESSAGE_ENABLE}" --affirmative="Bling me up!" --negative "No, I'm boring"
+    echo "Adding bling to your $(basename "${TARGET_CONFIG_FILE}")"
+    cat<<EOF >> "${TARGET_CONFIG_FILE}"
+### ${BLING_SCRIPT_SOURCE} source start
+test -f ${BLING_CLI_DIRECTORY}/${BLING_SCRIPT_SOURCE} && source ${BLING_CLI_DIRECTORY}/${BLING_SCRIPT_SOURCE}
+### ${BLING_SCRIPT_SOURCE} source end
+EOF
+    echo "Installation complete. Reopen your terminal so that the configurations may be applied"
+fi

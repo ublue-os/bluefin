@@ -1,0 +1,3 @@
+# Personal Communication Systems, Inc. Twin USB Gamepad; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0810", ATTRS{idProduct}=="e301", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEM=="input", ATTRS{name}=="Twin USB Gamepad*", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"

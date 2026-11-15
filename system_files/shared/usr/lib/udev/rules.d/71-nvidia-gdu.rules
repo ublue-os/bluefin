@@ -1,0 +1,8 @@
+# NVIDIA Shield Portable (2013 - NVIDIA_Controller_v01.01 - In-Home Streaming only)
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0955", ATTRS{idProduct}=="7203", ENV{ID_INPUT_JOYSTICK}="1", ENV{ID_INPUT_MOUSE}="", MODE="0660", TAG+="uaccess"
+
+# NVIDIA Shield Controller (2017 - NVIDIA_Controller_v01.04); Bluetooth
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*0955:7214*", MODE="0660", TAG+="uaccess"
+
+# NVIDIA Shield Controller (2015 - NVIDIA_Controller_v01.03); USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0955", ATTRS{idProduct}=="7210", ENV{ID_INPUT_JOYSTICK}="1", ENV{ID_INPUT_MOUSE}="", MODE="0660", TAG+="uaccess"

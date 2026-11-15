@@ -7,7 +7,7 @@ echo "::group:: Copy Files"
 # Speeds up local builds
 dnf config-manager setopt keepcache=1
 
-# We need to remove this package here because lots of files we add from `projectbluefin/common` override the rpm files and they also go away when you do `dnf remove`
+# We need to remove this package here because lots of files we add in `system_files/shared` (vendored from `projectbluefin/common`) override the rpm files and they also go away when you do `dnf remove`
 dnf remove -y ublue-os-luks ublue-os-just ublue-os-udev-rules ublue-os-signing ublue-os-update-services
 
 # Keep *-logos in RPM DB for downstream package installations

@@ -1,0 +1,5 @@
+# Mad Catz Street Fighter V Arcade FightPad PRO
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0738", ATTRS{idProduct}=="8250", MODE="0660", TAG+="uaccess"
+
+# Mad Catz Street Fighter V Arcade FightStick TE S+
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0738", ATTRS{idProduct}=="8384", MODE="0660", TAG+="uaccess"

@@ -1,0 +1,2 @@
+# Nacon PS4 Revolution Pro Controller
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="146b", ATTRS{idProduct}=="0d01", MODE="0660", TAG+="uaccess"

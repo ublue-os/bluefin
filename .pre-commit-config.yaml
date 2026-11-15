@@ -1,5 +1,23 @@
 # .pre-commit-config.yaml
 
+# Files vendored byte for byte from projectbluefin/common (see NOTICE.common).
+# Keep them identical to what the image shipped; clean them up in a separate change.
+exclude: |
+  (?x)^system_files/shared/(
+    etc/containers/registries\.d/(quay\.io-toolbx-images|ublue-os)\.yaml|
+    etc/profile\.d/uutils\.sh|
+    usr/bin/ublue-(fastfetch|system-setup)|
+    usr/lib/pki/containers/quay\.io-toolbx-images\.pub|
+    usr/lib/udev/rules\.d/(70-u2f|70-wooting|71-bigscreen-gdu|71-google-gdu)\.rules|
+    usr/share/color/icc/colord/framework1[36]\.icc|
+    usr/share/icons/hicolor/scalable/places/fedora_white_?logo\.svg|
+    usr/share/ublue-os/bling/bling\.(fish|sh)|
+    usr/share/ublue-os/bluefin-logos/karl\.png|
+    usr/share/ublue-os/bluefin-logos/sixels/(bluefin|chicken|dolly|karl)|
+    usr/share/ublue-os/homebrew/(ai-tools|full-desktop|ide)\.Brewfile|
+    usr/share/ublue-os/just/system\.just
+  )$
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0

@@ -1,0 +1,17 @@
+# Devices that sub-license the Raspberry Pi USB vendor ID
+# https://github.com/raspberrypi/usb-pid
+
+# Hand Held Legend Generic SInput Device; Bluetooth; USB
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*2E8A:10C6*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="10c6", MODE="0660", TAG+="uaccess"
+
+# Hand Held Legend ProGCC in SInput Mode; Bluetooth; USB
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*2E8A:10DF*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="10df", MODE="0660", TAG+="uaccess"
+
+# Hand Held Legend GC Ultimate in SInput Mode; Bluetooth; USB
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*2E8A:10DD*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="10dd", MODE="0660", TAG+="uaccess"
+
+# Bonjiri Channel Firebird in SInput Mode; USB
+ACTION!="remove", KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="10e0", MODE="0660", TAG+="uaccess"

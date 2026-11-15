@@ -1,0 +1,77 @@
+#!/usr/bin/bash
+
+IMAGE_INFO="/usr/share/ublue-os/image-info.json"
+IMAGE_NAME="$(jq -r '."image-name"' < "$IMAGE_INFO")"
+IMAGE_TAG="$(jq -r '."image-tag"' < "$IMAGE_INFO")"
+IMAGE_VENDOR="$(jq -r '."image-vendor"' < "$IMAGE_INFO")"
+IMAGE_REGISTRY="ghcr.io/${IMAGE_VENDOR}"
+
+if grep -qe "lts" <<< "${IMAGE_TAG}" ; then
+  LTS_MODE="1"
+fi
+
+function list_tags() {
+  local filter="$1"
+  skopeo list-tags "docker://${IMAGE_REGISTRY}/${IMAGE_NAME}" \
+    | jq -r '.Tags[]' \
+    | grep -E --color=never "$filter" \
+    | sort -rV | head -n 31
+}
+
+echo -ne "Current image: ${IMAGE_NAME}:${IMAGE_TAG}\n"
+declare -a IMAGES
+if [ "${LTS_MODE}" == "1" ] ; then
+  IMAGES=(bluefin bluefin-dx bluefin-gdx)
+else
+  IMAGES=(bluefin bluefin-dx bluefin-nvidia-open bluefin-dx-nvidia-open)
+fi
+IMAGE_NAME="$(gum choose --header="Select your image:" "${IMAGES[@]}" cancel)"
+[[ "$IMAGE_NAME" == "cancel" || "$IMAGE_NAME" == "" ]] && exit 0
+
+base_image="${IMAGE_REGISTRY}/${IMAGE_NAME}"
+declare -a CHANNELS
+if [ "${LTS_MODE}" == "1" ] ; then
+  CHANNELS=(lts lts-hwe)
+  if grep -q -e "gdx" <<< "${IMAGE_NAME}" ; then
+    CHANNELS=(lts)
+  fi
+else
+  CHANNELS=(stable stable-daily latest)
+  echo "The default selection is stable (weekly builds) and stable-daily (daily builds) are for enthusiasts, and latest is for testers"
+fi
+
+channel_choice="$(gum choose "${CHANNELS[@]}" cancel)"
+[[ "$channel_choice" == "cancel" || "$channel_choice" == "" ]] && exit 0
+channel_selected=${channel_choice%% *}
+
+rebase_target="${base_image}:${channel_selected}"
+
+if gum confirm --default=no "Would you like to pin to a specific build date?" ; then
+  echo "Fetching available tags for channel: $channel_selected..."
+  filter="${channel_selected}.[0-9]{8}"
+
+  if [ "${LTS_MODE}" == 1 ] ; then
+    if grep -q -e "hwe" -e "gdx" <<< "${channel_selected}" ; then
+      filter="lts.[0-9]{8}"
+      valid_tags=( $(list_tags "$filter" | grep hwe) )
+    else
+      valid_tags=( $(list_tags "$filter" | grep -v hwe) )
+    fi
+  else
+    valid_tags=( $(list_tags "$filter") )
+  fi
+  [[ "${#valid_tags[@]}" -eq 0 ]] && { echo "No tags found for $filter"; exit 1; }
+
+  selected_tag="$(gum choose cancel "${valid_tags[@]}")"
+  [[ "$selected_tag" == "cancel" || "$selected_tag" == "" ]] && exit 0
+
+  rebase_target="${base_image}:${selected_tag}"
+fi
+
+gum confirm "Confirm rebase to ${rebase_target}?" || exit 1
+
+if grep -q "^LockLayering=true" /etc/rpm-ostreed.conf; then
+  pkexec bootc switch --enforce-container-sigpolicy "${rebase_target}"
+else
+  rpm-ostree rebase ostree-image-signed:docker://"${rebase_target}"
+fi

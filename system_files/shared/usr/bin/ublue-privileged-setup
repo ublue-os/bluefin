@@ -1,0 +1,28 @@
+#!/usr/bin/bash
+
+get_config() {
+	SETUP_CONFIG_FILE="${SETUP_CONFIG_FILE:-/etc/ublue-os/setup.json}"
+	QUERY="$1"
+	FALLBACK="$2"
+	shift
+	shift
+	OUTPUT="$(jq -r "$QUERY" "$SETUP_CONFIG_FILE" 2>/dev/null || echo "$FALLBACK")"
+	if [ "$OUTPUT" == "null" ] ; then
+		echo "$FALLBACK"
+		return
+	fi
+	echo "$OUTPUT"
+}
+
+PRIVILEGED_HOOKS_DIRECTORY="$(get_config '."privileged-hooks-directory"' "/usr/share/ublue-os/privileged-setup.hooks.d")"
+HOOKS_VERBOSE="${HOOKS_VERBOSE:-$(get_config '."verbose"' "false")}"
+
+if [ "${HOOKS_VERBOSE}" == "true" ] ; then
+	set -x
+fi
+
+if [ -d "${PRIVILEGED_HOOKS_DIRECTORY}" ] ; then
+	for script in $PRIVILEGED_HOOKS_DIRECTORY/* ; do
+		bash $script
+	done
+fi

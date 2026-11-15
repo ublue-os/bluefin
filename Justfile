@@ -1,6 +1,6 @@
 repo_organization := "ublue-os"
 rechunker_image := "ghcr.io/ublue-os/legacy-rechunk:v1.0.1-x86_64@sha256:2627cbf92ca60ab7372070dcf93b40f457926f301509ffba47a04d6a9e1ddaf7"
-common_image := "ghcr.io/projectbluefin/common:latest"
+wallpapers_image := "ghcr.io/ublue-os/bluefin-wallpapers-gnome:latest"
 brew_image := "ghcr.io/ublue-os/brew:latest"
 images := '(
     [bluefin]=bluefin
@@ -110,7 +110,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     # Image Name
     image_name=$({{ just }} image_name {{ image }} {{ tag }} {{ flavor }})
 
-    common_image_sha=$(yq -r '.images[] | select(.name == "common") | .digest' image-versions.yml)
+    wallpapers_image_sha=$(yq -r '.images[] | select(.name == "bluefin-wallpapers-gnome") | .digest' image-versions.yml)
     brew_image_sha=$(yq -r '.images[] | select(.name == "brew") | .digest' image-versions.yml)
 
     # Base Image
@@ -161,7 +161,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
         {{ just }} verify-container "akmods-nvidia-open:${akmods_flavor}-${fedora_version}-${kernel_release}"
     fi
 
-    {{ just }} verify-container "common:latest@${common_image_sha}" ghcr.io/projectbluefin https://raw.githubusercontent.com/projectbluefin/common/refs/heads/main/cosign.pub
+    {{ just }} verify-container "bluefin-wallpapers-gnome:latest@${wallpapers_image_sha}"
     {{ just }} verify-container "brew:latest@${brew_image_sha}" ghcr.io/ublue-os https://raw.githubusercontent.com/ublue-os/brew/refs/heads/main/cosign.pub
 
     # Get Version
@@ -192,8 +192,8 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${akmods_flavor}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${base_image_name}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_SHA=${base_image_sha}")
-    BUILD_ARGS+=("--build-arg" "COMMON_IMAGE={{ common_image }}")
-    BUILD_ARGS+=("--build-arg" "COMMON_IMAGE_SHA=${common_image_sha}")
+    BUILD_ARGS+=("--build-arg" "WALLPAPERS_IMAGE={{ wallpapers_image }}")
+    BUILD_ARGS+=("--build-arg" "WALLPAPERS_IMAGE_SHA=${wallpapers_image_sha}")
     BUILD_ARGS+=("--build-arg" "BREW_IMAGE={{ brew_image }}")
     BUILD_ARGS+=("--build-arg" "BREW_IMAGE_SHA=${brew_image_sha}")
     BUILD_ARGS+=("--build-arg" "FEDORA_MAJOR_VERSION=${fedora_version}")

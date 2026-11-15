@@ -1,0 +1,15 @@
+# Written by https://github.com/kylegospo
+
+# Audio Expansion Card
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0010", ATTR{power/autosuspend}="10", ATTR{power/control}="auto", GOTO="rules_end"
+
+# Framework Laptop 16 Keyboard Module - ANSI
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0012", ATTR{power/autosuspend}="-1", ATTR{power/control}="on", ATTR{power/wakeup}="disabled", GOTO="rules_end"
+
+# Framework Laptop 16 Numpad Module
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0014", ATTR{power/autosuspend}="-1", ATTR{power/control}="on", ATTR{power/wakeup}="disabled", GOTO="rules_end"
+
+# Framework Laptop 16 Keyboard Module
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="32ac", ATTR{idProduct}=="0018", ATTR{power/autosuspend}="-1", ATTR{power/control}="on", ATTR{power/wakeup}="disabled", GOTO="rules_end"
+
+LABEL="rules_end"

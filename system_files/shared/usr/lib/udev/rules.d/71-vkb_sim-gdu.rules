@@ -1,0 +1,2 @@
+# VKBsim Gladiator NXT R
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="231d", ATTRS{idProduct}=="0200", MODE="0660", TAG+="uaccess"

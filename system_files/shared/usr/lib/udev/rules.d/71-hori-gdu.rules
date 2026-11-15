@@ -1,0 +1,35 @@
+# Hori HORIPAD 4 FPS; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="0055", MODE="0660", TAG+="uaccess"
+
+# Hori HORIPAD 4 FPS Plus; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="0066", MODE="0660", TAG+="uaccess"
+
+# Hori RAP4; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="008a", MODE="0660", TAG+="uaccess"
+
+# Hori Pokkén Tournament DX Pro Pad for Nintendo Switch; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="0092", MODE="0660", TAG+="uaccess"
+
+# Hori Nintendo Switch HORIPAD Wired Controller; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="00c1", MODE="0660", TAG+="uaccess"
+
+# HORIPAD mini 4; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="00ee", MODE="0660", TAG+="uaccess"
+
+# HORI Alpha for PS5 (PS4 Mode); USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="011c", MODE="0660", TAG+="uaccess"
+
+# HORI Alpha for PS5 (PC Mode); USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="011e", MODE="0660", TAG+="uaccess"
+
+# HORI Wireless Pad ONYX PLUS; Bluetooth
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="012b", MODE="0660", TAG+="uaccess"
+
+# HORI Wireless Pad ONYX PLUS; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="012d", MODE="0660", TAG+="uaccess"
+
+# HORI Alpha for PS5 (PS5 Mode); USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="0184", MODE="0660", TAG+="uaccess"
+
+# Hori Wireless HORIPAD for Steam; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0f0d", ATTRS{idProduct}=="01ab", MODE="0660", TAG+="uaccess"

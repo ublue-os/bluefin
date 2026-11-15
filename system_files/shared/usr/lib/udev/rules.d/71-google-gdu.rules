@@ -1,0 +1,13 @@
+# Google Stadia Controller; Bluetooth; USB
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*18D1:9400*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="9400", SUBSYSTEM=="hidraw", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEMS=="usb", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="9400", MODE="0660", TAG+="uaccess"
+
+# Google Stadia Controller Update
+# SDP protocol
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1fc9", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEM=="usb", ATTR{idVendor}=="1fc9", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEM=="usb", ATTR{idVendor}=="0d28", MODE="0660", TAG+="uaccess"
+# Flashloader
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="15a2", MODE="0660", TAG+="uaccess"
+
