@@ -1,0 +1,16 @@
+# Apply Bluefin's Dash to Dock defaults system-wide
+[org/gnome/shell/extensions/dash-to-dock]
+dock-fixed=true
+force-straight-corner=false
+custom-theme-shrink=true
+disable-overview-on-startup=true
+transparency-mode='DYNAMIC'
+animation-time=0.15
+background-color='rgb(40,40,40)'
+background-opacity=0.8
+custom-background-color=true
+customize-alphas=true
+max-alpha=0.8
+min-alpha=0.5
+running-indicator-style='DOTS'
+apply-custom-theme=true
