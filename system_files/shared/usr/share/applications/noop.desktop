@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=
+Comment=Prevents GNOME Disks from opening non-executable AppImage files
+Comment[cs]=Zabraňuje GNOME Diskům v otevírání nespustitelných AppImage souborů
+Comment[fr]=Empêche GNOME Disks d'ouvrir les fichiers AppImage non exécutables
+Exec=/usr/bin/true
+NoDisplay=true
+Terminal=false
+MimeType=application/vnd.appimage;

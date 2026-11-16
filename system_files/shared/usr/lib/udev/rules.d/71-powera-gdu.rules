@@ -1,0 +1,15 @@
+# PowerA GameCube Style Wired Controller for Nintendo Switch; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="20d6", ATTRS{idProduct}=="a711", MODE="0660", TAG+="uaccess"
+
+# PowerA Nintendo Switch Enhanced Wireless Controller; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="20d6", ATTRS{idProduct}=="a712", MODE="0660", TAG+="uaccess"
+
+# PowerA Zelda Wired Controller for Nintendo Switch; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="20d6", ATTRS{idProduct}=="a713", MODE="0660", TAG+="uaccess"
+
+# PowerA Wireless Controller for Nintendo Switch; Bluetooth
+## We have to use ATTRS{name} since VID/PID are reported as zeros.
+## We use /bin/sh instead of udevadm directly becuase we need to
+## use '*' glob at the end of "hidraw" name since we don't know the index it'd have.
+## Thanks @https://github.com/ValveSoftware
+ACTION!="remove", KERNEL=="input*", ATTRS{name}=="Lic Pro Controller", RUN{program}+="/bin/sh -c 'udevadm test-builtin uaccess /sys/%p/../../hidraw/hidraw*'"

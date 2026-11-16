@@ -1,0 +1,4 @@
+# Flydigi Apex 4 Controller; Bluetooth; USB
+# D-Input
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*04b4:2412*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEM=="input", ATTRS{id/product}=="2412", ATTRS{id/vendor}=="04b4", MODE="0660", TAG+="uaccess"

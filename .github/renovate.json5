@@ -61,7 +61,7 @@
     },
     {
       "matchUpdateTypes": ["pin", "digest", "pinDigest"],
-      "matchDepNames": ["ghcr.io/projectbluefin/common"],
+      "matchDepNames": ["ghcr.io/ublue-os/bluefin-wallpapers-gnome"],
       "automerge": false
     },
     {

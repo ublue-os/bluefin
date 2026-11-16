@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=System Update
+Name[cs]=Aktualizace Systému
+Name[fr]=Mises à jour
+Comment=Update Bluefin, Flatpaks, Distrobox containers, and more
+Comment[cs]=Aktualizuje Bluefin, Flatpaky, Distrobox a další
+Comment[fr]=Mettre à jour Bluefin, les applications, les conteneurs, etc...
+Icon=ublue-update
+Categories=ConsoleOnly;System;
+Terminal=true
+Exec=/usr/bin/ujust update

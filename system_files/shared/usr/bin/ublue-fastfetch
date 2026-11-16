@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+
+get_config() {
+	FASTFETCH_CONFIG_FILE="${FASTFETCH_CONFIG_FILE:-/etc/ublue-os/fastfetch.json}"
+	QUERY="$1"
+	FALLBACK="$2"
+	shift
+	shift
+	OUTPUT="$(jq -r "${QUERY}" "${FASTFETCH_CONFIG_FILE}" 2>/dev/null || echo "${FALLBACK}")"
+	if [ "${OUTPUT}" == "null" ] ; then
+		echo "${FALLBACK}"
+		return
+	fi
+	echo "${OUTPUT}"
+}
+
+FASTFETCH_CONFIG="$(get_config '."fastfetch-config"' "/usr/share/ublue-os/fastfetch.jsonc")"
+SHUFFLE_LOGO="$(get_config '."shuffle-logo"' "false")"
+LOGO_DIRECTORY="$(get_config '."logo-directory"' "/usr/share/ublue-os/fastfetch")"
+
+export DEFAULT_THEME # Gets passed to `ublue-bling-fastfetch`
+DEFAULT_THEME="$(get_config '."default-theme"' "slate")"
+if [ "$SHUFFLE_LOGO" == "true" ] ; then
+  FETCH_LOGO="$(find "$LOGO_DIRECTORY" -type f | shuf -n 1)"
+  exec fastfetch --logo "$FETCH_LOGO" --color "$(ublue-bling-fastfetch)" --config "${FASTFETCH_CONFIG}" "${@}"
+else
+  exec fastfetch --color "$(ublue-bling-fastfetch)" --config "${FASTFETCH_CONFIG}" "${@}"
+fi
+
+

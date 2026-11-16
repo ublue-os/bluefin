@@ -1,0 +1,32 @@
+# Relocatable schemas are located here in dconf
+# Some Gnome extensions don't ship gschema XML, so their settings also need to go in dconf
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Control><Alt>t'
+command='xdg-terminal-exec'
+name='Terminal'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+binding='<Control><Alt>Return'
+command='xdg-terminal-exec'
+name='Terminal Alt'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Control><Shift>Escape'
+command="flatpak run io.missioncenter.MissionCenter"
+name='mission-center'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
+binding='<Control><Alt>BackSpace'
+command="flatpak run com.jeffser.Alpaca"
+name='Launch Alpaca'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5]
+binding='<Control><Alt>space'
+command="flatpak run it.mijorus.smile"
+name='Open up the emoji picker'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6]
+binding='<Super>period'
+command="flatpak run it.mijorus.smile"
+name='Open up the emoji picker (Alt)'

@@ -1,0 +1,8 @@
+# Source: https://github.com/arduino/ArduinoCore-mbed/blob/main/post_install.sh
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e8a", MODE:="0666"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", MODE:="0666"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1fc9", MODE:="0666"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0525", MODE:="0666"
+
+# Arduino Nano clone, @vfosnar owns one
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", MODE:="0666"

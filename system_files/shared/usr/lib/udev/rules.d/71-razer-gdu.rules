@@ -1,0 +1,26 @@
+# Razer Panthera Arcade Stick
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="0401", MODE="0660", TAG+="uaccess"
+
+# Razer Raiju PS4 Controller
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="1000", MODE="0660", TAG+="uaccess"
+
+# Razer Raiju Ultimate; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="1004", MODE="0660", TAG+="uaccess"
+
+# Razer Raiju 2 Tournament Edition
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="1007", MODE="0660", TAG+="uaccess"
+
+# Razer Panthera EVO Arcade Stick
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="1008", MODE="0660", TAG+="uaccess"
+
+# Razer Raiju Ultimate; Bluetooth
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*1532:1009*", MODE="0660", TAG+="uaccess"
+
+# Razer Raiju PS4 Controller Tournament Edition; Bluetooth
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*1532:100A*", MODE="0660", TAG+="uaccess"
+
+# Razer Wolverine V2 Pro PS5 Mode; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="100b", MODE="0660", TAG+="uaccess"
+
+# Razer Raion PS4 Fightpad
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="1100", MODE="0660", TAG+="uaccess"

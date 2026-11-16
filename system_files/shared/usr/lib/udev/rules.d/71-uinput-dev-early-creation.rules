@@ -1,0 +1,14 @@
+# This rule creates /dev/uinput with user-matching rw permissions before
+# uinput was loaded. This is so we dont run into a problem, where the node is
+# not yet available, but something is trying to access it.
+## Some info:
+## https://www.kernel.org/doc/html/latest/input/uinput.html
+## https://github.com/systemd/systemd/issues/4288
+## https://enotty.pipebreaker.pl/2012/05/23/linux-automatic-user-acl-management/
+
+# OPTIONS+="static_node=uinput"
+## To pre-create device node (/dev/uinput) with the designated permissions,
+## before the uinput kernel module has even been loaded.
+## https://github.com/ValveSoftware/steam-for-linux/issues/4794#issuecomment-327006061
+
+ACTION!="remove", KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"

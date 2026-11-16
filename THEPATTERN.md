@@ -29,7 +29,7 @@
 
 ### Containerfile
 
-Near-identical architecture (ublue: 48 lines, projectbluefin: 47 lines): multi-stage build from `common` + `brew` OCI layers → single `RUN --mount` build step → `bootc container lint`.
+Near-identical architecture (ublue: 48 lines, projectbluefin: 47 lines): multi-stage build from `common` + `brew` OCI layers (ublue-os has since vendored `common` into `system_files/shared/` and pulls only the wallpapers image) → single `RUN --mount` build step → `bootc container lint`.
 
 **Critical difference:** The base image source diverges:
 - `ublue-os`: `FROM ghcr.io/ublue-os/silverblue-main:42` — depends on ublue's own reprocessed upstream image

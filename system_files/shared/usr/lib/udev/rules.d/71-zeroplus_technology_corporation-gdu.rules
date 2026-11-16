@@ -1,0 +1,23 @@
+# Zeroplus(ZP) appears to be a tech-provider for variouse other companies.
+## They all use the ZP ID. Because of this, they are grouped in this rule.
+
+# Brooks Universal Fighting Board; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0c12", ATTRS{idProduct}=="0c30", MODE="0660", TAG+="uaccess"
+
+# Armor PS4 Armor 3 Pad; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0c12", ATTRS{idProduct}=="0e10", MODE="0660", TAG+="uaccess"
+
+# Hit Box Arcade HIT BOX PS4/PC version; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0c12", ATTRS{idProduct}=="0ef6", MODE="0660", TAG+="uaccess"
+
+# EMiO PS4 Elite Controller; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0c12", ATTRS{idProduct}=="1cf6", MODE="0660", TAG+="uaccess"
+
+# Nyko Xbox Controller; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0c12", ATTRS{idProduct}=="8801", MODE="0660", TAG+="uaccess"
+
+# Unknown-Brand Xbox Controller; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0c12", ATTRS{idProduct}=="8802", MODE="0660", TAG+="uaccess"
+
+# Unknown-Brand Xbox Controller; USB
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="0c12", ATTRS{idProduct}=="8810", MODE="0660", TAG+="uaccess"

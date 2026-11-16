@@ -1,0 +1,19 @@
+# Microsoft Xbox 360 Controller; USB #EXPERIMENTAL
+ACTION!="remove", SUBSYSTEM=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="028e", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEMS=="input", ATTRS{name}=="Microsoft X-Box 360 pad", MODE="0660", TAG+="uaccess"
+
+# Microsoft Xbox 360 Wireless Receiver for Windows; USB
+ACTION!="remove", SUBSYSTEM=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="0719", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEMS=="input", ATTRS{name}=="Xbox 360 Wireless Receiver", MODE="0660", TAG+="uaccess"
+
+# Microsoft Xbox One S Controller; Bluetooth; USB #EXPERIMENTAL
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*045e:02ea*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEMS=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="02ea", MODE="0660", TAG+="uaccess"
+
+# Microsoft Xbox One Controller; Bluetooth; USB
+SUBSYSTEM=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="02fd", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*045e:02fd*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", SUBSYSTEMS=="input", ATTRS{name}=="Xbox Wireless Controller", MODE="0660", TAG+="uaccess"
+
+# Microsoft Xbox One Elite 2 Controller; Bluetooth
+ACTION!="remove", KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*045E:0B22*", MODE="0660", TAG+="uaccess"

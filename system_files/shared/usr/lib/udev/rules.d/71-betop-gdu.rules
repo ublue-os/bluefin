@@ -1,0 +1,2 @@
+# Betop PS4 Fun Controller
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="11c0", ATTRS{idProduct}=="4001", MODE="0660", TAG+="uaccess"

@@ -1,0 +1,16 @@
+// allow members of the wheel group to access gpg cards via pcscd service
+// this is needed for access to yubikey devices
+// installation details from https://github.com/drduh/YubiKey-Guide/issues/376
+
+polkit.addRule(function(action, subject) {
+        if (action.id == "org.debian.pcsc-lite.access_card" &&
+                subject.isInGroup("wheel")) {
+                return polkit.Result.YES;
+        }
+});
+polkit.addRule(function(action, subject) {
+        if (action.id == "org.debian.pcsc-lite.access_pcsc" &&
+                subject.isInGroup("wheel")) {
+                return polkit.Result.YES;
+        }
+});

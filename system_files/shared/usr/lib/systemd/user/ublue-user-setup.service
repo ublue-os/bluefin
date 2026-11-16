@@ -1,0 +1,12 @@
+[Unit]
+Description=Configure system for current user
+Wants=network-online.target
+After=network-online.target
+ConditionUser=!@system
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ublue-user-setup
+
+[Install]
+WantedBy=graphical-session.target

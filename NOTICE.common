@@ -1,0 +1,253 @@
+Files vendored from projectbluefin/common
+=========================================
+
+The files listed below, under system_files/shared/, originate from
+projectbluefin/common (https://github.com/projectbluefin/common), licensed
+under the Apache License, Version 2.0 (see LICENSE). They were copied byte for
+byte from the image this repository used to build from:
+
+  ghcr.io/projectbluefin/common@sha256:fbcef9b1636bc67c2cb58327527f01c9798280229ad5a91c2f8dac0a5d3b6f3c
+  built from projectbluefin/common commit 7f273b6aecbd7bdbbdf88ea746c2a2381f5881cc
+  with the projectbluefin/branding submodule at 59ca14a42f5a922159895d37935f70e408a42c7d (Apache-2.0)
+
+Files that common generated or downloaded at build time keep their upstream
+headers and licenses:
+  - usr/lib/udev/rules.d/70-u2f.rules: Yubico libfido2 (BSD-2-Clause, header in file)
+  - usr/lib/udev/rules.d/71-*.rules: fabiscafe/game-devices-udev 1.0 (MIT,
+    Copyright (c) 2017-2026 Fabian Bornschein)
+  - usr/share/bash-completion/completions/ujust, usr/share/zsh/site-functions/_ujust,
+    usr/share/fish/vendor_completions.d/ujust.fish: generated with `just --completions`
+
+Not vendored:
+  - Wallpapers (usr/share/backgrounds/bluefin, usr/share/gnome-background-properties)
+    are still copied at build time from ghcr.io/ublue-os/bluefin-wallpapers-gnome,
+    pinned in image-versions.yml.
+  - etc/bazaar/bazaar.yaml, etc/bazaar/blocklist.yaml, usr/lib/systemd/user/bazaar.service
+    and both 11-bluefin.xml files: this repository already had its own copies,
+    which took precedence over common's, so they were kept.
+
+Source of each file (common = projectbluefin/common at the commit above):
+
+  system_files/shared/etc/bazaar/01-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/01-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/02-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/02-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/03-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/03-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/04-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/04-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/05-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/05-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/06-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/06-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/08-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/08-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/10-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/10-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/11-bluefin-day.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/11-bluefin-night.jxl  [branding system_files]
+  system_files/shared/etc/bazaar/curated.yaml  [common system_files/bluefin]
+  system_files/shared/etc/containers/policy.json  [common system_files/shared]
+  system_files/shared/etc/containers/registries.d/quay.io-toolbx-images.yaml  [common system_files/shared]
+  system_files/shared/etc/containers/registries.d/ublue-os.yaml  [common system_files/shared]
+  system_files/shared/etc/dconf/db/distro.d/01-bluefin-folders  [common system_files/bluefin]
+  system_files/shared/etc/dconf/db/distro.d/02-bluefin-keybindings  [common system_files/bluefin]
+  system_files/shared/etc/dconf/db/distro.d/03-bluefin-ptyxis-palette  [common system_files/bluefin]
+  system_files/shared/etc/dconf/db/distro.d/04-bluefin-logomenu-extension  [common system_files/bluefin]
+  system_files/shared/etc/dconf/db/distro.d/05-bluefin-searchlight-extension  [common system_files/bluefin]
+  system_files/shared/etc/dconf/db/distro.d/locks/01-bluefin-locked-settings  [common system_files/bluefin]
+  system_files/shared/etc/environment  [common system_files/bluefin]
+  system_files/shared/etc/geoclue/conf.d/99-beacondb.conf  [common system_files/shared]
+  system_files/shared/etc/gnome-initial-setup/vendor.conf  [common system_files/bluefin]
+  system_files/shared/etc/profile.d/open.sh  [common system_files/bluefin]
+  system_files/shared/etc/profile.d/ublue-fastfetch.sh  [common system_files/shared]
+  system_files/shared/etc/profile.d/ublue-motd.sh  [common system_files/shared]
+  system_files/shared/etc/profile.d/uutils.sh  [common system_files/bluefin]
+  system_files/shared/etc/skel/.local/share/flatpak/overrides/com.google.Chrome  [common system_files/bluefin]
+  system_files/shared/etc/skel/.local/share/flatpak/overrides/com.visualstudio.code  [common system_files/bluefin]
+  system_files/shared/etc/skel/.local/share/org.gnome.Ptyxis/palettes/catppuccin-dynamic.palette  [common system_files/bluefin]
+  system_files/shared/etc/ublue-os/fastfetch.json  [common system_files/bluefin]
+  system_files/shared/etc/uupd/config.json  [common system_files/shared]
+  system_files/shared/etc/xdg/mimeapps.list  [common system_files/bluefin]
+  system_files/shared/etc/zsh/zlogin  [common system_files/bluefin]
+  system_files/shared/etc/zsh/zlogout  [common system_files/bluefin]
+  system_files/shared/etc/zsh/zprofile  [common system_files/bluefin]
+  system_files/shared/etc/zsh/zshenv  [common system_files/bluefin]
+  system_files/shared/etc/zsh/zshrc  [common system_files/bluefin]
+  system_files/shared/usr/bin/luks-tpm2-autounlock  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-bling  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-bling-fastfetch  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-fastfetch  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-image-info.sh  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-motd  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-privileged-setup  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-rollback-helper  [common system_files/bluefin]
+  system_files/shared/usr/bin/ublue-system-setup  [common system_files/shared]
+  system_files/shared/usr/bin/ublue-user-setup  [common system_files/shared]
+  system_files/shared/usr/bin/ujust  [common system_files/shared]
+  system_files/shared/usr/lib/dracut/dracut.conf.d/90-passkeys-tpm.conf  [common system_files/bluefin]
+  system_files/shared/usr/lib/dracut/fido-tpm2-luks.conf  [common system_files/shared]
+  system_files/shared/usr/lib/modprobe.d/amd-legacy.conf  [common system_files/shared]
+  system_files/shared/usr/lib/pki/containers/quay.io-toolbx-images.pub  [common system_files/shared]
+  system_files/shared/usr/lib/pki/containers/ublue-os-backup.pub  [common system_files/shared]
+  system_files/shared/usr/lib/pki/containers/ublue-os.pub  [common system_files/shared]
+  system_files/shared/usr/lib/systemd/system/dconf-update.service  [common system_files/bluefin]
+  system_files/shared/usr/lib/systemd/system/flatpak-preinstall.service  [common system_files/shared]
+  system_files/shared/usr/lib/systemd/system-preset/01-uupd.preset  [common system_files/shared]
+  system_files/shared/usr/lib/systemd/system/ublue-system-setup.service  [common system_files/shared]
+  system_files/shared/usr/lib/systemd/user/ublue-user-setup.service  [common system_files/shared]
+  system_files/shared/usr/lib/tmpfiles.d/bazaar-flatpak.conf  [common system_files/bluefin]
+  system_files/shared/usr/lib/ublue/setup-services/libsetup.sh  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/10-switch.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/50-framework16.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/50-steam-horipad-controller.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/50-usb-realtek-net.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/50-zsa.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/60-arduino-mbed.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/70-titan-key.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/70-u2f.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/70-wooting.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/71-8bitdo-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-alpha_imaging_technology_co-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-astro_gaming-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-betop-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-bigscreen-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-cypress_semiconductor_corp-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-google-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-hori-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-htc-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-logitech-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-mad_catz-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-microsoft-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-nacon-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-nintendo-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-nvidia-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-pdp-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-personal_communication_systems_inc-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-pid_codes-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-powera-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-raspberry_pi_ltd-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-razer-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-sony-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-thrustmaster-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-uinput-dev-early-creation.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-valve-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-vkb_sim-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/71-zeroplus_technology_corporation-gdu.rules  [generated by common's Containerfile]
+  system_files/shared/usr/lib/udev/rules.d/88-neutron_hifi_dac.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/90-apple-superdrive.rules  [common system_files/shared]
+  system_files/shared/usr/lib/udev/rules.d/92-viia.rules  [common system_files/shared]
+  system_files/shared/usr/share/applications/discourse.desktop  [common system_files/bluefin]
+  system_files/shared/usr/share/applications/documentation.desktop  [common system_files/bluefin]
+  system_files/shared/usr/share/applications/noop.desktop  [common system_files/bluefin]
+  system_files/shared/usr/share/applications/system-update.desktop  [common system_files/bluefin]
+  system_files/shared/usr/share/bash-completion/completions/ujust  [generated by common's Containerfile]
+  system_files/shared/usr/share/color/icc/colord/framework13.icc  [common system_files/shared]
+  system_files/shared/usr/share/color/icc/colord/framework16.icc  [common system_files/shared]
+  system_files/shared/usr/share/fish/vendor_completions.d/ujust.fish  [generated by common's Containerfile]
+  system_files/shared/usr/share/fish/vendor_conf.d/fish_greeting.fish  [common system_files/shared]
+  system_files/shared/usr/share/fish/vendor_conf.d/ublue-fastfetch.fish  [common system_files/shared]
+  system_files/shared/usr/share/fish/vendor_functions.d/fish_prompt.fish  [common system_files/bluefin]
+  system_files/shared/usr/share/flatpak/preinstall.d/bazaar.preinstall  [common system_files/bluefin]
+  system_files/shared/usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override  [common system_files/bluefin]
+  system_files/shared/usr/share/icons/hicolor/scalable/actions/ublue-logo-symbolic.svg  [common system_files/bluefin]
+  system_files/shared/usr/share/icons/hicolor/scalable/places/fedora-logo-sprite.svg  [common system_files/bluefin]
+  system_files/shared/usr/share/icons/hicolor/scalable/places/fedora_white_logo.svg  [common system_files/bluefin]
+  system_files/shared/usr/share/icons/hicolor/scalable/places/fedora_whitelogo.svg  [common system_files/bluefin]
+  system_files/shared/usr/share/icons/hicolor/scalable/places/ublue-discourse.svg  [common system_files/bluefin]
+  system_files/shared/usr/share/icons/hicolor/scalable/places/ublue-docs.svg  [common system_files/bluefin]
+  system_files/shared/usr/share/icons/hicolor/scalable/places/ublue-update.svg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/bicycle.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/book.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/calculator.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/cat.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/coffee2.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/flower2.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/gamepad.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/guitar2.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/headphones.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/hummingbird.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/mountain.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/plane.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/surfer.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/tomatoes.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/faces/bluefin/tree.jpg  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/fedora-gdm-logo.png  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/fedora-logo-icon.png  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/fedora_logo_med.png  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/fedora-logo.png  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/fedora-logo-small.png  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/fedora-logo-sprite.png  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/fedora_whitelogo_med.png  [common system_files/bluefin]
+  system_files/shared/usr/share/pixmaps/system-logo-white.png  [common system_files/bluefin]
+  system_files/shared/usr/share/plymouth/themes/spinner/silverblue-watermark.png  [common system_files/bluefin]
+  system_files/shared/usr/share/plymouth/themes/spinner/watermark.png  [common system_files/bluefin]
+  system_files/shared/usr/share/polkit-1/actions/org.ublue.privileged.user.setup.policy  [common system_files/shared]
+  system_files/shared/usr/share/polkit-1/rules.d/20-privileged-user-setup.rules  [common system_files/shared]
+  system_files/shared/usr/share/polkit-1/rules.d/org.debian.pcsc-lite.access_card.rules  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/bling/bling.fish  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/bling/bling.sh  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/bling/env.sh  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/bluefin.png  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/chicken.png  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/dolly.png  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/karl.png  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/sixels/bluefin  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/sixels/chicken  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/sixels/dolly  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/sixels/karl  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/symbols/bluefin  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/symbols/chicken  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/symbols/dolly  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/bluefin-logos/symbols/karl  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/fastfetch.jsonc  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/firefox-config/01-bluefin-global.js  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/flatpak-overrides/io.github.kolunmi.Bazaar  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/homebrew/ai-tools.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/artwork.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/cli.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/cncf.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/experimental-ide.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/fonts.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/full-desktop.Brewfile  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/homebrew/ide.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/k8s-tools.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/swift.Brewfile  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/homebrew/system-dx-flatpaks.Brewfile  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/homebrew/system-flatpaks.Brewfile  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/just/00-entry.just  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/just/apps.just  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/just/changelog.just  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/just/default.just  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/just/shared.just  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/just/system.just  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/just/update.just  [common system_files/shared]
+  system_files/shared/usr/share/ublue-os/motd/env.sh  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/motd/template.md  [common system_files/bluefin]
+  system_files/shared/usr/share/ublue-os/motd/tips/10-tips.md  [common system_files/bluefin]
+  system_files/shared/usr/share/xdg-terminal-exec/gnome-xdg-terminals.list  [common system_files/bluefin]
+  system_files/shared/usr/share/zsh/site-functions/_ujust  [generated by common's Containerfile]
+
+game-devices-udev license (applies to the 71-*.rules files above):
+
+    MIT License
+
+    Copyright (c) 2017-2026 Fabian Bornschein
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.

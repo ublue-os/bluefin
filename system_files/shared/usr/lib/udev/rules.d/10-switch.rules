@@ -1,0 +1,4 @@
+# This got added on https://github.com/ublue-os/config/pull/154
+# Written by https://github.com/badlydrawnface
+# Makes restarting a jigged switch easier
+SUBSYSTEMS=="usb", ATTRS{manufacturer}=="NVIDIA Corp.", ATTRS{product}=="APX", GROUP="nintendo_switch"

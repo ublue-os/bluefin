@@ -1,0 +1,4 @@
+# Keychron keyboard hardware enablement
+# Created on https://github.com/ublue-os/config/pull/153
+# Written by https://github.com/atimeofday
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"

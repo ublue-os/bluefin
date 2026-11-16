@@ -1,0 +1,6 @@
+# Source: https://github.com/ublue-os/config/pull/285
+# Written by https://github.com/fiftydinar
+# Udev rule written for unprivileged access of Neutron HiFi DAC V1 functionality
+# https://neutronhifi.com/devices/dac/v1
+
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1fc9", ATTRS{idProduct}=="82f9", MODE="0666"

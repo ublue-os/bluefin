@@ -1,0 +1,25 @@
+# Mayflash Wireless Sensor DolphinBar
+ACTION!="remove", SUBSYSTEM=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="0306", TAG+="uaccess"
+
+# Nintendo GameCube Controller / Adapter; USB
+ACTION!="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="0337", MODE="0660", TAG+="uaccess"
+
+# Nintendo Switch Joy-Con (L); Bluetooth
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*057E:2006*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2006", MODE="0660", TAG+="uaccess"
+
+# Nintendo Switch Joy-Con (R); Bluetooth
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*057E:2007*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2007", MODE="0660", TAG+="uaccess"
+
+# Nintendo Switch Pro Controller; Bluetooth; USB
+ACTION!="remove", KERNEL=="hidraw*", KERNELS=="*057E:2009*", MODE="0660", TAG+="uaccess"
+ACTION!="remove", KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0660", TAG+="uaccess"
+# Grand access for some userspace tools, if connected via USB
+ACTION!="remove", SUBSYSTEM=="usb", ATTR{idVendor}=="057e", ATTR{idProduct}=="2009", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+
+# Nintendo Switch Joy-Con Charging Grip; USB
+ACTION!="remove", KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="200e", MODE="0660", TAG+="uaccess"
+
+# Nintendo Switch 2 GameCube Controller; USB
+ACTION!="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2073", MODE="0660", TAG+="uaccess"
