@@ -26,6 +26,11 @@ Not vendored:
     and both 11-bluefin.xml files: this repository already had its own copies,
     which took precedence over common's, so they were kept.
 
+Changed in this repository after vendoring:
+  - usr/lib/systemd/user/ublue-user-setup.service: added
+    ConditionEnvironment=!XDG_SESSION_CLASS=greeter so it doesn't run in the
+    GDM login screen or initial setup session.
+
 Source of each file (common = projectbluefin/common at the commit above):
 
   system_files/shared/etc/bazaar/01-bluefin-day.jxl  [branding system_files]
