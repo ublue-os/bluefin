@@ -14,7 +14,7 @@ images:
   - name: bluefin-wallpapers-gnome
     image: ghcr.io/ublue-os/bluefin-wallpapers-gnome
     tag: latest
-    digest: sha256:e4d74fa741ce9ff03a6a60440a58c31cef6c0fc145182357d243580ba239f810
+    digest: sha256:4747d2a8234fc31c5be89ac87dd7527e04af2fb06401611f682525e68f4e209f
   - name: brew
     image: ghcr.io/ublue-os/brew
     tag: latest
