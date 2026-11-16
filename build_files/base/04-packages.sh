@@ -87,6 +87,7 @@ FEDORA_PACKAGES=(
     waypipe
     wireguard-tools
     wl-clipboard
+    xdg-native-messaging-proxy
     xdg-terminal-exec
     xprop
     zenity
