@@ -3,6 +3,10 @@ Description=Configure system for current user
 Wants=network-online.target
 After=network-online.target
 ConditionUser=!@system
+# Since GDM 49 the login screen and initial setup run as dynamic users outside
+# the system UID range, so @system doesn't skip them; their sessions set
+# XDG_SESSION_CLASS=greeter.
+ConditionEnvironment=!XDG_SESSION_CLASS=greeter
 
 [Service]
 Type=simple
