@@ -132,7 +132,6 @@ copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 
 # From ublue-os/packages
 copr_install_isolated "ublue-os/packages" "uupd"
-copr_install_isolated "ublue-os/packages" "gnome-rounded-blur"
 
 # Version-specific COPR packages
 # case "$FEDORA_MAJOR_VERSION" in
