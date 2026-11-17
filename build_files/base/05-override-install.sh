@@ -48,11 +48,4 @@ if [[ -f /usr/share/applications/org.gnome.SystemMonitor.desktop ]]; then
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/org.gnome.SystemMonitor.desktop
 fi
 
-# Add Mutter experimental-features
-if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
-    sed -i "/experimental-features/ s/\]/, 'kms-modifiers'&/" /usr/share/glib-2.0/schemas/zz0-bluefin-modifications.gschema.override
-    echo "Compiling gschema to include bluefin setting overrides"
-    glib-compile-schemas /usr/share/glib-2.0/schemas
-fi
-
 echo "::endgroup::"
