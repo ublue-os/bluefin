@@ -37,6 +37,7 @@ grep -qx 'cask "ublue-os/tap/chairlift"' /usr/share/ublue-os/homebrew/preinstall
 test -f /usr/share/chairlift/config.yml
 test -f /usr/share/chairlift/channels.yml
 test "$(systemctl --global is-enabled brew-preinstall.service)" = enabled
+grep -aq io.projectbluefin.chairlift /usr/share/icons/hicolor/icon-theme.cache
 
 # If this file is not on the image bazaar will automatically be removed from users systems :(
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall

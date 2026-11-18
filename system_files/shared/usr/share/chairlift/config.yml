@@ -17,8 +17,11 @@ agents_page:
     enabled: false
 
 updates_page:
-  # uupd stays in charge of background updates. This switch only turns
-  # uupd.timer on or off, the same as `ujust toggle-updates`.
+  # uupd stays in charge of background updates. This switch turns
+  # uupd.timer and uupd-resume.timer on or off. Off *masks* both timers,
+  # while `ujust toggle-updates` only enables or disables uupd.timer, so
+  # after turning updates off here, turn them back on here too (or run
+  # `sudo systemctl unmask uupd.timer uupd-resume.timer` first).
   automatic_updates_group:
     enabled: true
   # "Update now" stages the next image with /usr/libexec/bootc-update-stage

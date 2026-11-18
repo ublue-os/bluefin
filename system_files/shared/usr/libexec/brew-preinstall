@@ -43,6 +43,15 @@ if [[ ! -x "${BREW_BIN}" ]]; then
     exit 0
 fi
 
+# brew-setup gives the shared Homebrew prefix to the first user (UID 1000).
+# Other accounts cannot install into it, so skip instead of failing at every
+# login. They still get ChairLift: the desktop entry ships in the image and
+# runs the shared cask.
+if [[ ! -w "${BREW_BIN%/bin/brew}" ]]; then
+    echo "brew-preinstall: Homebrew prefix is not writable by ${current_user}, skipping"
+    exit 0
+fi
+
 if [[ ! -d "${PREINSTALL_DIR}" ]]; then
     echo "brew-preinstall: no preinstall.d at ${PREINSTALL_DIR}, skipping"
     exit 0

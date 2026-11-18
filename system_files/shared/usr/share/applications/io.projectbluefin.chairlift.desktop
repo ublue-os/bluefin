@@ -7,8 +7,7 @@
 # *installing* user's ~/.local/share. Homebrew uses one shared prefix on
 # Bluefin, so every user after the first sees the cask as already installed
 # and never receives those artifacts. Shipping them from the image is what
-# makes ChairLift appear for all users; see
-# docs/skills/brew-lifecycle/references/service-mechanics.md.
+# makes ChairLift appear for all users.
 Name=Control Center
 GenericName=System Management
 Comment=Update, configure, and maintain your Bluefin system
