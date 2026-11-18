@@ -21,6 +21,24 @@ if [[ "$(systemctl show -P ActiveState flatpak-preinstall.service 2>/dev/null)" 
 	exit 0
 fi
 
+# Repair may need to reinstall refs from the remote. Don't record the
+# version while offline; try again next login.
+if ! nm-online -q --timeout=60; then
+	echo "flatpak-repair: no network, will retry next login"
+	exit 0
+fi
+
+# Forget the recorded version so the next login tries again.
+unrecord() {
+	local tmp
+	tmp="$(mktemp)" || return 0
+	if jq 'del(.version.privileged."flatpak-repair")' "$SETUP_CHECKER_FILE" >"$tmp"; then
+		mv "$tmp" "$SETUP_CHECKER_FILE"
+	else
+		rm -f "$tmp"
+	fi
+}
+
 version-script flatpak-repair privileged "$FEDORA_MAJOR" || exit 0
 
 # A fresh install has nothing stale to repair. Without a previous (rollback)
@@ -38,6 +56,7 @@ echo "flatpak-repair: Fedora ${FEDORA_MAJOR} detected, repairing the system flat
 if timeout 30m nice -n 10 ionice -c 2 -n 7 flatpak repair --system; then
 	echo "flatpak-repair: system installation repaired"
 else
-	echo "flatpak-repair: 'flatpak repair --system' failed (exit $?), continuing"
+	echo "flatpak-repair: 'flatpak repair --system' failed (exit $?), will retry next login"
+	unrecord
 fi
 exit 0
