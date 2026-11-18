@@ -1,0 +1,19 @@
+[Unit]
+Description=Preinstall OS-managed Homebrew packages
+After=ublue-user-setup.service graphical-session.target
+ConditionUser=!@system
+ConditionPathExists=/home/linuxbrew/.linuxbrew/bin/brew
+StartLimitIntervalSec=600
+StartLimitBurst=3
+
+[Service]
+Type=oneshot
+Slice=background.slice
+IOWeight=10
+ExecStart=/usr/bin/brew-preinstall
+RemainAfterExit=true
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,87 @@
+# ChairLift (Control Center) configuration for Bluefin.
+# Admin overrides go in /etc/chairlift/config.yml, which takes priority.
+# Reference: https://github.com/projectbluefin/chairlift/blob/main/CONFIG.md
+#
+# ChairLift rejects any page, group or field it does not know and then turns
+# every group off, so only use keys from the config.yml of the ChairLift
+# release the projectbluefin/tap cask installs. Groups left out keep
+# ChairLift's own default.
+
+updates_page:
+  # uupd stays in charge of background updates. This switch only turns
+  # uupd.timer on or off, the same as `ujust toggle-updates`.
+  automatic_updates_group:
+    enabled: true
+  # "Update now" stages the next image with /usr/libexec/bootc-update-stage
+  # (plain `bootc upgrade`). It never reboots; the update applies on the
+  # next restart, like uupd's.
+  bootc_updates_group:
+    enabled: true
+  flatpak_updates_group:
+    enabled: true
+  brew_updates_group:
+    enabled: true
+  brew_trust_group:
+    enabled: true
+  # Graphics driver switch. /usr/share/chairlift/channels.yml limits it to
+  # the images Bluefin still publishes. Stable and latest have no testing
+  # stream, so ChairLift shows no channel switch on them.
+  channel_group:
+    enabled: true
+  bootc_status_group:
+    enabled: true
+
+applications_page:
+  brew_group:
+    enabled: true
+  brew_bundles_group:
+    enabled: true
+    bundles_paths:
+      - /usr/share/ublue-os/homebrew
+
+maintenance_page:
+  maintenance_cleanup_group:
+    enabled: false
+  maintenance_freespace_group:
+    enabled: true
+  # Powerwash and factory reset are irreversible; keep them off.
+  reset_group:
+    enabled: false
+
+features_page:
+  # ChairLift's Bluefin CLI switch writes its own block into ~/.bashrc, and
+  # setup selects it by default. Bluefin already has `ujust bluefin-cli`
+  # (ublue-bling), so keep one owner of the shell setup.
+  bluefin_cli_group:
+    enabled: false
+  # updex system extensions do not exist on Bluefin.
+  features_group:
+    enabled: false
+  # Developer mode on Bluefin is the bluefin-dx image (`ujust devmode`).
+  # ChairLift's switch only adds groups and installs Docker from Homebrew,
+  # which is not the same thing, so it stays off.
+  dx_group:
+    enabled: false
+  # The Gaming Mode switch moves to a Dakota gaming image. There is none for
+  # Bluefin.
+  gaming_group:
+    enabled: false
+  # Installs and removes Compass from the FlatPark remote. It says Compass
+  # is unavailable until the image ships the FlatPark remote.
+  compass_group:
+    enabled: true
+
+livery_page:
+  # The panel mark needs the Custom Command Menu extension. Bluefin's top
+  # bar menu is Logo Menu, so the group could never work here.
+  livery_foundation_group:
+    enabled: false
+
+help_page:
+  # ChairLift titles these "Browse Documentation", "Report a problem" and
+  # "Ask for Help".
+  help_resources_group:
+    enabled: true
+    website: https://docs.projectbluefin.io/
+    issues: https://github.com/ublue-os/bluefin/issues
+    chat: https://ask.projectbluefin.io/

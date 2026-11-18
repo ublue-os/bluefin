@@ -1,0 +1,16 @@
+# ChairLift release-channel and graphics-driver table for Bluefin.
+# Admin overrides go in /etc/chairlift/channels.yml, which takes priority.
+# Reference: https://github.com/projectbluefin/chairlift/blob/main/channels.example.yml
+#
+# ChairLift's built-in driver table still offers the proprietary NVIDIA
+# images (bluefin-nvidia, bluefin-dx-nvidia). Bluefin stopped publishing
+# them in October 2025, so a switch would rebase onto a year-old image.
+# These entries replace the built-in ones and only offer the images that
+# are still built: the standard image and nvidia-open.
+drivers:
+  ghcr.io/ublue-os/bluefin:
+    standard: [latest, stable, stable-daily, lts, lts-hwe, lts-testing, lts-hwe-testing]
+    nvidia-open: [latest, stable, stable-daily]
+  ghcr.io/ublue-os/bluefin-dx:
+    standard: [latest, stable, stable-daily, lts, lts-hwe, lts-testing, lts-hwe-testing]
+    nvidia-open: [latest, stable, stable-daily]

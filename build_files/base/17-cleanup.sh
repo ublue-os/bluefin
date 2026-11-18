@@ -8,6 +8,9 @@ set -eoux pipefail
 # systemctl --global enable bazaar.service
 systemctl --global enable podman-auto-update.timer
 systemctl --global enable ublue-user-setup.service
+# Installs the OS-managed Homebrew packages (ChairLift) at login. A user
+# preset is not applied to existing users, so enable it globally.
+systemctl --global enable brew-preinstall.service
 systemctl enable brew-setup.service
 systemctl enable dconf-update.service
 systemctl enable flatpak-nuke-fedora.service

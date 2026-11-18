@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# bootc-update-stage — privileged helper invoked via ChairLift's fixed
+# io.projectbluefin.chairlift.bootc.stage polkit action (pkexec exec.path is
+# pinned to this exact path; see
+# system_files/shared/usr/share/polkit-1/actions/io.projectbluefin.chairlift.bootc.policy).
+#
+# Stages the next bootc system image update. Plain `bootc upgrade` fetches
+# the new image and queues it as a staged deployment; ostree-finalize-staged
+# applies it at the user's next ordinary shutdown or reboot. Nothing here
+# reboots, restarts, or otherwise changes the running system. uupd remains
+# the owner of Bluefin's background update policy; this script only backs
+# ChairLift's manual "check for updates now" action.
+#
+# Contract: no arguments are read or required. Any arguments pkexec may
+# forward are ignored so this cannot be used to run arbitrary bootc
+# subcommands through a privileged invocation.
+set -euo pipefail
+
+# Deliberately no flags:
+#   --apply / --soft-reboot   reboot the machine; that is the user's call.
+#   --download-only           downloads the image but locks finalization, so
+#                             the update would NOT apply on the next reboot
+#                             (bootc-upgrade(8): "it will not be applied on
+#                             reboot"), and it would also re-lock an update
+#                             uupd had already staged for shutdown.
+#   --from-downloaded         only unlocks a previously downloaded update and
+#                             never checks the registry.
+# Plain `bootc upgrade` is the one verb that both stages a fresh update and
+# leaves an existing staged deployment finalizable on shutdown.
+#
+# Progress output is deliberately NOT suppressed: ChairLift's StageUpdate
+# merges this process's stdout and stderr and streams each line into its
+# progress view, so `--quiet` would leave the user staring at an empty
+# dialog for the length of an image pull.
+#
+# On composefs (e.g. Dakota) `bootc upgrade` exits non-zero when the newest
+# image is already booted or staged — "Target image has the same fs-verity
+# digest as the existing ... deployment". That means the system is current,
+# not broken, so treat only that refusal as success; any other failure keeps
+# its original exit code (projectbluefin/common#1417).
+#
+# Classify from this run's own stderr (mirrored to a temp file, still
+# streamed). Never re-run bootc to find out why it failed: when the image is
+# already pulled, even `bootc upgrade --check` reaches do_upgrade() and stages.
+err_log="$(mktemp)"
+trap 'rm -f "$err_log"' EXIT
+exec 3>&1
+rc=0
+/usr/bin/bootc upgrade 2>&1 1>&3 | tee "$err_log" >&2 || rc=${PIPESTATUS[0]}
+if [ "$rc" -ne 0 ] \
+        && grep -qF "Target image has the same fs-verity digest as the existing" "$err_log"; then
+    echo "System image is already up to date."
+    exit 0
+fi
+exit "$rc"
