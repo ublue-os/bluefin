@@ -38,8 +38,6 @@ switch-applications=['<Super>Tab']
 switch-applications-backward=['<Shift><Super>Tab']
 switch-windows=['<Alt>Tab']
 switch-windows-backward=['<Shift><Alt>Tab']
-switch-input-source=['<Shift><Super>space']
-switch-input-source-backward=['']
 unmaximize=['<Super>Down']
 
 [org.gnome.desktop.peripherals.keyboard]
