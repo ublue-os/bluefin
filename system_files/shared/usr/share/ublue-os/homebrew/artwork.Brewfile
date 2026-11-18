@@ -1,4 +1,4 @@
-tap "ublue-os/tap"
+tap "ublue-os/tap", trusted: true
 
 cask "aurora-wallpapers"
 cask "bazzite-wallpapers"
