@@ -18,8 +18,8 @@ RUN mkdir -p /out/usr/share/backgrounds/bluefin && \
     mv /out/usr/share/*.jxl /out/usr/share/*.xml /out/usr/share/backgrounds/bluefin && \
     sed -i 's|~\/\.local\/share|\/usr\/share|' /out/usr/share/backgrounds/bluefin/*.xml /out/usr/share/gnome-background-properties/*.xml
 
-# ChairLift (Control Center): the GUI comes from the projectbluefin/tap cask,
-# which brew-preinstall installs at login and brew-upgrade keeps current. A
+# ChairLift (Control Center): the GUI comes from the ublue-os/tap chairlift
+# cask, which brew-preinstall installs at login and brew-upgrade keeps current. A
 # cask cannot install root-owned files, so the image ships the pkexec helper,
 # its PolicyKit policy and the GSettings schemas from the same release. The
 # release's checksums.txt is checked against its Sigstore bundle (signed by

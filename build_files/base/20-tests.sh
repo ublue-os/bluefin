@@ -24,7 +24,7 @@ done
 
 test -f /usr/share/ublue-os/homebrew/fonts.Brewfile
 
-# ChairLift: the image half of the projectbluefin/tap cask
+# ChairLift: the image half of the ublue-os/tap chairlift cask
 for i in bin/chairlift-helper bin/brew-preinstall libexec/brew-preinstall libexec/bootc-update-stage ; do
     test -x /usr/$i
 done
@@ -33,7 +33,7 @@ for i in livery updates firstrun printers ; do
 done
 test -f /usr/share/polkit-1/actions/io.projectbluefin.chairlift.ublue.policy
 test -f /usr/share/polkit-1/actions/io.projectbluefin.chairlift.bootc.policy
-test -f /usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile
+grep -qx 'cask "ublue-os/tap/chairlift"' /usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile
 test -f /usr/share/chairlift/config.yml
 test -f /usr/share/chairlift/channels.yml
 test "$(systemctl --global is-enabled brew-preinstall.service)" = enabled
