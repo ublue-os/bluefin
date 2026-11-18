@@ -19,6 +19,7 @@ font-name="Adwaita Sans 11"
 document-font-name="Adwaita Sans 12"
 monospace-font-name="JetBrains Mono 11"
 accent-color="slate"
+gtk-theme="adw-gtk3"
 
 [org.gnome.desktop.search-providers]
 enabled=['io.github.kolunmi.Bazaar.desktop', 'org.gnome.Calculator.desktop']

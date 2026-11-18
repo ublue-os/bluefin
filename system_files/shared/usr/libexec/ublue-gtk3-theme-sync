@@ -1,0 +1,46 @@
+#!/usr/bin/bash
+# Keep the GTK3 theme in step with the GNOME light/dark style.
+#
+# GTK3 apps ignore org.gnome.desktop.interface color-scheme: they only read
+# gtk-theme. So with Settings > Appearance set to Dark, GTK3 apps stay light
+# unless gtk-theme changes too. This switches gtk-theme between adw-gtk3 and
+# adw-gtk3-dark whenever color-scheme changes, and once at login.
+#
+# It only acts while gtk-theme is adw-gtk3 or adw-gtk3-dark (adw-gtk3 is the
+# image default). A theme the user picked by hand, including Adwaita, is left
+# alone.
+
+set -euo pipefail
+
+SCHEMA=org.gnome.desktop.interface
+
+sync_theme() {
+	local scheme theme want
+	scheme="$(gsettings get "$SCHEMA" color-scheme)"
+	theme="$(gsettings get "$SCHEMA" gtk-theme)"
+
+	case "$theme" in
+	"'adw-gtk3'" | "'adw-gtk3-dark'") ;;
+	*) return 0 ;;
+	esac
+
+	if [[ "$scheme" == "'prefer-dark'" ]]; then
+		want=adw-gtk3-dark
+	else
+		want=adw-gtk3
+	fi
+
+	if [[ "$theme" != "'$want'" ]]; then
+		gsettings set "$SCHEMA" gtk-theme "$want"
+	fi
+}
+
+# Start watching before the first sync so a change made in between is not lost.
+exec {monitor}< <(gsettings monitor "$SCHEMA" color-scheme)
+sync_theme
+while read -r -u "$monitor" _; do
+	sync_theme
+done
+
+# gsettings monitor only exits if something went wrong; let systemd restart us.
+exit 1
