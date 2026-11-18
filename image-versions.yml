@@ -10,7 +10,7 @@ images:
   - name: silverblue-main-45
     image: ghcr.io/ublue-os/silverblue-main
     tag: 45
-    digest: sha256:ad6200d209e29b074405978e19496be7e230586cbe8f6173008e9b8190bde02f
+    digest: sha256:9cb8c916c0069c4a215f3cc57dc9ec477f0803005162c6b1e80cd7f6ae628869
   - name: bluefin-wallpapers-gnome
     image: ghcr.io/ublue-os/bluefin-wallpapers-gnome
     tag: latest
