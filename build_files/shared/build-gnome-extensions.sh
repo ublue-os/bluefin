@@ -55,6 +55,36 @@ glib-compile-schemas --strict /usr/share/gnome-shell/extensions/logomenu@aryan_k
 # Search Light
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/search-light@icedman.github.com/schemas
 
+# Translations
+# Several vendored extensions (AppIndicator, Dash to Dock, Logo Menu) ship only .po sources, which gettext cannot read.
+# GNOME Shell binds the "gettext-domain" from an extension's metadata.json to <extension>/locale when that directory
+# exists, so compile every po/*.po or locale/*.po into locale/<lang>/LC_MESSAGES/<domain>.mo. Extensions without a
+# gettext-domain (GSConnect installs its own catalogues to /usr/share/locale) and extensions whose own build already
+# compiled them (Blur My Shell, Caffeine) are skipped. One broken catalogue must not fail the image: if msgfmt rejects
+# a file (e.g. duplicate entries), retry once after de-duplicating it with msguniq, otherwise skip that language with
+# a warning.
+for ext in /usr/share/gnome-shell/extensions/*/; do
+    ext="${ext%/}"
+    [[ -f "${ext}/metadata.json" ]] || continue
+    if compgen -G "${ext}/locale/*/LC_MESSAGES/*.mo" >/dev/null; then
+        continue
+    fi
+    domain="$(jq -r '."gettext-domain" // empty' "${ext}/metadata.json")"
+    [[ -n "${domain}" ]] || continue
+    for po in "${ext}"/po/*.po "${ext}"/locale/*.po; do
+        [[ -f "${po}" ]] || continue
+        lang="$(basename "${po}" .po)"
+        mo="${ext}/locale/${lang}/LC_MESSAGES/${domain}.mo"
+        mkdir -p "$(dirname "${mo}")"
+        if ! msgfmt -o "${mo}" "${po}" 2>/dev/null; then
+            if ! msguniq --use-first "${po}" | msgfmt -o "${mo}" -; then
+                echo "::warning::Skipping ${lang} translation for $(basename "${ext}"): msgfmt could not compile ${po}"
+                rm -f "${mo}"
+            fi
+        fi
+    done
+done
+
 rm /usr/share/glib-2.0/schemas/gschemas.compiled
 glib-compile-schemas /usr/share/glib-2.0/schemas
 
