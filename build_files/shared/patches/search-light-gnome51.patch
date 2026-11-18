@@ -1,0 +1,328 @@
+Search Light: GNOME 51 support (Clutter.ShaderEffect.set_shader_source() was removed in mutter 51)
+
+Carried in Bluefin until upstream merges it; drop this file and its block in
+build_files/shared/build-gnome-extensions.sh when the submodule moves to a release with GNOME 51 support.
+
+Upstream: https://github.com/icedman/search-light/pull/181 (b43cf27), which builds on
+          https://github.com/icedman/search-light/pull/175 (1588b83)
+Base:     4e93e0e (the pinned submodule commit)
+Bluefin:  https://github.com/ublue-os/bluefin/issues/5122
+Generated with: git diff 4e93e0e b43cf27
+
+diff --git a/effects/blur_effect.js b/effects/blur_effect.js
+index 342160e..eb09a51 100644
+--- a/effects/blur_effect.js
++++ b/effects/blur_effect.js
+@@ -3,7 +3,7 @@
+ import Shell from 'gi://Shell';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import Clutter from 'gi://Clutter';
++import { ShaderEffect } from './shader_effect.js';
+ 
+ const getTintShaderSource = (extensionDir) => {
+   const SHADER_PATH = GLib.build_filenamev([
+@@ -22,7 +22,7 @@ const getTintShaderSource = (extensionDir) => {
+ 
+ export const BlurEffect = GObject.registerClass(
+   {},
+-  class SearchLighBlurEffect extends Clutter.ShaderEffect {
++  class SearchLighBlurEffect extends ShaderEffect {
+     _init(params) {
+       this._red = null;
+       this._green = null;
+diff --git a/effects/color_effect.js b/effects/color_effect.js
+index 674bcc1..5d5eb91 100644
+--- a/effects/color_effect.js
++++ b/effects/color_effect.js
+@@ -5,7 +5,7 @@
+ import Shell from 'gi://Shell';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import Clutter from 'gi://Clutter';
++import { ShaderEffect } from './shader_effect.js';
+ 
+ const getColorEffectShaderSource = (extensionDir) => {
+   const SHADER_PATH = GLib.build_filenamev([
+@@ -33,7 +33,7 @@ const getColorEffectShaderSource = (extensionDir) => {
+ /// https://gjs-docs.gnome.org/clutter10~10_api/clutter.shadereffect
+ export const ColorEffect = GObject.registerClass(
+   {},
+-  class SearchLightColorShader extends Clutter.ShaderEffect {
++  class SearchLightColorShader extends ShaderEffect {
+     _init(params) {
+       this._red = null;
+       this._green = null;
+diff --git a/effects/monochrome_effect.js b/effects/monochrome_effect.js
+index a04cdb5..04e4563 100644
+--- a/effects/monochrome_effect.js
++++ b/effects/monochrome_effect.js
+@@ -6,7 +6,7 @@
+ import Shell from 'gi://Shell';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import Clutter from 'gi://Clutter';
++import { ShaderEffect } from './shader_effect.js';
+ 
+ const getMonochromeShaderSource = (extensionDir) => {
+   const SHADER_PATH = GLib.build_filenamev([
+@@ -34,7 +34,7 @@ const getMonochromeShaderSource = (extensionDir) => {
+ /// https://gjs-docs.gnome.org/clutter10~10_api/clutter.shadereffect
+ export const MonochromeEffect = GObject.registerClass(
+   {},
+-  class SearchLightMonochromeEffect extends Clutter.ShaderEffect {
++  class SearchLightMonochromeEffect extends ShaderEffect {
+     _init(params) {
+       this._red = null;
+       this._green = null;
+diff --git a/effects/shader_effect.js b/effects/shader_effect.js
+new file mode 100644
+index 0000000..287527b
+--- /dev/null
++++ b/effects/shader_effect.js
+@@ -0,0 +1,81 @@
++// GNOME 51 removed Clutter.ShaderEffect.set_shader_source(): the shader is
++// now a Cogl.Snippet returned once per class from vfunc_get_static_snippet().
++// Older shells keep the original API, so only add the two methods on 51.
++
++'use strict';
++
++import GObject from 'gi://GObject';
++import Clutter from 'gi://Clutter';
++import Cogl from 'gi://Cogl';
++
++// Fallback used if mutter asks for the snippet before a source was loaded.
++// Returning null (or throwing) from vfunc_get_static_snippet makes mutter
++// dereference a NULL snippet and crash gnome-shell, so always return one.
++const PASSTHROUGH_SOURCE = `
++uniform sampler2D tex;
++void main() {
++  cogl_color_out = texture2D(tex, cogl_tex_coord_in[0].st);
++}`;
++
++// Split a full GLSL fragment shader into the code before main() and the body
++// of main(), matching braces so nested blocks are handled.
++function splitFragmentShader(source) {
++  const mainIndex = source.search(/void\s+main\s*\(\s*(?:void)?\s*\)\s*\{/);
++  if (mainIndex < 0) return null;
++  const braceIndex = source.indexOf('{', mainIndex);
++
++  let depth = 0;
++  let endIndex = braceIndex;
++  do {
++    if (source[endIndex] === '{') depth++;
++    else if (source[endIndex] === '}') depth--;
++    endIndex++;
++  } while (depth > 0 && endIndex < source.length);
++
++  return {
++    declarations: source.slice(0, mainIndex),
++    body: source.slice(braceIndex + 1, endIndex - 1),
++  };
++}
++
++function createFragmentSnippet(source) {
++  const parts =
++    splitFragmentShader(source || '') ||
++    splitFragmentShader(PASSTHROUGH_SOURCE);
++  // Keep the shader's main() as its own function so its locals and any
++  // early returns stay scoped, then call it in place of the fragment hook.
++  const snippet = Cogl.Snippet.new(
++    Cogl.SnippetHook.FRAGMENT,
++    `${parts.declarations}\nvoid search_light_main() {\n${parts.body}\n}\n`,
++    null,
++  );
++  snippet.set_replace('search_light_main();');
++  return snippet;
++}
++
++class SearchLightShaderEffect extends Clutter.ShaderEffect {}
++
++if (Clutter.ShaderEffect.new_with_snippet) {
++  SearchLightShaderEffect.prototype.set_shader_source = function (source) {
++    this._snippet_source = source;
++  };
++
++  // defineProperty, not assignment: assigning a vfunc_* name walks up to
++  // Clutter.ShaderEffect.prototype, where GJS rejects the unimplemented vfunc
++  Object.defineProperty(
++    SearchLightShaderEffect.prototype,
++    'vfunc_get_static_snippet',
++    {
++      value() {
++        try {
++          return createFragmentSnippet(this._snippet_source);
++        } catch (e) {
++          console.log(`[search-light] shader snippet error: ${e}`);
++          return createFragmentSnippet(null);
++        }
++      },
++    },
++  );
++}
++
++export const ShaderEffect = GObject.registerClass({}, SearchLightShaderEffect);
+diff --git a/effects/tint_effect.js b/effects/tint_effect.js
+index 01c40d4..f7c837c 100644
+--- a/effects/tint_effect.js
++++ b/effects/tint_effect.js
+@@ -5,7 +5,7 @@
+ import Shell from 'gi://Shell';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import Clutter from 'gi://Clutter';
++import { ShaderEffect } from './shader_effect.js';
+ 
+ const getTintShaderSource = (extensionDir) => {
+   const SHADER_PATH = GLib.build_filenamev([
+@@ -33,7 +33,7 @@ const getTintShaderSource = (extensionDir) => {
+ /// https://gjs-docs.gnome.org/clutter10~10_api/clutter.shadereffect
+ export const TintEffect = GObject.registerClass(
+   {},
+-  class SearchLightTintEffect extends Clutter.ShaderEffect {
++  class SearchLightTintEffect extends ShaderEffect {
+     _init(params) {
+       this._red = null;
+       this._green = null;
+diff --git a/extension.js b/extension.js
+index 81d5e0f..d67ba8d 100644
+--- a/extension.js
++++ b/extension.js
+@@ -169,9 +169,9 @@ export default class SearchLightExt extends Extension {
+     this._animationSpeed = this._settings.get_double('animation-speed');
+ 
+     Main.overview.connectObject(
+-      'overview-showing',
++      'showing',
+       this._onOverviewShowing.bind(this),
+-      'overview-hidden',
++      'hidden',
+       this._onOverviewHidden.bind(this),
+       this,
+     );
+@@ -198,10 +198,6 @@ export default class SearchLightExt extends Extension {
+ 
+     Main.overview.searchLight = this;
+ 
+-    let appInfo = Gio.DesktopAppInfo.new_from_filename(
+-      `${this.path}/apps/org.gnome.Calculator.desktop`,
+-    );
+-
+     let _providers = [];
+ 
+     // deferred startup for providers
+@@ -221,6 +217,18 @@ export default class SearchLightExt extends Extension {
+   }
+ 
+   disable() {
++    // give the search entry/results back to the overview if we are open
++    this._remove_events();
++    this._release_ui();
++    this._visible = false;
++
++    Main.overview.disconnectObject(this);
++    Shell.AppSystem.get_default().disconnectObject(this);
++    global.display.disconnectObject(this);
++    if (Main.overview.searchLight === this) {
++      delete Main.overview.searchLight;
++    }
++
+     this._hiTimer?.shutdown();
+     this._loTimer?.shutdown();
+     this._hiTimer = null;
+@@ -240,7 +248,9 @@ export default class SearchLightExt extends Extension {
+     this._settingsKeys.disconnectSettings();
+     this._settings = null;
+ 
+-    this._desktopSettings.disconnectObject();
++    // must pass the same tracker given to connectObject(), otherwise the
++    // picture-uri handler survives disable() and fires on a null object
++    this._desktopSettings.disconnectObject(this);
+     this._desktopSettings = null;
+ 
+     if (this.accel) {
+@@ -265,7 +275,10 @@ export default class SearchLightExt extends Extension {
+     }
+ 
+     Main.layoutManager.removeChrome(this.mainContainer);
++    this.mainContainer.destroy();
+     this.mainContainer = null;
++    this.container = null;
++    this.windowEffect = null;
+   }
+ 
+   _createIndicator() {
+@@ -324,6 +337,7 @@ export default class SearchLightExt extends Extension {
+   }
+ 
+   _updateBlurredBackground() {
++    if (!this._desktopSettings) return;
+     this.desktop_background = this._desktopSettings.get_string('picture-uri');
+     
+     let uuid = GLib.get_user_name();
+@@ -492,8 +506,11 @@ export default class SearchLightExt extends Extension {
+       return;
+     }
+ 
+-    this._release_ui();
++    // disconnect key-focus handlers first: moving the focused entry out in
++    // _release_ui() emits notify::key-focus, whose handler calls hide()
++    // again and recurses until gnome-shell aborts
+     this._remove_events();
++    this._release_ui();
+ 
+     if (this._useAnimations) {
+       this.mainContainer.ease({
+@@ -921,13 +938,17 @@ export default class SearchLightExt extends Extension {
+     }
+   }
+ 
++  // Signals that only live while the popup is shown. They use their own
++  // tracker object so hide() does not also drop the long-lived signals that
++  // enable() connects to Main.overview, AppSystem and global.display.
+   _add_events() {
++    if (!this._uiEvents) this._uiEvents = {};
+     global.stage.connectObject(
+       'notify::key-focus',
+       this._onKeyFocusChanged.bind(this),
+       'key-press-event',
+       this._onKeyPressed.bind(this),
+-      this,
++      this._uiEvents,
+     );
+ 
+     global.display.connectObject(
+@@ -935,15 +956,15 @@ export default class SearchLightExt extends Extension {
+       this._onFocusWindow.bind(this),
+       'in-fullscreen-changed',
+       this._onFullScreen.bind(this),
+-      this,
++      this._uiEvents,
+     );
+   }
+ 
+   _remove_events() {
+-    global.display.disconnectObject(this);
+-    global.stage.disconnectObject(this);
+-    Main.overview.disconnectObject(this);
+-    Shell.AppSystem.get_default().disconnectObject(this);
++    if (!this._uiEvents) return;
++    global.display.disconnectObject(this._uiEvents);
++    global.stage.disconnectObject(this._uiEvents);
++    this._uiEvents = null;
+   }
+ 
+   _onOverviewShowing() {
+diff --git a/metadata.json b/metadata.json
+index 9d5f05c..3b2e12a 100644
+--- a/metadata.json
++++ b/metadata.json
+@@ -3,7 +3,7 @@
+   "description": "Take the apps search out of overview.",
+   "uuid": "search-light@icedman.github.com",
+   "shell-version": [
+-    "48", "49", "50"
++    "48", "49", "50", "51"
+   ],
+   "url": "https://github.com/icedman/search-light",
+   "schema-id": "org.gnome.shell.extensions.search-light",

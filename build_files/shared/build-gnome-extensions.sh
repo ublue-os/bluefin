@@ -53,6 +53,18 @@ install -Dpm0755 -t /usr/bin /usr/share/gnome-shell/extensions/logomenu@aryan_k/
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/logomenu@aryan_k/schemas
 
 # Search Light
+# GNOME 51 removed Clutter.ShaderEffect.set_shader_source(), so the pinned release goes to ERROR there.
+# Carry icedman/search-light#181 (builds on #175) on GNOME >= 51 only; it also adds "51" to shell-version.
+# Drop when upstream merges it. https://github.com/icedman/search-light/pull/175
+# https://github.com/icedman/search-light/pull/181 https://github.com/ublue-os/bluefin/issues/5122
+GNOME_SHELL_MAJOR="$(rpm -q --queryformat '%{VERSION}' gnome-shell | cut -d. -f1)"
+if [[ "${GNOME_SHELL_MAJOR}" -ge 51 ]]; then
+    if ! (cd / && git apply --verbose -p1 --directory=usr/share/gnome-shell/extensions/search-light@icedman.github.com \
+        /ctx/build_files/shared/patches/search-light-gnome51.patch); then
+        echo "ERROR: search-light-gnome51.patch does not apply to the Search Light submodule. Refresh or drop it." >&2
+        exit 1
+    fi
+fi
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/search-light@icedman.github.com/schemas
 
 rm /usr/share/glib-2.0/schemas/gschemas.compiled

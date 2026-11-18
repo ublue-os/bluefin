@@ -28,6 +28,8 @@ repos:
         - id: check-yaml
         - id: end-of-file-fixer
         - id: trailing-whitespace
+          # patch context lines carry the target file's whitespace; trimming them breaks the patch
+          exclude: \.patch$
         - id: check-merge-conflict
         - id: detect-private-key
         - id: check-added-large-files
