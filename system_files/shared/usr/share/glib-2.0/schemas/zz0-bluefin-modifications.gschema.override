@@ -2,7 +2,7 @@
 
 [org.gnome.shell]
 favorite-apps = ['com.fyralabs.Readymade.desktop', 'org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Nautilus.desktop', 'io.github.kolunmi.Bazaar.desktop', 'org.gnome.Software.desktop', 'code.desktop']
-enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'bazaar-integration@kolunmi.github.io', 'blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'gradia-integration@alexandervanhee.github.io', 'gsconnect@andyholmes.github.io', 'logomenu@aryan_k', 'search-light@icedman.github.com']
+enabled-extensions = ['appindicatorsupport@rgcjonas.gmail.com', 'bazaar-integration@kolunmi.github.io', 'blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'gradia-integration@alexandervanhee.github.io', 'gsconnect@andyholmes.github.io', 'logomenu@aryan_k']
 
 [org.gnome.desktop.background]
 picture-uri='file:///usr/share/backgrounds/bluefin/12-bluefin.xml'
@@ -99,15 +99,6 @@ show-gamemode=false
 hide-forcequit=true
 show-distroshelf=true
 
-[org.gnome.shell.extensions.search-light]
-shortcut-search=['<Super>space']
-scale-width=0.10
-scale-height=0.15
-border-thickness=1
-border-radius=1.65
-border-color=(0.23, 0.23, 0.23, 1.0)
-background-color=(0.0, 0.0, 0.0, 0.8)
-
 [org.gnome.shell.extensions.blur-my-shell.dash-to-dock]
 blur=true
 
@@ -133,5 +124,3 @@ profile-uuids=['2871e8027773ae74d6c87a5f659bbc74']
 default-profile-uuid='2871e8027773ae74d6c87a5f659bbc74'
 
 # LogoMenu extension uses relocatable schemas, so additional settings are in dconf
-
-# SearchLight extension misses gschema XML file, so it's located in dconf

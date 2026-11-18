@@ -52,9 +52,6 @@ install -Dpm0755 -t /usr/bin /usr/share/gnome-shell/extensions/logomenu@aryan_k/
 install -Dpm0755 -t /usr/bin /usr/share/gnome-shell/extensions/logomenu@aryan_k/missioncenter-helper
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/logomenu@aryan_k/schemas
 
-# Search Light
-glib-compile-schemas --strict /usr/share/gnome-shell/extensions/search-light@icedman.github.com/schemas
-
 # Translations
 # Several vendored extensions (AppIndicator, Dash to Dock, Logo Menu) ship only .po sources, which gettext cannot read.
 # GNOME Shell binds the "gettext-domain" from an extension's metadata.json to <extension>/locale when that directory

@@ -59,7 +59,6 @@ Source of each file (common = projectbluefin/common at the commit above):
   system_files/shared/etc/dconf/db/distro.d/02-bluefin-keybindings  [common system_files/bluefin]
   system_files/shared/etc/dconf/db/distro.d/03-bluefin-ptyxis-palette  [common system_files/bluefin]
   system_files/shared/etc/dconf/db/distro.d/04-bluefin-logomenu-extension  [common system_files/bluefin]
-  system_files/shared/etc/dconf/db/distro.d/05-bluefin-searchlight-extension  [common system_files/bluefin]
   system_files/shared/etc/dconf/db/distro.d/locks/01-bluefin-locked-settings  [common system_files/bluefin]
   system_files/shared/etc/environment  [common system_files/bluefin]
   system_files/shared/etc/geoclue/conf.d/99-beacondb.conf  [common system_files/shared]
