@@ -1,0 +1,10 @@
+deny app/com.calibre_ebook.calibre/*
+deny app/com.google.Chrome/*
+deny app/com.jianguoyun.Nutstore/*
+deny app/com.longbridgeapp.LongbridgePro/*
+deny app/com.tencent.wemeet/*
+deny app/com.tradingview.tradingview/*
+deny app/io.enpass.Enpass/*
+deny app/me.hyliu.fluentreader/*
+deny app/org.openshot.OpenShot/*
+deny app/social.whalebird.WhalebirdDesktop/*
