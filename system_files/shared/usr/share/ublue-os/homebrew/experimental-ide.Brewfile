@@ -1,4 +1,4 @@
-tap "ublue-os/experimental-tap"
+tap "ublue-os/experimental-tap", trusted: true
 cask "ublue-os/experimental-tap/cursor-linux"
 cask "ublue-os/experimental-tap/clion-linux"
 cask "ublue-os/experimental-tap/datagrip-linux"

@@ -9,8 +9,8 @@ jetbrains-toolbox:
 [group('Apps')]
 install-jetbrains-toolbox:
     #!/usr/bin/env bash
-    brew tap ublue-os/homebrew-tap
-    brew install --cask jetbrains-toolbox-linux
+    brew tap ublue-os/tap
+    brew install --cask ublue-os/tap/jetbrains-toolbox-linux
 
 # Install OpenTabletDriver, an open source, cross-platform, user-mode tablet driver
 [group('Apps')]

@@ -1,4 +1,4 @@
-tap "ublue-os/tap"
+tap "ublue-os/tap", trusted: true
 cask "ublue-os/tap/visual-studio-code-linux"
 cask "ublue-os/tap/visual-studio-code-linux@insiders"
 cask "ublue-os/tap/vscodium-linux"
