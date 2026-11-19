@@ -1,0 +1,22 @@
+# Framework Laptop 13: do not let the touchpad wake the laptop from sleep.
+#
+# The touchpad (PixArt, i2c-PIXA*) is wired to the SoC as an ACPI wake source,
+# so the kernel turns its wakeup on by default. In a bag, pressure on the
+# closed lid presses the touchpad and wakes the laptop over and over, which
+# drains the battery and heats it up (ublue-os/bluefin#2201).
+#
+# Only the touchpad is changed. The power button, the keyboard and opening
+# the lid still wake the laptop. Other hardware is never touched: the rule
+# only runs when the DMI vendor is "Framework" and the product is a Laptop 13
+# (product names as listed in the kernel's cros_ec_lpc.c and Framework's
+# framework-system smbios.rs).
+#
+# "bind" is matched as well as "add" because i2c devices only get their
+# power/wakeup file once the driver has probed. Every check is a positive
+# match on one line, so if any value cannot be read (for example a machine
+# without DMI data) the rule does nothing.
+
+ACTION=="add|bind", SUBSYSTEM=="i2c", KERNEL=="i2c-PIXA*", \
+  ATTR{[dmi/id]sys_vendor}=="Framework", \
+  ATTR{[dmi/id]product_name}=="Laptop|Laptop (12th Gen Intel Core)|Laptop (13th Gen Intel Core)|Laptop 13 (*|Laptop 13 Pro (*", \
+  TEST=="power/wakeup", ATTR{power/wakeup}="disabled"
