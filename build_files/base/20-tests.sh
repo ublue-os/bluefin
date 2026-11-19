@@ -103,6 +103,7 @@ UNWANTED_PACKAGES=(
     firefox
     gnome-software
     gnome-software-rpm-ostree
+    gnome-system-monitor
     podman-docker
 )
 
