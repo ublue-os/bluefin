@@ -235,29 +235,29 @@ Source of each file (common = projectbluefin/common at the commit above):
 
 ChairLift (Control Center) files, copied later from projectbluefin/common
 commit 8820523227b0329b02b44af4d2d65854d8d214cc (system_files/shared). They are
-not part of the image above. All are byte for byte except where noted:
+not part of the image above. They are installed on non-DX images only. All
+are byte for byte except where noted:
 
-  system_files/shared/usr/bin/brew-preinstall
-  system_files/shared/usr/lib/systemd/user-preset/01-brew-preinstall.preset
-  system_files/shared/usr/lib/systemd/user/brew-preinstall.service
+  system_files/chairlift/usr/bin/brew-preinstall
+  system_files/chairlift/usr/lib/systemd/user-preset/01-brew-preinstall.preset
+  system_files/chairlift/usr/lib/systemd/user/brew-preinstall.service
       (changed: waits for the network with nm-online before each attempt
       and retries after 60 s instead of 30 s)
-  system_files/shared/usr/libexec/bootc-update-stage
-  system_files/shared/usr/libexec/brew-preinstall
-      (changed: removed the --external-chairlift option and the migration of
-      ChairLift installs from older taps, which do not apply here, and skips
-      accounts that cannot write the Homebrew prefix)
-  system_files/shared/usr/share/applications/io.projectbluefin.chairlift.desktop
+  system_files/chairlift/usr/libexec/bootc-update-stage
+  system_files/chairlift/usr/libexec/brew-preinstall
+      (changed: removed the --external-chairlift option, and skips accounts
+      that cannot write the Homebrew prefix)
+  system_files/chairlift/usr/share/applications/io.projectbluefin.chairlift.desktop
       (from ChairLift, GPL-3.0, with an absolute Exec= path and a shorter comment)
-  system_files/shared/usr/share/icons/hicolor/scalable/apps/io.projectbluefin.chairlift.svg
+  system_files/chairlift/usr/share/icons/hicolor/scalable/apps/io.projectbluefin.chairlift.svg
       (from ChairLift; CC0 1.0, see ChairLift's data/icons/NOTICE)
-  system_files/shared/usr/share/icons/hicolor/symbolic/apps/io.projectbluefin.chairlift-symbolic.svg
+  system_files/chairlift/usr/share/icons/hicolor/symbolic/apps/io.projectbluefin.chairlift-symbolic.svg
       (from ChairLift; Project Bluefin artwork, see ChairLift's data/icons/NOTICE)
-  system_files/shared/usr/share/polkit-1/actions/io.projectbluefin.chairlift.bootc.policy
+  system_files/chairlift/usr/share/polkit-1/actions/io.projectbluefin.chairlift.bootc.policy
+  system_files/chairlift/usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile
 
-usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile (the ublue-os/tap
-cask), usr/share/chairlift/config.yml and usr/share/chairlift/channels.yml are
-this repository's own. The ChairLift helper, its PolicyKit policy and its GSettings
+system_files/chairlift/usr/share/chairlift/config.yml and channels.yml are this
+repository's own. The ChairLift helper, its PolicyKit policy and its GSettings
 schemas are downloaded from the ChairLift release at build time (Containerfile).
 
 game-devices-udev license (applies to the 71-*.rules files above):
