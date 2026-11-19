@@ -157,6 +157,7 @@ EXCLUDED_PACKAGES=(
     gnome-shell-extension-background-logo
     gnome-software
     gnome-software-rpm-ostree
+    gnome-system-monitor
     gnome-terminal-nautilus
     podman-docker
     yelp
