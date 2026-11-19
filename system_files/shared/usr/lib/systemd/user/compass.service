@@ -1,0 +1,16 @@
+[Unit]
+Description=Compass launcher
+Documentation=https://github.com/tuna-os/compass
+ConditionPathExists=/home/linuxbrew/.linuxbrew/bin/compass
+After=graphical-session.target brew-preinstall.service
+Requires=dbus.socket
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/home/linuxbrew/.linuxbrew/bin/compass start --hidden
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
