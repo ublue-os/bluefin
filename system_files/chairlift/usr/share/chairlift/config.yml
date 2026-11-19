@@ -4,7 +4,7 @@
 #
 # ChairLift rejects any page, group or field it does not know and then turns
 # every group off, so only use keys from the config.yml of the ChairLift
-# release the ublue-os/tap chairlift cask installs. Groups left out keep
+# release the projectbluefin/tap chairlift cask installs. Groups left out keep
 # ChairLift's own default.
 
 # Agent Mode installs llmman from a third-party tap, and the page's
@@ -78,14 +78,15 @@ features_page:
   # Bluefin.
   gaming_group:
     enabled: false
-  # Installs and removes Compass from the FlatPark remote. It says Compass
-  # is unavailable until the image ships the FlatPark remote.
+  # Installs and removes Compass from the FlatPark remote the image ships.
+  # It says Compass is unavailable if that remote is missing.
   compass_group:
     enabled: true
 
 livery_page:
-  # "More Dinosaurs" installs the Valhalla Flatpak from FlatPark and the
-  # extra wallpapers from a Homebrew tap Bluefin does not use.
+  # "More Dinosaurs" installs the Valhalla Flatpak and replaces the
+  # ublue-os/tap bluefin-wallpapers-extra cask (the artwork Brewfile's) with
+  # projectbluefin/tap's copy. Keep it off.
   wallpapers_group:
     enabled: false
   # The panel mark needs the Custom Command Menu extension. Bluefin's top
