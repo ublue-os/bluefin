@@ -8,12 +8,14 @@ set -eoux pipefail
 # systemctl --global enable bazaar.service
 systemctl --global enable podman-auto-update.timer
 systemctl --global enable ublue-user-setup.service
-# Installs the OS-managed Homebrew packages (ChairLift) at login. A user
-# preset is not applied to existing users, so enable it globally.
-systemctl --global enable brew-preinstall.service
-# The ChairLift icons come from system_files; refresh the hicolor cache so
-# users without the cask's ~/.local copy (everyone but UID 1000) see them.
-gtk-update-icon-cache -f -t /usr/share/icons/hicolor
+if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
+    # Installs the OS-managed Homebrew packages (ChairLift) at login. A user
+    # preset is not applied to existing users, so enable it globally.
+    systemctl --global enable brew-preinstall.service
+    # The ChairLift icons come from system_files; refresh the hicolor cache so
+    # users without the cask's ~/.local copy (everyone but UID 1000) see them.
+    gtk-update-icon-cache -f -t /usr/share/icons/hicolor
+fi
 systemctl enable brew-setup.service
 systemctl enable dconf-update.service
 systemctl enable flatpak-nuke-fedora.service
