@@ -1,0 +1,23 @@
+[Unit]
+Description=Preinstall OS-managed Homebrew packages
+After=ublue-user-setup.service graphical-session.target
+ConditionUser=!@system
+ConditionPathExists=/home/linuxbrew/.linuxbrew/bin/brew
+StartLimitIntervalSec=600
+StartLimitBurst=3
+
+[Service]
+Type=oneshot
+Slice=background.slice
+IOWeight=10
+# A first login often starts before Wi-Fi is up. Wait for NetworkManager to
+# report a connection (up to 5 minutes) before each attempt; if NetworkManager
+# is not reachable this returns at once and the attempt runs anyway.
+ExecStartPre=-/usr/bin/nm-online -q -t 300
+ExecStart=/usr/bin/brew-preinstall
+RemainAfterExit=true
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=graphical-session.target
