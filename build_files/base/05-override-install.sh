@@ -40,12 +40,4 @@ rm -f /usr/share/pixmaps/faces/* || echo "Expected directory deletion to fail"
 mv /usr/share/pixmaps/faces/bluefin/* /usr/share/pixmaps/faces
 rm -rf /usr/share/pixmaps/faces/bluefin
 
-# Remove desktop entries
-if [[ -f /usr/share/applications/gnome-system-monitor.desktop ]]; then
-    sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/gnome-system-monitor.desktop
-fi
-if [[ -f /usr/share/applications/org.gnome.SystemMonitor.desktop ]]; then
-    sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nHidden=true@g' /usr/share/applications/org.gnome.SystemMonitor.desktop
-fi
-
 echo "::endgroup::"

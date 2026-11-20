@@ -1,0 +1,18 @@
+[Unit]
+Description=Keep the GTK3 theme in step with the light/dark style
+PartOf=graphical-session.target
+After=graphical-session.target
+ConditionUser=!@system
+# The login screen and initial setup run as dynamic users outside the system
+# UID range; their sessions set XDG_SESSION_CLASS=greeter.
+ConditionEnvironment=!XDG_SESSION_CLASS=greeter
+ConditionPathExists=/usr/share/themes/adw-gtk3-dark
+
+[Service]
+Type=simple
+ExecStart=/usr/libexec/ublue-gtk3-theme-sync
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
