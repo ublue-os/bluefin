@@ -69,6 +69,29 @@ else
     fi
 fi
 
+# Compass ships only on non-DX images, where brew-preinstall installs it.
+COMPASS_FILES=(
+    /usr/lib/systemd/user/compass.service
+    /usr/lib/systemd/user-preset/01-compass.preset
+    /usr/share/ublue-os/homebrew/preinstall.d/compass.Brewfile
+    /usr/share/glib-2.0/schemas/zz1-bluefin-compass.gschema.override
+    /etc/dconf/db/distro.d/07-bluefin-compass
+)
+if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
+    for i in "${COMPASS_FILES[@]}"; do
+        test -f "$i"
+    done
+    test "$(systemctl --global is-enabled compass.service)" = enabled
+else
+    for i in "${COMPASS_FILES[@]}"; do
+        test ! -e "$i"
+    done
+    if systemctl --global is-enabled compass.service; then
+        echo "compass.service is enabled on a DX image"
+        exit 1
+    fi
+fi
+
 # If this file is not on the image bazaar will automatically be removed from users systems :(
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall
 test -f /usr/share/flatpak/preinstall.d/bazaar.preinstall

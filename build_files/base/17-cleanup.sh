@@ -13,6 +13,9 @@ if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
     # Installs the OS-managed Homebrew packages (ChairLift) at login. A user
     # preset is not applied to existing users, so enable it globally.
     systemctl --global enable brew-preinstall.service
+    # Compass is installed by brew-preinstall on non-DX images. A user preset
+    # is not applied to existing users, so enable its unit globally too.
+    systemctl --global enable compass.service
     # The ChairLift icons come from system_files; refresh the hicolor cache so
     # users without the cask's ~/.local copy (everyone but UID 1000) see them.
     gtk-update-icon-cache -f -t /usr/share/icons/hicolor

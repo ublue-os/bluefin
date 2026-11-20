@@ -18,10 +18,13 @@ rpm --erase --nodeps --nodb generic-logos
 # Copy Files to Container
 rsync -rvK /ctx/system_files/shared/ /
 
-# ChairLift (Control Center) and brew-preinstall ship on non-DX images only.
-# On DX they would overlap with the DX tooling and confuse more than help.
+# ChairLift (Control Center), brew-preinstall and Compass ship on non-DX
+# images only. On DX they would overlap with the DX tooling and confuse more
+# than help; Compass in particular is installed by brew-preinstall, so none
+# of its defaults or units should land on an image without it.
 if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
     rsync -rvK /ctx/system_files/chairlift/ /
+    rsync -rvK /ctx/system_files/compass/ /
 fi
 
 mkdir -p /tmp/scripts/helpers
