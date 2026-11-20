@@ -259,6 +259,16 @@ system_files/chairlift/usr/share/chairlift/config.yml and channels.yml are this
 repository's own. The ChairLift helper, its PolicyKit policy and its GSettings
 schemas are downloaded from the ChairLift release at build time (Containerfile).
 
+Compass files are ported from projectbluefin/common PR #1356 (Apache-2.0) and
+ship on non-DX images only:
+
+  system_files/compass/usr/lib/systemd/user-preset/01-compass.preset
+  system_files/compass/usr/lib/systemd/user/compass.service
+  system_files/compass/usr/share/ublue-os/homebrew/preinstall.d/compass.Brewfile
+
+The gschema override and dconf keybinding under system_files/compass/ are the
+non-DX-scoped form of that PR's schema/dconf changes.
+
 game-devices-udev license (applies to the 71-*.rules files above):
 
     MIT License
