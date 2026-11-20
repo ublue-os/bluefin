@@ -8,6 +8,7 @@ set -eoux pipefail
 # systemctl --global enable bazaar.service
 systemctl --global enable podman-auto-update.timer
 systemctl --global enable ublue-user-setup.service
+systemctl --global enable ublue-gtk3-theme-sync.service
 if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
     # Installs the OS-managed Homebrew packages (ChairLift) at login. A user
     # preset is not applied to existing users, so enable it globally.
