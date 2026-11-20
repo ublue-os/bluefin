@@ -97,6 +97,13 @@ sed -i "s/enabled=.*/enabled=0/g" /etc/yum.repos.d/vscode.repo
 dnf -y install --enablerepo=code \
     code
 
+# VS Code's vsce-sign (self-contained .NET 9) only loads libssl.so.3 and older.
+# Fedora 45 moved to OpenSSL 4, and without the OpenSSL 3 libs every Marketplace
+# extension install fails signature verification ('UnknownError').
+if [[ "${FEDORA_MAJOR_VERSION}" -ge 45 ]]; then
+    dnf5 -y install openssl3-libs
+fi
+
 
 # DX packages to exclude - common to all versions
 EXCLUDED_PACKAGES=()
