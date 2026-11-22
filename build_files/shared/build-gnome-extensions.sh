@@ -16,7 +16,13 @@ glib-compile-schemas --strict /usr/share/gnome-shell/extensions/appindicatorsupp
 mv /usr/share/gnome-shell/extensions/tmp/bazaar-integration@kolunmi.github.io/src/ /usr/share/gnome-shell/extensions/bazaar-integration@kolunmi.github.io/
 
 # Blur My Shell
-make -C /usr/share/gnome-shell/extensions/blur-my-shell@aunetx
+# Since aunetx/blur-my-shell#1282 the default make target only builds and `make pack` creates the zip. Checkouts from
+# before that change have no pack target and create the zip in the default target.
+if make -C /usr/share/gnome-shell/extensions/blur-my-shell@aunetx -n pack >/dev/null 2>&1; then
+    make -C /usr/share/gnome-shell/extensions/blur-my-shell@aunetx pack
+else
+    make -C /usr/share/gnome-shell/extensions/blur-my-shell@aunetx
+fi
 unzip -o /usr/share/gnome-shell/extensions/blur-my-shell@aunetx/build/blur-my-shell@aunetx.shell-extension.zip -d /usr/share/gnome-shell/extensions/blur-my-shell@aunetx
 glib-compile-schemas --strict /usr/share/gnome-shell/extensions/blur-my-shell@aunetx/schemas
 rm -rf /usr/share/gnome-shell/extensions/blur-my-shell@aunetx/build
