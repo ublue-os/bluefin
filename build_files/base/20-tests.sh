@@ -161,4 +161,13 @@ for unit in "${IMPORTANT_UNITS[@]}"; do
     fi
 done
 
+# mcelog.service must be skipped, not failed, on CPUs mcelog does not support
+# (AMD family 0x10 and newer, Hygon). The drop-in asks "mcelog
+# --is-cpu-supported"; an unknown option also exits 1 and would skip it on
+# every CPU, so make sure the shipped mcelog still has that flag.
+test -f /usr/lib/systemd/system/mcelog.service.d/skip-unsupported-cpu.conf
+if rpm -q mcelog >/dev/null; then
+    mcelog --help 2>&1 | grep -- '--is-cpu-supported' >/dev/null
+fi
+
 echo "::endgroup::"
