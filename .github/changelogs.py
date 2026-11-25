@@ -166,6 +166,13 @@ def get_tags(target: str, manifests: dict[str, Any]):
         print("No current and previous tags found")
         exit(1)
 
+    current_tag = tags[-1]
+    if not has_sboms(target, current_tag):
+        print(
+            f"Current tag {current_tag} has no SBOM: signing, SBOM attach, or attestation did not complete."
+        )
+        exit(1)
+
     # A build that pushed its tags but failed before the SBOM was attached
     # (e.g. at signing) leaves a tag with no SBOM. Compare against the newest
     # previous tag that has one instead of failing the release.
@@ -180,24 +187,46 @@ def get_tags(target: str, manifests: dict[str, Any]):
 
 def get_image_digest(image: str, tag: str) -> str:
     """Get image digest using skopeo."""
-    result = subprocess.run(
-        ["skopeo", "inspect", f"docker://{image}:{tag}"],
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    return json.loads(result.stdout)["Digest"]
+    output = None
+    for i in range(RETRIES):
+        try:
+            output = subprocess.run(
+                ["skopeo", "inspect", f"docker://{image}:{tag}"],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout
+            break
+        except subprocess.CalledProcessError:
+            print(
+                f"Failed to get digest for {image}:{tag}, retrying in {RETRY_WAIT} seconds ({i+1}/{RETRIES})"
+            )
+            time.sleep(RETRY_WAIT)
+    if output is None:
+        raise RuntimeError(f"Failed to get digest for {image}:{tag} after {RETRIES} attempts")
+    return json.loads(output)["Digest"]
 
 
 def find_sbom_digest(image: str, digest: str) -> str | None:
     """Return the digest of the SBOM referrer attached to image@digest, if any."""
-    result = subprocess.run(
-        ["oras", "discover", "--format", "json", f"{image}@{digest}"],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    for referrer in json.loads(result.stdout).get("referrers", []):
+    output = None
+    for i in range(RETRIES):
+        try:
+            output = subprocess.run(
+                ["oras", "discover", "--format", "json", f"{image}@{digest}"],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout
+            break
+        except subprocess.CalledProcessError:
+            print(
+                f"Failed to discover SBOM for {image}@{digest}, retrying in {RETRY_WAIT} seconds ({i+1}/{RETRIES})"
+            )
+            time.sleep(RETRY_WAIT)
+    if output is None:
+        raise RuntimeError(f"Failed to discover SBOM for {image}@{digest} after {RETRIES} attempts")
+    for referrer in json.loads(output).get("referrers", []):
         if "spdx+json" in referrer.get("artifactType", ""):
             return referrer["digest"]
     return None

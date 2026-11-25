@@ -4,13 +4,29 @@ echo "::group:: ===$(basename "$0")==="
 
 set -eoux pipefail
 
+retry() {
+    local attempt=0
+    local delay=2
+    while true; do
+        if "$@"; then
+            return 0
+        fi
+        attempt=$((attempt + 1))
+        if [[ "${attempt}" -ge 3 ]]; then
+            return 1
+        fi
+        sleep "${delay}"
+        delay=4
+    done
+}
+
 # Remove Existing Kernel
 for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra; do
     rpm --erase $pkg --nodeps
 done
 
 # Fetch Common AKMODS & Kernel RPMS
-skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods
+retry skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods
 AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods/manifest.json | cut -d : -f 2)
 tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
 mv /tmp/rpms/* /tmp/akmods/
@@ -43,7 +59,7 @@ dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
 # Nvidia AKMODS
 if [[ "${IMAGE_NAME}" =~ nvidia ]]; then
     # Fetch Nvidia RPMs
-    skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia-open:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-rpms
+    retry skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia-open:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-rpms
     NVIDIA_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-rpms/manifest.json | cut -d : -f 2)
     tar -xvzf /tmp/akmods-rpms/"$NVIDIA_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-rpms/
@@ -63,7 +79,7 @@ fi
 # ZFS for stable
 if [[ ${AKMODS_FLAVOR} =~ coreos ]]; then
     # Fetch ZFS RPMs
-    skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-zfs:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-zfs
+    retry skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-zfs:"${AKMODS_FLAVOR}"-"$(rpm -E %fedora)"-"${KERNEL}" dir:/tmp/akmods-zfs
     ZFS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-zfs/manifest.json | cut -d : -f 2)
     tar -xvzf /tmp/akmods-zfs/"$ZFS_TARGZ" -C /tmp/
     mv /tmp/rpms/* /tmp/akmods-zfs/

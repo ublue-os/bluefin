@@ -12,7 +12,12 @@ dnf remove -y ublue-os-luks ublue-os-just ublue-os-udev-rules ublue-os-signing u
 
 # Keep *-logos in RPM DB for downstream package installations
 # We are not allowed to ship an empty fedora-logos package
-dnf -y swap fedora-logos generic-logos
+if ! dnf -y swap fedora-logos generic-logos; then
+    echo "dnf swap failed, clearing libdnf5 cache and retrying once"
+    rm -rf /var/cache/libdnf5
+    dnf makecache
+    dnf -y swap fedora-logos generic-logos
+fi
 rpm --erase --nodeps --nodb generic-logos
 
 # Copy Files to Container
