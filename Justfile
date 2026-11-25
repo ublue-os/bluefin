@@ -547,7 +547,7 @@ secureboot $image="bluefin" $tag="latest" $flavor="main":
     ${PODMAN} rm "$TMP"
 
     # Get the Public Certificates
-    curl --retry 3 --retry-all-errors --retry-delay 2 --connect-timeout 10 --max-time 30 -Lo /tmp/kernel-sign.der https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
+    curl --fail --retry 3 --retry-all-errors --retry-delay 2 --connect-timeout 10 --max-time 30 -Lo /tmp/kernel-sign.der https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
     openssl x509 -in /tmp/kernel-sign.der -out /tmp/kernel-sign.crt
 
     # Make sure we have sbverify

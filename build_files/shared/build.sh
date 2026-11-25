@@ -14,7 +14,7 @@ dnf remove -y ublue-os-luks ublue-os-just ublue-os-udev-rules ublue-os-signing u
 # We are not allowed to ship an empty fedora-logos package
 if ! dnf -y swap fedora-logos generic-logos; then
     echo "dnf swap failed, clearing libdnf5 cache and retrying once"
-    rm -rf /var/cache/libdnf5
+    rm -rf /var/cache/libdnf5/*
     dnf makecache
     dnf -y swap fedora-logos generic-logos
 fi
