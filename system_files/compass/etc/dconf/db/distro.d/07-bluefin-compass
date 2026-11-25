@@ -1,4 +1,0 @@
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/compass]
-name='Compass'
-command='/home/linuxbrew/.linuxbrew/bin/compass toggle'
-binding='<Super>space'
