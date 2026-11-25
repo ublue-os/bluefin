@@ -506,6 +506,15 @@ verify-container container="" registry="ghcr.io/ublue-os" key="":
         key="https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub"
     fi
 
+    # Fetch a remote key with retries; cosign's own URL fetch fails on a single 5xx
+    if [[ "${key}" =~ ^https?:// ]]; then
+        key_file="$(mktemp)"
+        trap 'rm -f "${key_file}"' EXIT
+        curl --fail --silent --show-error --location --connect-timeout 10 --max-time 30 --retry 5 --retry-all-errors --retry-delay 2 \
+            --output "${key_file}" "${key}"
+        key="${key_file}"
+    fi
+
     # Verify Container using cosign public key
     if ! cosign verify --key "${key}" "{{ registry }}"/"{{ container }}" >/dev/null; then
         echo "NOTICE: Verification failed. Please ensure your public key is correct."

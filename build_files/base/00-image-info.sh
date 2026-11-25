@@ -62,12 +62,18 @@ echo "IMAGE_VERSION=\"${VERSION}\"" >> /usr/lib/os-release
 # Fix issues caused by ID no longer being fedora
 sed -i "s|^EFIDIR=.*|EFIDIR=\"fedora\"|" /usr/sbin/grub2-switch-to-blscfg
 
-# Weekly user count for fastfetch
-ghcurl https://raw.githubusercontent.com/ublue-os/countme/main/badge-endpoints/bluefin.json | jq -r ".message" > /usr/share/ublue-os/fastfetch-user-count
+# Weekly user count for fastfetch (cosmetic, so a failed fetch must not fail the build)
+if ! ghcurl https://raw.githubusercontent.com/ublue-os/countme/main/badge-endpoints/bluefin.json \
+    --fail --connect-timeout 10 --max-time 30 --retry 5 --retry-all-errors --retry-delay 2 |
+    jq -er ".message" > /usr/share/ublue-os/fastfetch-user-count; then
+    echo "unknown" > /usr/share/ublue-os/fastfetch-user-count
+fi
 
-# bazaar weekly downloads used for fastfetch
-curl -X 'GET' \
-'https://flathub.org/api/v2/stats/io.github.kolunmi.Bazaar?all=false&days=1' \
--H 'accept: application/json' | jq -r ".installs_last_7_days" | numfmt --to=si --round=nearest > /usr/share/ublue-os/bazaar-install-count
+# bazaar weekly downloads used for fastfetch (cosmetic, same as above)
+if ! curl -fsSL --connect-timeout 10 --max-time 30 --retry 5 --retry-all-errors --retry-delay 2 -X 'GET' \
+    'https://flathub.org/api/v2/stats/io.github.kolunmi.Bazaar?all=false&days=1' \
+    -H 'accept: application/json' | jq -er ".installs_last_7_days" | numfmt --to=si --round=nearest > /usr/share/ublue-os/bazaar-install-count; then
+    echo "unknown" > /usr/share/ublue-os/bazaar-install-count
+fi
 
 echo "::endgroup::"
