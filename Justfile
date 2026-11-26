@@ -104,6 +104,22 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     echo "::group:: Build Prep"
     set -eoux pipefail
 
+    retry() {
+        local attempt=0
+        local delay=2
+        while true; do
+            if "$@"; then
+                return 0
+            fi
+            attempt=$((attempt + 1))
+            if [[ "${attempt}" -ge 3 ]]; then
+                return 1
+            fi
+            sleep "${delay}"
+            delay=4
+        done
+    }
+
     # Validate
     {{ just }} validate "${image}" "${tag}" "${flavor}"
 
@@ -147,7 +163,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
 
     # Kernel Release/Pin
     if [[ -z "${kernel_pin:-}" ]]; then
-        kernel_release=$(skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${akmods_flavor}"-"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
+        kernel_release=$(retry skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${akmods_flavor}"-"${fedora_version}" | jq -r '.Labels["ostree.linux"]')
     else
         kernel_release="${kernel_pin}"
     fi
@@ -170,7 +186,7 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     else
         ver="${tag}-${fedora_version}.$(date +%Y%m%d)"
     fi
-    skopeo list-tags docker://ghcr.io/{{ repo_organization }}/${image_name} > /tmp/repotags.json
+    retry skopeo list-tags docker://ghcr.io/{{ repo_organization }}/${image_name} > /tmp/repotags.json
     if [[ $(jq "any(.Tags[]; contains(\"$ver\"))" < /tmp/repotags.json) == "true" ]]; then
         POINT="1"
         while $(jq -e "any(.Tags[]; contains(\"$ver.$POINT\"))" < /tmp/repotags.json)
@@ -531,7 +547,7 @@ secureboot $image="bluefin" $tag="latest" $flavor="main":
     ${PODMAN} rm "$TMP"
 
     # Get the Public Certificates
-    curl --retry 3 -Lo /tmp/kernel-sign.der https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
+    curl --fail --retry 3 --retry-all-errors --retry-delay 2 --connect-timeout 10 --max-time 30 -Lo /tmp/kernel-sign.der https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
     openssl x509 -in /tmp/kernel-sign.der -out /tmp/kernel-sign.crt
 
     # Make sure we have sbverify
@@ -566,13 +582,30 @@ secureboot $image="bluefin" $tag="latest" $flavor="main":
 fedora_version image="bluefin" tag="latest" flavor="main" $kernel_pin="":
     #!/usr/bin/bash
     set -eou pipefail
+
+    retry() {
+        local attempt=0
+        local delay=2
+        while true; do
+            if "$@"; then
+                return 0
+            fi
+            attempt=$((attempt + 1))
+            if [[ "${attempt}" -ge 3 ]]; then
+                return 1
+            fi
+            sleep "${delay}"
+            delay=4
+        done
+    }
+
     {{ just }} validate {{ image }} {{ tag }} {{ flavor }}
     if [[ ! -f /tmp/manifest.json ]]; then
         if [[ "{{ tag }}" =~ stable ]]; then
             # CoreOS does not uses cosign
-            skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable > /tmp/manifest.json
+            retry skopeo inspect --retry-times 3 docker://quay.io/fedora/fedora-coreos:stable > /tmp/manifest.json
         else
-            skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
+            retry skopeo inspect --retry-times 3 docker://ghcr.io/ublue-os/base-main:"{{ tag }}" > /tmp/manifest.json
         fi
     fi
     fedora_version=$(jq -r '.Labels["org.opencontainers.image.version"]' < /tmp/manifest.json | grep -oP '^[0-9]+')
