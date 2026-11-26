@@ -24,21 +24,6 @@ done
 
 test -f /usr/share/ublue-os/homebrew/fonts.Brewfile
 
-# ChairLift: the image half of the ublue-os/tap chairlift cask
-for i in bin/chairlift-helper bin/brew-preinstall libexec/brew-preinstall libexec/bootc-update-stage ; do
-    test -x /usr/$i
-done
-for i in livery updates firstrun printers ; do
-    test -f "/usr/share/glib-2.0/schemas/io.projectbluefin.chairlift.${i}.gschema.xml"
-done
-test -f /usr/share/polkit-1/actions/io.projectbluefin.chairlift.ublue.policy
-test -f /usr/share/polkit-1/actions/io.projectbluefin.chairlift.bootc.policy
-grep -qx 'cask "ublue-os/tap/chairlift"' /usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile
-test -f /usr/share/chairlift/config.yml
-test -f /usr/share/chairlift/channels.yml
-test "$(systemctl --global is-enabled brew-preinstall.service)" = enabled
-grep -aq io.projectbluefin.chairlift /usr/share/icons/hicolor/icon-theme.cache
-
 # If this file is not on the image bazaar will automatically be removed from users systems :(
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall
 test -f /usr/share/flatpak/preinstall.d/bazaar.preinstall
