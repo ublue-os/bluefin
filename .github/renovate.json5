@@ -43,7 +43,7 @@
       depTypeTemplate: 'gnome-extension',
     },
     // ChairLift's helper, PolicyKit policy and GSettings schemas come from
-    // this release; keep it level with the projectbluefin/tap chairlift cask.
+    // this release; keep it level with the ublue-os/tap chairlift cask.
     {
       customType: 'regex',
       managerFilePatterns: [
@@ -93,8 +93,8 @@
       "matchDepTypes": ["gnome-extension"],
       "groupName": "GNOME extensions"
     },
-    // The ChairLift GUI comes from the projectbluefin/tap cask, which is
-    // usually updated within a day of a release. Wait so the image does not
+    // The ChairLift GUI comes from the ublue-os/tap cask, which its own bump
+    // workflow updates within a day of a release. Wait so the image does not
     // ship a helper newer than the GUI users can install, and review by hand.
     {
       "matchDepNames": ["projectbluefin/chairlift"],

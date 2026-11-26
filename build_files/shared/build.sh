@@ -18,12 +18,6 @@ rpm --erase --nodeps --nodb generic-logos
 # Copy Files to Container
 rsync -rvK /ctx/system_files/shared/ /
 
-# ChairLift (Control Center) and brew-preinstall ship on non-DX images only.
-# On DX they would overlap with the DX tooling and confuse more than help.
-if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
-    rsync -rvK /ctx/system_files/chairlift/ /
-fi
-
 mkdir -p /tmp/scripts/helpers
 install -Dm0755 /ctx/build_files/shared/utils/ghcurl /tmp/scripts/helpers/ghcurl
 export PATH="/tmp/scripts/helpers:$PATH"

@@ -24,50 +24,20 @@ done
 
 test -f /usr/share/ublue-os/homebrew/fonts.Brewfile
 
-# ChairLift: the image half of the projectbluefin/tap chairlift cask on
-# non-DX images, and none of it on DX images
-CHAIRLIFT_FILES=(
-    /usr/bin/chairlift-helper
-    /usr/bin/brew-preinstall
-    /usr/libexec/brew-preinstall
-    /usr/libexec/bootc-update-stage
-    /usr/lib/systemd/user/brew-preinstall.service
-    /usr/lib/systemd/user-preset/01-brew-preinstall.preset
-    /usr/share/glib-2.0/schemas/io.projectbluefin.chairlift.livery.gschema.xml
-    /usr/share/glib-2.0/schemas/io.projectbluefin.chairlift.updates.gschema.xml
-    /usr/share/glib-2.0/schemas/io.projectbluefin.chairlift.firstrun.gschema.xml
-    /usr/share/glib-2.0/schemas/io.projectbluefin.chairlift.printers.gschema.xml
-    /usr/share/polkit-1/actions/io.projectbluefin.chairlift.ublue.policy
-    /usr/share/polkit-1/actions/io.projectbluefin.chairlift.bootc.policy
-    /usr/share/applications/io.projectbluefin.chairlift.desktop
-    /usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile
-    /usr/share/chairlift/config.yml
-    /usr/share/chairlift/channels.yml
-)
-if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
-    for i in "${CHAIRLIFT_FILES[@]}"; do
-        test -f "$i"
-    done
-    test -x /usr/bin/chairlift-helper
-    test -x /usr/libexec/brew-preinstall
-    grep -qx 'cask "projectbluefin/tap/chairlift"' /usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile
-    test "$(systemctl --global is-enabled brew-preinstall.service)" = enabled
-    grep -aq io.projectbluefin.chairlift /usr/share/icons/hicolor/icon-theme.cache
-else
-    for i in "${CHAIRLIFT_FILES[@]}"; do
-        test ! -e "$i"
-    done
-    # Only ChairLift's own Brewfile is checked: other preinstall.d Brewfiles
-    # may ship on every image, but nothing runs them on DX.
-    if systemctl --global is-enabled brew-preinstall.service; then
-        echo "brew-preinstall.service is enabled on a DX image"
-        exit 1
-    fi
-    if gsettings list-schemas | grep -q io.projectbluefin.chairlift; then
-        echo "ChairLift schemas are compiled into a DX image"
-        exit 1
-    fi
-fi
+# ChairLift: the image half of the ublue-os/tap chairlift cask
+for i in bin/chairlift-helper bin/brew-preinstall libexec/brew-preinstall libexec/bootc-update-stage ; do
+    test -x /usr/$i
+done
+for i in livery updates firstrun printers ; do
+    test -f "/usr/share/glib-2.0/schemas/io.projectbluefin.chairlift.${i}.gschema.xml"
+done
+test -f /usr/share/polkit-1/actions/io.projectbluefin.chairlift.ublue.policy
+test -f /usr/share/polkit-1/actions/io.projectbluefin.chairlift.bootc.policy
+grep -qx 'cask "ublue-os/tap/chairlift"' /usr/share/ublue-os/homebrew/preinstall.d/chairlift.Brewfile
+test -f /usr/share/chairlift/config.yml
+test -f /usr/share/chairlift/channels.yml
+test "$(systemctl --global is-enabled brew-preinstall.service)" = enabled
+grep -aq io.projectbluefin.chairlift /usr/share/icons/hicolor/icon-theme.cache
 
 # If this file is not on the image bazaar will automatically be removed from users systems :(
 # See: https://docs.flatpak.org/en/latest/flatpak-command-reference.html#flatpak-preinstall

@@ -18,11 +18,10 @@ RUN mkdir -p /out/usr/share/backgrounds/bluefin && \
     mv /out/usr/share/*.jxl /out/usr/share/*.xml /out/usr/share/backgrounds/bluefin && \
     sed -i 's|~\/\.local\/share|\/usr\/share|' /out/usr/share/backgrounds/bluefin/*.xml /out/usr/share/gnome-background-properties/*.xml
 
-# ChairLift (Control Center), non-DX images only: the GUI comes from the
-# projectbluefin/tap chairlift cask, which brew-preinstall installs at login
-# and brew-upgrade keeps current. A cask cannot install root-owned files, so
-# the image ships the pkexec helper, its PolicyKit policy and the GSettings
-# schemas from the same release. The
+# ChairLift (Control Center): the GUI comes from the ublue-os/tap chairlift
+# cask, which brew-preinstall installs at login and brew-upgrade keeps current. A
+# cask cannot install root-owned files, so the image ships the pkexec helper,
+# its PolicyKit policy and the GSettings schemas from the same release. The
 # release's checksums.txt is checked against its Sigstore bundle (signed by
 # ChairLift's release workflow for exactly this tag) and the archive against
 # checksums.txt, so a bump only changes CHAIRLIFT_RELEASE. Same steps as
@@ -80,7 +79,7 @@ RUN set -eu; \
 FROM scratch AS ctx
 COPY /build_files /build_files
 COPY --from=wallpapers /out /system_files/shared
-COPY --from=chairlift /out /system_files/chairlift
+COPY --from=chairlift /out /system_files/shared
 COPY --from=brew /system_files /system_files/shared
 # bluefin-owned files overlay last so they take precedence
 COPY /system_files /system_files
