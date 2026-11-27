@@ -38,6 +38,12 @@ dnf5 -y install \
     /tmp/kernel-rpms/kernel-core-*.rpm \
     /tmp/kernel-rpms/kernel-modules-*.rpm
 
+# kernel-devel pulls libzstd-devel from updates, which upgrades libzstd but
+# not zstd (zstd only requires the soname). A zstd CLI older than libzstd
+# refuses to run, so dracut fails. Upgrade both together first; no-op when
+# the base image is already current.
+dnf5 -y upgrade zstd libzstd
+
 # TODO: Figure out why akmods cache is pulling in akmods/kernel-devel
 dnf5 -y install \
     /tmp/kernel-rpms/kernel-devel-*.rpm
