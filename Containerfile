@@ -29,7 +29,7 @@ RUN mkdir -p /out/usr/share/backgrounds/bluefin && \
 # projectbluefin/common's Containerfile.
 FROM ghcr.io/sigstore/cosign/cosign:v3.1.4@sha256:0f06154836d2de34f887a5c273506d52ca43edaa1d9e53e6510fa78a48f69c2d AS cosign
 FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION}@${BASE_IMAGE_SHA} AS chairlift
-ARG CHAIRLIFT_RELEASE=v26.11.8
+ARG CHAIRLIFT_RELEASE=v26.11.9
 ARG TARGETARCH
 COPY --from=cosign /ko-app/cosign /usr/local/bin/cosign
 RUN set -eu; \
