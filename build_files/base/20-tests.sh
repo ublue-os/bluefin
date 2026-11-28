@@ -69,7 +69,8 @@ else
     fi
 fi
 
-# Compass ships only on non-DX images, where brew-preinstall installs it.
+# Compass is no longer shipped on any image. brew-preinstall removes the
+# formula from existing installs once its Brewfile is gone.
 COMPASS_FILES=(
     /usr/lib/systemd/user/compass.service
     /usr/lib/systemd/user-preset/01-compass.preset
@@ -77,19 +78,33 @@ COMPASS_FILES=(
     /usr/share/glib-2.0/schemas/zz1-bluefin-compass.gschema.override
     /etc/dconf/db/distro.d/07-bluefin-compass
 )
-if [[ "${IMAGE_FLAVOR}" != "dx" ]]; then
-    for i in "${COMPASS_FILES[@]}"; do
-        test -f "$i"
-    done
-    test "$(systemctl --global is-enabled compass.service)" = enabled
-else
-    for i in "${COMPASS_FILES[@]}"; do
-        test ! -e "$i"
-    done
-    if systemctl --global is-enabled compass.service; then
-        echo "compass.service is enabled on a DX image"
-        exit 1
-    fi
+for i in "${COMPASS_FILES[@]}"; do
+    test ! -e "$i"
+done
+if systemctl --global is-enabled compass.service; then
+    echo "compass.service is enabled"
+    exit 1
+fi
+compass_wants=$(find /etc/systemd/user /usr/lib/systemd/user -path '*.wants/*' -name compass.service)
+if [[ -n "${compass_wants}" ]]; then
+    echo "compass.service is wanted by a user target: ${compass_wants}"
+    exit 1
+fi
+if [[ -d /usr/share/ublue-os/homebrew/preinstall.d ]] &&
+    grep -rliE 'compass|experimental-tap' /usr/share/ublue-os/homebrew/preinstall.d; then
+    echo "A preinstall.d Brewfile installs Compass or uses the experimental tap"
+    exit 1
+fi
+# Assigned first so a gsettings failure fails the build under set -e.
+enabled_extensions=$(gsettings get org.gnome.shell enabled-extensions)
+if [[ "${enabled_extensions}" == *compass* ]]; then
+    echo "Compass is in the default enabled-extensions"
+    exit 1
+fi
+custom_keybindings=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings)
+if [[ "${custom_keybindings}" == *compass* ]]; then
+    echo "Compass is in the default custom-keybindings"
+    exit 1
 fi
 
 # If this file is not on the image bazaar will automatically be removed from users systems :(
